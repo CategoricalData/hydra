@@ -13,7 +13,7 @@ import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Variants                   as Variants
 import qualified Hydra.Dsl.Terms                           as Terms
 import qualified Hydra.Dsl.Types                           as Types
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import           Prelude hiding ((++))
 import qualified Data.List                                 as L
@@ -26,15 +26,15 @@ ns = Namespace "hydra.ext.org.yaml.language"
 
 module_ :: Module
 module_ = Module ns
-  [toTermDefinition yamlLanguage]
-  [Rewriting.ns]
+  [toDefinition yamlLanguage]
+  [Strip.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints for YAML"
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-yamlLanguage :: TBinding Language
+yamlLanguage :: TTermDefinition Language
 yamlLanguage = define "yamlLanguage" $
   doc "Language constraints for YAML" $ lets [
   "eliminationVariants">: Sets.empty,
@@ -61,7 +61,7 @@ yamlLanguage = define "yamlLanguage" $
     Variants.typeVariantRecord,
     Variants.typeVariantUnit,
     Variants.typeVariantVoid],
-  "typePredicate">: lambda "typ" $ cases _Type (Rewriting.deannotateType @@ var "typ")
+  "typePredicate">: lambda "typ" $ cases _Type (Strip.deannotateType @@ var "typ")
     (Just true) [
     _Type_maybe>>: lambda "innerType" $
       cases _Type (var "innerType")

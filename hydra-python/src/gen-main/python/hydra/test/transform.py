@@ -6,7 +6,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from functools import lru_cache
 from hydra.dsl.python import Either, Just, Maybe, Nothing, frozenlist
-from typing import cast
+from typing import TypeVar, cast
 import hydra.core
 import hydra.lib.eithers
 import hydra.lib.lists
@@ -17,6 +17,8 @@ import hydra.lib.strings
 import hydra.module
 import hydra.testing
 import hydra.util
+
+T0 = TypeVar("T0")
 
 def add_generation_prefix(ns_: hydra.module.Namespace) -> hydra.module.Namespace:
     r"""Add generation namespace prefix."""
@@ -92,44 +94,10 @@ def transform_module(m: hydra.module.Module) -> hydra.module.Module:
 
     return hydra.module.Module(add_generation_prefix(m.namespace), m.definitions, m.term_dependencies, m.type_dependencies, m.description)
 
-def transform_test_case(tcm: hydra.testing.TestCaseWithMetadata) -> Maybe[hydra.testing.TestCaseWithMetadata]:
-    r"""Transform a test case to DelegatedEvaluationTestCase if applicable."""
+def transform_test_case(tcm: T0) -> Maybe[T0]:
+    r"""Pass through test cases unchanged."""
 
-    name_ = tcm.name
-    tc = tcm.case
-    desc = tcm.description
-    tags_ = tcm.tags
-    match tc:
-        case hydra.testing.TestCaseCaseConversion(value=ccase):
-            from_conv = ccase.from_convention
-            to_conv = ccase.to_convention
-            from_str = ccase.from_string
-            to_str = ccase.to_string
-            return Just(hydra.testing.TestCaseWithMetadata(name_, cast(hydra.testing.TestCase, hydra.testing.TestCaseDelegatedEvaluation(hydra.testing.DelegatedEvaluationTestCase(build_convert_case_call(from_conv, to_conv, from_str), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(to_str))))))), desc, tags_))
-
-        case hydra.testing.TestCaseEvaluation(value=ecase):
-            input_ = ecase.input
-            output_ = ecase.output
-            return Just(hydra.testing.TestCaseWithMetadata(name_, cast(hydra.testing.TestCase, hydra.testing.TestCaseDelegatedEvaluation(hydra.testing.DelegatedEvaluationTestCase(input_, output_))), desc, tags_))
-
-        case hydra.testing.TestCaseDelegatedEvaluation():
-            return Just(tcm)
-
-        case hydra.testing.TestCaseTopologicalSort(value=tscase):
-            adj_list = tscase.adjacency_list
-            expected = tscase.expected
-            return Just(hydra.testing.TestCaseWithMetadata(name_, cast(hydra.testing.TestCase, hydra.testing.TestCaseDelegatedEvaluation(hydra.testing.DelegatedEvaluationTestCase(build_topological_sort_call(adj_list), encode_either_list_list(expected)))), desc, tags_))
-
-        case hydra.testing.TestCaseTopologicalSortSCC(value=scccase):
-            adj_list = scccase.adjacency_list
-            expected = scccase.expected
-            return Just(hydra.testing.TestCaseWithMetadata(name_, cast(hydra.testing.TestCase, hydra.testing.TestCaseDelegatedEvaluation(hydra.testing.DelegatedEvaluationTestCase(build_topological_sort_s_c_c_call(adj_list), encode_list_list(expected)))), desc, tags_))
-
-        case hydra.testing.TestCaseValidateCoreTerm():
-            return Just(tcm)
-
-        case _:
-            return Nothing()
+    return Just(tcm)
 
 def transform_to_compiled_tests(tg: hydra.testing.TestGroup) -> Maybe[hydra.testing.TestGroup]:
     r"""Transform test group hierarchy to only include delegated evaluation tests."""

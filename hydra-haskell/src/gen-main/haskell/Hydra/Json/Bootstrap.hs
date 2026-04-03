@@ -6,15 +6,51 @@ module Hydra.Json.Bootstrap where
 
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 
 typesByName :: M.Map Core.Name Core.Type
 typesByName =
     M.fromList [
+      (Core.Name "hydra.coders.Adapter", (Core.TypeAnnotated (Core.AnnotatedType {
+        Core.annotatedTypeBody = (Core.TypeForall (Core.ForallType {
+          Core.forallTypeParameter = (Core.Name "t1"),
+          Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
+            Core.forallTypeParameter = (Core.Name "t2"),
+            Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
+              Core.forallTypeParameter = (Core.Name "v1"),
+              Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
+                Core.forallTypeParameter = (Core.Name "v2"),
+                Core.forallTypeBody = (Core.TypeRecord [
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "isLossy"),
+                    Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                      Core.annotatedTypeBody = (Core.TypeLiteral Core.LiteralTypeBoolean),
+                      Core.annotatedTypeAnnotation = (M.fromList [
+                        (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Whether information may be lost in the course of this adaptation")))])}))},
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "source"),
+                    Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                      Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "t1")),
+                      Core.annotatedTypeAnnotation = (M.fromList [
+                        (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The source type")))])}))},
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "target"),
+                    Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                      Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "t2")),
+                      Core.annotatedTypeAnnotation = (M.fromList [
+                        (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The target type")))])}))},
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "coder"),
+                    Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                      Core.annotatedTypeBody = (Core.TypeApplication (Core.ApplicationType {
+                        Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
+                          Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.coders.Coder")),
+                          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v1"))})),
+                        Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v2"))})),
+                      Core.annotatedTypeAnnotation = (M.fromList [
+                        (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The coder for transforming instances of the source type to instances of the target type")))])}))}])}))}))}))})),
+        Core.annotatedTypeAnnotation = (M.fromList [
+          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A two-level bidirectional encoder which adapts types to types and terms to terms")))])}))),
       (Core.Name "hydra.coders.AdapterContext", (Core.TypeAnnotated (Core.AnnotatedType {
         Core.annotatedTypeBody = (Core.TypeRecord [
           Core.FieldType {
@@ -38,7 +74,7 @@ typesByName =
                   Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
                     Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
                       Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
-                        Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.util.Adapter")),
+                        Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.coders.Adapter")),
                         Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "hydra.core.Type"))})),
                       Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "hydra.core.Type"))})),
                     Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
@@ -47,6 +83,86 @@ typesByName =
                 (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A map of type names to adapters for those types")))])}))}]),
         Core.annotatedTypeAnnotation = (M.fromList [
           (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An evaluation context together with a source language and a target language")))])}))),
+      (Core.Name "hydra.coders.Bicoder", (Core.TypeAnnotated (Core.AnnotatedType {
+        Core.annotatedTypeBody = (Core.TypeForall (Core.ForallType {
+          Core.forallTypeParameter = (Core.Name "t1"),
+          Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
+            Core.forallTypeParameter = (Core.Name "t2"),
+            Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
+              Core.forallTypeParameter = (Core.Name "v1"),
+              Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
+                Core.forallTypeParameter = (Core.Name "v2"),
+                Core.forallTypeBody = (Core.TypeRecord [
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "encode"),
+                    Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                      Core.annotatedTypeBody = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t1")),
+                        Core.functionTypeCodomain = (Core.TypeApplication (Core.ApplicationType {
+                          Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
+                            Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
+                              Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
+                                Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.coders.Adapter")),
+                                Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t1"))})),
+                              Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t2"))})),
+                            Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v1"))})),
+                          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v2"))}))})),
+                      Core.annotatedTypeAnnotation = (M.fromList [
+                        (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A function from source types to adapters")))])}))},
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "decode"),
+                    Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                      Core.annotatedTypeBody = (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t2")),
+                        Core.functionTypeCodomain = (Core.TypeApplication (Core.ApplicationType {
+                          Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
+                            Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
+                              Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
+                                Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.coders.Adapter")),
+                                Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t2"))})),
+                              Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t1"))})),
+                            Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v2"))})),
+                          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v1"))}))})),
+                      Core.annotatedTypeAnnotation = (M.fromList [
+                        (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A function from target types to adapters")))])}))}])}))}))}))})),
+        Core.annotatedTypeAnnotation = (M.fromList [
+          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A two-level encoder and decoder, operating both at a type level and an instance (data) level")))])}))),
+      (Core.Name "hydra.coders.Coder", (Core.TypeAnnotated (Core.AnnotatedType {
+        Core.annotatedTypeBody = (Core.TypeForall (Core.ForallType {
+          Core.forallTypeParameter = (Core.Name "v1"),
+          Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
+            Core.forallTypeParameter = (Core.Name "v2"),
+            Core.forallTypeBody = (Core.TypeRecord [
+              Core.FieldType {
+                Core.fieldTypeName = (Core.Name "encode"),
+                Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                  Core.annotatedTypeBody = (Core.TypeFunction (Core.FunctionType {
+                    Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.context.Context")),
+                    Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+                      Core.functionTypeDomain = (Core.TypeVariable (Core.Name "v1")),
+                      Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
+                        Core.eitherTypeLeft = (Core.TypeApplication (Core.ApplicationType {
+                          Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.context.InContext")),
+                          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "hydra.errors.Error"))})),
+                        Core.eitherTypeRight = (Core.TypeVariable (Core.Name "v2"))}))}))})),
+                  Core.annotatedTypeAnnotation = (M.fromList [
+                    (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A function which encodes source values as target values in a given context")))])}))},
+              Core.FieldType {
+                Core.fieldTypeName = (Core.Name "decode"),
+                Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                  Core.annotatedTypeBody = (Core.TypeFunction (Core.FunctionType {
+                    Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.context.Context")),
+                    Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+                      Core.functionTypeDomain = (Core.TypeVariable (Core.Name "v2")),
+                      Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
+                        Core.eitherTypeLeft = (Core.TypeApplication (Core.ApplicationType {
+                          Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.context.InContext")),
+                          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "hydra.errors.Error"))})),
+                        Core.eitherTypeRight = (Core.TypeVariable (Core.Name "v1"))}))}))})),
+                  Core.annotatedTypeAnnotation = (M.fromList [
+                    (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A function which decodes target values as source values in a given context")))])}))}])}))})),
+        Core.annotatedTypeAnnotation = (M.fromList [
+          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An encoder and decoder; a bidirectional transformation between two types")))])}))),
       (Core.Name "hydra.coders.CoderDirection", (Core.TypeAnnotated (Core.AnnotatedType {
         Core.annotatedTypeBody = (Core.TypeUnion [
           Core.FieldType {
@@ -140,7 +256,7 @@ typesByName =
               Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
                 Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
                   Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
-                    Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.util.Adapter")),
+                    Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.coders.Adapter")),
                     Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t"))})),
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t"))})),
                 Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v"))})),
@@ -1505,90 +1621,6 @@ typesByName =
                 (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The type being defined")))])}))}]),
         Core.annotatedTypeAnnotation = (M.fromList [
           (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A type-level definition, including a name and the type")))])}))),
-      (Core.Name "hydra.util.Adapter", (Core.TypeAnnotated (Core.AnnotatedType {
-        Core.annotatedTypeBody = (Core.TypeForall (Core.ForallType {
-          Core.forallTypeParameter = (Core.Name "t1"),
-          Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
-            Core.forallTypeParameter = (Core.Name "t2"),
-            Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
-              Core.forallTypeParameter = (Core.Name "v1"),
-              Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
-                Core.forallTypeParameter = (Core.Name "v2"),
-                Core.forallTypeBody = (Core.TypeRecord [
-                  Core.FieldType {
-                    Core.fieldTypeName = (Core.Name "isLossy"),
-                    Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                      Core.annotatedTypeBody = (Core.TypeLiteral Core.LiteralTypeBoolean),
-                      Core.annotatedTypeAnnotation = (M.fromList [
-                        (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Whether information may be lost in the course of this adaptation")))])}))},
-                  Core.FieldType {
-                    Core.fieldTypeName = (Core.Name "source"),
-                    Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                      Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "t1")),
-                      Core.annotatedTypeAnnotation = (M.fromList [
-                        (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The source type")))])}))},
-                  Core.FieldType {
-                    Core.fieldTypeName = (Core.Name "target"),
-                    Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                      Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "t2")),
-                      Core.annotatedTypeAnnotation = (M.fromList [
-                        (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The target type")))])}))},
-                  Core.FieldType {
-                    Core.fieldTypeName = (Core.Name "coder"),
-                    Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                      Core.annotatedTypeBody = (Core.TypeApplication (Core.ApplicationType {
-                        Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
-                          Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.util.Coder")),
-                          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v1"))})),
-                        Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v2"))})),
-                      Core.annotatedTypeAnnotation = (M.fromList [
-                        (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The coder for transforming instances of the source type to instances of the target type")))])}))}])}))}))}))})),
-        Core.annotatedTypeAnnotation = (M.fromList [
-          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A two-level bidirectional encoder which adapts types to types and terms to terms")))])}))),
-      (Core.Name "hydra.util.Bicoder", (Core.TypeAnnotated (Core.AnnotatedType {
-        Core.annotatedTypeBody = (Core.TypeForall (Core.ForallType {
-          Core.forallTypeParameter = (Core.Name "t1"),
-          Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
-            Core.forallTypeParameter = (Core.Name "t2"),
-            Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
-              Core.forallTypeParameter = (Core.Name "v1"),
-              Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
-                Core.forallTypeParameter = (Core.Name "v2"),
-                Core.forallTypeBody = (Core.TypeRecord [
-                  Core.FieldType {
-                    Core.fieldTypeName = (Core.Name "encode"),
-                    Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                      Core.annotatedTypeBody = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t1")),
-                        Core.functionTypeCodomain = (Core.TypeApplication (Core.ApplicationType {
-                          Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
-                            Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
-                              Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
-                                Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.util.Adapter")),
-                                Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t1"))})),
-                              Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t2"))})),
-                            Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v1"))})),
-                          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v2"))}))})),
-                      Core.annotatedTypeAnnotation = (M.fromList [
-                        (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A function from source types to adapters")))])}))},
-                  Core.FieldType {
-                    Core.fieldTypeName = (Core.Name "decode"),
-                    Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                      Core.annotatedTypeBody = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t2")),
-                        Core.functionTypeCodomain = (Core.TypeApplication (Core.ApplicationType {
-                          Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
-                            Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
-                              Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
-                                Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.util.Adapter")),
-                                Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t2"))})),
-                              Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t1"))})),
-                            Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v2"))})),
-                          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "v1"))}))})),
-                      Core.annotatedTypeAnnotation = (M.fromList [
-                        (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A function from target types to adapters")))])}))}])}))}))}))})),
-        Core.annotatedTypeAnnotation = (M.fromList [
-          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A two-level encoder and decoder, operating both at a type level and an instance (data) level")))])}))),
       (Core.Name "hydra.util.CaseConvention", (Core.TypeAnnotated (Core.AnnotatedType {
         Core.annotatedTypeBody = (Core.TypeUnion [
           Core.FieldType {
@@ -1605,42 +1637,6 @@ typesByName =
             Core.fieldTypeType = Core.TypeUnit}]),
         Core.annotatedTypeAnnotation = (M.fromList [
           (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A naming convention for symbols, such as camelCase or snake_case")))])}))),
-      (Core.Name "hydra.util.Coder", (Core.TypeAnnotated (Core.AnnotatedType {
-        Core.annotatedTypeBody = (Core.TypeForall (Core.ForallType {
-          Core.forallTypeParameter = (Core.Name "v1"),
-          Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
-            Core.forallTypeParameter = (Core.Name "v2"),
-            Core.forallTypeBody = (Core.TypeRecord [
-              Core.FieldType {
-                Core.fieldTypeName = (Core.Name "encode"),
-                Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                  Core.annotatedTypeBody = (Core.TypeFunction (Core.FunctionType {
-                    Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.context.Context")),
-                    Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                      Core.functionTypeDomain = (Core.TypeVariable (Core.Name "v1")),
-                      Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                        Core.eitherTypeLeft = (Core.TypeApplication (Core.ApplicationType {
-                          Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.context.InContext")),
-                          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "hydra.errors.Error"))})),
-                        Core.eitherTypeRight = (Core.TypeVariable (Core.Name "v2"))}))}))})),
-                  Core.annotatedTypeAnnotation = (M.fromList [
-                    (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A function which encodes source values as target values in a given context")))])}))},
-              Core.FieldType {
-                Core.fieldTypeName = (Core.Name "decode"),
-                Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                  Core.annotatedTypeBody = (Core.TypeFunction (Core.FunctionType {
-                    Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.context.Context")),
-                    Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                      Core.functionTypeDomain = (Core.TypeVariable (Core.Name "v2")),
-                      Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                        Core.eitherTypeLeft = (Core.TypeApplication (Core.ApplicationType {
-                          Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.context.InContext")),
-                          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "hydra.errors.Error"))})),
-                        Core.eitherTypeRight = (Core.TypeVariable (Core.Name "v1"))}))}))})),
-                  Core.annotatedTypeAnnotation = (M.fromList [
-                    (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A function which decodes target values as source values in a given context")))])}))}])}))})),
-        Core.annotatedTypeAnnotation = (M.fromList [
-          (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An encoder and decoder; a bidirectional transformation between two types")))])}))),
       (Core.Name "hydra.util.Comparison", (Core.TypeAnnotated (Core.AnnotatedType {
         Core.annotatedTypeBody = (Core.TypeUnion [
           Core.FieldType {

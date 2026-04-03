@@ -5,7 +5,7 @@ package hydra.testing;
 import java.io.Serializable;
 
 /**
- * A tag for categorizing test cases
+ * A tag for test cases
  */
 public class Tag implements Serializable, Comparable<Tag> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.Tag");

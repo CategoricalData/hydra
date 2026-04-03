@@ -13,10 +13,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.bind[Int, scala.Predef.String, Int](Right("ab"))((s: scala.Predef.String) =>
-  hydra.lib.logic.ifElse[Either[Int, Int]](hydra.lib.strings.`null`(s))(Left(0))(Right(hydra.lib.strings.length(s))))) == (
+      right(2)) == (
 
-      Right(2)))
+      right(2)))
 
   }
 
@@ -24,10 +23,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.bind[Int, scala.Predef.String, Int](Right(""))((s: scala.Predef.String) =>
-  hydra.lib.logic.ifElse[Either[Int, Int]](hydra.lib.strings.`null`(s))(Left(0))(Right(hydra.lib.strings.length(s))))) == (
+      left(0)) == (
 
-      Left(0)))
+      left(0)))
 
   }
 
@@ -35,10 +33,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.bind[Int, scala.Predef.String, Int](Left(42))((s: scala.Predef.String) =>
-  hydra.lib.logic.ifElse[Either[Int, Int]](hydra.lib.strings.`null`(s))(Left(0))(Right(hydra.lib.strings.length(s))))) == (
+      left(42)) == (
 
-      Left(42)))
+      left(42)))
 
   }
 
@@ -48,9 +45,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.bimap[Int, scala.Predef.String, Int, Int]((x: Int) => hydra.lib.math.mul(x)(2))((s: scala.Predef.String) => hydra.lib.strings.length(s))(Left(5))) == (
+      left(10)) == (
 
-      Left(10)))
+      left(10)))
 
   }
 
@@ -58,9 +55,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.bimap[Int, scala.Predef.String, Int, Int]((x: Int) => hydra.lib.math.mul(x)(2))((s: scala.Predef.String) => hydra.lib.strings.length(s))(Right("ab"))) == (
+      right(2)) == (
 
-      Right(2)))
+      right(2)))
 
   }
 
@@ -70,7 +67,7 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.isLeft(Left(42))) == (
+      true) == (
 
       true))
 
@@ -80,7 +77,7 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.isLeft(Right("test"))) == (
+      false) == (
 
       false))
 
@@ -92,7 +89,7 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.isRight(Right("test"))) == (
+      true) == (
 
       true))
 
@@ -102,7 +99,7 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.isRight(Left(42))) == (
+      false) == (
 
       false))
 
@@ -114,7 +111,7 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.fromLeft(99)(Left(42))) == (
+      42) == (
 
       42))
 
@@ -124,7 +121,7 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.fromLeft[Int, scala.Predef.String](99)(Right("test"))) == (
+      99) == (
 
       99))
 
@@ -136,7 +133,7 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.fromRight("default")(Right("test"))) == (
+      "test") == (
 
       "test"))
 
@@ -146,7 +143,7 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.fromRight[Int, scala.Predef.String]("default")(Left(42))) == (
+      "default") == (
 
       "default"))
 
@@ -158,7 +155,7 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.either[Int, scala.Predef.String, Int]((x: Int) => hydra.lib.math.mul(x)(2))((s: scala.Predef.String) => hydra.lib.strings.length(s))(Left(5))) == (
+      10) == (
 
       10))
 
@@ -168,7 +165,7 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.either[Int, scala.Predef.String, Int]((x: Int) => hydra.lib.math.mul(x)(2))((s: scala.Predef.String) => hydra.lib.strings.length(s))(Right("ab"))) == (
+      2) == (
 
       2))
 
@@ -180,9 +177,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.lefts[Int, scala.Predef.String](Seq(Left(1), Right("a"), Left(2), Right("b")))) == (
+      [1, 2]) == (
 
-      Seq(1, 2)))
+      [1, 2]))
 
   }
 
@@ -190,9 +187,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.lefts(Seq(Left(1), Left(2)))) == (
+      [1, 2]) == (
 
-      Seq(1, 2)))
+      [1, 2]))
 
   }
 
@@ -200,9 +197,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.lefts(Seq(Right("a"), Right("b")))) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -210,9 +207,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.lefts(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -222,9 +219,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.rights[Int, scala.Predef.String](Seq(Left(1), Right("a"), Left(2), Right("b")))) == (
+      ["a", "b"]) == (
 
-      Seq("a", "b")))
+      ["a", "b"]))
 
   }
 
@@ -232,9 +229,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.rights(Seq(Right("a"), Right("b")))) == (
+      ["a", "b"]) == (
 
-      Seq("a", "b")))
+      ["a", "b"]))
 
   }
 
@@ -242,9 +239,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.rights(Seq(Left(1), Left(2)))) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -252,9 +249,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.rights(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -264,9 +261,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.partitionEithers[Int, scala.Predef.String](Seq(Left(1), Right("a"), Left(2), Right("b")))) == (
+      ([1, 2], ["a", "b"])) == (
 
-      Tuple2(Seq(1, 2), Seq("a", "b"))))
+      ([1, 2], ["a", "b"])))
 
   }
 
@@ -274,9 +271,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.partitionEithers(Seq(Left(1), Left(2)))) == (
+      ([1, 2], [])) == (
 
-      Tuple2(Seq(1, 2), Seq())))
+      ([1, 2], [])))
 
   }
 
@@ -284,9 +281,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.partitionEithers(Seq(Right("a"), Right("b")))) == (
+      ([], ["a", "b"])) == (
 
-      Tuple2(Seq(), Seq("a", "b"))))
+      ([], ["a", "b"])))
 
   }
 
@@ -294,9 +291,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.partitionEithers(Seq())) == (
+      ([], [])) == (
 
-      Tuple2(Seq(), Seq())))
+      ([], [])))
 
   }
 
@@ -306,9 +303,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.map((x: Int) => hydra.lib.math.mul(x)(2))(Right(5))) == (
+      right(10)) == (
 
-      Right(10)))
+      right(10)))
 
   }
 
@@ -316,9 +313,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.map[Int, Int, Int]((x: Int) => hydra.lib.math.mul(x)(2))(Left(99))) == (
+      left(99)) == (
 
-      Left(99)))
+      left(99)))
 
   }
 
@@ -328,10 +325,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.mapList[Int, Int, scala.Predef.String]((x: Int) =>
-  hydra.lib.logic.ifElse[Either[scala.Predef.String, Int]](hydra.lib.equality.equal[Int](x)(0))(Left("zero"))(Right(hydra.lib.math.mul(x)(2))))(Seq(1, 2, 3))) == (
+      right([2, 4, 6])) == (
 
-      Right(Seq(2, 4, 6))))
+      right([2, 4, 6])))
 
   }
 
@@ -339,10 +335,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.mapList[Int, Int, scala.Predef.String]((x: Int) =>
-  hydra.lib.logic.ifElse[Either[scala.Predef.String, Int]](hydra.lib.equality.equal[Int](x)(0))(Left("zero"))(Right(hydra.lib.math.mul(x)(2))))(Seq(1, 0, 3))) == (
+      left("zero")) == (
 
-      Left("zero")))
+      left("zero")))
 
   }
 
@@ -350,10 +345,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.mapList[Int, Int, scala.Predef.String]((x: Int) =>
-  hydra.lib.logic.ifElse[Either[scala.Predef.String, Int]](hydra.lib.equality.equal[Int](x)(0))(Left("zero"))(Right(hydra.lib.math.mul(x)(2))))(Seq())) == (
+      right([])) == (
 
-      Right(Seq())))
+      right([])))
 
   }
 
@@ -363,10 +357,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.mapMaybe[Int, Int, scala.Predef.String]((x: Int) =>
-  hydra.lib.logic.ifElse[Either[scala.Predef.String, Int]](hydra.lib.equality.equal[Int](x)(0))(Left("zero"))(Right(hydra.lib.math.mul(x)(2))))(Some(5))) == (
+      right(just(10))) == (
 
-      Right(Some(10))))
+      right(just(10))))
 
   }
 
@@ -374,10 +367,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.mapMaybe[Int, Int, scala.Predef.String]((x: Int) =>
-  hydra.lib.logic.ifElse[Either[scala.Predef.String, Int]](hydra.lib.equality.equal[Int](x)(0))(Left("zero"))(Right(hydra.lib.math.mul(x)(2))))(Some(0))) == (
+      left("zero")) == (
 
-      Left("zero")))
+      left("zero")))
 
   }
 
@@ -385,10 +377,9 @@ class EithersTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.eithers.mapMaybe[Int, Int, scala.Predef.String]((x: Int) =>
-  hydra.lib.logic.ifElse[Either[scala.Predef.String, Int]](hydra.lib.equality.equal[Int](x)(0))(Left("zero"))(Right(hydra.lib.math.mul(x)(2))))(None)) == (
+      right(nothing)) == (
 
-      Right(None)))
+      right(nothing)))
 
   }
 }

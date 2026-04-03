@@ -62,13 +62,11 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -92,7 +90,7 @@ import qualified Hydra.Ext.Sources.Python.Language as PyLanguage
 import qualified Hydra.Ext.Dsl.Python.Syntax as PyDsl
 
 
-def :: String -> TTerm a -> TBinding a
+def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
 ns :: Namespace
@@ -108,48 +106,48 @@ module_ = Module ns elements
     Just "Python naming utilities: encoding Hydra names as Python names"
   where
     elements = [
-      toTermDefinition encodeConstantForFieldName,
-      toTermDefinition encodeConstantForTypeName,
-      toTermDefinition encodeEnumValue,
-      toTermDefinition encodeFieldName,
-      toTermDefinition encodeName,
-      toTermDefinition encodeNameQualified,
-      toTermDefinition encodeNamespace,
-      toTermDefinition encodeTypeVariable,
-      toTermDefinition sanitizePythonName,
-      toTermDefinition termVariableReference,
-      toTermDefinition typeVariableReference,
-      toTermDefinition useFutureAnnotations,
-      toTermDefinition variableReference,
-      toTermDefinition variantName]
+      toDefinition encodeConstantForFieldName,
+      toDefinition encodeConstantForTypeName,
+      toDefinition encodeEnumValue,
+      toDefinition encodeFieldName,
+      toDefinition encodeName,
+      toDefinition encodeNameQualified,
+      toDefinition encodeNamespace,
+      toDefinition encodeTypeVariable,
+      toDefinition sanitizePythonName,
+      toDefinition termVariableReference,
+      toDefinition typeVariableReference,
+      toDefinition useFutureAnnotations,
+      toDefinition variableReference,
+      toDefinition variantName]
 
 -- | Encode a constant name for a field (e.g., FIELD_NAME as a class-level attribute).
-encodeConstantForFieldName :: TBinding (PyHelpers.PythonEnvironment -> Name -> Name -> Py.Name)
+encodeConstantForFieldName :: TTermDefinition (PyHelpers.PythonEnvironment -> Name -> Name -> Py.Name)
 encodeConstantForFieldName = def "encodeConstantForFieldName" $
   doc "Generate a constant name for a field definition" $
   lambdas ["env", "tname", "fname"] $ wrap Py._Name $
     Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionUpperSnake @@ (Core.unName $ var "fname")
 
 -- | Encode a constant name for a type (always TYPE_ as a class-level attribute).
-encodeConstantForTypeName :: TBinding (PyHelpers.PythonEnvironment -> Name -> Py.Name)
+encodeConstantForTypeName :: TTermDefinition (PyHelpers.PythonEnvironment -> Name -> Py.Name)
 encodeConstantForTypeName = def "encodeConstantForTypeName" $
   doc "Generate a constant name for a type definition" $
   lambdas ["env", "tname"] $ wrap Py._Name $ string "TYPE_"
 
 -- | Encode an enum value name (UPPER_SNAKE case).
-encodeEnumValue :: TBinding (PyHelpers.PythonEnvironment -> Name -> Py.Name)
+encodeEnumValue :: TTermDefinition (PyHelpers.PythonEnvironment -> Name -> Py.Name)
 encodeEnumValue = def "encodeEnumValue" $
   doc "Encode a name as a Python enum value (UPPER_SNAKE case)" $
   encodeName @@ false @@ Util.caseConventionUpperSnake
 
 -- | Encode a field name (lower_snake case).
-encodeFieldName :: TBinding (PyHelpers.PythonEnvironment -> Name -> Py.Name)
+encodeFieldName :: TTermDefinition (PyHelpers.PythonEnvironment -> Name -> Py.Name)
 encodeFieldName = def "encodeFieldName" $
   doc "Encode a name as a Python field name (lower_snake case)" $
   lambdas ["env", "fname"] $ encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "fname"
 
 -- | Encode a Hydra name as a Python name with the given case convention.
-encodeName :: TBinding (Bool -> CaseConvention -> PyHelpers.PythonEnvironment -> Name -> Py.Name)
+encodeName :: TTermDefinition (Bool -> CaseConvention -> PyHelpers.PythonEnvironment -> Name -> Py.Name)
 encodeName = def "encodeName" $
   doc "Encode a Hydra name as a Python name" $
   lambdas ["isQualified", "conv", "env", "name"] $ lets [
@@ -192,7 +190,7 @@ encodeName = def "encodeName" $
       (wrap Py._Name $ var "pyLocal")
 
 -- | Encode a qualified name for Python.
-encodeNameQualified :: TBinding (PyHelpers.PythonEnvironment -> Name -> Py.Name)
+encodeNameQualified :: TTermDefinition (PyHelpers.PythonEnvironment -> Name -> Py.Name)
 encodeNameQualified = def "encodeNameQualified" $
   doc "Encode a name as a fully qualified Python name" $
   lambdas ["env", "name"] $ lets [
@@ -221,7 +219,7 @@ encodeNameQualified = def "encodeNameQualified" $
       (Maps.lookup (var "name") (var "boundVars"))
 
 -- | Encode a namespace as a Python dotted name.
-encodeNamespace :: TBinding (Namespace -> Py.DottedName)
+encodeNamespace :: TTermDefinition (Namespace -> Py.DottedName)
 encodeNamespace = def "encodeNamespace" $
   doc "Encode a namespace as a Python dotted name" $
   lambda "nsVal" $ wrap Py._DottedName $
@@ -230,37 +228,37 @@ encodeNamespace = def "encodeNamespace" $
       (Strings.splitOn (string ".") (Module.unNamespace $ var "nsVal"))
 
 -- | Encode a type variable name (capitalized).
-encodeTypeVariable :: TBinding (Name -> Py.Name)
+encodeTypeVariable :: TTermDefinition (Name -> Py.Name)
 encodeTypeVariable = def "encodeTypeVariable" $
   doc "Encode a type variable name (capitalized)" $
   lambda "name" $ wrap Py._Name $ Formatting.capitalize @@ (Core.unName $ var "name")
 
 -- | Sanitize a string to be a valid Python name.
-sanitizePythonName :: TBinding (String -> String)
+sanitizePythonName :: TTermDefinition (String -> String)
 sanitizePythonName = def "sanitizePythonName" $
   doc "Sanitize a string to be a valid Python name" $
   Formatting.sanitizeWithUnderscores @@ PyLanguage.pythonReservedWords
 
 -- | Reference a term variable as a Python expression.
-termVariableReference :: TBinding (PyHelpers.PythonEnvironment -> Name -> Py.Expression)
+termVariableReference :: TTermDefinition (PyHelpers.PythonEnvironment -> Name -> Py.Expression)
 termVariableReference = def "termVariableReference" $
   doc "Reference a term variable as a Python expression" $
   variableReference @@ Util.caseConventionLowerSnake @@ false
 
 -- | Reference a type variable as a Python expression.
-typeVariableReference :: TBinding (PyHelpers.PythonEnvironment -> Name -> Py.Expression)
+typeVariableReference :: TTermDefinition (PyHelpers.PythonEnvironment -> Name -> Py.Expression)
 typeVariableReference = def "typeVariableReference" $
   doc "Reference a type variable as a Python expression" $
   variableReference @@ Util.caseConventionPascal @@ false
 
 -- | Temporary flag for Python code generation - use __future__ annotations.
-useFutureAnnotations :: TBinding Bool
+useFutureAnnotations :: TTermDefinition Bool
 useFutureAnnotations = def "useFutureAnnotations" $
   doc "Whether to use __future__ annotations for forward references" $
   true
 
 -- | Reference a variable as a Python expression with optional quoting.
-variableReference :: TBinding (CaseConvention -> Bool -> PyHelpers.PythonEnvironment -> Name -> Py.Expression)
+variableReference :: TTermDefinition (CaseConvention -> Bool -> PyHelpers.PythonEnvironment -> Name -> Py.Expression)
 variableReference = def "variableReference" $
   doc "Reference a variable as a Python expression" $
   lambdas ["conv", "quoted", "env", "name"] $ lets [
@@ -277,7 +275,7 @@ variableReference = def "variableReference" $
       (var "unquoted")
 
 -- | Generate a variant name by combining type name and field name.
-variantName :: TBinding (Bool -> PyHelpers.PythonEnvironment -> Name -> Name -> Py.Name)
+variantName :: TTermDefinition (Bool -> PyHelpers.PythonEnvironment -> Name -> Name -> Py.Name)
 variantName = def "variantName" $
   doc "Generate a variant name from type name and field name" $
   lambdas ["isQualified", "env", "tname", "fname"] $

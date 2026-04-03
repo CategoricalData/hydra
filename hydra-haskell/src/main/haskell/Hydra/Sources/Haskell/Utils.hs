@@ -60,13 +60,13 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
+import qualified Hydra.Sources.Kernel.Terms.Analysis       as Analysis
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants      as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -89,7 +89,7 @@ import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 
 type HaskellNamespaces = Namespaces H.ModuleName
 
-haskellUtilsDefinition :: String -> TTerm a -> TBinding a
+haskellUtilsDefinition :: String -> TTerm a -> TTermDefinition a
 haskellUtilsDefinition = definitionInModule module_
 
 ns :: Namespace
@@ -97,30 +97,30 @@ ns = Namespace "hydra.ext.haskell.utils"
 
 module_ :: Module
 module_ = Module ns elements
-    [Formatting.ns, HaskellLanguage.ns, Schemas.ns, Names.ns]
+    [Analysis.ns, Formatting.ns, HaskellLanguage.ns, Names.ns]
     (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Utilities for working with Haskell syntax trees"
   where
     elements = [
-      toTermDefinition applicationPattern,
-      toTermDefinition elementReference,
-      toTermDefinition hsapp,
-      toTermDefinition hslambda,
-      toTermDefinition hslit,
-      toTermDefinition hsvar,
-      toTermDefinition namespacesForModule,
-      toTermDefinition newtypeAccessorName,
-      toTermDefinition rawName,
-      toTermDefinition recordFieldReference,
-      toTermDefinition sanitizeHaskellName,
-      toTermDefinition simpleName,
-      toTermDefinition simpleValueBinding,
-      toTermDefinition toTypeApplication,
-      toTermDefinition typeNameForRecord,
-      toTermDefinition unionFieldReference,
-      toTermDefinition unpackForallType]
+      toDefinition applicationPattern,
+      toDefinition elementReference,
+      toDefinition hsapp,
+      toDefinition hslambda,
+      toDefinition hslit,
+      toDefinition hsvar,
+      toDefinition namespacesForModule,
+      toDefinition newtypeAccessorName,
+      toDefinition rawName,
+      toDefinition recordFieldReference,
+      toDefinition sanitizeHaskellName,
+      toDefinition simpleName,
+      toDefinition simpleValueBinding,
+      toDefinition toTypeApplication,
+      toDefinition typeNameForRecord,
+      toDefinition unionFieldReference,
+      toDefinition unpackForallType]
 
-applicationPattern :: TBinding (H.Name -> [H.Pattern] -> H.Pattern)
+applicationPattern :: TTermDefinition (H.Name -> [H.Pattern] -> H.Pattern)
 applicationPattern = haskellUtilsDefinition "applicationPattern" $
   doc "Create an application pattern from a name and argument patterns" $
   "name" ~> "args" ~>
@@ -129,7 +129,7 @@ applicationPattern = haskellUtilsDefinition "applicationPattern" $
       H._ApplicationPattern_name>>: var "name",
       H._ApplicationPattern_args>>: var "args"]
 
-elementReference :: TBinding (HaskellNamespaces -> Name -> H.Name)
+elementReference :: TTermDefinition (HaskellNamespaces -> Name -> H.Name)
 elementReference = haskellUtilsDefinition "elementReference" $
   doc "Generate a Haskell name reference for a Hydra element" $
   "namespaces" ~> "name" ~> lets [
@@ -155,7 +155,7 @@ elementReference = haskellUtilsDefinition "elementReference" $
                 string ".",
                 sanitizeHaskellName @@ var "local"]))
 
-hsapp :: TBinding (H.Expression -> H.Expression -> H.Expression)
+hsapp :: TTermDefinition (H.Expression -> H.Expression -> H.Expression)
 hsapp = haskellUtilsDefinition "hsapp" $
   doc "Create a Haskell function application expression" $
   "l" ~> "r" ~>
@@ -164,7 +164,7 @@ hsapp = haskellUtilsDefinition "hsapp" $
         H._ApplicationExpression_function>>: var "l",
         H._ApplicationExpression_argument>>: var "r"]
 
-hslambda :: TBinding (H.Name -> H.Expression -> H.Expression)
+hslambda :: TTermDefinition (H.Name -> H.Expression -> H.Expression)
 hslambda = haskellUtilsDefinition "hslambda" $
   doc "Create a Haskell lambda expression" $
   "name" ~> "rhs" ~>
@@ -173,23 +173,23 @@ hslambda = haskellUtilsDefinition "hslambda" $
         H._LambdaExpression_bindings>>: list [inject H._Pattern H._Pattern_name $ var "name"],
         H._LambdaExpression_inner>>: var "rhs"]
 
-hslit :: TBinding (H.Literal -> H.Expression)
+hslit :: TTermDefinition (H.Literal -> H.Expression)
 hslit = haskellUtilsDefinition "hslit" $
   doc "Create a Haskell literal expression" $
   "lit" ~>
     inject H._Expression H._Expression_literal $ var "lit"
 
-hsvar :: TBinding (String -> H.Expression)
+hsvar :: TTermDefinition (String -> H.Expression)
 hsvar = haskellUtilsDefinition "hsvar" $
   doc "Create a Haskell variable expression from a string" $
   "s" ~>
     inject H._Expression H._Expression_variable $ (rawName @@ var "s")
 
-namespacesForModule :: TBinding (Module -> Context -> Graph -> Either (InContext Error) HaskellNamespaces)
+namespacesForModule :: TTermDefinition (Module -> Context -> Graph -> Either (InContext Error) HaskellNamespaces)
 namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
   doc "Compute the Haskell module namespaces for a Hydra module" $
   "mod" ~> "cx" ~> "g" ~>
-    "nss" <<~ Schemas.moduleDependencyNamespaces @@ var "cx" @@ var "g" @@ true @@ true @@ true @@ true @@ var "mod" $
+    "nss" <<~ Analysis.moduleDependencyNamespaces @@ var "cx" @@ var "g" @@ true @@ true @@ true @@ true @@ var "mod" $
     "ns" <~ (Module.moduleNamespace $ var "mod") $
     "toModuleName" <~ ("namespace" ~> lets [
       "namespaceStr">: unwrap _Namespace @@ var "namespace",
@@ -216,13 +216,13 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
     "resultMap" <~ (Pairs.first $ var "finalState") $
     right $ Module.namespaces (var "focusPair") (var "resultMap")
 
-newtypeAccessorName :: TBinding (Name -> String)
+newtypeAccessorName :: TTermDefinition (Name -> String)
 newtypeAccessorName = haskellUtilsDefinition "newtypeAccessorName" $
   doc "Generate an accessor name for a newtype wrapper (e.g., 'unFoo' for Foo)" $
   "name" ~>
     Strings.cat2 (string "un") (Names.localNameOf @@ var "name")
 
-rawName :: TBinding (String -> H.Name)
+rawName :: TTermDefinition (String -> H.Name)
 rawName = haskellUtilsDefinition "rawName" $
   doc "Create a raw Haskell name from a string without sanitization" $
   "n" ~>
@@ -231,7 +231,7 @@ rawName = haskellUtilsDefinition "rawName" $
         H._QualifiedName_qualifiers>>: list ([] :: [TTerm H.NamePart]),
         H._QualifiedName_unqualified>>: wrap H._NamePart $ var "n"]
 
-recordFieldReference :: TBinding (HaskellNamespaces -> Name -> Name -> H.Name)
+recordFieldReference :: TTermDefinition (HaskellNamespaces -> Name -> Name -> H.Name)
 recordFieldReference = haskellUtilsDefinition "recordFieldReference" $
   doc "Generate a Haskell name for a record field accessor" $
   "namespaces" ~> "sname" ~> "fname" ~> lets [
@@ -248,17 +248,17 @@ recordFieldReference = haskellUtilsDefinition "recordFieldReference" $
     "unqualName">: Names.unqualifyName @@ var "qualName"] $
     elementReference @@ var "namespaces" @@ var "unqualName"
 
-sanitizeHaskellName :: TBinding (String -> String)
+sanitizeHaskellName :: TTermDefinition (String -> String)
 sanitizeHaskellName = haskellUtilsDefinition "sanitizeHaskellName" $
   doc "Sanitize a string to be a valid Haskell identifier, escaping reserved words" $
   Formatting.sanitizeWithUnderscores @@ (HaskellLanguage.reservedWords)
 
-simpleName :: TBinding (String -> H.Name)
+simpleName :: TTermDefinition (String -> H.Name)
 simpleName = haskellUtilsDefinition "simpleName" $
   doc "Create a sanitized Haskell name from a string" $
   compose (rawName) (sanitizeHaskellName)
 
-simpleValueBinding :: TBinding (H.Name -> H.Expression -> Maybe H.LocalBindings -> H.ValueBinding)
+simpleValueBinding :: TTermDefinition (H.Name -> H.Expression -> Maybe H.LocalBindings -> H.ValueBinding)
 simpleValueBinding = haskellUtilsDefinition "simpleValueBinding" $
   doc "Create a simple value binding (e.g., 'foo = expr' or 'foo = expr where ...')" $
   "hname" ~> "rhs" ~> "bindings" ~> lets [
@@ -273,7 +273,7 @@ simpleValueBinding = haskellUtilsDefinition "simpleValueBinding" $
         H._SimpleValueBinding_rhs>>: var "rightHandSide",
         H._SimpleValueBinding_localBindings>>: var "bindings"]
 
-toTypeApplication :: TBinding ([H.Type] -> H.Type)
+toTypeApplication :: TTermDefinition ([H.Type] -> H.Type)
 toTypeApplication = haskellUtilsDefinition "toTypeApplication" $
   doc "Convert a list of types into a nested type application" $
   "types" ~> lets [
@@ -285,7 +285,7 @@ toTypeApplication = haskellUtilsDefinition "toTypeApplication" $
         (Lists.head $ var "l")] $
     var "app" @@ (Lists.reverse $ var "types")
 
-typeNameForRecord :: TBinding (Name -> String)
+typeNameForRecord :: TTermDefinition (Name -> String)
 typeNameForRecord = haskellUtilsDefinition "typeNameForRecord" $
   doc "Extract the local type name from a fully qualified record type name" $
   "sname" ~> lets [
@@ -293,7 +293,7 @@ typeNameForRecord = haskellUtilsDefinition "typeNameForRecord" $
     "parts">: Strings.splitOn (string ".") (var "snameStr")] $
     Lists.last $ var "parts"
 
-unionFieldReference :: TBinding (S.Set Name -> HaskellNamespaces -> Name -> Name -> H.Name)
+unionFieldReference :: TTermDefinition (S.Set Name -> HaskellNamespaces -> Name -> Name -> H.Name)
 unionFieldReference = haskellUtilsDefinition "unionFieldReference" $
   doc "Generate a Haskell name for a union variant constructor, with disambiguation" $
   "boundNames" ~> "namespaces" ~> "sname" ~> "fname" ~> lets [
@@ -317,10 +317,10 @@ unionFieldReference = haskellUtilsDefinition "unionFieldReference" $
     "unqualName">: Names.unqualifyName @@ var "qualName"] $
     elementReference @@ var "namespaces" @@ var "unqualName"
 
-unpackForallType :: TBinding (Type -> ([Name], Type))
+unpackForallType :: TTermDefinition (Type -> ([Name], Type))
 unpackForallType = haskellUtilsDefinition "unpackForallType" $
   doc "Unpack nested forall types into a list of type variables and the inner type" $
-  "t" ~> cases _Type (Rewriting.deannotateType @@ var "t")
+  "t" ~> cases _Type (Strip.deannotateType @@ var "t")
     (Just $ pair (list ([] :: [TTerm Name])) (var "t")) [
     _Type_forall>>: "fat" ~> lets [
       "v">: Core.forallTypeParameter $ var "fat",

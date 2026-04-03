@@ -22,19 +22,19 @@ ns = Namespace "hydra.test.checking.failures"
 
 module_ :: Module
 module_ = Module ns elements
-    [TestGraph.ns]
+    [TestGraph.ns, Namespace "hydra.rewriting"]
     kernelTypesNamespaces
     (Just "Type checking failure test cases")
   where
     elements = [
-      Phantoms.toTermDefinition allTests,
-      Phantoms.toTermDefinition failOnUntypedTests,
-      Phantoms.toTermDefinition untypedLambdasTests]
+      Phantoms.toDefinition allTests,
+      Phantoms.toDefinition failOnUntypedTests,
+      Phantoms.toDefinition untypedLambdasTests]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
   Phantoms.doc "Type checking failure test cases" $
   supergroup "Failures" [
@@ -42,33 +42,13 @@ allTests = define "allTests" $
 
 ------ Helper functions ------
 
--- Helper function to create a type checking test case
-checkTest :: String -> [Tag] -> TTerm Term -> TTerm Term -> TTerm Type -> TTerm TestCaseWithMetadata
-checkTest name tags input outputTerm outputType = testCaseWithMetadata (Phantoms.string name)
-  (testCaseTypeChecking $ typeCheckingTestCase input outputTerm outputType) Phantoms.nothing (Phantoms.list $ tag . unTag <$> tags)
-
--- Helper for tests where the term doesn't change during type checking
-noChange :: String -> TTerm Term -> TTerm Type -> TTerm TestCaseWithMetadata
-noChange name term typ = checkTest name [] term term typ
-
--- Create a TestCase inject for type checking
-testCaseTypeChecking :: TTerm TypeCheckingTestCase -> TTerm TestCase
-testCaseTypeChecking = Phantoms.inject _TestCase _TestCase_typeChecking
-
--- Create a TypeCheckingTestCase record
-typeCheckingTestCase :: TTerm Term -> TTerm Term -> TTerm Type -> TTerm TypeCheckingTestCase
-typeCheckingTestCase input outputTerm outputType = Phantoms.record _TypeCheckingTestCase [
-  Phantoms.field _TypeCheckingTestCase_input input,
-  Phantoms.field _TypeCheckingTestCase_outputTerm outputTerm,
-  Phantoms.field _TypeCheckingTestCase_outputType outputType]
-
 ------ Fail on untyped (pre-inference) terms ------
 
-failOnUntypedTests :: TBinding TestGroup
+failOnUntypedTests :: TTermDefinition TestGroup
 failOnUntypedTests = define "failOnUntypedTests" $
   supergroup "Fail on untyped (pre-inference) terms" [
     untypedLambdasTests]
 
-untypedLambdasTests :: TBinding TestGroup
+untypedLambdasTests :: TTermDefinition TestGroup
 untypedLambdasTests = define "untypedLambdasTests" $
   subgroup "Untyped lambdas" ([] :: [TTerm TestCaseWithMetadata])

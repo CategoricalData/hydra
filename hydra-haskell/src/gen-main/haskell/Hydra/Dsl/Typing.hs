@@ -9,11 +9,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 
 functionStructure :: Phantoms.TTerm [Core.Name] -> Phantoms.TTerm [Core.Name] -> Phantoms.TTerm [Core.Binding] -> Phantoms.TTerm Core.Term -> Phantoms.TTerm [Core.Type] -> Phantoms.TTerm (Maybe Core.Type) -> Phantoms.TTerm env -> Phantoms.TTerm (Typing.FunctionStructure env)
 functionStructure typeParams params bindings body domains codomain environment =

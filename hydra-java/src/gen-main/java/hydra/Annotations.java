@@ -283,7 +283,7 @@ public interface Annotations {
 
   static hydra.core.Term normalizeTermAnnotations(hydra.core.Term term) {
     hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> anns = hydra.Annotations.termAnnotationInternal(term);
-    hydra.core.Term stripped = hydra.Rewriting.deannotateTerm(term);
+    hydra.core.Term stripped = hydra.Strip.deannotateTerm(term);
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.maps.Null.apply(anns),
       () -> stripped,
@@ -292,7 +292,7 @@ public interface Annotations {
 
   static hydra.core.Type normalizeTypeAnnotations(hydra.core.Type typ) {
     hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> anns = hydra.Annotations.typeAnnotationInternal(typ);
-    hydra.core.Type stripped = hydra.Rewriting.deannotateType(typ);
+    hydra.core.Type stripped = hydra.Strip.deannotateType(typ);
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.maps.Null.apply(anns),
       () -> stripped,
@@ -341,7 +341,7 @@ public interface Annotations {
       key,
       val,
       hydra.Annotations.termAnnotationInternal(term)));
-    hydra.core.Term term_ = hydra.Rewriting.deannotateTerm(term);
+    hydra.core.Term term_ = hydra.Strip.deannotateTerm(term);
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.maps.Null.apply(anns.get()),
       () -> term_,
@@ -371,7 +371,7 @@ public interface Annotations {
       key,
       val,
       hydra.Annotations.typeAnnotationInternal(typ)));
-    hydra.core.Type typ_ = hydra.Rewriting.deannotateType(typ);
+    hydra.core.Type typ_ = hydra.Strip.deannotateType(typ);
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.maps.Null.apply(anns.get()),
       () -> typ_,

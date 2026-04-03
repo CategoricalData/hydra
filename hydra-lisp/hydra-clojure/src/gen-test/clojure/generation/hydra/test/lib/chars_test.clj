@@ -1,7 +1,7 @@
 ;; Note: this is an automatically generated file. Do not edit.
 ;; hydra.lib.chars primitives
 
-(ns generation.hydra.test.lib.chars-test
+(ns test-ns
   (:require [clojure.test :refer :all]))
 
 ;; isAlphaNum
@@ -10,25 +10,25 @@
 
   (is (= true
 
-         (hydra_lib_chars_is_alpha_num 97))))
+         true)))
 
 (deftest test-chars-negisalphanum-negdigit
 
   (is (= true
 
-         (hydra_lib_chars_is_alpha_num 53))))
+         true)))
 
 (deftest test-chars-negisalphanum-negspace
 
   (is (= false
 
-         (hydra_lib_chars_is_alpha_num 32))))
+         false)))
 
 (deftest test-chars-negisalphanum-negpunctuation
 
   (is (= false
 
-         (hydra_lib_chars_is_alpha_num 46))))
+         false)))
 
 ;; isLower
 
@@ -36,19 +36,19 @@
 
   (is (= true
 
-         (hydra_lib_chars_is_lower 97))))
+         true)))
 
 (deftest test-chars-negislower-neguppercase
 
   (is (= false
 
-         (hydra_lib_chars_is_lower 65))))
+         false)))
 
 (deftest test-chars-negislower-negdigit
 
   (is (= false
 
-         (hydra_lib_chars_is_lower 53))))
+         false)))
 
 ;; isSpace
 
@@ -56,25 +56,25 @@
 
   (is (= true
 
-         (hydra_lib_chars_is_space 32))))
+         true)))
 
 (deftest test-chars-negisspace-negtab
 
   (is (= true
 
-         (hydra_lib_chars_is_space 9))))
+         true)))
 
 (deftest test-chars-negisspace-negnewline
 
   (is (= true
 
-         (hydra_lib_chars_is_space 10))))
+         true)))
 
 (deftest test-chars-negisspace-negletter
 
   (is (= false
 
-         (hydra_lib_chars_is_space 97))))
+         false)))
 
 ;; isUpper
 
@@ -82,56 +82,56 @@
 
   (is (= true
 
-         (hydra_lib_chars_is_upper 65))))
+         true)))
 
 (deftest test-chars-negisupper-neglowercase
 
   (is (= false
 
-         (hydra_lib_chars_is_upper 97))))
+         false)))
 
 (deftest test-chars-negisupper-negdigit
 
   (is (= false
 
-         (hydra_lib_chars_is_upper 53))))
+         false)))
 
 ;; toLower
 
 (deftest test-chars-negtolower-neguppercase
 
-  (is (= 97
+  (is (= 97:int32
 
-         (hydra_lib_chars_to_lower 65))))
+         97:int32)))
 
 (deftest test-chars-negtolower-neglowercase
 
-  (is (= 97
+  (is (= 97:int32
 
-         (hydra_lib_chars_to_lower 97))))
+         97:int32)))
 
 (deftest test-chars-negtolower-negdigit
 
-  (is (= 53
+  (is (= 53:int32
 
-         (hydra_lib_chars_to_lower 53))))
+         53:int32)))
 
 ;; toUpper
 
 (deftest test-chars-negtoupper-neglowercase
 
-  (is (= 65
+  (is (= 65:int32
 
-         (hydra_lib_chars_to_upper 97))))
+         65:int32)))
 
 (deftest test-chars-negtoupper-neguppercase
 
-  (is (= 65
+  (is (= 65:int32
 
-         (hydra_lib_chars_to_upper 65))))
+         65:int32)))
 
 (deftest test-chars-negtoupper-negdigit
 
-  (is (= 53
+  (is (= 53:int32
 
-         (hydra_lib_chars_to_upper 53))))
+         53:int32)))

@@ -11,11 +11,6 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Parsing as Parsing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Try the first parser; if it fails without consuming input, try the second
 alt :: Parsing.Parser t0 -> Parsing.Parser t0 -> Parsing.Parser t0
@@ -47,7 +42,7 @@ apply pf pa =
 
 -- | Parse something between an opening and closing parser
 between :: Parsing.Parser t0 -> Parsing.Parser t1 -> Parsing.Parser t2 -> Parsing.Parser t2
-between open close p = bind open (\_ -> bind p (\x -> bind close (\_ -> pure x)))
+between open close p = bind open (\_ -> bind p (\x -> bind close (\_2 -> pure x)))
 
 -- | Sequence two parsers, passing the result of the first to a function that produces the second
 bind :: Parsing.Parser t0 -> (t0 -> Parsing.Parser t1) -> Parsing.Parser t1

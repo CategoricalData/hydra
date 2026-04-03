@@ -7,242 +7,242 @@
 
 (define (test-maps-negalter-neginsert-new-key)
 
-  (assert (equal? (list (cons 1 "a") (cons 2 "b") (cons 3 "new")) (((hydra_lib_maps_alter (lambda (opt) (list 'just "new"))) 3) (list (cons 1 "a") (cons 2 "b"))))))
+  (assert (equal? {1: "a", 2: "b", 3: "new"} {1: "a", 2: "b", 3: "new"})))
 
 (define (test-maps-negalter-negupdate-existing-key)
 
-  (assert (equal? (list (cons 1 "a") (cons 2 "updated")) (((hydra_lib_maps_alter (lambda (opt) (list 'just "updated"))) 2) (list (cons 1 "a") (cons 2 "b"))))))
+  (assert (equal? {1: "a", 2: "updated"} {1: "a", 2: "updated"})))
 
 (define (test-maps-negalter-negdelete-key)
 
-  (assert (equal? (list (cons 1 "a")) (((hydra_lib_maps_alter (lambda (opt) (list 'nothing))) 2) (list (cons 1 "a") (cons 2 "b"))))))
+  (assert (equal? {1: "a"} {1: "a"})))
 
 ;; bimap
 
 (define (test-maps-negbimap-negtransform-both)
 
-  (assert (equal? (list (cons 2 "A") (cons 4 "B")) (((hydra_lib_maps_bimap (lambda (k) ((hydra_lib_math_mul k) 2))) (lambda (v) (hydra_lib_strings_to_upper v))) (list (cons 1 "a") (cons 2 "b"))))))
+  (assert (equal? {2: "A", 4: "B"} {2: "A", 4: "B"})))
 
 (define (test-maps-negbimap-negempty-map)
 
-  (assert (equal? (list) (((hydra_lib_maps_bimap (lambda (k) ((hydra_lib_math_mul k) 2))) (lambda (v) (hydra_lib_strings_to_upper v))) (list)))))
+  (assert (equal? {} {})))
 
 ;; elems
 
 (define (test-maps-negelems-negget-all-elements)
 
-  (assert (equal? (list "a" "b") (hydra_lib_maps_elems (list (cons 1 "a") (cons 2 "b"))))))
+  (assert (equal? ["a", "b"] ["a", "b"])))
 
 (define (test-maps-negelems-negunsorted-keys)
 
-  (assert (equal? (list "a" "b" "c") (hydra_lib_maps_elems (list (cons 1 "a") (cons 2 "b") (cons 3 "c"))))))
+  (assert (equal? ["a", "b", "c"] ["a", "b", "c"])))
 
 (define (test-maps-negelems-negempty-map)
 
-  (assert (equal? (list ) (hydra_lib_maps_elems (list)))))
+  (assert (equal? [] [])))
 
 ;; empty
 
 (define (test-maps-negempty-negempty-map)
 
-  (assert (equal? (list) hydra_lib_maps_empty)))
+  (assert (equal? {} {})))
 
 ;; filter
 
 (define (test-maps-negfilter-negfilter-values-starting-with-a)
 
-  (assert (equal? (list (cons 1 "a") (cons 3 "ab")) ((hydra_lib_maps_filter (lambda (v) ((hydra_lib_equality_equal ((hydra_lib_strings_char_at 0) v)) 97))) (list (cons 1 "a") (cons 2 "b") (cons 3 "ab"))))))
+  (assert (equal? {1: "a", 3: "ab"} {1: "a", 3: "ab"})))
 
 (define (test-maps-negfilter-negfilter-all)
 
-  (assert (equal? (list) ((hydra_lib_maps_filter (lambda (v) ((hydra_lib_equality_equal ((hydra_lib_strings_char_at 0) v)) 97))) (list (cons 1 "b") (cons 2 "c"))))))
+  (assert (equal? {} {})))
 
 (define (test-maps-negfilter-negempty-map)
 
-  (assert (equal? (list) ((hydra_lib_maps_filter (lambda (v) ((hydra_lib_equality_equal ((hydra_lib_strings_char_at 0) v)) 97))) (list)))))
+  (assert (equal? {} {})))
 
 ;; filterWithKey
 
 (define (test-maps-negfilterwithkey-negfilter-by-key-1)
 
-  (assert (equal? (list (cons 2 "b") (cons 3 "c")) ((hydra_lib_maps_filter_with_key (lambda (k) (lambda (v) ((hydra_lib_equality_gt k) 1)))) (list (cons 1 "a") (cons 2 "b") (cons 3 "c"))))))
+  (assert (equal? {2: "b", 3: "c"} {2: "b", 3: "c"})))
 
 (define (test-maps-negfilterwithkey-negfilter-all)
 
-  (assert (equal? (list) ((hydra_lib_maps_filter_with_key (lambda (k) (lambda (v) ((hydra_lib_equality_gt k) 1)))) (list (cons 1 "a"))))))
+  (assert (equal? {} {})))
 
 (define (test-maps-negfilterwithkey-negempty-map)
 
-  (assert (equal? (list) ((hydra_lib_maps_filter_with_key (lambda (k) (lambda (v) ((hydra_lib_equality_gt k) 1)))) (list)))))
+  (assert (equal? {} {})))
 
 ;; findWithDefault
 
 (define (test-maps-negfindwithdefault-negfind-existing)
 
-  (assert (equal? "b" (((hydra_lib_maps_find_with_default "default") 2) (list (cons 1 "a") (cons 2 "b"))))))
+  (assert (equal? b b)))
 
 (define (test-maps-negfindwithdefault-neguse-default)
 
-  (assert (equal? "default" (((hydra_lib_maps_find_with_default "default") 3) (list (cons 1 "a") (cons 2 "b"))))))
+  (assert (equal? default default)))
 
 ;; fromList
 
 (define (test-maps-negfromlist-negcreate-from-pairs)
 
-  (assert (equal? (list (cons 1 "a") (cons 2 "b")) (hydra_lib_maps_from_list (list (list 1 "a") (list 2 "b"))))))
+  (assert (equal? {1: "a", 2: "b"} {1: "a", 2: "b"})))
 
 (define (test-maps-negfromlist-negduplicate-keys)
 
-  (assert (equal? (list (cons 1 "b")) (hydra_lib_maps_from_list (list (list 1 "a") (list 1 "b"))))))
+  (assert (equal? {1: "b"} {1: "b"})))
 
 (define (test-maps-negfromlist-negempty-list)
 
-  (assert (equal? (list) (hydra_lib_maps_from_list (list )))))
+  (assert (equal? {} {})))
 
 ;; insert
 
 (define (test-maps-neginsert-neginsert-new-key)
 
-  (assert (equal? (list (cons 1 "a") (cons 2 "b") (cons 3 "c")) (((hydra_lib_maps_insert 3) "c") (list (cons 1 "a") (cons 2 "b"))))))
+  (assert (equal? {1: "a", 2: "b", 3: "c"} {1: "a", 2: "b", 3: "c"})))
 
 (define (test-maps-neginsert-negupdate-existing)
 
-  (assert (equal? (list (cons 1 "a") (cons 2 "updated")) (((hydra_lib_maps_insert 2) "updated") (list (cons 1 "a") (cons 2 "b"))))))
+  (assert (equal? {1: "a", 2: "updated"} {1: "a", 2: "updated"})))
 
 (define (test-maps-neginsert-neginsert-into-empty)
 
-  (assert (equal? (list (cons 1 "x")) (((hydra_lib_maps_insert 1) "x") (list)))))
+  (assert (equal? {1: "x"} {1: "x"})))
 
 ;; keys
 
 (define (test-maps-negkeys-negget-all-keys)
 
-  (assert (equal? (list 1 2 3) (hydra_lib_maps_keys (list (cons 1 "a") (cons 2 "b") (cons 3 "c"))))))
+  (assert (equal? [1, 2, 3] [1, 2, 3])))
 
 (define (test-maps-negkeys-negunsorted-keys)
 
-  (assert (equal? (list 1 2 3) (hydra_lib_maps_keys (list (cons 1 "a") (cons 2 "b") (cons 3 "c"))))))
+  (assert (equal? [1, 2, 3] [1, 2, 3])))
 
 (define (test-maps-negkeys-negempty-map)
 
-  (assert (equal? (list ) (hydra_lib_maps_keys (list)))))
+  (assert (equal? [] [])))
 
 ;; lookup
 
 (define (test-maps-neglookup-negfind-existing-key)
 
-  (assert (equal? (list 'just "b") ((hydra_lib_maps_lookup 2) (list (cons 1 "a") (cons 2 "b"))))))
+  (assert (equal? just("b") just("b"))))
 
 (define (test-maps-neglookup-negkey-not-found)
 
-  (assert (equal? (list 'nothing) ((hydra_lib_maps_lookup 3) (list (cons 1 "a") (cons 2 "b"))))))
+  (assert (equal? nothing nothing)))
 
 (define (test-maps-neglookup-neglookup-in-empty)
 
-  (assert (equal? (list 'nothing) ((hydra_lib_maps_lookup 1) (list)))))
+  (assert (equal? nothing nothing)))
 
 ;; map
 
 (define (test-maps-negmap-negmap-over-values)
 
-  (assert (equal? (list (cons 1 "A") (cons 2 "B")) ((hydra_lib_maps_map (lambda (s) (hydra_lib_strings_to_upper s))) (list (cons 1 "a") (cons 2 "b"))))))
+  (assert (equal? {1: "A", 2: "B"} {1: "A", 2: "B"})))
 
 (define (test-maps-negmap-negmap-empty)
 
-  (assert (equal? (list) ((hydra_lib_maps_map (lambda (s) (hydra_lib_strings_to_upper s))) (list)))))
+  (assert (equal? {} {})))
 
 ;; mapKeys
 
 (define (test-maps-negmapkeys-negdouble-keys)
 
-  (assert (equal? (list (cons 2 "a") (cons 4 "b")) ((hydra_lib_maps_map_keys (lambda (k) ((hydra_lib_math_mul k) 2))) (list (cons 1 "a") (cons 2 "b"))))))
+  (assert (equal? {2: "a", 4: "b"} {2: "a", 4: "b"})))
 
 (define (test-maps-negmapkeys-negempty-map)
 
-  (assert (equal? (list) ((hydra_lib_maps_map_keys (lambda (k) ((hydra_lib_math_mul k) 2))) (list)))))
+  (assert (equal? {} {})))
 
 ;; member
 
 (define (test-maps-negmember-negkey-exists)
 
-  (assert (equal? #t ((hydra_lib_maps_member 2) (list (cons 1 "a") (cons 2 "b"))))))
+  (assert (equal? true true)))
 
 (define (test-maps-negmember-negkey-missing)
 
-  (assert (equal? #f ((hydra_lib_maps_member 3) (list (cons 1 "a") (cons 2 "b"))))))
+  (assert (equal? false false)))
 
 (define (test-maps-negmember-negempty-map)
 
-  (assert (equal? #f ((hydra_lib_maps_member 1) (list)))))
+  (assert (equal? false false)))
 
 ;; null
 
 (define (test-maps-negnull-negempty-map)
 
-  (assert (equal? #t (hydra_lib_maps_null (list)))))
+  (assert (equal? true true)))
 
 (define (test-maps-negnull-negnon-negempty-map)
 
-  (assert (equal? #f (hydra_lib_maps_null (list (cons 1 "a"))))))
+  (assert (equal? false false)))
 
 ;; remove
 
 (define (test-maps-negremove-negremove-existing)
 
-  (assert (equal? (list (cons 1 "a") (cons 3 "c")) ((hydra_lib_maps_delete 2) (list (cons 1 "a") (cons 2 "b") (cons 3 "c"))))))
+  (assert (equal? {1: "a", 3: "c"} {1: "a", 3: "c"})))
 
 (define (test-maps-negremove-negremove-non-negexisting)
 
-  (assert (equal? (list (cons 1 "a") (cons 2 "b")) ((hydra_lib_maps_delete 4) (list (cons 1 "a") (cons 2 "b"))))))
+  (assert (equal? {1: "a", 2: "b"} {1: "a", 2: "b"})))
 
 (define (test-maps-negremove-negremove-from-empty)
 
-  (assert (equal? (list) ((hydra_lib_maps_delete 1) (list)))))
+  (assert (equal? {} {})))
 
 ;; singleton
 
 (define (test-maps-negsingleton-negsingle-entry)
 
-  (assert (equal? (list (cons 42 "hello")) ((hydra_lib_maps_singleton 42) "hello"))))
+  (assert (equal? {42: "hello"} {42: "hello"})))
 
 ;; size
 
 (define (test-maps-negsize-negthree-entries)
 
-  (assert (equal? 3 (hydra_lib_maps_size (list (cons 1 "a") (cons 2 "b") (cons 3 "c"))))))
+  (assert (equal? 3 3)))
 
 (define (test-maps-negsize-negsingle-entry)
 
-  (assert (equal? 1 (hydra_lib_maps_size (list (cons 42 "test"))))))
+  (assert (equal? 1 1)))
 
 (define (test-maps-negsize-negempty-map)
 
-  (assert (equal? 0 (hydra_lib_maps_size (list)))))
+  (assert (equal? 0 0)))
 
 ;; toList
 
 (define (test-maps-negtolist-negconvert-to-pairs)
 
-  (assert (equal? (list (list 1 "a") (list 2 "b")) (hydra_lib_maps_to_list (list (cons 1 "a") (cons 2 "b"))))))
+  (assert (equal? [(1, "a"), (2, "b")] [(1, "a"), (2, "b")])))
 
 (define (test-maps-negtolist-negunsorted-keys)
 
-  (assert (equal? (list (list 1 "a") (list 2 "b") (list 3 "c")) (hydra_lib_maps_to_list (list (cons 1 "a") (cons 2 "b") (cons 3 "c"))))))
+  (assert (equal? [(1, "a"), (2, "b"), (3, "c")] [(1, "a"), (2, "b"), (3, "c")])))
 
 (define (test-maps-negtolist-negempty-map)
 
-  (assert (equal? (list ) (hydra_lib_maps_to_list (list)))))
+  (assert (equal? [] [])))
 
 ;; union
 
 (define (test-maps-negunion-negunion-two-maps)
 
-  (assert (equal? (list (cons 1 "a") (cons 2 "b") (cons 3 "c")) ((hydra_lib_maps_union (list (cons 1 "a") (cons 2 "b"))) (list (cons 2 "x") (cons 3 "c"))))))
+  (assert (equal? {1: "a", 2: "b", 3: "c"} {1: "a", 2: "b", 3: "c"})))
 
 (define (test-maps-negunion-negunion-with-empty)
 
-  (assert (equal? (list (cons 1 "a")) ((hydra_lib_maps_union (list (cons 1 "a"))) (list)))))
+  (assert (equal? {1: "a"} {1: "a"})))
 
 (define (test-maps-negunion-negempty-with-map)
 
-  (assert (equal? (list (cons 1 "a")) ((hydra_lib_maps_union (list)) (list (cons 1 "a"))))))
+  (assert (equal? {1: "a"} {1: "a"})))

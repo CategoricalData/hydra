@@ -7,11 +7,6 @@ module Hydra.Sources.Encode.Coders where
 import qualified Hydra.Core as Core
 import qualified Hydra.Module as Module
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 module_ :: Module.Module
 module_ =
@@ -241,8 +236,9 @@ module_ =
             Core.typeSchemeConstraints = Nothing}))}))],
       Module.moduleTermDependencies = [
         Module.Namespace "hydra.encode.core",
+        (Module.Namespace "hydra.encode.context"),
+        (Module.Namespace "hydra.encode.errors"),
         (Module.Namespace "hydra.encode.graph"),
-        (Module.Namespace "hydra.encode.util"),
         (Module.Namespace "hydra.encode.variants")],
       Module.moduleTypeDependencies = [
         Module.Namespace "hydra.coders"],

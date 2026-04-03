@@ -8,7 +8,7 @@
 
 (def hydra_encode_tabular_data_row (fn [v] (fn [x] (list :wrap (->hydra_core_wrapped_term "hydra.tabular.DataRow" ((fn [xs] (list :list ((hydra_lib_lists_map (fn [opt] (list :maybe ((hydra_lib_maybes_map v) opt)))) xs))) ((fn [v] v) x)))))))
 
-(def hydra_encode_tabular_header_row (fn [x] (list :wrap (->hydra_core_wrapped_term "hydra.tabular.HeaderRow" ((fn [xs] (list :list ((hydra_lib_lists_map (fn [x] (list :literal (list :string x)))) xs))) ((fn [v] v) x))))))
+(def hydra_encode_tabular_header_row (fn [x] (list :wrap (->hydra_core_wrapped_term "hydra.tabular.HeaderRow" ((fn [xs] (list :list ((hydra_lib_lists_map (fn [x2] (list :literal (list :string x2)))) xs))) ((fn [v] v) x))))))
 
 (def hydra_encode_tabular_table (fn [v] (fn [x] (list :record (->hydra_core_record "hydra.tabular.Table" (list (->hydra_core_field "header" ((fn [opt] (list :maybe ((hydra_lib_maybes_map hydra_encode_tabular_header_row) opt))) ((fn [v] (:header v)) x))) (->hydra_core_field "data" ((fn [xs] (list :list ((hydra_lib_lists_map (hydra_encode_tabular_data_row v)) xs))) ((fn [v] (:data v)) x)))))))))
 

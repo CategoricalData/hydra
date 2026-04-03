@@ -238,8 +238,8 @@ match tname def pairs = Core.termFunction $ Core.functionElimination $ Core.elim
 --meta :: TTerm a -> TTerm Term
 --meta (TTerm term) = TTerm $ EncodeCore.term term
 
-metaref :: TBinding a -> TTerm Term
-metaref (TBinding name _) = Core.termVariable $ Core.nameLift name
+metaref :: TTermDefinition a -> TTerm Term
+metaref (TTermDefinition name _) = Core.termVariable $ Core.nameLift name
 
 -- | Create a term-encoded 'Nothing' optional value
 nothing :: TTerm (Maybe Term)

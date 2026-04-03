@@ -692,7 +692,7 @@
                                         "parameter": "_"}}},
                                   "domain": [{"variable": "hydra.context.Context"}],
                                   "parameter": "_cx"}}}}],
-                        "typeName": "hydra.util.Coder"}},
+                        "typeName": "hydra.coders.Coder"}},
                     "type": {"variable": "hydra.pg.graphson.syntax.Vertex"}}},
                 "type": {"variable": "hydra.json.model.Value"}}}}},
         "type": [
@@ -704,7 +704,7 @@
                 "function": {
                   "application": {
                     "argument": {"variable": "hydra.pg.graphson.syntax.Vertex"},
-                    "function": {"variable": "hydra.util.Coder"}}}}},
+                    "function": {"variable": "hydra.coders.Coder"}}}}},
             "variables": []}]}},
     {
       "term": {
@@ -1421,6 +1421,7 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
+    "hydra.error.module",
     "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",

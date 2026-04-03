@@ -1,5 +1,5 @@
--- | Haskell test code generation codec for HSpec-based generation tests.
--- This thin wrapper delegates all codec logic to the generated module,
+-- | Haskell test code generation for HSpec-based generation tests.
+-- This thin wrapper delegates test file generation to the generated module,
 -- and only adds the TestGenerator (which involves IO infrastructure)
 -- and the aggregator file generator (which uses System.FilePath).
 
@@ -28,7 +28,6 @@ haskellTestGenerator = TestGenerator {
     case namespacesForModule m emptyContext g of
       Left ic -> Left (showError (inContextObject ic))
       Right ns -> Right ns,
-  testGeneratorCreateCodec = Generated.haskellTestCodec,
   testGeneratorGenerateTestFile = Generated.generateHaskellTestFile,
   testGeneratorAggregatorFile = Just generateHaskellAggregatorSpec
 }

@@ -54,6 +54,7 @@ import qualified Data.Maybe                  as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
 
 
@@ -62,27 +63,27 @@ ns = Namespace "hydra.unification"
 
 module_ :: Module
 module_ = Module ns elements
-    [Rewriting.ns, ShowCore.ns, Substitution.ns]
+    [Rewriting.ns, ShowCore.ns, Strip.ns, Substitution.ns]
     kernelTypesNamespaces $
     Just ("Utilities for type unification.")
   where
    elements = [
-     toTermDefinition joinTypes,
-     toTermDefinition unifyTypeConstraints,
-     toTermDefinition unifyTypeLists,
-     toTermDefinition unifyTypes,
-     toTermDefinition variableOccursInType]
+     toDefinition joinTypes,
+     toDefinition unifyTypeConstraints,
+     toDefinition unifyTypeLists,
+     toDefinition unifyTypes,
+     toDefinition variableOccursInType]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-joinTypes :: TBinding (Context -> Type -> Type -> String -> Either (InContext UnificationError) [TypeConstraint])
+joinTypes :: TTermDefinition (Context -> Type -> Type -> String -> Either (InContext UnificationError) [TypeConstraint])
 joinTypes = define "joinTypes" $
   doc ("Join two types, producing a list of type constraints."
     <> "The comment is used to provide context for the constraints.") $
   "cx" ~> "left" ~> "right" ~> "comment" ~>
-  "sleft" <~ Rewriting.deannotateType @@ var "left" $
-  "sright" <~ Rewriting.deannotateType @@ var "right" $
+  "sleft" <~ Strip.deannotateType @@ var "left" $
+  "sright" <~ Strip.deannotateType @@ var "right" $
   "joinOne" <~ ("l" ~> "r" ~> Typing.typeConstraint (var "l") (var "r") ((string "join types; ") ++ var "comment")) $
   "cannotUnify" <~ Ctx.failInContext
     (Error.unificationError (var "sleft") (var "sright")
@@ -147,7 +148,7 @@ joinTypes = define "joinTypes" $
       _Type_wrap>>: "r" ~> right (list [
         var "joinOne" @@ (var "l") @@ (var "r")])]]
 
-unifyTypeConstraints :: TBinding (Context -> M.Map Name TypeScheme -> [TypeConstraint] -> Either (InContext UnificationError) TypeSubst)
+unifyTypeConstraints :: TTermDefinition (Context -> M.Map Name TypeScheme -> [TypeConstraint] -> Either (InContext UnificationError) TypeSubst)
 unifyTypeConstraints = define "unifyTypeConstraints" $
   doc (""
     <> "Robinson's algorithm, following https://www.cs.cornell.edu/courses/cs6110/2017sp/lectures/lec23.pdf\n"
@@ -158,8 +159,8 @@ unifyTypeConstraints = define "unifyTypeConstraints" $
     <> "  * Unify({(f(s1, ..., sn), f(t1, ..., tn))} ∪ E) = Unify({(s1, t1), ..., (sn, tn)} ∪ E))") $
   "cx" ~> "schemaTypes" ~> "constraints" ~>
   "withConstraint" <~ ("c" ~> "rest" ~>
-    "sleft" <~ Rewriting.deannotateType @@ (Typing.typeConstraintLeft (var "c")) $
-    "sright" <~ Rewriting.deannotateType @@ (Typing.typeConstraintRight (var "c")) $
+    "sleft" <~ Strip.deannotateType @@ (Typing.typeConstraintLeft (var "c")) $
+    "sright" <~ Strip.deannotateType @@ (Typing.typeConstraintRight (var "c")) $
     "comment" <~ Typing.typeConstraintComment (var "c") $
     "bind" <~ ("v" ~> "t" ~>
       "subst" <~ Substitution.singletonTypeSubst @@ var "v" @@ var "t" $
@@ -198,18 +199,18 @@ unifyTypeConstraints = define "unifyTypeConstraints" $
     (right (asTerm Substitution.idTypeSubst))
     (var "withConstraint" @@ (Lists.head (var "constraints")) @@ (Lists.tail (var "constraints")))
 
-unifyTypeLists :: TBinding (Context -> M.Map Name TypeScheme -> [Type] -> [Type] -> String -> Either (InContext UnificationError) TypeSubst)
+unifyTypeLists :: TTermDefinition (Context -> M.Map Name TypeScheme -> [Type] -> [Type] -> String -> Either (InContext UnificationError) TypeSubst)
 unifyTypeLists = define "unifyTypeLists" $
   "cx" ~> "schemaTypes" ~> "l" ~> "r" ~> "comment" ~>
   "toConstraint" <~ ("l" ~> "r" ~> Typing.typeConstraint (var "l") (var "r") (var "comment")) $
   unifyTypeConstraints @@ var "cx" @@ var "schemaTypes" @@ (Lists.zipWith (var "toConstraint") (var "l") (var "r"))
 
-unifyTypes :: TBinding (Context -> M.Map Name TypeScheme -> Type -> Type -> String -> Either (InContext UnificationError) TypeSubst)
+unifyTypes :: TTermDefinition (Context -> M.Map Name TypeScheme -> Type -> Type -> String -> Either (InContext UnificationError) TypeSubst)
 unifyTypes = define "unifyTypes" $
   "cx" ~> "schemaTypes" ~> "l" ~> "r" ~> "comment" ~>
   unifyTypeConstraints @@ var "cx" @@ var "schemaTypes" @@ list [Typing.typeConstraint (var "l") (var "r") (var "comment")]
 
-variableOccursInType :: TBinding (Name -> Type -> Bool)
+variableOccursInType :: TTermDefinition (Name -> Type -> Bool)
 variableOccursInType = define "variableOccursInType" $
   doc ("Determine whether a type variable appears within a type expression."
     <> "No distinction is made between free and bound type variables.") $

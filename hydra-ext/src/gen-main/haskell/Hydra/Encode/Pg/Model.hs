@@ -9,11 +9,6 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Pg.Model as Model
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 adjacentEdge :: (t0 -> Core.Term) -> Model.AdjacentEdge t0 -> Core.Term
 adjacentEdge v x =
@@ -82,7 +77,7 @@ edgeLabel :: Model.EdgeLabel -> Core.Term
 edgeLabel x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.pg.model.EdgeLabel"),
-      Core.wrappedTermBody = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Model.unEdgeLabel x))})
+      Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Model.unEdgeLabel x))})
 
 edgeType :: (t0 -> Core.Term) -> Model.EdgeType t0 -> Core.Term
 edgeType t x =
@@ -237,7 +232,7 @@ propertyKey :: Model.PropertyKey -> Core.Term
 propertyKey x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.pg.model.PropertyKey"),
-      Core.wrappedTermBody = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Model.unPropertyKey x))})
+      Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Model.unPropertyKey x))})
 
 propertyType :: (t0 -> Core.Term) -> Model.PropertyType t0 -> Core.Term
 propertyType t x =
@@ -252,7 +247,7 @@ propertyType t x =
           Core.fieldTerm = (t (Model.propertyTypeValue x))},
         Core.Field {
           Core.fieldName = (Core.Name "required"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralBoolean x)) (Model.propertyTypeRequired x))}]})
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralBoolean x2)) (Model.propertyTypeRequired x))}]})
 
 vertex :: (t0 -> Core.Term) -> Model.Vertex t0 -> Core.Term
 vertex v x =
@@ -273,7 +268,7 @@ vertexLabel :: Model.VertexLabel -> Core.Term
 vertexLabel x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.pg.model.VertexLabel"),
-      Core.wrappedTermBody = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Model.unVertexLabel x))})
+      Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Model.unVertexLabel x))})
 
 vertexType :: (t0 -> Core.Term) -> Model.VertexType t0 -> Core.Term
 vertexType t x =

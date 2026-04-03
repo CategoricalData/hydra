@@ -9,7 +9,7 @@ import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Helpers as Helpers
+import qualified Hydra.Extract.Core as Core__
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
@@ -21,13 +21,8 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
-import qualified Hydra.Schemas as Schemas
+import qualified Hydra.Predicates as Predicates
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Collect forall type variable names from a type
 collectForallVariables :: Core.Type -> [Core.Name]
@@ -108,7 +103,7 @@ decodeEitherType et =
           rightDecoder = decodeType (Core.eitherTypeRight et)
       in (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
-          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeEither")),
+          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeEither")),
           Core.applicationArgument = leftDecoder})),
         Core.applicationArgument = rightDecoder}))
 
@@ -126,7 +121,7 @@ decodeListType elemType =
 
       let elemDecoder = decodeType elemType
       in (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeList")),
+        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeList")),
         Core.applicationArgument = elemDecoder}))
 
 -- | Generate a decoder for a literal type
@@ -1077,7 +1072,7 @@ decodeMapType mt =
           valDecoder = decodeType (Core.mapTypeValues mt)
       in (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
-          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeMap")),
+          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeMap")),
           Core.applicationArgument = keyDecoder})),
         Core.applicationArgument = valDecoder}))
 
@@ -1087,7 +1082,7 @@ decodeMaybeType elemType =
 
       let elemDecoder = decodeType elemType
       in (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeMaybe")),
+        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeMaybe")),
         Core.applicationArgument = elemDecoder}))
 
 -- | Transform a type module into a decoder module
@@ -1108,7 +1103,7 @@ decodeModule cx graph mod =
           Module.termDefinitionTerm = (Core.bindingTerm b),
           Module.termDefinitionType = (Core.bindingType b)})) decodedBindings),
         Module.moduleTermDependencies = (Lists.concat2 [
-          Module.Namespace "hydra.extract.helpers",
+          Module.Namespace "hydra.extract.core",
           (Module.Namespace "hydra.lexical"),
           (Module.Namespace "hydra.rewriting")] allDecodedDeps),
         Module.moduleTypeDependencies = [
@@ -1133,7 +1128,7 @@ decodePairType pt =
           secondDecoder = decodeType (Core.pairTypeSecond pt)
       in (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
-          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodePair")),
+          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodePair")),
           Core.applicationArgument = firstDecoder})),
         Core.applicationArgument = secondDecoder}))
 
@@ -1150,7 +1145,7 @@ decodeRecordTypeImpl tname rt =
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.requireField")),
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.requireField")),
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralString (Core.unName (Core.fieldTypeName ft))))})),
                     Core.applicationArgument = (decodeType (Core.fieldTypeType ft))})),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
@@ -1210,7 +1205,7 @@ decodeRecordTypeImpl tname rt =
                               Core.Binding {
                                 Core.bindingName = (Core.Name "fieldMap"),
                                 Core.bindingTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.toFieldMap")),
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.toFieldMap")),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "record"))})),
                                 Core.bindingType = Nothing}],
                             Core.letBody = decodeBody}))})))}]})))),
@@ -1231,7 +1226,7 @@ decodeSetType elemType =
 
       let elemDecoder = decodeType elemType
       in (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeSet")),
+        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeSet")),
         Core.applicationArgument = elemDecoder}))
 
 -- | Generate a decoder term for a Type
@@ -1428,7 +1423,7 @@ decodeUnionTypeNamed ename rt =
 
 -- | Generate a decoder for the unit type
 decodeUnitType :: Core.Term
-decodeUnitType = Core.TermVariable (Core.Name "hydra.extract.helpers.decodeUnit")
+decodeUnitType = Core.TermVariable (Core.Name "hydra.extract.core.decodeUnit")
 
 -- | Generate a decoder for a wrapped type
 decodeWrappedType :: Core.Type -> Core.Term
@@ -1640,7 +1635,7 @@ filterTypeBindings cx graph bindings =
 -- | Check if a binding is decodable (serializable type)
 isDecodableBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Errors.Error) (Maybe Core.Binding)
 isDecodableBinding cx graph b =
-    Eithers.bind (Schemas.isSerializableByName cx graph (Core.bindingName b)) (\serializable -> Right (Logic.ifElse serializable (Just b) Nothing))
+    Eithers.bind (Predicates.isSerializableByName cx graph (Core.bindingName b)) (\serializable -> Right (Logic.ifElse serializable (Just b) Nothing))
 
 -- | Prepend decoder types for forall parameters to base type
 prependForallDecoders :: Core.Type -> Core.Type -> Core.Type

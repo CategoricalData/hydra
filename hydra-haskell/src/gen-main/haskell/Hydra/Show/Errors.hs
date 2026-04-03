@@ -14,14 +14,9 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Show.Core as Core_
 import qualified Hydra.Show.Error.Core as Core__
-import qualified Hydra.Show.Meta as Meta
 import qualified Hydra.Show.Typing as Typing
+import qualified Hydra.Show.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Show a checking error as a string
 checkingError :: Checking.CheckingError -> String
@@ -162,7 +157,7 @@ unificationError e =
 -- | Show an unsupported term variant error as a string
 unsupportedTermVariantError :: Checking.UnsupportedTermVariantError -> String
 unsupportedTermVariantError e =
-    Strings.cat2 "unsupported term variant: " (Meta.termVariant (Checking.unsupportedTermVariantErrorTermVariant e))
+    Strings.cat2 "unsupported term variant: " (Variants.termVariant (Checking.unsupportedTermVariantErrorTermVariant e))
 
 -- | Show an untyped lambda error as a string
 untypedLambdaError :: t0 -> String

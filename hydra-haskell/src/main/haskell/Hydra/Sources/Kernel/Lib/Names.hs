@@ -21,343 +21,343 @@ module_ = Module ns elements
   where
     elements = [
       -- Namespace constants
-      toTermDefinition chars,
-      toTermDefinition eithers,
-      toTermDefinition equality,
-      toTermDefinition lists,
-      toTermDefinition literals,
-      toTermDefinition logic,
-      toTermDefinition maps,
-      toTermDefinition math,
-      toTermDefinition maybes,
-      toTermDefinition pairs,
-      toTermDefinition regex,
-      toTermDefinition sets,
-      toTermDefinition strings,
-      toTermDefinition typeclass,
+      toDefinition chars,
+      toDefinition eithers,
+      toDefinition equality,
+      toDefinition lists,
+      toDefinition literals,
+      toDefinition logic,
+      toDefinition maps,
+      toDefinition math,
+      toDefinition maybes,
+      toDefinition pairs,
+      toDefinition regex,
+      toDefinition sets,
+      toDefinition strings,
+      toDefinition typeclass,
 
       -- chars primitives
-      toTermDefinition charsIsAlphaNum,
-      toTermDefinition charsIsLower,
-      toTermDefinition charsIsSpace,
-      toTermDefinition charsIsUpper,
-      toTermDefinition charsToLower,
-      toTermDefinition charsToUpper,
+      toDefinition charsIsAlphaNum,
+      toDefinition charsIsLower,
+      toDefinition charsIsSpace,
+      toDefinition charsIsUpper,
+      toDefinition charsToLower,
+      toDefinition charsToUpper,
 
       -- eithers primitives
-      toTermDefinition eithersBimap,
-      toTermDefinition eithersBind,
-      toTermDefinition eithersEither,
-      toTermDefinition eithersFoldl,
-      toTermDefinition eithersFromLeft,
-      toTermDefinition eithersFromRight,
-      toTermDefinition eithersIsLeft,
-      toTermDefinition eithersIsRight,
-      toTermDefinition eithersLefts,
-      toTermDefinition eithersMap,
-      toTermDefinition eithersMapList,
-      toTermDefinition eithersMapMaybe,
-      toTermDefinition eithersMapSet,
-      toTermDefinition eithersPartitionEithers,
-      toTermDefinition eithersRights,
+      toDefinition eithersBind,
+      toDefinition eithersBimap,
+      toDefinition eithersEither,
+      toDefinition eithersFoldl,
+      toDefinition eithersFromLeft,
+      toDefinition eithersFromRight,
+      toDefinition eithersIsLeft,
+      toDefinition eithersIsRight,
+      toDefinition eithersLefts,
+      toDefinition eithersMap,
+      toDefinition eithersMapList,
+      toDefinition eithersMapMaybe,
+      toDefinition eithersMapSet,
+      toDefinition eithersPartitionEithers,
+      toDefinition eithersRights,
 
       -- equality primitives
-      toTermDefinition equalityCompare,
-      toTermDefinition equalityEqual,
-      toTermDefinition equalityGt,
-      toTermDefinition equalityGte,
-      toTermDefinition equalityIdentity,
-      toTermDefinition equalityLt,
-      toTermDefinition equalityLte,
-      toTermDefinition equalityMax,
-      toTermDefinition equalityMin,
+      toDefinition equalityCompare,
+      toDefinition equalityEqual,
+      toDefinition equalityGt,
+      toDefinition equalityGte,
+      toDefinition equalityIdentity,
+      toDefinition equalityLt,
+      toDefinition equalityLte,
+      toDefinition equalityMax,
+      toDefinition equalityMin,
 
       -- lists primitives
-      toTermDefinition listsApply,
-      toTermDefinition listsAt,
-      toTermDefinition listsBind,
-      toTermDefinition listsConcat,
-      toTermDefinition listsConcat2,
-      toTermDefinition listsCons,
-      toTermDefinition listsDrop,
-      toTermDefinition listsDropWhile,
-      toTermDefinition listsElem,
-      toTermDefinition listsFilter,
-      toTermDefinition listsFind,
-      toTermDefinition listsFoldl,
-      toTermDefinition listsFoldr,
-      toTermDefinition listsGroup,
-      toTermDefinition listsHead,
-      toTermDefinition listsInit,
-      toTermDefinition listsIntercalate,
-      toTermDefinition listsIntersperse,
-      toTermDefinition listsLast,
-      toTermDefinition listsLength,
-      toTermDefinition listsMap,
-      toTermDefinition listsNub,
-      toTermDefinition listsNull,
-      toTermDefinition listsPartition,
-      toTermDefinition listsPure,
-      toTermDefinition listsReplicate,
-      toTermDefinition listsReverse,
-      toTermDefinition listsSafeHead,
-      toTermDefinition listsSingleton,
-      toTermDefinition listsSort,
-      toTermDefinition listsSortOn,
-      toTermDefinition listsSpan,
-      toTermDefinition listsTail,
-      toTermDefinition listsTake,
-      toTermDefinition listsTranspose,
-      toTermDefinition listsZip,
-      toTermDefinition listsZipWith,
+      toDefinition listsApply,
+      toDefinition listsAt,
+      toDefinition listsBind,
+      toDefinition listsConcat,
+      toDefinition listsConcat2,
+      toDefinition listsCons,
+      toDefinition listsDrop,
+      toDefinition listsDropWhile,
+      toDefinition listsElem,
+      toDefinition listsFilter,
+      toDefinition listsFind,
+      toDefinition listsFoldl,
+      toDefinition listsFoldr,
+      toDefinition listsGroup,
+      toDefinition listsHead,
+      toDefinition listsInit,
+      toDefinition listsIntercalate,
+      toDefinition listsIntersperse,
+      toDefinition listsLast,
+      toDefinition listsLength,
+      toDefinition listsMap,
+      toDefinition listsNub,
+      toDefinition listsNull,
+      toDefinition listsPartition,
+      toDefinition listsPure,
+      toDefinition listsReplicate,
+      toDefinition listsReverse,
+      toDefinition listsSafeHead,
+      toDefinition listsSingleton,
+      toDefinition listsSort,
+      toDefinition listsSortOn,
+      toDefinition listsSpan,
+      toDefinition listsTail,
+      toDefinition listsTake,
+      toDefinition listsTranspose,
+      toDefinition listsZip,
+      toDefinition listsZipWith,
 
       -- literals primitives
-      toTermDefinition literalsBigfloatToBigint,
-      toTermDefinition literalsBigfloatToFloat32,
-      toTermDefinition literalsBigfloatToFloat64,
-      toTermDefinition literalsBigintToBigfloat,
-      toTermDefinition literalsBigintToInt16,
-      toTermDefinition literalsBigintToInt32,
-      toTermDefinition literalsBigintToInt64,
-      toTermDefinition literalsBigintToInt8,
-      toTermDefinition literalsBigintToUint16,
-      toTermDefinition literalsBigintToUint32,
-      toTermDefinition literalsBigintToUint64,
-      toTermDefinition literalsBigintToUint8,
-      toTermDefinition literalsBinaryToBytes,
-      toTermDefinition literalsBinaryToString,
-      toTermDefinition literalsFloat32ToBigfloat,
-      toTermDefinition literalsFloat64ToBigfloat,
-      toTermDefinition literalsInt16ToBigint,
-      toTermDefinition literalsInt32ToBigint,
-      toTermDefinition literalsInt64ToBigint,
-      toTermDefinition literalsInt8ToBigint,
-      toTermDefinition literalsReadBigfloat,
-      toTermDefinition literalsReadBigint,
-      toTermDefinition literalsReadBoolean,
-      toTermDefinition literalsReadFloat32,
-      toTermDefinition literalsReadFloat64,
-      toTermDefinition literalsReadInt16,
-      toTermDefinition literalsReadInt32,
-      toTermDefinition literalsReadInt64,
-      toTermDefinition literalsReadInt8,
-      toTermDefinition literalsReadString,
-      toTermDefinition literalsReadUint16,
-      toTermDefinition literalsReadUint32,
-      toTermDefinition literalsReadUint64,
-      toTermDefinition literalsReadUint8,
-      toTermDefinition literalsShowBigfloat,
-      toTermDefinition literalsShowBigint,
-      toTermDefinition literalsShowBoolean,
-      toTermDefinition literalsShowFloat32,
-      toTermDefinition literalsShowFloat64,
-      toTermDefinition literalsShowInt16,
-      toTermDefinition literalsShowInt32,
-      toTermDefinition literalsShowInt64,
-      toTermDefinition literalsShowInt8,
-      toTermDefinition literalsShowString,
-      toTermDefinition literalsShowUint16,
-      toTermDefinition literalsShowUint32,
-      toTermDefinition literalsShowUint64,
-      toTermDefinition literalsShowUint8,
-      toTermDefinition literalsStringToBinary,
-      toTermDefinition literalsUint16ToBigint,
-      toTermDefinition literalsUint32ToBigint,
-      toTermDefinition literalsUint64ToBigint,
-      toTermDefinition literalsUint8ToBigint,
+      toDefinition literalsBigfloatToBigint,
+      toDefinition literalsBigfloatToFloat32,
+      toDefinition literalsBigfloatToFloat64,
+      toDefinition literalsBigintToBigfloat,
+      toDefinition literalsBigintToInt8,
+      toDefinition literalsBigintToInt16,
+      toDefinition literalsBigintToInt32,
+      toDefinition literalsBigintToInt64,
+      toDefinition literalsBigintToUint8,
+      toDefinition literalsBigintToUint16,
+      toDefinition literalsBigintToUint32,
+      toDefinition literalsBigintToUint64,
+      toDefinition literalsBinaryToBytes,
+      toDefinition literalsBinaryToString,
+      toDefinition literalsFloat32ToBigfloat,
+      toDefinition literalsFloat64ToBigfloat,
+      toDefinition literalsInt8ToBigint,
+      toDefinition literalsInt16ToBigint,
+      toDefinition literalsInt32ToBigint,
+      toDefinition literalsInt64ToBigint,
+      toDefinition literalsReadBigfloat,
+      toDefinition literalsReadBigint,
+      toDefinition literalsReadBoolean,
+      toDefinition literalsReadFloat32,
+      toDefinition literalsReadFloat64,
+      toDefinition literalsReadInt8,
+      toDefinition literalsReadInt16,
+      toDefinition literalsReadInt32,
+      toDefinition literalsReadInt64,
+      toDefinition literalsReadString,
+      toDefinition literalsReadUint8,
+      toDefinition literalsReadUint16,
+      toDefinition literalsReadUint32,
+      toDefinition literalsReadUint64,
+      toDefinition literalsShowBigfloat,
+      toDefinition literalsShowBigint,
+      toDefinition literalsShowBoolean,
+      toDefinition literalsShowFloat32,
+      toDefinition literalsShowFloat64,
+      toDefinition literalsShowInt8,
+      toDefinition literalsShowInt16,
+      toDefinition literalsShowInt32,
+      toDefinition literalsShowInt64,
+      toDefinition literalsShowUint8,
+      toDefinition literalsShowUint16,
+      toDefinition literalsShowUint32,
+      toDefinition literalsShowUint64,
+      toDefinition literalsShowString,
+      toDefinition literalsStringToBinary,
+      toDefinition literalsUint8ToBigint,
+      toDefinition literalsUint16ToBigint,
+      toDefinition literalsUint32ToBigint,
+      toDefinition literalsUint64ToBigint,
 
       -- logic primitives
-      toTermDefinition logicAnd,
-      toTermDefinition logicIfElse,
-      toTermDefinition logicNot,
-      toTermDefinition logicOr,
+      toDefinition logicAnd,
+      toDefinition logicIfElse,
+      toDefinition logicNot,
+      toDefinition logicOr,
 
       -- maps primitives
-      toTermDefinition mapsAlter,
-      toTermDefinition mapsBimap,
-      toTermDefinition mapsDelete,
-      toTermDefinition mapsElems,
-      toTermDefinition mapsEmpty,
-      toTermDefinition mapsFilter,
-      toTermDefinition mapsFilterWithKey,
-      toTermDefinition mapsFindWithDefault,
-      toTermDefinition mapsFromList,
-      toTermDefinition mapsInsert,
-      toTermDefinition mapsKeys,
-      toTermDefinition mapsLookup,
-      toTermDefinition mapsMap,
-      toTermDefinition mapsMapKeys,
-      toTermDefinition mapsMember,
-      toTermDefinition mapsNull,
-      toTermDefinition mapsSingleton,
-      toTermDefinition mapsSize,
-      toTermDefinition mapsToList,
-      toTermDefinition mapsUnion,
+      toDefinition mapsAlter,
+      toDefinition mapsBimap,
+      toDefinition mapsDelete,
+      toDefinition mapsElems,
+      toDefinition mapsEmpty,
+      toDefinition mapsFilter,
+      toDefinition mapsFilterWithKey,
+      toDefinition mapsFindWithDefault,
+      toDefinition mapsFromList,
+      toDefinition mapsInsert,
+      toDefinition mapsKeys,
+      toDefinition mapsLookup,
+      toDefinition mapsMap,
+      toDefinition mapsMapKeys,
+      toDefinition mapsMember,
+      toDefinition mapsNull,
+      toDefinition mapsSingleton,
+      toDefinition mapsSize,
+      toDefinition mapsToList,
+      toDefinition mapsUnion,
 
       -- math primitives
-      toTermDefinition mathAbs,
-      toTermDefinition mathAcos,
-      toTermDefinition mathAcosh,
-      toTermDefinition mathAdd,
-      toTermDefinition mathAsin,
-      toTermDefinition mathAsinh,
-      toTermDefinition mathAtan,
-      toTermDefinition mathAtan2,
-      toTermDefinition mathAtanh,
-      toTermDefinition mathCeiling,
-      toTermDefinition mathCos,
-      toTermDefinition mathCosh,
-      toTermDefinition mathDiv,
-      toTermDefinition mathE,
-      toTermDefinition mathEven,
-      toTermDefinition mathExp,
-      toTermDefinition mathFloor,
-      toTermDefinition mathLog,
-      toTermDefinition mathLogBase,
-      toTermDefinition mathMax,
-      toTermDefinition mathMin,
-      toTermDefinition mathMod,
-      toTermDefinition mathMul,
-      toTermDefinition mathNegate,
-      toTermDefinition mathOdd,
-      toTermDefinition mathPi,
-      toTermDefinition mathPow,
-      toTermDefinition mathPred,
-      toTermDefinition mathRange,
-      toTermDefinition mathRem,
-      toTermDefinition mathRound,
-      toTermDefinition mathRoundBigfloat,
-      toTermDefinition mathRoundFloat32,
-      toTermDefinition mathRoundFloat64,
-      toTermDefinition mathSignum,
-      toTermDefinition mathSin,
-      toTermDefinition mathSinh,
-      toTermDefinition mathSqrt,
-      toTermDefinition mathSub,
-      toTermDefinition mathSucc,
-      toTermDefinition mathTan,
-      toTermDefinition mathTanh,
-      toTermDefinition mathTruncate,
+      toDefinition mathAbs,
+      toDefinition mathAcos,
+      toDefinition mathAcosh,
+      toDefinition mathAdd,
+      toDefinition mathAsin,
+      toDefinition mathAsinh,
+      toDefinition mathAtan,
+      toDefinition mathAtan2,
+      toDefinition mathAtanh,
+      toDefinition mathCeiling,
+      toDefinition mathCos,
+      toDefinition mathCosh,
+      toDefinition mathDiv,
+      toDefinition mathE,
+      toDefinition mathEven,
+      toDefinition mathExp,
+      toDefinition mathFloor,
+      toDefinition mathLog,
+      toDefinition mathLogBase,
+      toDefinition mathMax,
+      toDefinition mathMin,
+      toDefinition mathMod,
+      toDefinition mathMul,
+      toDefinition mathNegate,
+      toDefinition mathOdd,
+      toDefinition mathPi,
+      toDefinition mathPow,
+      toDefinition mathPred,
+      toDefinition mathRange,
+      toDefinition mathRem,
+      toDefinition mathRound,
+      toDefinition mathRoundBigfloat,
+      toDefinition mathRoundFloat32,
+      toDefinition mathRoundFloat64,
+      toDefinition mathSignum,
+      toDefinition mathSin,
+      toDefinition mathSinh,
+      toDefinition mathSqrt,
+      toDefinition mathSub,
+      toDefinition mathSucc,
+      toDefinition mathTan,
+      toDefinition mathTanh,
+      toDefinition mathTruncate,
 
       -- maybes primitives
-      toTermDefinition maybesApply,
-      toTermDefinition maybesBind,
-      toTermDefinition maybesCases,
-      toTermDefinition maybesCat,
-      toTermDefinition maybesCompose,
-      toTermDefinition maybesFromJust,
-      toTermDefinition maybesFromMaybe,
-      toTermDefinition maybesIsJust,
-      toTermDefinition maybesIsNothing,
-      toTermDefinition maybesMap,
-      toTermDefinition maybesMapMaybe,
-      toTermDefinition maybesMaybe,
-      toTermDefinition maybesPure,
-      toTermDefinition maybesToList,
+      toDefinition maybesApply,
+      toDefinition maybesBind,
+      toDefinition maybesCases,
+      toDefinition maybesCat,
+      toDefinition maybesCompose,
+      toDefinition maybesFromJust,
+      toDefinition maybesFromMaybe,
+      toDefinition maybesIsJust,
+      toDefinition maybesIsNothing,
+      toDefinition maybesMap,
+      toDefinition maybesMapMaybe,
+      toDefinition maybesMaybe,
+      toDefinition maybesPure,
+      toDefinition maybesToList,
 
       -- pairs primitives
-      toTermDefinition pairsBimap,
-      toTermDefinition pairsFirst,
-      toTermDefinition pairsSecond,
+      toDefinition pairsBimap,
+      toDefinition pairsFirst,
+      toDefinition pairsSecond,
 
       -- sets primitives
-      toTermDefinition setsDelete,
-      toTermDefinition setsDifference,
-      toTermDefinition setsEmpty,
-      toTermDefinition setsFromList,
-      toTermDefinition setsInsert,
-      toTermDefinition setsIntersection,
-      toTermDefinition setsMap,
-      toTermDefinition setsMember,
-      toTermDefinition setsNull,
-      toTermDefinition setsSingleton,
-      toTermDefinition setsSize,
-      toTermDefinition setsToList,
-      toTermDefinition setsUnion,
-      toTermDefinition setsUnions,
+      toDefinition setsDelete,
+      toDefinition setsDifference,
+      toDefinition setsEmpty,
+      toDefinition setsFromList,
+      toDefinition setsInsert,
+      toDefinition setsIntersection,
+      toDefinition setsMap,
+      toDefinition setsMember,
+      toDefinition setsNull,
+      toDefinition setsSingleton,
+      toDefinition setsSize,
+      toDefinition setsToList,
+      toDefinition setsUnion,
+      toDefinition setsUnions,
 
       -- regex primitives
-      toTermDefinition regexFind,
-      toTermDefinition regexFindAll,
-      toTermDefinition regexMatches,
-      toTermDefinition regexReplace,
-      toTermDefinition regexReplaceAll,
-      toTermDefinition regexSplit,
+      toDefinition regexFind,
+      toDefinition regexFindAll,
+      toDefinition regexMatches,
+      toDefinition regexReplace,
+      toDefinition regexReplaceAll,
+      toDefinition regexSplit,
 
       -- strings primitives
-      toTermDefinition stringsCat,
-      toTermDefinition stringsCat2,
-      toTermDefinition stringsCharAt,
-      toTermDefinition stringsFromList,
-      toTermDefinition stringsIntercalate,
-      toTermDefinition stringsLength,
-      toTermDefinition stringsNull,
-      toTermDefinition stringsLines,
-      toTermDefinition stringsSplitOn,
-      toTermDefinition stringsToList,
-      toTermDefinition stringsToLower,
-      toTermDefinition stringsToUpper,
-      toTermDefinition stringsUnlines,
+      toDefinition stringsCat,
+      toDefinition stringsCat2,
+      toDefinition stringsCharAt,
+      toDefinition stringsFromList,
+      toDefinition stringsIntercalate,
+      toDefinition stringsNull,
+      toDefinition stringsLength,
+      toDefinition stringsLines,
+      toDefinition stringsSplitOn,
+      toDefinition stringsToList,
+      toDefinition stringsToLower,
+      toDefinition stringsToUpper,
+      toDefinition stringsUnlines,
 
       -- typeclass names
-      toTermDefinition typeclassEq,
-      toTermDefinition typeclassOrd]
+      toDefinition typeclassEq,
+      toDefinition typeclassOrd]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 -- | Helper: define a namespace constant
-defineNs :: String -> String -> TBinding Namespace
+defineNs :: String -> String -> TTermDefinition Namespace
 defineNs name nsStr = define name $
   wrap _Namespace $ string nsStr
 
 -- | Helper: define a primitive name constant as a simple Name data constructor
-defineName :: String -> String -> String -> TBinding Name
+defineName :: String -> String -> String -> TTermDefinition Name
 defineName name nsStr localName = define name $
   wrap _Name $ string (nsStr <> "." <> localName)
 
 -- Namespace constants
 
-chars :: TBinding Namespace
+chars :: TTermDefinition Namespace
 chars = defineNs "chars" "hydra.lib.chars"
 
-eithers :: TBinding Namespace
+eithers :: TTermDefinition Namespace
 eithers = defineNs "eithers" "hydra.lib.eithers"
 
-equality :: TBinding Namespace
+equality :: TTermDefinition Namespace
 equality = defineNs "equality" "hydra.lib.equality"
 
-lists :: TBinding Namespace
+lists :: TTermDefinition Namespace
 lists = defineNs "lists" "hydra.lib.lists"
 
-literals :: TBinding Namespace
+literals :: TTermDefinition Namespace
 literals = defineNs "literals" "hydra.lib.literals"
 
-logic :: TBinding Namespace
+logic :: TTermDefinition Namespace
 logic = defineNs "logic" "hydra.lib.logic"
 
-maps :: TBinding Namespace
+maps :: TTermDefinition Namespace
 maps = defineNs "maps" "hydra.lib.maps"
 
-math :: TBinding Namespace
+math :: TTermDefinition Namespace
 math = defineNs "math" "hydra.lib.math"
 
-maybes :: TBinding Namespace
+maybes :: TTermDefinition Namespace
 maybes = defineNs "maybes" "hydra.lib.maybes"
 
-pairs :: TBinding Namespace
+pairs :: TTermDefinition Namespace
 pairs = defineNs "pairs" "hydra.lib.pairs"
 
-regex :: TBinding Namespace
+regex :: TTermDefinition Namespace
 regex = defineNs "regex" "hydra.lib.regex"
 
-sets :: TBinding Namespace
+sets :: TTermDefinition Namespace
 sets = defineNs "sets" "hydra.lib.sets"
 
-strings :: TBinding Namespace
+strings :: TTermDefinition Namespace
 strings = defineNs "strings" "hydra.lib.strings"
 
-typeclass :: TBinding Namespace
+typeclass :: TTermDefinition Namespace
 typeclass = defineNs "typeclass" "hydra.typeclass"
 
 -- Chars primitives
@@ -371,8 +371,8 @@ charsToUpper    = defineName "charsToUpper" "hydra.lib.chars" "toUpper"
 
 -- Eithers primitives
 
-eithersBimap            = defineName "eithersBimap" "hydra.lib.eithers" "bimap"
 eithersBind             = defineName "eithersBind" "hydra.lib.eithers" "bind"
+eithersBimap            = defineName "eithersBimap" "hydra.lib.eithers" "bimap"
 eithersEither           = defineName "eithersEither" "hydra.lib.eithers" "either"
 eithersFoldl            = defineName "eithersFoldl" "hydra.lib.eithers" "foldl"
 eithersFromLeft         = defineName "eithersFromLeft" "hydra.lib.eithers" "fromLeft"
@@ -422,6 +422,11 @@ listsIntersperse = defineName "listsIntersperse" "hydra.lib.lists" "intersperse"
 listsLast        = defineName "listsLast" "hydra.lib.lists" "last"
 listsLength      = defineName "listsLength" "hydra.lib.lists" "length"
 listsMap         = defineName "listsMap" "hydra.lib.lists" "map"
+listsMaybeAt     = defineName "listsMaybeAt" "hydra.lib.lists" "maybeAt"
+listsMaybeHead   = defineName "listsMaybeHead" "hydra.lib.lists" "maybeHead"
+listsMaybeInit   = defineName "listsMaybeInit" "hydra.lib.lists" "maybeInit"
+listsMaybeLast   = defineName "listsMaybeLast" "hydra.lib.lists" "maybeLast"
+listsMaybeTail   = defineName "listsMaybeTail" "hydra.lib.lists" "maybeTail"
 listsNub         = defineName "listsNub" "hydra.lib.lists" "nub"
 listsNull        = defineName "listsNull" "hydra.lib.lists" "null"
 listsPartition   = defineName "listsPartition" "hydra.lib.lists" "partition"
@@ -445,55 +450,55 @@ literalsBigfloatToBigint  = defineName "literalsBigfloatToBigint" "hydra.lib.lit
 literalsBigfloatToFloat32 = defineName "literalsBigfloatToFloat32" "hydra.lib.literals" "bigfloatToFloat32"
 literalsBigfloatToFloat64 = defineName "literalsBigfloatToFloat64" "hydra.lib.literals" "bigfloatToFloat64"
 literalsBigintToBigfloat  = defineName "literalsBigintToBigfloat" "hydra.lib.literals" "bigintToBigfloat"
+literalsBigintToInt8      = defineName "literalsBigintToInt8" "hydra.lib.literals" "bigintToInt8"
 literalsBigintToInt16     = defineName "literalsBigintToInt16" "hydra.lib.literals" "bigintToInt16"
 literalsBigintToInt32     = defineName "literalsBigintToInt32" "hydra.lib.literals" "bigintToInt32"
 literalsBigintToInt64     = defineName "literalsBigintToInt64" "hydra.lib.literals" "bigintToInt64"
-literalsBigintToInt8      = defineName "literalsBigintToInt8" "hydra.lib.literals" "bigintToInt8"
+literalsBigintToUint8     = defineName "literalsBigintToUint8" "hydra.lib.literals" "bigintToUint8"
 literalsBigintToUint16    = defineName "literalsBigintToUint16" "hydra.lib.literals" "bigintToUint16"
 literalsBigintToUint32    = defineName "literalsBigintToUint32" "hydra.lib.literals" "bigintToUint32"
 literalsBigintToUint64    = defineName "literalsBigintToUint64" "hydra.lib.literals" "bigintToUint64"
-literalsBigintToUint8     = defineName "literalsBigintToUint8" "hydra.lib.literals" "bigintToUint8"
 literalsBinaryToBytes     = defineName "literalsBinaryToBytes" "hydra.lib.literals" "binaryToBytes"
 literalsBinaryToString    = defineName "literalsBinaryToString" "hydra.lib.literals" "binaryToString"
 literalsFloat32ToBigfloat = defineName "literalsFloat32ToBigfloat" "hydra.lib.literals" "float32ToBigfloat"
 literalsFloat64ToBigfloat = defineName "literalsFloat64ToBigfloat" "hydra.lib.literals" "float64ToBigfloat"
+literalsInt8ToBigint      = defineName "literalsInt8ToBigint" "hydra.lib.literals" "int8ToBigint"
 literalsInt16ToBigint     = defineName "literalsInt16ToBigint" "hydra.lib.literals" "int16ToBigint"
 literalsInt32ToBigint     = defineName "literalsInt32ToBigint" "hydra.lib.literals" "int32ToBigint"
 literalsInt64ToBigint     = defineName "literalsInt64ToBigint" "hydra.lib.literals" "int64ToBigint"
-literalsInt8ToBigint      = defineName "literalsInt8ToBigint" "hydra.lib.literals" "int8ToBigint"
 literalsReadBigfloat      = defineName "literalsReadBigfloat" "hydra.lib.literals" "readBigfloat"
 literalsReadBigint        = defineName "literalsReadBigint" "hydra.lib.literals" "readBigint"
 literalsReadBoolean       = defineName "literalsReadBoolean" "hydra.lib.literals" "readBoolean"
 literalsReadFloat32       = defineName "literalsReadFloat32" "hydra.lib.literals" "readFloat32"
 literalsReadFloat64       = defineName "literalsReadFloat64" "hydra.lib.literals" "readFloat64"
+literalsReadInt8          = defineName "literalsReadInt8" "hydra.lib.literals" "readInt8"
 literalsReadInt16         = defineName "literalsReadInt16" "hydra.lib.literals" "readInt16"
 literalsReadInt32         = defineName "literalsReadInt32" "hydra.lib.literals" "readInt32"
 literalsReadInt64         = defineName "literalsReadInt64" "hydra.lib.literals" "readInt64"
-literalsReadInt8          = defineName "literalsReadInt8" "hydra.lib.literals" "readInt8"
 literalsReadString        = defineName "literalsReadString" "hydra.lib.literals" "readString"
+literalsReadUint8         = defineName "literalsReadUint8" "hydra.lib.literals" "readUint8"
 literalsReadUint16        = defineName "literalsReadUint16" "hydra.lib.literals" "readUint16"
 literalsReadUint32        = defineName "literalsReadUint32" "hydra.lib.literals" "readUint32"
 literalsReadUint64        = defineName "literalsReadUint64" "hydra.lib.literals" "readUint64"
-literalsReadUint8         = defineName "literalsReadUint8" "hydra.lib.literals" "readUint8"
 literalsShowBigfloat      = defineName "literalsShowBigfloat" "hydra.lib.literals" "showBigfloat"
 literalsShowBigint        = defineName "literalsShowBigint" "hydra.lib.literals" "showBigint"
 literalsShowBoolean       = defineName "literalsShowBoolean" "hydra.lib.literals" "showBoolean"
 literalsShowFloat32       = defineName "literalsShowFloat32" "hydra.lib.literals" "showFloat32"
 literalsShowFloat64       = defineName "literalsShowFloat64" "hydra.lib.literals" "showFloat64"
+literalsShowInt8          = defineName "literalsShowInt8" "hydra.lib.literals" "showInt8"
 literalsShowInt16         = defineName "literalsShowInt16" "hydra.lib.literals" "showInt16"
 literalsShowInt32         = defineName "literalsShowInt32" "hydra.lib.literals" "showInt32"
 literalsShowInt64         = defineName "literalsShowInt64" "hydra.lib.literals" "showInt64"
-literalsShowInt8          = defineName "literalsShowInt8" "hydra.lib.literals" "showInt8"
-literalsShowString        = defineName "literalsShowString" "hydra.lib.literals" "showString"
+literalsShowUint8         = defineName "literalsShowUint8" "hydra.lib.literals" "showUint8"
 literalsShowUint16        = defineName "literalsShowUint16" "hydra.lib.literals" "showUint16"
 literalsShowUint32        = defineName "literalsShowUint32" "hydra.lib.literals" "showUint32"
 literalsShowUint64        = defineName "literalsShowUint64" "hydra.lib.literals" "showUint64"
-literalsShowUint8         = defineName "literalsShowUint8" "hydra.lib.literals" "showUint8"
+literalsShowString        = defineName "literalsShowString" "hydra.lib.literals" "showString"
 literalsStringToBinary    = defineName "literalsStringToBinary" "hydra.lib.literals" "stringToBinary"
+literalsUint8ToBigint     = defineName "literalsUint8ToBigint" "hydra.lib.literals" "uint8ToBigint"
 literalsUint16ToBigint    = defineName "literalsUint16ToBigint" "hydra.lib.literals" "uint16ToBigint"
 literalsUint32ToBigint    = defineName "literalsUint32ToBigint" "hydra.lib.literals" "uint32ToBigint"
 literalsUint64ToBigint    = defineName "literalsUint64ToBigint" "hydra.lib.literals" "uint64ToBigint"
-literalsUint8ToBigint     = defineName "literalsUint8ToBigint" "hydra.lib.literals" "uint8ToBigint"
 
 -- Logic primitives
 
@@ -547,15 +552,19 @@ mathFloor    = defineName "mathFloor" "hydra.lib.math" "floor"
 mathLog      = defineName "mathLog" "hydra.lib.math" "log"
 mathLogBase  = defineName "mathLogBase" "hydra.lib.math" "logBase"
 mathMax      = defineName "mathMax" "hydra.lib.math" "max"
+mathMaybeDiv = defineName "mathMaybeDiv" "hydra.lib.math" "maybeDiv"
 mathMin      = defineName "mathMin" "hydra.lib.math" "min"
+mathMaybeMod = defineName "mathMaybeMod" "hydra.lib.math" "maybeMod"
 mathMod      = defineName "mathMod" "hydra.lib.math" "mod"
 mathMul      = defineName "mathMul" "hydra.lib.math" "mul"
 mathNegate   = defineName "mathNegate" "hydra.lib.math" "negate"
 mathOdd      = defineName "mathOdd" "hydra.lib.math" "odd"
 mathPi       = defineName "mathPi" "hydra.lib.math" "pi"
 mathPow      = defineName "mathPow" "hydra.lib.math" "pow"
+mathMaybePred = defineName "mathMaybePred" "hydra.lib.math" "maybePred"
 mathPred     = defineName "mathPred" "hydra.lib.math" "pred"
 mathRange    = defineName "mathRange" "hydra.lib.math" "range"
+mathMaybeRem = defineName "mathMaybeRem" "hydra.lib.math" "maybeRem"
 mathRem          = defineName "mathRem" "hydra.lib.math" "rem"
 mathRound        = defineName "mathRound" "hydra.lib.math" "round"
 mathRoundBigfloat = defineName "mathRoundBigfloat" "hydra.lib.math" "roundBigfloat"
@@ -566,6 +575,7 @@ mathSin      = defineName "mathSin" "hydra.lib.math" "sin"
 mathSinh     = defineName "mathSinh" "hydra.lib.math" "sinh"
 mathSqrt     = defineName "mathSqrt" "hydra.lib.math" "sqrt"
 mathSub      = defineName "mathSub" "hydra.lib.math" "sub"
+mathMaybeSucc = defineName "mathMaybeSucc" "hydra.lib.math" "maybeSucc"
 mathSucc     = defineName "mathSucc" "hydra.lib.math" "succ"
 mathTan      = defineName "mathTan" "hydra.lib.math" "tan"
 mathTanh     = defineName "mathTanh" "hydra.lib.math" "tanh"
@@ -627,9 +637,10 @@ stringsCat2        = defineName "stringsCat2" "hydra.lib.strings" "cat2"
 stringsCharAt      = defineName "stringsCharAt" "hydra.lib.strings" "charAt"
 stringsFromList    = defineName "stringsFromList" "hydra.lib.strings" "fromList"
 stringsIntercalate = defineName "stringsIntercalate" "hydra.lib.strings" "intercalate"
-stringsLength      = defineName "stringsLength" "hydra.lib.strings" "length"
 stringsNull        = defineName "stringsNull" "hydra.lib.strings" "null"
+stringsLength      = defineName "stringsLength" "hydra.lib.strings" "length"
 stringsLines       = defineName "stringsLines" "hydra.lib.strings" "lines"
+stringsMaybeCharAt = defineName "stringsMaybeCharAt" "hydra.lib.strings" "maybeCharAt"
 stringsSplitOn     = defineName "stringsSplitOn" "hydra.lib.strings" "splitOn"
 stringsToList      = defineName "stringsToList" "hydra.lib.strings" "toList"
 stringsToLower     = defineName "stringsToLower" "hydra.lib.strings" "toLower"

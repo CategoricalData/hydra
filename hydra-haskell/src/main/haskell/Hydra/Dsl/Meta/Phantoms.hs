@@ -111,13 +111,13 @@ constant t = TTerm $ Terms.constant (unTTerm $ asTerm t)
 
 -- | Create a definition in a module
 -- Example: definitionInModule myModule "addInts" (lambda "x" (lambda "y" (add @@ var "x" @@ var "y")))
-definitionInModule :: Module -> String -> TTerm a -> TBinding a
+definitionInModule :: Module -> String -> TTerm a -> TTermDefinition a
 definitionInModule mod = definitionInNamespace $ moduleNamespace mod
 
 -- | Create a definition in a namespace
 -- Example: definitionInNamespace (Namespace "com.example") "addInts" myFunction
-definitionInNamespace :: Namespace -> String -> TTerm a -> TBinding a
-definitionInNamespace ns lname = TBinding $ unqualifyName $ QualifiedName (Just ns) lname
+definitionInNamespace :: Namespace -> String -> TTerm a -> TTermDefinition a
+definitionInNamespace ns lname = TTermDefinition $ unqualifyName $ QualifiedName (Just ns) lname
 
 -- | Add documentation to a term
 -- Example: doc "Adds two integers" addFunction
@@ -225,6 +225,11 @@ encoderFor typeName = var $ unName $ encodeBindingName typeName
 -- Example: el (definitionInModule myModule "addInts" myFunction)
 el :: TBinding a -> Binding
 el = toBinding
+
+-- | Convert a phantom-typed term definition to a Definition for use in module definition lists
+-- Example: toDefinition functionArity
+toDefinition :: TTermDefinition a -> Definition
+toDefinition (TTermDefinition name (TTerm term)) = DefinitionTerm $ TermDefinition name term Nothing
 
 
 

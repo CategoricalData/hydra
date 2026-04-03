@@ -19,6 +19,7 @@ import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.paths
 import hydra.rewriting
+import hydra.variables
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
@@ -82,7 +83,7 @@ def check_undefined_type_variables_in_type(path: T0, cx: hydra.graph.Graph, typ:
 
     @lru_cache(1)
     def free_vars() -> frozenset[hydra.core.Name]:
-        return hydra.rewriting.free_variables_in_type(typ)
+        return hydra.variables.free_variables_in_type(typ)
     @lru_cache(1)
     def undefined() -> frozenset[hydra.core.Name]:
         return hydra.lib.sets.difference(free_vars(), cx.type_variables)
@@ -93,7 +94,7 @@ def check_undefined_type_variables_in_type_scheme(path: T0, cx: hydra.graph.Grap
 
     @lru_cache(1)
     def free_vars() -> frozenset[hydra.core.Name]:
-        return hydra.rewriting.free_variables_in_type_scheme(ts)
+        return hydra.variables.free_variables_in_type_scheme(ts)
     @lru_cache(1)
     def undefined() -> frozenset[hydra.core.Name]:
         return hydra.lib.sets.difference(free_vars(), cx.type_variables)

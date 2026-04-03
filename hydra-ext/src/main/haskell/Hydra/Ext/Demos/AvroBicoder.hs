@@ -29,6 +29,7 @@ import qualified Hydra.Json.Writer as JsonWriter
 import Hydra.Parsing (ParseResult(..), ParseSuccess(..), ParseError(..))
 import qualified Hydra.Show.Errors as ShowError
 import Hydra.Ext.Tools.AvroWorkflows (propertyGraphGraphsonLastMile, transformAvroJsonDirectory)
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Util as Util
 import qualified Hydra.Json.Writer as JsonWriter
 
@@ -91,7 +92,7 @@ runForwardDemo = do
         case AvroCoder.avroHydraAdapter cx avroSchema AvroCoder.emptyAvroEnvironment of
           Left e -> putStrLn $ "  Adapter error: " ++ show e
           Right (adapter, _env) -> do
-            putStrLn $ "  Forward adapter created (lossy: " ++ show (Util.adapterIsLossy adapter) ++ ")"
+            putStrLn $ "  Forward adapter created (lossy: " ++ show (Coders.adapterIsLossy adapter) ++ ")"
 
             -- Load and convert example data
             let dataPath = combine pwd "src/test/json/moviedemo/exampleReview.json"
@@ -99,12 +100,12 @@ runForwardDemo = do
             case parseJson dataStr of
               Left e -> putStrLn $ "  Data parse error: " ++ e
               Right dataJson -> do
-                case Util.coderEncode (Util.adapterCoder adapter) cx dataJson of
+                case Coders.coderEncode (Coders.adapterCoder adapter) cx dataJson of
                   Left e -> putStrLn $ "  Encode error: " ++ show e
                   Right hydraTerm -> do
                     putStrLn "  JSON data -> Hydra term: OK"
                     -- Decode back to JSON to verify round-trip
-                    case Util.coderDecode (Util.adapterCoder adapter) cx hydraTerm of
+                    case Coders.coderDecode (Coders.adapterCoder adapter) cx hydraTerm of
                       Left e -> putStrLn $ "  Decode error: " ++ show e
                       Right jsonResult -> do
                         let resultStr = JsonWriter.printJson jsonResult
@@ -143,7 +144,7 @@ runReverseDemo = do
   case Encoder.encodeType cx typeMap personName of
     Left err -> putStrLn $ "  ERROR: " ++ ShowError.error (inContextObject err)
     Right adapter -> do
-      let avroSchema = Util.adapterTarget adapter
+      let avroSchema = Coders.adapterTarget adapter
       let json = SchemaJson.encodeSchema avroSchema
       let jsonStr = JsonWriter.printJson json
       putStrLn "  Hydra type 'com.example.Person' encoded as Avro schema:"
@@ -167,7 +168,7 @@ runReverseDemo = do
             Core.Field (Core.Name "tags") (Core.TermList [
               Core.TermLiteral (Core.LiteralString "engineer"),
               Core.TermLiteral (Core.LiteralString "haskell")])]
-      case Util.coderEncode (Util.adapterCoder adapter) cx personTerm of
+      case Coders.coderEncode (Coders.adapterCoder adapter) cx personTerm of
         Left err -> putStrLn $ "  Term encode ERROR: " ++ ShowError.error (inContextObject err)
         Right jsonVal -> do
           let termJsonStr = JsonWriter.printJson jsonVal
@@ -201,7 +202,7 @@ runRoundTripDemo = do
         case AvroCoder.avroHydraAdapter cx avroSchema AvroCoder.emptyAvroEnvironment of
           Left e -> putStrLn $ "  Forward adapter error: " ++ show e
           Right (fwdAdapter, _env) -> do
-            let hydraType = Util.adapterTarget fwdAdapter
+            let hydraType = Coders.adapterTarget fwdAdapter
             putStrLn $ "  Forward: Avro schema -> Hydra type (ok)"
 
             -- Reverse: Hydra -> Avro
@@ -209,7 +210,7 @@ runRoundTripDemo = do
             case Encoder.encodeType cx (M.singleton typeName hydraType) typeName of
               Left e -> putStrLn $ "  Reverse adapter error: " ++ show e
               Right revAdapter -> do
-                let revSchema = Util.adapterTarget revAdapter
+                let revSchema = Coders.adapterTarget revAdapter
                 putStrLn $ "  Reverse: Hydra type -> Avro schema (ok)"
 
                 -- Compare: serialize both and check structure
@@ -265,19 +266,19 @@ runSchemaCodecDemo = do
           Avro.Field "timestamp" Nothing (Avro.SchemaPrimitive Avro.PrimitiveLong) Nothing Nothing Nothing M.empty],
         Avro.namedAnnotations = M.empty}
 
-  case Util.coderEncode coder cx schema of
+  case Coders.coderEncode coder cx schema of
     Left e -> putStrLn $ "  Encode error: " ++ show e
     Right jsonStr -> do
       putStrLn $ "  Encoded: " ++ jsonStr
       -- Decode it back
-      case Util.coderDecode coder cx jsonStr of
+      case Coders.coderDecode coder cx jsonStr of
         Left e -> putStrLn $ "  Decode error: " ++ show e
         Right decoded -> do
           if decoded == schema
             then putStrLn "  PASS: round-trip produces identical schema"
             else putStrLn "  NOTE: round-trip produces structurally different schema (may differ in optional fields)"
           -- Re-encode to verify
-          case Util.coderEncode coder cx decoded of
+          case Coders.coderEncode coder cx decoded of
             Left e -> putStrLn $ "  Re-encode error: " ++ show e
             Right jsonStr2 -> do
               if jsonStr == jsonStr2

@@ -24,8 +24,10 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
+import qualified Hydra.Strip as Strip
 import qualified Hydra.Rewriting as Rewriting
-import qualified Hydra.Schemas as Schemas
+import qualified Hydra.Environment as Environment
+import qualified Hydra.Predicates as Predicates
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Show.Core as Core_
 import qualified Hydra.Util as Util
@@ -39,7 +41,7 @@ import qualified Data.Set as S
 moduleToGraphql :: Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (M.Map String String)
 moduleToGraphql mod defs cx g =
 
-      let partitioned = Schemas.partitionDefinitions defs
+      let partitioned = Environment.partitionDefinitions defs
           typeDefs = Pairs.first partitioned
           prefixes =
                   (\modNs -> \tdefs ->
@@ -99,14 +101,14 @@ encodeLiteralType cx lt =
 
 encodeNamedType :: Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Core.Name -> Core.Type -> Either (Context.InContext Errors.Error) Syntax.TypeDefinition
 encodeNamedType cx g prefixes name typ =
-    case (Rewriting.deannotateType typ) of
+    case (Strip.deannotateType typ) of
       Core.TypeRecord v0 -> Eithers.bind (Eithers.mapList (\f -> encodeFieldType cx g prefixes f) v0) (\gfields -> Eithers.bind (descriptionFromType cx g typ) (\desc -> Right (Syntax.TypeDefinitionObject (Syntax.ObjectTypeDefinition {
         Syntax.objectTypeDefinitionDescription = desc,
         Syntax.objectTypeDefinitionName = (encodeTypeName prefixes name),
         Syntax.objectTypeDefinitionImplementsInterfaces = Nothing,
         Syntax.objectTypeDefinitionDirectives = Nothing,
         Syntax.objectTypeDefinitionFieldsDefinition = (Just (Syntax.FieldsDefinition gfields))}))))
-      Core.TypeUnion v0 -> if Schemas.isEnumRowType v0
+      Core.TypeUnion v0 -> if Predicates.isEnumRowType v0
         then Eithers.bind (Eithers.mapList (\f -> encodeEnumFieldType cx g f) v0) (\values -> Eithers.bind (descriptionFromType cx g typ) (\desc -> Right (Syntax.TypeDefinitionEnum (Syntax.EnumTypeDefinition {
           Syntax.enumTypeDefinitionDescription = desc,
           Syntax.enumTypeDefinitionName = (encodeTypeName prefixes name),
@@ -178,8 +180,8 @@ encodeNamedType cx g prefixes name typ =
 
 encodeType :: Context.Context -> t0 -> M.Map Module.Namespace String -> Core.Type -> Either (Context.InContext Errors.Error) Syntax.Type
 encodeType cx g prefixes typ =
-    case (Rewriting.deannotateType typ) of
-      Core.TypeMaybe v0 -> case (Rewriting.deannotateType v0) of
+    case (Strip.deannotateType typ) of
+      Core.TypeMaybe v0 -> case (Strip.deannotateType v0) of
         Core.TypeList v1 -> Eithers.map (\gt -> Syntax.TypeList (Syntax.ListType gt)) (encodeType cx g prefixes v1)
         Core.TypeSet v1 -> Eithers.map (\gt -> Syntax.TypeList (Syntax.ListType gt)) (encodeType cx g prefixes v1)
         Core.TypeMap v1 -> Eithers.map (\gt -> Syntax.TypeList (Syntax.ListType gt)) (encodeType cx g prefixes (Core.mapTypeValues v1))
@@ -235,7 +237,7 @@ encodeTypeName prefixes name =
 encodeUnionFieldType :: Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Core.FieldType -> Either (Context.InContext Errors.Error) Syntax.FieldDefinition
 encodeUnionFieldType cx g prefixes ft =
     let innerType = Core.fieldTypeType ft
-        isUnit = Schemas.isUnitType (Rewriting.deannotateType innerType)
+        isUnit = Predicates.isUnitType (Strip.deannotateType innerType)
         effectiveType = if isUnit
           then Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeBoolean)
           else Core.TypeMaybe innerType

@@ -12,7 +12,7 @@ public interface Coder {
       t,
       cx,
       g));
-    return hydra.Rewriting.deannotateType(typ).accept(new hydra.core.Type.PartialVisitor<>() {
+    return hydra.Strip.deannotateType(typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.Type> otherwise(hydra.core.Type instance) {
         return hydra.lib.eithers.Bind.apply(
@@ -88,6 +88,7 @@ public interface Coder {
     hydra.util.Lazy<hydra.util.ConsList<hydra.ext.haskell.syntax.Import>> domainImports = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       toImport,
       hydra.lib.maps.ToList.apply(((java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>, hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName>>) (projected -> projected.mapping)).apply(namespaces))));
+    hydra.ext.haskell.environment.HaskellModuleMetadata meta = hydra.ext.haskell.Coder.gatherMetadata(defs);
     java.util.function.Function<hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>, hydra.ext.haskell.syntax.Import> toImport2 = (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>, hydra.ext.haskell.syntax.Import>) (triple -> {
       hydra.util.Lazy<hydra.util.ConsList<String>> hidden = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(triple));
       hydra.util.Lazy<hydra.util.Maybe<String>> malias = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(triple)));
@@ -104,26 +105,32 @@ public interface Coder {
     });
     hydra.util.Lazy<hydra.util.ConsList<hydra.ext.haskell.syntax.Import>> standardImports = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       toImport2,
-      hydra.lib.lists.Concat2.apply(
-        hydra.util.ConsList.of(
-          (hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>) ((hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>) (new hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>((hydra.util.Pair<String, hydra.util.Maybe<String>>) ((hydra.util.Pair<String, hydra.util.Maybe<String>>) (new hydra.util.Pair<String, hydra.util.Maybe<String>>("Prelude", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())))), hydra.util.ConsList.of(
-            "Enum",
-            "Ordering",
-            "decodeFloat",
-            "encodeFloat",
-            "fail",
-            "map",
-            "pure",
-            "sum")))),
-          (hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>) ((hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>) (new hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>((hydra.util.Pair<String, hydra.util.Maybe<String>>) ((hydra.util.Pair<String, hydra.util.Maybe<String>>) (new hydra.util.Pair<String, hydra.util.Maybe<String>>("Data.ByteString", hydra.util.Maybe.just("B")))), (hydra.util.ConsList<String>) (hydra.util.ConsList.<String>empty())))),
-          (hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>) ((hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>) (new hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>((hydra.util.Pair<String, hydra.util.Maybe<String>>) ((hydra.util.Pair<String, hydra.util.Maybe<String>>) (new hydra.util.Pair<String, hydra.util.Maybe<String>>("Data.Int", hydra.util.Maybe.just("I")))), (hydra.util.ConsList<String>) (hydra.util.ConsList.<String>empty())))),
-          (hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>) ((hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>) (new hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>((hydra.util.Pair<String, hydra.util.Maybe<String>>) ((hydra.util.Pair<String, hydra.util.Maybe<String>>) (new hydra.util.Pair<String, hydra.util.Maybe<String>>("Data.List", hydra.util.Maybe.just("L")))), (hydra.util.ConsList<String>) (hydra.util.ConsList.<String>empty())))),
-          (hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>) ((hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>) (new hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>((hydra.util.Pair<String, hydra.util.Maybe<String>>) ((hydra.util.Pair<String, hydra.util.Maybe<String>>) (new hydra.util.Pair<String, hydra.util.Maybe<String>>("Data.Map", hydra.util.Maybe.just("M")))), (hydra.util.ConsList<String>) (hydra.util.ConsList.<String>empty())))),
+      hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
+        hydra.util.ConsList.of((hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>) ((hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>) (new hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>((hydra.util.Pair<String, hydra.util.Maybe<String>>) ((hydra.util.Pair<String, hydra.util.Maybe<String>>) (new hydra.util.Pair<String, hydra.util.Maybe<String>>("Prelude", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())))), hydra.util.ConsList.of(
+          "Enum",
+          "Ordering",
+          "decodeFloat",
+          "encodeFloat",
+          "fail",
+          "map",
+          "pure",
+          "sum"))))),
+        hydra.ext.haskell.Coder.constructModule_condImport(
+          (meta).usesByteString,
+          (hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>) ((hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>) (new hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>((hydra.util.Pair<String, hydra.util.Maybe<String>>) ((hydra.util.Pair<String, hydra.util.Maybe<String>>) (new hydra.util.Pair<String, hydra.util.Maybe<String>>("Data.ByteString", hydra.util.Maybe.just("B")))), (hydra.util.ConsList<String>) (hydra.util.ConsList.<String>empty()))))),
+        hydra.ext.haskell.Coder.constructModule_condImport(
+          (meta).usesInt,
+          (hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>) ((hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>) (new hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>((hydra.util.Pair<String, hydra.util.Maybe<String>>) ((hydra.util.Pair<String, hydra.util.Maybe<String>>) (new hydra.util.Pair<String, hydra.util.Maybe<String>>("Data.Int", hydra.util.Maybe.just("I")))), (hydra.util.ConsList<String>) (hydra.util.ConsList.<String>empty()))))),
+        hydra.ext.haskell.Coder.constructModule_condImport(
+          (meta).usesMap,
+          (hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>) ((hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>) (new hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>((hydra.util.Pair<String, hydra.util.Maybe<String>>) ((hydra.util.Pair<String, hydra.util.Maybe<String>>) (new hydra.util.Pair<String, hydra.util.Maybe<String>>("Data.Map", hydra.util.Maybe.just("M")))), (hydra.util.ConsList<String>) (hydra.util.ConsList.<String>empty()))))),
+        hydra.ext.haskell.Coder.constructModule_condImport(
+          (meta).usesSet,
           (hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>) ((hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>) (new hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>((hydra.util.Pair<String, hydra.util.Maybe<String>>) ((hydra.util.Pair<String, hydra.util.Maybe<String>>) (new hydra.util.Pair<String, hydra.util.Maybe<String>>("Data.Set", hydra.util.Maybe.just("S")))), (hydra.util.ConsList<String>) (hydra.util.ConsList.<String>empty()))))),
         hydra.lib.logic.IfElse.lazy(
-          hydra.Schemas.moduleContainsBinaryLiterals(mod),
+          hydra.Analysis.moduleContainsBinaryLiterals(mod),
           () -> hydra.util.ConsList.of((hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>) ((hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>) (new hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>((hydra.util.Pair<String, hydra.util.Maybe<String>>) ((hydra.util.Pair<String, hydra.util.Maybe<String>>) (new hydra.util.Pair<String, hydra.util.Maybe<String>>("Hydra.Lib.Literals", hydra.util.Maybe.just("Literals")))), (hydra.util.ConsList<String>) (hydra.util.ConsList.<String>empty()))))),
-          () -> (hydra.util.ConsList<hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>>empty())))));
+          () -> (hydra.util.ConsList<hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.util.Pair<String, hydra.util.Maybe<String>>, hydra.util.ConsList<String>>>empty()))))));
     hydra.util.Lazy<hydra.util.ConsList<hydra.ext.haskell.syntax.Import>> imports = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
       domainImports.get(),
       standardImports.get()));
@@ -136,6 +143,17 @@ public interface Coder {
         hydra.util.Maybe<String> mc = (mod).description;
         return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.Module>right(new hydra.ext.haskell.syntax.Module(hydra.util.Maybe.just(new hydra.ext.haskell.syntax.ModuleHead(mc, (importName).apply((h).apply((mod).namespace)), (hydra.util.ConsList<hydra.ext.haskell.syntax.Export>) (hydra.util.ConsList.<hydra.ext.haskell.syntax.Export>empty()))), imports.get(), decls.get()));
       }));
+  }
+
+  static <T0> hydra.util.ConsList<T0> constructModule_condImport(Boolean flag, T0 triple) {
+    return hydra.lib.logic.IfElse.lazy(
+      flag,
+      () -> hydra.util.ConsList.of(triple),
+      () -> (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()));
+  }
+
+  static hydra.ext.haskell.environment.HaskellModuleMetadata emptyMetadata() {
+    return new hydra.ext.haskell.environment.HaskellModuleMetadata(false, false, false, false);
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.Expression> encodeCaseExpression(Integer depth, hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName> namespaces, hydra.core.CaseStatement stmt, hydra.ext.haskell.syntax.Expression scrutinee, hydra.context.Context cx, hydra.graph.Graph g) {
@@ -156,9 +174,9 @@ public interface Coder {
         "v",
         hydra.lib.literals.ShowInt32.apply(depth));
       hydra.core.Term raw = new hydra.core.Term.Application(new hydra.core.Application(fun_, new hydra.core.Term.Variable(new hydra.core.Name(v0))));
-      hydra.core.Term rhsTerm = hydra.Rewriting.simplifyTerm(raw);
+      hydra.core.Term rhsTerm = hydra.Dependencies.simplifyTerm(raw);
       hydra.util.Lazy<String> v1 = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
-        hydra.Rewriting.isFreeVariableInTerm(
+        hydra.Variables.isFreeVariableInTerm(
           new hydra.core.Name(v0),
           rhsTerm),
         () -> hydra.Constants.ignoredVariable(),
@@ -176,7 +194,7 @@ public interface Coder {
           (java.util.function.Function<hydra.core.FieldType, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.haskell.syntax.Pattern>>>) (fieldType -> {
             hydra.core.Type ft = (fieldType).type;
             hydra.util.ConsList<hydra.ext.haskell.syntax.Pattern> singleArg = hydra.util.ConsList.of(new hydra.ext.haskell.syntax.Pattern.Name(hydra.ext.haskell.Utils.rawName(v1.get())));
-            return hydra.Rewriting.deannotateType(ft).accept(new hydra.core.Type.PartialVisitor<>() {
+            return hydra.Strip.deannotateType(ft).accept(new hydra.core.Type.PartialVisitor<>() {
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.haskell.syntax.Pattern>> otherwise(hydra.core.Type instance) {
                 return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.haskell.syntax.Pattern>>right(singleArg);
@@ -207,7 +225,7 @@ public interface Coder {
         }));
     }));
     return hydra.lib.eithers.Bind.apply(
-      hydra.Schemas.requireUnionType(
+      hydra.Resolution.requireUnionType(
         cx,
         g,
         dn),
@@ -460,7 +478,7 @@ public interface Coder {
           lhs,
           rhs))));
     });
-    return hydra.Rewriting.deannotateTerm(term).accept(new hydra.core.Term.PartialVisitor<>() {
+    return hydra.Strip.deannotateTerm(term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.Expression> otherwise(hydra.core.Term instance) {
         return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.Expression>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
@@ -472,7 +490,7 @@ public interface Coder {
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.Expression> visit(hydra.core.Term.Application app) {
         hydra.core.Term arg = (app).value.argument;
         hydra.core.Term fun = (app).value.function;
-        hydra.core.Term deannotatedFun = hydra.Rewriting.deannotateTerm(fun);
+        hydra.core.Term deannotatedFun = hydra.Strip.deannotateTerm(fun);
         return (deannotatedFun).accept(new hydra.core.Term.PartialVisitor<>() {
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.Expression> otherwise(hydra.core.Term instance) {
@@ -564,7 +582,7 @@ public interface Coder {
         collectBindings.set((java.util.function.Function<hydra.core.Let, hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, hydra.core.Term>>) (lt -> {
           hydra.core.Term body = (lt).body;
           hydra.util.ConsList<hydra.core.Binding> bs = (lt).bindings;
-          return hydra.Rewriting.deannotateTerm(body).accept(new hydra.core.Term.PartialVisitor<>() {
+          return hydra.Strip.deannotateTerm(body).accept(new hydra.core.Term.PartialVisitor<>() {
             @Override
             public hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, hydra.core.Term> otherwise(hydra.core.Term instance) {
               return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, hydra.core.Term>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, hydra.core.Term>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, hydra.core.Term>(bs, body)));
@@ -713,12 +731,12 @@ public interface Coder {
             v1)),
           (encode).apply(ft)));
         return hydra.lib.eithers.Bind.apply(
-          hydra.Schemas.requireUnionField(
+          hydra.Resolution.requireUnionField(
             cx,
             g,
             sname,
             fn),
-          (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.Expression>>) (ftyp -> hydra.Rewriting.deannotateType(ftyp).accept(new hydra.core.Type.PartialVisitor<>() {
+          (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.Expression>>) (ftyp -> hydra.Strip.deannotateType(ftyp).accept(new hydra.core.Type.PartialVisitor<>() {
             @Override
             public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.Expression> otherwise(hydra.core.Type instance) {
               return dflt.get();
@@ -766,7 +784,7 @@ public interface Coder {
       cx,
       g));
     hydra.util.Lazy<hydra.ext.haskell.syntax.Type> unitTuple = new hydra.util.Lazy<>(() -> new hydra.ext.haskell.syntax.Type.Tuple((hydra.util.ConsList<hydra.ext.haskell.syntax.Type>) (hydra.util.ConsList.<hydra.ext.haskell.syntax.Type>empty())));
-    return hydra.Rewriting.deannotateType(typ).accept(new hydra.core.Type.PartialVisitor<>() {
+    return hydra.Strip.deannotateType(typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.Type> otherwise(hydra.core.Type instance) {
         return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.Type>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
@@ -1073,13 +1091,107 @@ public interface Coder {
       hydra.lib.sets.ToList.apply(hydra.ext.haskell.Coder.<T1, T2>encodeTypeWithClassAssertions_clsSet(mapEntry)));
   }
 
-  static <T1> hydra.util.Either<T1, hydra.ext.haskell.syntax.Type> encodeType_ref(java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>, java.util.function.Function<hydra.core.Name, hydra.ext.haskell.syntax.Name>> hydra_ext_haskell_utils_elementReference2, hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName> namespaces, hydra.core.Name name) {
-    return hydra.util.Either.<T1, hydra.ext.haskell.syntax.Type>right(new hydra.ext.haskell.syntax.Type.Variable((hydra_ext_haskell_utils_elementReference2).apply(namespaces).apply(name)));
+  static <T1> hydra.util.Either<T1, hydra.ext.haskell.syntax.Type> encodeType_ref(java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>, java.util.function.Function<hydra.core.Name, hydra.ext.haskell.syntax.Name>> hydra_ext_haskell_utils_elementReference, hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName> namespaces, hydra.core.Name name) {
+    return hydra.util.Either.<T1, hydra.ext.haskell.syntax.Type>right(new hydra.ext.haskell.syntax.Type.Variable((hydra_ext_haskell_utils_elementReference).apply(namespaces).apply(name)));
+  }
+
+  static hydra.ext.haskell.environment.HaskellModuleMetadata extendMetaForTerm(hydra.ext.haskell.environment.HaskellModuleMetadata meta, hydra.core.Term term) {
+    return (term).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public hydra.ext.haskell.environment.HaskellModuleMetadata otherwise(hydra.core.Term instance) {
+        return meta;
+      }
+
+      @Override
+      public hydra.ext.haskell.environment.HaskellModuleMetadata visit(hydra.core.Term.Map ignored) {
+        return hydra.ext.haskell.Coder.setMetaUsesMap(
+          true,
+          meta);
+      }
+
+      @Override
+      public hydra.ext.haskell.environment.HaskellModuleMetadata visit(hydra.core.Term.Set ignored) {
+        return hydra.ext.haskell.Coder.setMetaUsesSet(
+          true,
+          meta);
+      }
+    });
+  }
+
+  static hydra.ext.haskell.environment.HaskellModuleMetadata extendMetaForType(hydra.ext.haskell.environment.HaskellModuleMetadata meta, hydra.core.Type typ) {
+    return hydra.Strip.deannotateType(typ).accept(new hydra.core.Type.PartialVisitor<>() {
+      @Override
+      public hydra.ext.haskell.environment.HaskellModuleMetadata otherwise(hydra.core.Type instance) {
+        return meta;
+      }
+
+      @Override
+      public hydra.ext.haskell.environment.HaskellModuleMetadata visit(hydra.core.Type.Literal lt) {
+        return (lt).value.accept(new hydra.core.LiteralType.PartialVisitor<>() {
+          @Override
+          public hydra.ext.haskell.environment.HaskellModuleMetadata otherwise(hydra.core.LiteralType instance) {
+            return meta;
+          }
+
+          @Override
+          public hydra.ext.haskell.environment.HaskellModuleMetadata visit(hydra.core.LiteralType.Binary ignored) {
+            return hydra.ext.haskell.Coder.setMetaUsesByteString(
+              true,
+              meta);
+          }
+
+          @Override
+          public hydra.ext.haskell.environment.HaskellModuleMetadata visit(hydra.core.LiteralType.Integer_ it) {
+            return (it).value.accept(new hydra.core.IntegerType.PartialVisitor<>() {
+              @Override
+              public hydra.ext.haskell.environment.HaskellModuleMetadata otherwise(hydra.core.IntegerType instance) {
+                return meta;
+              }
+
+              @Override
+              public hydra.ext.haskell.environment.HaskellModuleMetadata visit(hydra.core.IntegerType.Int8 ignored) {
+                return hydra.ext.haskell.Coder.setMetaUsesInt(
+                  true,
+                  meta);
+              }
+
+              @Override
+              public hydra.ext.haskell.environment.HaskellModuleMetadata visit(hydra.core.IntegerType.Int16 ignored) {
+                return hydra.ext.haskell.Coder.setMetaUsesInt(
+                  true,
+                  meta);
+              }
+
+              @Override
+              public hydra.ext.haskell.environment.HaskellModuleMetadata visit(hydra.core.IntegerType.Int64 ignored) {
+                return hydra.ext.haskell.Coder.setMetaUsesInt(
+                  true,
+                  meta);
+              }
+            });
+          }
+        });
+      }
+
+      @Override
+      public hydra.ext.haskell.environment.HaskellModuleMetadata visit(hydra.core.Type.Map ignored) {
+        return hydra.ext.haskell.Coder.setMetaUsesMap(
+          true,
+          meta);
+      }
+
+      @Override
+      public hydra.ext.haskell.environment.HaskellModuleMetadata visit(hydra.core.Type.Set ignored) {
+        return hydra.ext.haskell.Coder.setMetaUsesSet(
+          true,
+          meta);
+      }
+    });
   }
 
   static hydra.util.PersistentSet<hydra.core.Name> findOrdVariables(hydra.core.Type typ) {
     java.util.function.Function<hydra.core.Name, Boolean> isTypeVariable = (java.util.function.Function<hydra.core.Name, Boolean>) (v -> hydra.lib.maybes.IsNothing.apply(hydra.Names.namespaceOf(v)));
-    java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.util.PersistentSet<hydra.core.Name>>> tryType = (java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.util.PersistentSet<hydra.core.Name>>>) (names -> (java.util.function.Function<hydra.core.Type, hydra.util.PersistentSet<hydra.core.Name>>) (t -> hydra.Rewriting.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
+    java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.util.PersistentSet<hydra.core.Name>>> tryType = (java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.util.PersistentSet<hydra.core.Name>>>) (names -> (java.util.function.Function<hydra.core.Type, hydra.util.PersistentSet<hydra.core.Name>>) (t -> hydra.Strip.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.PersistentSet<hydra.core.Name> otherwise(hydra.core.Type instance) {
         return names;
@@ -1117,6 +1229,48 @@ public interface Coder {
       fold,
       (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
       typ);
+  }
+
+  static hydra.ext.haskell.environment.HaskellModuleMetadata gatherMetadata(hydra.util.ConsList<hydra.module.Definition> defs) {
+    java.util.function.Function<hydra.ext.haskell.environment.HaskellModuleMetadata, java.util.function.Function<hydra.module.Definition, hydra.ext.haskell.environment.HaskellModuleMetadata>> addDef = (java.util.function.Function<hydra.ext.haskell.environment.HaskellModuleMetadata, java.util.function.Function<hydra.module.Definition, hydra.ext.haskell.environment.HaskellModuleMetadata>>) (meta -> (java.util.function.Function<hydra.module.Definition, hydra.ext.haskell.environment.HaskellModuleMetadata>) (def -> (def).accept(new hydra.module.Definition.PartialVisitor<>() {
+      @Override
+      public hydra.ext.haskell.environment.HaskellModuleMetadata visit(hydra.module.Definition.Term termDef) {
+        hydra.core.Term term = (termDef).value.term;
+        hydra.util.Lazy<hydra.ext.haskell.environment.HaskellModuleMetadata> metaWithTerm = new hydra.util.Lazy<>(() -> hydra.Rewriting.foldOverTerm(
+          new hydra.coders.TraversalOrder.Pre(),
+          (java.util.function.Function<hydra.ext.haskell.environment.HaskellModuleMetadata, java.util.function.Function<hydra.core.Term, hydra.ext.haskell.environment.HaskellModuleMetadata>>) (m -> (java.util.function.Function<hydra.core.Term, hydra.ext.haskell.environment.HaskellModuleMetadata>) (t -> hydra.ext.haskell.Coder.extendMetaForTerm(
+            m,
+            t))),
+          meta,
+          term));
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> metaWithTerm.get(),
+          (java.util.function.Function<hydra.core.TypeScheme, hydra.ext.haskell.environment.HaskellModuleMetadata>) (ts -> hydra.Rewriting.foldOverType(
+            new hydra.coders.TraversalOrder.Pre(),
+            (java.util.function.Function<hydra.ext.haskell.environment.HaskellModuleMetadata, java.util.function.Function<hydra.core.Type, hydra.ext.haskell.environment.HaskellModuleMetadata>>) (m -> (java.util.function.Function<hydra.core.Type, hydra.ext.haskell.environment.HaskellModuleMetadata>) (t -> hydra.ext.haskell.Coder.extendMetaForType(
+              m,
+              t))),
+            metaWithTerm.get(),
+            (ts).type)),
+          (termDef).value.type);
+      }
+
+      @Override
+      public hydra.ext.haskell.environment.HaskellModuleMetadata visit(hydra.module.Definition.Type typeDef) {
+        hydra.core.Type typ = (typeDef).value.type;
+        return hydra.Rewriting.foldOverType(
+          new hydra.coders.TraversalOrder.Pre(),
+          (java.util.function.Function<hydra.ext.haskell.environment.HaskellModuleMetadata, java.util.function.Function<hydra.core.Type, hydra.ext.haskell.environment.HaskellModuleMetadata>>) (m -> (java.util.function.Function<hydra.core.Type, hydra.ext.haskell.environment.HaskellModuleMetadata>) (t -> hydra.ext.haskell.Coder.extendMetaForType(
+            m,
+            t))),
+          meta,
+          typ);
+      }
+    })));
+    return hydra.lib.lists.Foldl.apply(
+      addDef,
+      hydra.ext.haskell.Coder.emptyMetadata(),
+      defs);
   }
 
   static hydra.util.PersistentMap<hydra.core.Name, hydra.util.PersistentSet<hydra.classes.TypeClass>> getImplicitTypeClasses(hydra.core.Type typ) {
@@ -1202,6 +1356,22 @@ public interface Coder {
       () -> (hydra.util.ConsList<hydra.ext.haskell.syntax.DeclarationWithComments>) (hydra.util.ConsList.<hydra.ext.haskell.syntax.DeclarationWithComments>empty()));
   }
 
+  static hydra.ext.haskell.environment.HaskellModuleMetadata setMetaUsesByteString(Boolean b, hydra.ext.haskell.environment.HaskellModuleMetadata m) {
+    return new hydra.ext.haskell.environment.HaskellModuleMetadata(b, (m).usesInt, (m).usesMap, (m).usesSet);
+  }
+
+  static hydra.ext.haskell.environment.HaskellModuleMetadata setMetaUsesInt(Boolean b, hydra.ext.haskell.environment.HaskellModuleMetadata m) {
+    return new hydra.ext.haskell.environment.HaskellModuleMetadata((m).usesByteString, b, (m).usesMap, (m).usesSet);
+  }
+
+  static hydra.ext.haskell.environment.HaskellModuleMetadata setMetaUsesMap(Boolean b, hydra.ext.haskell.environment.HaskellModuleMetadata m) {
+    return new hydra.ext.haskell.environment.HaskellModuleMetadata((m).usesByteString, (m).usesInt, b, (m).usesSet);
+  }
+
+  static hydra.ext.haskell.environment.HaskellModuleMetadata setMetaUsesSet(Boolean b, hydra.ext.haskell.environment.HaskellModuleMetadata m) {
+    return new hydra.ext.haskell.environment.HaskellModuleMetadata((m).usesByteString, (m).usesInt, (m).usesMap, b);
+  }
+
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.DeclarationWithComments> toDataDeclaration(hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName> namespaces, hydra.module.TermDefinition def, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.core.Name name = (def).name;
     hydra.ext.haskell.syntax.Name hname = hydra.ext.haskell.Utils.simpleName(hydra.Names.localNameOf(name));
@@ -1249,7 +1419,7 @@ public interface Coder {
     hydra.core.Term term = (def).term;
     hydra.util.Maybe<hydra.core.TypeScheme> typ = (def).type;
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.Maybe<String>, java.util.function.Function<hydra.ext.haskell.syntax.Name, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.util.Maybe<hydra.ext.haskell.syntax.LocalBindings>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.DeclarationWithComments>>>>>> toDecl = new java.util.concurrent.atomic.AtomicReference<>();
-    toDecl.set((java.util.function.Function<hydra.util.Maybe<String>, java.util.function.Function<hydra.ext.haskell.syntax.Name, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.util.Maybe<hydra.ext.haskell.syntax.LocalBindings>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.DeclarationWithComments>>>>>) (comments -> (java.util.function.Function<hydra.ext.haskell.syntax.Name, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.util.Maybe<hydra.ext.haskell.syntax.LocalBindings>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.DeclarationWithComments>>>>) (hname_ -> (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.util.Maybe<hydra.ext.haskell.syntax.LocalBindings>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.DeclarationWithComments>>>) (term_ -> (java.util.function.Function<hydra.util.Maybe<hydra.ext.haskell.syntax.LocalBindings>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.DeclarationWithComments>>) (bindings -> hydra.Rewriting.deannotateTerm(term_).accept(new hydra.core.Term.PartialVisitor<>() {
+    toDecl.set((java.util.function.Function<hydra.util.Maybe<String>, java.util.function.Function<hydra.ext.haskell.syntax.Name, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.util.Maybe<hydra.ext.haskell.syntax.LocalBindings>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.DeclarationWithComments>>>>>) (comments -> (java.util.function.Function<hydra.ext.haskell.syntax.Name, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.util.Maybe<hydra.ext.haskell.syntax.LocalBindings>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.DeclarationWithComments>>>>) (hname_ -> (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.util.Maybe<hydra.ext.haskell.syntax.LocalBindings>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.DeclarationWithComments>>>) (term_ -> (java.util.function.Function<hydra.util.Maybe<hydra.ext.haskell.syntax.LocalBindings>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.DeclarationWithComments>>) (bindings -> hydra.Strip.deannotateTerm(term_).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.DeclarationWithComments> otherwise(hydra.core.Term instance) {
         return hydra.lib.eithers.Bind.apply(
@@ -1273,7 +1443,7 @@ public interface Coder {
               hydra.Annotations.getTypeClasses(
                 cx,
                 g,
-                hydra.Rewriting.removeTypesFromTerm(term)),
+                hydra.Strip.removeTypesFromTerm(term)),
               (java.util.function.Function<hydra.util.PersistentMap<hydra.core.Name, hydra.util.PersistentSet<hydra.classes.TypeClass>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.DeclarationWithComments>>) (explicitClasses -> {
                 hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.util.PersistentSet<hydra.classes.TypeClass>>> combinedClasses = new hydra.util.Lazy<>(() -> hydra.lib.maps.Union.apply(
                   schemeClasses.get(),
@@ -1424,7 +1594,7 @@ public interface Coder {
           return hydra.lib.eithers.Bind.apply(
             hydra.lib.logic.IfElse.lazy(
               hydra.lib.equality.Equal.apply(
-                hydra.Rewriting.deannotateType(ftype),
+                hydra.Strip.deannotateType(ftype),
                 new hydra.core.Type.Unit()),
               () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.haskell.syntax.Type>>right((hydra.util.ConsList<hydra.ext.haskell.syntax.Type>) (hydra.util.ConsList.<hydra.ext.haskell.syntax.Type>empty())),
               () -> hydra.lib.eithers.Bind.apply(
@@ -1438,7 +1608,7 @@ public interface Coder {
         }));
     })));
     return hydra.lib.eithers.Bind.apply(
-      hydra.Schemas.isSerializableByName(
+      hydra.Predicates.isSerializableByName(
         cx,
         g,
         elementName),
@@ -1458,7 +1628,7 @@ public interface Coder {
         hydra.util.Lazy<hydra.ext.haskell.syntax.DeclarationHead> hd = new hydra.util.Lazy<>(() -> declHead.get().apply(hname).apply(hydra.lib.lists.Reverse.apply(vars.get())));
         hydra.util.Lazy<hydra.core.Type> t_ = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(unpackResult));
         return hydra.lib.eithers.Bind.apply(
-          hydra.Rewriting.deannotateType(t_.get()).accept(new hydra.core.Type.PartialVisitor<>() {
+          hydra.Strip.deannotateType(t_.get()).accept(new hydra.core.Type.PartialVisitor<>() {
             @Override
             public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.Declaration> otherwise(hydra.core.Type instance) {
               return hydra.lib.eithers.Bind.apply(
@@ -1527,7 +1697,7 @@ public interface Coder {
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.DeclarationWithComments> typeDecl(hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName> namespaces, hydra.core.Name name, hydra.core.Type typ, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.core.Term rawTerm = hydra.encode.Core.type(typ);
     java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>> rewrite = (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (recurse -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (term -> {
-      java.util.function.Function<hydra.core.Term, hydra.util.Maybe<String>> decodeString = (java.util.function.Function<hydra.core.Term, hydra.util.Maybe<String>>) (term2 -> hydra.Rewriting.deannotateTerm(term2).accept(new hydra.core.Term.PartialVisitor<>() {
+      java.util.function.Function<hydra.core.Term, hydra.util.Maybe<String>> decodeString = (java.util.function.Function<hydra.core.Term, hydra.util.Maybe<String>>) (term2 -> hydra.Strip.deannotateTerm(term2).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Maybe<String> otherwise(hydra.core.Term instance) {
           return (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing());
@@ -1548,7 +1718,7 @@ public interface Coder {
           });
         }
       }));
-      java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.Name>> decodeName = (java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.Name>>) (term2 -> hydra.Rewriting.deannotateTerm(term2).accept(new hydra.core.Term.PartialVisitor<>() {
+      java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.Name>> decodeName = (java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.Name>>) (term2 -> hydra.Strip.deannotateTerm(term2).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Maybe<hydra.core.Name> otherwise(hydra.core.Term instance) {
           return (hydra.util.Maybe<hydra.core.Name>) (hydra.util.Maybe.<hydra.core.Name>nothing());
@@ -1596,7 +1766,7 @@ public interface Coder {
               forVariableType),
             () -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())));
       });
-      hydra.util.Lazy<hydra.util.Maybe<hydra.core.Field>> variantResult = new hydra.util.Lazy<>(() -> hydra.Rewriting.deannotateTerm(term).accept(new hydra.core.Term.PartialVisitor<>() {
+      hydra.util.Lazy<hydra.util.Maybe<hydra.core.Field>> variantResult = new hydra.util.Lazy<>(() -> hydra.Strip.deannotateTerm(term).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Maybe<hydra.core.Field> otherwise(hydra.core.Term instance) {
           return (hydra.util.Maybe<hydra.core.Field>) (hydra.util.Maybe.<hydra.core.Field>nothing());

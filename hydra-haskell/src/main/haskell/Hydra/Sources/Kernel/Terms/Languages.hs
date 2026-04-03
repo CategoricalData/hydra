@@ -59,12 +59,12 @@ ns = Namespace "hydra.languages"
 
 module_ :: Module
 module_ = Module ns
-  [toTermDefinition hydraLanguage]
+  [toDefinition hydraLanguage]
   [Reflect.ns]
   kernelTypesNamespaces $
   Just "Language constraints for Hydra Core"
 
-hydraLanguage :: TBinding Language
+hydraLanguage :: TTermDefinition Language
 hydraLanguage = definitionInModule module_ "hydraLanguage" $
   doc "Language constraints for Hydra Core, i.e. no constraints." $ lets [
   "eliminationVariants">: Sets.fromList Reflect.eliminationVariants,

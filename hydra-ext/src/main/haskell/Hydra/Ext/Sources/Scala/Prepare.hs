@@ -11,13 +11,13 @@ import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Types                      as MetaTypes
 import qualified Hydra.Dsl.Terms                           as Terms
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import           Prelude hiding ((++))
 import qualified Data.Set                                  as S
 
 
-def :: String -> TTerm a -> TBinding a
+def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
 ns :: Namespace
@@ -25,19 +25,19 @@ ns = Namespace "hydra.ext.scala.prepare"
 
 module_ :: Module
 module_ = Module ns elements
-    [Rewriting.ns]
+    [Strip.ns]
     KernelTypes.kernelTypesNamespaces $
     Just "Type preparation functions for Scala code generation"
   where
     elements = [
-      toTermDefinition prepareFloatType,
-      toTermDefinition prepareIntegerType,
-      toTermDefinition prepareLiteralType,
-      toTermDefinition prepareType,
-      toTermDefinition same]
+      toDefinition prepareFloatType,
+      toDefinition prepareIntegerType,
+      toDefinition prepareLiteralType,
+      toDefinition prepareType,
+      toDefinition same]
 
 
-prepareFloatType :: TBinding (FloatType -> (FloatType, FloatValue -> FloatValue, S.Set String))
+prepareFloatType :: TTermDefinition (FloatType -> (FloatType, FloatValue -> FloatValue, S.Set String))
 prepareFloatType = def "prepareFloatType" $
   doc "Prepare a float type for Scala" $
   lambda "ft" $
@@ -49,7 +49,7 @@ prepareFloatType = def "prepareFloatType" $
             _FloatValue_bigfloat>>: ("d" ~> inject _FloatValue _FloatValue_float64 (Literals.bigfloatToFloat64 (var "d")))])
           (Sets.fromList $ list [string "replace arbitrary-precision floating-point numbers with 64-bit floating-point numbers (doubles)"]))])
 
-prepareIntegerType :: TBinding (IntegerType -> (IntegerType, IntegerValue -> IntegerValue, S.Set String))
+prepareIntegerType :: TTermDefinition (IntegerType -> (IntegerType, IntegerValue -> IntegerValue, S.Set String))
 prepareIntegerType = def "prepareIntegerType" $
   doc "Prepare an integer type for Scala" $
   lambda "it" $
@@ -79,7 +79,7 @@ prepareIntegerType = def "prepareIntegerType" $
             _IntegerValue_uint64>>: ("i" ~> inject _IntegerValue _IntegerValue_int64 (Literals.bigintToInt64 (Literals.uint64ToBigint (var "i"))))])
           (Sets.fromList $ list [string "replace unsigned 64-bit integers with signed 64-bit integers"]))])
 
-prepareLiteralType :: TBinding (LiteralType -> (LiteralType, Literal -> Literal, S.Set String))
+prepareLiteralType :: TTermDefinition (LiteralType -> (LiteralType, Literal -> Literal, S.Set String))
 prepareLiteralType = def "prepareLiteralType" $
   doc "Prepare a literal type for Scala, substituting unsupported types" $
   lambda "at" $
@@ -111,11 +111,11 @@ prepareLiteralType = def "prepareLiteralType" $
             _Literal_integer>>: ("iv" ~> inject _Literal _Literal_integer (var "rep" @@ var "iv"))])
           (var "msgs"))])
 
-prepareType :: TBinding (Graph -> Type -> (Type, Term -> Term, S.Set String))
+prepareType :: TTermDefinition (Graph -> Type -> (Type, Term -> Term, S.Set String))
 prepareType = def "prepareType" $
   doc "Prepare a type for Scala code generation, substituting unsupported types" $
   lambda "cx" $ lambda "typ" $
-    (cases _Type (Rewriting.deannotateType @@ var "typ") (Just (same @@ var "typ")) [
+    (cases _Type (Strip.deannotateType @@ var "typ") (Just (same @@ var "typ")) [
       _Type_literal>>: ("at" ~> lets [
         "result">: prepareLiteralType @@ var "at",
         "rtyp">: Pairs.first (var "result"),
@@ -127,7 +127,7 @@ prepareType = def "prepareType" $
             _Term_literal>>: ("av" ~> inject _Term _Term_literal (var "rep" @@ var "av"))])
           (var "msgs"))])
 
-same :: TBinding (a -> (a, b -> b, S.Set c))
+same :: TTermDefinition (a -> (a, b -> b, S.Set c))
 same = def "same" $
   doc "Return a type unchanged with identity transform and no messages" $
   lambda "x" $

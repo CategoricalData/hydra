@@ -55,7 +55,7 @@ import qualified Data.Maybe              as Y
 ns :: Namespace
 ns = Namespace "hydra.eval.lib.logic"
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
@@ -65,13 +65,13 @@ module_ = Module ns elements
     Just ("Evaluation-level implementations of Logic functions for the Hydra interpreter.")
   where
     elements = [
-      toTermDefinition and_,
-      toTermDefinition not_,
-      toTermDefinition or_]
+      toDefinition and_,
+      toDefinition not_,
+      toDefinition or_]
 
 -- | Interpreter-friendly logical AND.
 -- and a b = ifElse a b false
-and_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+and_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 and_ = define "and" $
   doc "Interpreter-friendly logical AND." $
   "cx" ~> "g" ~>
@@ -86,7 +86,7 @@ and_ = define "and" $
 
 -- | Interpreter-friendly logical NOT.
 -- not a = ifElse a false true
-not_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+not_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
 not_ = define "not" $
   doc "Interpreter-friendly logical NOT." $
   "cx" ~> "g" ~>
@@ -101,7 +101,7 @@ not_ = define "not" $
 
 -- | Interpreter-friendly logical OR.
 -- or a b = ifElse a true b
-or_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+or_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 or_ = define "or" $
   doc "Interpreter-friendly logical OR." $
   "cx" ~> "g" ~>

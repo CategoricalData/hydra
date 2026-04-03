@@ -64,7 +64,7 @@ import qualified Hydra.Sources.Eval.Lib.Sets as EvalSets
 ns :: Namespace
 ns = Namespace "hydra.eval.lib"
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 -- | All eval library modules

@@ -57,7 +57,7 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 ns :: Namespace
 ns = Namespace "hydra.eval.lib.pairs"
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
@@ -67,13 +67,13 @@ module_ = Module ns elements
     Just ("Evaluation-level implementations of Pair functions for the Hydra interpreter.")
   where
     elements = [
-      toTermDefinition bimap_,
-      toTermDefinition first_,
-      toTermDefinition second_]
+      toDefinition bimap_,
+      toDefinition first_,
+      toDefinition second_]
 
 -- | Interpreter-friendly bimap for Pair terms.
 -- Applies firstFun to the first element and secondFun to the second element.
-bimap_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
+bimap_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
 bimap_ = define "bimap" $
   doc "Interpreter-friendly bimap for Pair terms." $
   "cx" ~> "g" ~>
@@ -89,7 +89,7 @@ bimap_ = define "bimap" $
 
 -- | Interpreter-friendly first for Pair terms.
 -- Extracts the first element of a pair.
-first_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+first_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
 first_ = define "first" $
   doc "Interpreter-friendly first for Pair terms." $
   "cx" ~> "g" ~>
@@ -101,7 +101,7 @@ first_ = define "first" $
 
 -- | Interpreter-friendly second for Pair terms.
 -- Extracts the second element of a pair.
-second_ :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Term)
+second_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
 second_ = define "second" $
   doc "Interpreter-friendly second for Pair terms." $
   "cx" ~> "g" ~>

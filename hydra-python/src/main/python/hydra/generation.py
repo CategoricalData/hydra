@@ -1,6 +1,6 @@
 """I/O wrapper for Hydra code generation in Python.
 
-Provides file I/O around the pure Either-based functions in hydra.code_generation.
+Provides file I/O around the pure Either-based functions in hydra.codegen.
 This is the Python equivalent of Haskell's Hydra.Generation module.
 """
 
@@ -14,7 +14,7 @@ from functools import lru_cache
 sys.setrecursionlimit(10000)
 
 from hydra.annotations import is_native_type
-from hydra.code_generation import (
+from hydra.codegen import (
     generate_source_files,
     namespace_to_path,
     strip_module_type_schemes,
@@ -25,7 +25,8 @@ from hydra.dsl.python import FrozenDict, Just, Left, Nothing, Right
 from hydra.graph import Graph
 from hydra.json import model as JsonModel
 from hydra.module import Module, Namespace
-from hydra.rewriting import deannotate_type_recursive, f_type_to_type_scheme, remove_types_from_term
+from hydra.strip import deannotate_type_recursive, remove_types_from_term
+from hydra.scoping import f_type_to_type_scheme
 from hydra.sources.libraries import standard_library
 
 

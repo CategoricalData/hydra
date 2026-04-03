@@ -11,11 +11,6 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Tabular as Tabular
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 columnType :: Tabular.ColumnType -> Core.Term
 columnType x =
@@ -39,7 +34,7 @@ headerRow :: Tabular.HeaderRow -> Core.Term
 headerRow x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.tabular.HeaderRow"),
-      Core.wrappedTermBody = ((\xs -> Core.TermList (Lists.map (\x -> Core.TermLiteral (Core.LiteralString x)) xs)) (Tabular.unHeaderRow x))})
+      Core.wrappedTermBody = ((\xs -> Core.TermList (Lists.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) xs)) (Tabular.unHeaderRow x))})
 
 table :: (t0 -> Core.Term) -> Tabular.Table t0 -> Core.Term
 table v x =

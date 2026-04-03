@@ -59,7 +59,7 @@ public interface Utils {
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>> namespacesForModule(hydra.module.Module mod, hydra.context.Context cx, hydra.graph.Graph g) {
     return hydra.lib.eithers.Bind.apply(
-      hydra.Schemas.moduleDependencyNamespaces(
+      hydra.Analysis.moduleDependencyNamespaces(
         cx,
         g,
         true,
@@ -221,7 +221,7 @@ public interface Utils {
   }
 
   static hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Type> unpackForallType(hydra.core.Type t) {
-    return hydra.Rewriting.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
+    return hydra.Strip.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Type> otherwise(hydra.core.Type instance) {
         return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Type>((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()), t)));

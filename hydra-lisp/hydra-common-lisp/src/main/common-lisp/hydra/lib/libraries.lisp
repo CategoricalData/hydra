@@ -175,6 +175,11 @@
       (cons (qname ns_ "map")        (prim2 (qname ns_ "map")
                                               hydra_lib_lists_map
                                               nil (fun a b) (tc-list a) (tc-list b)))
+      (cons (qname ns_ "maybeAt")    (prim2 (qname ns_ "maybeAt")    hydra_lib_lists_maybe_at   nil (tc-int32) (tc-list a) (tc-optional a)))
+      (cons (qname ns_ "maybeHead")  (prim1 (qname ns_ "maybeHead")  hydra_lib_lists_maybe_head nil (tc-list a) (tc-optional a)))
+      (cons (qname ns_ "maybeInit")  (prim1 (qname ns_ "maybeInit")  hydra_lib_lists_maybe_init nil (tc-list a) (tc-optional (tc-list a))))
+      (cons (qname ns_ "maybeLast")  (prim1 (qname ns_ "maybeLast")  hydra_lib_lists_maybe_last nil (tc-list a) (tc-optional a)))
+      (cons (qname ns_ "maybeTail")  (prim1 (qname ns_ "maybeTail")  hydra_lib_lists_maybe_tail nil (tc-list a) (tc-optional (tc-list a))))
       (cons (qname ns_ "nub")        (prim1 (qname ns_ "nub")        hydra_lib_lists_nub        nil (tc-list a) (tc-list a) '(("a" . ("equality")))))
       (cons (qname ns_ "null")       (prim1 (qname ns_ "null")       hydra_lib_lists_null       nil (tc-list a) (tc-boolean)))
       (cons (qname ns_ "partition")   (prim2 (qname ns_ "partition")
@@ -323,6 +328,11 @@
         (cons (qname ns_ "sub")    (prim2 (qname ns_ "sub")    hydra_lib_math_sub    nil i32 i32 i32))
         (cons (qname ns_ "succ")   (prim1 (qname ns_ "succ")   hydra_lib_math_succ   nil i32 i32))
         (cons (qname ns_ "max")    (prim2 (qname ns_ "max")    hydra_lib_math_max    nil i32 i32 i32))
+        (cons (qname ns_ "maybeDiv")  (prim2 (qname ns_ "maybeDiv")  hydra_lib_math_maybe_div  nil i32 i32 (tc-optional i32)))
+        (cons (qname ns_ "maybeMod")  (prim2 (qname ns_ "maybeMod")  hydra_lib_math_maybe_mod  nil i32 i32 (tc-optional i32)))
+        (cons (qname ns_ "maybePred") (prim1 (qname ns_ "maybePred") hydra_lib_math_maybe_pred nil i32 (tc-optional i32)))
+        (cons (qname ns_ "maybeRem")  (prim2 (qname ns_ "maybeRem")  hydra_lib_math_maybe_rem  nil i32 i32 (tc-optional i32)))
+        (cons (qname ns_ "maybeSucc") (prim1 (qname ns_ "maybeSucc") hydra_lib_math_maybe_succ nil i32 (tc-optional i32)))
         (cons (qname ns_ "min")    (prim2 (qname ns_ "min")    hydra_lib_math_min    nil i32 i32 i32)))
       ;; Float64 primitives
       (list
@@ -475,6 +485,7 @@
                                                nil s (tc-list s) s))
       (cons (qname ns_ "length")      (prim1 (qname ns_ "length")      hydra_lib_strings_length      nil s i))
       (cons (qname ns_ "lines")       (prim1 (qname ns_ "lines")       hydra_lib_strings_lines       nil s (tc-list s)))
+      (cons (qname ns_ "maybeCharAt") (prim2 (qname ns_ "maybeCharAt") hydra_lib_strings_maybe_char_at nil i s (tc-optional i)))
       (cons (qname ns_ "null")        (prim1 (qname ns_ "null")        hydra_lib_strings_null        nil s b))
       (cons (qname ns_ "splitOn")     (prim2 (qname ns_ "splitOn")
                                                hydra_lib_strings_split_on

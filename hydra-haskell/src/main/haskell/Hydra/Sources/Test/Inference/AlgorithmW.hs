@@ -25,20 +25,20 @@ module_ = Module ns elements
     (Just "Algorithm W inference tests")
   where
     elements = [
-      Phantoms.toTermDefinition allTests,
-      Phantoms.toTermDefinition testGroupForSystemF]
+      Phantoms.toDefinition allTests,
+      Phantoms.toDefinition testGroupForSystemF]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
   Phantoms.doc "Algorithm W test cases" $
   supergroup "Algorithm W test cases" [
     testGroupForSystemF]
 
 -- @wisnesky's original Algorithm W test cases, modified so as to normalize type variables
-testGroupForSystemF :: TBinding TestGroup
+testGroupForSystemF :: TTermDefinition TestGroup
 testGroupForSystemF = define "testGroupForSystemF" $
   subgroup "STLC to System F" [
 

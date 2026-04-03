@@ -50,21 +50,21 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {"name": "null", "term": {"unit": {}}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {"name": "output", "term": {"literal": {"string": "null"}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {"name": "expected", "term": {"literal": {"string": "null"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -84,21 +84,21 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {"name": "boolean", "term": {"literal": {"boolean": true}}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {"name": "output", "term": {"literal": {"string": "true"}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {"name": "expected", "term": {"literal": {"string": "true"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -118,21 +118,21 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {"name": "boolean", "term": {"literal": {"boolean": false}}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {"name": "output", "term": {"literal": {"string": "false"}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {"name": "expected", "term": {"literal": {"string": "false"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -152,21 +152,21 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 0}}}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {"name": "output", "term": {"literal": {"string": "0"}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {"name": "expected", "term": {"literal": {"string": "0"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -186,21 +186,21 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 42}}}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {"name": "output", "term": {"literal": {"string": "42"}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {"name": "expected", "term": {"literal": {"string": "42"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -220,21 +220,21 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": -17}}}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {"name": "output", "term": {"literal": {"string": "-17"}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {"name": "expected", "term": {"literal": {"string": "-17"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -254,23 +254,23 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {
                                                                     "name": "number",
                                                                     "term": {"literal": {"float": {"bigfloat": 1000000}}}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {"name": "output", "term": {"literal": {"string": "1000000"}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {"name": "expected", "term": {"literal": {"string": "1000000"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -290,21 +290,21 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 3.14}}}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {"name": "output", "term": {"literal": {"string": "3.14"}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {"name": "expected", "term": {"literal": {"string": "3.14"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -324,21 +324,21 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": -2.5}}}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {"name": "output", "term": {"literal": {"string": "-2.5"}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {"name": "expected", "term": {"literal": {"string": "-2.5"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -358,23 +358,23 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {
                                                                     "name": "number",
                                                                     "term": {"literal": {"float": {"bigfloat": 1.0e-3}}}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {"name": "output", "term": {"literal": {"string": "1.0e-3"}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {"name": "expected", "term": {"literal": {"string": "1.0e-3"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -413,21 +413,21 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {"name": "string", "term": {"literal": {"string": ""}}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {"name": "output", "term": {"literal": {"string": "\"\""}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {"name": "expected", "term": {"literal": {"string": "\"\""}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -447,21 +447,21 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {"name": "string", "term": {"literal": {"string": "hello"}}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {"name": "output", "term": {"literal": {"string": "\"hello\""}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {"name": "expected", "term": {"literal": {"string": "\"hello\""}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -483,21 +483,23 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {"name": "string", "term": {"literal": {"string": "hello world"}}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {"name": "output", "term": {"literal": {"string": "\"hello world\""}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"literal": {"string": "\"hello world\""}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -519,23 +521,23 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {"name": "string", "term": {"literal": {"string": "say \"hi\""}}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {
-                                                              "name": "output",
-                                                              "term": {"literal": {"string": "\"say \\\"hi\\\"\""}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"literal": {"string": "\"say \\\"hi\\\"\""}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -557,23 +559,23 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {"name": "string", "term": {"literal": {"string": "path\\to\\file"}}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {
-                                                              "name": "output",
-                                                              "term": {"literal": {"string": "\"path\\\\to\\\\file\""}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"literal": {"string": "\"path\\\\to\\\\file\""}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -595,23 +597,23 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {"name": "string", "term": {"literal": {"string": "line1\nline2"}}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {
-                                                              "name": "output",
-                                                              "term": {"literal": {"string": "\"line1\\nline2\""}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"literal": {"string": "\"line1\\nline2\""}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -633,23 +635,23 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {"name": "string", "term": {"literal": {"string": "line1\rline2"}}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {
-                                                              "name": "output",
-                                                              "term": {"literal": {"string": "\"line1\\rline2\""}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"literal": {"string": "\"line1\\rline2\""}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -669,21 +671,23 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {"name": "string", "term": {"literal": {"string": "col1\tcol2"}}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {"name": "output", "term": {"literal": {"string": "\"col1\\tcol2\""}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"literal": {"string": "\"col1\\tcol2\""}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -705,23 +709,23 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {"name": "string", "term": {"literal": {"string": "a\"b\\c\nd"}}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {
-                                                              "name": "output",
-                                                              "term": {"literal": {"string": "\"a\\\"b\\\\c\\nd\""}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"literal": {"string": "\"a\\\"b\\\\c\\nd\""}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -760,24 +764,24 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {
                                                                     "name": "array",
                                                                     "term": {
                                                                       "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.json.model.Value"}}}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {"name": "output", "term": {"literal": {"string": "[]"}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {"name": "expected", "term": {"literal": {"string": "[]"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -797,15 +801,15 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {
                                                                     "name": "array",
@@ -815,10 +819,10 @@
                                                                           "union": {
                                                                             "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 1}}}},
                                                                             "typeName": "hydra.json.model.Value"}}]}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {"name": "output", "term": {"literal": {"string": "[1]"}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {"name": "expected", "term": {"literal": {"string": "[1]"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -838,15 +842,15 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {
                                                                     "name": "array",
@@ -864,10 +868,10 @@
                                                                           "union": {
                                                                             "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 3}}}},
                                                                             "typeName": "hydra.json.model.Value"}}]}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {"name": "output", "term": {"literal": {"string": "[1, 2, 3]"}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {"name": "expected", "term": {"literal": {"string": "[1, 2, 3]"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -887,15 +891,15 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {
                                                                     "name": "array",
@@ -909,10 +913,12 @@
                                                                           "union": {
                                                                             "field": {"name": "string", "term": {"literal": {"string": "b"}}},
                                                                             "typeName": "hydra.json.model.Value"}}]}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {"name": "output", "term": {"literal": {"string": "[\"a\", \"b\"]"}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"literal": {"string": "[\"a\", \"b\"]"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -932,15 +938,15 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {
                                                                     "name": "array",
@@ -962,12 +968,12 @@
                                                                           "union": {
                                                                             "field": {"name": "null", "term": {"unit": {}}},
                                                                             "typeName": "hydra.json.model.Value"}}]}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {
-                                                              "name": "output",
-                                                              "term": {"literal": {"string": "[1, \"two\", true, null]"}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"literal": {"string": "[1, \"two\", true, null]"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -1006,15 +1012,15 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {
                                                                     "name": "object",
@@ -1023,10 +1029,10 @@
                                                                         "body": {
                                                                           "typeApplication": {"body": {"map": []}, "type": {"literal": {"string": {}}}}},
                                                                         "type": {"variable": "hydra.json.model.Value"}}}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {"name": "output", "term": {"literal": {"string": "{}"}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {"name": "expected", "term": {"literal": {"string": "{}"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -1046,15 +1052,15 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {
                                                                     "name": "object",
@@ -1066,12 +1072,12 @@
                                                                             "union": {
                                                                               "field": {"name": "string", "term": {"literal": {"string": "Alice"}}},
                                                                               "typeName": "hydra.json.model.Value"}}}]}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {
-                                                              "name": "output",
-                                                              "term": {"literal": {"string": "{\"name\": \"Alice\"}"}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"literal": {"string": "{\"name\": \"Alice\"}"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -1091,15 +1097,15 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {
                                                                     "name": "object",
@@ -1117,12 +1123,12 @@
                                                                             "union": {
                                                                               "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 2}}}},
                                                                               "typeName": "hydra.json.model.Value"}}}]}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {
-                                                              "name": "output",
-                                                              "term": {"literal": {"string": "{\"a\": 1, \"b\": 2}"}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"literal": {"string": "{\"a\": 1, \"b\": 2}"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -1142,15 +1148,15 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {
                                                                     "name": "object",
@@ -1174,13 +1180,13 @@
                                                                             "union": {
                                                                               "field": {"name": "string", "term": {"literal": {"string": "test"}}},
                                                                               "typeName": "hydra.json.model.Value"}}}]}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {
-                                                              "name": "output",
-                                                              "term": {
-                                                                "literal": {"string": "{\"active\": true, \"count\": 42, \"name\": \"test\"}"}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "literal": {"string": "{\"active\": true, \"count\": 42, \"name\": \"test\"}"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -1219,15 +1225,15 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {
                                                                     "name": "array",
@@ -1263,12 +1269,12 @@
                                                                                       "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 4}}}},
                                                                                       "typeName": "hydra.json.model.Value"}}]}},
                                                                             "typeName": "hydra.json.model.Value"}}]}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {
-                                                              "name": "output",
-                                                              "term": {"literal": {"string": "[[1, 2], [3, 4]]"}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"literal": {"string": "[[1, 2], [3, 4]]"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -1288,15 +1294,15 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {
                                                                     "name": "object",
@@ -1319,12 +1325,12 @@
                                                                                         "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 2}}}},
                                                                                         "typeName": "hydra.json.model.Value"}}]}},
                                                                               "typeName": "hydra.json.model.Value"}}}]}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {
-                                                              "name": "output",
-                                                              "term": {"literal": {"string": "{\"items\": [1, 2]}"}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"literal": {"string": "{\"items\": [1, 2]}"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -1344,15 +1350,15 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {
                                                                     "name": "array",
@@ -1384,12 +1390,12 @@
                                                                                         "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 2}}}},
                                                                                         "typeName": "hydra.json.model.Value"}}}]}},
                                                                             "typeName": "hydra.json.model.Value"}}]}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {
-                                                              "name": "output",
-                                                              "term": {"literal": {"string": "[{\"id\": 1}, {\"id\": 2}]"}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"literal": {"string": "[{\"id\": 1}, {\"id\": 2}]"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -1409,15 +1415,15 @@
                                             "term": {
                                               "union": {
                                                 "field": {
-                                                  "name": "jsonWriter",
+                                                  "name": "universal",
                                                   "term": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "record": {
-                                                          "fields": [
-                                                            {
-                                                              "name": "input",
-                                                              "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
                                                                 "union": {
                                                                   "field": {
                                                                     "name": "object",
@@ -1438,12 +1444,12 @@
                                                                                           "field": {"name": "string", "term": {"literal": {"string": "Bob"}}},
                                                                                           "typeName": "hydra.json.model.Value"}}}]}},
                                                                               "typeName": "hydra.json.model.Value"}}}]}},
-                                                                  "typeName": "hydra.json.model.Value"}}},
-                                                            {
-                                                              "name": "output",
-                                                              "term": {"literal": {"string": "{\"user\": {\"name\": \"Bob\"}}"}}}],
-                                                          "typeName": "hydra.testing.WriterTestCase"}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                  "typeName": "hydra.json.model.Value"}},
+                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"literal": {"string": "{\"user\": {\"name\": \"Bob\"}}"}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {
                                             "name": "description",
@@ -1469,7 +1475,7 @@
             "variables": []}]}}],
   "description": ["Test cases for JSON serialization"],
   "namespace": "hydra.test.json.writer",
-  "termDependencies": [],
+  "termDependencies": ["hydra.json.writer"],
   "typeDependencies": [
     "hydra.paths",
     "hydra.ast",
@@ -1479,6 +1485,7 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
+    "hydra.error.module",
     "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",

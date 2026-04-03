@@ -10,11 +10,7 @@ import qualified Hydra.Ext.Org.Iana.Linkrelations as Linkrelations
 import qualified Hydra.Ext.Org.Stacspec.Items as Items
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 
 asset :: Phantoms.TTerm Items.Uri -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe Items.MediaType) -> Phantoms.TTerm [Items.Role] -> Phantoms.TTerm Items.Asset
 asset href title description type_ roles =

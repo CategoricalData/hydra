@@ -301,10 +301,28 @@
           {
             "constraints": null,
             "type": {"variable": "hydra.module.Namespace"},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.test.testGraph.testGraph",
+        "term": {"variable": "hydra.lexical.emptyGraph"},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"variable": "hydra.graph.Graph"},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.test.testGraph.testContext",
+        "term": {"variable": "hydra.lexical.emptyContext"},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"variable": "hydra.context.Context"},
             "variables": []}]}}],
   "description": ["A module defining the graph used in the test suite."],
   "namespace": "hydra.test.testGraph",
-  "termDependencies": ["hydra.test.testTerms", "hydra.test.testTypes"],
+  "termDependencies": ["hydra.test.testTerms", "hydra.test.testTypes", "hydra.lexical"],
   "typeDependencies": [
     "hydra.paths",
     "hydra.ast",
@@ -314,6 +332,7 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
+    "hydra.error.module",
     "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",

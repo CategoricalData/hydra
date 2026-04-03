@@ -56,6 +56,7 @@ import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
+import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
 
 
 ns :: Namespace
@@ -63,29 +64,29 @@ ns = Namespace "hydra.validate.core"
 
 module_ :: Module
 module_ = Module ns elements
-    [Rewriting.ns]
+    [Rewriting.ns, Variables.ns]
     kernelTypesNamespaces $
     Just "Validation functions for core terms and types"
   where
    elements = [
-     toTermDefinition checkDuplicateBindings,
-     toTermDefinition checkDuplicateFields,
-     toTermDefinition checkDuplicateFieldTypes,
-     toTermDefinition checkShadowing,
-     toTermDefinition checkTerm,
-     toTermDefinition validateTypeNode,
-     toTermDefinition checkUndefinedTypeVariablesInType,
-     toTermDefinition checkUndefinedTypeVariablesInTypeScheme,
-     toTermDefinition checkVoid,
-     toTermDefinition findDuplicate,
-     toTermDefinition findDuplicateFieldType,
-     toTermDefinition firstError,
-     toTermDefinition firstTypeError,
-     toTermDefinition isValidName,
-     toTermDefinition term,
-     toTermDefinition type_]
+     toDefinition checkDuplicateBindings,
+     toDefinition checkDuplicateFields,
+     toDefinition checkDuplicateFieldTypes,
+     toDefinition checkShadowing,
+     toDefinition checkTerm,
+     toDefinition validateTypeNode,
+     toDefinition checkUndefinedTypeVariablesInType,
+     toDefinition checkUndefinedTypeVariablesInTypeScheme,
+     toDefinition checkVoid,
+     toDefinition findDuplicate,
+     toDefinition findDuplicateFieldType,
+     toDefinition firstError,
+     toDefinition firstTypeError,
+     toDefinition isValidName,
+     toDefinition term,
+     toDefinition type_]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 -- | A Nothing of type Maybe InvalidTermError
@@ -101,7 +102,7 @@ mkJust :: TTerm InvalidTermError -> TTerm (Maybe InvalidTermError)
 mkJust = just
 
 -- | Return the first Just from a list of Maybe values, or Nothing
-firstError :: TBinding ([Maybe InvalidTermError] -> Maybe InvalidTermError)
+firstError :: TTermDefinition ([Maybe InvalidTermError] -> Maybe InvalidTermError)
 firstError = define "firstError" $
   doc "Return the first error from a list of optional errors, or nothing if all are valid" $
   "checks" ~>
@@ -113,7 +114,7 @@ firstError = define "firstError" $
     noError
     (var "checks")
 
-term :: TBinding (Bool -> Graph -> Term -> Maybe InvalidTermError)
+term :: TTermDefinition (Bool -> Graph -> Term -> Maybe InvalidTermError)
 term = define "term" $
   doc "Validate a term, returning the first error found or nothing if valid. The 'typed' parameter indicates whether to expect System F (typed) terms; when true, type variable binding checks and UntypedTermVariableError are active." $
   "typed" ~> "g" ~> "t" ~>
@@ -136,7 +137,7 @@ term = define "term" $
 
 -- | Check a single term node for validation errors (without recursing into subterms).
 -- The Graph provides bound variable information; the typed flag controls System F checks.
-checkTerm :: TBinding (Bool -> SubtermPath -> Graph -> Term -> Maybe InvalidTermError)
+checkTerm :: TTermDefinition (Bool -> SubtermPath -> Graph -> Term -> Maybe InvalidTermError)
 checkTerm = define "checkTerm" $
   doc "Check a single term node for validation errors" $
   "typed" ~> "path" ~> "cx" ~> "term" ~>
@@ -429,7 +430,7 @@ checkTerm = define "checkTerm" $
         noError]
 
 -- | Check a list of names for shadowing against the current graph scope
-checkShadowing :: TBinding (SubtermPath -> Graph -> [Name] -> Maybe InvalidTermError)
+checkShadowing :: TTermDefinition (SubtermPath -> Graph -> [Name] -> Maybe InvalidTermError)
 checkShadowing = define "checkShadowing" $
   doc "Check if any name in a list shadows a variable already in scope" $
   "path" ~> "cx" ~> "names" ~>
@@ -452,7 +453,7 @@ checkShadowing = define "checkShadowing" $
   var "result"
 
 -- | Check a list of bindings for duplicate names
-checkDuplicateBindings :: TBinding (SubtermPath -> [Binding] -> Maybe InvalidTermError)
+checkDuplicateBindings :: TTermDefinition (SubtermPath -> [Binding] -> Maybe InvalidTermError)
 checkDuplicateBindings = define "checkDuplicateBindings" $
   doc "Check for duplicate binding names in a list of bindings" $
   "path" ~> "bindings" ~>
@@ -466,7 +467,7 @@ checkDuplicateBindings = define "checkDuplicateBindings" $
     (var "dup")
 
 -- | Check a list of field names for duplicates
-checkDuplicateFields :: TBinding (SubtermPath -> [Name] -> Maybe InvalidTermError)
+checkDuplicateFields :: TTermDefinition (SubtermPath -> [Name] -> Maybe InvalidTermError)
 checkDuplicateFields = define "checkDuplicateFields" $
   doc "Check for duplicate field names in a list of fields" $
   "path" ~> "names" ~>
@@ -479,7 +480,7 @@ checkDuplicateFields = define "checkDuplicateFields" $
     (var "dup")
 
 -- | Find the first duplicate in a list, if any
-findDuplicate :: TBinding ([Name] -> Maybe Name)
+findDuplicate :: TTermDefinition ([Name] -> Maybe Name)
 findDuplicate = define "findDuplicate" $
   doc "Find the first duplicate name in a list" $
   "names" ~>
@@ -500,7 +501,7 @@ findDuplicate = define "findDuplicate" $
 
 -- | Validate a name at an introduction site.
 -- Currently only rejects empty strings; may be extended with additional naming conventions.
-isValidName :: TBinding (Name -> Bool)
+isValidName :: TTermDefinition (Name -> Bool)
 isValidName = define "isValidName" $
   doc "Check whether a name is valid at an introduction site. Currently rejects empty strings." $
   "name" ~>
@@ -509,11 +510,11 @@ isValidName = define "isValidName" $
 -- | Check a type for undefined type variables against the current graph scope.
 -- Takes a path, graph, type, and a handler function that receives the first undefined variable name
 -- and returns an error. Returns Nothing if all type variables are defined.
-checkUndefinedTypeVariablesInType :: TBinding (SubtermPath -> Graph -> Type -> (Name -> Maybe InvalidTermError) -> Maybe InvalidTermError)
+checkUndefinedTypeVariablesInType :: TTermDefinition (SubtermPath -> Graph -> Type -> (Name -> Maybe InvalidTermError) -> Maybe InvalidTermError)
 checkUndefinedTypeVariablesInType = define "checkUndefinedTypeVariablesInType" $
   doc "Check a type for type variables not bound in the current scope" $
   "path" ~> "cx" ~> "typ" ~> "mkError" ~>
-  "freeVars" <~ Rewriting.freeVariablesInType @@ var "typ" $
+  "freeVars" <~ Variables.freeVariablesInType @@ var "typ" $
   "undefined" <~ Sets.difference (var "freeVars") (Graph.graphTypeVariables $ var "cx") $
   Logic.ifElse (Sets.null $ var "undefined")
     noError
@@ -522,11 +523,11 @@ checkUndefinedTypeVariablesInType = define "checkUndefinedTypeVariablesInType" $
 
 -- | Check a type scheme for undefined type variables against the current graph scope.
 -- The scheme's own bound variables are excluded before checking.
-checkUndefinedTypeVariablesInTypeScheme :: TBinding (SubtermPath -> Graph -> TypeScheme -> (Name -> Maybe InvalidTermError) -> Maybe InvalidTermError)
+checkUndefinedTypeVariablesInTypeScheme :: TTermDefinition (SubtermPath -> Graph -> TypeScheme -> (Name -> Maybe InvalidTermError) -> Maybe InvalidTermError)
 checkUndefinedTypeVariablesInTypeScheme = define "checkUndefinedTypeVariablesInTypeScheme" $
   doc "Check a type scheme for type variables not bound by the scheme or the current scope" $
   "path" ~> "cx" ~> "ts" ~> "mkError" ~>
-  "freeVars" <~ Rewriting.freeVariablesInTypeScheme @@ var "ts" $
+  "freeVars" <~ Variables.freeVariablesInTypeScheme @@ var "ts" $
   "undefined" <~ Sets.difference (var "freeVars") (Graph.graphTypeVariables $ var "cx") $
   Logic.ifElse (Sets.null $ var "undefined")
     noError
@@ -546,7 +547,7 @@ mkJustType :: TTerm InvalidTypeError -> TTerm (Maybe InvalidTypeError)
 mkJustType = just
 
 -- | Return the first Just from a list of Maybe InvalidTypeError values
-firstTypeError :: TBinding ([Maybe InvalidTypeError] -> Maybe InvalidTypeError)
+firstTypeError :: TTermDefinition ([Maybe InvalidTypeError] -> Maybe InvalidTypeError)
 firstTypeError = define "firstTypeError" $
   doc "Return the first type error from a list of optional errors, or nothing if all are valid" $
   "checks" ~>
@@ -560,7 +561,7 @@ firstTypeError = define "firstTypeError" $
 
 -- | Validate a type, returning the first error found or nothing if valid.
 -- Recursively traverses the type, tracking bound type variables through forall binders.
-type_ :: TBinding (S.Set Name -> Type -> Maybe InvalidTypeError)
+type_ :: TTermDefinition (S.Set Name -> Type -> Maybe InvalidTypeError)
 type_ = define "type" $
   doc "Validate a type, returning the first error found or nothing if valid. The first argument is the set of type variables already in scope." $
   "boundVars" ~> "typ" ~>
@@ -611,7 +612,7 @@ type_ = define "type" $
     ("err" ~> mkJustType (var "err"))
 
 -- | Check if a type is TypeVoid and return a VoidInNonBottomPositionError if so
-checkVoid :: TBinding (Type -> Maybe InvalidTypeError)
+checkVoid :: TTermDefinition (Type -> Maybe InvalidTypeError)
 checkVoid = define "checkVoid" $
   doc "Return an error if the given type is TypeVoid" $
   "typ" ~>
@@ -622,7 +623,7 @@ checkVoid = define "checkVoid" $
           _VoidInNonBottomPositionError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep]))]]
 
 -- | Check a single type node for validation errors (without recursing into subtypes).
-validateTypeNode :: TBinding (S.Set Name -> Type -> Maybe InvalidTypeError)
+validateTypeNode :: TTermDefinition (S.Set Name -> Type -> Maybe InvalidTypeError)
 validateTypeNode = define "validateTypeNode" $
   doc "Check a single type node for validation errors" $
   "boundVars" ~> "typ" ~>
@@ -768,7 +769,7 @@ validateTypeNode = define "validateTypeNode" $
             _UndefinedTypeVariableError_name>>: var "varName"])]
 
 -- | Check a list of FieldType for duplicate names, calling a handler on the first duplicate found
-checkDuplicateFieldTypes :: TBinding ([FieldType] -> (Name -> Maybe InvalidTypeError) -> Maybe InvalidTypeError)
+checkDuplicateFieldTypes :: TTermDefinition ([FieldType] -> (Name -> Maybe InvalidTypeError) -> Maybe InvalidTypeError)
 checkDuplicateFieldTypes = define "checkDuplicateFieldTypes" $
   doc "Check for duplicate field names in a list of field types" $
   "fields" ~> "mkError" ~>
@@ -779,7 +780,7 @@ checkDuplicateFieldTypes = define "checkDuplicateFieldTypes" $
     ("name" ~> var "mkError" @@ var "name")
 
 -- | Find the first duplicate in a list of names (for field types)
-findDuplicateFieldType :: TBinding ([Name] -> Maybe Name)
+findDuplicateFieldType :: TTermDefinition ([Name] -> Maybe Name)
 findDuplicateFieldType = define "findDuplicateFieldType" $
   doc "Find the first duplicate name in a list (for field type validation)" $
   "names" ~>

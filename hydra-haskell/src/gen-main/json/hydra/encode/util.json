@@ -498,5 +498,5 @@
             "variables": []}]}}],
   "description": ["Term encoders for hydra.util"],
   "namespace": "hydra.encode.util",
-  "termDependencies": ["hydra.encode.context", "hydra.encode.core", "hydra.encode.errors"],
+  "termDependencies": ["hydra.encode.core"],
   "typeDependencies": ["hydra.util"]}

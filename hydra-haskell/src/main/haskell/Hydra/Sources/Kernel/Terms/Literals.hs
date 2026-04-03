@@ -62,15 +62,15 @@ module_ = Module ns elements
     Just "Conversion functions for literal values."
   where
    elements = [
-     toTermDefinition bigfloatToFloatValue,
-     toTermDefinition bigintToIntegerValue,
-     toTermDefinition floatValueToBigfloat,
-     toTermDefinition integerValueToBigint]
+     toDefinition bigfloatToFloatValue,
+     toDefinition bigintToIntegerValue,
+     toDefinition floatValueToBigfloat,
+     toDefinition integerValueToBigint]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-bigfloatToFloatValue :: TBinding (FloatType -> Bigfloat -> FloatValue)
+bigfloatToFloatValue :: TTermDefinition (FloatType -> Bigfloat -> FloatValue)
 bigfloatToFloatValue = define "bigfloatToFloatValue" $
   doc "Convert a bigfloat to a floating-point value of a given type (note: lossy)" $
   "ft" ~> "bf" ~> cases _FloatType (var "ft")
@@ -79,7 +79,7 @@ bigfloatToFloatValue = define "bigfloatToFloatValue" $
     _FloatType_float32>>: constant $ Core.floatValueFloat32 $ Literals.bigfloatToFloat32 $ var "bf",
     _FloatType_float64>>: constant $ Core.floatValueFloat64 $ Literals.bigfloatToFloat64 $ var "bf"]
 
-bigintToIntegerValue :: TBinding (IntegerType -> Integer -> IntegerValue)
+bigintToIntegerValue :: TTermDefinition (IntegerType -> Integer -> IntegerValue)
 bigintToIntegerValue = define "bigintToIntegerValue" $
   doc "Convert a bigint to an integer value of a given type (note: lossy)" $
   "it" ~> "bi" ~> cases _IntegerType (var "it")
@@ -94,7 +94,7 @@ bigintToIntegerValue = define "bigintToIntegerValue" $
     _IntegerType_uint32>>: constant $ Core.integerValueUint32 $ Literals.bigintToUint32 $ var "bi",
     _IntegerType_uint64>>: constant $ Core.integerValueUint64 $ Literals.bigintToUint64 $ var "bi"]
 
-floatValueToBigfloat :: TBinding (FloatValue -> Bigfloat)
+floatValueToBigfloat :: TTermDefinition (FloatValue -> Bigfloat)
 floatValueToBigfloat = define "floatValueToBigfloat" $
   doc "Convert a floating-point value of any precision to a bigfloat" $
   match _FloatValue
@@ -103,7 +103,7 @@ floatValueToBigfloat = define "floatValueToBigfloat" $
     _FloatValue_float32>>: "f32" ~> Literals.float32ToBigfloat $ var "f32",
     _FloatValue_float64>>: "f64" ~> Literals.float64ToBigfloat $ var "f64"]
 
-integerValueToBigint :: TBinding (IntegerValue -> Integer)
+integerValueToBigint :: TTermDefinition (IntegerValue -> Integer)
 integerValueToBigint = define "integerValueToBigint" $
   doc "Convert an integer value of any precision to a bigint" $
   match _IntegerValue

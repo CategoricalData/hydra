@@ -17,9 +17,9 @@ public interface Parsing {
 
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseError> visit(hydra.core.Term.Record record) {
-          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Core.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
-            hydra.extract.Helpers.requireField(
+            hydra.extract.Core.requireField(
               "message",
               (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>) (raw2 -> hydra.lib.eithers.Either.apply(
                 (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, String>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, String>left(new hydra.errors.DecodingError(err))),
@@ -50,7 +50,7 @@ public interface Parsing {
               fieldMap,
               cx),
             (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseError>>) (field_message -> hydra.lib.eithers.Bind.apply(
-              hydra.extract.Helpers.requireField(
+              hydra.extract.Core.requireField(
                 "remainder",
                 (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>) (raw2 -> hydra.lib.eithers.Either.apply(
                   (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, String>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, String>left(new hydra.errors.DecodingError(err))),
@@ -123,7 +123,7 @@ public interface Parsing {
         raw));
   }
 
-  static <T0> hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseResult<T0>>>> parseResult_variantMap(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, T0>>> a, hydra.graph.Graph cx, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseError>>> hydra_decode_parsing_parseError2) {
+  static <T0> hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseResult<T0>>>> parseResult_variantMap(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, T0>>> a, hydra.graph.Graph cx, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseError>>> hydra_decode_parsing_parseError) {
     return hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
       (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseResult<T0>>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseResult<T0>>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseResult<T0>>>>(new hydra.core.Name("success"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseResult<T0>>>) (input -> hydra.lib.eithers.Map.apply(
         (java.util.function.Function<hydra.parsing.ParseSuccess<T0>, hydra.parsing.ParseResult<T0>>) (t -> (hydra.parsing.ParseResult<T0>) (new hydra.parsing.ParseResult.Success(t))),
@@ -133,7 +133,7 @@ public interface Parsing {
           input)))))),
       (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseResult<T0>>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseResult<T0>>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseResult<T0>>>>(new hydra.core.Name("failure"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseResult<T0>>>) (input -> hydra.lib.eithers.Map.apply(
         (java.util.function.Function<hydra.parsing.ParseError, hydra.parsing.ParseResult<T0>>) (t -> (hydra.parsing.ParseResult<T0>) (new hydra.parsing.ParseResult.Failure(t))),
-        (hydra_decode_parsing_parseError2).apply(cx).apply(input))))))));
+        (hydra_decode_parsing_parseError).apply(cx).apply(input))))))));
   }
 
   static <T0> hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseSuccess<T0>> parseSuccess(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, T0>>> a, hydra.graph.Graph cx, hydra.core.Term raw) {
@@ -147,15 +147,15 @@ public interface Parsing {
 
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseSuccess<T0>> visit(hydra.core.Term.Record record) {
-          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Core.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
-            hydra.extract.Helpers.requireField(
+            hydra.extract.Core.requireField(
               "value",
               a,
               fieldMap,
               cx),
             (java.util.function.Function<T0, hydra.util.Either<hydra.errors.DecodingError, hydra.parsing.ParseSuccess<T0>>>) (field_value -> hydra.lib.eithers.Bind.apply(
-              hydra.extract.Helpers.requireField(
+              hydra.extract.Core.requireField(
                 "remainder",
                 (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>) (raw2 -> hydra.lib.eithers.Either.apply(
                   (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, String>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, String>left(new hydra.errors.DecodingError(err))),

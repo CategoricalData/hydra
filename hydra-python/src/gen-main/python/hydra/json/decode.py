@@ -19,8 +19,8 @@ import hydra.lib.maps
 import hydra.lib.maybes
 import hydra.lib.sets
 import hydra.lib.strings
-import hydra.rewriting
 import hydra.show.core
+import hydra.strip
 
 def expect_number(value: hydra.json.model.Value) -> Either[str, Decimal]:
     r"""Extract a number from a JSON value."""
@@ -186,7 +186,7 @@ def from_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], tname: hydra.
 
     @lru_cache(1)
     def stripped() -> hydra.core.Type:
-        return hydra.rewriting.deannotate_type(typ)
+        return hydra.strip.deannotate_type(typ)
     match stripped():
         case hydra.core.TypeLiteral(value=lt):
             return decode_literal(lt, value)

@@ -17,9 +17,9 @@ public interface Tabular {
 
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.ColumnType> visit(hydra.core.Term.Record record) {
-          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Core.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
-            hydra.extract.Helpers.requireField(
+            hydra.extract.Core.requireField(
               "name",
               (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.ColumnName>>>) (p0 -> p1 -> hydra.decode.Relational.columnName(
                 p0,
@@ -27,7 +27,7 @@ public interface Tabular {
               fieldMap,
               cx),
             (java.util.function.Function<hydra.relational.ColumnName, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.ColumnType>>) (field_name -> hydra.lib.eithers.Bind.apply(
-              hydra.extract.Helpers.requireField(
+              hydra.extract.Core.requireField(
                 "type",
                 (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Type>>>) (p0 -> p1 -> hydra.decode.Core.type(
                   p0,
@@ -55,8 +55,8 @@ public interface Tabular {
         public hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.DataRow<T0>> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(
             (java.util.function.Function<hydra.util.ConsList<hydra.util.Maybe<T0>>, hydra.tabular.DataRow<T0>>) (b -> (hydra.tabular.DataRow<T0>) (new hydra.tabular.DataRow(b))),
-            hydra.extract.Helpers.<hydra.util.Maybe<T0>>decodeList(
-              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.Maybe<T0>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.Maybe<T0>>>) (v2 -> hydra.extract.Helpers.<T0>decodeMaybe(
+            hydra.extract.Core.<hydra.util.Maybe<T0>>decodeList(
+              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.Maybe<T0>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.Maybe<T0>>>) (v2 -> hydra.extract.Core.<T0>decodeMaybe(
                 v,
                 v1,
                 v2))),
@@ -82,7 +82,7 @@ public interface Tabular {
         public hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.HeaderRow> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(
             (java.util.function.Function<hydra.util.ConsList<String>, hydra.tabular.HeaderRow>) (b -> new hydra.tabular.HeaderRow(b)),
-            hydra.extract.Helpers.decodeList(
+            hydra.extract.Core.decodeList(
               (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>) (raw2 -> hydra.lib.eithers.Either.apply(
                 (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, String>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, String>left(new hydra.errors.DecodingError(err))),
                 (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
@@ -129,11 +129,11 @@ public interface Tabular {
 
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.Table<T0>> visit(hydra.core.Term.Record record) {
-          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Core.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
-            hydra.extract.Helpers.requireField(
+            hydra.extract.Core.requireField(
               "header",
-              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.Maybe<hydra.tabular.HeaderRow>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.Maybe<hydra.tabular.HeaderRow>>>) (v2 -> hydra.extract.Helpers.decodeMaybe(
+              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.Maybe<hydra.tabular.HeaderRow>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.Maybe<hydra.tabular.HeaderRow>>>) (v2 -> hydra.extract.Core.decodeMaybe(
                 (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.HeaderRow>>>) (p0 -> p1 -> hydra.decode.Tabular.headerRow(
                   p0,
                   p1)),
@@ -142,9 +142,9 @@ public interface Tabular {
               fieldMap,
               cx),
             (java.util.function.Function<hydra.util.Maybe<hydra.tabular.HeaderRow>, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.Table<T0>>>) (field_header -> hydra.lib.eithers.Bind.apply(
-              hydra.extract.Helpers.requireField(
+              hydra.extract.Core.requireField(
                 "data",
-                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<hydra.tabular.DataRow<T0>>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<hydra.tabular.DataRow<T0>>>>) (v2 -> hydra.extract.Helpers.decodeList(
+                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<hydra.tabular.DataRow<T0>>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<hydra.tabular.DataRow<T0>>>>) (v2 -> hydra.extract.Core.decodeList(
                   (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.DataRow<T0>>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.DataRow<T0>>>) (v22 -> hydra.decode.Tabular.<T0>dataRow(
                     v,
                     v12,
@@ -172,9 +172,9 @@ public interface Tabular {
 
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.TableType> visit(hydra.core.Term.Record record) {
-          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Core.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
-            hydra.extract.Helpers.requireField(
+            hydra.extract.Core.requireField(
               "name",
               (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.RelationName>>>) (p0 -> p1 -> hydra.decode.Relational.relationName(
                 p0,
@@ -182,9 +182,9 @@ public interface Tabular {
               fieldMap,
               cx),
             (java.util.function.Function<hydra.relational.RelationName, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.TableType>>) (field_name -> hydra.lib.eithers.Bind.apply(
-              hydra.extract.Helpers.requireField(
+              hydra.extract.Core.requireField(
                 "columns",
-                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<hydra.tabular.ColumnType>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<hydra.tabular.ColumnType>>>) (v2 -> hydra.extract.Helpers.decodeList(
+                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<hydra.tabular.ColumnType>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<hydra.tabular.ColumnType>>>) (v2 -> hydra.extract.Core.decodeList(
                   (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.ColumnType>>>) (p0 -> p1 -> hydra.decode.Tabular.columnType(
                     p0,
                     p1)),

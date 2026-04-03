@@ -7,242 +7,242 @@
 
 (ert-deftest test-maps-negalter-neginsert-new-key ()
 
-  (should (equal (list (cons 1 "a") (cons 2 "b") (cons 3 "new")) (funcall (funcall (funcall hydra_lib_maps_alter (lambda (opt) (list :just "new"))) 3) (list (cons 1 "a") (cons 2 "b"))))))
+  (should (equal {1: "a", 2: "b", 3: "new"} {1: "a", 2: "b", 3: "new"})))
 
 (ert-deftest test-maps-negalter-negupdate-existing-key ()
 
-  (should (equal (list (cons 1 "a") (cons 2 "updated")) (funcall (funcall (funcall hydra_lib_maps_alter (lambda (opt) (list :just "updated"))) 2) (list (cons 1 "a") (cons 2 "b"))))))
+  (should (equal {1: "a", 2: "updated"} {1: "a", 2: "updated"})))
 
 (ert-deftest test-maps-negalter-negdelete-key ()
 
-  (should (equal (list (cons 1 "a")) (funcall (funcall (funcall hydra_lib_maps_alter (lambda (opt) (list :nothing))) 2) (list (cons 1 "a") (cons 2 "b"))))))
+  (should (equal {1: "a"} {1: "a"})))
 
 ;; bimap
 
 (ert-deftest test-maps-negbimap-negtransform-both ()
 
-  (should (equal (list (cons 2 "A") (cons 4 "B")) (funcall (funcall (funcall hydra_lib_maps_bimap (lambda (k) (funcall (hydra_lib_math_mul k) 2))) (lambda (v) (hydra_lib_strings_to_upper v))) (list (cons 1 "a") (cons 2 "b"))))))
+  (should (equal {2: "A", 4: "B"} {2: "A", 4: "B"})))
 
 (ert-deftest test-maps-negbimap-negempty-map ()
 
-  (should (equal (list) (funcall (funcall (funcall hydra_lib_maps_bimap (lambda (k) (funcall (hydra_lib_math_mul k) 2))) (lambda (v) (hydra_lib_strings_to_upper v))) (list)))))
+  (should (equal {} {})))
 
 ;; elems
 
 (ert-deftest test-maps-negelems-negget-all-elements ()
 
-  (should (equal (list "a" "b") (funcall hydra_lib_maps_elems (list (cons 1 "a") (cons 2 "b"))))))
+  (should (equal ["a", "b"] ["a", "b"])))
 
 (ert-deftest test-maps-negelems-negunsorted-keys ()
 
-  (should (equal (list "a" "b" "c") (funcall hydra_lib_maps_elems (list (cons 1 "a") (cons 2 "b") (cons 3 "c"))))))
+  (should (equal ["a", "b", "c"] ["a", "b", "c"])))
 
 (ert-deftest test-maps-negelems-negempty-map ()
 
-  (should (equal (list ) (funcall hydra_lib_maps_elems (list)))))
+  (should (equal [] [])))
 
 ;; empty
 
 (ert-deftest test-maps-negempty-negempty-map ()
 
-  (should (equal (list) hydra_lib_maps_empty)))
+  (should (equal {} {})))
 
 ;; filter
 
 (ert-deftest test-maps-negfilter-negfilter-values-starting-with-a ()
 
-  (should (equal (list (cons 1 "a") (cons 3 "ab")) (funcall (funcall hydra_lib_maps_filter (lambda (v) (funcall (hydra_lib_equality_equal (funcall (hydra_lib_strings_char_at 0) v)) 97))) (list (cons 1 "a") (cons 2 "b") (cons 3 "ab"))))))
+  (should (equal {1: "a", 3: "ab"} {1: "a", 3: "ab"})))
 
 (ert-deftest test-maps-negfilter-negfilter-all ()
 
-  (should (equal (list) (funcall (funcall hydra_lib_maps_filter (lambda (v) (funcall (hydra_lib_equality_equal (funcall (hydra_lib_strings_char_at 0) v)) 97))) (list (cons 1 "b") (cons 2 "c"))))))
+  (should (equal {} {})))
 
 (ert-deftest test-maps-negfilter-negempty-map ()
 
-  (should (equal (list) (funcall (funcall hydra_lib_maps_filter (lambda (v) (funcall (hydra_lib_equality_equal (funcall (hydra_lib_strings_char_at 0) v)) 97))) (list)))))
+  (should (equal {} {})))
 
 ;; filterWithKey
 
 (ert-deftest test-maps-negfilterwithkey-negfilter-by-key-1 ()
 
-  (should (equal (list (cons 2 "b") (cons 3 "c")) (funcall (funcall hydra_lib_maps_filter_with_key (lambda (k) (lambda (v) (funcall (hydra_lib_equality_gt k) 1)))) (list (cons 1 "a") (cons 2 "b") (cons 3 "c"))))))
+  (should (equal {2: "b", 3: "c"} {2: "b", 3: "c"})))
 
 (ert-deftest test-maps-negfilterwithkey-negfilter-all ()
 
-  (should (equal (list) (funcall (funcall hydra_lib_maps_filter_with_key (lambda (k) (lambda (v) (funcall (hydra_lib_equality_gt k) 1)))) (list (cons 1 "a"))))))
+  (should (equal {} {})))
 
 (ert-deftest test-maps-negfilterwithkey-negempty-map ()
 
-  (should (equal (list) (funcall (funcall hydra_lib_maps_filter_with_key (lambda (k) (lambda (v) (funcall (hydra_lib_equality_gt k) 1)))) (list)))))
+  (should (equal {} {})))
 
 ;; findWithDefault
 
 (ert-deftest test-maps-negfindwithdefault-negfind-existing ()
 
-  (should (equal "b" (funcall (funcall (funcall hydra_lib_maps_find_with_default "default") 2) (list (cons 1 "a") (cons 2 "b"))))))
+  (should (equal b b)))
 
 (ert-deftest test-maps-negfindwithdefault-neguse-default ()
 
-  (should (equal "default" (funcall (funcall (funcall hydra_lib_maps_find_with_default "default") 3) (list (cons 1 "a") (cons 2 "b"))))))
+  (should (equal default default)))
 
 ;; fromList
 
 (ert-deftest test-maps-negfromlist-negcreate-from-pairs ()
 
-  (should (equal (list (cons 1 "a") (cons 2 "b")) (funcall hydra_lib_maps_from_list (list (list 1 "a") (list 2 "b"))))))
+  (should (equal {1: "a", 2: "b"} {1: "a", 2: "b"})))
 
 (ert-deftest test-maps-negfromlist-negduplicate-keys ()
 
-  (should (equal (list (cons 1 "b")) (funcall hydra_lib_maps_from_list (list (list 1 "a") (list 1 "b"))))))
+  (should (equal {1: "b"} {1: "b"})))
 
 (ert-deftest test-maps-negfromlist-negempty-list ()
 
-  (should (equal (list) (funcall hydra_lib_maps_from_list (list )))))
+  (should (equal {} {})))
 
 ;; insert
 
 (ert-deftest test-maps-neginsert-neginsert-new-key ()
 
-  (should (equal (list (cons 1 "a") (cons 2 "b") (cons 3 "c")) (funcall (funcall (funcall hydra_lib_maps_insert 3) "c") (list (cons 1 "a") (cons 2 "b"))))))
+  (should (equal {1: "a", 2: "b", 3: "c"} {1: "a", 2: "b", 3: "c"})))
 
 (ert-deftest test-maps-neginsert-negupdate-existing ()
 
-  (should (equal (list (cons 1 "a") (cons 2 "updated")) (funcall (funcall (funcall hydra_lib_maps_insert 2) "updated") (list (cons 1 "a") (cons 2 "b"))))))
+  (should (equal {1: "a", 2: "updated"} {1: "a", 2: "updated"})))
 
 (ert-deftest test-maps-neginsert-neginsert-into-empty ()
 
-  (should (equal (list (cons 1 "x")) (funcall (funcall (funcall hydra_lib_maps_insert 1) "x") (list)))))
+  (should (equal {1: "x"} {1: "x"})))
 
 ;; keys
 
 (ert-deftest test-maps-negkeys-negget-all-keys ()
 
-  (should (equal (list 1 2 3) (funcall hydra_lib_maps_keys (list (cons 1 "a") (cons 2 "b") (cons 3 "c"))))))
+  (should (equal [1, 2, 3] [1, 2, 3])))
 
 (ert-deftest test-maps-negkeys-negunsorted-keys ()
 
-  (should (equal (list 1 2 3) (funcall hydra_lib_maps_keys (list (cons 1 "a") (cons 2 "b") (cons 3 "c"))))))
+  (should (equal [1, 2, 3] [1, 2, 3])))
 
 (ert-deftest test-maps-negkeys-negempty-map ()
 
-  (should (equal (list ) (funcall hydra_lib_maps_keys (list)))))
+  (should (equal [] [])))
 
 ;; lookup
 
 (ert-deftest test-maps-neglookup-negfind-existing-key ()
 
-  (should (equal (list :just "b") (funcall (funcall hydra_lib_maps_lookup 2) (list (cons 1 "a") (cons 2 "b"))))))
+  (should (equal just("b") just("b"))))
 
 (ert-deftest test-maps-neglookup-negkey-not-found ()
 
-  (should (equal (list :nothing) (funcall (funcall hydra_lib_maps_lookup 3) (list (cons 1 "a") (cons 2 "b"))))))
+  (should (equal nothing nothing)))
 
 (ert-deftest test-maps-neglookup-neglookup-in-empty ()
 
-  (should (equal (list :nothing) (funcall (funcall hydra_lib_maps_lookup 1) (list)))))
+  (should (equal nothing nothing)))
 
 ;; map
 
 (ert-deftest test-maps-negmap-negmap-over-values ()
 
-  (should (equal (list (cons 1 "A") (cons 2 "B")) (funcall (funcall hydra_lib_maps_map (lambda (s) (hydra_lib_strings_to_upper s))) (list (cons 1 "a") (cons 2 "b"))))))
+  (should (equal {1: "A", 2: "B"} {1: "A", 2: "B"})))
 
 (ert-deftest test-maps-negmap-negmap-empty ()
 
-  (should (equal (list) (funcall (funcall hydra_lib_maps_map (lambda (s) (hydra_lib_strings_to_upper s))) (list)))))
+  (should (equal {} {})))
 
 ;; mapKeys
 
 (ert-deftest test-maps-negmapkeys-negdouble-keys ()
 
-  (should (equal (list (cons 2 "a") (cons 4 "b")) (funcall (funcall hydra_lib_maps_map_keys (lambda (k) (funcall (hydra_lib_math_mul k) 2))) (list (cons 1 "a") (cons 2 "b"))))))
+  (should (equal {2: "a", 4: "b"} {2: "a", 4: "b"})))
 
 (ert-deftest test-maps-negmapkeys-negempty-map ()
 
-  (should (equal (list) (funcall (funcall hydra_lib_maps_map_keys (lambda (k) (funcall (hydra_lib_math_mul k) 2))) (list)))))
+  (should (equal {} {})))
 
 ;; member
 
 (ert-deftest test-maps-negmember-negkey-exists ()
 
-  (should (equal t (funcall (funcall hydra_lib_maps_member 2) (list (cons 1 "a") (cons 2 "b"))))))
+  (should (equal true true)))
 
 (ert-deftest test-maps-negmember-negkey-missing ()
 
-  (should (equal nil (funcall (funcall hydra_lib_maps_member 3) (list (cons 1 "a") (cons 2 "b"))))))
+  (should (equal false false)))
 
 (ert-deftest test-maps-negmember-negempty-map ()
 
-  (should (equal nil (funcall (funcall hydra_lib_maps_member 1) (list)))))
+  (should (equal false false)))
 
 ;; null
 
 (ert-deftest test-maps-negnull-negempty-map ()
 
-  (should (equal t (funcall hydra_lib_maps_null (list)))))
+  (should (equal true true)))
 
 (ert-deftest test-maps-negnull-negnon-negempty-map ()
 
-  (should (equal nil (funcall hydra_lib_maps_null (list (cons 1 "a"))))))
+  (should (equal false false)))
 
 ;; remove
 
 (ert-deftest test-maps-negremove-negremove-existing ()
 
-  (should (equal (list (cons 1 "a") (cons 3 "c")) (funcall (funcall hydra_lib_maps_delete 2) (list (cons 1 "a") (cons 2 "b") (cons 3 "c"))))))
+  (should (equal {1: "a", 3: "c"} {1: "a", 3: "c"})))
 
 (ert-deftest test-maps-negremove-negremove-non-negexisting ()
 
-  (should (equal (list (cons 1 "a") (cons 2 "b")) (funcall (funcall hydra_lib_maps_delete 4) (list (cons 1 "a") (cons 2 "b"))))))
+  (should (equal {1: "a", 2: "b"} {1: "a", 2: "b"})))
 
 (ert-deftest test-maps-negremove-negremove-from-empty ()
 
-  (should (equal (list) (funcall (funcall hydra_lib_maps_delete 1) (list)))))
+  (should (equal {} {})))
 
 ;; singleton
 
 (ert-deftest test-maps-negsingleton-negsingle-entry ()
 
-  (should (equal (list (cons 42 "hello")) (funcall (funcall hydra_lib_maps_singleton 42) "hello"))))
+  (should (equal {42: "hello"} {42: "hello"})))
 
 ;; size
 
 (ert-deftest test-maps-negsize-negthree-entries ()
 
-  (should (equal 3 (funcall hydra_lib_maps_size (list (cons 1 "a") (cons 2 "b") (cons 3 "c"))))))
+  (should (equal 3 3)))
 
 (ert-deftest test-maps-negsize-negsingle-entry ()
 
-  (should (equal 1 (funcall hydra_lib_maps_size (list (cons 42 "test"))))))
+  (should (equal 1 1)))
 
 (ert-deftest test-maps-negsize-negempty-map ()
 
-  (should (equal 0 (funcall hydra_lib_maps_size (list)))))
+  (should (equal 0 0)))
 
 ;; toList
 
 (ert-deftest test-maps-negtolist-negconvert-to-pairs ()
 
-  (should (equal (list (list 1 "a") (list 2 "b")) (funcall hydra_lib_maps_to_list (list (cons 1 "a") (cons 2 "b"))))))
+  (should (equal [(1, "a"), (2, "b")] [(1, "a"), (2, "b")])))
 
 (ert-deftest test-maps-negtolist-negunsorted-keys ()
 
-  (should (equal (list (list 1 "a") (list 2 "b") (list 3 "c")) (funcall hydra_lib_maps_to_list (list (cons 1 "a") (cons 2 "b") (cons 3 "c"))))))
+  (should (equal [(1, "a"), (2, "b"), (3, "c")] [(1, "a"), (2, "b"), (3, "c")])))
 
 (ert-deftest test-maps-negtolist-negempty-map ()
 
-  (should (equal (list ) (funcall hydra_lib_maps_to_list (list)))))
+  (should (equal [] [])))
 
 ;; union
 
 (ert-deftest test-maps-negunion-negunion-two-maps ()
 
-  (should (equal (list (cons 1 "a") (cons 2 "b") (cons 3 "c")) (funcall (funcall hydra_lib_maps_union (list (cons 1 "a") (cons 2 "b"))) (list (cons 2 "x") (cons 3 "c"))))))
+  (should (equal {1: "a", 2: "b", 3: "c"} {1: "a", 2: "b", 3: "c"})))
 
 (ert-deftest test-maps-negunion-negunion-with-empty ()
 
-  (should (equal (list (cons 1 "a")) (funcall (funcall hydra_lib_maps_union (list (cons 1 "a"))) (list)))))
+  (should (equal {1: "a"} {1: "a"})))
 
 (ert-deftest test-maps-negunion-negempty-with-map ()
 
-  (should (equal (list (cons 1 "a")) (funcall (funcall hydra_lib_maps_union (list)) (list (cons 1 "a"))))))
+  (should (equal {1: "a"} {1: "a"})))

@@ -31,7 +31,7 @@
                                             "term": {
                                               "application": {
                                                 "argument": {"variable": "left"},
-                                                "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                "function": {"variable": "hydra.strip.deannotateType"}}},
                                             "type": [
                                               {
                                                 "constraints": null,
@@ -45,7 +45,7 @@
                                                 "term": {
                                                   "application": {
                                                     "argument": {"variable": "right"},
-                                                    "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                    "function": {"variable": "hydra.strip.deannotateType"}}},
                                                 "type": [
                                                   {
                                                     "constraints": null,
@@ -1384,7 +1384,7 @@
                                                                         "function": {
                                                                           "elimination": {
                                                                             "record": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}}}},
-                                                                  "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                                  "function": {"variable": "hydra.strip.deannotateType"}}},
                                                               "type": [
                                                                 {
                                                                   "constraints": null,
@@ -1404,7 +1404,7 @@
                                                                             "function": {
                                                                               "elimination": {
                                                                                 "record": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}}}},
-                                                                      "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                                      "function": {"variable": "hydra.strip.deannotateType"}}},
                                                                   "type": [
                                                                     {
                                                                       "constraints": null,
@@ -2479,7 +2479,11 @@
             "variables": []}]}}],
   "description": ["Utilities for type unification."],
   "namespace": "hydra.unification",
-  "termDependencies": ["hydra.rewriting", "hydra.show.core", "hydra.substitution"],
+  "termDependencies": [
+    "hydra.rewriting",
+    "hydra.show.core",
+    "hydra.strip",
+    "hydra.substitution"],
   "typeDependencies": [
     "hydra.paths",
     "hydra.ast",
@@ -2489,6 +2493,7 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
+    "hydra.error.module",
     "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",

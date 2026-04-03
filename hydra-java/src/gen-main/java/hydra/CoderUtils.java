@@ -50,7 +50,7 @@ public interface CoderUtils {
   }
 
   static <T0, T1> hydra.util.Either<T1, hydra.typing.FunctionStructure<T0>> analyzeFunctionTermWith_gather(hydra.context.Context cx, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>> forBinding, java.util.function.Function<T0, hydra.graph.Graph> getTC, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, T0>> setTC, Boolean argMode, T0 gEnv, hydra.util.ConsList<hydra.core.Name> tparams, hydra.util.ConsList<hydra.core.Name> args, hydra.util.ConsList<hydra.core.Binding> bindings, hydra.util.ConsList<hydra.core.Type> doms, hydra.util.ConsList<hydra.core.Type> tapps, hydra.core.Term t) {
-    return hydra.Rewriting.deannotateTerm(t).accept(new hydra.core.Term.PartialVisitor<>() {
+    return hydra.Strip.deannotateTerm(t).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Either<T1, hydra.typing.FunctionStructure<T0>> otherwise(hydra.core.Term instance) {
         return hydra.CoderUtils.<T0, T1>analyzeFunctionTermWith_finish(
@@ -104,7 +104,7 @@ public interface CoderUtils {
                       hydra.CoderUtils.<T0>analyzeFunctionTermWith_gather_newEnv(
                         gEnv,
                         getTC,
-                        (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>>) (p0 -> p1 -> hydra.Rewriting.extendGraphForLambda(
+                        (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>>) (p0 -> p1 -> hydra.Scoping.extendGraphForLambda(
                           p0,
                           p1)),
                         (lam).value,
@@ -150,7 +150,7 @@ public interface CoderUtils {
             forBinding,
             gEnv,
             getTC,
-            (java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Let, hydra.graph.Graph>>>) (p0 -> p1 -> p2 -> hydra.Rewriting.extendGraphForLet(
+            (java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Let, hydra.graph.Graph>>>) (p0 -> p1 -> p2 -> hydra.Scoping.extendGraphForLet(
               p0,
               p1,
               p2)),
@@ -200,7 +200,7 @@ public interface CoderUtils {
           hydra.CoderUtils.<T0>analyzeFunctionTermWith_gather_newEnv3(
             gEnv,
             getTC,
-            (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.TypeLambda, hydra.graph.Graph>>) (p0 -> p1 -> hydra.Rewriting.extendGraphForTypeLambda(
+            (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.TypeLambda, hydra.graph.Graph>>) (p0 -> p1 -> hydra.Scoping.extendGraphForTypeLambda(
               p0,
               p1)),
             setTC,
@@ -217,16 +217,16 @@ public interface CoderUtils {
     });
   }
 
-  static <T0> T0 analyzeFunctionTermWith_gather_newEnv(T0 gEnv, java.util.function.Function<T0, hydra.graph.Graph> getTC, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>> hydra_rewriting_extendGraphForLambda2, hydra.core.Lambda lam, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, T0>> setTC) {
-    return (setTC).apply((hydra_rewriting_extendGraphForLambda2).apply((getTC).apply(gEnv)).apply(lam)).apply(gEnv);
+  static <T0> T0 analyzeFunctionTermWith_gather_newEnv(T0 gEnv, java.util.function.Function<T0, hydra.graph.Graph> getTC, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>> hydra_scoping_extendGraphForLambda, hydra.core.Lambda lam, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, T0>> setTC) {
+    return (setTC).apply((hydra_scoping_extendGraphForLambda).apply((getTC).apply(gEnv)).apply(lam)).apply(gEnv);
   }
 
-  static <T0> T0 analyzeFunctionTermWith_gather_newEnv2(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>> forBinding, T0 gEnv, java.util.function.Function<T0, hydra.graph.Graph> getTC, java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Let, hydra.graph.Graph>>> hydra_rewriting_extendGraphForLet2, hydra.core.Let lt, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, T0>> setTC) {
-    return (setTC).apply((hydra_rewriting_extendGraphForLet2).apply(forBinding).apply((getTC).apply(gEnv)).apply(lt)).apply(gEnv);
+  static <T0> T0 analyzeFunctionTermWith_gather_newEnv2(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>> forBinding, T0 gEnv, java.util.function.Function<T0, hydra.graph.Graph> getTC, java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Let, hydra.graph.Graph>>> hydra_scoping_extendGraphForLet, hydra.core.Let lt, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, T0>> setTC) {
+    return (setTC).apply((hydra_scoping_extendGraphForLet).apply(forBinding).apply((getTC).apply(gEnv)).apply(lt)).apply(gEnv);
   }
 
-  static <T0> T0 analyzeFunctionTermWith_gather_newEnv3(T0 gEnv, java.util.function.Function<T0, hydra.graph.Graph> getTC, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.TypeLambda, hydra.graph.Graph>> hydra_rewriting_extendGraphForTypeLambda2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, T0>> setTC, hydra.core.TypeLambda tl) {
-    return (setTC).apply((hydra_rewriting_extendGraphForTypeLambda2).apply((getTC).apply(gEnv)).apply(tl)).apply(gEnv);
+  static <T0> T0 analyzeFunctionTermWith_gather_newEnv3(T0 gEnv, java.util.function.Function<T0, hydra.graph.Graph> getTC, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.TypeLambda, hydra.graph.Graph>> hydra_scoping_extendGraphForTypeLambda, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, T0>> setTC, hydra.core.TypeLambda tl) {
+    return (setTC).apply((hydra_scoping_extendGraphForTypeLambda).apply((getTC).apply(gEnv)).apply(tl)).apply(gEnv);
   }
 
   static hydra.util.Maybe<hydra.core.Term> bindingMetadata(hydra.graph.Graph tc, hydra.core.Binding b) {
@@ -254,7 +254,7 @@ public interface CoderUtils {
 
   static hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term> gatherApplications(hydra.core.Term term) {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term>>>> go = new java.util.concurrent.atomic.AtomicReference<>();
-    go.set((java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term>>>) (args -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term>>) (t -> hydra.Rewriting.deannotateTerm(t).accept(new hydra.core.Term.PartialVisitor<>() {
+    go.set((java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term>>>) (args -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term>>) (t -> hydra.Strip.deannotateTerm(t).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term> otherwise(hydra.core.Term instance) {
         return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term>(args, t)));
@@ -273,7 +273,7 @@ public interface CoderUtils {
   }
 
   static hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>> gatherArgs(hydra.core.Term term, hydra.util.ConsList<hydra.core.Term> args) {
-    return hydra.Rewriting.deannotateTerm(term).accept(new hydra.core.Term.PartialVisitor<>() {
+    return hydra.Strip.deannotateTerm(term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>> otherwise(hydra.core.Term instance) {
         return (hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>) ((hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>) (new hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>(term, args)));
@@ -309,7 +309,7 @@ public interface CoderUtils {
   }
 
   static hydra.util.Pair<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Type>>> gatherArgsWithTypeApps(hydra.core.Term term, hydra.util.ConsList<hydra.core.Term> args, hydra.util.ConsList<hydra.core.Type> tyArgs) {
-    return hydra.Rewriting.deannotateTerm(term).accept(new hydra.core.Term.PartialVisitor<>() {
+    return hydra.Strip.deannotateTerm(term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Pair<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Type>>> otherwise(hydra.core.Term instance) {
         return (hydra.util.Pair<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Type>>>) ((hydra.util.Pair<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Type>>>) (new hydra.util.Pair<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Type>>>(term, (hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Type>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Type>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Type>>(args, tyArgs))))));
@@ -438,7 +438,7 @@ public interface CoderUtils {
   }
 
   static Boolean isSelfTailRecursive(hydra.core.Name funcName, hydra.core.Term body) {
-    Boolean callsSelf = hydra.lib.logic.Not.apply(hydra.Rewriting.isFreeVariableInTerm(
+    Boolean callsSelf = hydra.lib.logic.Not.apply(hydra.Variables.isFreeVariableInTerm(
       funcName,
       body));
     return hydra.lib.logic.IfElse.lazy(
@@ -527,11 +527,11 @@ public interface CoderUtils {
   }
 
   static Boolean isTailRecursiveInTailPosition(hydra.core.Name funcName, hydra.core.Term term) {
-    hydra.core.Term stripped = hydra.Rewriting.deannotateAndDetypeTerm(term);
+    hydra.core.Term stripped = hydra.Strip.deannotateAndDetypeTerm(term);
     return (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.core.Term instance) {
-        return hydra.Rewriting.isFreeVariableInTerm(
+        return hydra.Variables.isFreeVariableInTerm(
           funcName,
           term);
       }
@@ -541,11 +541,11 @@ public interface CoderUtils {
         hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term> gathered = hydra.CoderUtils.gatherApplications(stripped);
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> gatherArgs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered));
         hydra.util.Lazy<hydra.core.Term> gatherFun = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(gathered));
-        hydra.core.Term strippedFun = hydra.Rewriting.deannotateAndDetypeTerm(gatherFun.get());
+        hydra.core.Term strippedFun = hydra.Strip.deannotateAndDetypeTerm(gatherFun.get());
         return (strippedFun).accept(new hydra.core.Term.PartialVisitor<>() {
           @Override
           public Boolean otherwise(hydra.core.Term instance) {
-            return hydra.Rewriting.isFreeVariableInTerm(
+            return hydra.Variables.isFreeVariableInTerm(
               funcName,
               term);
           }
@@ -560,7 +560,7 @@ public interface CoderUtils {
                 hydra.util.Lazy<Boolean> argsNoFunc = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
                   (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Term, Boolean>>) (ok -> (java.util.function.Function<hydra.core.Term, Boolean>) (arg -> hydra.lib.logic.And.apply(
                     ok,
-                    hydra.Rewriting.isFreeVariableInTerm(
+                    hydra.Variables.isFreeVariableInTerm(
                       funcName,
                       arg)))),
                   true,
@@ -604,7 +604,7 @@ public interface CoderUtils {
                     argsNoLambda.get());
                 })).get();
               })).get(),
-              () -> hydra.Rewriting.isFreeVariableInTerm(
+              () -> hydra.Variables.isFreeVariableInTerm(
                 funcName,
                 term));
           }
@@ -614,7 +614,7 @@ public interface CoderUtils {
             return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
               @Override
               public Boolean otherwise(hydra.core.Function instance) {
-                return hydra.Rewriting.isFreeVariableInTerm(
+                return hydra.Variables.isFreeVariableInTerm(
                   funcName,
                   term);
               }
@@ -624,7 +624,7 @@ public interface CoderUtils {
                 return (e).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
                   @Override
                   public Boolean otherwise(hydra.core.Elimination instance) {
-                    return hydra.Rewriting.isFreeVariableInTerm(
+                    return hydra.Variables.isFreeVariableInTerm(
                       funcName,
                       term);
                   }
@@ -634,7 +634,7 @@ public interface CoderUtils {
                     hydra.util.Lazy<Boolean> argsOk = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
                       (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Term, Boolean>>) (ok -> (java.util.function.Function<hydra.core.Term, Boolean>) (arg -> hydra.lib.logic.And.apply(
                         ok,
-                        hydra.Rewriting.isFreeVariableInTerm(
+                        hydra.Variables.isFreeVariableInTerm(
                           funcName,
                           arg)))),
                       true,
@@ -673,7 +673,7 @@ public interface CoderUtils {
         return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
           public Boolean otherwise(hydra.core.Function instance) {
-            return hydra.Rewriting.isFreeVariableInTerm(
+            return hydra.Variables.isFreeVariableInTerm(
               funcName,
               term);
           }
@@ -692,7 +692,7 @@ public interface CoderUtils {
         hydra.util.Lazy<Boolean> bindingsOk = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
           (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Binding, Boolean>>) (ok -> (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.logic.And.apply(
             ok,
-            hydra.Rewriting.isFreeVariableInTerm(
+            hydra.Variables.isFreeVariableInTerm(
               funcName,
               (b).term)))),
           true,
@@ -707,7 +707,7 @@ public interface CoderUtils {
   }
 
   static Boolean isTrivialTerm(hydra.core.Term t) {
-    return hydra.Rewriting.deannotateTerm(t).accept(new hydra.core.Term.PartialVisitor<>() {
+    return hydra.Strip.deannotateTerm(t).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.core.Term instance) {
         return false;
@@ -862,7 +862,7 @@ public interface CoderUtils {
   }
 
   static hydra.util.ConsList<hydra.module.Definition> reorderDefs(hydra.util.ConsList<hydra.module.Definition> defs) {
-    hydra.util.Pair<hydra.util.ConsList<hydra.module.TypeDefinition>, hydra.util.ConsList<hydra.module.TermDefinition>> partitioned = hydra.Schemas.partitionDefinitions(defs);
+    hydra.util.Pair<hydra.util.ConsList<hydra.module.TypeDefinition>, hydra.util.ConsList<hydra.module.TermDefinition>> partitioned = hydra.Environment.partitionDefinitions(defs);
     hydra.util.Lazy<hydra.util.ConsList<hydra.module.TypeDefinition>> typeDefsRaw = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(partitioned));
     hydra.util.Lazy<hydra.util.ConsList<hydra.module.TypeDefinition>> nameFirst = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
       (java.util.function.Function<hydra.module.TypeDefinition, Boolean>) (td -> hydra.lib.equality.Equal.apply(
@@ -892,7 +892,7 @@ public interface CoderUtils {
 
         @Override
         public hydra.util.ConsList<hydra.core.Name> visit(hydra.module.Definition.Term td) {
-          return hydra.lib.sets.ToList.apply(hydra.Rewriting.freeVariablesInTerm((td).value.term));
+          return hydra.lib.sets.ToList.apply(hydra.Variables.freeVariablesInTerm((td).value.term));
         }
       })),
       termDefsWrapped.get())));

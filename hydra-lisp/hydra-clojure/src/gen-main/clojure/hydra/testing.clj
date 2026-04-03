@@ -1,98 +1,11 @@
-(ns hydra.testing
-  (:require [hydra.ast :refer :all] [hydra.coders :refer :all] [hydra.core :refer :all] [hydra.error.core :refer :all] [hydra.graph :refer :all] [hydra.json.model :refer :all] [hydra.module :refer :all] [hydra.parsing :refer :all] [hydra.typing :refer :all] [hydra.util :refer :all]
-))
+(ns hydra.testing)
 
-(declare hydra_testing_evaluation_style-variants hydra_testing_fold_operation-variants hydra_testing_hoist_predicate-variants hydra_testing_term_rewriter-variants hydra_testing_type_rewriter-variants hydra_testing_test_case-variants)
-
-(defrecord hydra_testing_alpha_conversion_test_case [term old_variable new_variable result])
-(defn make-hydra_testing_alpha_conversion_test_case [term old_variable new_variable result] (->hydra_testing_alpha_conversion_test_case term old_variable new_variable result))
-
-(def hydra_testing_evaluation_style-variants (list :eager :lazy))
-
-(defrecord hydra_testing_case_conversion_test_case [from_convention to_convention from_string to_string])
-(defn make-hydra_testing_case_conversion_test_case [from_convention to_convention from_string to_string] (->hydra_testing_case_conversion_test_case from_convention to_convention from_string to_string))
-
-(defrecord hydra_testing_delegated_evaluation_test_case [input output])
-(defn make-hydra_testing_delegated_evaluation_test_case [input output] (->hydra_testing_delegated_evaluation_test_case input output))
-
-(defrecord hydra_testing_eta_expansion_test_case [input output])
-(defn make-hydra_testing_eta_expansion_test_case [input output] (->hydra_testing_eta_expansion_test_case input output))
-
-(defrecord hydra_testing_deannotate_term_test_case [input output])
-(defn make-hydra_testing_deannotate_term_test_case [input output] (->hydra_testing_deannotate_term_test_case input output))
-
-(defrecord hydra_testing_deannotate_type_test_case [input output])
-(defn make-hydra_testing_deannotate_type_test_case [input output] (->hydra_testing_deannotate_type_test_case input output))
-
-(defrecord hydra_testing_flatten_let_terms_test_case [input output])
-(defn make-hydra_testing_flatten_let_terms_test_case [input output] (->hydra_testing_flatten_let_terms_test_case input output))
-
-(def hydra_testing_fold_operation-variants (list :sum_int32_literals :collect_list_lengths :collect_labels))
-
-(defrecord hydra_testing_fold_over_term_test_case [input traversal_order operation output])
-(defn make-hydra_testing_fold_over_term_test_case [input traversal_order operation output] (->hydra_testing_fold_over_term_test_case input traversal_order operation output))
-
-(defrecord hydra_testing_free_variables_test_case [input output])
-(defn make-hydra_testing_free_variables_test_case [input output] (->hydra_testing_free_variables_test_case input output))
-
-(def hydra_testing_hoist_predicate-variants (list :case_statements :applications :lists :nothing))
-
-(defrecord hydra_testing_hoist_let_bindings_test_case [input output])
-(defn make-hydra_testing_hoist_let_bindings_test_case [input output] (->hydra_testing_hoist_let_bindings_test_case input output))
-
-(defrecord hydra_testing_hoist_polymorphic_let_bindings_test_case [input output])
-(defn make-hydra_testing_hoist_polymorphic_let_bindings_test_case [input output] (->hydra_testing_hoist_polymorphic_let_bindings_test_case input output))
-
-(defrecord hydra_testing_hoist_subterms_test_case [predicate input output])
-(defn make-hydra_testing_hoist_subterms_test_case [predicate input output] (->hydra_testing_hoist_subterms_test_case predicate input output))
-
-(defrecord hydra_testing_hoist_case_statements_test_case [input output])
-(defn make-hydra_testing_hoist_case_statements_test_case [input output] (->hydra_testing_hoist_case_statements_test_case input output))
-
-(def hydra_testing_term_rewriter-variants (list :replace_foo_with_bar :replace_int32_with_int64))
-
-(defrecord hydra_testing_rewrite_term_test_case [input rewriter output])
-(defn make-hydra_testing_rewrite_term_test_case [input rewriter output] (->hydra_testing_rewrite_term_test_case input rewriter output))
-
-(def hydra_testing_type_rewriter-variants (list :replace_string_with_int32))
-
-(defrecord hydra_testing_rewrite_type_test_case [input rewriter output])
-(defn make-hydra_testing_rewrite_type_test_case [input rewriter output] (->hydra_testing_rewrite_type_test_case input rewriter output))
-
-(defrecord hydra_testing_evaluation_test_case [evaluation_style input output])
-(defn make-hydra_testing_evaluation_test_case [evaluation_style input output] (->hydra_testing_evaluation_test_case evaluation_style input output))
-
-(defrecord hydra_testing_inference_failure_test_case [input])
-(defn make-hydra_testing_inference_failure_test_case [input] (->hydra_testing_inference_failure_test_case input))
-
-(defrecord hydra_testing_inference_test_case [input output])
-(defn make-hydra_testing_inference_test_case [input output] (->hydra_testing_inference_test_case input output))
-
-(defrecord hydra_testing_json_decode_test_case [type json expected])
-(defn make-hydra_testing_json_decode_test_case [type json expected] (->hydra_testing_json_decode_test_case type json expected))
-
-(defrecord hydra_testing_json_encode_test_case [term expected])
-(defn make-hydra_testing_json_encode_test_case [term expected] (->hydra_testing_json_encode_test_case term expected))
-
-(defrecord hydra_testing_json_roundtrip_test_case [type term])
-(defn make-hydra_testing_json_roundtrip_test_case [type term] (->hydra_testing_json_roundtrip_test_case type term))
-
-(defrecord hydra_testing_lift_lambda_above_let_test_case [input output])
-(defn make-hydra_testing_lift_lambda_above_let_test_case [input output] (->hydra_testing_lift_lambda_above_let_test_case input output))
-
-(defrecord hydra_testing_parser_test_case [input output])
-(defn make-hydra_testing_parser_test_case [input output] (->hydra_testing_parser_test_case input output))
+(declare hydra_testing_test_case-variants)
 
 (defrecord hydra_testing_tag [value])
 (defn make-hydra_testing_tag [value] (->hydra_testing_tag value))
 
-(defrecord hydra_testing_test_codec [language file_extension encode_term encode_type format_test_name format_module_name test_case_template test_group_template module_template import_template find_imports])
-(defn make-hydra_testing_test_codec [language file_extension encode_term encode_type format_test_name format_module_name test_case_template test_group_template module_template import_template find_imports] (->hydra_testing_test_codec language file_extension encode_term encode_type format_test_name format_module_name test_case_template test_group_template module_template import_template find_imports))
-
-(defrecord hydra_testing_test_generator [namespaces_for_module create_codec generate_test_file aggregator_file])
-(defn make-hydra_testing_test_generator [namespaces_for_module create_codec generate_test_file aggregator_file] (->hydra_testing_test_generator namespaces_for_module create_codec generate_test_file aggregator_file))
-
-(def hydra_testing_test_case-variants (list :alpha_conversion :case_conversion :deannotate_term :deannotate_type :delegated_evaluation :eta_expansion :flatten_let_terms :free_variables :evaluation :inference :inference_failure :json_decode :json_encode :json_parser :json_roundtrip :json_writer :lift_lambda_above_let :serialization :simplify_term :topological_sort :topological_sort_bindings :topological_sort_s_c_c :type_checking :type_checking_failure :type_reduction :normalize_type_variables :fold_over_term :rewrite_term :rewrite_type :hoist_subterms :hoist_case_statements :hoist_let_bindings :hoist_polymorphic_let_bindings :subst_in_type :variable_occurs_in_type :unify_types :join_types :unshadow_variables :validate_core_term))
+(def hydra_testing_test_case-variants (list :universal))
 
 (defrecord hydra_testing_test_case_with_metadata [name case description tags])
 (defn make-hydra_testing_test_case_with_metadata [name case description tags] (->hydra_testing_test_case_with_metadata name case description tags))
@@ -100,50 +13,5 @@
 (defrecord hydra_testing_test_group [name description subgroups cases])
 (defn make-hydra_testing_test_group [name description subgroups cases] (->hydra_testing_test_group name description subgroups cases))
 
-(defrecord hydra_testing_type_checking_test_case [input output_term output_type])
-(defn make-hydra_testing_type_checking_test_case [input output_term output_type] (->hydra_testing_type_checking_test_case input output_term output_type))
-
-(defrecord hydra_testing_type_checking_failure_test_case [input])
-(defn make-hydra_testing_type_checking_failure_test_case [input] (->hydra_testing_type_checking_failure_test_case input))
-
-(defrecord hydra_testing_topological_sort_bindings_test_case [bindings expected])
-(defn make-hydra_testing_topological_sort_bindings_test_case [bindings expected] (->hydra_testing_topological_sort_bindings_test_case bindings expected))
-
-(defrecord hydra_testing_topological_sort_test_case [adjacency_list expected])
-(defn make-hydra_testing_topological_sort_test_case [adjacency_list expected] (->hydra_testing_topological_sort_test_case adjacency_list expected))
-
-(defrecord hydra_testing_topological_sort_s_c_c_test_case [adjacency_list expected])
-(defn make-hydra_testing_topological_sort_s_c_c_test_case [adjacency_list expected] (->hydra_testing_topological_sort_s_c_c_test_case adjacency_list expected))
-
-(defrecord hydra_testing_serialization_test_case [input output])
-(defn make-hydra_testing_serialization_test_case [input output] (->hydra_testing_serialization_test_case input output))
-
-(defrecord hydra_testing_simplify_term_test_case [input output])
-(defn make-hydra_testing_simplify_term_test_case [input output] (->hydra_testing_simplify_term_test_case input output))
-
-(defrecord hydra_testing_normalize_type_variables_test_case [input output])
-(defn make-hydra_testing_normalize_type_variables_test_case [input output] (->hydra_testing_normalize_type_variables_test_case input output))
-
-(defrecord hydra_testing_type_reduction_test_case [input output])
-(defn make-hydra_testing_type_reduction_test_case [input output] (->hydra_testing_type_reduction_test_case input output))
-
-(defrecord hydra_testing_writer_test_case [input output])
-(defn make-hydra_testing_writer_test_case [input output] (->hydra_testing_writer_test_case input output))
-
-(defrecord hydra_testing_subst_in_type_test_case [substitution input output])
-(defn make-hydra_testing_subst_in_type_test_case [substitution input output] (->hydra_testing_subst_in_type_test_case substitution input output))
-
-(defrecord hydra_testing_variable_occurs_in_type_test_case [variable type expected])
-(defn make-hydra_testing_variable_occurs_in_type_test_case [variable type expected] (->hydra_testing_variable_occurs_in_type_test_case variable type expected))
-
-(defrecord hydra_testing_unshadow_variables_test_case [input output])
-(defn make-hydra_testing_unshadow_variables_test_case [input output] (->hydra_testing_unshadow_variables_test_case input output))
-
-(defrecord hydra_testing_unify_types_test_case [schema_types left right expected])
-(defn make-hydra_testing_unify_types_test_case [schema_types left right expected] (->hydra_testing_unify_types_test_case schema_types left right expected))
-
-(defrecord hydra_testing_join_types_test_case [left right expected])
-(defn make-hydra_testing_join_types_test_case [left right expected] (->hydra_testing_join_types_test_case left right expected))
-
-(defrecord hydra_testing_validate_core_term_test_case [typed input output])
-(defn make-hydra_testing_validate_core_term_test_case [typed input output] (->hydra_testing_validate_core_term_test_case typed input output))
+(defrecord hydra_testing_universal_test_case [actual expected])
+(defn make-hydra_testing_universal_test_case [actual expected] (->hydra_testing_universal_test_case actual expected))

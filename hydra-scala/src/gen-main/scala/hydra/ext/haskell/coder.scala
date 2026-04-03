@@ -10,6 +10,8 @@ import hydra.core.*
 
 import hydra.errors.*
 
+import hydra.ext.haskell.environment.*
+
 import hydra.ext.haskell.syntax.*
 
 import hydra.graph.*
@@ -44,7 +46,7 @@ def adaptTypeToHaskellAndEncode[T0](namespaces: hydra.module.Namespaces[hydra.ex
    hydra.ext.haskell.syntax.Type] =
   {
   def enc(t: hydra.core.Type): Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.haskell.syntax.Type] = hydra.ext.haskell.coder.encodeType(namespaces)(t)(cx)(g)
-  hydra.rewriting.deannotateType(typ) match
+  hydra.strip.deannotateType(typ) match
     case hydra.core.Type.variable(v_Type_variable__) => enc(typ)
     case _ => hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Type, hydra.ext.haskell.syntax.Type](hydra.lib.eithers.bimap[scala.Predef.String,
        hydra.core.Type, hydra.context.InContext[hydra.errors.Error], hydra.core.Type]((_s: scala.Predef.String) => hydra.context.InContext(hydra.errors.Error.other(_s),
@@ -84,6 +86,8 @@ def constructModule(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax
     hydra.lib.lists.map[Tuple2[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName], hydra.ext.haskell.syntax.Import](toImport)(hydra.lib.maps.toList[hydra.module.Namespace,
        hydra.ext.haskell.syntax.ModuleName](namespaces.mapping))
   }
+  lazy val meta: hydra.ext.haskell.environment.HaskellModuleMetadata = hydra.ext.haskell.coder.gatherMetadata(defs)
+  def condImport[T0](flag: Boolean)(triple: T0): Seq[T0] = hydra.lib.logic.ifElse[Seq[T0]](flag)(Seq(triple))(Seq())
   lazy val standardImports: Seq[hydra.ext.haskell.syntax.Import] = {
     def toImport(triple: Tuple2[Tuple2[scala.Predef.String, Option[scala.Predef.String]], Seq[scala.Predef.String]]): hydra.ext.haskell.syntax.Import =
       {
@@ -100,13 +104,13 @@ def constructModule(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax
          hydra.ext.haskell.syntax.ModuleName]((x: scala.Predef.String) => x)(malias), spec)
     }
     hydra.lib.lists.map[Tuple2[Tuple2[scala.Predef.String, Option[scala.Predef.String]], Seq[scala.Predef.String]],
-       hydra.ext.haskell.syntax.Import](toImport)(hydra.lib.lists.concat2[Tuple2[Tuple2[scala.Predef.String,
-       Option[scala.Predef.String]], Seq[scala.Predef.String]]](Seq(Tuple2(Tuple2("Prelude", None), Seq("Enum",
-       "Ordering", "decodeFloat", "encodeFloat", "fail", "map", "pure", "sum")), Tuple2(Tuple2("Data.ByteString",
-       Some("B")), Seq()), Tuple2(Tuple2("Data.Int", Some("I")), Seq()), Tuple2(Tuple2("Data.List", Some("L")),
-       Seq()), Tuple2(Tuple2("Data.Map", Some("M")), Seq()), Tuple2(Tuple2("Data.Set", Some("S")), Seq())))(hydra.lib.logic.ifElse[Seq[Tuple2[Tuple2[scala.Predef.String,
-       Option[scala.Predef.String]], Seq[scala.Predef.String]]]](hydra.schemas.moduleContainsBinaryLiterals(mod))(Seq(Tuple2(Tuple2("Hydra.Lib.Literals",
-       Some("Literals")), Seq())))(Seq())))
+       hydra.ext.haskell.syntax.Import](toImport)(hydra.lib.lists.concat[Tuple2[Tuple2[scala.Predef.String,
+       Option[scala.Predef.String]], Seq[scala.Predef.String]]](Seq(Seq(Tuple2(Tuple2("Prelude", None),
+       Seq("Enum", "Ordering", "decodeFloat", "encodeFloat", "fail", "map", "pure", "sum"))), condImport(meta.usesByteString)(Tuple2(Tuple2("Data.ByteString",
+       Some("B")), Seq())), condImport(meta.usesInt)(Tuple2(Tuple2("Data.Int", Some("I")), Seq())), condImport(meta.usesMap)(Tuple2(Tuple2("Data.Map",
+       Some("M")), Seq())), condImport(meta.usesSet)(Tuple2(Tuple2("Data.Set", Some("S")), Seq())), hydra.lib.logic.ifElse[Seq[Tuple2[Tuple2[scala.Predef.String,
+       Option[scala.Predef.String]], Seq[scala.Predef.String]]]](hydra.analysis.moduleContainsBinaryLiterals(mod))(Seq(Tuple2(Tuple2("Hydra.Lib.Literals",
+       Some("Literals")), Seq())))(Seq()))))
   }
   hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Seq[Seq[hydra.ext.haskell.syntax.DeclarationWithComments]],
      hydra.ext.haskell.syntax.Module](hydra.lib.eithers.mapList[hydra.module.Definition, Seq[hydra.ext.haskell.syntax.DeclarationWithComments],
@@ -117,6 +121,8 @@ def constructModule(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax
     Right(hydra.ext.haskell.syntax.Module(Some(hydra.ext.haskell.syntax.ModuleHead(mc, importName(h(mod.namespace)), Seq())), imports, decls))
   })
 }
+
+lazy val emptyMetadata: hydra.ext.haskell.environment.HaskellModuleMetadata = hydra.ext.haskell.environment.HaskellModuleMetadata(false, false, false, false)
 
 def encodeCaseExpression(depth: Int)(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName])(stmt: hydra.core.CaseStatement)(scrutinee: hydra.ext.haskell.syntax.Expression)(cx: hydra.context.Context)(g: hydra.graph.Graph): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.ext.haskell.syntax.Expression] =
@@ -131,8 +137,8 @@ def encodeCaseExpression(depth: Int)(namespaces: hydra.module.Namespaces[hydra.e
     lazy val `fun_`: hydra.core.Term = (field.term)
     lazy val v0: scala.Predef.String = hydra.lib.strings.cat2("v")(hydra.lib.literals.showInt32(depth))
     lazy val raw: hydra.core.Term = hydra.core.Term.application(hydra.core.Application(`fun_`, hydra.core.Term.variable(v0)))
-    lazy val rhsTerm: hydra.core.Term = hydra.rewriting.simplifyTerm(raw)
-    lazy val v1: scala.Predef.String = hydra.lib.logic.ifElse[scala.Predef.String](hydra.rewriting.isFreeVariableInTerm(v0)(rhsTerm))(hydra.constants.ignoredVariable)(v0)
+    lazy val rhsTerm: hydra.core.Term = hydra.dependencies.simplifyTerm(raw)
+    lazy val v1: scala.Predef.String = hydra.lib.logic.ifElse[scala.Predef.String](hydra.variables.isFreeVariableInTerm(v0)(rhsTerm))(hydra.constants.ignoredVariable)(v0)
     lazy val hname: hydra.ext.haskell.syntax.Name = hydra.ext.haskell.utils.unionFieldReference(hydra.lib.sets.union[hydra.core.Name](hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.maps.keys[hydra.core.Name,
        hydra.core.Term](g.boundTerms)))(hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.maps.keys[hydra.core.Name,
        hydra.core.TypeScheme](g.schemaTypes))))(namespaces)(dn)(fn)
@@ -144,7 +150,7 @@ def encodeCaseExpression(depth: Int)(namespaces: hydra.module.Namespaces[hydra.e
       lazy val ft: hydra.core.Type = (fieldType.`type`)
       def noArgs[T0]: Seq[T0] = Seq()
       lazy val singleArg: Seq[hydra.ext.haskell.syntax.Pattern] = Seq(hydra.ext.haskell.syntax.Pattern.name(hydra.ext.haskell.utils.rawName(v1)))
-      hydra.rewriting.deannotateType(ft) match
+      hydra.strip.deannotateType(ft) match
         case hydra.core.Type.unit => Right(noArgs)
         case _ => Right(singleArg)
     }))((args: Seq[hydra.ext.haskell.syntax.Pattern]) =>
@@ -156,7 +162,7 @@ def encodeCaseExpression(depth: Int)(namespaces: hydra.module.Namespaces[hydra.e
          rhs, None)))
     })
   }
-  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Seq[hydra.core.FieldType], hydra.ext.haskell.syntax.Expression](hydra.schemas.requireUnionType(cx)(g)(dn))((rt: Seq[hydra.core.FieldType]) =>
+  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Seq[hydra.core.FieldType], hydra.ext.haskell.syntax.Expression](hydra.resolution.requireUnionType(cx)(g)(dn))((rt: Seq[hydra.core.FieldType]) =>
     {
     def toFieldMapEntry(f: hydra.core.FieldType): Tuple2[hydra.core.Name, hydra.core.FieldType] = Tuple2(f.name, f)
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.FieldType] = hydra.lib.maps.fromList[hydra.core.Name,
@@ -253,11 +259,11 @@ def encodeTerm(depth: Int)(namespaces: hydra.module.Namespaces[hydra.ext.haskell
     hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.ext.haskell.syntax.Expression,
        hydra.ext.haskell.syntax.Expression](hydra.ext.haskell.coder.encodeTerm(depth)(namespaces)(hydra.core.Term.list(hydra.lib.sets.toList[hydra.core.Term](s)))(cx)(g))((rhs: hydra.ext.haskell.syntax.Expression) => Right(hydra.ext.haskell.utils.hsapp(lhs)(rhs)))
   }
-  hydra.rewriting.deannotateTerm(term) match
+  hydra.strip.deannotateTerm(term) match
     case hydra.core.Term.application(v_Term_application_app) => {
       lazy val fun: hydra.core.Term = (v_Term_application_app.function)
       lazy val arg: hydra.core.Term = (v_Term_application_app.argument)
-      lazy val deannotatedFun: hydra.core.Term = hydra.rewriting.deannotateTerm(fun)
+      lazy val deannotatedFun: hydra.core.Term = hydra.strip.deannotateTerm(fun)
       deannotatedFun match
         case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
           case hydra.core.Function.elimination(v_Function_elimination_e) => v_Function_elimination_e match
@@ -291,7 +297,7 @@ def encodeTerm(depth: Int)(namespaces: hydra.module.Namespaces[hydra.ext.haskell
         {
         lazy val bs: Seq[hydra.core.Binding] = (lt.bindings)
         lazy val body: hydra.core.Term = (lt.body)
-        hydra.rewriting.deannotateTerm(body) match
+        hydra.strip.deannotateTerm(body) match
           case hydra.core.Term.let(v_Term_let_innerLt) => {
             lazy val innerResult: Tuple2[Seq[hydra.core.Binding], hydra.core.Term] = collectBindings(v_Term_let_innerLt)
             Tuple2(hydra.lib.lists.concat2[hydra.core.Binding](bs)(hydra.lib.pairs.first[Seq[hydra.core.Binding],
@@ -373,8 +379,8 @@ def encodeTerm(depth: Int)(namespaces: hydra.module.Namespaces[hydra.ext.haskell
          hydra.core.TypeScheme](g.schemaTypes))))(namespaces)(sname)(fn))
       lazy val dflt: Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.haskell.syntax.Expression] = hydra.lib.eithers.map[hydra.ext.haskell.syntax.Expression,
          hydra.ext.haskell.syntax.Expression, hydra.context.InContext[hydra.errors.Error]]((v1: hydra.ext.haskell.syntax.Expression) => hydra.ext.haskell.utils.hsapp(lhs)(v1))(encode(ft))
-      hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Type, hydra.ext.haskell.syntax.Expression](hydra.schemas.requireUnionField(cx)(g)(sname)(fn))((ftyp: hydra.core.Type) =>
-        hydra.rewriting.deannotateType(ftyp) match
+      hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Type, hydra.ext.haskell.syntax.Expression](hydra.resolution.requireUnionField(cx)(g)(sname)(fn))((ftyp: hydra.core.Type) =>
+        hydra.strip.deannotateType(ftyp) match
         case hydra.core.Type.unit => Right(lhs)
         case _ => dflt)
     }
@@ -397,7 +403,7 @@ def encodeType[T0](namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.
   def ref[T1](name: hydra.core.Name): Either[T1, hydra.ext.haskell.syntax.Type] =
     Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.elementReference(namespaces)(name)))
   lazy val unitTuple: hydra.ext.haskell.syntax.Type = hydra.ext.haskell.syntax.Type.tuple(Seq())
-  hydra.rewriting.deannotateType(typ) match
+  hydra.strip.deannotateType(typ) match
     case hydra.core.Type.application(v_Type_application_app) => {
       lazy val lhs: hydra.core.Type = (v_Type_application_app.function)
       lazy val rhs: hydra.core.Type = (v_Type_application_app.argument)
@@ -518,6 +524,26 @@ def encodeTypeWithClassAssertions[T0](namespaces: hydra.module.Namespaces[hydra.
   }))
 }
 
+def extendMetaForTerm(meta: hydra.ext.haskell.environment.HaskellModuleMetadata)(term: hydra.core.Term): hydra.ext.haskell.environment.HaskellModuleMetadata =
+  term match
+  case hydra.core.Term.map(v_Term_map__) => hydra.ext.haskell.coder.setMetaUsesMap(true)(meta)
+  case hydra.core.Term.set(v_Term_set__) => hydra.ext.haskell.coder.setMetaUsesSet(true)(meta)
+  case _ => meta
+
+def extendMetaForType(meta: hydra.ext.haskell.environment.HaskellModuleMetadata)(typ: hydra.core.Type): hydra.ext.haskell.environment.HaskellModuleMetadata =
+  hydra.strip.deannotateType(typ) match
+  case hydra.core.Type.literal(v_Type_literal_lt) => v_Type_literal_lt match
+    case hydra.core.LiteralType.binary => hydra.ext.haskell.coder.setMetaUsesByteString(true)(meta)
+    case hydra.core.LiteralType.integer(v_LiteralType_integer_it) => v_LiteralType_integer_it match
+      case hydra.core.IntegerType.int8 => hydra.ext.haskell.coder.setMetaUsesInt(true)(meta)
+      case hydra.core.IntegerType.int16 => hydra.ext.haskell.coder.setMetaUsesInt(true)(meta)
+      case hydra.core.IntegerType.int64 => hydra.ext.haskell.coder.setMetaUsesInt(true)(meta)
+      case _ => meta
+    case _ => meta
+  case hydra.core.Type.map(v_Type_map__) => hydra.ext.haskell.coder.setMetaUsesMap(true)(meta)
+  case hydra.core.Type.set(v_Type_set__) => hydra.ext.haskell.coder.setMetaUsesSet(true)(meta)
+  case _ => meta
+
 def findOrdVariables(typ: hydra.core.Type): scala.collection.immutable.Set[hydra.core.Name] =
   {
   def fold(names: scala.collection.immutable.Set[hydra.core.Name])(`typ_`: hydra.core.Type): scala.collection.immutable.Set[hydra.core.Name] =
@@ -530,10 +556,32 @@ def findOrdVariables(typ: hydra.core.Type): scala.collection.immutable.Set[hydra
     case _ => names
   def isTypeVariable(v: hydra.core.Name): Boolean = hydra.lib.maybes.isNothing[hydra.module.Namespace](hydra.names.namespaceOf(v))
   def tryType(names: scala.collection.immutable.Set[hydra.core.Name])(t: hydra.core.Type): scala.collection.immutable.Set[hydra.core.Name] =
-    hydra.rewriting.deannotateType(t) match
+    hydra.strip.deannotateType(t) match
     case hydra.core.Type.variable(v_Type_variable_v) => hydra.lib.logic.ifElse[scala.collection.immutable.Set[hydra.core.Name]](isTypeVariable(v_Type_variable_v))(hydra.lib.sets.insert[hydra.core.Name](v_Type_variable_v)(names))(names)
     case _ => names
   hydra.rewriting.foldOverType(hydra.coders.TraversalOrder.pre)(fold)(hydra.lib.sets.empty[hydra.core.Name])(typ)
+}
+
+def gatherMetadata(defs: Seq[hydra.module.Definition]): hydra.ext.haskell.environment.HaskellModuleMetadata =
+  {
+  def addDef(meta: hydra.ext.haskell.environment.HaskellModuleMetadata)(`def`: hydra.module.Definition): hydra.ext.haskell.environment.HaskellModuleMetadata =
+    `def` match
+    case hydra.module.Definition.term(v_Definition_term_termDef) => {
+      lazy val term: hydra.core.Term = (v_Definition_term_termDef.term)
+      {
+        lazy val metaWithTerm: hydra.ext.haskell.environment.HaskellModuleMetadata = hydra.rewriting.foldOverTerm(hydra.coders.TraversalOrder.pre)((m: hydra.ext.haskell.environment.HaskellModuleMetadata) =>
+          (t: hydra.core.Term) => hydra.ext.haskell.coder.extendMetaForTerm(m)(t))(meta)(term)
+        hydra.lib.maybes.maybe[hydra.ext.haskell.environment.HaskellModuleMetadata, hydra.core.TypeScheme](metaWithTerm)((ts: hydra.core.TypeScheme) =>
+          hydra.rewriting.foldOverType(hydra.coders.TraversalOrder.pre)((m: hydra.ext.haskell.environment.HaskellModuleMetadata) =>
+          (t: hydra.core.Type) => hydra.ext.haskell.coder.extendMetaForType(m)(t))(metaWithTerm)(ts.`type`))(v_Definition_term_termDef.`type`)
+      }
+    }
+    case hydra.module.Definition.`type`(v_Definition_type_typeDef) => {
+      lazy val typ: hydra.core.Type = (v_Definition_type_typeDef.`type`)
+      hydra.rewriting.foldOverType(hydra.coders.TraversalOrder.pre)((m: hydra.ext.haskell.environment.HaskellModuleMetadata) =>
+        (t: hydra.core.Type) => hydra.ext.haskell.coder.extendMetaForType(m)(t))(meta)(typ)
+    }
+  hydra.lib.lists.foldl[hydra.ext.haskell.environment.HaskellModuleMetadata, hydra.module.Definition](addDef)(hydra.ext.haskell.coder.emptyMetadata)(defs)
 }
 
 def getImplicitTypeClasses(typ: hydra.core.Type): Map[hydra.core.Name, scala.collection.immutable.Set[hydra.classes.TypeClass]] =
@@ -589,6 +637,18 @@ def nameDecls(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.Modul
      scala.Predef.String]) => toDecl("hydra.core.Name")(v1))(fieldDecls)))(Seq())
 }
 
+def setMetaUsesByteString(b: Boolean)(m: hydra.ext.haskell.environment.HaskellModuleMetadata): hydra.ext.haskell.environment.HaskellModuleMetadata =
+  hydra.ext.haskell.environment.HaskellModuleMetadata(b, (m.usesInt), (m.usesMap), (m.usesSet))
+
+def setMetaUsesInt(b: Boolean)(m: hydra.ext.haskell.environment.HaskellModuleMetadata): hydra.ext.haskell.environment.HaskellModuleMetadata =
+  hydra.ext.haskell.environment.HaskellModuleMetadata(m.usesByteString, b, (m.usesMap), (m.usesSet))
+
+def setMetaUsesMap(b: Boolean)(m: hydra.ext.haskell.environment.HaskellModuleMetadata): hydra.ext.haskell.environment.HaskellModuleMetadata =
+  hydra.ext.haskell.environment.HaskellModuleMetadata(m.usesByteString, (m.usesInt), b, (m.usesSet))
+
+def setMetaUsesSet(b: Boolean)(m: hydra.ext.haskell.environment.HaskellModuleMetadata): hydra.ext.haskell.environment.HaskellModuleMetadata =
+  hydra.ext.haskell.environment.HaskellModuleMetadata(m.usesByteString, (m.usesInt), (m.usesMap), b)
+
 def toDataDeclaration(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName])(`def`: hydra.module.TermDefinition)(cx: hydra.context.Context)(g: hydra.graph.Graph): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.ext.haskell.syntax.DeclarationWithComments] =
   {
@@ -621,7 +681,7 @@ def toDataDeclaration(namespaces: hydra.module.Namespaces[hydra.ext.haskell.synt
     }
   def toDecl(comments: Option[scala.Predef.String])(`hname_`: hydra.ext.haskell.syntax.Name)(`term_`: hydra.core.Term)(bindings: Option[hydra.ext.haskell.syntax.LocalBindings]): Either[hydra.context.InContext[hydra.errors.Error],
      hydra.ext.haskell.syntax.DeclarationWithComments] =
-    hydra.rewriting.deannotateTerm(`term_`) match
+    hydra.strip.deannotateTerm(`term_`) match
     case hydra.core.Term.let(v_Term_let_letTerm) => {
       lazy val lbindings: Seq[hydra.core.Binding] = (v_Term_let_letTerm.bindings)
       lazy val env: hydra.core.Term = (v_Term_let_letTerm.body)
@@ -649,7 +709,7 @@ def toDataDeclaration(namespaces: hydra.module.Namespaces[hydra.ext.haskell.synt
          hydra.core.TypeVariableMetadata]], hydra.core.TypeScheme](None)((ts: hydra.core.TypeScheme) => (ts.constraints))(typ)
       lazy val schemeClasses: Map[hydra.core.Name, scala.collection.immutable.Set[hydra.classes.TypeClass]] = hydra.ext.haskell.coder.typeSchemeConstraintsToClassMap(schemeConstraints)
       hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Map[hydra.core.Name, scala.collection.immutable.Set[hydra.classes.TypeClass]],
-         hydra.ext.haskell.syntax.DeclarationWithComments](hydra.annotations.getTypeClasses(cx)(g)(hydra.rewriting.removeTypesFromTerm(term)))((explicitClasses: Map[hydra.core.Name,
+         hydra.ext.haskell.syntax.DeclarationWithComments](hydra.annotations.getTypeClasses(cx)(g)(hydra.strip.removeTypesFromTerm(term)))((explicitClasses: Map[hydra.core.Name,
          scala.collection.immutable.Set[hydra.classes.TypeClass]]) =>
         {
         lazy val combinedClasses: Map[hydra.core.Name, scala.collection.immutable.Set[hydra.classes.TypeClass]] = hydra.lib.maps.union[hydra.core.Name,
@@ -731,13 +791,13 @@ def toTypeDeclarationsFrom(namespaces: hydra.module.Namespaces[hydra.ext.haskell
       lazy val nm: scala.Predef.String = deconflict(hydra.lib.strings.cat2(hydra.formatting.capitalize(`lname_`))(hydra.formatting.capitalize(fname)))
       hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Seq[hydra.ext.haskell.syntax.Type],
          hydra.ext.haskell.syntax.ConstructorWithComments](hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error],
-         Seq[hydra.ext.haskell.syntax.Type]]](hydra.lib.equality.equal[hydra.core.Type](hydra.rewriting.deannotateType(ftype))(hydra.core.Type.unit))(Right(Seq()))(hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error],
+         Seq[hydra.ext.haskell.syntax.Type]]](hydra.lib.equality.equal[hydra.core.Type](hydra.strip.deannotateType(ftype))(hydra.core.Type.unit))(Right(Seq()))(hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error],
          hydra.ext.haskell.syntax.Type, Seq[hydra.ext.haskell.syntax.Type]](hydra.ext.haskell.coder.adaptTypeToHaskellAndEncode(namespaces)(ftype)(cx)(g))((htype: hydra.ext.haskell.syntax.Type) => Right(Seq(htype)))))((typeList: Seq[hydra.ext.haskell.syntax.Type]) =>
         Right(hydra.ext.haskell.syntax.ConstructorWithComments(hydra.ext.haskell.syntax.Constructor.ordinary(hydra.ext.haskell.syntax.OrdinaryConstructor(hydra.ext.haskell.utils.simpleName(nm),
            typeList)), comments)))
     })
   }
-  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Boolean, Seq[hydra.ext.haskell.syntax.DeclarationWithComments]](hydra.schemas.isSerializableByName(cx)(g)(elementName))((isSer: Boolean) =>
+  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Boolean, Seq[hydra.ext.haskell.syntax.DeclarationWithComments]](hydra.predicates.isSerializableByName(cx)(g)(elementName))((isSer: Boolean) =>
     {
     lazy val deriv: hydra.ext.haskell.syntax.Deriving = hydra.lib.logic.ifElse[Seq[hydra.ext.haskell.syntax.Name]](isSer)(hydra.lib.lists.map[scala.Predef.String,
        hydra.ext.haskell.syntax.Name](hydra.ext.haskell.utils.rawName)(Seq("Eq", "Ord", "Read", "Show")))(Seq())
@@ -746,7 +806,7 @@ def toTypeDeclarationsFrom(namespaces: hydra.module.Namespaces[hydra.ext.haskell
     lazy val `t_`: hydra.core.Type = hydra.lib.pairs.second[Seq[hydra.core.Name], hydra.core.Type](unpackResult)
     lazy val hd: hydra.ext.haskell.syntax.DeclarationHead = declHead(hname)(hydra.lib.lists.reverse[hydra.core.Name](vars))
     hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.ext.haskell.syntax.Declaration,
-       Seq[hydra.ext.haskell.syntax.DeclarationWithComments]](hydra.rewriting.deannotateType(`t_`) match
+       Seq[hydra.ext.haskell.syntax.DeclarationWithComments]](hydra.strip.deannotateType(`t_`) match
       case hydra.core.Type.record(v_Type_record_rt) => hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error],
          hydra.ext.haskell.syntax.ConstructorWithComments, hydra.ext.haskell.syntax.Declaration](recordCons(lname)(v_Type_record_rt))((cons: hydra.ext.haskell.syntax.ConstructorWithComments) =>
         Right(hydra.ext.haskell.syntax.Declaration.data(hydra.ext.haskell.syntax.DataDeclaration(hydra.ext.haskell.syntax.DataOrNewtype.data,
@@ -787,17 +847,17 @@ def typeDecl(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.Module
   lazy val rawTerm: hydra.core.Term = hydra.encode.core.`type`(typ)
   def rewrite(recurse: (hydra.core.Term => hydra.core.Term))(term: hydra.core.Term): hydra.core.Term =
     {
-    lazy val variantResult: Option[hydra.core.Field] = hydra.rewriting.deannotateTerm(term) match
+    lazy val variantResult: Option[hydra.core.Field] = hydra.strip.deannotateTerm(term) match
       case hydra.core.Term.union(v_Term_union_inj) => hydra.lib.logic.ifElse[Option[hydra.core.Field]](hydra.lib.equality.equal[hydra.core.Name](v_Term_union_inj.typeName)("hydra.core.Type"))(Some(v_Term_union_inj.field))(None)
       case _ => None
     def decodeString(term2: hydra.core.Term): Option[scala.Predef.String] =
-      hydra.rewriting.deannotateTerm(term2) match
+      hydra.strip.deannotateTerm(term2) match
       case hydra.core.Term.literal(v_Term_literal_lit) => v_Term_literal_lit match
         case hydra.core.Literal.string(v_Literal_string_s) => Some(v_Literal_string_s)
         case _ => None
       case _ => None
     def decodeName(term2: hydra.core.Term): Option[hydra.core.Name] =
-      hydra.rewriting.deannotateTerm(term2) match
+      hydra.strip.deannotateTerm(term2) match
       case hydra.core.Term.wrap(v_Term_wrap_wt) => hydra.lib.logic.ifElse[Option[hydra.core.Name]](hydra.lib.equality.equal[hydra.core.Name](v_Term_wrap_wt.typeName)("hydra.core.Name"))(hydra.lib.maybes.map[scala.Predef.String,
          hydra.core.Name]((x: scala.Predef.String) => x)(decodeString(v_Term_wrap_wt.body)))(None)
       case _ => None

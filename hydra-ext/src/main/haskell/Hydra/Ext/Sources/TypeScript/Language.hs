@@ -59,13 +59,12 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -80,17 +79,17 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.typeScript.language")
-  [toTermDefinition typeScriptLanguage, toTermDefinition typeScriptReservedWords]
-  [Rewriting.ns]
+  [toDefinition typeScriptLanguage, toDefinition typeScriptReservedWords]
+  [Strip.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints for TypeScript"
 
-typeScriptLanguage :: TBinding Language
+typeScriptLanguage :: TTermDefinition Language
 typeScriptLanguage = define "typeScriptLanguage" $
   doc "Language constraints for TypeScript" $ lets [
   "eliminationVariants">: Sets.empty,
@@ -120,7 +119,7 @@ typeScriptLanguage = define "typeScriptLanguage" $
     Variants.typeVariantUnion],
   "types">: match _Type
     (Just true) [
-    _Type_map>>: "mt" ~> (cases _Type ((Rewriting.deannotateType @@ (Core.mapTypeValues $ var "mt")))
+    _Type_map>>: "mt" ~> (cases _Type ((Strip.deannotateType @@ (Core.mapTypeValues $ var "mt")))
       (Just true) [
       _Type_maybe>>: constant false])]] $
   Coders.language
@@ -135,7 +134,7 @@ typeScriptLanguage = define "typeScriptLanguage" $
       (var "typeVariants")
       (var "types"))
 
-typeScriptReservedWords :: TBinding (S.Set String)
+typeScriptReservedWords :: TTermDefinition (S.Set String)
 typeScriptReservedWords = define "typeScriptReservedWords" $
   doc ("A set of reserved words in TypeScript."
     <> " Taken directly from https://github.com/microsoft/TypeScript/issues/2536") $ lets [

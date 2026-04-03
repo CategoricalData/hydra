@@ -706,13 +706,17 @@ The entire Hydra kernel is defined using the meta DSLs.
 | Operator | DSL | Type | Description | Example |
 |----------|-----|------|-------------|---------|
 | `>:` | All | `String -> a -> (TTerm Name, a)` | Field definition | `"name">: value` |
-| `>>:` | Phantom | `Name -> TTerm a -> Field` | Field with Name | `fname>>: value` |
+| `>>:` | Base | `Name -> a -> (TTerm Name, a)` | Record field (tuple) | `fname>>: value` |
 
 ### Pattern matching
 
 | Operator | DSL | Type | Description | Example |
 |----------|-----|------|-------------|---------|
-| `>>:` | Phantom | `Name -> (String -> TTerm b) -> Field` | Match case | `_Type_record >>: "r" ~> ...` |
+| `>>:` | Phantom | `Name -> t -> Field` | Match case (Field) | `_Type_record >>: "r" ~> ...` |
+
+**Note**: `>>:` is overloaded. In `Base` it produces a tuple (for record definitions); in `Phantoms`
+it produces a `Field` (for `cases`/`match` branches). When `Phantoms` is imported qualified, the
+unqualified `>>:` resolves to the `Base` version. See [Troubleshooting](#error-produces-a-tuple-instead-of-a-field).
 
 ### Precedence
 
@@ -1169,6 +1173,38 @@ result = int32 2 + int32 3
 import Hydra.Dsl.Meta.Lib.Math as Math
 
 result = Math.add (int32 2) (int32 3)
+```
+
+#### Error: "`>>:` produces a tuple instead of a `Field`"
+
+**Problem**: The `>>:` operator is defined in two places with different types:
+
+- `Hydra.Dsl.Meta.Phantoms`: `Name -> t -> Field` (for `cases`/`match` branches)
+- `Hydra.Dsl.Meta.Base`: `Name -> a -> (TTerm Name, a)` (for record field definitions)
+
+If `Phantoms` is imported qualified (as in test source files), the unqualified `>>:` resolves to the
+`Base` version, which produces a tuple. Passing these tuples to `Phantoms.cases` causes a type error:
+
+```haskell
+-- Error: Couldn't match expected type 'Field' with actual type '(TTerm Name, TTerm (a -> b))'
+Phantoms.cases _Term (Phantoms.var "t") (Just defaultVal) [
+  _Term_literal >>: Phantoms.lambda "lit" $ ...]   -- >>: is Base.>>:, returns a tuple
+```
+
+**Solutions**:
+
+1. Use `Phantoms.>>:` qualified (awkward but explicit)
+2. Define a local alias: `(~>:) = (Phantoms.>>:); infixr 0 ~>:`
+3. Import `Phantoms` unqualified (as kernel source files do) — but this may conflict with other imports
+
+```haskell
+-- Using a local alias
+(~>:) :: AsTerm t a => Name -> t -> Field
+(~>:) = (Phantoms.>>:)
+infixr 0 ~>:
+
+Phantoms.cases _Term (Phantoms.var "t") (Just defaultVal) [
+  _Term_literal ~>: Phantoms.lambda "lit" $ ...]   -- correct: produces a Field
 ```
 
 ### Debugging tips

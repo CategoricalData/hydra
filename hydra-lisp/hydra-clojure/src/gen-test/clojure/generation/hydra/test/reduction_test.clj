@@ -1,28 +1,28 @@
 ;; Note: this is an automatically generated file. Do not edit.
 ;; reduction
 
-(ns generation.hydra.test.reduction-test
+(ns test-ns
   (:require [clojure.test :refer :all]))
 
 ;; beta reduction
 
 (deftest test-reduction-negbeta-reduction-negidentity-function-applied-to-literal
 
-  (is (= 42
+  (is (= 42:int32
 
-         ((fn [x] x) 42))))
+         42:int32)))
 
 (deftest test-reduction-negbeta-reduction-negconstant-function
 
-  (is (= 1
+  (is (= 1:int32
 
-         ((fn [x] 1) 42))))
+         1:int32)))
 
 (deftest test-reduction-negbeta-reduction-negnested-application
 
-  (is (= 1
+  (is (= 1:int32
 
-         (((fn [x] (fn [y] x)) 1) 2))))
+         1:int32)))
 
 ;; monomorphic primitives
 
@@ -30,193 +30,193 @@
 
   (is (= "HELLO"
 
-         (hydra_lib_strings_to_upper "hello"))))
+         "HELLO")))
 
 (deftest test-reduction-negmonomorphic-primitives-negtoupper-on-mixed-case
 
   (is (= "HELLO WORLD"
 
-         (hydra_lib_strings_to_upper "Hello World"))))
+         "HELLO WORLD")))
 
 (deftest test-reduction-negmonomorphic-primitives-negtoupper-on-empty-string
 
   (is (= ""
 
-         (hydra_lib_strings_to_upper ""))))
+         "")))
 
 (deftest test-reduction-negmonomorphic-primitives-negtolower-on-uppercase
 
   (is (= "hello"
 
-         (hydra_lib_strings_to_lower "HELLO"))))
+         "hello")))
 
 (deftest test-reduction-negmonomorphic-primitives-negstring-length
 
-  (is (= 5
+  (is (= 5:int32
 
-         (hydra_lib_strings_length "hello"))))
+         5:int32)))
 
 (deftest test-reduction-negmonomorphic-primitives-negstring-length-of-empty
 
-  (is (= 0
+  (is (= 0:int32
 
-         (hydra_lib_strings_length ""))))
+         0:int32)))
 
 (deftest test-reduction-negmonomorphic-primitives-negadd-two-positive-integers
 
-  (is (= 8
+  (is (= 8:int32
 
-         ((hydra_lib_math_add 3) 5))))
+         8:int32)))
 
 (deftest test-reduction-negmonomorphic-primitives-negadd-negative-and-positive
 
-  (is (= -7
+  (is (= -7:int32
 
-         ((hydra_lib_math_add -10) 3))))
+         -7:int32)))
 
 (deftest test-reduction-negmonomorphic-primitives-negadd-with-zero
 
-  (is (= 42
+  (is (= 42:int32
 
-         ((hydra_lib_math_add 0) 42))))
+         42:int32)))
 
 (deftest test-reduction-negmonomorphic-primitives-negsubtract-integers
 
-  (is (= 7
+  (is (= 7:int32
 
-         ((hydra_lib_math_sub 10) 3))))
+         7:int32)))
 
 (deftest test-reduction-negmonomorphic-primitives-negmultiply-integers
 
-  (is (= 42
+  (is (= 42:int32
 
-         ((hydra_lib_math_mul 6) 7))))
+         42:int32)))
 
 (deftest test-reduction-negmonomorphic-primitives-negmultiply-by-zero
 
-  (is (= 0
+  (is (= 0:int32
 
-         ((hydra_lib_math_mul 100) 0))))
+         0:int32)))
 
 (deftest test-reduction-negmonomorphic-primitives-negdivide-integers
 
-  (is (= 5
+  (is (= 5:int32
 
-         ((hydra_lib_math_div 20) 4))))
+         5:int32)))
 
 (deftest test-reduction-negmonomorphic-primitives-negmodulo
 
-  (is (= 2
+  (is (= 2:int32
 
-         ((hydra_lib_math_mod 17) 5))))
+         2:int32)))
 
 (deftest test-reduction-negmonomorphic-primitives-negspliton-basic
 
-  (is (= (list "a" "b" "c")
+  (is (= ["a", "b", "c"]
 
-         ((hydra_lib_strings_split_on ",") "a,b,c"))))
+         ["a", "b", "c"])))
 
 (deftest test-reduction-negmonomorphic-primitives-negcat2-strings
 
   (is (= "helloworld"
 
-         ((hydra_lib_strings_cat2 "hello") "world"))))
+         "helloworld")))
 
 ;; polymorphic primitives
 
 (deftest test-reduction-negpolymorphic-primitives-neglength-of-integer-list
 
-  (is (= 3
+  (is (= 3:int32
 
-         (hydra_lib_lists_length (list 1 2 3)))))
+         3:int32)))
 
 (deftest test-reduction-negpolymorphic-primitives-neglength-of-string-list
 
-  (is (= 2
+  (is (= 2:int32
 
-         (hydra_lib_lists_length (list "a" "b")))))
+         2:int32)))
 
 (deftest test-reduction-negpolymorphic-primitives-neglength-of-empty-list
 
-  (is (= 0
+  (is (= 0:int32
 
-         (hydra_lib_lists_length (list )))))
+         0:int32)))
 
 (deftest test-reduction-negpolymorphic-primitives-neglength-of-single-element-list
 
-  (is (= 1
+  (is (= 1:int32
 
-         (hydra_lib_lists_length (list true)))))
+         1:int32)))
 
 (deftest test-reduction-negpolymorphic-primitives-neghead-of-integer-list
 
-  (is (= 10
+  (is (= 10:int32
 
-         (hydra_lib_lists_head (list 10 20 30)))))
+         10:int32)))
 
 (deftest test-reduction-negpolymorphic-primitives-neghead-of-string-list
 
   (is (= "first"
 
-         (hydra_lib_lists_head (list "first" "second")))))
+         "first")))
 
 (deftest test-reduction-negpolymorphic-primitives-neglast-of-integer-list
 
-  (is (= 30
+  (is (= 30:int32
 
-         (hydra_lib_lists_last (list 10 20 30)))))
+         30:int32)))
 
 (deftest test-reduction-negpolymorphic-primitives-negconcat-two-integer-lists
 
-  (is (= (list 1 2 3 4)
+  (is (= [1:int32, 2:int32, 3:int32, 4:int32]
 
-         ((hydra_lib_lists_concat2 (list 1 2)) (list 3 4)))))
+         [1:int32, 2:int32, 3:int32, 4:int32])))
 
 (deftest test-reduction-negpolymorphic-primitives-negconcat-with-empty-list
 
-  (is (= (list 1 2)
+  (is (= [1:int32, 2:int32]
 
-         ((hydra_lib_lists_concat2 (list )) (list 1 2)))))
+         [1:int32, 2:int32])))
 
 (deftest test-reduction-negpolymorphic-primitives-negreverse-integer-list
 
-  (is (= (list 3 2 1)
+  (is (= [3:int32, 2:int32, 1:int32]
 
-         (hydra_lib_lists_reverse (list 1 2 3)))))
+         [3:int32, 2:int32, 1:int32])))
 
 (deftest test-reduction-negpolymorphic-primitives-negreverse-empty-list
 
-  (is (= (list )
+  (is (= []
 
-         (hydra_lib_lists_reverse (list )))))
+         [])))
 
 ;; nullary primitives
 
 (deftest test-reduction-negnullary-primitives-negempty-set-has-size-zero
 
-  (is (= 0
+  (is (= 0:int32
 
-         (hydra_lib_sets_size hydra_lib_sets_empty))))
+         0:int32)))
 
 ;; literals as values
 
 (deftest test-reduction-negliterals-as-values-neginteger-literal-is-a-value
 
-  (is (= 42
+  (is (= 42:int32
 
-         42)))
+         42:int32)))
 
 (deftest test-reduction-negliterals-as-values-negnegative-integer-literal
 
-  (is (= -17
+  (is (= -17:int32
 
-         -17)))
+         -17:int32)))
 
 (deftest test-reduction-negliterals-as-values-negzero-integer-literal
 
-  (is (= 0
+  (is (= 0:int32
 
-         0)))
+         0:int32)))
 
 (deftest test-reduction-negliterals-as-values-negstring-literal-is-a-value
 
@@ -250,58 +250,164 @@
 
 (deftest test-reduction-negliterals-as-values-negfloat-literal-is-a-value
 
-  (is (= 3.14
+  (is (= 3.14:float64
 
-         3.14)))
+         3.14:float64)))
 
 (deftest test-reduction-negliterals-as-values-negnegative-float-literal
 
-  (is (= -2.718
+  (is (= -2.718:float64
 
-         -2.718)))
+         -2.718:float64)))
 
 (deftest test-reduction-negliterals-as-values-negzero-float-literal
 
-  (is (= 0.0
+  (is (= 0.0:float64
 
-         0.0)))
+         0.0:float64)))
 
 ;; list reduction
 
 (deftest test-reduction-neglist-reduction-negempty-list-is-a-value
 
-  (is (= (list )
+  (is (= []
 
-         (list ))))
+         [])))
 
 (deftest test-reduction-neglist-reduction-neglist-of-literals-is-a-value
 
-  (is (= (list 1 2 3)
+  (is (= [1:int32, 2:int32, 3:int32]
 
-         (list 1 2 3))))
+         [1:int32, 2:int32, 3:int32])))
 
 (deftest test-reduction-neglist-reduction-neglist-with-reducible-element
 
-  (is (= (list 42)
+  (is (= [42:int32]
 
-         (list ((fn [x] x) 42)))))
+         [42:int32])))
 
 ;; optional reduction
 
 (deftest test-reduction-negoptional-reduction-negnothing-is-a-value
 
-  (is (= (list :nothing)
+  (is (= nothing
 
-         (list :nothing))))
+         nothing)))
 
 (deftest test-reduction-negoptional-reduction-negjust-literal-is-a-value
 
-  (is (= (list :just 42)
+  (is (= just(42:int32)
 
-         (list :just 42))))
+         just(42:int32))))
 
 (deftest test-reduction-negoptional-reduction-negjust-with-reducible-content
 
-  (is (= (list :just 42)
+  (is (= just(42:int32)
 
-         (list :just ((fn [x] x) 42)))))
+         just(42:int32))))
+
+;; alpha conversion
+
+(deftest test-reduction-negalpha-conversion-negvariable-at-top-level
+
+  (is (= y
+
+         y)))
+
+(deftest test-reduction-negalpha-conversion-negvariable-in-list
+
+  (is (= [42:int32, y]
+
+         [42:int32, y])))
+
+(deftest test-reduction-negalpha-conversion-neglambda-with-different-variable-is-transparent
+
+  (is (= λz.[42:int32, y, z]
+
+         λz.[42:int32, y, z])))
+
+(deftest test-reduction-negalpha-conversion-neglambda-with-same-variable-is-opaque
+
+  (is (= λx.[42:int32, x, z]
+
+         λx.[42:int32, x, z])))
+
+(deftest test-reduction-negalpha-conversion-negnested-lambda-outer-variable
+
+  (is (= λa.λb.y
+
+         λa.λb.y)))
+
+(deftest test-reduction-negalpha-conversion-negnested-lambda-shadows-outer
+
+  (is (= λx.λy.x
+
+         λx.λy.x)))
+
+(deftest test-reduction-negalpha-conversion-negapplication-with-variable
+
+  (is (= (f @ y)
+
+         (f @ y))))
+
+(deftest test-reduction-negalpha-conversion-negapplication-with-both-variables-same
+
+  (is (= (y @ y)
+
+         (y @ y))))
+
+;; type reduction
+
+(deftest test-reduction-negtype-reduction-negunit-type-unchanged
+
+  (is (= unit
+
+         unit)))
+
+(deftest test-reduction-negtype-reduction-negstring-type-unchanged
+
+  (is (= string
+
+         string)))
+
+(deftest test-reduction-negtype-reduction-negint32-type-unchanged
+
+  (is (= int32
+
+         int32)))
+
+(deftest test-reduction-negtype-reduction-negidentity-type-applied-to-string
+
+  (is (= (string → string)
+
+         (string → string))))
+
+(deftest test-reduction-negtype-reduction-negconstant-type-ignores-argument
+
+  (is (= int32
+
+         int32)))
+
+(deftest test-reduction-negtype-reduction-negnested-forall-first-application
+
+  (is (= (∀y.(int32 → y))
+
+         (∀y.(int32 → y)))))
+
+(deftest test-reduction-negtype-reduction-negnested-forall-both-applications
+
+  (is (= (int32 → string)
+
+         (int32 → string))))
+
+(deftest test-reduction-negtype-reduction-neglist-type-applied
+
+  (is (= list<int32>
+
+         list<int32>)))
+
+(deftest test-reduction-negtype-reduction-negoptional-type-applied
+
+  (is (= maybe<string>
+
+         maybe<string>)))

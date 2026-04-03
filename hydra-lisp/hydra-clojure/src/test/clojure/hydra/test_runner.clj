@@ -251,7 +251,7 @@
 ;; Graph construction
 ;; ==========================================================================
 
-(defn- build-test-graph []
+(defn build-test-graph []
   (let [std-prims (libraries/standard-library)
 
         ;; Create annotation primitives
@@ -297,9 +297,9 @@
      :schema_types schema-types
      :type_variables #{}}))
 
-(def ^:private test-graph (atom nil))
+(def test-graph (atom nil))
 
-(defn- ensure-test-graph! []
+(defn ensure-test-graph! []
   "Build and enhance the test graph with schema types (called after all namespaces loaded)."
   (when (nil? @test-graph)
     (let [base (build-test-graph)]
@@ -314,7 +314,7 @@
               test-types-var (ns-resolve 'hydra.test.testGraph 'hydra_test_test_graph_test_types)
               test-types (if (and test-types-var (bound? test-types-var)) @test-types-var ())
               ;; Convert types to TypeSchemes using f_type_to_type_scheme (handles foralls)
-              type-to-ts-var (ns-resolve 'hydra.rewriting 'hydra_rewriting_f_type_to_type_scheme)
+              type-to-ts-var (ns-resolve 'hydra.rewriting 'hydra_scoping_f_type_to_type_scheme)
               type-to-ts (if (and type-to-ts-var (bound? type-to-ts-var)) @type-to-ts-var nil)
               ;; Build schema types from bootstrap + test types
               ;; bootstrap-types is a Clojure map {string -> type}
@@ -548,6 +548,17 @@
       (println (str "  EXCEPTION: " (.getMessage e)))
       [0 1 0])))
 
+(defn- run-universal-test [path tc]
+  "Run a universal test case: compare actual and expected strings."
+  (let [actual (:actual tc)
+        expected (:expected tc)]
+    (if (= actual expected)
+      [1 0 0]
+      (do (println (str "FAIL: " path))
+          (println (str "  Expected: " (pr-str expected)))
+          (println (str "  Actual:   " (pr-str actual)))
+          [0 1 0]))))
+
 (defn- run-simple-test [path expected actual-fn]
   "Run a test that compares expected to the result of actual-fn."
   (try
@@ -618,7 +629,7 @@
     (run-simple-test path (:to_string tc) #(((f (:from_convention tc)) (:to_convention tc)) (:from_string tc)))))
 
 (defn- run-deannotate-term-test [path tc]
-  (let [f (resolve-fn 'hydra.rewriting 'hydra_rewriting_deannotate_term)]
+  (let [f (resolve-fn 'hydra.rewriting 'hydra_strip_deannotate_term)]
     (run-simple-test path (:output tc) #(f (:input tc)))))
 
 (defn- run-deannotate-type-test [path tc]
@@ -1303,6 +1314,7 @@
               :validate_core_term      (run-validate-core-term-test full case-data)
               ;; Skip remaining unimplemented test types
               :delegated_evaluation    [0 0 1]
+              :universal               (run-universal-test full case-data)
               [0 0 1]))))
     (catch Throwable e
       (let [tname (:name tcase) full (str path " > " tname)]

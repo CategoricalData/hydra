@@ -29,6 +29,11 @@ def binding(el: hydra.core.Binding): scala.Predef.String =
   hydra.lib.strings.cat(Seq(name, typeStr, " = ", hydra.show.core.term(t)))
 }
 
+def either[T0, T1](showA: (T0 => scala.Predef.String))(showB: (T1 => scala.Predef.String))(e: Either[T0, T1]): scala.Predef.String =
+  hydra.lib.eithers.either[T0, T1, scala.Predef.String]((a: T0) =>
+  hydra.lib.strings.cat2("left(")(hydra.lib.strings.cat2(showA(a))(")")))((b: T1) =>
+  hydra.lib.strings.cat2("right(")(hydra.lib.strings.cat2(showB(b))(")")))(e)
+
 def elimination(elm: hydra.core.Elimination): scala.Predef.String =
   elm match
   case hydra.core.Elimination.record(v_Elimination_record_proj) => {
@@ -165,7 +170,27 @@ def literalType(lt: hydra.core.LiteralType): scala.Predef.String =
   case hydra.core.LiteralType.integer(v_LiteralType_integer_it) => hydra.show.core.integerType(v_LiteralType_integer_it)
   case hydra.core.LiteralType.string => "string"
 
+def map[T0, T1](showK: (T0 => scala.Predef.String))(showV: (T1 => scala.Predef.String))(m: Map[T0, T1]): scala.Predef.String =
+  {
+  lazy val pairStrs: Seq[scala.Predef.String] = hydra.lib.lists.map[Tuple2[T0, T1], scala.Predef.String]((p: Tuple2[T0, T1]) =>
+    hydra.lib.strings.cat(Seq(showK(hydra.lib.pairs.first[T0, T1](p)), ": ", showV(hydra.lib.pairs.second[T0, T1](p)))))(hydra.lib.maps.toList[T0, T1](m))
+  hydra.lib.strings.cat(Seq("{", hydra.lib.strings.intercalate(", ")(pairStrs), "}"))
+}
+
+def maybe[T0](f: (T0 => scala.Predef.String))(mx: Option[T0]): scala.Predef.String =
+  hydra.lib.maybes.maybe[scala.Predef.String, T0]("nothing")((x: T0) =>
+  hydra.lib.strings.cat2("just(")(hydra.lib.strings.cat2(f(x))(")")))(mx)
+
+def pair[T0, T1](showA: (T0 => scala.Predef.String))(showB: (T1 => scala.Predef.String))(p: Tuple2[T0, T1]): scala.Predef.String =
+  hydra.lib.strings.cat(Seq("(", showA(hydra.lib.pairs.first[T0, T1](p)), ", ", showB(hydra.lib.pairs.second[T0, T1](p)), ")"))
+
 def readTerm(s: scala.Predef.String): Option[hydra.core.Term] = Some(hydra.core.Term.literal(hydra.core.Literal.string(s)))
+
+def set[T0](f: (T0 => scala.Predef.String))(xs: scala.collection.immutable.Set[T0]): scala.Predef.String =
+  {
+  lazy val elementStrs: Seq[scala.Predef.String] = hydra.lib.lists.map[T0, scala.Predef.String](f)(hydra.lib.sets.toList[T0](xs))
+  hydra.lib.strings.cat(Seq("{", hydra.lib.strings.intercalate(", ")(elementStrs), "}"))
+}
 
 def term(t: hydra.core.Term): scala.Predef.String =
   {

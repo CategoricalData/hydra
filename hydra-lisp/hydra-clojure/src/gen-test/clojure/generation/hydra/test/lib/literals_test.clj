@@ -1,394 +1,394 @@
 ;; Note: this is an automatically generated file. Do not edit.
 ;; hydra.lib.literals primitives
 
-(ns generation.hydra.test.lib.literals-test
+(ns test-ns
   (:require [clojure.test :refer :all]))
 
 ;; bigintToInt8
 
 (deftest test-literals-negbiginttoint8-negpositive
 
-  (is (= 42
+  (is (= 42:int8
 
-         (hydra_lib_literals_bigint_to_int8 42))))
+         42:int8)))
 
 (deftest test-literals-negbiginttoint8-negnegative
 
-  (is (= -42
+  (is (= -42:int8
 
-         (hydra_lib_literals_bigint_to_int8 -42))))
+         -42:int8)))
 
 ;; bigintToInt16
 
 (deftest test-literals-negbiginttoint16-negpositive
 
-  (is (= 1000
+  (is (= 1000:int16
 
-         (hydra_lib_literals_bigint_to_int16 1000))))
+         1000:int16)))
 
 (deftest test-literals-negbiginttoint16-negnegative
 
-  (is (= -1000
+  (is (= -1000:int16
 
-         (hydra_lib_literals_bigint_to_int16 -1000))))
+         -1000:int16)))
 
 ;; bigintToInt32
 
 (deftest test-literals-negbiginttoint32-negpositive
 
-  (is (= 42
+  (is (= 42:int32
 
-         (hydra_lib_literals_bigint_to_int32 42))))
+         42:int32)))
 
 (deftest test-literals-negbiginttoint32-negnegative
 
-  (is (= -42
+  (is (= -42:int32
 
-         (hydra_lib_literals_bigint_to_int32 -42))))
+         -42:int32)))
 
 (deftest test-literals-negbiginttoint32-negzero
 
-  (is (= 0
+  (is (= 0:int32
 
-         (hydra_lib_literals_bigint_to_int32 0))))
+         0:int32)))
 
 ;; bigintToInt64
 
 (deftest test-literals-negbiginttoint64-negpositive
 
-  (is (= 1000000
+  (is (= 1000000:int64
 
-         (hydra_lib_literals_bigint_to_int64 1000000))))
+         1000000:int64)))
 
 (deftest test-literals-negbiginttoint64-negnegative
 
-  (is (= -1000000
+  (is (= -1000000:int64
 
-         (hydra_lib_literals_bigint_to_int64 -1000000))))
+         -1000000:int64)))
 
 ;; bigintToUint8
 
 (deftest test-literals-negbiginttouint8-negzero
 
-  (is (= 0
+  (is (= 0:uint8
 
-         (hydra_lib_literals_bigint_to_uint8 0))))
+         0:uint8)))
 
 (deftest test-literals-negbiginttouint8-negtypical-value
 
-  (is (= 100
+  (is (= 100:uint8
 
-         (hydra_lib_literals_bigint_to_uint8 100))))
+         100:uint8)))
 
 ;; bigintToUint16
 
 (deftest test-literals-negbiginttouint16-negzero
 
-  (is (= 0
+  (is (= 0:uint16
 
-         (hydra_lib_literals_bigint_to_uint16 0))))
+         0:uint16)))
 
 (deftest test-literals-negbiginttouint16-negtypical-value
 
-  (is (= 1000
+  (is (= 1000:uint16
 
-         (hydra_lib_literals_bigint_to_uint16 1000))))
+         1000:uint16)))
 
 ;; bigintToUint32
 
 (deftest test-literals-negbiginttouint32-negzero
 
-  (is (= 0
+  (is (= 0:uint32
 
-         (hydra_lib_literals_bigint_to_uint32 0))))
+         0:uint32)))
 
 (deftest test-literals-negbiginttouint32-negtypical-value
 
-  (is (= 100000
+  (is (= 100000:uint32
 
-         (hydra_lib_literals_bigint_to_uint32 100000))))
+         100000:uint32)))
 
 ;; bigintToUint64
 
 (deftest test-literals-negbiginttouint64-negzero
 
-  (is (= 0
+  (is (= 0:uint64
 
-         (hydra_lib_literals_bigint_to_uint64 0))))
+         0:uint64)))
 
 (deftest test-literals-negbiginttouint64-negtypical-value
 
-  (is (= 1000000
+  (is (= 1000000:uint64
 
-         (hydra_lib_literals_bigint_to_uint64 1000000))))
+         1000000:uint64)))
 
 ;; int8ToBigint
 
 (deftest test-literals-negint8tobigint-negpositive
 
-  (is (= 42
+  (is (= 42:bigint
 
-         (hydra_lib_literals_int8_to_bigint 42))))
+         42:bigint)))
 
 (deftest test-literals-negint8tobigint-negnegative
 
-  (is (= -42
+  (is (= -42:bigint
 
-         (hydra_lib_literals_int8_to_bigint -42))))
+         -42:bigint)))
 
 (deftest test-literals-negint8tobigint-negmax-value
 
-  (is (= 127
+  (is (= 127:bigint
 
-         (hydra_lib_literals_int8_to_bigint 127))))
+         127:bigint)))
 
 (deftest test-literals-negint8tobigint-negmin-value
 
-  (is (= -128
+  (is (= -128:bigint
 
-         (hydra_lib_literals_int8_to_bigint -128))))
+         -128:bigint)))
 
 ;; int16ToBigint
 
 (deftest test-literals-negint16tobigint-negpositive
 
-  (is (= 1000
+  (is (= 1000:bigint
 
-         (hydra_lib_literals_int16_to_bigint 1000))))
+         1000:bigint)))
 
 (deftest test-literals-negint16tobigint-negnegative
 
-  (is (= -1000
+  (is (= -1000:bigint
 
-         (hydra_lib_literals_int16_to_bigint -1000))))
+         -1000:bigint)))
 
 ;; int32ToBigint
 
 (deftest test-literals-negint32tobigint-negpositive
 
-  (is (= 42
+  (is (= 42:bigint
 
-         (hydra_lib_literals_int32_to_bigint 42))))
+         42:bigint)))
 
 (deftest test-literals-negint32tobigint-negnegative
 
-  (is (= -42
+  (is (= -42:bigint
 
-         (hydra_lib_literals_int32_to_bigint -42))))
+         -42:bigint)))
 
 (deftest test-literals-negint32tobigint-negzero
 
-  (is (= 0
+  (is (= 0:bigint
 
-         (hydra_lib_literals_int32_to_bigint 0))))
+         0:bigint)))
 
 ;; int64ToBigint
 
 (deftest test-literals-negint64tobigint-negpositive
 
-  (is (= 1000000
+  (is (= 1000000:bigint
 
-         (hydra_lib_literals_int64_to_bigint 1000000))))
+         1000000:bigint)))
 
 (deftest test-literals-negint64tobigint-negnegative
 
-  (is (= -1000000
+  (is (= -1000000:bigint
 
-         (hydra_lib_literals_int64_to_bigint -1000000))))
+         -1000000:bigint)))
 
 ;; uint8ToBigint
 
 (deftest test-literals-neguint8tobigint-negzero
 
-  (is (= 0
+  (is (= 0:bigint
 
-         (hydra_lib_literals_uint8_to_bigint 0))))
+         0:bigint)))
 
 (deftest test-literals-neguint8tobigint-negmax-value
 
-  (is (= 255
+  (is (= 255:bigint
 
-         (hydra_lib_literals_uint8_to_bigint 255))))
+         255:bigint)))
 
 ;; uint16ToBigint
 
 (deftest test-literals-neguint16tobigint-negzero
 
-  (is (= 0
+  (is (= 0:bigint
 
-         (hydra_lib_literals_uint16_to_bigint 0))))
+         0:bigint)))
 
 (deftest test-literals-neguint16tobigint-negtypical-value
 
-  (is (= 1000
+  (is (= 1000:bigint
 
-         (hydra_lib_literals_uint16_to_bigint 1000))))
+         1000:bigint)))
 
 ;; uint32ToBigint
 
 (deftest test-literals-neguint32tobigint-negzero
 
-  (is (= 0
+  (is (= 0:bigint
 
-         (hydra_lib_literals_uint32_to_bigint 0))))
+         0:bigint)))
 
 (deftest test-literals-neguint32tobigint-negtypical-value
 
-  (is (= 100000
+  (is (= 100000:bigint
 
-         (hydra_lib_literals_uint32_to_bigint 100000))))
+         100000:bigint)))
 
 ;; uint64ToBigint
 
 (deftest test-literals-neguint64tobigint-negzero
 
-  (is (= 0
+  (is (= 0:bigint
 
-         (hydra_lib_literals_uint64_to_bigint 0))))
+         0:bigint)))
 
 (deftest test-literals-neguint64tobigint-negtypical-value
 
-  (is (= 1000000
+  (is (= 1000000:bigint
 
-         (hydra_lib_literals_uint64_to_bigint 1000000))))
+         1000000:bigint)))
 
 ;; float32ToBigfloat
 
 (deftest test-literals-negfloat32tobigfloat-negpositive
 
-  (is (= 2.5
+  (is (= 2.5:bigfloat
 
-         (hydra_lib_literals_float32_to_bigfloat 2.5))))
+         2.5:bigfloat)))
 
 (deftest test-literals-negfloat32tobigfloat-negnegative
 
-  (is (= -2.5
+  (is (= -2.5:bigfloat
 
-         (hydra_lib_literals_float32_to_bigfloat -2.5))))
+         -2.5:bigfloat)))
 
 (deftest test-literals-negfloat32tobigfloat-negzero
 
-  (is (= 0.0
+  (is (= 0.0:bigfloat
 
-         (hydra_lib_literals_float32_to_bigfloat 0.0))))
+         0.0:bigfloat)))
 
 ;; float64ToBigfloat
 
 (deftest test-literals-negfloat64tobigfloat-negpositive
 
-  (is (= 3.14159
+  (is (= 3.14159:bigfloat
 
-         (hydra_lib_literals_float64_to_bigfloat 3.14159))))
+         3.14159:bigfloat)))
 
 (deftest test-literals-negfloat64tobigfloat-negnegative
 
-  (is (= -2.71828
+  (is (= -2.71828:bigfloat
 
-         (hydra_lib_literals_float64_to_bigfloat -2.71828))))
+         -2.71828:bigfloat)))
 
 (deftest test-literals-negfloat64tobigfloat-negzero
 
-  (is (= 0.0
+  (is (= 0.0:bigfloat
 
-         (hydra_lib_literals_float64_to_bigfloat 0.0))))
+         0.0:bigfloat)))
 
 ;; bigfloatToFloat32
 
 (deftest test-literals-negbigfloattofloat32-negpositive
 
-  (is (= 3.140000104904175
+  (is (= 3.14:float32
 
-         (hydra_lib_literals_bigfloat_to_float32 3.14))))
+         3.14:float32)))
 
 (deftest test-literals-negbigfloattofloat32-negnegative
 
-  (is (= -2.5
+  (is (= -2.5:float32
 
-         (hydra_lib_literals_bigfloat_to_float32 -2.5))))
+         -2.5:float32)))
 
 (deftest test-literals-negbigfloattofloat32-negzero
 
-  (is (= 0.0
+  (is (= 0.0:float32
 
-         (hydra_lib_literals_bigfloat_to_float32 0.0))))
+         0.0:float32)))
 
 ;; bigfloatToFloat64
 
 (deftest test-literals-negbigfloattofloat64-negpositive
 
-  (is (= 3.14159
+  (is (= 3.14159:float64
 
-         (hydra_lib_literals_bigfloat_to_float64 3.14159))))
+         3.14159:float64)))
 
 (deftest test-literals-negbigfloattofloat64-negnegative
 
-  (is (= -2.71828
+  (is (= -2.71828:float64
 
-         (hydra_lib_literals_bigfloat_to_float64 -2.71828))))
+         -2.71828:float64)))
 
 (deftest test-literals-negbigfloattofloat64-negzero
 
-  (is (= 0.0
+  (is (= 0.0:float64
 
-         (hydra_lib_literals_bigfloat_to_float64 0.0))))
+         0.0:float64)))
 
 ;; bigintToBigfloat
 
 (deftest test-literals-negbiginttobigfloat-negpositive
 
-  (is (= 42.0
+  (is (= 42.0:bigfloat
 
-         (hydra_lib_literals_bigint_to_bigfloat 42))))
+         42.0:bigfloat)))
 
 (deftest test-literals-negbiginttobigfloat-negnegative
 
-  (is (= -42.0
+  (is (= -42.0:bigfloat
 
-         (hydra_lib_literals_bigint_to_bigfloat -42))))
+         -42.0:bigfloat)))
 
 (deftest test-literals-negbiginttobigfloat-negzero
 
-  (is (= 0.0
+  (is (= 0.0:bigfloat
 
-         (hydra_lib_literals_bigint_to_bigfloat 0))))
+         0.0:bigfloat)))
 
 ;; bigfloatToBigint
 
 (deftest test-literals-negbigfloattobigint-negpositive
 
-  (is (= 43
+  (is (= 43:bigint
 
-         (hydra_lib_literals_bigfloat_to_bigint 42.7))))
+         43:bigint)))
 
 (deftest test-literals-negbigfloattobigint-negnegative
 
-  (is (= -43
+  (is (= -43:bigint
 
-         (hydra_lib_literals_bigfloat_to_bigint -42.7))))
+         -43:bigint)))
 
 (deftest test-literals-negbigfloattobigint-negzero
 
-  (is (= 0
+  (is (= 0:bigint
 
-         (hydra_lib_literals_bigfloat_to_bigint 0.0))))
+         0:bigint)))
 
 (deftest test-literals-negbigfloattobigint-neground-down
 
-  (is (= 42
+  (is (= 42:bigint
 
-         (hydra_lib_literals_bigfloat_to_bigint 42.3))))
+         42:bigint)))
 
 (deftest test-literals-negbigfloattobigint-neghalf-even-up
 
-  (is (= 42
+  (is (= 42:bigint
 
-         (hydra_lib_literals_bigfloat_to_bigint 42.5))))
+         42:bigint)))
 
 (deftest test-literals-negbigfloattobigint-neghalf-even-down
 
-  (is (= 44
+  (is (= 44:bigint
 
-         (hydra_lib_literals_bigfloat_to_bigint 43.5))))
+         44:bigint)))
 
 ;; showInt8
 
@@ -396,13 +396,13 @@
 
   (is (= "42"
 
-         (hydra_lib_literals_show_int8 42))))
+         "42")))
 
 (deftest test-literals-negshowint8-negnegative
 
   (is (= "-42"
 
-         (hydra_lib_literals_show_int8 -42))))
+         "-42")))
 
 ;; showInt16
 
@@ -410,13 +410,13 @@
 
   (is (= "1000"
 
-         (hydra_lib_literals_show_int16 1000))))
+         "1000")))
 
 (deftest test-literals-negshowint16-negnegative
 
   (is (= "-1000"
 
-         (hydra_lib_literals_show_int16 -1000))))
+         "-1000")))
 
 ;; showInt32
 
@@ -424,19 +424,19 @@
 
   (is (= "42"
 
-         (hydra_lib_literals_show_int32 42))))
+         "42")))
 
 (deftest test-literals-negshowint32-negnegative
 
   (is (= "-42"
 
-         (hydra_lib_literals_show_int32 -42))))
+         "-42")))
 
 (deftest test-literals-negshowint32-negzero
 
   (is (= "0"
 
-         (hydra_lib_literals_show_int32 0))))
+         "0")))
 
 ;; showInt64
 
@@ -444,13 +444,13 @@
 
   (is (= "1000000"
 
-         (hydra_lib_literals_show_int64 1000000))))
+         "1000000")))
 
 (deftest test-literals-negshowint64-negnegative
 
   (is (= "-1000000"
 
-         (hydra_lib_literals_show_int64 -1000000))))
+         "-1000000")))
 
 ;; showUint8
 
@@ -458,13 +458,13 @@
 
   (is (= "0"
 
-         (hydra_lib_literals_show_uint8 0))))
+         "0")))
 
 (deftest test-literals-negshowuint8-negmax-value
 
   (is (= "255"
 
-         (hydra_lib_literals_show_uint8 255))))
+         "255")))
 
 ;; showUint16
 
@@ -472,13 +472,13 @@
 
   (is (= "0"
 
-         (hydra_lib_literals_show_uint16 0))))
+         "0")))
 
 (deftest test-literals-negshowuint16-negtypical-value
 
   (is (= "1000"
 
-         (hydra_lib_literals_show_uint16 1000))))
+         "1000")))
 
 ;; showUint32
 
@@ -486,13 +486,13 @@
 
   (is (= "0"
 
-         (hydra_lib_literals_show_uint32 0))))
+         "0")))
 
 (deftest test-literals-negshowuint32-negtypical-value
 
   (is (= "100000"
 
-         (hydra_lib_literals_show_uint32 100000))))
+         "100000")))
 
 ;; showUint64
 
@@ -500,13 +500,13 @@
 
   (is (= "0"
 
-         (hydra_lib_literals_show_uint64 0))))
+         "0")))
 
 (deftest test-literals-negshowuint64-negtypical-value
 
   (is (= "1000000"
 
-         (hydra_lib_literals_show_uint64 1000000))))
+         "1000000")))
 
 ;; showBigint
 
@@ -514,19 +514,19 @@
 
   (is (= "42"
 
-         (hydra_lib_literals_show_bigint 42))))
+         "42")))
 
 (deftest test-literals-negshowbigint-negnegative
 
   (is (= "-42"
 
-         (hydra_lib_literals_show_bigint -42))))
+         "-42")))
 
 (deftest test-literals-negshowbigint-negzero
 
   (is (= "0"
 
-         (hydra_lib_literals_show_bigint 0))))
+         "0")))
 
 ;; showFloat32
 
@@ -534,43 +534,43 @@
 
   (is (= "3.14"
 
-         (hydra_lib_literals_show_float32 3.140000104904175))))
+         "3.14")))
 
 (deftest test-literals-negshowfloat32-negnegative
 
   (is (= "-2.5"
 
-         (hydra_lib_literals_show_float32 -2.5))))
+         "-2.5")))
 
 (deftest test-literals-negshowfloat32-negzero
 
   (is (= "0.0"
 
-         (hydra_lib_literals_show_float32 0.0))))
+         "0.0")))
 
 (deftest test-literals-negshowfloat32-negsmall-positive
 
   (is (= "5.0e-2"
 
-         (hydra_lib_literals_show_float32 5.000000074505806e-2))))
+         "5.0e-2")))
 
 (deftest test-literals-negshowfloat32-negsmall-positive-2
 
   (is (= "3.0e-2"
 
-         (hydra_lib_literals_show_float32 2.9999999329447746e-2))))
+         "3.0e-2")))
 
 (deftest test-literals-negshowfloat32-negvery-small
 
   (is (= "1.0e-3"
 
-         (hydra_lib_literals_show_float32 1.0000000474974513e-3))))
+         "1.0e-3")))
 
 (deftest test-literals-negshowfloat32-negnormal-decimal
 
   (is (= "0.1"
 
-         (hydra_lib_literals_show_float32 0.10000000149011612))))
+         "0.1")))
 
 ;; showFloat64
 
@@ -578,37 +578,37 @@
 
   (is (= "3.14159"
 
-         (hydra_lib_literals_show_float64 3.14159))))
+         "3.14159")))
 
 (deftest test-literals-negshowfloat64-negzero
 
   (is (= "0.0"
 
-         (hydra_lib_literals_show_float64 0.0))))
+         "0.0")))
 
 (deftest test-literals-negshowfloat64-negsmall-positive
 
   (is (= "5.0e-2"
 
-         (hydra_lib_literals_show_float64 5.0e-2))))
+         "5.0e-2")))
 
 (deftest test-literals-negshowfloat64-negsmall-positive-2
 
   (is (= "3.0e-2"
 
-         (hydra_lib_literals_show_float64 3.0e-2))))
+         "3.0e-2")))
 
 (deftest test-literals-negshowfloat64-negvery-small
 
   (is (= "1.0e-3"
 
-         (hydra_lib_literals_show_float64 1.0e-3))))
+         "1.0e-3")))
 
 (deftest test-literals-negshowfloat64-negnormal-decimal
 
   (is (= "0.1"
 
-         (hydra_lib_literals_show_float64 0.1))))
+         "0.1")))
 
 ;; showBigfloat
 
@@ -616,37 +616,37 @@
 
   (is (= "3.14"
 
-         (hydra_lib_literals_show_bigfloat 3.14))))
+         "3.14")))
 
 (deftest test-literals-negshowbigfloat-negzero
 
   (is (= "0.0"
 
-         (hydra_lib_literals_show_bigfloat 0.0))))
+         "0.0")))
 
 (deftest test-literals-negshowbigfloat-negsmall-positive
 
   (is (= "5.0e-2"
 
-         (hydra_lib_literals_show_bigfloat 5.0e-2))))
+         "5.0e-2")))
 
 (deftest test-literals-negshowbigfloat-negsmall-positive-2
 
   (is (= "3.0e-2"
 
-         (hydra_lib_literals_show_bigfloat 3.0e-2))))
+         "3.0e-2")))
 
 (deftest test-literals-negshowbigfloat-negvery-small
 
   (is (= "1.0e-3"
 
-         (hydra_lib_literals_show_bigfloat 1.0e-3))))
+         "1.0e-3")))
 
 (deftest test-literals-negshowbigfloat-negnormal-decimal
 
   (is (= "0.1"
 
-         (hydra_lib_literals_show_bigfloat 0.1))))
+         "0.1")))
 
 ;; showBoolean
 
@@ -654,13 +654,13 @@
 
   (is (= "true"
 
-         (hydra_lib_literals_show_boolean true))))
+         "true")))
 
 (deftest test-literals-negshowboolean-negfalse
 
   (is (= "false"
 
-         (hydra_lib_literals_show_boolean false))))
+         "false")))
 
 ;; showString
 
@@ -668,445 +668,445 @@
 
   (is (= "\"hello\""
 
-         (hydra_lib_literals_show_string "hello"))))
+         "\"hello\"")))
 
 (deftest test-literals-negshowstring-negempty
 
   (is (= "\"\""
 
-         (hydra_lib_literals_show_string ""))))
+         "\"\"")))
 
 (deftest test-literals-negshowstring-neglatin-accented
 
   (is (= "\"caf\\233\""
 
-         (hydra_lib_literals_show_string "café"))))
+         "\"caf\\233\"")))
 
 (deftest test-literals-negshowstring-neggreek-lambda
 
   (is (= "\"\\955\""
 
-         (hydra_lib_literals_show_string "λ"))))
+         "\"\\955\"")))
 
 (deftest test-literals-negshowstring-negmixed-ascii-and-non-negascii
 
   (is (= "\"A\\233B\""
 
-         (hydra_lib_literals_show_string "AéB"))))
+         "\"A\\233B\"")))
 
 (deftest test-literals-negshowstring-negtab
 
   (is (= "\"\\t\""
 
-         (hydra_lib_literals_show_string "\t"))))
+         "\"\\t\"")))
 
 (deftest test-literals-negshowstring-negnewline
 
   (is (= "\"\\n\""
 
-         (hydra_lib_literals_show_string "\n"))))
+         "\"\\n\"")))
 
 (deftest test-literals-negshowstring-negcarriage-return
 
   (is (= "\"\\r\""
 
-         (hydra_lib_literals_show_string "\r"))))
+         "\"\\r\"")))
 
 (deftest test-literals-negshowstring-negbackslash
 
   (is (= "\"\\\\\""
 
-         (hydra_lib_literals_show_string "\\"))))
+         "\"\\\\\"")))
 
 (deftest test-literals-negshowstring-negdouble-quote
 
   (is (= "\"\\\"\""
 
-         (hydra_lib_literals_show_string "\""))))
+         "\"\\\"\"")))
 
 (deftest test-literals-negshowstring-negnull
 
   (is (= "\"\\NUL\""
 
-         (hydra_lib_literals_show_string " "))))
+         "\"\\NUL\"")))
 
 (deftest test-literals-negshowstring-negbell
 
   (is (= "\"\\a\""
 
-         (hydra_lib_literals_show_string ""))))
+         "\"\\a\"")))
 
 (deftest test-literals-negshowstring-negbackspace
 
   (is (= "\"\\b\""
 
-         (hydra_lib_literals_show_string ""))))
+         "\"\\b\"")))
 
 (deftest test-literals-negshowstring-negform-feed
 
   (is (= "\"\\f\""
 
-         (hydra_lib_literals_show_string ""))))
+         "\"\\f\"")))
 
 (deftest test-literals-negshowstring-negvertical-tab
 
   (is (= "\"\\v\""
 
-         (hydra_lib_literals_show_string ""))))
+         "\"\\v\"")))
 
 (deftest test-literals-negshowstring-negdelete
 
   (is (= "\"\\DEL\""
 
-         (hydra_lib_literals_show_string ""))))
+         "\"\\DEL\"")))
 
 ;; readInt8
 
 (deftest test-literals-negreadint8-negpositive
 
-  (is (= (list :just 42)
+  (is (= just(42:int8)
 
-         (hydra_lib_literals_read_int8 "42"))))
+         just(42:int8))))
 
 (deftest test-literals-negreadint8-negnegative
 
-  (is (= (list :just -42)
+  (is (= just(-42:int8)
 
-         (hydra_lib_literals_read_int8 "-42"))))
+         just(-42:int8))))
 
 (deftest test-literals-negreadint8-negmax-value
 
-  (is (= (list :just 127)
+  (is (= just(127:int8)
 
-         (hydra_lib_literals_read_int8 "127"))))
+         just(127:int8))))
 
 (deftest test-literals-negreadint8-negmin-value
 
-  (is (= (list :just -128)
+  (is (= just(-128:int8)
 
-         (hydra_lib_literals_read_int8 "-128"))))
+         just(-128:int8))))
 
 (deftest test-literals-negreadint8-neginvalid
 
-  (is (= (list :nothing)
+  (is (= nothing
 
-         (hydra_lib_literals_read_int8 "abc"))))
+         nothing)))
 
 (deftest test-literals-negreadint8-negoverflow
 
-  (is (= (list :nothing)
+  (is (= nothing
 
-         (hydra_lib_literals_read_int8 "128"))))
+         nothing)))
 
 ;; readInt16
 
 (deftest test-literals-negreadint16-negpositive
 
-  (is (= (list :just 1000)
+  (is (= just(1000:int16)
 
-         (hydra_lib_literals_read_int16 "1000"))))
+         just(1000:int16))))
 
 (deftest test-literals-negreadint16-negnegative
 
-  (is (= (list :just -1000)
+  (is (= just(-1000:int16)
 
-         (hydra_lib_literals_read_int16 "-1000"))))
+         just(-1000:int16))))
 
 (deftest test-literals-negreadint16-neginvalid
 
-  (is (= (list :nothing)
+  (is (= nothing
 
-         (hydra_lib_literals_read_int16 "abc"))))
+         nothing)))
 
 ;; readInt32
 
 (deftest test-literals-negreadint32-negpositive
 
-  (is (= (list :just 42)
+  (is (= just(42:int32)
 
-         (hydra_lib_literals_read_int32 "42"))))
+         just(42:int32))))
 
 (deftest test-literals-negreadint32-negnegative
 
-  (is (= (list :just -42)
+  (is (= just(-42:int32)
 
-         (hydra_lib_literals_read_int32 "-42"))))
+         just(-42:int32))))
 
 (deftest test-literals-negreadint32-neginvalid
 
-  (is (= (list :nothing)
+  (is (= nothing
 
-         (hydra_lib_literals_read_int32 "abc"))))
+         nothing)))
 
 ;; readInt64
 
 (deftest test-literals-negreadint64-negpositive
 
-  (is (= (list :just 1000000)
+  (is (= just(1000000:int64)
 
-         (hydra_lib_literals_read_int64 "1000000"))))
+         just(1000000:int64))))
 
 (deftest test-literals-negreadint64-negnegative
 
-  (is (= (list :just -1000000)
+  (is (= just(-1000000:int64)
 
-         (hydra_lib_literals_read_int64 "-1000000"))))
+         just(-1000000:int64))))
 
 (deftest test-literals-negreadint64-neginvalid
 
-  (is (= (list :nothing)
+  (is (= nothing
 
-         (hydra_lib_literals_read_int64 "abc"))))
+         nothing)))
 
 ;; readUint8
 
 (deftest test-literals-negreaduint8-negzero
 
-  (is (= (list :just 0)
+  (is (= just(0:uint8)
 
-         (hydra_lib_literals_read_uint8 "0"))))
+         just(0:uint8))))
 
 (deftest test-literals-negreaduint8-negtypical
 
-  (is (= (list :just 100)
+  (is (= just(100:uint8)
 
-         (hydra_lib_literals_read_uint8 "100"))))
+         just(100:uint8))))
 
 (deftest test-literals-negreaduint8-negmax-value
 
-  (is (= (list :just 255)
+  (is (= just(255:uint8)
 
-         (hydra_lib_literals_read_uint8 "255"))))
+         just(255:uint8))))
 
 (deftest test-literals-negreaduint8-neginvalid
 
-  (is (= (list :nothing)
+  (is (= nothing
 
-         (hydra_lib_literals_read_uint8 "abc"))))
+         nothing)))
 
 (deftest test-literals-negreaduint8-negnegative
 
-  (is (= (list :nothing)
+  (is (= nothing
 
-         (hydra_lib_literals_read_uint8 "-1"))))
+         nothing)))
 
 ;; readUint16
 
 (deftest test-literals-negreaduint16-negzero
 
-  (is (= (list :just 0)
+  (is (= just(0:uint16)
 
-         (hydra_lib_literals_read_uint16 "0"))))
+         just(0:uint16))))
 
 (deftest test-literals-negreaduint16-negtypical
 
-  (is (= (list :just 1000)
+  (is (= just(1000:uint16)
 
-         (hydra_lib_literals_read_uint16 "1000"))))
+         just(1000:uint16))))
 
 (deftest test-literals-negreaduint16-neginvalid
 
-  (is (= (list :nothing)
+  (is (= nothing
 
-         (hydra_lib_literals_read_uint16 "abc"))))
+         nothing)))
 
 (deftest test-literals-negreaduint16-negnegative
 
-  (is (= (list :nothing)
+  (is (= nothing
 
-         (hydra_lib_literals_read_uint16 "-1"))))
+         nothing)))
 
 ;; readUint32
 
 (deftest test-literals-negreaduint32-negzero
 
-  (is (= (list :just 0)
+  (is (= just(0:uint32)
 
-         (hydra_lib_literals_read_uint32 "0"))))
+         just(0:uint32))))
 
 (deftest test-literals-negreaduint32-negtypical
 
-  (is (= (list :just 100000)
+  (is (= just(100000:uint32)
 
-         (hydra_lib_literals_read_uint32 "100000"))))
+         just(100000:uint32))))
 
 (deftest test-literals-negreaduint32-neginvalid
 
-  (is (= (list :nothing)
+  (is (= nothing
 
-         (hydra_lib_literals_read_uint32 "abc"))))
+         nothing)))
 
 (deftest test-literals-negreaduint32-negnegative
 
-  (is (= (list :nothing)
+  (is (= nothing
 
-         (hydra_lib_literals_read_uint32 "-1"))))
+         nothing)))
 
 ;; readUint64
 
 (deftest test-literals-negreaduint64-negzero
 
-  (is (= (list :just 0)
+  (is (= just(0:uint64)
 
-         (hydra_lib_literals_read_uint64 "0"))))
+         just(0:uint64))))
 
 (deftest test-literals-negreaduint64-negtypical
 
-  (is (= (list :just 1000000)
+  (is (= just(1000000:uint64)
 
-         (hydra_lib_literals_read_uint64 "1000000"))))
+         just(1000000:uint64))))
 
 (deftest test-literals-negreaduint64-neginvalid
 
-  (is (= (list :nothing)
+  (is (= nothing
 
-         (hydra_lib_literals_read_uint64 "abc"))))
+         nothing)))
 
 (deftest test-literals-negreaduint64-negnegative
 
-  (is (= (list :nothing)
+  (is (= nothing
 
-         (hydra_lib_literals_read_uint64 "-1"))))
+         nothing)))
 
 ;; readBigint
 
 (deftest test-literals-negreadbigint-negpositive
 
-  (is (= (list :just 42)
+  (is (= just(42:bigint)
 
-         (hydra_lib_literals_read_bigint "42"))))
+         just(42:bigint))))
 
 (deftest test-literals-negreadbigint-negnegative
 
-  (is (= (list :just -42)
+  (is (= just(-42:bigint)
 
-         (hydra_lib_literals_read_bigint "-42"))))
+         just(-42:bigint))))
 
 (deftest test-literals-negreadbigint-negzero
 
-  (is (= (list :just 0)
+  (is (= just(0:bigint)
 
-         (hydra_lib_literals_read_bigint "0"))))
+         just(0:bigint))))
 
 (deftest test-literals-negreadbigint-neglarge
 
-  (is (= (list :just 123456789012345678901234567890)
+  (is (= just(123456789012345678901234567890:bigint)
 
-         (hydra_lib_literals_read_bigint "123456789012345678901234567890"))))
+         just(123456789012345678901234567890:bigint))))
 
 (deftest test-literals-negreadbigint-neginvalid
 
-  (is (= (list :nothing)
+  (is (= nothing
 
-         (hydra_lib_literals_read_bigint "abc"))))
+         nothing)))
 
 ;; readFloat32
 
 (deftest test-literals-negreadfloat32-negpositive
 
-  (is (= (list :just 3.140000104904175)
+  (is (= just(3.14:float32)
 
-         (hydra_lib_literals_read_float32 "3.14"))))
+         just(3.14:float32))))
 
 (deftest test-literals-negreadfloat32-negnegative
 
-  (is (= (list :just -2.5)
+  (is (= just(-2.5:float32)
 
-         (hydra_lib_literals_read_float32 "-2.5"))))
+         just(-2.5:float32))))
 
 (deftest test-literals-negreadfloat32-neginvalid
 
-  (is (= (list :nothing)
+  (is (= nothing
 
-         (hydra_lib_literals_read_float32 "abc"))))
+         nothing)))
 
 ;; readFloat64
 
 (deftest test-literals-negreadfloat64-negpositive
 
-  (is (= (list :just 3.14159)
+  (is (= just(3.14159:float64)
 
-         (hydra_lib_literals_read_float64 "3.14159"))))
+         just(3.14159:float64))))
 
 (deftest test-literals-negreadfloat64-negnegative
 
-  (is (= (list :just -2.71828)
+  (is (= just(-2.71828:float64)
 
-         (hydra_lib_literals_read_float64 "-2.71828"))))
+         just(-2.71828:float64))))
 
 (deftest test-literals-negreadfloat64-neginvalid
 
-  (is (= (list :nothing)
+  (is (= nothing
 
-         (hydra_lib_literals_read_float64 "abc"))))
+         nothing)))
 
 ;; readBigfloat
 
 (deftest test-literals-negreadbigfloat-negpositive
 
-  (is (= (list :just 3.14)
+  (is (= just(3.14:bigfloat)
 
-         (hydra_lib_literals_read_bigfloat "3.14"))))
+         just(3.14:bigfloat))))
 
 (deftest test-literals-negreadbigfloat-neginvalid
 
-  (is (= (list :nothing)
+  (is (= nothing
 
-         (hydra_lib_literals_read_bigfloat "abc"))))
+         nothing)))
 
 ;; readBoolean
 
 (deftest test-literals-negreadboolean-negtrue
 
-  (is (= (list :just true)
+  (is (= just(true)
 
-         (hydra_lib_literals_read_boolean "true"))))
+         just(true))))
 
 (deftest test-literals-negreadboolean-negfalse
 
-  (is (= (list :just false)
+  (is (= just(false)
 
-         (hydra_lib_literals_read_boolean "false"))))
+         just(false))))
 
 (deftest test-literals-negreadboolean-neginvalid
 
-  (is (= (list :nothing)
+  (is (= nothing
 
-         (hydra_lib_literals_read_boolean "yes"))))
+         nothing)))
 
 ;; readString
 
 (deftest test-literals-negreadstring-negquoted-string
 
-  (is (= (list :just "hello")
+  (is (= just("hello")
 
-         (hydra_lib_literals_read_string "\"hello\""))))
+         just("hello"))))
 
 (deftest test-literals-negreadstring-negempty-quoted
 
-  (is (= (list :just "")
+  (is (= just("")
 
-         (hydra_lib_literals_read_string "\"\""))))
+         just(""))))
 
 (deftest test-literals-negreadstring-negunquoted
 
-  (is (= (list :nothing)
+  (is (= nothing
 
-         (hydra_lib_literals_read_string "hello"))))
+         nothing)))
 
 ;; stringToBinary
 
 (deftest test-literals-negstringtobinary-negsimple-base64
 
-  (is (= (list 104 101 108 108 111)
+  (is (= [binary]
 
-         (hydra_lib_literals_string_to_binary "aGVsbG8="))))
+         [binary])))
 
 (deftest test-literals-negstringtobinary-negempty-string
 
-  (is (= (list)
+  (is (= [binary]
 
-         (hydra_lib_literals_string_to_binary ""))))
+         [binary])))
 
 ;; binaryToString
 
@@ -1114,10 +1114,10 @@
 
   (is (= "aGVsbG8="
 
-         (hydra_lib_literals_binary_to_string (list 104 101 108 108 111)))))
+         "aGVsbG8=")))
 
 (deftest test-literals-negbinarytostring-negempty-binary
 
   (is (= ""
 
-         (hydra_lib_literals_binary_to_string (list)))))
+         "")))

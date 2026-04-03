@@ -13,9 +13,9 @@ class FormattingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.formatting.convertCase(hydra.util.CaseConvention.lowerSnake)(hydra.util.CaseConvention.upperSnake)("a_hello_world_42_a42_42a_b")) == (
+      A_HELLO_WORLD_42_A42_42A_B) == (
 
-      "A_HELLO_WORLD_42_A42_42A_B"))
+      A_HELLO_WORLD_42_A42_42A_B))
 
   }
 
@@ -23,9 +23,9 @@ class FormattingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.formatting.convertCase(hydra.util.CaseConvention.lowerSnake)(hydra.util.CaseConvention.camel)("a_hello_world_42_a42_42a_b")) == (
+      aHelloWorld42A4242aB) == (
 
-      "aHelloWorld42A4242aB"))
+      aHelloWorld42A4242aB))
 
   }
 
@@ -33,9 +33,9 @@ class FormattingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.formatting.convertCase(hydra.util.CaseConvention.lowerSnake)(hydra.util.CaseConvention.pascal)("a_hello_world_42_a42_42a_b")) == (
+      AHelloWorld42A4242aB) == (
 
-      "AHelloWorld42A4242aB"))
+      AHelloWorld42A4242aB))
 
   }
 
@@ -43,9 +43,9 @@ class FormattingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.formatting.convertCase(hydra.util.CaseConvention.lowerSnake)(hydra.util.CaseConvention.lowerSnake)("a_hello_world_42_a42_42a_b")) == (
+      a_hello_world_42_a42_42a_b) == (
 
-      "a_hello_world_42_a42_42a_b"))
+      a_hello_world_42_a42_42a_b))
 
   }
 
@@ -53,9 +53,9 @@ class FormattingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.formatting.convertCase(hydra.util.CaseConvention.upperSnake)(hydra.util.CaseConvention.lowerSnake)("A_HELLO_WORLD_42_A42_42A_B")) == (
+      a_hello_world_42_a42_42a_b) == (
 
-      "a_hello_world_42_a42_42a_b"))
+      a_hello_world_42_a42_42a_b))
 
   }
 
@@ -63,9 +63,9 @@ class FormattingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.formatting.convertCase(hydra.util.CaseConvention.upperSnake)(hydra.util.CaseConvention.camel)("A_HELLO_WORLD_42_A42_42A_B")) == (
+      aHelloWorld42A4242aB) == (
 
-      "aHelloWorld42A4242aB"))
+      aHelloWorld42A4242aB))
 
   }
 
@@ -73,9 +73,9 @@ class FormattingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.formatting.convertCase(hydra.util.CaseConvention.upperSnake)(hydra.util.CaseConvention.pascal)("A_HELLO_WORLD_42_A42_42A_B")) == (
+      AHelloWorld42A4242aB) == (
 
-      "AHelloWorld42A4242aB"))
+      AHelloWorld42A4242aB))
 
   }
 
@@ -83,9 +83,9 @@ class FormattingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.formatting.convertCase(hydra.util.CaseConvention.upperSnake)(hydra.util.CaseConvention.upperSnake)("A_HELLO_WORLD_42_A42_42A_B")) == (
+      A_HELLO_WORLD_42_A42_42A_B) == (
 
-      "A_HELLO_WORLD_42_A42_42A_B"))
+      A_HELLO_WORLD_42_A42_42A_B))
 
   }
 
@@ -93,9 +93,9 @@ class FormattingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.formatting.convertCase(hydra.util.CaseConvention.camel)(hydra.util.CaseConvention.lowerSnake)("aHelloWorld42A4242aB")) == (
+      a_hello_world42_a4242a_b) == (
 
-      "a_hello_world42_a4242a_b"))
+      a_hello_world42_a4242a_b))
 
   }
 
@@ -103,9 +103,9 @@ class FormattingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.formatting.convertCase(hydra.util.CaseConvention.camel)(hydra.util.CaseConvention.upperSnake)("aHelloWorld42A4242aB")) == (
+      A_HELLO_WORLD42_A4242A_B) == (
 
-      "A_HELLO_WORLD42_A4242A_B"))
+      A_HELLO_WORLD42_A4242A_B))
 
   }
 
@@ -113,9 +113,9 @@ class FormattingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.formatting.convertCase(hydra.util.CaseConvention.camel)(hydra.util.CaseConvention.pascal)("aHelloWorld42A4242aB")) == (
+      AHelloWorld42A4242aB) == (
 
-      "AHelloWorld42A4242aB"))
+      AHelloWorld42A4242aB))
 
   }
 
@@ -123,9 +123,9 @@ class FormattingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.formatting.convertCase(hydra.util.CaseConvention.camel)(hydra.util.CaseConvention.camel)("aHelloWorld42A4242aB")) == (
+      aHelloWorld42A4242aB) == (
 
-      "aHelloWorld42A4242aB"))
+      aHelloWorld42A4242aB))
 
   }
 
@@ -133,9 +133,9 @@ class FormattingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.formatting.convertCase(hydra.util.CaseConvention.pascal)(hydra.util.CaseConvention.lowerSnake)("AHelloWorld42A4242aB")) == (
+      a_hello_world42_a4242a_b) == (
 
-      "a_hello_world42_a4242a_b"))
+      a_hello_world42_a4242a_b))
 
   }
 
@@ -143,9 +143,9 @@ class FormattingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.formatting.convertCase(hydra.util.CaseConvention.pascal)(hydra.util.CaseConvention.upperSnake)("AHelloWorld42A4242aB")) == (
+      A_HELLO_WORLD42_A4242A_B) == (
 
-      "A_HELLO_WORLD42_A4242A_B"))
+      A_HELLO_WORLD42_A4242A_B))
 
   }
 
@@ -153,9 +153,9 @@ class FormattingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.formatting.convertCase(hydra.util.CaseConvention.pascal)(hydra.util.CaseConvention.camel)("AHelloWorld42A4242aB")) == (
+      aHelloWorld42A4242aB) == (
 
-      "aHelloWorld42A4242aB"))
+      aHelloWorld42A4242aB))
 
   }
 
@@ -163,9 +163,9 @@ class FormattingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.formatting.convertCase(hydra.util.CaseConvention.pascal)(hydra.util.CaseConvention.pascal)("AHelloWorld42A4242aB")) == (
+      AHelloWorld42A4242aB) == (
 
-      "AHelloWorld42A4242aB"))
+      AHelloWorld42A4242aB))
 
   }
 }

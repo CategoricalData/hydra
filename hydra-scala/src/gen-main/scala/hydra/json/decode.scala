@@ -148,7 +148,7 @@ def expectString(value: hydra.json.model.Value): Either[scala.Predef.String, sca
 def fromJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Name)(typ: hydra.core.Type)(value: hydra.json.model.Value): Either[scala.Predef.String,
    hydra.core.Term] =
   {
-  lazy val stripped: hydra.core.Type = hydra.rewriting.deannotateType(typ)
+  lazy val stripped: hydra.core.Type = hydra.strip.deannotateType(typ)
   stripped match
     case hydra.core.Type.literal(v_Type_literal_lt) => hydra.json.decode.decodeLiteral(v_Type_literal_lt)(value)
     case hydra.core.Type.list(v_Type_list_elemType) => {

@@ -24,7 +24,7 @@ import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Context as Context
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Strip as Strip
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -52,7 +52,7 @@ bindingsToTypeDefinitions :: Graph -> [Binding] -> [TypeDefinition]
 bindingsToTypeDefinitions graph bindings =
   [TypeDefinition (bindingName b) typ | b <- bindings,
    Annotations.isNativeType b,
-   Right typ <- [DecodeCore.type_ graph (Rewriting.deannotateTerm (bindingTerm b))]]
+   Right typ <- [DecodeCore.type_ graph (Strip.deannotateTerm (bindingTerm b))]]
 
 -- | Convert TypeDefinitions to Definitions
 typeDefsToDefinitions :: [TypeDefinition] -> [Definition]

@@ -4,11 +4,11 @@
 
 (in-package :hydra.encode.relational)
 
-(cl:defvar hydra_encode_relational_column_name (cl:lambda (x) (list :wrap (make-hydra_core_wrapped_term "hydra.relational.ColumnName" ((cl:lambda (x) (list :literal (list :string x))) ((cl:lambda (v) v) x))))))
+(cl:defvar hydra_encode_relational_column_name (cl:lambda (x) (list :wrap (make-hydra_core_wrapped_term "hydra.relational.ColumnName" ((cl:lambda (x2) (list :literal (list :string x2))) ((cl:lambda (v) v) x))))))
 
 (cl:defvar hydra_encode_relational_column_schema (cl:lambda (t_) (cl:lambda (x) (list :record (make-hydra_core_record "hydra.relational.ColumnSchema" (cl:list (make-hydra_core_field "name" (hydra_encode_relational_column_name ((cl:lambda (v) (hydra_relational_column_schema-name v)) x))) (make-hydra_core_field "domain" (t_ ((cl:lambda (v) (hydra_relational_column_schema-domain v)) x)))))))))
 
-(cl:defvar hydra_encode_relational_relation_name (cl:lambda (x) (list :wrap (make-hydra_core_wrapped_term "hydra.relational.RelationName" ((cl:lambda (x) (list :literal (list :string x))) ((cl:lambda (v) v) x))))))
+(cl:defvar hydra_encode_relational_relation_name (cl:lambda (x) (list :wrap (make-hydra_core_wrapped_term "hydra.relational.RelationName" ((cl:lambda (x2) (list :literal (list :string x2))) ((cl:lambda (v) v) x))))))
 
 (cl:defvar hydra_encode_relational_foreign_key (cl:lambda (x) (list :record (make-hydra_core_record "hydra.relational.ForeignKey" (cl:list (make-hydra_core_field "foreignRelation" (hydra_encode_relational_relation_name ((cl:lambda (v) (hydra_relational_foreign_key-foreign_relation v)) x))) (make-hydra_core_field "keys" ((cl:lambda (m) (list :map (((hydra_lib_maps_bimap hydra_encode_relational_column_name) hydra_encode_relational_column_name) m))) ((cl:lambda (v) (hydra_relational_foreign_key-keys v)) x))))))))
 

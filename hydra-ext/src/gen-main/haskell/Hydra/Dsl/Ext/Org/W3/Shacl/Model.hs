@@ -9,10 +9,6 @@ import qualified Hydra.Ext.Org.W3.Rdf.Syntax as Syntax
 import qualified Hydra.Ext.Org.W3.Shacl.Model as Model
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
 import qualified Data.Set as S
 
 closed :: Phantoms.TTerm Bool -> Phantoms.TTerm (Maybe (S.Set Syntax.Property)) -> Phantoms.TTerm Model.Closed

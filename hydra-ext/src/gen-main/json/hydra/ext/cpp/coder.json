@@ -1543,7 +1543,7 @@
                                       "term": {
                                         "application": {
                                           "argument": {"variable": "typ"},
-                                          "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                          "function": {"variable": "hydra.strip.deannotateType"}}},
                                       "type": [
                                         {
                                           "constraints": null,
@@ -2866,7 +2866,7 @@
                                                         "term": {
                                                           "application": {
                                                             "argument": {"variable": "typ"},
-                                                            "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                            "function": {"variable": "hydra.strip.deannotateType"}}},
                                                         "type": [
                                                           {
                                                             "constraints": null,
@@ -3723,7 +3723,7 @@
                                                           "argument": {
                                                             "application": {
                                                               "argument": {"variable": "rt"},
-                                                              "function": {"variable": "hydra.schemas.isEnumRowType"}}},
+                                                              "function": {"variable": "hydra.predicates.isEnumRowType"}}},
                                                           "function": {
                                                             "typeApplication": {
                                                               "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
@@ -5061,7 +5061,7 @@
                                                               "argument": {
                                                                 "application": {
                                                                   "argument": {"variable": "variantType"},
-                                                                  "function": {"variable": "hydra.schemas.isUnitType"}}},
+                                                                  "function": {"variable": "hydra.predicates.isUnitType"}}},
                                                               "function": {"function": {"primitive": "hydra.lib.logic.not"}}}},
                                                           "type": [
                                                             {
@@ -5099,7 +5099,7 @@
                                                                               "argument": {
                                                                                 "application": {
                                                                                   "argument": {"variable": "variantType"},
-                                                                                  "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                                                  "function": {"variable": "hydra.strip.deannotateType"}}},
                                                                               "function": {
                                                                                 "application": {
                                                                                   "argument": {"variable": "g"},
@@ -5210,7 +5210,7 @@
                                                                                   "argument": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "variantType"},
-                                                                                      "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                                                                      "function": {"variable": "hydra.strip.deannotateType"}}},
                                                                                   "function": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "g"},
@@ -6376,7 +6376,7 @@
                                                             "function": {
                                                               "application": {
                                                                 "argument": {"literal": {"boolean": true}},
-                                                                "function": {"variable": "hydra.rewriting.typeDependencyNames"}}}}},
+                                                                "function": {"variable": "hydra.dependencies.typeDependencyNames"}}}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "acc"},
@@ -6492,7 +6492,7 @@
                       "term": {
                         "application": {
                           "argument": {"variable": "typ"},
-                          "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                          "function": {"variable": "hydra.strip.deannotateType"}}},
                       "type": [
                         {
                           "constraints": null,
@@ -6581,7 +6581,7 @@
                       "term": {
                         "application": {
                           "argument": {"variable": "rawType"},
-                          "function": {"variable": "hydra.schemas.fullyStripType"}}},
+                          "function": {"variable": "hydra.resolution.fullyStripType"}}},
                       "type": [
                         {
                           "constraints": null,
@@ -6622,7 +6622,7 @@
                               "argument": {
                                 "application": {
                                   "argument": {"variable": "rawType"},
-                                  "function": {"variable": "hydra.schemas.isEnumType"}}},
+                                  "function": {"variable": "hydra.predicates.isEnumType"}}},
                               "function": {"function": {"primitive": "hydra.lib.logic.not"}}}},
                           "function": {
                             "application": {
@@ -6655,7 +6655,7 @@
                       "term": {
                         "application": {
                           "argument": {"variable": "typ"},
-                          "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                          "function": {"variable": "hydra.strip.deannotateType"}}},
                       "type": [
                         {
                           "constraints": null,
@@ -7081,7 +7081,7 @@
                                                     "argument": {
                                                       "application": {
                                                         "argument": {"variable": "defs"},
-                                                        "function": {"variable": "hydra.schemas.partitionDefinitions"}}},
+                                                        "function": {"variable": "hydra.environment.partitionDefinitions"}}},
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {
@@ -7210,8 +7210,11 @@
     "hydra.ext.cpp.serde",
     "hydra.formatting",
     "hydra.names",
-    "hydra.rewriting",
-    "hydra.schemas",
+    "hydra.dependencies",
+    "hydra.strip",
+    "hydra.environment",
+    "hydra.predicates",
+    "hydra.resolution",
     "hydra.lexical",
     "hydra.show.core",
     "hydra.annotations",
@@ -7229,6 +7232,7 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
+    "hydra.error.module",
     "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",

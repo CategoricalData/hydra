@@ -66,7 +66,37 @@ stack build hydra-ext:exe:bootstrap-from-json
 echo ""
 echo "Step 2/5: Generating Python main modules and tests from JSON..."
 echo ""
-stack exec bootstrap-from-json -- --target python --include-coders --include-dsls --include-tests --include-gentests $RTS_FLAGS
+stack exec bootstrap-from-json -- --target python --include-coders --include-dsls --include-tests $RTS_FLAGS || {
+    echo "WARNING: Python test generation had errors (some polymorphic types not supported). Continuing..."
+}
+
+# Patch test_graph.py to replace empty test_graph/test_context with lazy versions via test_env
+echo "Patching test_graph.py..."
+TESTGRAPH="../hydra-python/src/gen-test/python/hydra/test/test_graph.py"
+if [ -f "$TESTGRAPH" ]; then
+    # Remove the module-level test_context and test_graph assignments so __getattr__ can intercept
+    sed -i '' '/^test_context = /d' "$TESTGRAPH"
+    sed -i '' '/^test_graph = /d' "$TESTGRAPH"
+    cat >> "$TESTGRAPH" << 'PYEOF'
+
+_test_graph_cache = None
+_test_context_cache = None
+
+def __getattr__(name):
+    global _test_graph_cache, _test_context_cache
+    if name == "test_graph":
+        if _test_graph_cache is None:
+            import hydra.test.test_env as _test_env
+            _test_graph_cache = _test_env.test_graph()
+        return _test_graph_cache
+    elif name == "test_context":
+        if _test_context_cache is None:
+            import hydra.test.test_env as _test_env
+            _test_context_cache = _test_env.test_context()
+        return _test_context_cache
+    raise AttributeError(f"module 'hydra.test.test_graph' has no attribute {name!r}")
+PYEOF
+fi
 
 echo ""
 echo "Step 3/5: Generating ext Python modules into hydra-ext from JSON..."

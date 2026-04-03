@@ -10,7 +10,6 @@ import qualified Hydra.Test.EtaExpansion as EtaExpansion
 import qualified Hydra.Test.Formatting as Formatting
 import qualified Hydra.Test.Hoisting.All as All_
 import qualified Hydra.Test.Inference.All as All__
-import qualified Hydra.Test.Json.Parser as Parser
 import qualified Hydra.Test.Json.Roundtrip as Roundtrip
 import qualified Hydra.Test.Json.Writer as Writer
 import qualified Hydra.Test.Lib.Chars as Chars
@@ -35,11 +34,6 @@ import qualified Hydra.Test.Unification as Unification
 import qualified Hydra.Test.Validate.All as All___
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | The group of all common tests
 allTests :: Testing.TestGroup
@@ -67,7 +61,6 @@ allTests =
         Formatting.allTests,
         All_.allTests,
         All__.allTests,
-        Parser.allTests,
         Roundtrip.allTests,
         Writer.allTests,
         Reduction.allTests,

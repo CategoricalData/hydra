@@ -4,17 +4,23 @@
 
 module Hydra.Test.TestGraph where
 
+import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Lexical as Lexical
+import qualified Hydra.Test.TestEnv as TestEnv
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Module as Module
 import qualified Hydra.Test.TestTerms as TestTerms
 import qualified Hydra.Test.TestTypes as TestTypes
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
+
+testContext :: Context.Context
+testContext = TestEnv.testContext
+
+testGraph :: Graph.Graph
+testGraph = TestEnv.testGraph testTypes
 
 testNamespace :: Module.Namespace
 testNamespace = Module.Namespace "testGraph"

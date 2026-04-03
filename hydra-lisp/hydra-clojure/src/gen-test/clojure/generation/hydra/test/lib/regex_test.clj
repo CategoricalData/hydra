@@ -1,7 +1,7 @@
 ;; Note: this is an automatically generated file. Do not edit.
 ;; hydra.lib.regex primitives
 
-(ns generation.hydra.test.lib.regex-test
+(ns test-ns
   (:require [clojure.test :refer :all]))
 
 ;; matches
@@ -10,143 +10,143 @@
 
   (is (= true
 
-         ((hydra_lib_regex_matches "hello") "hello"))))
+         true)))
 
 (deftest test-regex-negmatches-negpattern-match
 
   (is (= true
 
-         ((hydra_lib_regex_matches "[a-z]+") "hello"))))
+         true)))
 
 (deftest test-regex-negmatches-negno-match
 
   (is (= false
 
-         ((hydra_lib_regex_matches "[0-9]+") "hello"))))
+         false)))
 
 (deftest test-regex-negmatches-negpartial-content-does-not-match
 
   (is (= false
 
-         ((hydra_lib_regex_matches "[a-z]+") "hello123"))))
+         false)))
 
 (deftest test-regex-negmatches-negdigit-pattern
 
   (is (= true
 
-         ((hydra_lib_regex_matches "[0-9]+") "12345"))))
+         true)))
 
 (deftest test-regex-negmatches-negmixed-pattern
 
   (is (= true
 
-         ((hydra_lib_regex_matches "[a-z]+[0-9]+") "hello123"))))
+         true)))
 
 (deftest test-regex-negmatches-negempty-pattern-matches-empty
 
   (is (= true
 
-         ((hydra_lib_regex_matches "") ""))))
+         true)))
 
 (deftest test-regex-negmatches-negempty-pattern-does-not-match-non-negempty
 
   (is (= false
 
-         ((hydra_lib_regex_matches "") "hello"))))
+         false)))
 
 (deftest test-regex-negmatches-negstar-matches-empty
 
   (is (= true
 
-         ((hydra_lib_regex_matches "a*") ""))))
+         true)))
 
 (deftest test-regex-negmatches-negalternation
 
   (is (= true
 
-         ((hydra_lib_regex_matches "cat|dog") "cat"))))
+         true)))
 
 (deftest test-regex-negmatches-negalternation-second
 
   (is (= true
 
-         ((hydra_lib_regex_matches "cat|dog") "dog"))))
+         true)))
 
 (deftest test-regex-negmatches-negalternation-no-match
 
   (is (= false
 
-         ((hydra_lib_regex_matches "cat|dog") "bird"))))
+         false)))
 
 (deftest test-regex-negmatches-negquantifier
 
   (is (= true
 
-         ((hydra_lib_regex_matches "ab?c") "ac"))))
+         true)))
 
 (deftest test-regex-negmatches-negquantifier-with-optional
 
   (is (= true
 
-         ((hydra_lib_regex_matches "ab?c") "abc"))))
+         true)))
 
 ;; find
 
 (deftest test-regex-negfind-negsimple-find
 
-  (is (= (list :just "123")
+  (is (= just("123")
 
-         ((hydra_lib_regex_find "[0-9]+") "abc123def"))))
+         just("123"))))
 
 (deftest test-regex-negfind-negno-match
 
-  (is (= (list :nothing)
+  (is (= nothing
 
-         ((hydra_lib_regex_find "[0-9]+") "abcdef"))))
+         nothing)))
 
 (deftest test-regex-negfind-negfind-first
 
-  (is (= (list :just "abc")
+  (is (= just("abc")
 
-         ((hydra_lib_regex_find "[a-z]+") "123abc456def"))))
+         just("abc"))))
 
 (deftest test-regex-negfind-negempty-input
 
-  (is (= (list :nothing)
+  (is (= nothing
 
-         ((hydra_lib_regex_find "[0-9]+") ""))))
+         nothing)))
 
 (deftest test-regex-negfind-negfull-match
 
-  (is (= (list :just "hello")
+  (is (= just("hello")
 
-         ((hydra_lib_regex_find ".*") "hello"))))
+         just("hello"))))
 
 ;; findAll
 
 (deftest test-regex-negfindall-negmultiple-matches
 
-  (is (= (list "1" "2" "3")
+  (is (= ["1", "2", "3"]
 
-         ((hydra_lib_regex_find_all "[0-9]+") "a1b2c3"))))
+         ["1", "2", "3"])))
 
 (deftest test-regex-negfindall-negno-matches
 
-  (is (= (list )
+  (is (= []
 
-         ((hydra_lib_regex_find_all "[0-9]+") "abc"))))
+         [])))
 
 (deftest test-regex-negfindall-negoverlapping-words
 
-  (is (= (list "abc" "def" "ghi")
+  (is (= ["abc", "def", "ghi"]
 
-         ((hydra_lib_regex_find_all "[a-z]+") "abc def ghi"))))
+         ["abc", "def", "ghi"])))
 
 (deftest test-regex-negfindall-negsingle-match
 
-  (is (= (list "hello")
+  (is (= ["hello"]
 
-         ((hydra_lib_regex_find_all "hello") "say hello world"))))
+         ["hello"])))
 
 ;; replace
 
@@ -154,25 +154,25 @@
 
   (is (= "abcXdef456"
 
-         (((hydra_lib_regex_replace "[0-9]+") "X") "abc123def456"))))
+         "abcXdef456")))
 
 (deftest test-regex-negreplace-negno-match
 
   (is (= "abcdef"
 
-         (((hydra_lib_regex_replace "[0-9]+") "X") "abcdef"))))
+         "abcdef")))
 
 (deftest test-regex-negreplace-negreplace-at-start
 
   (is (= "X123"
 
-         (((hydra_lib_regex_replace "^[a-z]+") "X") "abc123"))))
+         "X123")))
 
 (deftest test-regex-negreplace-negempty-replacement
 
   (is (= "abcdef"
 
-         (((hydra_lib_regex_replace "[0-9]+") "") "abc123def"))))
+         "abcdef")))
 
 ;; replaceAll
 
@@ -180,54 +180,54 @@
 
   (is (= "aXbXcX"
 
-         (((hydra_lib_regex_replace_all "[0-9]+") "X") "a1b2c3"))))
+         "aXbXcX")))
 
 (deftest test-regex-negreplaceall-negno-match
 
   (is (= "abc"
 
-         (((hydra_lib_regex_replace_all "[0-9]+") "X") "abc"))))
+         "abc")))
 
 (deftest test-regex-negreplaceall-negreplace-all-words
 
   (is (= "X 123 X"
 
-         (((hydra_lib_regex_replace_all "[a-z]+") "X") "abc 123 def"))))
+         "X 123 X")))
 
 (deftest test-regex-negreplaceall-negempty-replacement
 
   (is (= "abc"
 
-         (((hydra_lib_regex_replace_all "[0-9]+") "") "a1b2c3"))))
+         "abc")))
 
 ;; split
 
 (deftest test-regex-negsplit-negsplit-on-comma
 
-  (is (= (list "a" "b" "c")
+  (is (= ["a", "b", "c"]
 
-         ((hydra_lib_regex_split ",") "a,b,c"))))
+         ["a", "b", "c"])))
 
 (deftest test-regex-negsplit-negsplit-on-spaces
 
-  (is (= (list "a" "b" "c")
+  (is (= ["a", "b", "c"]
 
-         ((hydra_lib_regex_split " +") "a b  c"))))
+         ["a", "b", "c"])))
 
 (deftest test-regex-negsplit-negno-match
 
-  (is (= (list "abc")
+  (is (= ["abc"]
 
-         ((hydra_lib_regex_split ",") "abc"))))
+         ["abc"])))
 
 (deftest test-regex-negsplit-negsplit-on-digits
 
-  (is (= (list "a" "b" "c")
+  (is (= ["a", "b", "c"]
 
-         ((hydra_lib_regex_split "[0-9]+") "a1b2c"))))
+         ["a", "b", "c"])))
 
 (deftest test-regex-negsplit-negtrailing-delimiter
 
-  (is (= (list "a" "b" "")
+  (is (= ["a", "b", ""]
 
-         ((hydra_lib_regex_split ",") "a,b,"))))
+         ["a", "b", ""])))

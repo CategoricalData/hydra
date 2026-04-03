@@ -28,11 +28,15 @@ import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Typing                     as Typing
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
+import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
+import qualified Hydra.Sources.Kernel.Terms.Variables      as Variables
+import qualified Hydra.Sources.Kernel.Terms.Scoping        as Scoping
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import qualified Hydra.Sources.CoderUtils                  as CoderUtils
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Resolution    as Resolution
+import qualified Hydra.Sources.Kernel.Terms.Analysis      as Analysis
+import qualified Hydra.Sources.Kernel.Terms.Environment   as Environment
 import qualified Hydra.Sources.CoderUtils                   as CoderUtils
 import qualified Hydra.Sources.Kernel.Terms.Inference      as Inference
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
@@ -57,7 +61,7 @@ import qualified Hydra.Ext.Sources.Scala.Utils as ScalaUtilsSource
 import qualified Hydra.Ext.Sources.Scala.Serde as ScalaSerdeSource
 
 
-def :: String -> TTerm a -> TBinding a
+def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
 -- | An empty list term, avoiding ambiguous type variable issues with 'emptyList'
@@ -70,64 +74,64 @@ ns = Namespace "hydra.ext.scala.coder"
 
 module_ :: Module
 module_ = Module ns elements
-    [ScalaUtilsSource.ns, ScalaSerdeSource.ns, Formatting.ns, Names.ns, Rewriting.ns, CoderUtils.ns, Schemas.ns, ShowCore.ns, Annotations.ns, Constants.ns,
+    [ScalaUtilsSource.ns, ScalaSerdeSource.ns, Formatting.ns, Names.ns, Scoping.ns, Strip.ns, Variables.ns, CoderUtils.ns, Analysis.ns, Environment.ns, Resolution.ns, ShowCore.ns, Annotations.ns, Constants.ns,
       Inference.ns, Sorting.ns, Arity.ns, SerializationSource.ns, Reduction.ns]
     (ScalaSyntax.ns:moduleNamespace ScalaLanguageSource.module_:KernelTypes.kernelTypesNamespaces) $
     Just "Scala code generator: converts Hydra modules to Scala source code"
   where
     elements = [
-      toTermDefinition applyVar,
-      toTermDefinition constructModule,
-      toTermDefinition dropDomains,
-      toTermDefinition encodeCase,
-      toTermDefinition encodeComplexTermDef,
-      toTermDefinition encodeFunction,
-      toTermDefinition encodeLetBinding,
-      toTermDefinition encodeLiteral,
-      toTermDefinition encodeLocalDef,
-      toTermDefinition encodeTerm,
-      toTermDefinition encodeTermDefinition,
-      toTermDefinition encodeType,
-      toTermDefinition encodeTypeDefinition,
-      toTermDefinition encodeTypedParam,
-      toTermDefinition encodeUntypeApplicationTerm,
-      toTermDefinition extractBody,
-      toTermDefinition extractCodomain,
-      toTermDefinition extractDomains,
-      toTermDefinition extractLetBindings,
-      toTermDefinition extractParams,
-      toTermDefinition fieldToEnumCase,
-      toTermDefinition fieldToParam,
-      toTermDefinition findDomain,
-      toTermDefinition findImports,
-      toTermDefinition findSdom,
-      toTermDefinition moduleToScala,
-      toTermDefinition stripWrapEliminations,
-      toTermDefinition toElImport,
-      toTermDefinition toPrimImport,
-      toTermDefinition typeParamToTypeVar]
+      toDefinition applyVar,
+      toDefinition constructModule,
+      toDefinition dropDomains,
+      toDefinition encodeCase,
+      toDefinition encodeComplexTermDef,
+      toDefinition encodeFunction,
+      toDefinition encodeLetBinding,
+      toDefinition encodeLiteral,
+      toDefinition encodeLocalDef,
+      toDefinition encodeTerm,
+      toDefinition encodeTermDefinition,
+      toDefinition encodeType,
+      toDefinition encodeTypeDefinition,
+      toDefinition encodeTypedParam,
+      toDefinition encodeUntypeApplicationTerm,
+      toDefinition extractBody,
+      toDefinition extractCodomain,
+      toDefinition extractDomains,
+      toDefinition extractLetBindings,
+      toDefinition extractParams,
+      toDefinition fieldToEnumCase,
+      toDefinition fieldToParam,
+      toDefinition findDomain,
+      toDefinition findImports,
+      toDefinition findSdom,
+      toDefinition moduleToScala,
+      toDefinition stripWrapEliminations,
+      toDefinition toElImport,
+      toDefinition toPrimImport,
+      toDefinition typeParamToTypeVar]
 
 
-applyVar :: TBinding (Term -> Name -> Term)
+applyVar :: TTermDefinition (Term -> Name -> Term)
 applyVar = def "applyVar" $
   doc "Apply a variable to a term, performing substitution for lambdas" $
   lambda "fterm" $ lambda "avar" $ lets [
     "v">: Core.unName (var "avar")] $
-    cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "fterm") (Just $ Core.termApplication (record _Application [_Application_function>>: var "fterm", _Application_argument>>: Core.termVariable (var "avar")])) [
+    cases _Term (Strip.deannotateAndDetypeTerm @@ var "fterm") (Just $ Core.termApplication (record _Application [_Application_function>>: var "fterm", _Application_argument>>: Core.termVariable (var "avar")])) [
       _Term_function>>: ("f" ~> cases _Function (var "f")
         (Just $ Core.termApplication (record _Application [_Application_function>>: var "fterm", _Application_argument>>: Core.termVariable (var "avar")])) [
           _Function_lambda>>: ("lam" ~> lets [
             "lamParam">: project _Lambda _Lambda_parameter @@ var "lam",
             "lamBody">: project _Lambda _Lambda_body @@ var "lam"] $
-            Logic.ifElse (Rewriting.isFreeVariableInTerm @@ var "lamParam" @@ var "lamBody")
+            Logic.ifElse (Variables.isFreeVariableInTerm @@ var "lamParam" @@ var "lamBody")
               (var "lamBody")
-              (Rewriting.substituteVariable @@ var "lamParam" @@ var "avar" @@ var "lamBody"))])]
+              (Variables.substituteVariable @@ var "lamParam" @@ var "avar" @@ var "lamBody"))])]
 
-constructModule :: TBinding (Context -> Graph -> Module -> [Definition] -> Either (InContext Error) Scala.Pkg)
+constructModule :: TTermDefinition (Context -> Graph -> Module -> [Definition] -> Either (InContext Error) Scala.Pkg)
 constructModule = def "constructModule" $
   doc "Construct a Scala package from a Hydra module and its definitions" $
   lambda "cx" $ lambda "g" $ lambda "mod" $ lambda "defs" $ lets [
-    "partitioned">: Schemas.partitionDefinitions @@ var "defs",
+    "partitioned">: Environment.partitionDefinitions @@ var "defs",
     "typeDefs">: Pairs.first (var "partitioned"),
     "termDefs">: Pairs.second (var "partitioned"),
     "nsName">: Module.unNamespace (Module.moduleNamespace (var "mod")),
@@ -154,18 +158,18 @@ constructModule = def "constructModule" $
 --   dropDomains 0 (A -> B -> C) = A -> B -> C
 --   dropDomains 1 (A -> B -> C) = B -> C
 --   dropDomains 2 (A -> B -> C) = C
-dropDomains :: TBinding (Int -> Type -> Type)
+dropDomains :: TTermDefinition (Int -> Type -> Type)
 dropDomains = def "dropDomains" $
   doc "Drop N domain types from a function type, returning the remaining type" $
   lambda "n" $ lambda "t" $
     Logic.ifElse (Equality.lte (var "n") (int32 0))
       (var "t")
-      (cases _Type (Rewriting.deannotateType @@ var "t")
+      (cases _Type (Strip.deannotateType @@ var "t")
         (Just $ var "t") [
         _Type_function>>: ("ft" ~> dropDomains @@ (Math.sub (var "n") (int32 1)) @@ (Core.functionTypeCodomain $ var "ft")),
         _Type_forall>>: ("fa" ~> dropDomains @@ var "n" @@ (Core.forallTypeBody $ var "fa"))])
 
-encodeCase :: TBinding (Context -> Graph -> M.Map Name Type -> Maybe Name -> Field -> Either (InContext Error) Scala.Case)
+encodeCase :: TTermDefinition (Context -> Graph -> M.Map Name Type -> Maybe Name -> Field -> Either (InContext Error) Scala.Case)
 encodeCase = def "encodeCase" $
   doc "Encode a case branch" $
   lambda "cx" $ lambda "g" $ lambda "ftypes" $ lambda "sn" $ lambda "f" $ lets [
@@ -174,7 +178,7 @@ encodeCase = def "encodeCase" $
     -- Determine if the field has unit type: check ftypes if available, otherwise check if term is a lambda
     "isUnit">: Maybes.maybe
       -- If ftypes doesn't have this field, check the term structure
-      (cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "fterm") (Just false) [
+      (cases _Term (Strip.deannotateAndDetypeTerm @@ var "fterm") (Just false) [
         _Term_function>>: ("fn" ~> cases _Function (var "fn") (Just false) [
           -- Check lambda: unit if domain=Unit, or if lambda body doesn't use the parameter
           _Function_lambda>>: ("lam" ~> lets [
@@ -182,11 +186,11 @@ encodeCase = def "encodeCase" $
             "lamBody">: Core.lambdaBody $ var "lam",
             "domIsUnit">: Maybes.maybe false ("dom" ~> Equality.equal (var "dom") (Core.typeUnit)) (Core.lambdaDomain $ var "lam"),
             -- isFreeVariableInTerm returns True when the variable is NOT present
-            "bodyIgnoresParam">: Rewriting.isFreeVariableInTerm @@ var "lamParam" @@ var "lamBody"] $
+            "bodyIgnoresParam">: Variables.isFreeVariableInTerm @@ var "lamParam" @@ var "lamBody"] $
             Logic.or (var "domIsUnit") (var "bodyIgnoresParam"))]),
         _Term_record>>: ("r" ~> Equality.equal (Lists.length (Core.recordFields (var "r"))) (int32 0)),
         _Term_unit>>: (constant true)])
-      ("dom" ~> cases _Type (Rewriting.deannotateType @@ var "dom")
+      ("dom" ~> cases _Type (Strip.deannotateType @@ var "dom")
         (Just false)
         [_Type_unit>>: constant true,
          _Type_record>>: ("rt" ~> Equality.equal (Lists.length (var "rt")) (int32 0))])
@@ -196,7 +200,7 @@ encodeCase = def "encodeCase" $
     -- (e.g., outer "sf" -> "v_ParseResult_success_sf", inner "sa" -> "v_ParseResult_success_sa").
     "shortTypeName">: Lists.last (Strings.splitOn (string ".") (Maybes.maybe (string "x") ("n" ~> Core.unName (var "n")) (var "sn"))),
     -- Sanitize lambda param name for use as suffix: replace apostrophes with underscores
-    "lamParamSuffix">: cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "fterm") (Just $ string "") [
+    "lamParamSuffix">: cases _Term (Strip.deannotateAndDetypeTerm @@ var "fterm") (Just $ string "") [
       _Term_function>>: ("fn" ~> cases _Function (var "fn") (Just $ string "") [
         _Function_lambda>>: ("lam" ~> lets [
           "rawName">: Core.unName (Core.lambdaParameter $ var "lam"),
@@ -204,7 +208,7 @@ encodeCase = def "encodeCase" $
           Strings.cat2 (string "_") (var "safeName"))])],
     "v">: Core.name (Strings.cat (list [string "v_", var "shortTypeName", string "_", Core.unName (var "fname"), var "lamParamSuffix"])),
     -- Check if variant is truly parameterless (domain is Unit) vs parameterized but unused
-    "domainIsUnit">: cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "fterm") (Just true) [
+    "domainIsUnit">: cases _Term (Strip.deannotateAndDetypeTerm @@ var "fterm") (Just true) [
       _Term_function>>: ("fn" ~> cases _Function (var "fn") (Just true) [
         _Function_lambda>>: ("lam" ~>
           Maybes.maybe true ("dom" ~> Equality.equal (var "dom") (Core.typeUnit)) (Core.lambdaDomain $ var "lam"))])],
@@ -225,7 +229,7 @@ encodeCase = def "encodeCase" $
           _Case_cond>>: nothing,
           _Case_body>>: var "body"]))
 
-encodeComplexTermDef :: TBinding (Context -> Graph -> String -> Term -> Type -> Either (InContext Error) Scala.Stat)
+encodeComplexTermDef :: TTermDefinition (Context -> Graph -> String -> Term -> Type -> Either (InContext Error) Scala.Stat)
 encodeComplexTermDef = def "encodeComplexTermDef" $
   doc "Encode a complex term definition with proper parameter types from the type signature" $
   lambda "cx" $ lambda "g" $ lambda "lname" $ lambda "term" $ lambda "typ" $ lets [
@@ -238,7 +242,7 @@ encodeComplexTermDef = def "encodeComplexTermDef" $
     "zippedParams">: Lists.zip (Lists.take (var "paramCount") (var "paramNames")) (Lists.take (var "paramCount") (var "doms")),
     "freeTypeVars">: Lists.filter
       ("v" ~> Logic.not (Lists.elem (int32 46) (Strings.toList (Core.unName (var "v")))))
-      (Sets.toList (Rewriting.freeVariablesInType @@ var "typ")),
+      (Sets.toList (Variables.freeVariablesInType @@ var "typ")),
     "tparams">: Lists.map (lambda "tv" $ ScalaUtilsSource.stparam @@ var "tv") (var "freeTypeVars"),
     "letBindings">: extractLetBindings @@ var "term",
     -- Extend graph with the def's type variables so inner lets can see them
@@ -264,7 +268,7 @@ encodeComplexTermDef = def "encodeComplexTermDef" $
                 lets [
                 "gForLets">: Logic.ifElse (Lists.null (var "letBindings"))
                   (var "gWithTypeVars")
-                  (Rewriting.extendGraphForLet @@ CoderUtils.bindingMetadata @@ var "gWithTypeVars"
+                  (Scoping.extendGraphForLet @@ CoderUtils.bindingMetadata @@ var "gWithTypeVars"
                     @@ Core.let_ (var "letBindings") (Core.termVariable (wrap _Name (string "dummy"))))] $
                 -- Encode let bindings, passing current type params as outer scope
                 Eithers.bind (Eithers.mapList (asTerm encodeLetBinding @@ var "cx" @@ var "gForLets" @@ (Sets.fromList (var "freeTypeVars"))) (var "letBindings"))
@@ -281,7 +285,7 @@ encodeComplexTermDef = def "encodeComplexTermDef" $
                       _Defn_Def_decltpe>>: just (var "scod"),
                       _Defn_Def_body>>: var "defBody"])))))))
 
-encodeFunction :: TBinding (Context -> Graph -> M.Map Name Term -> Function -> Maybe Term -> Either (InContext Error) Scala.Data)
+encodeFunction :: TTermDefinition (Context -> Graph -> M.Map Name Term -> Function -> Maybe Term -> Either (InContext Error) Scala.Data)
 encodeFunction = def "encodeFunction" $
   doc "Encode a Hydra function as a Scala expression" $
   lambda "cx" $ lambda "g" $ lambda "meta" $ lambda "fun" $ lambda "arg" $
@@ -297,7 +301,7 @@ encodeFunction = def "encodeFunction" $
         -- Check: any free unqualified type variable NOT in graphTypeVariables is suspect.
         "mdom">: Maybes.bind (var "rawMdom")
           ("dom" ~> lets [
-            "freeVars">: Rewriting.freeVariablesInType @@ var "dom",
+            "freeVars">: Variables.freeVariablesInType @@ var "dom",
             -- Filter to unqualified vars (no dots in name)
             "unqualifiedFreeVars">: Sets.fromList (Lists.filter
               ("n" ~> Logic.not (Lists.elem (int32 46) (Strings.toList (Core.unName (var "n")))))
@@ -383,7 +387,7 @@ encodeFunction = def "encodeFunction" $
             "ftypes">: Eithers.either_
               (constant Maps.empty)
               identity
-              (Schemas.fieldTypes @@ var "cx" @@ var "g" @@ var "dom")] $
+              (Resolution.fieldTypes @@ var "cx" @@ var "g" @@ var "dom")] $
                 Eithers.bind
                   (Eithers.mapList ("f" ~> asTerm encodeCase @@ var "cx" @@ var "g" @@ var "ftypes" @@ var "sn" @@ var "f") (var "cases"))
                   ("fieldCases" ~>
@@ -428,7 +432,7 @@ mkLazyVal vname mdecltpe rhs =
     _Defn_Val_decltpe>>: mdecltpe,
     _Defn_Val_rhs>>: rhs]))
 
-encodeLetBinding :: TBinding (Context -> Graph -> S.Set Name -> Binding -> Either (InContext Error) Scala.Stat)
+encodeLetBinding :: TTermDefinition (Context -> Graph -> S.Set Name -> Binding -> Either (InContext Error) Scala.Stat)
 encodeLetBinding = def "encodeLetBinding" $
   doc "Encode a let binding as a val or def declaration. outerTypeVars are type params from the enclosing scope." $
   lambda "cx" $ lambda "g" $ lambda "outerTypeVars" $ lambda "b" $ lets [
@@ -440,10 +444,10 @@ encodeLetBinding = def "encodeLetBinding" $
       ("ts" ~> just (var "ts")),
     -- Check if the binding has a function type
     "isFn">: Maybes.maybe false
-      ("ts" ~> cases _Type (Rewriting.deannotateType @@ (Core.typeSchemeType $ var "ts"))
+      ("ts" ~> cases _Type (Strip.deannotateType @@ (Core.typeSchemeType $ var "ts"))
         (Just false)
         [_Type_function>>: constant true,
-         _Type_forall>>: ("fa" ~> cases _Type (Rewriting.deannotateType @@ Core.forallTypeBody (var "fa"))
+         _Type_forall>>: ("fa" ~> cases _Type (Strip.deannotateType @@ Core.forallTypeBody (var "fa"))
            (Just false) [_Type_function>>: constant true])])
       (var "mts")] $
     -- Route to encodeLocalDef when we have a type scheme AND either it's a function OR it has local type vars.
@@ -465,7 +469,7 @@ encodeLetBinding = def "encodeLetBinding" $
               ("styp" ~> right (mkLazyVal (var "bname") (just (var "styp")) (var "srhs"))))))
       (var "mts")
 
-encodeLiteral :: TBinding (Context -> Graph -> Literal -> Either (InContext Error) Scala.Lit)
+encodeLiteral :: TTermDefinition (Context -> Graph -> Literal -> Either (InContext Error) Scala.Lit)
 encodeLiteral = def "encodeLiteral" $
   doc "Encode a literal value as a Scala literal" $
   lambda "cx" $ lambda "g" $ lambda "av" $
@@ -488,7 +492,7 @@ encodeLiteral = def "encodeLiteral" $
         _IntegerValue_uint64>>: ("i" ~> right (inject _Lit _Lit_long (Literals.bigintToInt64 (Literals.uint64ToBigint (var "i")))))]),
       _Literal_string>>: ("s" ~> right (inject _Lit _Lit_string (var "s")))])
 
-encodeLocalDef :: TBinding (Context -> Graph -> S.Set Name -> String -> Term -> Type -> Either (InContext Error) Scala.Stat)
+encodeLocalDef :: TTermDefinition (Context -> Graph -> S.Set Name -> String -> Term -> Type -> Either (InContext Error) Scala.Stat)
 encodeLocalDef = def "encodeLocalDef" $
   doc "Encode a local def. outerTypeVars are type params already in scope (don't redeclare them)." $
   lambda "cx" $ lambda "g" $ lambda "outerTypeVars" $ lambda "lname" $ lambda "term" $ lambda "typ" $ lets [
@@ -497,7 +501,7 @@ encodeLocalDef = def "encodeLocalDef" $
       ("v" ~> Logic.and
         (Logic.not (Lists.elem (int32 46) (Strings.toList (Core.unName (var "v")))))
         (Logic.not (Sets.member (var "v") (var "outerTypeVars"))))
-      (Sets.toList (Rewriting.freeVariablesInType @@ var "typ")),
+      (Sets.toList (Variables.freeVariablesInType @@ var "typ")),
     "doms">: extractDomains @@ var "typ",
     "paramNames">: extractParams @@ var "term",
     "paramCount">: Math.min (Lists.length (var "paramNames")) (Lists.length (var "doms")),
@@ -528,7 +532,7 @@ encodeLocalDef = def "encodeLocalDef" $
                 lets [
                 "gForLets">: Logic.ifElse (Lists.null (var "letBindings"))
                   (var "gWithTypeVars")
-                  (Rewriting.extendGraphForLet @@ CoderUtils.bindingMetadata @@ var "gWithTypeVars"
+                  (Scoping.extendGraphForLet @@ CoderUtils.bindingMetadata @@ var "gWithTypeVars"
                     @@ Core.let_ (var "letBindings") (Core.termVariable (wrap _Name (string "dummy"))))] $
                 Eithers.bind (Eithers.mapList (asTerm encodeLetBinding @@ var "cx" @@ var "gForLets" @@ var "allTypeVars") (var "letBindings"))
                   ("sbindings" ~> lets [
@@ -544,16 +548,16 @@ encodeLocalDef = def "encodeLocalDef" $
                       _Defn_Def_decltpe>>: just (var "scod"),
                       _Defn_Def_body>>: var "defBody"])))))))
 
-encodeTerm :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Scala.Data)
+encodeTerm :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Scala.Data)
 encodeTerm = def "encodeTerm" $
   doc "Encode a Hydra term as a Scala expression" $
   lambda "cx" $ lambda "g" $ lambda "term0" $ lets [
     "term">: stripWrapEliminations @@ var "term0"] $
-    (cases _Term (Rewriting.deannotateTerm @@ var "term") (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "unexpected term")) (var "cx"))) [
+    (cases _Term (Strip.deannotateTerm @@ var "term") (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "unexpected term")) (var "cx"))) [
       _Term_typeApplication>>: ("ta" ~> lets [
         -- Collect all nested type applications into a list of type args
         "collectTypeArgs">: ("t" ~> "acc" ~>
-          cases _Term (Rewriting.deannotateTerm @@ var "t")
+          cases _Term (Strip.deannotateTerm @@ var "t")
             (Just $ pair (var "acc") (var "t"))
             [_Term_typeApplication>>: ("ta2" ~>
               var "collectTypeArgs"
@@ -566,7 +570,7 @@ encodeTerm = def "encodeTerm" $
         "innerTerm">: Pairs.second (var "collected"),
         -- Collect type lambda parameters from the inner term to build a substitution map
         "collectTypeLambdas">: ("t" ~> "acc" ~>
-          cases _Term (Rewriting.deannotateTerm @@ var "t")
+          cases _Term (Strip.deannotateTerm @@ var "t")
             (Just $ pair (var "acc") (var "t"))
             [_Term_typeLambda>>: ("tl" ~>
               var "collectTypeLambdas"
@@ -577,7 +581,7 @@ encodeTerm = def "encodeTerm" $
         "bodyAfterTypeLambdas">: Pairs.second (var "tlCollected"),
         "substitutedBody">: var "bodyAfterTypeLambdas"] $
         -- Check if the inner term is a function (primitive or variable) — if so, add type args
-        cases _Term (Rewriting.deannotateTerm @@ var "substitutedBody")
+        cases _Term (Strip.deannotateTerm @@ var "substitutedBody")
           -- Not a function: encode the substituted body
           (Just $ asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody")
           [_Term_function>>: ("f" ~> cases _Function (var "f")
@@ -611,11 +615,11 @@ encodeTerm = def "encodeTerm" $
               -- For eliminations (record/union projections): encode the substituted body
               asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody")])]),
       _Term_typeLambda>>: ("tl" ~>
-        asTerm encodeTerm @@ var "cx" @@ (Rewriting.extendGraphForTypeLambda @@ var "g" @@ var "tl") @@ (Core.typeLambdaBody $ var "tl")),
+        asTerm encodeTerm @@ var "cx" @@ (Scoping.extendGraphForTypeLambda @@ var "g" @@ var "tl") @@ (Core.typeLambdaBody $ var "tl")),
       _Term_application>>: ("app" ~> lets [
         "fun">: project _Application _Application_function @@ var "app",
         "arg">: project _Application _Application_argument @@ var "app"] $
-        cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "fun")
+        cases _Term (Strip.deannotateAndDetypeTerm @@ var "fun")
           (Just $ Eithers.bind
             (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "fun")
             ("sfun" ~>
@@ -637,7 +641,7 @@ encodeTerm = def "encodeTerm" $
                 "lamBody">: Core.lambdaBody $ var "lam"] $
                 -- Check if the body is a union elimination applied to the lambda param
                 -- i.e. Application(Function(Elimination(Union(cs))), Variable(v))
-                cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "lamBody")
+                cases _Term (Strip.deannotateAndDetypeTerm @@ var "lamBody")
                   -- Default: just encode as function application
                   (Just $ Eithers.bind
                     (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "fun")
@@ -649,7 +653,7 @@ encodeTerm = def "encodeTerm" $
                   -- Application(Elimination(Union(cs)), lamParam) → encode as arg match { cs }
                   _Term_application>>: ("innerApp" ~> lets [
                     "innerFun">: Core.applicationFunction $ var "innerApp"] $
-                    cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "innerFun")
+                    cases _Term (Strip.deannotateAndDetypeTerm @@ var "innerFun")
                       (Just $ Eithers.bind
                         (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "fun")
                         ("sfun" ~>
@@ -761,15 +765,15 @@ encodeTerm = def "encodeTerm" $
         "unionFtypes">: Eithers.either_
           (constant Maps.empty)
           identity
-          (Schemas.fieldTypes @@ var "cx" @@ var "g" @@ Core.typeVariable (var "sn"))] $
+          (Resolution.fieldTypes @@ var "cx" @@ var "g" @@ Core.typeVariable (var "sn"))] $
         -- Check if the field is unit-typed using ftypes, then term structure
         Logic.ifElse (Maybes.maybe
           -- No ftypes: check term structure
-          (cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "ft") (Just false) [
+          (cases _Term (Strip.deannotateAndDetypeTerm @@ var "ft") (Just false) [
             _Term_unit>>: constant true,
             _Term_record>>: ("rec" ~> Equality.equal (Lists.length (Core.recordFields (var "rec"))) (int32 0))])
           -- Has ftypes: check if field type is unit or empty record
-          ("dom" ~> cases _Type (Rewriting.deannotateType @@ var "dom") (Just false) [
+          ("dom" ~> cases _Type (Strip.deannotateType @@ var "dom") (Just false) [
             _Type_unit>>: constant true,
             _Type_record>>: ("rt" ~> Equality.equal (Lists.length (var "rt")) (int32 0))])
           (Maps.lookup (var "fn") (var "unionFtypes")))
@@ -821,7 +825,7 @@ encodeTerm = def "encodeTerm" $
         "bindings">: Core.letBindings $ var "lt",
         "body">: Core.letBody $ var "lt",
         -- Extend the graph with the let bindings so type lookups work for recursive refs
-        "gLet">: Rewriting.extendGraphForLet @@ CoderUtils.bindingMetadata @@ var "g" @@ var "lt"] $
+        "gLet">: Scoping.extendGraphForLet @@ CoderUtils.bindingMetadata @@ var "g" @@ var "lt"] $
         Eithers.bind
           (Eithers.mapList (asTerm encodeLetBinding @@ var "cx" @@ var "gLet" @@ (Graph.graphTypeVariables $ var "gLet"))
             (var "bindings"))
@@ -832,7 +836,7 @@ encodeTerm = def "encodeTerm" $
                 right (inject _Data _Data_block (record _Data_Block [
                   _Data_Block_stats>>: Lists.concat2 (var "sbindings") (list [inject _Stat _Stat_term (var "sbody")])])))))])
 
-encodeTermDefinition :: TBinding (Context -> Graph -> TermDefinition -> Either (InContext Error) Scala.Stat)
+encodeTermDefinition :: TTermDefinition (Context -> Graph -> TermDefinition -> Either (InContext Error) Scala.Stat)
 encodeTermDefinition = def "encodeTermDefinition" $
   doc "Encode a term definition as a Scala statement" $
   lambda "cx" $ lambda "g" $ lambda "td" $ lets [
@@ -844,10 +848,10 @@ encodeTermDefinition = def "encodeTermDefinition" $
       (unaryFunction Core.typeSchemeType)
       (project _TermDefinition _TermDefinition_type @@ var "td"),
     -- Check if the type is a function type (needs def) by looking at the stripped type
-    "isFunctionType">: cases _Type (Rewriting.deannotateType @@ var "typ'")
+    "isFunctionType">: cases _Type (Strip.deannotateType @@ var "typ'")
       (Just false)
       [_Type_function>>: constant true,
-       _Type_forall>>: ("fa" ~> cases _Type (Rewriting.deannotateType @@ Core.forallTypeBody (var "fa"))
+       _Type_forall>>: ("fa" ~> cases _Type (Strip.deannotateType @@ Core.forallTypeBody (var "fa"))
          (Just false) [_Type_function>>: constant true])]] $
     Logic.ifElse (var "isFunctionType")
       -- Complex binding: extract parameter types from the type signature
@@ -861,15 +865,15 @@ encodeTermDefinition = def "encodeTermDefinition" $
             ("rhs" ~>
               right (mkLazyVal (var "lname") (just (var "stype")) (var "rhs")))))
 
-encodeType :: TBinding (Context -> Graph -> Type -> Either (InContext Error) Scala.Type)
+encodeType :: TTermDefinition (Context -> Graph -> Type -> Either (InContext Error) Scala.Type)
 encodeType = def "encodeType" $
   doc "Encode a Hydra type as a Scala type" $
   lambda "cx" $ lambda "g" $ lambda "t" $
-    (cases _Type (Rewriting.deannotateType @@ var "t") (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "unsupported type")) (var "cx"))) [
+    (cases _Type (Strip.deannotateType @@ var "t") (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "unsupported type")) (var "cx"))) [
       _Type_application>>: ("at" ~> lets [
         -- Collect all curried type application args into a flat list
         "collectTypeArgs">: ("t" ~> "acc" ~>
-          cases _Type (Rewriting.deannotateType @@ var "t")
+          cases _Type (Strip.deannotateType @@ var "t")
             (Just $ pair (var "t") (var "acc"))
             [_Type_application>>: ("at2" ~> lets [
               "f2">: project _ApplicationType _ApplicationType_function @@ var "at2",
@@ -984,7 +988,7 @@ encodeType = def "encodeType" $
   where
     stref s = inject Scala._Type _Type_ref (inject _Type_Ref _Type_Ref_name (record _Type_Name [_Type_Name_value>>: s]))
 
-encodeTypeDefinition :: TBinding (Context -> Graph -> TypeDefinition -> Either (InContext Error) Scala.Stat)
+encodeTypeDefinition :: TTermDefinition (Context -> Graph -> TypeDefinition -> Either (InContext Error) Scala.Stat)
 encodeTypeDefinition = def "encodeTypeDefinition" $
   doc "Encode a type definition as a Scala statement" $
   lambda "cx" $ lambda "g" $ lambda "td" $ lets [
@@ -993,15 +997,15 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
     "lname">: Names.localNameOf @@ var "name",
     "tname">: record _Type_Name [_Type_Name_value>>: var "lname"],
     "dname">: record _Data_Name [_Data_Name_value>>: wrap _PredefString (var "lname")],
-    "freeVars">: Lists.filter ("v" ~> Logic.not (Lists.elem (int32 46) (Strings.toList (Core.unName (var "v"))))) (Sets.toList (Rewriting.freeVariablesInType @@ var "typ")),
+    "freeVars">: Lists.filter ("v" ~> Logic.not (Lists.elem (int32 46) (Strings.toList (Core.unName (var "v"))))) (Sets.toList (Variables.freeVariablesInType @@ var "typ")),
     "tparams">: Lists.map ("__v" ~> stparam (var "__v")) (var "freeVars")] $
-    (cases _Type (Rewriting.deannotateType @@ var "typ") (Just $ defaultTypeCase (var "lname") (var "tparams") (var "cx") (var "g") (var "typ")) [
+    (cases _Type (Strip.deannotateType @@ var "typ") (Just $ defaultTypeCase (var "lname") (var "tparams") (var "cx") (var "g") (var "typ")) [
       _Type_forall>>: ("ft" ~> lets [
         "forallBody">: project _ForallType _ForallType_body @@ var "ft",
         "forallParam">: project _ForallType _ForallType_parameter @@ var "ft",
         -- Collect all forall-bound type params by recursively stripping foralls
         "collectForallParams">: ("t" ~> "acc" ~>
-          cases _Type (Rewriting.deannotateType @@ var "t")
+          cases _Type (Strip.deannotateType @@ var "t")
             (Just $ pair (var "acc") (var "t"))
             [_Type_forall>>: ("ft2" ~>
               var "collectForallParams"
@@ -1012,7 +1016,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
         "innerBody">: Pairs.second (var "collected"),
         "allTparams">: Lists.map ("__v" ~> stparam (var "__v")) (var "allForallParams")] $
         -- Unwrap all foralls and check inner body
-        cases _Type (Rewriting.deannotateType @@ var "innerBody")
+        cases _Type (Strip.deannotateType @@ var "innerBody")
           (Just $ defaultTypeCase (var "lname") (var "allTparams") (var "cx") (var "g") (var "innerBody"))
           [ _Type_record>>: ("rt2" ~> recordTypeCase (var "tname") (var "allTparams") (var "cx") (var "g") (var "rt2"))
           , _Type_union>>: ("rt2" ~> unionTypeCase (var "tname") (var "lname") (var "allTparams") (var "cx") (var "g") (var "rt2"))
@@ -1106,7 +1110,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
         _Type_Param_vbounds>>: emptyList,
         _Type_Param_cbounds>>: emptyList]
 
-encodeTypedParam :: TBinding (Context -> Graph -> (Name, Type) -> Either (InContext Error) Scala.Data_Param)
+encodeTypedParam :: TTermDefinition (Context -> Graph -> (Name, Type) -> Either (InContext Error) Scala.Data_Param)
 encodeTypedParam = def "encodeTypedParam" $
   doc "Encode a parameter with its type annotation" $
   lambda "cx" $ lambda "g" $ lambda "pair" $ lets [
@@ -1119,7 +1123,7 @@ encodeTypedParam = def "encodeTypedParam" $
         _Data_Param_decltpe>>: just (var "sdom"),
         _Data_Param_default>>: nothing]))
 
-encodeUntypeApplicationTerm :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Scala.Data)
+encodeUntypeApplicationTerm :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Scala.Data)
 encodeUntypeApplicationTerm = def "encodeUntypeApplicationTerm" $
   doc "Encode an untyped application term by first inferring types" $
   lambda "cx" $ lambda "g" $ lambda "term" $
@@ -1129,11 +1133,11 @@ encodeUntypeApplicationTerm = def "encodeUntypeApplicationTerm" $
         asTerm encodeTerm @@ var "cx" @@ var "g" @@ Typing.inferenceResultTerm (var "result"))
 
 -- | Extract the body from a term by peeling off lambdas, type lambdas, lets, etc.
-extractBody :: TBinding (Term -> Term)
+extractBody :: TTermDefinition (Term -> Term)
 extractBody = def "extractBody" $
   doc "Extract the innermost body from a term" $
   lambda "t" $
-    cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "t")
+    cases _Term (Strip.deannotateAndDetypeTerm @@ var "t")
       (Just $ var "t") [
       _Term_function>>: ("f" ~> cases _Function (var "f")
         (Just $ var "t") [
@@ -1143,21 +1147,21 @@ extractBody = def "extractBody" $
       _Term_let>>: ("lt" ~> extractBody @@ (Core.letBody $ var "lt"))]
 
 -- | Extract the final codomain from a function type
-extractCodomain :: TBinding (Type -> Type)
+extractCodomain :: TTermDefinition (Type -> Type)
 extractCodomain = def "extractCodomain" $
   doc "Extract the final return type from a function type" $
   lambda "t" $
-    cases _Type (Rewriting.deannotateType @@ var "t")
+    cases _Type (Strip.deannotateType @@ var "t")
       (Just $ var "t") [
       _Type_function>>: ("ft" ~> extractCodomain @@ (Core.functionTypeCodomain $ var "ft")),
       _Type_forall>>: ("fa" ~> extractCodomain @@ (Core.forallTypeBody $ var "fa"))]
 
 -- | Extract parameter types from a function type by peeling off function arrows
-extractDomains :: TBinding (Type -> [Type])
+extractDomains :: TTermDefinition (Type -> [Type])
 extractDomains = def "extractDomains" $
   doc "Extract domain types from a function type" $
   lambda "t" $
-    cases _Type (Rewriting.deannotateType @@ var "t")
+    cases _Type (Strip.deannotateType @@ var "t")
       (Just $ list ([] :: [TTerm Type])) [
       _Type_function>>: ("ft" ~>
         Lists.cons
@@ -1166,11 +1170,11 @@ extractDomains = def "extractDomains" $
       _Type_forall>>: ("fa" ~> extractDomains @@ (Core.forallTypeBody $ var "fa"))]
 
 -- | Extract let bindings from a term by peeling off lambdas, type lambdas, etc.
-extractLetBindings :: TBinding (Term -> [Binding])
+extractLetBindings :: TTermDefinition (Term -> [Binding])
 extractLetBindings = def "extractLetBindings" $
   doc "Extract let bindings from a term" $
   lambda "t" $
-    cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "t")
+    cases _Term (Strip.deannotateAndDetypeTerm @@ var "t")
       (Just $ list ([] :: [TTerm Binding])) [
       _Term_function>>: ("f" ~> cases _Function (var "f")
         (Just $ list ([] :: [TTerm Binding])) [
@@ -1183,11 +1187,11 @@ extractLetBindings = def "extractLetBindings" $
           (extractLetBindings @@ (Core.letBody $ var "lt")))]
 
 -- | Extract parameter names from a term by peeling off lambdas
-extractParams :: TBinding (Term -> [Name])
+extractParams :: TTermDefinition (Term -> [Name])
 extractParams = def "extractParams" $
   doc "Extract parameter names from a term" $
   lambda "t" $
-    cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "t")
+    cases _Term (Strip.deannotateAndDetypeTerm @@ var "t")
       (Just $ list ([] :: [TTerm Name])) [
       _Term_function>>: ("f" ~> cases _Function (var "f")
         (Just $ list ([] :: [TTerm Name])) [
@@ -1199,14 +1203,14 @@ extractParams = def "extractParams" $
       _Term_typeApplication>>: ("ta" ~> extractParams @@ (Core.typeApplicationTermBody $ var "ta")),
       _Term_let>>: ("lt" ~> extractParams @@ (Core.letBody $ var "lt"))]
 
-fieldToEnumCase :: TBinding (Context -> Graph -> String -> [Scala.Type_Param] -> FieldType -> Either (InContext Error) Scala.Stat)
+fieldToEnumCase :: TTermDefinition (Context -> Graph -> String -> [Scala.Type_Param] -> FieldType -> Either (InContext Error) Scala.Stat)
 fieldToEnumCase = def "fieldToEnumCase" $
   doc "Convert a field type to a Scala enum case" $
   lambda "cx" $ lambda "g" $ lambda "parentName" $ lambda "tparams" $ lambda "ft" $ lets [
     "fname">: ScalaUtilsSource.scalaEscapeName @@ (Core.unName (project _FieldType _FieldType_name @@ var "ft")),
     "ftyp">: project _FieldType _FieldType_type @@ var "ft",
     "caseName">: record _Data_Name [_Data_Name_value>>: wrap _PredefString (var "fname")],
-    "isUnit">: cases _Type (Rewriting.deannotateType @@ var "ftyp") (Just false) [
+    "isUnit">: cases _Type (Strip.deannotateType @@ var "ftyp") (Just false) [
       _Type_unit>>: (constant true),
       _Type_record>>: ("rt" ~> Equality.equal (Lists.length (var "rt")) (int32 0))],
     "parentType">: Logic.ifElse (Lists.null (var "tparams"))
@@ -1240,7 +1244,7 @@ fieldToEnumCase = def "fieldToEnumCase" $
   where
     stref s = inject Scala._Type _Type_ref (inject _Type_Ref _Type_Ref_name (record _Type_Name [_Type_Name_value>>: s]))
 
-fieldToParam :: TBinding (Context -> Graph -> FieldType -> Either (InContext Error) Scala.Data_Param)
+fieldToParam :: TTermDefinition (Context -> Graph -> FieldType -> Either (InContext Error) Scala.Data_Param)
 fieldToParam = def "fieldToParam" $
   doc "Convert a field type to a Scala parameter" $
   lambda "cx" $ lambda "g" $ lambda "ft" $ lets [
@@ -1265,7 +1269,7 @@ getTypeE cx g ann = Eithers.bimap
   ("__a" ~> var "__a")
   (Annotations.getType @@ g @@ ann)
 
-findDomain :: TBinding (Context -> Graph -> M.Map Name Term -> Either (InContext Error) Type)
+findDomain :: TTermDefinition (Context -> Graph -> M.Map Name Term -> Either (InContext Error) Type)
 findDomain = def "findDomain" $
   doc "Find the domain type from annotations" $
   lambda "cx" $ lambda "g" $ lambda "meta" $
@@ -1273,25 +1277,25 @@ findDomain = def "findDomain" $
       (getTypeE (var "cx") (var "g") (var "meta"))
       ("r" ~> Maybes.maybe
         (left (Ctx.inContext (Error.errorOther $ Error.otherError (string "expected a typed term")) (var "cx")))
-        ("t" ~> cases _Type (Rewriting.deannotateType @@ var "t") (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "expected a function type")) (var "cx"))) [
+        ("t" ~> cases _Type (Strip.deannotateType @@ var "t") (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "expected a function type")) (var "cx"))) [
           _Type_function>>: ("ft" ~> right (project _FunctionType _FunctionType_domain @@ var "ft"))])
         (var "r"))
 
-findImports :: TBinding (Context -> Graph -> Module -> Either (InContext Error) [Scala.Stat])
+findImports :: TTermDefinition (Context -> Graph -> Module -> Either (InContext Error) [Scala.Stat])
 findImports = def "findImports" $
   doc "Find import statements for the module" $
   lambda "cx" $ lambda "g" $ lambda "mod" $
     Eithers.bind
-      (Schemas.moduleDependencyNamespaces @@ var "cx" @@ var "g" @@ false @@ false @@ true @@ false @@ var "mod")
+      (Analysis.moduleDependencyNamespaces @@ var "cx" @@ var "g" @@ false @@ false @@ true @@ false @@ var "mod")
       ("elImps" ~>
         Eithers.bind
-          (Schemas.moduleDependencyNamespaces @@ var "cx" @@ var "g" @@ false @@ true @@ false @@ false @@ var "mod")
+          (Analysis.moduleDependencyNamespaces @@ var "cx" @@ var "g" @@ false @@ true @@ false @@ false @@ var "mod")
           ("primImps" ~>
             right (Lists.concat (list [
               Lists.map (asTerm toElImport) (Sets.toList (var "elImps")),
               Lists.map (asTerm toPrimImport) (Sets.toList (var "primImps"))]))))
 
-findSdom :: TBinding (Context -> Graph -> M.Map Name Term -> Either (InContext Error) (Maybe Scala.Type))
+findSdom :: TTermDefinition (Context -> Graph -> M.Map Name Term -> Either (InContext Error) (Maybe Scala.Type))
 findSdom = def "findSdom" $
   doc "Find the Scala domain type for a function from annotations" $
   lambda "cx" $ lambda "g" $ lambda "meta" $
@@ -1300,7 +1304,7 @@ findSdom = def "findSdom" $
       ("mtyp" ~> Maybes.maybe
         -- No type annotation: return Nothing (shouldn't happen in well-typed terms)
         (right nothing)
-        ("t" ~> cases _Type (Rewriting.deannotateType @@ var "t")
+        ("t" ~> cases _Type (Strip.deannotateType @@ var "t")
           (Just $
             -- Not a function type but has type annotation: encode the full type
             Eithers.bind
@@ -1311,7 +1315,7 @@ findSdom = def "findSdom" $
             Eithers.bind
               (asTerm encodeType @@ var "cx" @@ var "g" @@ var "dom")
               ("sdom" ~> right (just (var "sdom")))),
-          _Type_forall>>: ("fa" ~> cases _Type (Rewriting.deannotateType @@ Core.forallTypeBody (var "fa"))
+          _Type_forall>>: ("fa" ~> cases _Type (Strip.deannotateType @@ Core.forallTypeBody (var "fa"))
             (Just $ right nothing) [
             _Type_function>>: ("ft2" ~> lets [
               "dom2">: project _FunctionType _FunctionType_domain @@ var "ft2"] $
@@ -1320,7 +1324,7 @@ findSdom = def "findSdom" $
                 ("sdom2" ~> right (just (var "sdom2"))))])])
         (var "mtyp"))
 
-moduleToScala :: TBinding (Module -> [Definition] -> Context -> Graph -> Either (InContext Error) (M.Map FilePath String))
+moduleToScala :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either (InContext Error) (M.Map FilePath String))
 moduleToScala = def "moduleToScala" $
   doc "Convert a Hydra module to Scala source code" $
   lambda "mod" $ lambda "defs" $ lambda "cx" $ lambda "g" $
@@ -1333,16 +1337,16 @@ moduleToScala = def "moduleToScala" $
           (var "s")))
 
 -- | Strip wrap eliminations from a term (newtypes are erased in Scala)
-stripWrapEliminations :: TBinding (Term -> Term)
+stripWrapEliminations :: TTermDefinition (Term -> Term)
 stripWrapEliminations = def "stripWrapEliminations" $
   doc "Strip wrap eliminations from terms (newtypes are erased in Scala)" $
   lambda "t" $
-    cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "t")
+    cases _Term (Strip.deannotateAndDetypeTerm @@ var "t")
       (Just $ var "t") [
       _Term_application>>: ("app" ~> lets [
         "appFun">: Core.applicationFunction $ var "app",
         "appArg">: Core.applicationArgument $ var "app"] $
-        cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "appFun")
+        cases _Term (Strip.deannotateAndDetypeTerm @@ var "appFun")
           (Just $ var "t") [
           -- unwrap(value) → value
           _Term_function>>: ("f" ~> cases _Function (var "f")
@@ -1354,7 +1358,7 @@ stripWrapEliminations = def "stripWrapEliminations" $
           _Term_application>>: ("innerApp" ~> lets [
             "innerFun">: Core.applicationFunction $ var "innerApp",
             "innerArg">: Core.applicationArgument $ var "innerApp"] $
-            cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "innerFun")
+            cases _Term (Strip.deannotateAndDetypeTerm @@ var "innerFun")
               (Just $ var "t") [
               _Term_function>>: ("innerF" ~> cases _Function (var "innerF")
                 (Just $ var "t") [
@@ -1366,7 +1370,7 @@ stripWrapEliminations = def "stripWrapEliminations" $
                       _Application_function>>: var "innerArg",
                       _Application_argument>>: var "appArg"]))])])])])]
 
-toElImport :: TBinding (Namespace -> Scala.Stat)
+toElImport :: TTermDefinition (Namespace -> Scala.Stat)
 toElImport = def "toElImport" $
   doc "Create an element import statement" $
   lambda "ns" $
@@ -1381,7 +1385,7 @@ toElImport = def "toElImport" $
                     Strings.intercalate (string ".") (Strings.splitOn (string ".") (Module.unNamespace (var "ns"))))]),
               _Importer_importees>>: list [inject _Importee _Importee_wildcard unit]]]]))
 
-toPrimImport :: TBinding (Namespace -> Scala.Stat)
+toPrimImport :: TTermDefinition (Namespace -> Scala.Stat)
 toPrimImport = def "toPrimImport" $
   doc "Create a primitive import statement" $
   lambda "ns" $
@@ -1396,7 +1400,7 @@ toPrimImport = def "toPrimImport" $
                     Strings.intercalate (string ".") (Strings.splitOn (string ".") (Module.unNamespace (var "ns"))))]),
               _Importer_importees>>: emptyList]]]))
 
-typeParamToTypeVar :: TBinding (Scala.Type_Param -> Scala.Type)
+typeParamToTypeVar :: TTermDefinition (Scala.Type_Param -> Scala.Type)
 typeParamToTypeVar = def "typeParamToTypeVar" $
   doc "Convert a type parameter to a type variable reference" $
   lambda "tp" $ lets [

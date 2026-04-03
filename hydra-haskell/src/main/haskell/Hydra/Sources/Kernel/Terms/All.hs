@@ -4,16 +4,18 @@ module Hydra.Sources.Kernel.Terms.All where
 import Hydra.Kernel
 
 import qualified Hydra.Sources.Kernel.Terms.Adapt           as Adapt
+import qualified Hydra.Sources.Kernel.Terms.Analysis        as Analysis
 import qualified Hydra.Sources.Kernel.Terms.Annotations     as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Arity           as Arity
 import qualified Hydra.Sources.Kernel.Terms.Checking        as Checking
-import qualified Hydra.Sources.Kernel.Terms.CodeGeneration  as CodeGeneration
+import qualified Hydra.Sources.Kernel.Terms.Generation      as Generation
 import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
 import qualified Hydra.Sources.Kernel.Terms.Decoding        as Decoding
+import qualified Hydra.Sources.Kernel.Terms.Dependencies    as Dependencies
 import qualified Hydra.Sources.Kernel.Terms.Dsls            as Dsls
 import qualified Hydra.Sources.Kernel.Terms.Encoding        as Encoding
+import qualified Hydra.Sources.Kernel.Terms.Environment     as Environment
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core    as ExtractCore
-import qualified Hydra.Sources.Kernel.Terms.Extract.Helpers as ExtractHelpers
 import qualified Hydra.Sources.Kernel.Terms.Extract.Util    as ExtractUtil
 import qualified Hydra.Sources.Kernel.Terms.Formatting      as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Hoisting        as Hoisting
@@ -25,24 +27,28 @@ import qualified Hydra.Sources.Kernel.Terms.Literals        as Literals
 import qualified Hydra.Sources.Kernel.Lib.Names             as LibNames
 import qualified Hydra.Sources.Kernel.Terms.Names           as Names
 import qualified Hydra.Sources.Kernel.Terms.Parsers         as Parsers
+import qualified Hydra.Sources.Kernel.Terms.Predicates     as Predicates
 import qualified Hydra.Sources.Kernel.Terms.Reduction       as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect         as Reflect
+import qualified Hydra.Sources.Kernel.Terms.Resolution     as Resolution
 import qualified Hydra.Sources.Kernel.Terms.Rewriting       as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas         as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Scoping         as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Serialization   as Serialization
+import qualified Hydra.Sources.Kernel.Terms.Strip           as Strip
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths      as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core       as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors      as ShowErrors
 import qualified Hydra.Sources.Kernel.Terms.Show.Error.Core as ShowErrorCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph      as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta       as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants       as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing     as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Show.Util       as ShowUtil
 import qualified Hydra.Sources.Kernel.Terms.Sorting         as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution    as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Templates       as Templates
 import qualified Hydra.Sources.Kernel.Terms.Unification     as Unification
-import qualified Hydra.Sources.Kernel.Terms.Validate.Core      as ValidateCore
+import qualified Hydra.Sources.Kernel.Terms.Validate.Core  as ValidateCore
+import qualified Hydra.Sources.Kernel.Terms.Variables       as Variables
 import qualified Hydra.Sources.Kernel.Terms.Validate.Packaging as ValidatePackaging
 
 -- Secondary, generated decoding modules
@@ -98,16 +104,18 @@ kernelTermsModules = kernelPrimaryTermsModules ++ kernelDecodingModules ++ kerne
 kernelPrimaryTermsModules :: [Module]
 kernelPrimaryTermsModules = [
   Adapt.module_,
+  Analysis.module_,
   Annotations.module_,
   Arity.module_,
   Checking.module_,
-  CodeGeneration.module_,
+  Generation.module_,
   Constants.module_,
   Decoding.module_,
+  Dependencies.module_,
 --  Dsls.module_,
   Encoding.module_,
+  Environment.module_,
   ExtractCore.module_,
-  ExtractHelpers.module_,
   ExtractUtil.module_,
   Formatting.module_,
   Hoisting.module_,
@@ -119,17 +127,20 @@ kernelPrimaryTermsModules = [
 
   Names.module_,
   Parsers.module_,
+  Predicates.module_,
   Reduction.module_,
   Reflect.module_,
+  Resolution.module_,
   Rewriting.module_,
-  Schemas.module_,
+  Scoping.module_,
   Serialization.module_,
+  Strip.module_,
   ShowPaths.module_,
   ShowCore.module_,
   ShowErrors.module_,
   ShowErrorCore.module_,
   ShowGraph.module_,
-  ShowMeta.module_,
+  ShowVariants.module_,
   ShowTyping.module_,
   ShowUtil.module_,
   Sorting.module_,
@@ -137,7 +148,8 @@ kernelPrimaryTermsModules = [
   Templates.module_,
   Unification.module_,
   ValidateCore.module_,
-  ValidatePackaging.module_]
+  ValidatePackaging.module_,
+  Variables.module_]
 
 kernelDecodingModules :: [Module]
 kernelDecodingModules = [
@@ -157,7 +169,7 @@ kernelDecodingModules = [
   DecodeQuery.module_,
   DecodeRelational.module_,
   DecodeTabular.module_,
-  DecodeTesting.module_,
+    DecodeTesting.module_,
   DecodeTopology.module_,
   DecodeTyping.module_,
   DecodeUtil.module_,
@@ -181,7 +193,7 @@ kernelEncodingModules = [
   EncodeQuery.module_,
   EncodeRelational.module_,
   EncodeTabular.module_,
-  EncodeTesting.module_,
+    EncodeTesting.module_,
   EncodeTopology.module_,
   EncodeTyping.module_,
   EncodeUtil.module_,

@@ -10,6 +10,7 @@ import qualified Hydra.Checking as Checking
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Environment as Environment
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
@@ -26,16 +27,13 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
 import qualified Hydra.Rewriting as Rewriting
-import qualified Hydra.Schemas as Schemas
+import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Sorting as Sorting
+import qualified Hydra.Strip as Strip
 import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
+import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Analyze a function term, collecting lambdas, type lambdas, lets, and type applications
 analyzeFunctionTerm :: Context.Context -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
@@ -65,19 +63,19 @@ analyzeFunctionTermWith_finish cx getTC fEnv tparams args bindings doms tapps bo
 
 analyzeFunctionTermWith_gather :: Context.Context -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> Bool -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
 analyzeFunctionTermWith_gather cx forBinding getTC setTC argMode gEnv tparams args bindings doms tapps t =
-    case (Rewriting.deannotateTerm t) of
+    case (Strip.deannotateTerm t) of
       Core.TermFunction v0 -> case v0 of
         Core.FunctionLambda v1 -> Logic.ifElse argMode (
           let v = Core.lambdaParameter v1
               dom = Maybes.maybe (Core.TypeVariable (Core.Name "_")) (\x_ -> x_) (Core.lambdaDomain v1)
               body = Core.lambdaBody v1
-              newEnv = setTC (Rewriting.extendGraphForLambda (getTC gEnv) v1) gEnv
+              newEnv = setTC (Scoping.extendGraphForLambda (getTC gEnv) v1) gEnv
           in (analyzeFunctionTermWith_gather cx forBinding getTC setTC argMode newEnv tparams (Lists.cons v args) bindings (Lists.cons dom doms) tapps body)) (analyzeFunctionTermWith_finish cx getTC gEnv tparams args bindings doms tapps t)
         _ -> analyzeFunctionTermWith_finish cx getTC gEnv tparams args bindings doms tapps t
       Core.TermLet v0 ->
         let newBindings = Core.letBindings v0
             body = Core.letBody v0
-            newEnv = setTC (Rewriting.extendGraphForLet forBinding (getTC gEnv) v0) gEnv
+            newEnv = setTC (Scoping.extendGraphForLet forBinding (getTC gEnv) v0) gEnv
         in (analyzeFunctionTermWith_gather cx forBinding getTC setTC False newEnv tparams args (Lists.concat2 bindings newBindings) doms tapps body)
       Core.TermTypeApplication v0 ->
         let taBody = Core.typeApplicationTermBody v0
@@ -86,7 +84,7 @@ analyzeFunctionTermWith_gather cx forBinding getTC setTC argMode gEnv tparams ar
       Core.TermTypeLambda v0 ->
         let tvar = Core.typeLambdaParameter v0
             tlBody = Core.typeLambdaBody v0
-            newEnv = setTC (Rewriting.extendGraphForTypeLambda (getTC gEnv) v0) gEnv
+            newEnv = setTC (Scoping.extendGraphForTypeLambda (getTC gEnv) v0) gEnv
         in (analyzeFunctionTermWith_gather cx forBinding getTC setTC argMode newEnv (Lists.cons tvar tparams) args bindings doms tapps tlBody)
       _ -> analyzeFunctionTermWith_finish cx getTC gEnv tparams args bindings doms tapps t
 
@@ -107,7 +105,7 @@ gatherApplications :: Core.Term -> ([Core.Term], Core.Term)
 gatherApplications term =
 
       let go =
-              \args -> \t -> case (Rewriting.deannotateTerm t) of
+              \args -> \t -> case (Strip.deannotateTerm t) of
                 Core.TermApplication v0 ->
                   let lhs = Core.applicationFunction v0
                       rhs = Core.applicationArgument v0
@@ -118,7 +116,7 @@ gatherApplications term =
 -- | Gather term arguments, stripping type-level constructs
 gatherArgs :: Core.Term -> [Core.Term] -> (Core.Term, [Core.Term])
 gatherArgs term args =
-    case (Rewriting.deannotateTerm term) of
+    case (Strip.deannotateTerm term) of
       Core.TermApplication v0 ->
         let lhs = Core.applicationFunction v0
             rhs = Core.applicationArgument v0
@@ -134,7 +132,7 @@ gatherArgs term args =
 -- | Gather term and type arguments from a term
 gatherArgsWithTypeApps :: Core.Term -> [Core.Term] -> [Core.Type] -> (Core.Term, ([Core.Term], [Core.Type]))
 gatherArgsWithTypeApps term args tyArgs =
-    case (Rewriting.deannotateTerm term) of
+    case (Strip.deannotateTerm term) of
       Core.TermApplication v0 ->
         let lhs = Core.applicationFunction v0
             rhs = Core.applicationArgument v0
@@ -183,7 +181,7 @@ isComplexVariable tc name =
 isSelfTailRecursive :: Core.Name -> Core.Term -> Bool
 isSelfTailRecursive funcName body =
 
-      let callsSelf = Logic.not (Rewriting.isFreeVariableInTerm funcName body)
+      let callsSelf = Logic.not (Variables.isFreeVariableInTerm funcName body)
       in (Logic.ifElse callsSelf (isTailRecursiveInTailPosition funcName body) False)
 
 -- | Check if a term can be encoded as a simple assignment
@@ -211,16 +209,16 @@ isSimpleAssignment term =
 isTailRecursiveInTailPosition :: Core.Name -> Core.Term -> Bool
 isTailRecursiveInTailPosition funcName term =
 
-      let stripped = Rewriting.deannotateAndDetypeTerm term
+      let stripped = Strip.deannotateAndDetypeTerm term
       in case stripped of
         Core.TermApplication _ ->
           let gathered = gatherApplications stripped
               gatherArgs = Pairs.first gathered
               gatherFun = Pairs.second gathered
-              strippedFun = Rewriting.deannotateAndDetypeTerm gatherFun
+              strippedFun = Strip.deannotateAndDetypeTerm gatherFun
           in case strippedFun of
             Core.TermVariable v1 -> Logic.ifElse (Equality.equal v1 funcName) (
-              let argsNoFunc = Lists.foldl (\ok -> \arg -> Logic.and ok (Rewriting.isFreeVariableInTerm funcName arg)) True gatherArgs
+              let argsNoFunc = Lists.foldl (\ok -> \arg -> Logic.and ok (Variables.isFreeVariableInTerm funcName arg)) True gatherArgs
                   argsNoLambda =
                           Lists.foldl (\ok -> \arg -> Logic.and ok (Logic.not (Rewriting.foldOverTerm Coders.TraversalOrderPre (\found -> \t -> Logic.or found (case t of
                             Core.TermFunction v2 -> case v2 of
@@ -229,7 +227,7 @@ isTailRecursiveInTailPosition funcName term =
                                 in True
                               _ -> False
                             _ -> False)) False arg))) True gatherArgs
-              in (Logic.and argsNoFunc argsNoLambda)) (Rewriting.isFreeVariableInTerm funcName term)
+              in (Logic.and argsNoFunc argsNoLambda)) (Variables.isFreeVariableInTerm funcName term)
             Core.TermFunction v1 -> case v1 of
               Core.FunctionElimination v2 -> case v2 of
                 Core.EliminationUnion v3 ->
@@ -238,24 +236,24 @@ isTailRecursiveInTailPosition funcName term =
                       branchesOk =
                               Lists.foldl (\ok -> \field -> Logic.and ok (isTailRecursiveInTailPosition funcName (Core.fieldTerm field))) True cases_
                       dfltOk = Maybes.maybe True (\d -> isTailRecursiveInTailPosition funcName d) dflt
-                      argsOk = Lists.foldl (\ok -> \arg -> Logic.and ok (Rewriting.isFreeVariableInTerm funcName arg)) True gatherArgs
+                      argsOk = Lists.foldl (\ok -> \arg -> Logic.and ok (Variables.isFreeVariableInTerm funcName arg)) True gatherArgs
                   in (Logic.and (Logic.and branchesOk dfltOk) argsOk)
-                _ -> Rewriting.isFreeVariableInTerm funcName term
-              _ -> Rewriting.isFreeVariableInTerm funcName term
-            _ -> Rewriting.isFreeVariableInTerm funcName term
+                _ -> Variables.isFreeVariableInTerm funcName term
+              _ -> Variables.isFreeVariableInTerm funcName term
+            _ -> Variables.isFreeVariableInTerm funcName term
         Core.TermFunction v0 -> case v0 of
           Core.FunctionLambda v1 -> isTailRecursiveInTailPosition funcName (Core.lambdaBody v1)
-          _ -> Rewriting.isFreeVariableInTerm funcName term
+          _ -> Variables.isFreeVariableInTerm funcName term
         Core.TermLet v0 ->
           let bindingsOk =
-                  Lists.foldl (\ok -> \b -> Logic.and ok (Rewriting.isFreeVariableInTerm funcName (Core.bindingTerm b))) True (Core.letBindings v0)
+                  Lists.foldl (\ok -> \b -> Logic.and ok (Variables.isFreeVariableInTerm funcName (Core.bindingTerm b))) True (Core.letBindings v0)
           in (Logic.and bindingsOk (isTailRecursiveInTailPosition funcName (Core.letBody v0)))
-        _ -> Rewriting.isFreeVariableInTerm funcName term
+        _ -> Variables.isFreeVariableInTerm funcName term
 
 -- | Check if a term is trivially cheap (no thunking needed)
 isTrivialTerm :: Core.Term -> Bool
 isTrivialTerm t =
-    case (Rewriting.deannotateTerm t) of
+    case (Strip.deannotateTerm t) of
       Core.TermLiteral _ -> True
       Core.TermVariable _ -> True
       Core.TermUnit -> True
@@ -285,7 +283,7 @@ nameToFilePath nsConv localConv ext name =
           ns = Module.qualifiedNameNamespace qualName
           local = Module.qualifiedNameLocal qualName
           nsToFilePath =
-                  \ns -> Strings.intercalate "/" (Lists.map (\part -> Formatting.convertCase Util.CaseConventionCamel nsConv part) (Strings.splitOn "." (Module.unNamespace ns)))
+                  \ns2 -> Strings.intercalate "/" (Lists.map (\part -> Formatting.convertCase Util.CaseConventionCamel nsConv part) (Strings.splitOn "." (Module.unNamespace ns2)))
           prefix = Maybes.maybe "" (\n -> Strings.cat2 (nsToFilePath n) "/") ns
           suffix = Formatting.convertCase Util.CaseConventionPascal localConv local
       in (Strings.cat [
@@ -308,7 +306,7 @@ normalizeComment s =
 reorderDefs :: [Module.Definition] -> [Module.Definition]
 reorderDefs defs =
 
-      let partitioned = Schemas.partitionDefinitions defs
+      let partitioned = Environment.partitionDefinitions defs
           typeDefsRaw = Pairs.first partitioned
           nameFirst = Lists.filter (\td -> Equality.equal (Module.typeDefinitionName td) (Core.Name "hydra.core.Name")) typeDefsRaw
           nameRest =
@@ -321,7 +319,7 @@ reorderDefs defs =
           sortedTermDefs =
                   Lists.concat (Sorting.topologicalSortNodes (\d -> case d of
                     Module.DefinitionTerm v0 -> Module.termDefinitionName v0) (\d -> case d of
-                    Module.DefinitionTerm v0 -> Sets.toList (Rewriting.freeVariablesInTerm (Module.termDefinitionTerm v0))
+                    Module.DefinitionTerm v0 -> Sets.toList (Variables.freeVariablesInTerm (Module.termDefinitionTerm v0))
                     _ -> []) termDefsWrapped)
       in (Lists.concat [
         typeDefs,

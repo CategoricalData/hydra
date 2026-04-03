@@ -12,11 +12,6 @@ import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Sets as Sets
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 checkingError :: Checking.CheckingError -> Core.Term
 checkingError x =
@@ -112,10 +107,10 @@ typeArityMismatchError x =
           Core.fieldTerm = (Core_.type_ (Checking.typeArityMismatchErrorType x))},
         Core.Field {
           Core.fieldName = (Core.Name "expectedArity"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))) (Checking.typeArityMismatchErrorExpectedArity x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x2))) (Checking.typeArityMismatchErrorExpectedArity x))},
         Core.Field {
           Core.fieldName = (Core.Name "actualArity"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))) (Checking.typeArityMismatchErrorActualArity x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x2))) (Checking.typeArityMismatchErrorActualArity x))},
         Core.Field {
           Core.fieldName = (Core.Name "typeArguments"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map Core_.type_ xs)) (Checking.typeArityMismatchErrorTypeArguments x))}]})
@@ -154,7 +149,7 @@ unequalTypesError x =
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map Core_.type_ xs)) (Checking.unequalTypesErrorTypes x))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Checking.unequalTypesErrorDescription x))}]})
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Checking.unequalTypesErrorDescription x))}]})
 
 unsupportedTermVariantError :: Checking.UnsupportedTermVariantError -> Core.Term
 unsupportedTermVariantError x =

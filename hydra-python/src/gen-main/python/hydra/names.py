@@ -5,19 +5,26 @@ r"""Functions for working with qualified names."""
 from __future__ import annotations
 from collections.abc import Callable
 from functools import lru_cache
-from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing
-from typing import cast
+from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
+from typing import TypeVar, cast
+import hydra.annotations
+import hydra.constants
 import hydra.core
 import hydra.formatting
 import hydra.lib.equality
 import hydra.lib.lists
+import hydra.lib.literals
 import hydra.lib.logic
 import hydra.lib.maps
+import hydra.lib.math
 import hydra.lib.maybes
+import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
 import hydra.module
 import hydra.util
+
+T0 = TypeVar("T0")
 
 def qualify_name(name: hydra.core.Name) -> hydra.module.QualifiedName:
     r"""Split a dot-separated name into a namespace and local name."""
@@ -36,6 +43,41 @@ def compact_name(namespaces: FrozenDict[hydra.module.Namespace, str], name: hydr
     mns = qual_name().namespace
     local = qual_name().local
     return hydra.lib.maybes.maybe((lambda : name.value), (lambda ns: hydra.lib.maybes.maybe((lambda : local), (lambda pre: hydra.lib.strings.cat((pre, ":", local))), hydra.lib.maps.lookup(ns, namespaces))), mns)
+
+def normal_type_variable(i: int) -> hydra.core.Name:
+    r"""Type variable naming convention follows Haskell: t0, t1, etc."""
+
+    return hydra.core.Name(hydra.lib.strings.cat2("t", hydra.lib.literals.show_int32(i)))
+
+def fresh_name(cx: hydra.context.Context) -> tuple[hydra.core.Name, hydra.context.Context]:
+    r"""Generate a fresh type variable name, threading Context."""
+
+    @lru_cache(1)
+    def count() -> int:
+        return hydra.annotations.get_count(hydra.constants.key_fresh_type_variable_count, cx)
+    return (normal_type_variable(count()), hydra.annotations.put_count(hydra.constants.key_fresh_type_variable_count, hydra.lib.math.add(count(), 1), cx))
+
+def fresh_names(n: int, cx: hydra.context.Context) -> tuple[frozenlist[hydra.core.Name], hydra.context.Context]:
+    r"""Generate multiple fresh type variable names, threading Context."""
+
+    def go(acc: tuple[frozenlist[hydra.core.Name], hydra.context.Context], _: T0) -> tuple[frozenlist[hydra.core.Name], hydra.context.Context]:
+        @lru_cache(1)
+        def names() -> frozenlist[hydra.core.Name]:
+            return hydra.lib.pairs.first(acc)
+        @lru_cache(1)
+        def cx0() -> hydra.context.Context:
+            return hydra.lib.pairs.second(acc)
+        @lru_cache(1)
+        def result() -> tuple[hydra.core.Name, hydra.context.Context]:
+            return fresh_name(cx0())
+        @lru_cache(1)
+        def name() -> hydra.core.Name:
+            return hydra.lib.pairs.first(result())
+        @lru_cache(1)
+        def cx1() -> hydra.context.Context:
+            return hydra.lib.pairs.second(result())
+        return (hydra.lib.lists.concat2(names(), hydra.lib.lists.pure(name())), cx1())
+    return hydra.lib.lists.foldl((lambda x1, x2: go(x1, x2)), ((), cx), hydra.lib.lists.replicate(n, None))
 
 def local_name_of(arg_: hydra.core.Name) -> str:
     r"""Extract the local part of a name."""

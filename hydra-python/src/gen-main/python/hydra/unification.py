@@ -20,6 +20,7 @@ import hydra.lib.maybes
 import hydra.lib.strings
 import hydra.rewriting
 import hydra.show.core
+import hydra.strip
 import hydra.substitution
 import hydra.typing
 
@@ -30,10 +31,10 @@ def join_types(cx: hydra.context.Context, left: hydra.core.Type, right: hydra.co
 
     @lru_cache(1)
     def sleft() -> hydra.core.Type:
-        return hydra.rewriting.deannotate_type(left)
+        return hydra.strip.deannotate_type(left)
     @lru_cache(1)
     def sright() -> hydra.core.Type:
-        return hydra.rewriting.deannotate_type(right)
+        return hydra.strip.deannotate_type(right)
     def join_one(l: hydra.core.Type, r: hydra.core.Type) -> hydra.typing.TypeConstraint:
         return hydra.typing.TypeConstraint(l, r, hydra.lib.strings.cat2("join types; ", comment))
     @lru_cache(1)
@@ -206,10 +207,10 @@ def unify_type_constraints(cx: hydra.context.Context, schema_types: FrozenDict[h
     def with_constraint(c: hydra.typing.TypeConstraint, rest: frozenlist[hydra.typing.TypeConstraint]):
         @lru_cache(1)
         def sleft() -> hydra.core.Type:
-            return hydra.rewriting.deannotate_type(c.left)
+            return hydra.strip.deannotate_type(c.left)
         @lru_cache(1)
         def sright() -> hydra.core.Type:
-            return hydra.rewriting.deannotate_type(c.right)
+            return hydra.strip.deannotate_type(c.right)
         comment = c.comment
         def bind(v: hydra.core.Name, t: hydra.core.Type) -> Either[hydra.context.InContext[hydra.errors.UnificationError], hydra.typing.TypeSubst]:
             @lru_cache(1)

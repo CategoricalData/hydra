@@ -9,11 +9,6 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maybes as Maybes
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 associativity :: Ast.Associativity -> Core.Term
 associativity x =
@@ -46,13 +41,13 @@ blockStyle x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "indent"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x -> Core.TermLiteral (Core.LiteralString x)) opt)) (Ast.blockStyleIndent x))},
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Ast.blockStyleIndent x))},
         Core.Field {
           Core.fieldName = (Core.Name "newlineBeforeContent"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralBoolean x)) (Ast.blockStyleNewlineBeforeContent x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralBoolean x2)) (Ast.blockStyleNewlineBeforeContent x))},
         Core.Field {
           Core.fieldName = (Core.Name "newlineAfterContent"),
-          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralBoolean x)) (Ast.blockStyleNewlineAfterContent x))}]})
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralBoolean x2)) (Ast.blockStyleNewlineAfterContent x))}]})
 
 bracketExpr :: Ast.BracketExpr -> Core.Term
 bracketExpr x =
@@ -185,7 +180,7 @@ precedence :: Ast.Precedence -> Core.Term
 precedence x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.ast.Precedence"),
-      Core.wrappedTermBody = ((\x -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))) (Ast.unPrecedence x))})
+      Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x2))) (Ast.unPrecedence x))})
 
 seqExpr :: Ast.SeqExpr -> Core.Term
 seqExpr x =
@@ -203,7 +198,7 @@ symbol :: Ast.Symbol -> Core.Term
 symbol x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.ast.Symbol"),
-      Core.wrappedTermBody = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Ast.unSymbol x))})
+      Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Ast.unSymbol x))})
 
 ws :: Ast.Ws -> Core.Term
 ws x =

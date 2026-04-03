@@ -1083,11 +1083,11 @@ by a second generation pass:
 | Phase | What it does |
 |-------|--------------|
 | 1 | Compile `mainModules` into executable Haskell (initial pass) |
-| 2–3 | Generate kernel tests and eval lib |
+| 2–3 | Generate universal test cases and eval lib |
 | 4 | Generate encoder/decoder source modules from `kernelTypesModules` |
 | 5 | Recompile `mainModules` into executable Haskell (picking up the new source modules) |
-| 6–7 | Generate generation tests; export and verify JSON kernel |
-| 8 | Run tests |
+| 6 | Export and verify JSON kernel |
+| 7 | Run tests |
 
 Phase 5 is necessary because the encoder/decoder source modules generated in phase 4 are
 part of `kernelTermsModules` and therefore `mainModules`. They need to be compiled into
@@ -1336,8 +1336,7 @@ Shell script wrappers live in `hydra-haskell/bin/`. Executables without shell wr
 | Script / Executable | Purpose |
 |---------------------|---------|
 | `bin/sync-haskell.sh` | **Main sync script.** Regenerate all Haskell artifacts in the correct order and optionally run tests. Supports `--quick`. |
-| `bin/update-generation-tests.sh` | Regenerate generation test files |
-| `bin/update-kernel-tests.sh` | Regenerate kernel test files |
+| `bin/update-kernel-tests.sh` | Regenerate test files (universal test cases) |
 | `bin/update-json-kernel.sh` | Export the kernel to JSON |
 | `bin/update-json-main.sh` | Export main (non-kernel) modules to JSON |
 | `bin/update-json-test.sh` | Export test modules to JSON |
@@ -1353,7 +1352,7 @@ Shell script wrappers live in `hydra-ext/bin/`. Executables without shell wrappe
 | Script / Executable | Purpose |
 |---------------------|---------|
 | `bin/sync-ext.sh` | **Ext sync script.** Regenerate ext Haskell modules and JSON exports. |
-| `bin/sync-haskell.sh` | **Haskell sync script (from JSON).** Regenerate Haskell kernel tests and generation tests from JSON. Supports `--quick`. |
+| `bin/sync-haskell.sh` | **Haskell sync script (from JSON).** Regenerate Haskell test files from JSON. Supports `--quick`. |
 | `bin/sync-java.sh` | **Main Java sync script.** Regenerate all Java artifacts, compile, and optionally run tests. Supports `--quick`. |
 | `bin/sync-python.sh` | **Main Python sync script.** Regenerate all Python artifacts and optionally run tests. Supports `--quick`. |
 | `update-haskell-ext-main` | Regenerate ext Haskell gen-main modules (executable only, called by `sync-ext.sh`) |

@@ -13,6 +13,7 @@ import qualified Data.Set                           as S
 import qualified Data.Maybe                         as Y
 
 -- Additional imports
+import qualified Hydra.Sources.Kernel.Types.Coders as Coders
 import qualified Hydra.Sources.Kernel.Types.Util as Util
 import qualified Hydra.Ext.Sources.Pg.Model         as PgModel
 
@@ -27,7 +28,7 @@ mappings :: String -> Type
 mappings = typeref ns
 
 compute :: String -> Type
-compute = typeref $ Util.ns
+compute = typeref $ Coders.ns
 
 core :: String -> Type
 core = typeref $ Core.ns
@@ -37,7 +38,7 @@ v3 = typeref $ PgModel.ns
 
 module_ :: Module
 module_ = Module ns (map toTypeDef elements)
-    [PgModel.ns, Core.ns, Util.ns] [Core.ns] $
+    [PgModel.ns, Coders.ns, Core.ns] [Core.ns] $
     Just "A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs"
   where
     elements = [

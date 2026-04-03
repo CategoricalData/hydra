@@ -7,11 +7,6 @@ module Hydra.Sources.Decode.Tabular where
 import qualified Hydra.Core as Core
 import qualified Hydra.Module as Module
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 module_ :: Module.Module
 module_ =
@@ -56,7 +51,7 @@ module_ =
                                   Core.Binding {
                                     Core.bindingName = (Core.Name "fieldMap"),
                                     Core.bindingTerm = (Core.TermApplication (Core.Application {
-                                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.toFieldMap")),
+                                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.toFieldMap")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "record"))})),
                                     Core.bindingType = Nothing}],
                                 Core.letBody = (Core.TermApplication (Core.Application {
@@ -66,7 +61,7 @@ module_ =
                                       Core.applicationFunction = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.requireField")),
+                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.requireField")),
                                             Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "name"))})),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.relational.columnName"))})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
@@ -81,7 +76,7 @@ module_ =
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                                             Core.applicationFunction = (Core.TermApplication (Core.Application {
                                               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.requireField")),
+                                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.requireField")),
                                                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "type"))})),
                                               Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.core.type"))})),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
@@ -162,9 +157,9 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeList")),
+                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeList")),
                                         Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeMaybe")),
+                                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeMaybe")),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
@@ -244,7 +239,7 @@ module_ =
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeList")),
+                                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeList")),
                                       Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                         Core.lambdaParameter = (Core.Name "cx"),
                                         Core.lambdaDomain = Nothing,
@@ -359,7 +354,7 @@ module_ =
                                     Core.Binding {
                                       Core.bindingName = (Core.Name "fieldMap"),
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
-                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.toFieldMap")),
+                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.toFieldMap")),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "record"))})),
                                       Core.bindingType = Nothing}],
                                   Core.letBody = (Core.TermApplication (Core.Application {
@@ -369,10 +364,10 @@ module_ =
                                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                                             Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.requireField")),
+                                              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.requireField")),
                                               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "header"))})),
                                             Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeMaybe")),
+                                              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeMaybe")),
                                               Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.tabular.headerRow"))}))})),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}))})),
@@ -386,10 +381,10 @@ module_ =
                                             Core.applicationFunction = (Core.TermApplication (Core.Application {
                                               Core.applicationFunction = (Core.TermApplication (Core.Application {
                                                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.requireField")),
+                                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.requireField")),
                                                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "data"))})),
                                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeList")),
+                                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeList")),
                                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.tabular.dataRow")),
                                                     Core.applicationArgument = (Core.TermVariable (Core.Name "v"))}))}))})),
@@ -472,7 +467,7 @@ module_ =
                                   Core.Binding {
                                     Core.bindingName = (Core.Name "fieldMap"),
                                     Core.bindingTerm = (Core.TermApplication (Core.Application {
-                                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.toFieldMap")),
+                                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.toFieldMap")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "record"))})),
                                     Core.bindingType = Nothing}],
                                 Core.letBody = (Core.TermApplication (Core.Application {
@@ -482,7 +477,7 @@ module_ =
                                       Core.applicationFunction = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.requireField")),
+                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.requireField")),
                                             Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "name"))})),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.relational.relationName"))})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
@@ -497,10 +492,10 @@ module_ =
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                                             Core.applicationFunction = (Core.TermApplication (Core.Application {
                                               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.requireField")),
+                                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.requireField")),
                                                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "columns"))})),
                                               Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeList")),
+                                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeList")),
                                                 Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.tabular.columnType"))}))})),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}))})),
@@ -533,7 +528,7 @@ module_ =
                   Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.tabular.TableType"))}))}))})),
             Core.typeSchemeConstraints = Nothing}))}))],
       Module.moduleTermDependencies = [
-        Module.Namespace "hydra.extract.helpers",
+        Module.Namespace "hydra.extract.core",
         (Module.Namespace "hydra.lexical"),
         (Module.Namespace "hydra.rewriting"),
         (Module.Namespace "hydra.decode.core"),

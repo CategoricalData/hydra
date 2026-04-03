@@ -467,9 +467,8 @@ charsIsAlphaNum = subgroup "isAlphaNum" [
 
 4. **Regenerate the test suite for all implementations** (this step is required!):
 ```bash
-# From hydra-haskell - regenerate kernel tests and generation tests
+# From hydra-haskell - regenerate test files (universal test cases)
 stack exec update-kernel-tests
-stack exec update-generation-tests
 
 # From hydra-ext - regenerate Java and Python (including tests)
 ./bin/sync-java.sh --quick
@@ -499,7 +498,7 @@ pytest -v 2>&1 | grep -i '<your_primitive_name>'
 If your test cases do not appear in the output of any implementation,
 the tests were not properly registered or regenerated. Go back and check:
 - The test group is listed in `allTests` in the Haskell test source
-- Kernel and generation tests were regenerated (`stack exec update-kernel-tests && stack exec update-generation-tests`)
+- Tests were regenerated (`stack exec update-kernel-tests`)
 - Java and Python test artifacts were regenerated via sync scripts
 
 **Test coverage guidelines:**
@@ -530,7 +529,7 @@ When adding a new primitive function:
 - [ ] **Common Test Suite** (required!)
   - [ ] Test group added to `Hydra.Sources.Test.Lib.<Library>`
   - [ ] Test group registered in `allTests`
-  - [ ] Kernel and generation tests regenerated (`stack exec update-kernel-tests && stack exec update-generation-tests`)
+  - [ ] Tests regenerated (`stack exec update-kernel-tests`)
 - [ ] **Tests pass** in all three languages
 - [ ] **Documentation** updated if needed
 

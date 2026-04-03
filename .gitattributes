@@ -1,0 +1,4 @@
+# Auto-resolve merge conflicts in generated files by keeping the local version.
+# After merging, run sync-all to ensure consistency.
+**/src/gen-main/** merge=ours
+**/src/gen-test/** merge=ours

@@ -7,11 +7,7 @@ module Hydra.Module where
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | A definition, which may be either a term or type definition
 data Definition =

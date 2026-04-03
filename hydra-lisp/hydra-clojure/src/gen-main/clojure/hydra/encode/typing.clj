@@ -12,4 +12,4 @@
 
 (def hydra_encode_typing_term_subst (fn [x] (list :wrap (->hydra_core_wrapped_term "hydra.typing.TermSubst" ((fn [m] (list :map (((hydra_lib_maps_bimap hydra_encode_core_name) hydra_encode_core_term) m))) ((fn [v] v) x))))))
 
-(def hydra_encode_typing_type_constraint (fn [x] (list :record (->hydra_core_record "hydra.typing.TypeConstraint" (list (->hydra_core_field "left" (hydra_encode_core_type ((fn [v] (:left v)) x))) (->hydra_core_field "right" (hydra_encode_core_type ((fn [v] (:right v)) x))) (->hydra_core_field "comment" ((fn [x] (list :literal (list :string x))) ((fn [v] (:comment v)) x))))))))
+(def hydra_encode_typing_type_constraint (fn [x] (list :record (->hydra_core_record "hydra.typing.TypeConstraint" (list (->hydra_core_field "left" (hydra_encode_core_type ((fn [v] (:left v)) x))) (->hydra_core_field "right" (hydra_encode_core_type ((fn [v] (:right v)) x))) (->hydra_core_field "comment" ((fn [x2] (list :literal (list :string x2))) ((fn [v] (:comment v)) x))))))))

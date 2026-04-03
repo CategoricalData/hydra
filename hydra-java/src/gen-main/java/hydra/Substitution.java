@@ -71,7 +71,7 @@ public interface Substitution {
             metadata.get(),
             acc),
           (java.util.function.Function<hydra.core.Type, hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (targetType -> {
-            hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> freeVars = new hydra.util.Lazy<>(() -> hydra.lib.sets.ToList.apply(hydra.Rewriting.freeVariablesInType(targetType)));
+            hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> freeVars = new hydra.util.Lazy<>(() -> hydra.lib.sets.ToList.apply(hydra.Variables.freeVariablesInType(targetType)));
             return hydra.lib.lists.Foldl.apply(
               (java.util.function.Function<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>, java.util.function.Function<hydra.core.Name, hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>>) (acc2 -> (java.util.function.Function<hydra.core.Name, hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (freeVar -> hydra.Substitution.substInClassConstraints_insertOrMerge(
                 freeVar,

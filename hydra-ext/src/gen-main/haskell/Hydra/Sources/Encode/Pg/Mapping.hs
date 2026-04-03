@@ -7,11 +7,6 @@ module Hydra.Sources.Encode.Pg.Mapping where
 import qualified Hydra.Core as Core
 import qualified Hydra.Module as Module
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 module_ :: Module.Module
 module_ =
@@ -907,7 +902,7 @@ module_ =
       Module.moduleTermDependencies = [
         Module.Namespace "hydra.encode.core",
         (Module.Namespace "hydra.encode.pg.model"),
-        (Module.Namespace "hydra.encode.util")],
+        (Module.Namespace "hydra.encode.coders")],
       Module.moduleTypeDependencies = [
         Module.Namespace "hydra.pg.mapping"],
       Module.moduleDescription = (Just "Term encoders for hydra.pg.mapping")}

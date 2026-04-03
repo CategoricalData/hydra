@@ -8,10 +8,6 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Com.Microsoft.Azure.Dtld as Dtld
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
 import qualified Data.Set as S
 
 command :: Phantoms.TTerm Dtld.Iri -> Phantoms.TTerm String -> Phantoms.TTerm (Maybe Dtld.Dtmi) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm (Maybe Dtld.CommandType) -> Phantoms.TTerm (Maybe Dtld.CommandPayload) -> Phantoms.TTerm (Maybe Dtld.CommandPayload) -> Phantoms.TTerm Dtld.Command

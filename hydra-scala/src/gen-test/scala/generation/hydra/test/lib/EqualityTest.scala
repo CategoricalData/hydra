@@ -13,9 +13,9 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.compare[Int](3)(5)) == (
+      inject(hydra.util.Comparison){lessThan=unit}) == (
 
-      hydra.util.Comparison.lessThan))
+      inject(hydra.util.Comparison){lessThan=unit}))
 
   }
 
@@ -23,9 +23,9 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.compare[Int](5)(5)) == (
+      inject(hydra.util.Comparison){equalTo=unit}) == (
 
-      hydra.util.Comparison.equalTo))
+      inject(hydra.util.Comparison){equalTo=unit}))
 
   }
 
@@ -33,9 +33,9 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.compare[Int](5)(3)) == (
+      inject(hydra.util.Comparison){greaterThan=unit}) == (
 
-      hydra.util.Comparison.greaterThan))
+      inject(hydra.util.Comparison){greaterThan=unit}))
 
   }
 
@@ -45,7 +45,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.equal[Int](5)(5)) == (
+      true) == (
 
       true))
 
@@ -55,7 +55,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.equal[Int](5)(3)) == (
+      false) == (
 
       false))
 
@@ -67,7 +67,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.gt[Int](5)(3)) == (
+      true) == (
 
       true))
 
@@ -77,7 +77,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.gt[Int](5)(5)) == (
+      false) == (
 
       false))
 
@@ -87,7 +87,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.gt[Int](3)(5)) == (
+      false) == (
 
       false))
 
@@ -99,7 +99,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.gte[Int](5)(3)) == (
+      true) == (
 
       true))
 
@@ -109,7 +109,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.gte[Int](5)(5)) == (
+      true) == (
 
       true))
 
@@ -119,7 +119,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.gte[Int](3)(5)) == (
+      false) == (
 
       false))
 
@@ -131,9 +131,9 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.identity[Int](42)) == (
+      42:int32) == (
 
-      42))
+      42:int32))
 
   }
 
@@ -143,7 +143,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.lt[Int](3)(5)) == (
+      true) == (
 
       true))
 
@@ -153,7 +153,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.lt[Int](5)(5)) == (
+      false) == (
 
       false))
 
@@ -163,7 +163,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.lt[Int](5)(3)) == (
+      false) == (
 
       false))
 
@@ -175,7 +175,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.lte[Int](3)(5)) == (
+      true) == (
 
       true))
 
@@ -185,7 +185,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.lte[Int](5)(5)) == (
+      true) == (
 
       true))
 
@@ -195,7 +195,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.lte[Int](5)(3)) == (
+      false) == (
 
       false))
 
@@ -207,9 +207,9 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.max[Int](5)(3)) == (
+      5:int32) == (
 
-      5))
+      5:int32))
 
   }
 
@@ -217,9 +217,9 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.max[Int](3)(5)) == (
+      5:int32) == (
 
-      5))
+      5:int32))
 
   }
 
@@ -227,9 +227,9 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.max[Int](5)(5)) == (
+      5:int32) == (
 
-      5))
+      5:int32))
 
   }
 
@@ -239,9 +239,9 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.min[Int](3)(5)) == (
+      3:int32) == (
 
-      3))
+      3:int32))
 
   }
 
@@ -249,9 +249,9 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.min[Int](5)(3)) == (
+      3:int32) == (
 
-      3))
+      3:int32))
 
   }
 
@@ -259,9 +259,9 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.min[Int](5)(5)) == (
+      5:int32) == (
 
-      5))
+      5:int32))
 
   }
 
@@ -271,9 +271,9 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.compare[scala.Predef.String]("apple")("banana")) == (
+      inject(hydra.util.Comparison){lessThan=unit}) == (
 
-      hydra.util.Comparison.lessThan))
+      inject(hydra.util.Comparison){lessThan=unit}))
 
   }
 
@@ -281,9 +281,9 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.compare[scala.Predef.String]("hello")("hello")) == (
+      inject(hydra.util.Comparison){equalTo=unit}) == (
 
-      hydra.util.Comparison.equalTo))
+      inject(hydra.util.Comparison){equalTo=unit}))
 
   }
 
@@ -291,9 +291,9 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.compare[scala.Predef.String]("zebra")("apple")) == (
+      inject(hydra.util.Comparison){greaterThan=unit}) == (
 
-      hydra.util.Comparison.greaterThan))
+      inject(hydra.util.Comparison){greaterThan=unit}))
 
   }
 
@@ -301,9 +301,9 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.compare[scala.Predef.String]("")("a")) == (
+      inject(hydra.util.Comparison){lessThan=unit}) == (
 
-      hydra.util.Comparison.lessThan))
+      inject(hydra.util.Comparison){lessThan=unit}))
 
   }
 
@@ -311,9 +311,9 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.compare[scala.Predef.String]("ab")("abc")) == (
+      inject(hydra.util.Comparison){lessThan=unit}) == (
 
-      hydra.util.Comparison.lessThan))
+      inject(hydra.util.Comparison){lessThan=unit}))
 
   }
 
@@ -323,7 +323,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.lt[scala.Predef.String]("apple")("banana")) == (
+      true) == (
 
       true))
 
@@ -333,7 +333,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.lt[scala.Predef.String]("hello")("hello")) == (
+      false) == (
 
       false))
 
@@ -343,7 +343,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.lt[scala.Predef.String]("zebra")("apple")) == (
+      false) == (
 
       false))
 
@@ -355,7 +355,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.gt[scala.Predef.String]("zebra")("apple")) == (
+      true) == (
 
       true))
 
@@ -365,7 +365,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.gt[scala.Predef.String]("hello")("hello")) == (
+      false) == (
 
       false))
 
@@ -375,7 +375,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.gt[scala.Predef.String]("apple")("banana")) == (
+      false) == (
 
       false))
 
@@ -387,7 +387,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.max[scala.Predef.String]("zebra")("apple")) == (
+      "zebra") == (
 
       "zebra"))
 
@@ -397,7 +397,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.max[scala.Predef.String]("apple")("zebra")) == (
+      "zebra") == (
 
       "zebra"))
 
@@ -407,7 +407,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.max[scala.Predef.String]("hello")("hello")) == (
+      "hello") == (
 
       "hello"))
 
@@ -419,7 +419,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.min[scala.Predef.String]("apple")("zebra")) == (
+      "apple") == (
 
       "apple"))
 
@@ -429,7 +429,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.min[scala.Predef.String]("zebra")("apple")) == (
+      "apple") == (
 
       "apple"))
 
@@ -439,7 +439,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.min[scala.Predef.String]("hello")("hello")) == (
+      "hello") == (
 
       "hello"))
 
@@ -451,9 +451,9 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.compare[Double](1.5)(2.5)) == (
+      inject(hydra.util.Comparison){lessThan=unit}) == (
 
-      hydra.util.Comparison.lessThan))
+      inject(hydra.util.Comparison){lessThan=unit}))
 
   }
 
@@ -461,9 +461,9 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.compare[Double](3.14)(3.14)) == (
+      inject(hydra.util.Comparison){equalTo=unit}) == (
 
-      hydra.util.Comparison.equalTo))
+      inject(hydra.util.Comparison){equalTo=unit}))
 
   }
 
@@ -471,9 +471,9 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.compare[Double](5.0)(3.0)) == (
+      inject(hydra.util.Comparison){greaterThan=unit}) == (
 
-      hydra.util.Comparison.greaterThan))
+      inject(hydra.util.Comparison){greaterThan=unit}))
 
   }
 
@@ -481,9 +481,9 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.compare[Double](-1.0)(1.0)) == (
+      inject(hydra.util.Comparison){lessThan=unit}) == (
 
-      hydra.util.Comparison.lessThan))
+      inject(hydra.util.Comparison){lessThan=unit}))
 
   }
 
@@ -493,7 +493,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.lt[Double](1.5)(2.5)) == (
+      true) == (
 
       true))
 
@@ -503,7 +503,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.lt[Double](3.14)(3.14)) == (
+      false) == (
 
       false))
 
@@ -513,7 +513,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.lt[Double](5.0)(3.0)) == (
+      false) == (
 
       false))
 
@@ -525,7 +525,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.gt[Double](5.0)(3.0)) == (
+      true) == (
 
       true))
 
@@ -535,7 +535,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.gt[Double](3.14)(3.14)) == (
+      false) == (
 
       false))
 
@@ -545,7 +545,7 @@ class EqualityTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.equality.gt[Double](1.5)(2.5)) == (
+      false) == (
 
       false))
 

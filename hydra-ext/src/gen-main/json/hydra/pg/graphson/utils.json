@@ -1027,7 +1027,7 @@
                       "argument": {
                         "application": {
                           "argument": {"variable": "term"},
-                          "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                          "function": {"variable": "hydra.strip.deannotateTerm"}}},
                       "function": {
                         "function": {
                           "elimination": {
@@ -1577,7 +1577,7 @@
   "description": [
     "Utility functions for GraphSON encoding and property graph conversion."],
   "namespace": "hydra.pg.graphson.utils",
-  "termDependencies": ["hydra.pg.graphson.construct", "hydra.rewriting"],
+  "termDependencies": ["hydra.pg.graphson.construct", "hydra.strip"],
   "typeDependencies": [
     "hydra.paths",
     "hydra.ast",
@@ -1587,6 +1587,7 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
+    "hydra.error.module",
     "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",

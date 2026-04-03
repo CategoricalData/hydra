@@ -80,10 +80,10 @@ def unificationError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.errors.UnificationError]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
-    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Type, hydra.errors.UnificationError](hydra.extract.helpers.requireField("leftType")(hydra.decode.core.`type`)(fieldMap)(cx))((field_leftType: hydra.core.Type) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Type, hydra.errors.UnificationError](hydra.extract.helpers.requireField("rightType")(hydra.decode.core.`type`)(fieldMap)(cx))((field_rightType: hydra.core.Type) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, scala.Predef.String, hydra.errors.UnificationError](hydra.extract.helpers.requireField("message")((cx2: hydra.graph.Graph) =>
+    lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.core.toFieldMap(v_Term_record_record)
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Type, hydra.errors.UnificationError](hydra.extract.core.requireField("leftType")(hydra.decode.core.`type`)(fieldMap)(cx))((field_leftType: hydra.core.Type) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Type, hydra.errors.UnificationError](hydra.extract.core.requireField("rightType")(hydra.decode.core.`type`)(fieldMap)(cx))((field_rightType: hydra.core.Type) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, scala.Predef.String, hydra.errors.UnificationError](hydra.extract.core.requireField("message")((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
       hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError,
          scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>

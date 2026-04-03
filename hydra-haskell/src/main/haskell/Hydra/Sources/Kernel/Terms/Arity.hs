@@ -54,7 +54,7 @@ import qualified Data.Maybe                  as Y
 ns :: Namespace
 ns = Namespace "hydra.arity"
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
@@ -64,14 +64,14 @@ module_ = Module ns elements
     Just "Functions dealing with arguments and arity."
   where
     elements = [
-      toTermDefinition functionArity,
-      toTermDefinition primitiveArity,
-      toTermDefinition termArity,
-      toTermDefinition typeArity,
-      toTermDefinition typeSchemeArity,
-      toTermDefinition uncurryType]
+      toDefinition functionArity,
+      toDefinition primitiveArity,
+      toDefinition termArity,
+      toDefinition typeArity,
+      toDefinition typeSchemeArity,
+      toDefinition uncurryType]
 
-functionArity :: TBinding (Function -> Int)
+functionArity :: TTermDefinition (Function -> Int)
 functionArity = define "functionArity" $
   doc "Find the arity (expected number of arguments) of a function" $
   match _Function Nothing [
@@ -80,12 +80,12 @@ functionArity = define "functionArity" $
     _Function_primitive>>: constant $
       doc "TODO: This function needs to be monadic, so we can look up the primitive" (int32 42)]
 
-primitiveArity :: TBinding (Primitive -> Int)
+primitiveArity :: TTermDefinition (Primitive -> Int)
 primitiveArity = define "primitiveArity" $
   doc "Find the arity (expected number of arguments) of a primitive constant or function" $
   (typeArity <.> unaryFunction Core.typeSchemeType <.> unaryFunction Graph.primitiveType)
 
-termArity :: TBinding (Term -> Int)
+termArity :: TTermDefinition (Term -> Int)
 termArity = define "termArity" $
   doc "Find the arity (expected number of arguments) of a term" $
   match _Term (Just $ int32 0) [
@@ -93,7 +93,7 @@ termArity = define "termArity" $
     _Term_function>>: functionArity]
     -- Note: ignoring variables which might resolve to functions
 
-typeArity :: TBinding (Type -> Int)
+typeArity :: TTermDefinition (Type -> Int)
 typeArity = define "typeArity" $
   doc "Find the arity (expected number of arguments) of a type" $
   match _Type (Just $ int32 0) [
@@ -103,12 +103,12 @@ typeArity = define "typeArity" $
     _Type_function>>: lambda "f" $
       Math.add (int32 1) (typeArity <.> unaryFunction Core.functionTypeCodomain @@ var "f")]
 
-typeSchemeArity :: TBinding (TypeScheme -> Int)
+typeSchemeArity :: TTermDefinition (TypeScheme -> Int)
 typeSchemeArity = define "typeSchemeArity" $
   doc "Find the arity (expected number of arguments) of a type scheme" $
   typeArity <.> unaryFunction Core.typeSchemeType
 
-uncurryType :: TBinding (Type -> [Type])
+uncurryType :: TTermDefinition (Type -> [Type])
 uncurryType = define "uncurryType" $
   doc "Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)" $
   lambda "t" ((match _Type (Just $ list [var "t"]) [

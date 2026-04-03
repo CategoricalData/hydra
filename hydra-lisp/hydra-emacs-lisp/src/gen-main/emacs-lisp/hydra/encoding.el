@@ -30,7 +30,7 @@
 
 (require 'hydra.names)
 
-(require 'hydra.schemas)
+(require 'hydra.predicates)
 
 (defvar hydra_encoding_encode_binding_name (lambda (n) (if (hydra_lib_logic_not (hydra_lib_lists_null (hydra_lib_lists_tail (funcall (hydra_lib_strings_split_on ".") (funcall (lambda (v) v) n))))) (funcall (hydra_lib_strings_intercalate ".") (funcall (hydra_lib_lists_concat2 (list "hydra" "encode")) (funcall (hydra_lib_lists_concat2 (hydra_lib_lists_tail (hydra_lib_lists_init (funcall (hydra_lib_strings_split_on ".") (funcall (lambda (v) v) n))))) (list (hydra_formatting_decapitalize (hydra_names_local_name_of n)))))) (hydra_formatting_decapitalize (hydra_names_local_name_of n)))))
 
@@ -96,7 +96,7 @@
 
 (defvar hydra_encoding_encode_namespace (lambda (ns_) (hydra_lib_strings_cat (list "hydra.encode." (funcall (hydra_lib_strings_intercalate ".") (hydra_lib_lists_tail (funcall (hydra_lib_strings_split_on ".") (funcall (lambda (v) v) ns_))))))))
 
-(defvar hydra_encoding_is_encodable_binding (lambda (cx) (lambda (graph) (lambda (b) (funcall (hydra_lib_eithers_bind (funcall (funcall (hydra_schemas_is_serializable_by_name cx) graph) (funcall (lambda (v) (hydra_core_binding-name v)) b))) (lambda (serializable) (list :right (if serializable (list :just b) (list :nothing)))))))))
+(defvar hydra_encoding_is_encodable_binding (lambda (cx) (lambda (graph) (lambda (b) (funcall (hydra_lib_eithers_bind (funcall (funcall (hydra_predicates_is_serializable_by_name cx) graph) (funcall (lambda (v) (hydra_core_binding-name v)) b))) (lambda (serializable) (list :right (if serializable (list :just b) (list :nothing)))))))))
 
 (defvar hydra_encoding_filter_type_bindings (lambda (cx) (lambda (graph) (lambda (bindings) (funcall (hydra_lib_eithers_map hydra_lib_maybes_cat) (funcall (hydra_lib_eithers_map_list (funcall (hydra_encoding_is_encodable_binding cx) graph)) (funcall (hydra_lib_lists_filter hydra_annotations_is_native_type) bindings)))))))
 

@@ -3,7 +3,8 @@ module Hydra.Sources.Kernel.Terms.Names where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  compactName, localNameOf, namespaceOf, namespaceToFilePath, qname, qualifyName,
+  compactName, freshName, freshNames, localNameOf, namespaceOf, namespaceToFilePath,
+  normalTypeVariable, qname, qualifyName,
   uniqueLabel, unqualifyName)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths    as Paths
@@ -53,6 +54,8 @@ import qualified Data.Map                    as M
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
+import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
+import qualified Hydra.Sources.Kernel.Terms.Constants  as Constants
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 
 
@@ -61,24 +64,27 @@ ns = Namespace "hydra.names"
 
 module_ :: Module
 module_ = Module ns elements
-    [Formatting.ns]
+    [Annotations.ns, Constants.ns, Formatting.ns]
     kernelTypesNamespaces $
     Just ("Functions for working with qualified names.")
   where
    elements = [
-     toTermDefinition compactName,
-     toTermDefinition localNameOf,
-     toTermDefinition namespaceOf,
-     toTermDefinition namespaceToFilePath,
-     toTermDefinition qname,
-     toTermDefinition qualifyName,
-     toTermDefinition uniqueLabel,
-     toTermDefinition unqualifyName]
+     toDefinition compactName,
+     toDefinition freshName,
+     toDefinition freshNames,
+     toDefinition localNameOf,
+     toDefinition namespaceOf,
+     toDefinition namespaceToFilePath,
+     toDefinition normalTypeVariable,
+     toDefinition qname,
+     toDefinition qualifyName,
+     toDefinition uniqueLabel,
+     toDefinition unqualifyName]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-compactName :: TBinding (M.Map Namespace String -> Name -> String)
+compactName :: TTermDefinition (M.Map Namespace String -> Name -> String)
 compactName = define "compactName" $
   doc "Given a mapping of namespaces to prefixes, convert a name to a compact string representation" $
   lambda "namespaces" $ lambda "name" $ lets [
@@ -93,17 +99,17 @@ compactName = define "compactName" $
             (Maps.lookup (var "ns") (var "namespaces")))
         (var "mns")
 
-localNameOf :: TBinding (Name -> String)
+localNameOf :: TTermDefinition (Name -> String)
 localNameOf = define "localNameOf" $
   doc "Extract the local part of a name" $
   unaryFunction Module.qualifiedNameLocal <.> qualifyName
 
-namespaceOf :: TBinding (Name -> Maybe Namespace)
+namespaceOf :: TTermDefinition (Name -> Maybe Namespace)
 namespaceOf = define "namespaceOf" $
   doc "Extract the namespace of a name, if any" $
   unaryFunction Module.qualifiedNameNamespace <.> qualifyName
 
-namespaceToFilePath :: TBinding (CaseConvention -> FileExtension -> Namespace -> String)
+namespaceToFilePath :: TTermDefinition (CaseConvention -> FileExtension -> Namespace -> String)
 namespaceToFilePath = define "namespaceToFilePath" $
   doc "Convert a namespace to a file path with the given case convention and file extension" $
   lambda "caseConv" $ lambda "ext" $ lambda "ns" $ lets [
@@ -112,7 +118,7 @@ namespaceToFilePath = define "namespaceToFilePath" $
       (Strings.splitOn (string ".") (Module.unNamespace $ var "ns"))]
     $ (Strings.intercalate (string "/") $ var "parts") ++ string "." ++ (Module.unFileExtension $ var "ext")
 
-qname :: TBinding (Namespace -> String -> Name)
+qname :: TTermDefinition (Namespace -> String -> Name)
 qname = define "qname" $
   doc "Construct a qualified (dot-separated) name" $
   lambda "ns" $ lambda "name" $
@@ -120,7 +126,7 @@ qname = define "qname" $
       Strings.cat $
         list [apply (unwrap _Namespace) (var "ns"), string ".", var "name"]
 
-qualifyName :: TBinding (Name -> QualifiedName)
+qualifyName :: TTermDefinition (Name -> QualifiedName)
 qualifyName = define "qualifyName" $
   doc "Split a dot-separated name into a namespace and local name" $
   lambda "name" $ lets [
@@ -132,7 +138,7 @@ qualifyName = define "qualifyName" $
         (just $ wrap _Namespace (Strings.intercalate (string ".") (Lists.reverse (Lists.tail $ var "parts"))))
         (Lists.head $ var "parts"))
 
-uniqueLabel :: TBinding (S.Set String -> String -> String)
+uniqueLabel :: TTermDefinition (S.Set String -> String -> String)
 uniqueLabel = define "uniqueLabel" $
   doc "Generate a unique label by appending a suffix if the label is already in use" $
   lambda "visited" $ lambda "l" $
@@ -140,7 +146,7 @@ uniqueLabel = define "uniqueLabel" $
     (uniqueLabel @@ var "visited" @@ Strings.cat2 (var "l") (string "'"))
     (var "l")
 
-unqualifyName :: TBinding (QualifiedName -> Name)
+unqualifyName :: TTermDefinition (QualifiedName -> Name)
 unqualifyName = define "unqualifyName" $
   doc "Convert a qualified name to a dot-separated name" $
   lambda "qname" $ lets [
@@ -149,3 +155,31 @@ unqualifyName = define "unqualifyName" $
       (lambda "n" $ (unwrap _Namespace @@ var "n") ++ string ".")
       (project _QualifiedName _QualifiedName_namespace @@ var "qname")]
     $ wrap _Name $ var "prefix" ++ (project _QualifiedName _QualifiedName_local @@ var "qname")
+
+freshName :: TTermDefinition (Context -> (Name, Context))
+freshName = define "freshName" $
+  doc "Generate a fresh type variable name, threading Context" $
+  "cx" ~>
+  "count" <~ Annotations.getCount @@ Constants.key_freshTypeVariableCount @@ var "cx" $
+  pair
+    (normalTypeVariable @@ var "count")
+    (Annotations.putCount @@ Constants.key_freshTypeVariableCount @@ Math.add (var "count") (int32 1) @@ var "cx")
+
+freshNames :: TTermDefinition (Int -> Context -> ([Name], Context))
+freshNames = define "freshNames" $
+  doc "Generate multiple fresh type variable names, threading Context" $
+  "n" ~> "cx" ~>
+  -- Fold over n units, accumulating names and threading context
+  "go" <~ ("acc" ~> "_" ~>
+    "names" <~ Pairs.first (var "acc") $
+    "cx0" <~ Pairs.second (var "acc") $
+    "result" <~ freshName @@ var "cx0" $
+    "name" <~ Pairs.first (var "result") $
+    "cx1" <~ Pairs.second (var "result") $
+    pair (Lists.concat2 (var "names") (Lists.pure (var "name"))) (var "cx1")) $
+  Lists.foldl (var "go") (pair (list ([] :: [TTerm Name])) (var "cx")) (Lists.replicate (var "n") unit)
+
+normalTypeVariable :: TTermDefinition (Int -> Name)
+normalTypeVariable = define "normalTypeVariable" $
+  doc "Type variable naming convention follows Haskell: t0, t1, etc." $
+  "i" ~> Core.name (Strings.cat2 (string "t") (Literals.showInt32 $ var "i"))

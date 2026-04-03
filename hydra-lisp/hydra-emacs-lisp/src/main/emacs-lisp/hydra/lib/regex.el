@@ -61,10 +61,17 @@
           (setq i (1+ i))))))
     (concat (nreverse result))))
 
+;; matches :: String -> String -> Bool
+(defvar hydra_lib_regex_matches
+  (lambda (pattern)
+    (lambda (input)
+      (let* ((emacs-pat (hydra--posix-to-emacs-regex pattern))
+             (full-pattern (concat "\\`\\(?:" emacs-pat "\\)\\'")))
+        (if (string-match-p full-pattern input) t nil)))))
+
 ;; find :: String -> String -> Maybe String
 (defvar hydra_lib_regex_find
   (lambda (pattern)
-    "Find the first substring matching a regex pattern."
     (lambda (input)
       (let ((emacs-pat (hydra--posix-to-emacs-regex pattern)))
         (if (string-match emacs-pat input)
@@ -74,7 +81,6 @@
 ;; find_all :: String -> String -> [String]
 (defvar hydra_lib_regex_find_all
   (lambda (pattern)
-    "Find all non-overlapping substrings matching a regex pattern."
     (lambda (input)
       (let ((emacs-pat (hydra--posix-to-emacs-regex pattern))
             (start 0)
@@ -87,20 +93,10 @@
             (setq start (1+ start))))
         (nreverse results)))))
 
-;; matches :: String -> String -> Bool
-(defvar hydra_lib_regex_matches
-  (lambda (pattern)
-    "Check whether an entire string matches a regex pattern."
-    (lambda (input)
-      (let* ((emacs-pat (hydra--posix-to-emacs-regex pattern))
-             (full-pattern (concat "\\`\\(?:" emacs-pat "\\)\\'")))
-        (if (string-match-p full-pattern input) t nil)))))
-
 ;; replace :: String -> String -> String -> String
 ;; Replace only the first occurrence
 (defvar hydra_lib_regex_replace
   (lambda (pattern)
-    "Replace the first occurrence of a regex pattern with a replacement string."
     (lambda (replacement)
       (lambda (input)
         (let ((emacs-pat (hydra--posix-to-emacs-regex pattern)))
@@ -113,7 +109,6 @@
 ;; replace_all :: String -> String -> String -> String
 (defvar hydra_lib_regex_replace_all
   (lambda (pattern)
-    "Replace all non-overlapping occurrences of a regex pattern with a replacement string."
     (lambda (replacement)
       (lambda (input)
         (let ((emacs-pat (hydra--posix-to-emacs-regex pattern)))
@@ -122,7 +117,6 @@
 ;; split :: String -> String -> [String]
 (defvar hydra_lib_regex_split
   (lambda (pattern)
-    "Split a string by a regex pattern."
     (lambda (input)
       (let ((emacs-pat (hydra--posix-to-emacs-regex pattern)))
         (split-string input emacs-pat)))))

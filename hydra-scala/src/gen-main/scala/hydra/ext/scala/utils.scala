@@ -21,7 +21,7 @@ import hydra.lib.sets
 import hydra.lib.strings
 
 def nameOfType[T0](cx: T0)(t: hydra.core.Type): Option[hydra.core.Name] =
-  hydra.rewriting.deannotateType(t) match
+  hydra.strip.deannotateType(t) match
   case hydra.core.Type.variable(v_Type_variable_name) => Some(v_Type_variable_name)
   case hydra.core.Type.forall(v_Type_forall_ft) => hydra.ext.scala.utils.nameOfType(cx)(v_Type_forall_ft.body)
   case _ => None

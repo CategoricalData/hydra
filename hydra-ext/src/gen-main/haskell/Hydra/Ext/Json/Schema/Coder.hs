@@ -10,13 +10,8 @@ import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Construct JSON Schema documents from type definitions
 constructModule :: t0 -> t1 -> t2 -> t3 -> t4 -> t5
@@ -40,7 +35,7 @@ encodeNamedType cx g name typ =
     Eithers.map (\res -> Lists.concat [
       [
         Schema.RestrictionTitle (Core.unName name)],
-      res]) (encodeType cx g False (Rewriting.deannotateType typ))
+      res]) (encodeType cx g False (Strip.deannotateType typ))
 
 -- | Encode a Hydra type as a list of JSON Schema restrictions
 encodeType :: t0 -> t1 -> t2 -> t3 -> t4
@@ -51,7 +46,7 @@ isRequiredField :: Core.FieldType -> Bool
 isRequiredField ft =
 
       let typ = Core.fieldTypeType ft
-      in case (Rewriting.deannotateType typ) of
+      in case (Strip.deannotateType typ) of
         Core.TypeMaybe _ -> False
         _ -> True
 

@@ -6,11 +6,6 @@ module Hydra.Phantoms where
 
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | An association of a named term (element) with a phantom type
 data TBinding a =
@@ -34,3 +29,18 @@ newtype TTerm a =
   deriving (Eq, Ord, Read, Show)
 
 _TTerm = Core.Name "hydra.phantoms.TTerm"
+
+-- | An association of a term definition with a phantom type
+data TTermDefinition a =
+  TTermDefinition {
+    -- | The name of the term
+    tTermDefinitionName :: Core.Name,
+    -- | The term with its phantom type
+    tTermDefinitionTerm :: (TTerm a)}
+  deriving (Eq, Ord, Read, Show)
+
+_TTermDefinition = Core.Name "hydra.phantoms.TTermDefinition"
+
+_TTermDefinition_name = Core.Name "name"
+
+_TTermDefinition_term = Core.Name "term"

@@ -8,3 +8,9 @@ def caseConvention(c: hydra.util.CaseConvention): scala.Predef.String =
   case hydra.util.CaseConvention.upperSnake => "UPPER_SNAKE_CASE"
   case hydra.util.CaseConvention.camel => "camelCase"
   case hydra.util.CaseConvention.pascal => "PascalCase"
+
+def comparison(c: hydra.util.Comparison): scala.Predef.String =
+  c match
+  case hydra.util.Comparison.lessThan => "lessThan"
+  case hydra.util.Comparison.equalTo => "equalTo"
+  case hydra.util.Comparison.greaterThan => "greaterThan"

@@ -2252,7 +2252,7 @@
                               "term": {
                                 "application": {
                                   "argument": {"variable": "term"},
-                                  "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                  "function": {"variable": "hydra.strip.deannotateTerm"}}},
                               "type": [
                                 {
                                   "constraints": null,
@@ -2337,7 +2337,7 @@
                               "term": {
                                 "application": {
                                   "argument": {"variable": "typ"},
-                                  "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                  "function": {"variable": "hydra.strip.deannotateType"}}},
                               "type": [
                                 {
                                   "constraints": null,
@@ -2754,7 +2754,7 @@
                                       "term": {
                                         "application": {
                                           "argument": {"variable": "term"},
-                                          "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                          "function": {"variable": "hydra.strip.deannotateTerm"}}},
                                       "type": [
                                         {
                                           "constraints": null,
@@ -2983,7 +2983,7 @@
                                       "term": {
                                         "application": {
                                           "argument": {"variable": "typ"},
-                                          "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                          "function": {"variable": "hydra.strip.deannotateType"}}},
                                       "type": [
                                         {
                                           "constraints": null,
@@ -3985,7 +3985,7 @@
     "hydra.encode.core",
     "hydra.extract.core",
     "hydra.lexical",
-    "hydra.rewriting",
+    "hydra.strip",
     "hydra.show.core",
     "hydra.show.errors"],
   "typeDependencies": [
@@ -3997,6 +3997,7 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
+    "hydra.error.module",
     "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",

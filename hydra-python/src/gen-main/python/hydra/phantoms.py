@@ -26,3 +26,14 @@ class TTerm(Node["hydra.core.Term"], Generic[A]):
     r"""An association of a term with a phantom type."""
 
 TTerm.TYPE_ = hydra.core.Name("hydra.phantoms.TTerm")
+
+@dataclass(frozen=True)
+class TTermDefinition(Generic[A]):
+    r"""An association of a term definition with a phantom type."""
+
+    name: Annotated[hydra.core.Name, "The name of the term"]
+    term: Annotated[TTerm[A], "The term with its phantom type"]
+
+    TYPE_ = hydra.core.Name("hydra.phantoms.TTermDefinition")
+    NAME = hydra.core.Name("name")
+    TERM = hydra.core.Name("term")

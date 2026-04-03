@@ -8,6 +8,7 @@ import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
 import qualified Hydra.Dsl.Meta.Types         as T
+import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Hydra.Dsl.Meta.Graph         as Graph
@@ -37,28 +38,36 @@ ns = Namespace "hydra.test.testGraph"
 
 module_ :: Module
 module_ = Module ns elements
-    [TestTerms.ns, TestTypes.ns]
+    [TestTerms.ns, TestTypes.ns, Lexical.ns]
     kernelTypesNamespaces $
     Just ("A module defining the graph used in the test suite.")
   where
    elements = [
-     Phantoms.toTermDefinition testTerms,
-     Phantoms.toTermDefinition testTypes,
-     Phantoms.toTermDefinition testNamespace,
-     Phantoms.toTermDefinition testSchemaNamespace]
+     Phantoms.toDefinition testTerms,
+     Phantoms.toDefinition testTypes,
+     Phantoms.toDefinition testNamespace,
+     Phantoms.toDefinition testSchemaNamespace,
+     Phantoms.toDefinition testGraph,
+     Phantoms.toDefinition testContext]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-testTerms :: TBinding (M.Map Name Term)
+testTerms :: TTermDefinition (M.Map Name Term)
 testTerms = define "testTerms" $
   Maps.fromList $ Phantoms.list [
     Phantoms.pair (name "testDataArthur") TestTerms.testDataArthur]
 
-testNamespace :: TBinding Namespace
+testNamespace :: TTermDefinition Namespace
 testNamespace = define "testNamespace" $ DModule.namespace $ Phantoms.string "testGraph"
 
-testTypes :: TBinding (M.Map Name Type)
+testGraph :: TTermDefinition Graph
+testGraph = define "testGraph" $ asTerm Lexical.emptyGraph
+
+testContext :: TTermDefinition Context
+testContext = define "testContext" $ asTerm Lexical.emptyContext
+
+testTypes :: TTermDefinition (M.Map Name Type)
 testTypes = define "testTypes" $
   Maps.fromList $ Phantoms.list [
     Phantoms.pair TestTypes.testTypeBuddyListAName TestTypes.testTypeBuddyListA,
@@ -84,5 +93,5 @@ testTypes = define "testTypes" $
     Phantoms.pair TestTypes.testTypeUnionPolymorphicRecursiveName TestTypes.testTypeUnionPolymorphicRecursive,
     Phantoms.pair TestTypes.testTypeUnitName TestTypes.testTypeUnit]
 
-testSchemaNamespace :: TBinding Namespace
+testSchemaNamespace :: TTermDefinition Namespace
 testSchemaNamespace = define "testSchemaNamespace" $ DModule.namespace $ Phantoms.string "testSchemaGraph"

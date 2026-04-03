@@ -5,6 +5,7 @@
 module Hydra.Hoisting where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Environment as Environment
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Equality as Equality
@@ -18,23 +19,22 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Paths as Paths
+import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Rewriting as Rewriting
-import qualified Hydra.Schemas as Schemas
+import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Sorting as Sorting
+import qualified Hydra.Strip as Strip
 import qualified Hydra.Substitution as Substitution
 import qualified Hydra.Typing as Typing
+import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Augment bindings with new free variables introduced by substitution, wrapping with lambdas after any type lambdas.
 augmentBindingsWithNewFreeVars :: Graph.Graph -> S.Set Core.Name -> [Core.Binding] -> ([Core.Binding], Typing.TermSubst)
 augmentBindingsWithNewFreeVars cx boundVars bindings =
 
-      let types = Maps.map Rewriting.typeSchemeToFType (Graph.graphBoundTypes cx)
+      let types = Maps.map Scoping.typeSchemeToFType (Graph.graphBoundTypes cx)
           wrapAfterTypeLambdas =
                   \vars -> \term -> case term of
                     Core.TermTypeLambda v0 -> Core.TermTypeLambda (Core.TypeLambda {
@@ -46,7 +46,7 @@ augmentBindingsWithNewFreeVars cx boundVars bindings =
                       Core.lambdaBody = t}))) term (Lists.reverse vars)
           augment =
                   \b ->
-                    let freeVars = Sets.toList (Sets.intersection boundVars (Rewriting.freeVariablesInTerm (Core.bindingTerm b)))
+                    let freeVars = Sets.toList (Sets.intersection boundVars (Variables.freeVariablesInTerm (Core.bindingTerm b)))
                         varTypePairs = Lists.map (\v -> (v, (Maps.lookup v types))) freeVars
                         varTypes = Maybes.cat (Lists.map Pairs.second varTypePairs)
                     in (Logic.ifElse (Logic.or (Lists.null freeVars) (Logic.not (Equality.equal (Lists.length varTypes) (Lists.length varTypePairs)))) (b, Nothing) (Core.Binding {
@@ -72,7 +72,7 @@ bindingIsPolymorphic binding =
 bindingUsesContextTypeVars :: Graph.Graph -> Core.Binding -> Bool
 bindingUsesContextTypeVars cx binding =
     Maybes.maybe False (\ts ->
-      let freeInType = Rewriting.freeVariablesInType (Core.typeSchemeType ts)
+      let freeInType = Variables.freeVariablesInType (Core.typeSchemeType ts)
           contextTypeVars = Graph.graphTypeVariables cx
       in (Logic.not (Sets.null (Sets.intersection freeInType contextTypeVars)))) (Core.bindingType binding)
 
@@ -124,7 +124,7 @@ hoistCaseStatementsInGraph bindings =
                     Core.letBindings = bindings,
                     Core.letBody = Core.TermUnit})
           term1 = hoistCaseStatements emptyTx term0
-      in (Schemas.termAsBindings term1)
+      in (Environment.termAsBindings term1)
 
 -- | Transform a let-term by pulling polymorphic let bindings to the top level, using Graph. A binding is hoisted if: (1) It is polymorphic (has non-empty typeSchemeVariables), OR (2) Its type uses type variables from the Graph (i.e., from enclosing type lambdas). Bindings which are already at the top level are not hoisted. If a hoisted binding captures lambda-bound or let-bound variables from an enclosing scope, the binding is wrapped in lambdas for those variables, and references are replaced with applications. If a hoisted binding uses type variables from the context, those type variables are added to the binding's type scheme. Note: we assume that there is no variable shadowing; use hydra.rewriting.unshadowVariables first.
 hoistLetBindingsWithContext :: (Core.Binding -> Bool) -> Graph.Graph -> Core.Let -> Core.Let
@@ -141,13 +141,13 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                     alreadyUsedNames = Pairs.second pair
                     b = Pairs.first bindingWithCapturedVars
                     capturedTermVars = Pairs.second bindingWithCapturedVars
-                    types = Maps.map Rewriting.typeSchemeToFType (Graph.graphBoundTypes cx)
+                    types = Maps.map Scoping.typeSchemeToFType (Graph.graphBoundTypes cx)
                     capturedTermVarTypePairs = Lists.map (\v -> (v, (Maps.lookup v types))) capturedTermVars
                     capturedTermVarTypes =
-                            Lists.map (\typ -> Rewriting.deannotateTypeParameters typ) (Maybes.cat (Lists.map Pairs.second capturedTermVarTypePairs))
+                            Lists.map (\typ -> Strip.deannotateTypeParameters typ) (Maybes.cat (Lists.map Pairs.second capturedTermVarTypePairs))
                     freeInBindingType =
-                            Maybes.maybe Sets.empty (\ts -> Rewriting.freeVariablesInType (Core.typeSchemeType ts)) (Core.bindingType b)
-                    freeInCapturedVarTypes = Sets.unions (Lists.map (\t -> Rewriting.freeVariablesInType t) capturedTermVarTypes)
+                            Maybes.maybe Sets.empty (\ts -> Variables.freeVariablesInType (Core.typeSchemeType ts)) (Core.bindingType b)
+                    freeInCapturedVarTypes = Sets.unions (Lists.map (\t -> Variables.freeVariablesInType t) capturedTermVarTypes)
                     capturedTypeVars =
                             Sets.toList (Sets.intersection (Graph.graphTypeVariables cx) (Sets.union freeInBindingType freeInCapturedVarTypes))
                     globalBindingName =
@@ -160,11 +160,11 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                                 Core.functionTypeDomain = a,
                                 Core.functionTypeCodomain = t})) (Core.typeSchemeType ts) (Lists.reverse capturedTermVarTypes)),
                               Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts)}) (Core.bindingType b)) Nothing
-                    strippedTerm = Rewriting.stripTypeLambdas (Core.bindingTerm b)
+                    strippedTerm = Strip.stripTypeLambdas (Core.bindingTerm b)
                     termWithLambdas =
                             Lists.foldl (\t -> \p -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                               Core.lambdaParameter = (Pairs.first p),
-                              Core.lambdaDomain = (Maybes.map (\dom -> Rewriting.deannotateTypeParameters dom) (Pairs.second p)),
+                              Core.lambdaDomain = (Maybes.map (\dom -> Strip.deannotateTypeParameters dom) (Pairs.second p)),
                               Core.lambdaBody = t}))) strippedTerm (Lists.reverse capturedTermVarTypePairs)
                     termWithTypeLambdas =
                             Lists.foldl (\t -> \v -> Core.TermTypeLambda (Core.TypeLambda {
@@ -202,11 +202,11 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                             keepUs = Pairs.second partitionPair
                             hoistedBindingNames = Lists.map Core.bindingName hoistUs
                             polyLetVariables =
-                                    Sets.fromList (Lists.filter (\v -> Maybes.maybe False Schemas.fTypeIsPolymorphic (Maybes.map Rewriting.typeSchemeToFType (Maps.lookup v (Graph.graphBoundTypes cx)))) (Sets.toList (Sets.difference (Sets.fromList (Maps.keys (Graph.graphBoundTerms cx))) (Graph.graphLambdaVariables cx))))
+                                    Sets.fromList (Lists.filter (\v -> Maybes.maybe False Resolution.fTypeIsPolymorphic (Maybes.map Scoping.typeSchemeToFType (Maps.lookup v (Graph.graphBoundTypes cx)))) (Sets.toList (Sets.difference (Sets.fromList (Maps.keys (Graph.graphBoundTerms cx))) (Graph.graphLambdaVariables cx))))
                             boundTermVariables =
                                     Sets.union (Graph.graphLambdaVariables cx) (Sets.difference (Sets.fromList (Maps.keys (Graph.graphBoundTerms cx))) (Graph.graphLambdaVariables cx))
                             freeVariablesInEachBinding =
-                                    Lists.map (\b -> Sets.toList (Sets.intersection boundTermVariables (Rewriting.freeVariablesInTerm (Core.bindingTerm b)))) hoistUs
+                                    Lists.map (\b -> Sets.toList (Sets.intersection boundTermVariables (Variables.freeVariablesInTerm (Core.bindingTerm b)))) hoistUs
                             bindingDependencies =
                                     Lists.map (\vars -> Lists.partition (\v -> Sets.member v (Sets.fromList hoistedBindingNames)) vars) freeVariablesInEachBinding
                             bindingEdges = Lists.zip hoistedBindingNames (Lists.map Pairs.first bindingDependencies)
@@ -261,7 +261,7 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                           hoistedBindingsFinal,
                           bindingsSoFarFinal], finalUsedNames), finalTerm)
                       _ -> ((Lists.concat2 previouslyFinishedBindings bindingsSoFar, alreadyUsedNames), newTerm)
-          cx1 = Rewriting.extendGraphForLet (\c -> \b -> Nothing) cx0 let0
+          cx1 = Scoping.extendGraphForLet (\c -> \b -> Nothing) cx0 let0
           forActiveBinding =
                   \b ->
                     let prefix = Strings.cat2 (Core.unName (Core.bindingName b)) "_"
@@ -324,14 +324,14 @@ hoistSubterms shouldHoist cx0 term0 =
                                               "_",
                                               (Literals.showInt32 newCounter)])
                                         existingNames = Sets.fromList (Lists.map (\b -> Core.bindingName b) newBindings)
-                                        freeVarsInSubterm = Rewriting.freeVariablesInTerm subterm
+                                        freeVarsInSubterm = Variables.freeVariablesInTerm subterm
                                         allReserved = Sets.union existingNames freeVarsInSubterm
                                         bindingName = Lexical.chooseUniqueName allReserved proposedName
                                         allLambdaVars = Graph.graphLambdaVariables cxInner
                                         newLambdaVars = Sets.difference allLambdaVars baselineLambdaVars
-                                        freeVars = Rewriting.freeVariablesInTerm processedTerm
+                                        freeVars = Variables.freeVariablesInTerm processedTerm
                                         capturedVars = Sets.toList (Sets.intersection newLambdaVars freeVars)
-                                        typeMap = Maps.map Rewriting.typeSchemeToFType (Graph.graphBoundTypes cxInner)
+                                        typeMap = Maps.map Scoping.typeSchemeToFType (Graph.graphBoundTypes cxInner)
                                         wrappedTerm =
                                                 Lists.foldl (\body -> \varName -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                                   Core.lambdaParameter = varName,
@@ -431,7 +431,7 @@ isUnionElimination term =
 isUnionEliminationApplication :: Core.Term -> Bool
 isUnionEliminationApplication term =
     case term of
-      Core.TermApplication v0 -> isUnionElimination (Rewriting.deannotateAndDetypeTerm (Core.applicationFunction v0))
+      Core.TermApplication v0 -> isUnionElimination (Strip.deannotateAndDetypeTerm (Core.applicationFunction v0))
       _ -> False
 
 -- | Normalize a path for hoisting by treating immediately-applied lambdas as let bindings. Replaces [applicationFunction, lambdaBody, ...] with [letBody, ...].
@@ -448,7 +448,7 @@ normalizePathForHoisting path =
 
 -- | Predicate that always returns True, for hoisting all bindings unconditionally.
 shouldHoistAll :: t0 -> t1 -> Bool
-shouldHoistAll _ _ = True
+shouldHoistAll _ _2 = True
 
 -- | Predicate for case statement hoisting. Returns True if term is a union elimination (bare case function) or a case statement application (union elimination applied to an argument) AND not at top level. Top level = reachable through annotations, let body/binding, lambda bodies, or ONE app LHS. Once through an app LHS, lambda bodies no longer pass through.
 shouldHoistCaseStatement :: ([Paths.SubtermStep], Core.Term) -> Bool

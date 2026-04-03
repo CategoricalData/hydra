@@ -2868,7 +2868,7 @@
                                                                                     "argument": {
                                                                                       "application": {
                                                                                         "argument": {"variable": "value"},
-                                                                                        "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                                                                                        "function": {"variable": "hydra.strip.deannotateTerm"}}},
                                                                                     "function": {
                                                                                       "application": {
                                                                                         "argument": {"variable": "k"},
@@ -6151,7 +6151,11 @@
   "description": [
     "Functions for transforming property graph mappings into property graph elements."],
   "namespace": "hydra.demos.genpg.transform",
-  "termDependencies": ["hydra.reduction", "hydra.rewriting", "hydra.extract.core"],
+  "termDependencies": [
+    "hydra.reduction",
+    "hydra.rewriting",
+    "hydra.strip",
+    "hydra.extract.core"],
   "typeDependencies": [
     "hydra.paths",
     "hydra.ast",
@@ -6161,6 +6165,7 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
+    "hydra.error.module",
     "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",

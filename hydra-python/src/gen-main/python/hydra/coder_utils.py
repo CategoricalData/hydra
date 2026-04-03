@@ -12,6 +12,7 @@ import hydra.arity
 import hydra.checking
 import hydra.coders
 import hydra.core
+import hydra.environment
 import hydra.formatting
 import hydra.graph
 import hydra.lib.eithers
@@ -27,10 +28,12 @@ import hydra.lib.strings
 import hydra.module
 import hydra.names
 import hydra.rewriting
-import hydra.schemas
+import hydra.scoping
 import hydra.sorting
+import hydra.strip
 import hydra.typing
 import hydra.util
+import hydra.variables
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
@@ -54,22 +57,22 @@ def analyze_function_term_with_gather(cx: hydra.context.Context, for_binding: Ca
         def _hoist_hydra_coder_utils_analyze_function_term_with_gather_1(arg_mode, args, bindings, cx, doms, for_binding, g_env, get_t_c, set_t_c, t, tapps, tparams, v1):
             match v1:
                 case hydra.core.FunctionLambda(value=lam):
-                    return hydra.lib.logic.if_else(arg_mode, (lambda : (v := lam.parameter, (dom := hydra.lib.maybes.maybe((lambda : cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("_")))), (lambda x_: x_), lam.domain), (body := lam.body, (new_env := set_t_c(hydra.rewriting.extend_graph_for_lambda(get_t_c(g_env), lam), g_env), analyze_function_term_with_gather(cx, for_binding, get_t_c, set_t_c, arg_mode, new_env, tparams, hydra.lib.lists.cons(v, args), bindings, hydra.lib.lists.cons(dom, doms), tapps, body))[1])[1])[1])[1]), (lambda : analyze_function_term_with_finish(cx, get_t_c, g_env, tparams, args, bindings, doms, tapps, t)))
+                    return hydra.lib.logic.if_else(arg_mode, (lambda : (v := lam.parameter, (dom := hydra.lib.maybes.maybe((lambda : cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("_")))), (lambda x_: x_), lam.domain), (body := lam.body, (new_env := set_t_c(hydra.scoping.extend_graph_for_lambda(get_t_c(g_env), lam), g_env), analyze_function_term_with_gather(cx, for_binding, get_t_c, set_t_c, arg_mode, new_env, tparams, hydra.lib.lists.cons(v, args), bindings, hydra.lib.lists.cons(dom, doms), tapps, body))[1])[1])[1])[1]), (lambda : analyze_function_term_with_finish(cx, get_t_c, g_env, tparams, args, bindings, doms, tapps, t)))
 
                 case _:
                     return analyze_function_term_with_finish(cx, get_t_c, g_env, tparams, args, bindings, doms, tapps, t)
-        match hydra.rewriting.deannotate_term(t):
+        match hydra.strip.deannotate_term(t):
             case hydra.core.TermFunction(value=f):
                 return _hoist_hydra_coder_utils_analyze_function_term_with_gather_1(arg_mode, args, bindings, cx, doms, for_binding, g_env, get_t_c, set_t_c, t, tapps, tparams, f)
 
             case hydra.core.TermLet(value=lt):
-                return (new_bindings := lt.bindings, (body := lt.body, (new_env := set_t_c(hydra.rewriting.extend_graph_for_let(for_binding, get_t_c(g_env), lt), g_env), analyze_function_term_with_gather(cx, for_binding, get_t_c, set_t_c, False, new_env, tparams, args, hydra.lib.lists.concat2(bindings, new_bindings), doms, tapps, body))[1])[1])[1]
+                return (new_bindings := lt.bindings, (body := lt.body, (new_env := set_t_c(hydra.scoping.extend_graph_for_let(for_binding, get_t_c(g_env), lt), g_env), analyze_function_term_with_gather(cx, for_binding, get_t_c, set_t_c, False, new_env, tparams, args, hydra.lib.lists.concat2(bindings, new_bindings), doms, tapps, body))[1])[1])[1]
 
             case hydra.core.TermTypeApplication(value=ta):
                 return (ta_body := ta.body, (typ := ta.type, analyze_function_term_with_gather(cx, for_binding, get_t_c, set_t_c, arg_mode, g_env, tparams, args, bindings, doms, hydra.lib.lists.cons(typ, tapps), ta_body))[1])[1]
 
             case hydra.core.TermTypeLambda(value=tl):
-                return (tvar := tl.parameter, (tl_body := tl.body, (new_env := set_t_c(hydra.rewriting.extend_graph_for_type_lambda(get_t_c(g_env), tl), g_env), analyze_function_term_with_gather(cx, for_binding, get_t_c, set_t_c, arg_mode, new_env, hydra.lib.lists.cons(tvar, tparams), args, bindings, doms, tapps, tl_body))[1])[1])[1]
+                return (tvar := tl.parameter, (tl_body := tl.body, (new_env := set_t_c(hydra.scoping.extend_graph_for_type_lambda(get_t_c(g_env), tl), g_env), analyze_function_term_with_gather(cx, for_binding, get_t_c, set_t_c, arg_mode, new_env, hydra.lib.lists.cons(tvar, tparams), args, bindings, doms, tapps, tl_body))[1])[1])[1]
 
             case _:
                 return analyze_function_term_with_finish(cx, get_t_c, g_env, tparams, args, bindings, doms, tapps, t)
@@ -138,7 +141,7 @@ def gather_applications(term: hydra.core.Term) -> tuple[frozenlist[hydra.core.Te
 
     def go(args: frozenlist[hydra.core.Term], t: hydra.core.Term) -> tuple[frozenlist[hydra.core.Term], hydra.core.Term]:
         while True:
-            match hydra.rewriting.deannotate_term(t):
+            match hydra.strip.deannotate_term(t):
                 case hydra.core.TermApplication(value=app):
                     return (lhs := app.function, (rhs := app.argument, go(hydra.lib.lists.cons(rhs, args), lhs))[1])[1]
 
@@ -150,7 +153,7 @@ def gather_args(term: hydra.core.Term, args: frozenlist[hydra.core.Term]) -> tup
     r"""Gather term arguments, stripping type-level constructs."""
 
     while True:
-        match hydra.rewriting.deannotate_term(term):
+        match hydra.strip.deannotate_term(term):
             case hydra.core.TermApplication(value=app):
                 return (lhs := app.function, (rhs := app.argument, gather_args(lhs, hydra.lib.lists.cons(rhs, args)))[1])[1]
 
@@ -167,7 +170,7 @@ def gather_args_with_type_apps(term: hydra.core.Term, args: frozenlist[hydra.cor
     r"""Gather term and type arguments from a term."""
 
     while True:
-        match hydra.rewriting.deannotate_term(term):
+        match hydra.strip.deannotate_term(term):
             case hydra.core.TermApplication(value=app):
                 return (lhs := app.function, (rhs := app.argument, gather_args_with_type_apps(lhs, hydra.lib.lists.cons(rhs, args), ty_args))[1])[1]
 
@@ -185,14 +188,14 @@ def is_tail_recursive_in_tail_position(func_name: hydra.core.Name, term: hydra.c
 
     @lru_cache(1)
     def stripped() -> hydra.core.Term:
-        return hydra.rewriting.deannotate_and_detype_term(term)
+        return hydra.strip.deannotate_and_detype_term(term)
     def _hoist_stripped_body_1(v1):
         match v1:
             case hydra.core.FunctionLambda(value=lam):
                 return is_tail_recursive_in_tail_position(func_name, lam.body)
 
             case _:
-                return hydra.rewriting.is_free_variable_in_term(func_name, term)
+                return hydra.variables.is_free_variable_in_term(func_name, term)
     match stripped():
         case hydra.core.TermApplication():
             @lru_cache(1)
@@ -206,7 +209,7 @@ def is_tail_recursive_in_tail_position(func_name: hydra.core.Name, term: hydra.c
                 return hydra.lib.pairs.second(gathered())
             @lru_cache(1)
             def stripped_fun() -> hydra.core.Term:
-                return hydra.rewriting.deannotate_and_detype_term(gather_fun())
+                return hydra.strip.deannotate_and_detype_term(gather_fun())
             def _hoist_stripped_fun_body_1(v1):
                 match v1:
                     case hydra.core.EliminationUnion(value=cs):
@@ -220,28 +223,28 @@ def is_tail_recursive_in_tail_position(func_name: hydra.core.Name, term: hydra.c
                             return hydra.lib.maybes.maybe((lambda : True), (lambda d: is_tail_recursive_in_tail_position(func_name, d)), dflt)
                         @lru_cache(1)
                         def args_ok() -> bool:
-                            return hydra.lib.lists.foldl((lambda ok, arg: hydra.lib.logic.and_(ok, hydra.rewriting.is_free_variable_in_term(func_name, arg))), True, gather_args())
+                            return hydra.lib.lists.foldl((lambda ok, arg: hydra.lib.logic.and_(ok, hydra.variables.is_free_variable_in_term(func_name, arg))), True, gather_args())
                         return hydra.lib.logic.and_(hydra.lib.logic.and_(branches_ok(), dflt_ok()), args_ok())
 
                     case _:
-                        return hydra.rewriting.is_free_variable_in_term(func_name, term)
+                        return hydra.variables.is_free_variable_in_term(func_name, term)
             def _hoist_stripped_fun_body_2(v1):
                 match v1:
                     case hydra.core.FunctionElimination(value=e):
                         return _hoist_stripped_fun_body_1(e)
 
                     case _:
-                        return hydra.rewriting.is_free_variable_in_term(func_name, term)
+                        return hydra.variables.is_free_variable_in_term(func_name, term)
             def _hoist_stripped_fun_body_3(v1):
                 match v1:
                     case hydra.core.TermVariable(value=vname):
-                        return hydra.lib.logic.if_else(hydra.lib.equality.equal(vname, func_name), (lambda : (args_no_func := hydra.lib.lists.foldl((lambda ok, arg: hydra.lib.logic.and_(ok, hydra.rewriting.is_free_variable_in_term(func_name, arg))), True, gather_args()), (args_no_lambda := (_hoist_args_no_lambda_1 := (lambda v12: (lambda lam: (ignore := lam.body, True)[1])(v12.value) if isinstance(v12, hydra.core.FunctionLambda) else False), _hoist_args_no_lambda_2 := (lambda v12: (lambda f2: _hoist_args_no_lambda_1(f2))(v12.value) if isinstance(v12, hydra.core.TermFunction) else False), hydra.lib.lists.foldl((lambda ok, arg: hydra.lib.logic.and_(ok, hydra.lib.logic.not_(hydra.rewriting.fold_over_term(hydra.coders.TraversalOrder.PRE, (lambda found, t: hydra.lib.logic.or_(found, _hoist_args_no_lambda_2(t))), False, arg)))), True, gather_args()))[2], hydra.lib.logic.and_(args_no_func, args_no_lambda))[1])[1]), (lambda : hydra.rewriting.is_free_variable_in_term(func_name, term)))
+                        return hydra.lib.logic.if_else(hydra.lib.equality.equal(vname, func_name), (lambda : (args_no_func := hydra.lib.lists.foldl((lambda ok, arg: hydra.lib.logic.and_(ok, hydra.variables.is_free_variable_in_term(func_name, arg))), True, gather_args()), (args_no_lambda := (_hoist_args_no_lambda_1 := (lambda v12: (lambda lam: (ignore := lam.body, True)[1])(v12.value) if isinstance(v12, hydra.core.FunctionLambda) else False), _hoist_args_no_lambda_2 := (lambda v12: (lambda f2: _hoist_args_no_lambda_1(f2))(v12.value) if isinstance(v12, hydra.core.TermFunction) else False), hydra.lib.lists.foldl((lambda ok, arg: hydra.lib.logic.and_(ok, hydra.lib.logic.not_(hydra.rewriting.fold_over_term(hydra.coders.TraversalOrder.PRE, (lambda found, t: hydra.lib.logic.or_(found, _hoist_args_no_lambda_2(t))), False, arg)))), True, gather_args()))[2], hydra.lib.logic.and_(args_no_func, args_no_lambda))[1])[1]), (lambda : hydra.variables.is_free_variable_in_term(func_name, term)))
 
                     case hydra.core.TermFunction(value=f):
                         return _hoist_stripped_fun_body_2(f)
 
                     case _:
-                        return hydra.rewriting.is_free_variable_in_term(func_name, term)
+                        return hydra.variables.is_free_variable_in_term(func_name, term)
             return _hoist_stripped_fun_body_3(stripped_fun())
 
         case hydra.core.TermFunction(value=f):
@@ -250,18 +253,18 @@ def is_tail_recursive_in_tail_position(func_name: hydra.core.Name, term: hydra.c
         case hydra.core.TermLet(value=lt):
             @lru_cache(1)
             def bindings_ok() -> bool:
-                return hydra.lib.lists.foldl((lambda ok, b: hydra.lib.logic.and_(ok, hydra.rewriting.is_free_variable_in_term(func_name, b.term))), True, lt.bindings)
+                return hydra.lib.lists.foldl((lambda ok, b: hydra.lib.logic.and_(ok, hydra.variables.is_free_variable_in_term(func_name, b.term))), True, lt.bindings)
             return hydra.lib.logic.and_(bindings_ok(), is_tail_recursive_in_tail_position(func_name, lt.body))
 
         case _:
-            return hydra.rewriting.is_free_variable_in_term(func_name, term)
+            return hydra.variables.is_free_variable_in_term(func_name, term)
 
 def is_self_tail_recursive(func_name: hydra.core.Name, body: hydra.core.Term) -> bool:
     r"""Check if a term body is self-tail-recursive with respect to a function name."""
 
     @lru_cache(1)
     def calls_self() -> bool:
-        return hydra.lib.logic.not_(hydra.rewriting.is_free_variable_in_term(func_name, body))
+        return hydra.lib.logic.not_(hydra.variables.is_free_variable_in_term(func_name, body))
     return hydra.lib.logic.if_else(calls_self(), (lambda : is_tail_recursive_in_tail_position(func_name, body)), (lambda : False))
 
 def is_simple_assignment(term: hydra.core.Term):
@@ -297,7 +300,7 @@ def is_simple_assignment(term: hydra.core.Term):
 def is_trivial_term(t: hydra.core.Term):
     r"""Check if a term is trivially cheap (no thunking needed)."""
 
-    match hydra.rewriting.deannotate_term(t):
+    match hydra.strip.deannotate_term(t):
         case hydra.core.TermLiteral():
             return True
 
@@ -385,7 +388,7 @@ def reorder_defs(defs: frozenlist[hydra.module.Definition]) -> frozenlist[hydra.
 
     @lru_cache(1)
     def partitioned() -> tuple[frozenlist[hydra.module.TypeDefinition], frozenlist[hydra.module.TermDefinition]]:
-        return hydra.schemas.partition_definitions(defs)
+        return hydra.environment.partition_definitions(defs)
     @lru_cache(1)
     def type_defs_raw() -> frozenlist[hydra.module.TypeDefinition]:
         return hydra.lib.pairs.first(partitioned())
@@ -413,7 +416,7 @@ def reorder_defs(defs: frozenlist[hydra.module.Definition]) -> frozenlist[hydra.
         def _hoist_sorted_term_defs_2(v1):
             match v1:
                 case hydra.module.DefinitionTerm(value=td):
-                    return hydra.lib.sets.to_list(hydra.rewriting.free_variables_in_term(td.term))
+                    return hydra.lib.sets.to_list(hydra.variables.free_variables_in_term(td.term))
 
                 case _:
                     return ()

@@ -292,3 +292,20 @@ The bootstrapping system generates the following module sets for each target:
 
 This covers the full Hydra codebase, including the Java and Python coders
 themselves.
+
+## Known limitations
+
+### Lisp test timing in the dashboard
+
+The dashboard's `test:` column shows near-zero times for Lisp targets (Clojure,
+Common Lisp, Scheme).
+This is a measurement artifact, not an indication that tests didn't run.
+
+Lisp dialects use eager top-level `def`/`define` forms, so the `reduceTerm`
+interpreter invocations happen during module loading, before the test runner's
+timer starts.
+Java and Python defer evaluation via `allTests()` / `@lru_cache`, so their
+timers capture the interpreter work.
+
+All Lisp test assertions do execute and verify correct results — the interpreter
+work is simply attributed to load time rather than test time.

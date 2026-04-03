@@ -13,9 +13,9 @@ class PairsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.pairs.bimap[Int, scala.Predef.String, Int, Int]((x: Int) => hydra.lib.math.mul(x)(2))((s: scala.Predef.String) => hydra.lib.strings.length(s))(Tuple2(5, "ab"))) == (
+      (10, 2)) == (
 
-      Tuple2(10, 2)))
+      (10, 2)))
 
   }
 
@@ -23,9 +23,9 @@ class PairsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.pairs.bimap[Int, scala.Predef.String, Int, Int]((x: Int) => hydra.lib.math.mul(x)(2))((s: scala.Predef.String) => hydra.lib.strings.length(s))(Tuple2(0, "hello"))) == (
+      (0, 5)) == (
 
-      Tuple2(0, 5)))
+      (0, 5)))
 
   }
 
@@ -35,7 +35,7 @@ class PairsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.pairs.first[Int, scala.Predef.String](Tuple2(42, "hello"))) == (
+      42) == (
 
       42))
 
@@ -45,7 +45,7 @@ class PairsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.pairs.first[Int, scala.Predef.String](Tuple2(0, "world"))) == (
+      0) == (
 
       0))
 
@@ -55,7 +55,7 @@ class PairsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.pairs.first[Int, scala.Predef.String](Tuple2(-5, "test"))) == (
+      -5) == (
 
       -5))
 
@@ -67,9 +67,9 @@ class PairsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.pairs.second[Int, scala.Predef.String](Tuple2(42, "hello"))) == (
+      hello) == (
 
-      "hello"))
+      hello))
 
   }
 
@@ -77,9 +77,9 @@ class PairsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.pairs.second[Int, scala.Predef.String](Tuple2(0, ""))) == (
+      ) == (
 
-      ""))
+      ))
 
   }
 
@@ -87,9 +87,9 @@ class PairsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.pairs.second[Int, scala.Predef.String](Tuple2(123, "testing"))) == (
+      testing) == (
 
-      "testing"))
+      testing))
 
   }
 }

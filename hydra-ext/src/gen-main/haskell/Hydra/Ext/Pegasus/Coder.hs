@@ -4,9 +4,12 @@
 
 module Hydra.Ext.Pegasus.Coder where
 
+import qualified Hydra.Analysis as Analysis
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Dependencies as Dependencies
+import qualified Hydra.Environment as Environment
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Ext.Pegasus.Pdl as Pdl
 import qualified Hydra.Ext.Pegasus.Serde as Serde
@@ -23,23 +26,18 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
-import qualified Hydra.Rewriting as Rewriting
-import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Strip as Strip
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Construct PDL schema files from type definitions, with topological sorting and cycle detection
 constructModule :: Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Module.Module -> [Module.TypeDefinition] -> Either (Context.InContext Errors.Error) (M.Map String Pdl.SchemaFile)
 constructModule cx g aliases mod typeDefs =
 
-      let groups = Schemas.topologicalSortTypeDefinitions typeDefs
+      let groups = Dependencies.topologicalSortTypeDefinitions typeDefs
       in (Maybes.cases (Lists.find (\grp -> Equality.gt (Lists.length grp) 1) groups) (
         let sortedDefs = Lists.concat groups
         in (Eithers.bind (Eithers.mapList (\typeDef -> typeToSchema cx g aliases mod typeDef) sortedDefs) (\schemas -> Right (Maps.fromList (Lists.map (toPair mod aliases) schemas))))) (\cycle -> Left (Context.InContext {
@@ -55,7 +53,7 @@ doc s =
 
 encode :: Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Core.Type -> Either (Context.InContext Errors.Error) Pdl.Schema
 encode cx g aliases t =
-    case (Rewriting.deannotateType t) of
+    case (Strip.deannotateType t) of
       Core.TypeRecord v0 -> Logic.ifElse (Lists.null v0) (encode cx g aliases (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) (Eithers.bind (encodeType cx g aliases t) (\res -> Eithers.either (\schema -> Right schema) (\_ -> Left (Context.InContext {
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "type resolved to an unsupported nested named schema: " (Core_.type_ t)))),
         Context.inContextContext = cx})) res))
@@ -74,7 +72,7 @@ encodeEnumField cx g ft =
 
 encodePossiblyOptionalType :: Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Core.Type -> Either (Context.InContext Errors.Error) (Pdl.Schema, Bool)
 encodePossiblyOptionalType cx g aliases typ =
-    case (Rewriting.deannotateType typ) of
+    case (Strip.deannotateType typ) of
       Core.TypeMaybe v0 -> Eithers.bind (encode cx g aliases v0) (\t -> Right (t, True))
       Core.TypeRecord _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
       Core.TypeUnion _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
@@ -173,7 +171,7 @@ encodeType cx g aliases typ =
       Core.TypeRecord v0 -> Eithers.bind (Eithers.mapList (encodeRecordField cx g aliases) v0) (\rfields -> Right (Right (Pdl.NamedSchemaTypeRecord (Pdl.RecordSchema {
         Pdl.recordSchemaFields = rfields,
         Pdl.recordSchemaIncludes = []}))))
-      Core.TypeUnion v0 -> Logic.ifElse (Lists.foldl (\b -> \t -> Logic.and b (Equality.equal (Rewriting.deannotateType t) Core.TypeUnit)) True (Lists.map (\f -> Core.fieldTypeType f) v0)) (Eithers.bind (Eithers.mapList (encodeEnumField cx g) v0) (\fs -> Right (Right (Pdl.NamedSchemaTypeEnum (Pdl.EnumSchema {
+      Core.TypeUnion v0 -> Logic.ifElse (Lists.foldl (\b -> \t -> Logic.and b (Equality.equal (Strip.deannotateType t) Core.TypeUnit)) True (Lists.map (\f -> Core.fieldTypeType f) v0)) (Eithers.bind (Eithers.mapList (encodeEnumField cx g) v0) (\fs -> Right (Right (Pdl.NamedSchemaTypeEnum (Pdl.EnumSchema {
         Pdl.enumSchemaFields = fs}))))) (Eithers.bind (Eithers.mapList (encodeUnionField cx g aliases) v0) (\members -> Right (Left (Pdl.SchemaUnion (Pdl.UnionSchema members)))))
       _ -> Left (Context.InContext {
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Expected " (Strings.cat2 "PDL-supported type" (Strings.cat2 ", found: " (Core_.type_ typ)))))),
@@ -202,7 +200,7 @@ getAnns cx g typ = Eithers.bind (Annotations.getTypeDescription cx g typ) (\r ->
 -- | Compute import aliases for a module's dependencies
 importAliasesForModule :: Context.Context -> Graph.Graph -> Module.Module -> Either (Context.InContext Errors.Error) (M.Map Module.Namespace String)
 importAliasesForModule cx g mod =
-    Eithers.bind (Schemas.moduleDependencyNamespaces cx g False True True False mod) (\nss -> Right (Maps.fromList (Lists.map (\ns_ -> (ns_, (slashesToDots (Module.unNamespace ns_)))) (Sets.toList nss))))
+    Eithers.bind (Analysis.moduleDependencyNamespaces cx g False True True False mod) (\nss -> Right (Maps.fromList (Lists.map (\ns_ -> (ns_, (slashesToDots (Module.unNamespace ns_)))) (Sets.toList nss))))
 
 -- | Convert a Hydra module to a map of file paths to PDL schema strings
 moduleToPdl :: Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (M.Map String String)
@@ -213,7 +211,7 @@ moduleToPdl mod defs cx g =
 moduleToPegasusSchemas :: Context.Context -> Graph.Graph -> Module.Module -> [Module.Definition] -> Either (Context.InContext Errors.Error) (M.Map String Pdl.SchemaFile)
 moduleToPegasusSchemas cx g mod defs =
 
-      let partitioned = Schemas.partitionDefinitions defs
+      let partitioned = Environment.partitionDefinitions defs
           typeDefs = Pairs.first partitioned
       in (Eithers.bind (importAliasesForModule cx g mod) (\aliases -> constructModule cx g aliases mod typeDefs))
 

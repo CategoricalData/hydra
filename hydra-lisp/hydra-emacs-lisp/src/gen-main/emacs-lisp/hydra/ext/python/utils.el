@@ -1,5 +1,7 @@
 (require 'cl-lib)
 
+(require 'hydra.analysis)
+
 (require 'hydra.ext.python.environment)
 
 (require 'hydra.ext.python.names)
@@ -23,8 +25,6 @@
 (require 'hydra.lib.strings)
 
 (require 'hydra.module)
-
-(require 'hydra.schemas)
 
 (require 'hydra.serialization)
 
@@ -96,7 +96,7 @@
 
 (defvar hydra_ext_python_utils_dotted_assignment_statement (lambda (obj) (lambda (attr) (lambda (expr) (let ((target (list :unstarred (list :project (make-hydra_ext_python_syntax_t_primary_and_name (list :atom (list :name obj)) attr))))) (hydra_ext_python_utils_py_assignment_to_py_statement (list :untyped (make-hydra_ext_python_syntax_untyped_assignment (list target) (hydra_ext_python_utils_py_expression_to_py_annotated_rhs expr) (list :nothing)))))))))
 
-(defvar hydra_ext_python_utils_find_namespaces (lambda (focus_ns) (lambda (defs) (let* ((core_ns "hydra.core") (namespaces (funcall (funcall (hydra_schemas_namespaces_for_definitions hydra_ext_python_names_encode_namespace) focus_ns) defs))) (if (funcall (hydra_lib_equality_equal (funcall (lambda (v) v) (hydra_lib_pairs_first (funcall (lambda (v) (hydra_module_namespaces-focus v)) namespaces)))) (funcall (lambda (v) v) core_ns)) namespaces (make-hydra_module_namespaces (funcall (lambda (v) (hydra_module_namespaces-focus v)) namespaces) (funcall (funcall (hydra_lib_maps_insert core_ns) (hydra_ext_python_names_encode_namespace core_ns)) (funcall (lambda (v) (hydra_module_namespaces-mapping v)) namespaces))))))))
+(defvar hydra_ext_python_utils_find_namespaces (lambda (focus_ns) (lambda (defs) (let* ((core_ns "hydra.core") (namespaces (funcall (funcall (hydra_analysis_namespaces_for_definitions hydra_ext_python_names_encode_namespace) focus_ns) defs))) (if (funcall (hydra_lib_equality_equal (funcall (lambda (v) v) (hydra_lib_pairs_first (funcall (lambda (v) (hydra_module_namespaces-focus v)) namespaces)))) (funcall (lambda (v) v) core_ns)) namespaces (make-hydra_module_namespaces (funcall (lambda (v) (hydra_module_namespaces-focus v)) namespaces) (funcall (funcall (hydra_lib_maps_insert core_ns) (hydra_ext_python_names_encode_namespace core_ns)) (funcall (lambda (v) (hydra_module_namespaces-mapping v)) namespaces))))))))
 
 (defvar hydra_ext_python_utils_get_item_params (list :param_no_default (make-hydra_ext_python_syntax_param_no_default_parameters (list (make-hydra_ext_python_syntax_param_no_default (make-hydra_ext_python_syntax_param "cls" (list :nothing)) (list :nothing)) (make-hydra_ext_python_syntax_param_no_default (make-hydra_ext_python_syntax_param "item" (list :nothing)) (list :nothing))) (list) (list :nothing))))
 

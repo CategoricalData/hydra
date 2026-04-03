@@ -64,13 +64,11 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -91,7 +89,7 @@ import qualified Hydra.Ext.Sources.JavaScript.Syntax as JavaScriptSyntax
 import qualified Hydra.Ext.Sources.JavaScript.Operators as JavaScriptOperators
 
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 ns :: Namespace
@@ -105,101 +103,101 @@ module_ = Module ns elements
   where
     elements = [
       -- Core conversions
-      toTermDefinition identifierToExpr,
-      toTermDefinition literalToExpr,
-      toTermDefinition stringLiteralToExpr,
-      toTermDefinition escapeString,
-      toTermDefinition templateLiteralToExpr,
-      toTermDefinition numericLiteralToExpr,
+      toDefinition identifierToExpr,
+      toDefinition literalToExpr,
+      toDefinition stringLiteralToExpr,
+      toDefinition escapeString,
+      toDefinition templateLiteralToExpr,
+      toDefinition numericLiteralToExpr,
 
       -- Expression conversions
-      toTermDefinition expressionToExpr,
-      toTermDefinition arrayExpressionToExpr,
-      toTermDefinition arrayElementToExpr,
-      toTermDefinition objectExpressionToExpr,
-      toTermDefinition propertyToExpr,
-      toTermDefinition functionExpressionToExpr,
-      toTermDefinition arrowFunctionExpressionToExpr,
-      toTermDefinition callExpressionToExpr,
-      toTermDefinition memberExpressionToExpr,
-      toTermDefinition conditionalExpressionToExpr,
-      toTermDefinition binaryExpressionToExpr,
-      toTermDefinition unaryExpressionToExpr,
-      toTermDefinition assignmentExpressionToExpr,
+      toDefinition expressionToExpr,
+      toDefinition arrayExpressionToExpr,
+      toDefinition arrayElementToExpr,
+      toDefinition objectExpressionToExpr,
+      toDefinition propertyToExpr,
+      toDefinition functionExpressionToExpr,
+      toDefinition arrowFunctionExpressionToExpr,
+      toDefinition callExpressionToExpr,
+      toDefinition memberExpressionToExpr,
+      toDefinition conditionalExpressionToExpr,
+      toDefinition binaryExpressionToExpr,
+      toDefinition unaryExpressionToExpr,
+      toDefinition assignmentExpressionToExpr,
 
       -- Pattern conversions
-      toTermDefinition patternToExpr,
-      toTermDefinition objectPatternToExpr,
-      toTermDefinition objectPatternPropertyToExpr,
-      toTermDefinition arrayPatternToExpr,
-      toTermDefinition assignmentPatternToExpr,
+      toDefinition patternToExpr,
+      toDefinition objectPatternToExpr,
+      toDefinition objectPatternPropertyToExpr,
+      toDefinition arrayPatternToExpr,
+      toDefinition assignmentPatternToExpr,
 
       -- Statement conversions
-      toTermDefinition statementToExpr,
-      toTermDefinition blockStatementToExpr,
-      toTermDefinition variableDeclarationToExpr,
-      toTermDefinition variableDeclaratorToExpr,
-      toTermDefinition variableKindToExpr,
-      toTermDefinition ifStatementToExpr,
-      toTermDefinition switchStatementToExpr,
-      toTermDefinition switchCaseToExpr,
-      toTermDefinition returnStatementToExpr,
-      toTermDefinition throwStatementToExpr,
-      toTermDefinition tryStatementToExpr,
-      toTermDefinition catchClauseToExpr,
-      toTermDefinition breakStatementToExpr,
-      toTermDefinition continueStatementToExpr,
-      toTermDefinition whileStatementToExpr,
-      toTermDefinition doWhileStatementToExpr,
-      toTermDefinition forStatementToExpr,
-      toTermDefinition forInStatementToExpr,
-      toTermDefinition forOfStatementToExpr,
-      toTermDefinition labeledStatementToExpr,
+      toDefinition statementToExpr,
+      toDefinition blockStatementToExpr,
+      toDefinition variableDeclarationToExpr,
+      toDefinition variableDeclaratorToExpr,
+      toDefinition variableKindToExpr,
+      toDefinition ifStatementToExpr,
+      toDefinition switchStatementToExpr,
+      toDefinition switchCaseToExpr,
+      toDefinition returnStatementToExpr,
+      toDefinition throwStatementToExpr,
+      toDefinition tryStatementToExpr,
+      toDefinition catchClauseToExpr,
+      toDefinition breakStatementToExpr,
+      toDefinition continueStatementToExpr,
+      toDefinition whileStatementToExpr,
+      toDefinition doWhileStatementToExpr,
+      toDefinition forStatementToExpr,
+      toDefinition forInStatementToExpr,
+      toDefinition forOfStatementToExpr,
+      toDefinition labeledStatementToExpr,
 
       -- Declaration conversions
-      toTermDefinition functionDeclarationToExpr,
-      toTermDefinition classDeclarationToExpr,
-      toTermDefinition methodDefinitionToExpr,
+      toDefinition functionDeclarationToExpr,
+      toDefinition classDeclarationToExpr,
+      toDefinition methodDefinitionToExpr,
 
       -- Module conversions
-      toTermDefinition programToExpr,
-      toTermDefinition moduleItemToExpr,
-      toTermDefinition importDeclarationToExpr,
-      toTermDefinition importSpecifierToExpr,
-      toTermDefinition formatImportSpecifiers,
-      toTermDefinition exportDeclarationToExpr,
-      toTermDefinition namedExportToExpr,
-      toTermDefinition exportSpecifierToExpr,
-      toTermDefinition exportAllToExpr,
+      toDefinition programToExpr,
+      toDefinition moduleItemToExpr,
+      toDefinition importDeclarationToExpr,
+      toDefinition importSpecifierToExpr,
+      toDefinition formatImportSpecifiers,
+      toDefinition exportDeclarationToExpr,
+      toDefinition namedExportToExpr,
+      toDefinition exportSpecifierToExpr,
+      toDefinition exportAllToExpr,
 
       -- Operators
-      toTermDefinition binaryOperatorToExpr,
-      toTermDefinition unaryOperatorToString,
-      toTermDefinition assignmentOperatorToString,
+      toDefinition binaryOperatorToExpr,
+      toDefinition unaryOperatorToString,
+      toDefinition assignmentOperatorToString,
 
       -- Comments
-      toTermDefinition documentationCommentToExpr,
-      toTermDefinition toJavaScriptComments,
-      toTermDefinition documentationTagToLine,
-      toTermDefinition typeExpressionToString,
-      toTermDefinition toLineComment,
+      toDefinition documentationCommentToExpr,
+      toDefinition toJavaScriptComments,
+      toDefinition documentationTagToLine,
+      toDefinition typeExpressionToString,
+      toDefinition toLineComment,
 
       -- With comments variants
-      toTermDefinition moduleItemWithCommentsToExpr,
-      toTermDefinition functionDeclarationWithCommentsToExpr,
-      toTermDefinition classDeclarationWithCommentsToExpr]
+      toDefinition moduleItemWithCommentsToExpr,
+      toDefinition functionDeclarationWithCommentsToExpr,
+      toDefinition classDeclarationWithCommentsToExpr]
 
 
 -- ============================================================================
 -- Core Conversions
 -- ============================================================================
 
-identifierToExpr :: TBinding (JS.Identifier -> Expr)
+identifierToExpr :: TTermDefinition (JS.Identifier -> Expr)
 identifierToExpr = define "identifierToExpr" $
   doc "Convert an identifier to an AST expression" $
   lambda "id" $ Serialization.cst @@ (unwrap JS._Identifier @@ var "id")
 
-literalToExpr :: TBinding (JS.Literal -> Expr)
+literalToExpr :: TTermDefinition (JS.Literal -> Expr)
 literalToExpr = define "literalToExpr" $
   doc "Convert a literal to an AST expression" $
   lambda "lit" $
@@ -214,7 +212,7 @@ literalToExpr = define "literalToExpr" $
         Serialization.cst @@ (Strings.cat2 (Literals.showBigint $ var "n") (string "n")),
       JS._Literal_template>>: lambda "t" $ templateLiteralToExpr @@ var "t"]
 
-stringLiteralToExpr :: TBinding (JS.StringLiteral -> Expr)
+stringLiteralToExpr :: TTermDefinition (JS.StringLiteral -> Expr)
 stringLiteralToExpr = define "stringLiteralToExpr" $
   doc "Convert a string literal to an AST expression" $
   lambda "s" $ lets [
@@ -224,7 +222,7 @@ stringLiteralToExpr = define "stringLiteralToExpr" $
     "escaped">: escapeString @@ var "value" @@ var "singleQuote"] $
     Serialization.cst @@ (Strings.cat $ list [var "quote", var "escaped", var "quote"])
 
-escapeString :: TBinding (String -> Bool -> String)
+escapeString :: TTermDefinition (String -> Bool -> String)
 escapeString = define "escapeString" $
   doc "Escape special characters in a string for JavaScript" $
   lambda "s" $ lambda "singleQuote" $
@@ -232,7 +230,7 @@ escapeString = define "escapeString" $
     -- A full implementation would handle more escape sequences
     var "s"  -- TODO: implement proper escaping
 
-templateLiteralToExpr :: TBinding (JS.TemplateLiteral -> Expr)
+templateLiteralToExpr :: TTermDefinition (JS.TemplateLiteral -> Expr)
 templateLiteralToExpr = define "templateLiteralToExpr" $
   doc "Convert a template literal to an AST expression" $
   lambda "t" $ lets [
@@ -246,7 +244,7 @@ templateLiteralToExpr = define "templateLiteralToExpr" $
         project JS._TemplateElement JS._TemplateElement_value @@ var "q") (var "quasis")),
       string "`"])
 
-numericLiteralToExpr :: TBinding (JS.NumericLiteral -> Expr)
+numericLiteralToExpr :: TTermDefinition (JS.NumericLiteral -> Expr)
 numericLiteralToExpr = define "numericLiteralToExpr" $
   doc "Convert a numeric literal to an AST expression" $
   lambda "n" $
@@ -261,7 +259,7 @@ numericLiteralToExpr = define "numericLiteralToExpr" $
 -- Expression Conversions
 -- ============================================================================
 
-expressionToExpr :: TBinding (JS.Expression -> Expr)
+expressionToExpr :: TTermDefinition (JS.Expression -> Expr)
 expressionToExpr = define "expressionToExpr" $
   doc "Convert a JavaScript expression to an AST expression" $
   lambda "expr" $
@@ -301,14 +299,14 @@ expressionToExpr = define "expressionToExpr" $
       JS._Expression_parenthesized>>: lambda "e" $
         Serialization.parenthesize @@ (expressionToExpr @@ var "e")]
 
-arrayExpressionToExpr :: TBinding (JS.ArrayExpression -> Expr)
+arrayExpressionToExpr :: TTermDefinition (JS.ArrayExpression -> Expr)
 arrayExpressionToExpr = define "arrayExpressionToExpr" $
   doc "Convert an array expression to an AST expression" $
   lambda "arr" $
     Serialization.bracketList @@ Serialization.inlineStyle @@
       (Lists.map (arrayElementToExpr) (var "arr"))
 
-arrayElementToExpr :: TBinding (JS.ArrayElement -> Expr)
+arrayElementToExpr :: TTermDefinition (JS.ArrayElement -> Expr)
 arrayElementToExpr = define "arrayElementToExpr" $
   doc "Convert an array element to an AST expression" $
   lambda "elem" $
@@ -318,14 +316,14 @@ arrayElementToExpr = define "arrayElementToExpr" $
         Serialization.prefix @@ string "..." @@ (expressionToExpr @@ (unwrap JS._SpreadElement @@ var "s")),
       JS._ArrayElement_hole>>: constant $ Serialization.cst @@ string ""]
 
-objectExpressionToExpr :: TBinding (JS.ObjectExpression -> Expr)
+objectExpressionToExpr :: TTermDefinition (JS.ObjectExpression -> Expr)
 objectExpressionToExpr = define "objectExpressionToExpr" $
   doc "Convert an object expression to an AST expression" $
   lambda "obj" $
     Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@
       (Lists.map (propertyToExpr) (var "obj"))
 
-propertyToExpr :: TBinding (JS.Property -> Expr)
+propertyToExpr :: TTermDefinition (JS.Property -> Expr)
 propertyToExpr = define "propertyToExpr" $
   doc "Convert an object property to an AST expression" $
   lambda "prop" $ lets [
@@ -340,7 +338,7 @@ propertyToExpr = define "propertyToExpr" $
       (var "keyExpr")
       (Serialization.ifx @@ JavaScriptOperators.colonOp @@ var "keyExpr" @@ (expressionToExpr @@ var "value"))
 
-functionExpressionToExpr :: TBinding (JS.FunctionExpression -> Expr)
+functionExpressionToExpr :: TTermDefinition (JS.FunctionExpression -> Expr)
 functionExpressionToExpr = define "functionExpressionToExpr" $
   doc "Convert a function expression to an AST expression" $
   lambda "fn" $ lets [
@@ -364,7 +362,7 @@ functionExpressionToExpr = define "functionExpressionToExpr" $
       var "nameExpr",
       list [var "paramsExpr", blockStatementToExpr @@ var "body"]])
 
-arrowFunctionExpressionToExpr :: TBinding (JS.ArrowFunctionExpression -> Expr)
+arrowFunctionExpressionToExpr :: TTermDefinition (JS.ArrowFunctionExpression -> Expr)
 arrowFunctionExpressionToExpr = define "arrowFunctionExpressionToExpr" $
   doc "Convert an arrow function expression to an AST expression" $
   lambda "arrow" $ lets [
@@ -384,7 +382,7 @@ arrowFunctionExpressionToExpr = define "arrowFunctionExpressionToExpr" $
       var "asyncKw",
       list [Serialization.ifx @@ JavaScriptOperators.arrowOp @@ var "paramsExpr" @@ var "bodyExpr"]])
 
-callExpressionToExpr :: TBinding (JS.CallExpression -> Expr)
+callExpressionToExpr :: TTermDefinition (JS.CallExpression -> Expr)
 callExpressionToExpr = define "callExpressionToExpr" $
   doc "Convert a call expression to an AST expression" $
   lambda "call" $ lets [
@@ -399,7 +397,7 @@ callExpressionToExpr = define "callExpressionToExpr" $
       Serialization.cst @@ var "optionalDot",
       var "argsExpr"]
 
-memberExpressionToExpr :: TBinding (JS.MemberExpression -> Expr)
+memberExpressionToExpr :: TTermDefinition (JS.MemberExpression -> Expr)
 memberExpressionToExpr = define "memberExpressionToExpr" $
   doc "Convert a member expression to an AST expression" $
   lambda "mem" $ lets [
@@ -420,7 +418,7 @@ memberExpressionToExpr = define "memberExpressionToExpr" $
         (Logic.ifElse (var "optional") JavaScriptOperators.optionalChainOp JavaScriptOperators.memberOp) @@
         var "objExpr" @@ var "propExpr")
 
-conditionalExpressionToExpr :: TBinding (JS.ConditionalExpression -> Expr)
+conditionalExpressionToExpr :: TTermDefinition (JS.ConditionalExpression -> Expr)
 conditionalExpressionToExpr = define "conditionalExpressionToExpr" $
   doc "Convert a conditional expression to an AST expression" $
   lambda "cond" $ lets [
@@ -434,7 +432,7 @@ conditionalExpressionToExpr = define "conditionalExpressionToExpr" $
       Serialization.cst @@ string ":",
       expressionToExpr @@ var "alternate"]
 
-binaryExpressionToExpr :: TBinding (JS.BinaryExpression -> Expr)
+binaryExpressionToExpr :: TTermDefinition (JS.BinaryExpression -> Expr)
 binaryExpressionToExpr = define "binaryExpressionToExpr" $
   doc "Convert a binary expression to an AST expression" $
   lambda "bin" $ lets [
@@ -446,7 +444,7 @@ binaryExpressionToExpr = define "binaryExpressionToExpr" $
       (expressionToExpr @@ var "left") @@
       (expressionToExpr @@ var "right")
 
-unaryExpressionToExpr :: TBinding (JS.UnaryExpression -> Expr)
+unaryExpressionToExpr :: TTermDefinition (JS.UnaryExpression -> Expr)
 unaryExpressionToExpr = define "unaryExpressionToExpr" $
   doc "Convert a unary expression to an AST expression" $
   lambda "un" $ lets [
@@ -459,7 +457,7 @@ unaryExpressionToExpr = define "unaryExpressionToExpr" $
       (Serialization.prefix @@ var "opStr" @@ var "argExpr")
       (Serialization.suffix @@ var "opStr" @@ var "argExpr")
 
-assignmentExpressionToExpr :: TBinding (JS.AssignmentExpression -> Expr)
+assignmentExpressionToExpr :: TTermDefinition (JS.AssignmentExpression -> Expr)
 assignmentExpressionToExpr = define "assignmentExpressionToExpr" $
   doc "Convert an assignment expression to an AST expression" $
   lambda "assign" $ lets [
@@ -477,7 +475,7 @@ assignmentExpressionToExpr = define "assignmentExpressionToExpr" $
 -- Pattern Conversions
 -- ============================================================================
 
-patternToExpr :: TBinding (JS.Pattern -> Expr)
+patternToExpr :: TTermDefinition (JS.Pattern -> Expr)
 patternToExpr = define "patternToExpr" $
   doc "Convert a pattern to an AST expression" $
   lambda "pat" $
@@ -489,7 +487,7 @@ patternToExpr = define "patternToExpr" $
       JS._Pattern_rest>>: lambda "rest" $
         Serialization.prefix @@ string "..." @@ (patternToExpr @@ (unwrap JS._RestElement @@ var "rest"))]
 
-objectPatternToExpr :: TBinding (JS.ObjectPattern -> Expr)
+objectPatternToExpr :: TTermDefinition (JS.ObjectPattern -> Expr)
 objectPatternToExpr = define "objectPatternToExpr" $
   doc "Convert an object pattern to an AST expression" $
   lambda "obj" $ lets [
@@ -497,7 +495,7 @@ objectPatternToExpr = define "objectPatternToExpr" $
     Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@
       (Lists.map (objectPatternPropertyToExpr) (var "props"))
 
-objectPatternPropertyToExpr :: TBinding (JS.ObjectPatternProperty -> Expr)
+objectPatternPropertyToExpr :: TTermDefinition (JS.ObjectPatternProperty -> Expr)
 objectPatternPropertyToExpr = define "objectPatternPropertyToExpr" $
   doc "Convert an object pattern property to an AST expression" $
   lambda "prop" $
@@ -506,7 +504,7 @@ objectPatternPropertyToExpr = define "objectPatternPropertyToExpr" $
       JS._ObjectPatternProperty_rest>>: lambda "r" $
         Serialization.prefix @@ string "..." @@ (patternToExpr @@ (unwrap JS._RestElement @@ var "r"))]
 
-arrayPatternToExpr :: TBinding (JS.ArrayPattern -> Expr)
+arrayPatternToExpr :: TTermDefinition (JS.ArrayPattern -> Expr)
 arrayPatternToExpr = define "arrayPatternToExpr" $
   doc "Convert an array pattern to an AST expression" $
   lambda "arr" $
@@ -515,7 +513,7 @@ arrayPatternToExpr = define "arrayPatternToExpr" $
         (lambda "maybeP" $ Maybes.maybe (Serialization.cst @@ string "") (patternToExpr) (var "maybeP"))
         (var "arr"))
 
-assignmentPatternToExpr :: TBinding (JS.AssignmentPattern -> Expr)
+assignmentPatternToExpr :: TTermDefinition (JS.AssignmentPattern -> Expr)
 assignmentPatternToExpr = define "assignmentPatternToExpr" $
   doc "Convert an assignment pattern to an AST expression" $
   lambda "assign" $ lets [
@@ -530,7 +528,7 @@ assignmentPatternToExpr = define "assignmentPatternToExpr" $
 -- Statement Conversions
 -- ============================================================================
 
-statementToExpr :: TBinding (JS.Statement -> Expr)
+statementToExpr :: TTermDefinition (JS.Statement -> Expr)
 statementToExpr = define "statementToExpr" $
   doc "Convert a statement to an AST expression" $
   lambda "stmt" $
@@ -557,14 +555,14 @@ statementToExpr = define "statementToExpr" $
       JS._Statement_classDeclaration>>: lambda "c" $ classDeclarationToExpr @@ var "c",
       JS._Statement_labeled>>: lambda "l" $ labeledStatementToExpr @@ var "l"]
 
-blockStatementToExpr :: TBinding (JS.BlockStatement -> Expr)
+blockStatementToExpr :: TTermDefinition (JS.BlockStatement -> Expr)
 blockStatementToExpr = define "blockStatementToExpr" $
   doc "Convert a block statement to an AST expression" $
   lambda "block" $
     Serialization.curlyBracesList @@ nothing @@ Serialization.fullBlockStyle @@
       (Lists.map (statementToExpr) (var "block"))
 
-variableDeclarationToExpr :: TBinding (JS.VariableDeclaration -> Expr)
+variableDeclarationToExpr :: TTermDefinition (JS.VariableDeclaration -> Expr)
 variableDeclarationToExpr = define "variableDeclarationToExpr" $
   doc "Convert a variable declaration to an AST expression" $
   lambda "decl" $ lets [
@@ -575,7 +573,7 @@ variableDeclarationToExpr = define "variableDeclarationToExpr" $
         variableKindToExpr @@ var "kind",
         Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map (variableDeclaratorToExpr) (var "declarations"))])
 
-variableDeclaratorToExpr :: TBinding (JS.VariableDeclarator -> Expr)
+variableDeclaratorToExpr :: TTermDefinition (JS.VariableDeclarator -> Expr)
 variableDeclaratorToExpr = define "variableDeclaratorToExpr" $
   doc "Convert a variable declarator to an AST expression" $
   lambda "decl" $ lets [
@@ -588,7 +586,7 @@ variableDeclaratorToExpr = define "variableDeclaratorToExpr" $
         (expressionToExpr @@ var "e"))
       (var "init")
 
-variableKindToExpr :: TBinding (JS.VariableKind -> Expr)
+variableKindToExpr :: TTermDefinition (JS.VariableKind -> Expr)
 variableKindToExpr = define "variableKindToExpr" $
   doc "Convert a variable kind to an AST expression" $
   lambda "kind" $
@@ -597,7 +595,7 @@ variableKindToExpr = define "variableKindToExpr" $
       JS._VariableKind_let>>: constant $ Serialization.cst @@ string "let",
       JS._VariableKind_const>>: constant $ Serialization.cst @@ string "const"]
 
-ifStatementToExpr :: TBinding (JS.IfStatement -> Expr)
+ifStatementToExpr :: TTermDefinition (JS.IfStatement -> Expr)
 ifStatementToExpr = define "ifStatementToExpr" $
   doc "Convert an if statement to an AST expression" $
   lambda "ifStmt" $ lets [
@@ -616,7 +614,7 @@ ifStatementToExpr = define "ifStatementToExpr" $
         statementToExpr @@ var "alt"])
       (var "alternate")
 
-switchStatementToExpr :: TBinding (JS.SwitchStatement -> Expr)
+switchStatementToExpr :: TTermDefinition (JS.SwitchStatement -> Expr)
 switchStatementToExpr = define "switchStatementToExpr" $
   doc "Convert a switch statement to an AST expression" $
   lambda "switchStmt" $ lets [
@@ -628,7 +626,7 @@ switchStatementToExpr = define "switchStatementToExpr" $
       Serialization.curlyBracesList @@ nothing @@ Serialization.fullBlockStyle @@
         (Lists.map (switchCaseToExpr) (var "cases"))]
 
-switchCaseToExpr :: TBinding (JS.SwitchCase -> Expr)
+switchCaseToExpr :: TTermDefinition (JS.SwitchCase -> Expr)
 switchCaseToExpr = define "switchCaseToExpr" $
   doc "Convert a switch case to an AST expression" $
   lambda "c" $ lets [
@@ -643,7 +641,7 @@ switchCaseToExpr = define "switchCaseToExpr" $
       (var "test")] $
     Serialization.newlineSep @@ (Lists.cons (var "caseLabel") (Lists.map (statementToExpr) (var "consequent")))
 
-returnStatementToExpr :: TBinding (JS.ReturnStatement -> Expr)
+returnStatementToExpr :: TTermDefinition (JS.ReturnStatement -> Expr)
 returnStatementToExpr = define "returnStatementToExpr" $
   doc "Convert a return statement to an AST expression" $
   lambda "r" $
@@ -655,7 +653,7 @@ returnStatementToExpr = define "returnStatementToExpr" $
           expressionToExpr @@ var "e"]))
       (var "r")
 
-throwStatementToExpr :: TBinding (JS.ThrowStatement -> Expr)
+throwStatementToExpr :: TTermDefinition (JS.ThrowStatement -> Expr)
 throwStatementToExpr = define "throwStatementToExpr" $
   doc "Convert a throw statement to an AST expression" $
   lambda "t" $
@@ -664,7 +662,7 @@ throwStatementToExpr = define "throwStatementToExpr" $
         Serialization.cst @@ string "throw",
         expressionToExpr @@ (unwrap JS._ThrowStatement @@ var "t")])
 
-tryStatementToExpr :: TBinding (JS.TryStatement -> Expr)
+tryStatementToExpr :: TTermDefinition (JS.TryStatement -> Expr)
 tryStatementToExpr = define "tryStatementToExpr" $
   doc "Convert a try statement to an AST expression" $
   lambda "t" $ lets [
@@ -686,7 +684,7 @@ tryStatementToExpr = define "tryStatementToExpr" $
       (var "finalizer")] $
     Serialization.spaceSep @@ (Lists.concat $ list [list [var "tryPart"], var "catchPart", var "finallyPart"])
 
-catchClauseToExpr :: TBinding (JS.CatchClause -> Expr)
+catchClauseToExpr :: TTermDefinition (JS.CatchClause -> Expr)
 catchClauseToExpr = define "catchClauseToExpr" $
   doc "Convert a catch clause to an AST expression" $
   lambda "c" $ lets [
@@ -700,7 +698,7 @@ catchClauseToExpr = define "catchClauseToExpr" $
       (var "param")] $
     Serialization.spaceSep @@ list [var "catchKw", blockStatementToExpr @@ var "body"]
 
-breakStatementToExpr :: TBinding (JS.BreakStatement -> Expr)
+breakStatementToExpr :: TTermDefinition (JS.BreakStatement -> Expr)
 breakStatementToExpr = define "breakStatementToExpr" $
   doc "Convert a break statement to an AST expression" $
   lambda "b" $
@@ -712,7 +710,7 @@ breakStatementToExpr = define "breakStatementToExpr" $
           identifierToExpr @@ var "label"]))
       (var "b")
 
-continueStatementToExpr :: TBinding (JS.ContinueStatement -> Expr)
+continueStatementToExpr :: TTermDefinition (JS.ContinueStatement -> Expr)
 continueStatementToExpr = define "continueStatementToExpr" $
   doc "Convert a continue statement to an AST expression" $
   lambda "c" $
@@ -724,7 +722,7 @@ continueStatementToExpr = define "continueStatementToExpr" $
           identifierToExpr @@ var "label"]))
       (var "c")
 
-whileStatementToExpr :: TBinding (JS.WhileStatement -> Expr)
+whileStatementToExpr :: TTermDefinition (JS.WhileStatement -> Expr)
 whileStatementToExpr = define "whileStatementToExpr" $
   doc "Convert a while statement to an AST expression" $
   lambda "w" $ lets [
@@ -735,7 +733,7 @@ whileStatementToExpr = define "whileStatementToExpr" $
       Serialization.parenthesize @@ (expressionToExpr @@ var "test"),
       statementToExpr @@ var "body"]
 
-doWhileStatementToExpr :: TBinding (JS.DoWhileStatement -> Expr)
+doWhileStatementToExpr :: TTermDefinition (JS.DoWhileStatement -> Expr)
 doWhileStatementToExpr = define "doWhileStatementToExpr" $
   doc "Convert a do-while statement to an AST expression" $
   lambda "d" $ lets [
@@ -748,7 +746,7 @@ doWhileStatementToExpr = define "doWhileStatementToExpr" $
         Serialization.cst @@ string "while",
         Serialization.parenthesize @@ (expressionToExpr @@ var "test")])
 
-forStatementToExpr :: TBinding (JS.ForStatement -> Expr)
+forStatementToExpr :: TTermDefinition (JS.ForStatement -> Expr)
 forStatementToExpr = define "forStatementToExpr" $
   doc "Convert a for statement to an AST expression" $
   lambda "f" $ lets [
@@ -768,7 +766,7 @@ forStatementToExpr = define "forStatementToExpr" $
       Serialization.parenList @@ false @@ list [var "initExpr", var "testExpr", var "updateExpr"],
       statementToExpr @@ var "body"]
 
-forInStatementToExpr :: TBinding (JS.ForInStatement -> Expr)
+forInStatementToExpr :: TTermDefinition (JS.ForInStatement -> Expr)
 forInStatementToExpr = define "forInStatementToExpr" $
   doc "Convert a for-in statement to an AST expression" $
   lambda "f" $ lets [
@@ -786,7 +784,7 @@ forInStatementToExpr = define "forInStatementToExpr" $
         expressionToExpr @@ var "right"]),
       statementToExpr @@ var "body"]
 
-forOfStatementToExpr :: TBinding (JS.ForOfStatement -> Expr)
+forOfStatementToExpr :: TTermDefinition (JS.ForOfStatement -> Expr)
 forOfStatementToExpr = define "forOfStatementToExpr" $
   doc "Convert a for-of statement to an AST expression" $
   lambda "f" $ lets [
@@ -808,7 +806,7 @@ forOfStatementToExpr = define "forOfStatementToExpr" $
         expressionToExpr @@ var "right"]),
       statementToExpr @@ var "body"]
 
-labeledStatementToExpr :: TBinding (JS.LabeledStatement -> Expr)
+labeledStatementToExpr :: TTermDefinition (JS.LabeledStatement -> Expr)
 labeledStatementToExpr = define "labeledStatementToExpr" $
   doc "Convert a labeled statement to an AST expression" $
   lambda "l" $ lets [
@@ -823,7 +821,7 @@ labeledStatementToExpr = define "labeledStatementToExpr" $
 -- Declaration Conversions
 -- ============================================================================
 
-functionDeclarationToExpr :: TBinding (JS.FunctionDeclaration -> Expr)
+functionDeclarationToExpr :: TTermDefinition (JS.FunctionDeclaration -> Expr)
 functionDeclarationToExpr = define "functionDeclarationToExpr" $
   doc "Convert a function declaration to an AST expression" $
   lambda "fn" $ lets [
@@ -841,7 +839,7 @@ functionDeclarationToExpr = define "functionDeclarationToExpr" $
       var "asyncKw",
       list [var "funcKw", identifierToExpr @@ var "id", var "paramsExpr", blockStatementToExpr @@ var "body"]])
 
-classDeclarationToExpr :: TBinding (JS.ClassDeclaration -> Expr)
+classDeclarationToExpr :: TTermDefinition (JS.ClassDeclaration -> Expr)
 classDeclarationToExpr = define "classDeclarationToExpr" $
   doc "Convert a class declaration to an AST expression" $
   lambda "cls" $ lets [
@@ -859,7 +857,7 @@ classDeclarationToExpr = define "classDeclarationToExpr" $
       var "extendsClause",
       list [var "bodyExpr"]])
 
-methodDefinitionToExpr :: TBinding (JS.MethodDefinition -> Expr)
+methodDefinitionToExpr :: TTermDefinition (JS.MethodDefinition -> Expr)
 methodDefinitionToExpr = define "methodDefinitionToExpr" $
   doc "Convert a method definition to an AST expression" $
   lambda "method" $ lets [
@@ -890,7 +888,7 @@ methodDefinitionToExpr = define "methodDefinitionToExpr" $
 -- Module Conversions
 -- ============================================================================
 
-programToExpr :: TBinding (JS.Program -> Expr)
+programToExpr :: TTermDefinition (JS.Program -> Expr)
 programToExpr = define "programToExpr" $
   doc "Convert a JavaScript program to an AST expression" $
   lambda "prog" $ lets [
@@ -899,7 +897,7 @@ programToExpr = define "programToExpr" $
     "items">: Lists.map (moduleItemToExpr) (var "body")] $
     Serialization.doubleNewlineSep @@ (Lists.concat $ list [var "warning", var "items"])
 
-moduleItemToExpr :: TBinding (JS.ModuleItem -> Expr)
+moduleItemToExpr :: TTermDefinition (JS.ModuleItem -> Expr)
 moduleItemToExpr = define "moduleItemToExpr" $
   doc "Convert a module item to an AST expression" $
   lambda "item" $
@@ -908,7 +906,7 @@ moduleItemToExpr = define "moduleItemToExpr" $
       JS._ModuleItem_import>>: lambda "i" $ importDeclarationToExpr @@ var "i",
       JS._ModuleItem_export>>: lambda "e" $ exportDeclarationToExpr @@ var "e"]
 
-importDeclarationToExpr :: TBinding (JS.ImportDeclaration -> Expr)
+importDeclarationToExpr :: TTermDefinition (JS.ImportDeclaration -> Expr)
 importDeclarationToExpr = define "importDeclarationToExpr" $
   doc "Convert an import declaration to an AST expression" $
   lambda "imp" $ lets [
@@ -928,7 +926,7 @@ importDeclarationToExpr = define "importDeclarationToExpr" $
           Serialization.cst @@ string "from",
           var "sourceExpr"]))
 
-importSpecifierToExpr :: TBinding (JS.ImportClause -> Expr)
+importSpecifierToExpr :: TTermDefinition (JS.ImportClause -> Expr)
 importSpecifierToExpr = define "importSpecifierToExpr" $
   doc "Convert an import specifier to an AST expression" $
   lambda "spec" $
@@ -949,14 +947,14 @@ importSpecifierToExpr = define "importSpecifierToExpr" $
           Serialization.cst @@ string "as",
           identifierToExpr @@ (unwrap JS._ImportNamespaceSpecifier @@ var "n")]]
 
-formatImportSpecifiers :: TBinding ([Expr] -> Expr)
+formatImportSpecifiers :: TTermDefinition ([Expr] -> Expr)
 formatImportSpecifiers = define "formatImportSpecifiers" $
   doc "Format import specifiers, handling default vs named imports" $
   lambda "specs" $
     -- Simplified: just wrap named imports in braces
     Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ var "specs"
 
-exportDeclarationToExpr :: TBinding (JS.ExportDeclaration -> Expr)
+exportDeclarationToExpr :: TTermDefinition (JS.ExportDeclaration -> Expr)
 exportDeclarationToExpr = define "exportDeclarationToExpr" $
   doc "Convert an export declaration to an AST expression" $
   lambda "exp" $
@@ -974,7 +972,7 @@ exportDeclarationToExpr = define "exportDeclarationToExpr" $
           statementToExpr @@ var "d"],
       JS._ExportDeclaration_all>>: lambda "a" $ exportAllToExpr @@ var "a"]
 
-namedExportToExpr :: TBinding (JS.NamedExport -> Expr)
+namedExportToExpr :: TTermDefinition (JS.NamedExport -> Expr)
 namedExportToExpr = define "namedExportToExpr" $
   doc "Convert a named export to an AST expression" $
   lambda "n" $ lets [
@@ -991,7 +989,7 @@ namedExportToExpr = define "namedExportToExpr" $
         list [Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ var "specExprs"],
         var "fromClause"]))
 
-exportSpecifierToExpr :: TBinding (JS.ExportSpecifier -> Expr)
+exportSpecifierToExpr :: TTermDefinition (JS.ExportSpecifier -> Expr)
 exportSpecifierToExpr = define "exportSpecifierToExpr" $
   doc "Convert an export specifier to an AST expression" $
   lambda "spec" $ lets [
@@ -1004,7 +1002,7 @@ exportSpecifierToExpr = define "exportSpecifierToExpr" $
         Serialization.cst @@ string "as",
         identifierToExpr @@ var "exported"])
 
-exportAllToExpr :: TBinding (JS.ExportAllDeclaration -> Expr)
+exportAllToExpr :: TTermDefinition (JS.ExportAllDeclaration -> Expr)
 exportAllToExpr = define "exportAllToExpr" $
   doc "Convert an export all declaration to an AST expression" $
   lambda "a" $ lets [
@@ -1029,7 +1027,7 @@ exportAllToExpr = define "exportAllToExpr" $
 -- Operators
 -- ============================================================================
 
-binaryOperatorToExpr :: TBinding (JS.BinaryOperator -> Op)
+binaryOperatorToExpr :: TTermDefinition (JS.BinaryOperator -> Op)
 binaryOperatorToExpr = define "binaryOperatorToExpr" $
   doc "Convert a binary operator to an Op" $
   lambda "op" $
@@ -1060,7 +1058,7 @@ binaryOperatorToExpr = define "binaryOperatorToExpr" $
       JS._BinaryOperator_in>>: constant JavaScriptOperators.inOp,
       JS._BinaryOperator_instanceof>>: constant JavaScriptOperators.instanceOfOp]
 
-unaryOperatorToString :: TBinding (JS.UnaryOperator -> String)
+unaryOperatorToString :: TTermDefinition (JS.UnaryOperator -> String)
 unaryOperatorToString = define "unaryOperatorToString" $
   doc "Convert a unary operator to a string" $
   lambda "op" $
@@ -1075,7 +1073,7 @@ unaryOperatorToString = define "unaryOperatorToString" $
       JS._UnaryOperator_increment>>: constant $ string "++",
       JS._UnaryOperator_decrement>>: constant $ string "--"]
 
-assignmentOperatorToString :: TBinding (JS.AssignmentOperator -> String)
+assignmentOperatorToString :: TTermDefinition (JS.AssignmentOperator -> String)
 assignmentOperatorToString = define "assignmentOperatorToString" $
   doc "Convert an assignment operator to a string" $
   lambda "op" $
@@ -1102,7 +1100,7 @@ assignmentOperatorToString = define "assignmentOperatorToString" $
 -- Comments
 -- ============================================================================
 
-documentationCommentToExpr :: TBinding (JS.DocumentationComment -> Expr)
+documentationCommentToExpr :: TTermDefinition (JS.DocumentationComment -> Expr)
 documentationCommentToExpr = define "documentationCommentToExpr" $
   doc "Convert a documentation comment to an AST expression" $
   lambda "doc" $ lets [
@@ -1110,7 +1108,7 @@ documentationCommentToExpr = define "documentationCommentToExpr" $
     "tags">: project JS._DocumentationComment JS._DocumentationComment_tags @@ var "doc"] $
     Serialization.cst @@ (toJavaScriptComments @@ var "description" @@ var "tags")
 
-toJavaScriptComments :: TBinding (String -> [JS.DocumentationTag] -> String)
+toJavaScriptComments :: TTermDefinition (String -> [JS.DocumentationTag] -> String)
 toJavaScriptComments = define "toJavaScriptComments" $
   doc "Format a description and tags as a JSDoc comment" $
   lambda "desc" $ lambda "tags" $ lets [
@@ -1127,7 +1125,7 @@ toJavaScriptComments = define "toJavaScriptComments" $
           var "allLines",
           list [string " */"]])
 
-documentationTagToLine :: TBinding (JS.DocumentationTag -> String)
+documentationTagToLine :: TTermDefinition (JS.DocumentationTag -> String)
 documentationTagToLine = define "documentationTagToLine" $
   doc "Convert a documentation tag to a JSDoc line" $
   lambda "tag" $ lets [
@@ -1139,7 +1137,7 @@ documentationTagToLine = define "documentationTagToLine" $
     "paramPart">: Maybes.maybe (string "") (lambda "p" $ Strings.cat2 (unwrap JS._Identifier @@ var "p") (string " ")) (var "mparamName")] $
     Strings.cat $ list [string " * @", var "name", string " ", var "typePart", var "paramPart", var "description"]
 
-typeExpressionToString :: TBinding (JS.TypeExpression -> String)
+typeExpressionToString :: TTermDefinition (JS.TypeExpression -> String)
 typeExpressionToString = define "typeExpressionToString" $
   doc "Convert a type expression to a string for JSDoc" $
   lambda "typ" $
@@ -1164,7 +1162,7 @@ typeExpressionToString = define "typeExpressionToString" $
           string ">"],
       JS._TypeExpression_optional>>: lambda "o" $ Strings.cat2 (string "?") (typeExpressionToString @@ var "o")]
 
-toLineComment :: TBinding (String -> String)
+toLineComment :: TTermDefinition (String -> String)
 toLineComment = define "toLineComment" $
   doc "Convert a string to a JavaScript line comment" $
   lambda "s" $ Strings.intercalate (string "\n") $ Lists.map (lambda "line" $ Strings.cat2 (string "// ") (var "line")) (Strings.lines $ var "s")
@@ -1174,7 +1172,7 @@ toLineComment = define "toLineComment" $
 -- With Comments Variants
 -- ============================================================================
 
-moduleItemWithCommentsToExpr :: TBinding (JS.ModuleItemWithComments -> Expr)
+moduleItemWithCommentsToExpr :: TTermDefinition (JS.ModuleItemWithComments -> Expr)
 moduleItemWithCommentsToExpr = define "moduleItemWithCommentsToExpr" $
   doc "Convert a module item with comments to an AST expression" $
   lambda "miwc" $ lets [
@@ -1187,7 +1185,7 @@ moduleItemWithCommentsToExpr = define "moduleItemWithCommentsToExpr" $
         moduleItemToExpr @@ var "body"])
       (var "mc")
 
-functionDeclarationWithCommentsToExpr :: TBinding (JS.FunctionDeclarationWithComments -> Expr)
+functionDeclarationWithCommentsToExpr :: TTermDefinition (JS.FunctionDeclarationWithComments -> Expr)
 functionDeclarationWithCommentsToExpr = define "functionDeclarationWithCommentsToExpr" $
   doc "Convert a function declaration with comments to an AST expression" $
   lambda "fdwc" $ lets [
@@ -1200,7 +1198,7 @@ functionDeclarationWithCommentsToExpr = define "functionDeclarationWithCommentsT
         functionDeclarationToExpr @@ var "body"])
       (var "mc")
 
-classDeclarationWithCommentsToExpr :: TBinding (JS.ClassDeclarationWithComments -> Expr)
+classDeclarationWithCommentsToExpr :: TTermDefinition (JS.ClassDeclarationWithComments -> Expr)
 classDeclarationWithCommentsToExpr = define "classDeclarationWithCommentsToExpr" $
   doc "Convert a class declaration with comments to an AST expression" $
   lambda "cdwc" $ lets [

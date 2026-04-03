@@ -162,7 +162,7 @@ public interface Utils {
 
   static hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> findNamespaces(hydra.module.Namespace focusNs, hydra.util.ConsList<hydra.module.Definition> defs) {
     hydra.module.Namespace coreNs = new hydra.module.Namespace("hydra.core");
-    hydra.util.Lazy<hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>> namespaces = new hydra.util.Lazy<>(() -> hydra.Schemas.namespacesForDefinitions(
+    hydra.util.Lazy<hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>> namespaces = new hydra.util.Lazy<>(() -> hydra.Analysis.namespacesForDefinitions(
       hydra.ext.python.Names::encodeNamespace,
       focusNs,
       defs));

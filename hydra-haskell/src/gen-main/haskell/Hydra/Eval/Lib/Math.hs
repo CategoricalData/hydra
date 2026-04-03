@@ -6,11 +6,6 @@ module Hydra.Eval.Lib.Math where
 
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Interpreter-friendly even.
 even :: t0 -> t1 -> Core.Term -> Either t2 Core.Term

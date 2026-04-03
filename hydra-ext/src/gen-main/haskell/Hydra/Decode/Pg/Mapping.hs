@@ -7,7 +7,7 @@ module Hydra.Decode.Pg.Mapping where
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Pg.Model as Model
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Helpers as Helpers
+import qualified Hydra.Extract.Core as Core_
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
@@ -16,78 +16,73 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Pg.Mapping as Mapping
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 annotationSchema :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Mapping.AnnotationSchema
 annotationSchema cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "vertexLabel" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+        let fieldMap = Core_.toFieldMap v0
+        in (Eithers.bind (Core_.requireField "vertexLabel" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_vertexLabel -> Eithers.bind (Helpers.requireField "edgeLabel" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_vertexLabel -> Eithers.bind (Core_.requireField "edgeLabel" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_edgeLabel -> Eithers.bind (Helpers.requireField "vertexId" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_edgeLabel -> Eithers.bind (Core_.requireField "vertexId" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_vertexId -> Eithers.bind (Helpers.requireField "edgeId" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_vertexId -> Eithers.bind (Core_.requireField "edgeId" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_edgeId -> Eithers.bind (Helpers.requireField "propertyKey" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_edgeId -> Eithers.bind (Core_.requireField "propertyKey" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_propertyKey -> Eithers.bind (Helpers.requireField "propertyValue" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_propertyKey -> Eithers.bind (Core_.requireField "propertyValue" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_propertyValue -> Eithers.bind (Helpers.requireField "outVertex" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_propertyValue -> Eithers.bind (Core_.requireField "outVertex" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_outVertex -> Eithers.bind (Helpers.requireField "outVertexLabel" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_outVertex -> Eithers.bind (Core_.requireField "outVertexLabel" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_outVertexLabel -> Eithers.bind (Helpers.requireField "inVertex" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_outVertexLabel -> Eithers.bind (Core_.requireField "inVertex" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_inVertex -> Eithers.bind (Helpers.requireField "inVertexLabel" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_inVertex -> Eithers.bind (Core_.requireField "inVertexLabel" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_inVertexLabel -> Eithers.bind (Helpers.requireField "outEdge" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_inVertexLabel -> Eithers.bind (Core_.requireField "outEdge" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_outEdge -> Eithers.bind (Helpers.requireField "outEdgeLabel" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_outEdge -> Eithers.bind (Core_.requireField "outEdgeLabel" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_outEdgeLabel -> Eithers.bind (Helpers.requireField "inEdge" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_outEdgeLabel -> Eithers.bind (Core_.requireField "inEdge" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_inEdge -> Eithers.bind (Helpers.requireField "inEdgeLabel" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_inEdge -> Eithers.bind (Core_.requireField "inEdgeLabel" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_inEdgeLabel -> Eithers.bind (Helpers.requireField "ignore" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_inEdgeLabel -> Eithers.bind (Core_.requireField "ignore" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_ignore -> Right (Mapping.AnnotationSchema {
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_ignore -> Right (Mapping.AnnotationSchema {
           Mapping.annotationSchemaVertexLabel = field_vertexLabel,
           Mapping.annotationSchemaEdgeLabel = field_edgeLabel,
           Mapping.annotationSchemaVertexId = field_vertexId,
@@ -109,8 +104,8 @@ edgeSpec :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Mapping.Edge
 edgeSpec cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "label" Model.edgeLabel fieldMap cx) (\field_label -> Eithers.bind (Helpers.requireField "id" valueSpec fieldMap cx) (\field_id -> Eithers.bind (Helpers.requireField "out" valueSpec fieldMap cx) (\field_out -> Eithers.bind (Helpers.requireField "in" valueSpec fieldMap cx) (\field_in -> Eithers.bind (Helpers.requireField "properties" (Helpers.decodeList propertySpec) fieldMap cx) (\field_properties -> Right (Mapping.EdgeSpec {
+        let fieldMap = Core_.toFieldMap v0
+        in (Eithers.bind (Core_.requireField "label" Model.edgeLabel fieldMap cx) (\field_label -> Eithers.bind (Core_.requireField "id" valueSpec fieldMap cx) (\field_id -> Eithers.bind (Core_.requireField "out" valueSpec fieldMap cx) (\field_out -> Eithers.bind (Core_.requireField "in" valueSpec fieldMap cx) (\field_in -> Eithers.bind (Core_.requireField "properties" (Core_.decodeList propertySpec) fieldMap cx) (\field_properties -> Right (Mapping.EdgeSpec {
           Mapping.edgeSpecLabel = field_label,
           Mapping.edgeSpecId = field_id,
           Mapping.edgeSpecOut = field_out,
@@ -139,8 +134,8 @@ propertySpec :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Mapping.
 propertySpec cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "key" Model.propertyKey fieldMap cx) (\field_key -> Eithers.bind (Helpers.requireField "value" valueSpec fieldMap cx) (\field_value -> Right (Mapping.PropertySpec {
+        let fieldMap = Core_.toFieldMap v0
+        in (Eithers.bind (Core_.requireField "key" Model.propertyKey fieldMap cx) (\field_key -> Eithers.bind (Core_.requireField "value" valueSpec fieldMap cx) (\field_value -> Right (Mapping.PropertySpec {
           Mapping.propertySpecKey = field_key,
           Mapping.propertySpecValue = field_value}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -154,8 +149,8 @@ valueSpec cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "value", (\input -> Eithers.map (\t -> Mapping.ValueSpecValue) (Helpers.decodeUnit cx input))),
-                      (Core.Name "pattern", (\input -> Eithers.map (\t -> Mapping.ValueSpecPattern t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+                      (Core.Name "value", (\input -> Eithers.map (\t -> Mapping.ValueSpecValue) (Core_.decodeUnit cx input))),
+                      (Core.Name "pattern", (\input -> Eithers.map (\t -> Mapping.ValueSpecPattern t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
                         Core.TermLiteral v1 -> case v1 of
                           Core.LiteralString v2 -> Right v2
                           _ -> Left (Errors.DecodingError "expected string literal")
@@ -170,8 +165,8 @@ vertexSpec :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Mapping.Ve
 vertexSpec cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
-        let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "label" Model.vertexLabel fieldMap cx) (\field_label -> Eithers.bind (Helpers.requireField "id" valueSpec fieldMap cx) (\field_id -> Eithers.bind (Helpers.requireField "properties" (Helpers.decodeList propertySpec) fieldMap cx) (\field_properties -> Right (Mapping.VertexSpec {
+        let fieldMap = Core_.toFieldMap v0
+        in (Eithers.bind (Core_.requireField "label" Model.vertexLabel fieldMap cx) (\field_label -> Eithers.bind (Core_.requireField "id" valueSpec fieldMap cx) (\field_id -> Eithers.bind (Core_.requireField "properties" (Core_.decodeList propertySpec) fieldMap cx) (\field_properties -> Right (Mapping.VertexSpec {
           Mapping.vertexSpecLabel = field_label,
           Mapping.vertexSpecId = field_id,
           Mapping.vertexSpecProperties = field_properties})))))

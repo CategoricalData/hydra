@@ -9,13 +9,8 @@ import qualified Hydra.Error.Core as Core_
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Show.Core as Core__
-import qualified Hydra.Show.Meta as Meta
+import qualified Hydra.Show.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Show a constant condition error as a string
 constantConditionError :: Core_.ConstantConditionError -> String
@@ -284,7 +279,7 @@ unexpectedTermVariantError e =
           actual = Core_.unexpectedTermVariantErrorActualTerm e
       in (Strings.cat [
         "expected ",
-        (Meta.termVariant expected),
+        (Variants.termVariant expected),
         " term but found ",
         (Core__.term actual)])
 
@@ -296,7 +291,7 @@ unexpectedTypeVariantError e =
           actual = Core_.unexpectedTypeVariantErrorActualType e
       in (Strings.cat [
         "expected ",
-        (Meta.typeVariant expected),
+        (Variants.typeVariant expected),
         " type but found ",
         (Core__.type_ actual)])
 

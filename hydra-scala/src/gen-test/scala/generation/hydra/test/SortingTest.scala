@@ -13,9 +13,9 @@ class SortingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.sorting.topologicalSort(Seq())) == (
+      right([])) == (
 
-      Right(Seq())))
+      right([])))
 
   }
 
@@ -23,9 +23,9 @@ class SortingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.sorting.topologicalSort(Seq(Tuple2(1, Seq())))) == (
+      right([1])) == (
 
-      Right(Seq(1))))
+      right([1])))
 
   }
 
@@ -33,9 +33,9 @@ class SortingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.sorting.topologicalSort(Seq(Tuple2(3, Seq()), Tuple2(1, Seq()), Tuple2(2, Seq())))) == (
+      right([1, 2, 3])) == (
 
-      Right(Seq(1, 2, 3))))
+      right([1, 2, 3])))
 
   }
 
@@ -43,9 +43,9 @@ class SortingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.sorting.topologicalSort(Seq(Tuple2(3, Seq(1)), Tuple2(2, Seq(3)), Tuple2(1, Seq())))) == (
+      right([1, 3, 2])) == (
 
-      Right(Seq(1, 3, 2))))
+      right([1, 3, 2])))
 
   }
 
@@ -53,9 +53,9 @@ class SortingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.sorting.topologicalSort(Seq(Tuple2(3, Seq(1, 4)), Tuple2(4, Seq(6, 2)), Tuple2(1, Seq(5)), Tuple2(2, Seq()), Tuple2(6, Seq()), Tuple2(5, Seq())))) == (
+      right([5, 1, 2, 6, 4, 3])) == (
 
-      Right(Seq(5, 1, 2, 6, 4, 3))))
+      right([5, 1, 2, 6, 4, 3])))
 
   }
 
@@ -63,9 +63,9 @@ class SortingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.sorting.topologicalSort(Seq(Tuple2(3, Seq(1, 4)), Tuple2(5, Seq(6, 2)), Tuple2(2, Seq(7)), Tuple2(1, Seq()), Tuple2(4, Seq()), Tuple2(6, Seq()), Tuple2(7, Seq())))) == (
+      right([1, 7, 2, 4, 3, 6, 5])) == (
 
-      Right(Seq(1, 7, 2, 4, 3, 6, 5))))
+      right([1, 7, 2, 4, 3, 6, 5])))
 
   }
 
@@ -73,9 +73,9 @@ class SortingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.sorting.topologicalSort(Seq(Tuple2(1, Seq(3, 4)), Tuple2(3, Seq(2)), Tuple2(4, Seq(2)), Tuple2(2, Seq(5)), Tuple2(5, Seq())))) == (
+      right([5, 2, 3, 4, 1])) == (
 
-      Right(Seq(5, 2, 3, 4, 1))))
+      right([5, 2, 3, 4, 1])))
 
   }
 
@@ -83,9 +83,9 @@ class SortingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.sorting.topologicalSort(Seq(Tuple2(1, Seq(2)), Tuple2(2, Seq(1))))) == (
+      left([[1, 2]])) == (
 
-      Left(Seq(Seq(1, 2)))))
+      left([[1, 2]])))
 
   }
 
@@ -93,9 +93,9 @@ class SortingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.sorting.topologicalSort(Seq(Tuple2(1, Seq(3)), Tuple2(3, Seq(2)), Tuple2(2, Seq(3, 4)), Tuple2(4, Seq(5)), Tuple2(5, Seq())))) == (
+      left([[2, 3]])) == (
 
-      Left(Seq(Seq(2, 3)))))
+      left([[2, 3]])))
 
   }
 
@@ -105,9 +105,9 @@ class SortingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.sorting.topologicalSortComponents(Seq())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -115,9 +115,9 @@ class SortingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.sorting.topologicalSortComponents(Seq(Tuple2(1, Seq())))) == (
+      [[1]]) == (
 
-      Seq(Seq(1))))
+      [[1]]))
 
   }
 
@@ -125,9 +125,9 @@ class SortingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.sorting.topologicalSortComponents(Seq(Tuple2(3, Seq()), Tuple2(1, Seq()), Tuple2(2, Seq())))) == (
+      [[1], [2], [3]]) == (
 
-      Seq(Seq(1), Seq(2), Seq(3))))
+      [[1], [2], [3]]))
 
   }
 
@@ -135,9 +135,9 @@ class SortingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.sorting.topologicalSortComponents(Seq(Tuple2(1, Seq(2)), Tuple2(2, Seq())))) == (
+      [[2], [1]]) == (
 
-      Seq(Seq(2), Seq(1))))
+      [[2], [1]]))
 
   }
 
@@ -145,9 +145,9 @@ class SortingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.sorting.topologicalSortComponents(Seq(Tuple2(2, Seq(1)), Tuple2(1, Seq())))) == (
+      [[1], [2]]) == (
 
-      Seq(Seq(1), Seq(2))))
+      [[1], [2]]))
 
   }
 
@@ -155,9 +155,9 @@ class SortingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.sorting.topologicalSortComponents(Seq(Tuple2(2, Seq(1, 3)), Tuple2(1, Seq(3)), Tuple2(3, Seq())))) == (
+      [[3], [1], [2]]) == (
 
-      Seq(Seq(3), Seq(1), Seq(2))))
+      [[3], [1], [2]]))
 
   }
 
@@ -165,9 +165,9 @@ class SortingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.sorting.topologicalSortComponents(Seq(Tuple2(1, Seq(2)), Tuple2(2, Seq(1))))) == (
+      [[1, 2]]) == (
 
-      Seq(Seq(1, 2))))
+      [[1, 2]]))
 
   }
 
@@ -175,9 +175,9 @@ class SortingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.sorting.topologicalSortComponents(Seq(Tuple2(2, Seq(1)), Tuple2(1, Seq(2))))) == (
+      [[1, 2]]) == (
 
-      Seq(Seq(1, 2))))
+      [[1, 2]]))
 
   }
 
@@ -185,9 +185,9 @@ class SortingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.sorting.topologicalSortComponents(Seq(Tuple2(1, Seq(2)), Tuple2(2, Seq(3)), Tuple2(3, Seq(1))))) == (
+      [[1, 2, 3]]) == (
 
-      Seq(Seq(1, 2, 3))))
+      [[1, 2, 3]]))
 
   }
 
@@ -195,9 +195,9 @@ class SortingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.sorting.topologicalSortComponents(Seq(Tuple2(2, Seq(1)), Tuple2(3, Seq(2)), Tuple2(1, Seq(3))))) == (
+      [[1, 2, 3]]) == (
 
-      Seq(Seq(1, 2, 3))))
+      [[1, 2, 3]]))
 
   }
 
@@ -205,9 +205,9 @@ class SortingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.sorting.topologicalSortComponents(Seq(Tuple2(200, Seq()), Tuple2(100, Seq()), Tuple2(300, Seq()), Tuple2(10, Seq(20)), Tuple2(20, Seq(10)), Tuple2(1, Seq(2)), Tuple2(2, Seq(3)), Tuple2(3, Seq(1))))) == (
+      [[1, 2, 3], [10, 20], [100], [200], [300]]) == (
 
-      Seq(Seq(1, 2, 3), Seq(10, 20), Seq(100), Seq(200), Seq(300))))
+      [[1, 2, 3], [10, 20], [100], [200], [300]]))
 
   }
 
@@ -215,9 +215,9 @@ class SortingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.sorting.topologicalSortComponents(Seq(Tuple2(1, Seq(2, 3)), Tuple2(2, Seq(3)), Tuple2(3, Seq(1))))) == (
+      [[1, 2, 3]]) == (
 
-      Seq(Seq(1, 2, 3))))
+      [[1, 2, 3]]))
 
   }
 
@@ -225,9 +225,9 @@ class SortingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.sorting.topologicalSortComponents(Seq(Tuple2(1, Seq(2, 10)), Tuple2(2, Seq(3)), Tuple2(3, Seq(1)), Tuple2(10, Seq(20)), Tuple2(20, Seq(100, 10)), Tuple2(100, Seq())))) == (
+      [[100], [10, 20], [1, 2, 3]]) == (
 
-      Seq(Seq(100), Seq(10, 20), Seq(1, 2, 3))))
+      [[100], [10, 20], [1, 2, 3]]))
 
   }
 
@@ -235,9 +235,9 @@ class SortingTest extends AnyFunSuite {
 
     assert((
 
-      hydra.sorting.topologicalSortComponents(Seq(Tuple2(1, Seq(2, 3, 10)), Tuple2(2, Seq(3)), Tuple2(3, Seq(1)), Tuple2(10, Seq(20, 30)), Tuple2(20, Seq(30)), Tuple2(30, Seq()), Tuple2(100, Seq(200, 2)), Tuple2(200, Seq()), Tuple2(300, Seq(100)), Tuple2(1000, Seq()), Tuple2(2000, Seq())))) == (
+      [[30], [20], [10], [1, 2, 3], [200], [100], [300], [1000], [2000]]) == (
 
-      Seq(Seq(30), Seq(20), Seq(10), Seq(1, 2, 3), Seq(200), Seq(100), Seq(300), Seq(1000), Seq(2000))))
+      [[30], [20], [10], [1, 2, 3], [200], [100], [300], [1000], [2000]]))
 
   }
 }

@@ -63,13 +63,11 @@ import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
-import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
-import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
+import qualified Hydra.Sources.Kernel.Terms.Show.Variants  as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
@@ -88,7 +86,7 @@ import qualified Hydra.Ext.Java.Syntax as Java
 import qualified Hydra.Ext.Sources.Java.Syntax as JavaSyntax
 
 
-def :: String -> TTerm a -> TBinding a
+def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
 ns :: Namespace
@@ -101,101 +99,101 @@ module_ = Module ns elements
     Just "Java naming constants and package name utilities"
   where
     elements = [
-      toTermDefinition acceptMethodName,
-      toTermDefinition applyMethodName,
-      toTermDefinition compareToMethodName,
-      toTermDefinition equalsMethodName,
-      toTermDefinition getMethodName,
-      toTermDefinition hashCodeMethodName,
-      toTermDefinition hydraCorePackageName,
-      toTermDefinition hydraUtilPackageName,
-      toTermDefinition instanceName,
-      toTermDefinition javaLangPackageName,
-      toTermDefinition javaPackageName,
-      toTermDefinition javaUtilFunctionPackageName,
-      toTermDefinition javaUtilPackageName,
-      toTermDefinition otherInstanceName,
-      toTermDefinition otherwiseMethodName,
-      toTermDefinition partialVisitorName,
-      toTermDefinition setMethodName,
-      toTermDefinition valueFieldName,
-      toTermDefinition visitMethodName,
-      toTermDefinition visitorName,
-      toTermDefinition visitorReturnParameter]
+      toDefinition acceptMethodName,
+      toDefinition applyMethodName,
+      toDefinition compareToMethodName,
+      toDefinition equalsMethodName,
+      toDefinition getMethodName,
+      toDefinition hashCodeMethodName,
+      toDefinition hydraCorePackageName,
+      toDefinition hydraUtilPackageName,
+      toDefinition instanceName,
+      toDefinition javaLangPackageName,
+      toDefinition javaPackageName,
+      toDefinition javaUtilFunctionPackageName,
+      toDefinition javaUtilPackageName,
+      toDefinition otherInstanceName,
+      toDefinition otherwiseMethodName,
+      toDefinition partialVisitorName,
+      toDefinition setMethodName,
+      toDefinition valueFieldName,
+      toDefinition visitMethodName,
+      toDefinition visitorName,
+      toDefinition visitorReturnParameter]
 
-acceptMethodName :: TBinding String
+acceptMethodName :: TTermDefinition String
 acceptMethodName = def "acceptMethodName" $ string "accept"
 
-applyMethodName :: TBinding String
+applyMethodName :: TTermDefinition String
 applyMethodName = def "applyMethodName" $ string "apply"
 
-compareToMethodName :: TBinding String
+compareToMethodName :: TTermDefinition String
 compareToMethodName = def "compareToMethodName" $ string "compareTo"
 
-equalsMethodName :: TBinding String
+equalsMethodName :: TTermDefinition String
 equalsMethodName = def "equalsMethodName" $ string "equals"
 
-getMethodName :: TBinding String
+getMethodName :: TTermDefinition String
 getMethodName = def "getMethodName" $ string "get"
 
-hashCodeMethodName :: TBinding String
+hashCodeMethodName :: TTermDefinition String
 hashCodeMethodName = def "hashCodeMethodName" $ string "hashCode"
 
-hydraCorePackageName :: TBinding (Maybe Java.PackageName)
+hydraCorePackageName :: TTermDefinition (Maybe Java.PackageName)
 hydraCorePackageName = def "hydraCorePackageName" $
   doc "The hydra.core package name" $
   just (javaPackageName @@ list [string "hydra", string "core"])
 
-hydraUtilPackageName :: TBinding (Maybe Java.PackageName)
+hydraUtilPackageName :: TTermDefinition (Maybe Java.PackageName)
 hydraUtilPackageName = def "hydraUtilPackageName" $
   doc "The hydra.util package name" $
   just (javaPackageName @@ list [string "hydra", string "util"])
 
-instanceName :: TBinding String
+instanceName :: TTermDefinition String
 instanceName = def "instanceName" $ string "instance"
 
-javaLangPackageName :: TBinding (Maybe Java.PackageName)
+javaLangPackageName :: TTermDefinition (Maybe Java.PackageName)
 javaLangPackageName = def "javaLangPackageName" $
   doc "The java.lang package name" $
   just (javaPackageName @@ list [string "java", string "lang"])
 
-javaPackageName :: TBinding ([String] -> Java.PackageName)
+javaPackageName :: TTermDefinition ([String] -> Java.PackageName)
 javaPackageName = def "javaPackageName" $
   doc "Construct a Java package name from a list of string parts" $
   "parts" ~>
     wrap Java._PackageName $
       Lists.map ("p" ~> wrap Java._Identifier (var "p")) (var "parts")
 
-javaUtilFunctionPackageName :: TBinding (Maybe Java.PackageName)
+javaUtilFunctionPackageName :: TTermDefinition (Maybe Java.PackageName)
 javaUtilFunctionPackageName = def "javaUtilFunctionPackageName" $
   doc "The java.util.function package name" $
   just (javaPackageName @@ list [string "java", string "util", string "function"])
 
-javaUtilPackageName :: TBinding (Maybe Java.PackageName)
+javaUtilPackageName :: TTermDefinition (Maybe Java.PackageName)
 javaUtilPackageName = def "javaUtilPackageName" $
   doc "The java.util package name" $
   just (javaPackageName @@ list [string "java", string "util"])
 
-otherInstanceName :: TBinding String
+otherInstanceName :: TTermDefinition String
 otherInstanceName = def "otherInstanceName" $ string "other"
 
-otherwiseMethodName :: TBinding String
+otherwiseMethodName :: TTermDefinition String
 otherwiseMethodName = def "otherwiseMethodName" $ string "otherwise"
 
-partialVisitorName :: TBinding String
+partialVisitorName :: TTermDefinition String
 partialVisitorName = def "partialVisitorName" $ string "PartialVisitor"
 
-setMethodName :: TBinding String
+setMethodName :: TTermDefinition String
 setMethodName = def "setMethodName" $ string "set"
 
-valueFieldName :: TBinding String
+valueFieldName :: TTermDefinition String
 valueFieldName = def "valueFieldName" $ string "value"
 
-visitMethodName :: TBinding String
+visitMethodName :: TTermDefinition String
 visitMethodName = def "visitMethodName" $ string "visit"
 
-visitorName :: TBinding String
+visitorName :: TTermDefinition String
 visitorName = def "visitorName" $ string "Visitor"
 
-visitorReturnParameter :: TBinding String
+visitorReturnParameter :: TTermDefinition String
 visitorReturnParameter = def "visitorReturnParameter" $ string "R"

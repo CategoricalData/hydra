@@ -13,9 +13,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.empty) == (
+      {}) == (
 
-      scala.collection.immutable.Set()))
+      {}))
 
   }
 
@@ -25,9 +25,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.singleton[Int](42)) == (
+      {42}) == (
 
-      scala.collection.immutable.Set(42)))
+      {42}))
 
   }
 
@@ -37,9 +37,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.fromList[Int](Seq(1, 2, 3))) == (
+      {1, 2, 3}) == (
 
-      scala.collection.immutable.Set(1, 2, 3)))
+      {1, 2, 3}))
 
   }
 
@@ -47,9 +47,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.fromList[Int](Seq(1, 2, 1, 3))) == (
+      {1, 2, 3}) == (
 
-      scala.collection.immutable.Set(1, 2, 3)))
+      {1, 2, 3}))
 
   }
 
@@ -57,9 +57,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.fromList(Seq())) == (
+      {}) == (
 
-      scala.collection.immutable.Set()))
+      {}))
 
   }
 
@@ -69,9 +69,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.toList[Int](scala.collection.immutable.Set(1, 2, 3))) == (
+      [1, 2, 3]) == (
 
-      Seq(1, 2, 3)))
+      [1, 2, 3]))
 
   }
 
@@ -79,9 +79,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.toList[Int](scala.collection.immutable.Set(1, 2, 3))) == (
+      [1, 2, 3]) == (
 
-      Seq(1, 2, 3)))
+      [1, 2, 3]))
 
   }
 
@@ -89,9 +89,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.toList(scala.collection.immutable.Set())) == (
+      []) == (
 
-      Seq()))
+      []))
 
   }
 
@@ -101,9 +101,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.insert[Int](4)(scala.collection.immutable.Set(1, 2, 3))) == (
+      {1, 2, 3, 4}) == (
 
-      scala.collection.immutable.Set(1, 2, 3, 4)))
+      {1, 2, 3, 4}))
 
   }
 
@@ -111,9 +111,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.insert[Int](2)(scala.collection.immutable.Set(1, 2, 3))) == (
+      {1, 2, 3}) == (
 
-      scala.collection.immutable.Set(1, 2, 3)))
+      {1, 2, 3}))
 
   }
 
@@ -121,9 +121,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.insert[Int](1)(scala.collection.immutable.Set())) == (
+      {1}) == (
 
-      scala.collection.immutable.Set(1)))
+      {1}))
 
   }
 
@@ -133,9 +133,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.delete[Int](2)(scala.collection.immutable.Set(1, 2, 3))) == (
+      {1, 3}) == (
 
-      scala.collection.immutable.Set(1, 3)))
+      {1, 3}))
 
   }
 
@@ -143,9 +143,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.delete[Int](4)(scala.collection.immutable.Set(1, 2, 3))) == (
+      {1, 2, 3}) == (
 
-      scala.collection.immutable.Set(1, 2, 3)))
+      {1, 2, 3}))
 
   }
 
@@ -153,9 +153,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.delete[Int](1)(scala.collection.immutable.Set())) == (
+      {}) == (
 
-      scala.collection.immutable.Set()))
+      {}))
 
   }
 
@@ -165,7 +165,7 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.member[Int](2)(scala.collection.immutable.Set(1, 2, 3))) == (
+      true) == (
 
       true))
 
@@ -175,7 +175,7 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.member[Int](4)(scala.collection.immutable.Set(1, 2, 3))) == (
+      false) == (
 
       false))
 
@@ -185,7 +185,7 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.member[Int](1)(scala.collection.immutable.Set())) == (
+      false) == (
 
       false))
 
@@ -197,7 +197,7 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.size[Int](scala.collection.immutable.Set(1, 2, 3))) == (
+      3) == (
 
       3))
 
@@ -207,7 +207,7 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.size[Int](scala.collection.immutable.Set(42))) == (
+      1) == (
 
       1))
 
@@ -217,7 +217,7 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.size(scala.collection.immutable.Set())) == (
+      0) == (
 
       0))
 
@@ -229,7 +229,7 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.`null`(scala.collection.immutable.Set())) == (
+      true) == (
 
       true))
 
@@ -239,7 +239,7 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.`null`[Int](scala.collection.immutable.Set(1, 2))) == (
+      false) == (
 
       false))
 
@@ -251,9 +251,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.union[Int](scala.collection.immutable.Set(1, 2))(scala.collection.immutable.Set(2, 3))) == (
+      {1, 2, 3}) == (
 
-      scala.collection.immutable.Set(1, 2, 3)))
+      {1, 2, 3}))
 
   }
 
@@ -261,9 +261,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.union[Int](scala.collection.immutable.Set(1, 2))(scala.collection.immutable.Set())) == (
+      {1, 2}) == (
 
-      scala.collection.immutable.Set(1, 2)))
+      {1, 2}))
 
   }
 
@@ -271,9 +271,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.union[Int](scala.collection.immutable.Set())(scala.collection.immutable.Set(1, 2))) == (
+      {1, 2}) == (
 
-      scala.collection.immutable.Set(1, 2)))
+      {1, 2}))
 
   }
 
@@ -283,9 +283,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.unions[Int](Seq(scala.collection.immutable.Set(1, 2), scala.collection.immutable.Set(2, 3), scala.collection.immutable.Set(3, 4)))) == (
+      {1, 2, 3, 4}) == (
 
-      scala.collection.immutable.Set(1, 2, 3, 4)))
+      {1, 2, 3, 4}))
 
   }
 
@@ -293,9 +293,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.unions[Int](Seq(scala.collection.immutable.Set(1, 2), scala.collection.immutable.Set(), scala.collection.immutable.Set(3)))) == (
+      {1, 2, 3}) == (
 
-      scala.collection.immutable.Set(1, 2, 3)))
+      {1, 2, 3}))
 
   }
 
@@ -303,9 +303,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.unions(Seq())) == (
+      {}) == (
 
-      scala.collection.immutable.Set()))
+      {}))
 
   }
 
@@ -313,9 +313,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.unions[Int](Seq(scala.collection.immutable.Set(1, 2, 3)))) == (
+      {1, 2, 3}) == (
 
-      scala.collection.immutable.Set(1, 2, 3)))
+      {1, 2, 3}))
 
   }
 
@@ -325,9 +325,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.intersection[Int](scala.collection.immutable.Set(1, 2, 3))(scala.collection.immutable.Set(2, 3, 4))) == (
+      {2, 3}) == (
 
-      scala.collection.immutable.Set(2, 3)))
+      {2, 3}))
 
   }
 
@@ -335,9 +335,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.intersection[Int](scala.collection.immutable.Set(1, 2))(scala.collection.immutable.Set(3, 4))) == (
+      {}) == (
 
-      scala.collection.immutable.Set()))
+      {}))
 
   }
 
@@ -345,9 +345,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.intersection[Int](scala.collection.immutable.Set(1, 2))(scala.collection.immutable.Set())) == (
+      {}) == (
 
-      scala.collection.immutable.Set()))
+      {}))
 
   }
 
@@ -357,9 +357,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.difference[Int](scala.collection.immutable.Set(1, 2, 3))(scala.collection.immutable.Set(2, 4))) == (
+      {1, 3}) == (
 
-      scala.collection.immutable.Set(1, 3)))
+      {1, 3}))
 
   }
 
@@ -367,9 +367,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.difference[Int](scala.collection.immutable.Set(1, 2))(scala.collection.immutable.Set(3, 4))) == (
+      {1, 2}) == (
 
-      scala.collection.immutable.Set(1, 2)))
+      {1, 2}))
 
   }
 
@@ -377,9 +377,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.difference[Int](scala.collection.immutable.Set(1, 2))(scala.collection.immutable.Set())) == (
+      {1, 2}) == (
 
-      scala.collection.immutable.Set(1, 2)))
+      {1, 2}))
 
   }
 
@@ -389,9 +389,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.map[Int, Int]((x: Int) => hydra.lib.math.mul(x)(2))(scala.collection.immutable.Set(1, 2, 3))) == (
+      {2, 4, 6}) == (
 
-      scala.collection.immutable.Set(2, 4, 6)))
+      {2, 4, 6}))
 
   }
 
@@ -399,9 +399,9 @@ class SetsTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.sets.map[Int, Int]((x: Int) => hydra.lib.math.mul(x)(2))(scala.collection.immutable.Set())) == (
+      {}) == (
 
-      scala.collection.immutable.Set()))
+      {}))
 
   }
 }

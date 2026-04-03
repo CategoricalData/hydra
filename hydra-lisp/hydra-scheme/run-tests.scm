@@ -8,6 +8,7 @@
         (hydra unification) (hydra substitution) (hydra typing)
         (hydra json bootstrap) (hydra json parser) (hydra json writer)
         (hydra json encode) (hydra json decode)
+        (hydra encode core)
         (hydra lib libraries) (hydra lib equality) (hydra lib maps)
         (hydra lib maybes) (hydra lib pairs) (hydra lib sets) (hydra lib lists)
         (hydra lib literals)

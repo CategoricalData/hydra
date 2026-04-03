@@ -28,12 +28,12 @@ import Prelude hiding ((++))
 testNs = Namespace "hydra.demos.meteredEvaluation"
 
 testModule :: Module
-testModule = Module testNs (Prelude.map bindingToDefinition elements) [] [] Nothing
+testModule = Module testNs elements [] [] Nothing
   where
-    test local tterm = TBinding (unqualifyName $ QualifiedName (Just testNs) local) tterm
+    test local tterm = TTermDefinition (unqualifyName $ QualifiedName (Just testNs) local) tterm
     elements = [
-        el $ test "catStrings" (string "foo" ++ string "bar" ++ string "quux" ++ (Literals.showInt32 $ int32 42)),
-        el $ test "describeType" $ ShowCore.type_ @@ (TTerm $ EncodeCore.type_ $ Types.list $ Types.int32)]
+        toDefinition $ test "catStrings" (string "foo" ++ string "bar" ++ string "quux" ++ (Literals.showInt32 $ int32 42)),
+        toDefinition $ test "describeType" $ ShowCore.type_ @@ (TTerm $ EncodeCore.type_ $ Types.list $ Types.int32)]
 
 demoMeteredEvaluation :: IO ()
 demoMeteredEvaluation = do

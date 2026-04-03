@@ -7,7 +7,7 @@ package hydra.ext.scala;
  */
 public interface Utils {
   static <T0> hydra.util.Maybe<hydra.core.Name> nameOfType(T0 cx, hydra.core.Type t) {
-    return hydra.Rewriting.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
+    return hydra.Strip.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Maybe<hydra.core.Name> otherwise(hydra.core.Type instance) {
         return (hydra.util.Maybe<hydra.core.Name>) (hydra.util.Maybe.<hydra.core.Name>nothing());

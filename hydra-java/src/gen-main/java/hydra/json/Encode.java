@@ -104,7 +104,7 @@ public interface Encode {
   }
 
   static hydra.util.Either<String, hydra.json.model.Value> toJson(hydra.core.Term term) {
-    hydra.core.Term stripped = hydra.Rewriting.deannotateTerm(term);
+    hydra.core.Term stripped = hydra.Strip.deannotateTerm(term);
     return (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Either<String, hydra.json.model.Value> otherwise(hydra.core.Term instance) {
