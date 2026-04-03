@@ -9,6 +9,7 @@ import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
+import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
@@ -106,6 +107,16 @@ nonAlnumToUnderscores input =
                     in (Logic.ifElse (isAlnum c) (Lists.cons c s, False) (Logic.ifElse b (s, True) (Lists.cons 95 s, True)))
           result = Lists.foldl replace ([], False) (Strings.toList input)
       in (Strings.fromList (Lists.reverse (Pairs.first result)))
+
+-- | Normalize a comment string for consistent output across coders
+normalizeComment :: String -> String
+normalizeComment s =
+
+      let stripped = stripLeadingAndTrailingWhitespace s
+      in (Logic.ifElse (Strings.null stripped) "" (
+        let lastIdx = Math.sub (Strings.length stripped) 1
+            lastChar = Strings.charAt lastIdx stripped
+        in (Logic.ifElse (Equality.equal lastChar 46) stripped (Strings.cat2 stripped "."))))
 
 -- | Sanitize a string by replacing non-alphanumeric characters and escaping reserved words
 sanitizeWithUnderscores :: S.Set String -> String -> String

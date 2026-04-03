@@ -4,128 +4,137 @@
       "type": {
         "name": "hydra.ext.workflow.HydraSchemaSpec",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "The specification of a Hydra schema, provided as a set of modules and a distinguished type"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "modules",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The modules to include in the schema graph"}}}],
-                      "body": {"list": {"variable": "hydra.module.Module"}}}}},
-                {
-                  "name": "typeName",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "The name of the top-level type; all data which passes through the workflow will be instances of this type"}}}],
-                      "body": {"variable": "hydra.core.Name"}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "The specification of a Hydra schema, provided as a set of modules and a distinguished type"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "modules",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The modules to include in the schema graph"}}}],
+                        "body": {"list": {"variable": "hydra.packaging.Module"}}}}},
+                  {
+                    "name": "typeName",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The name of the top-level type; all data which passes through the workflow will be instances of this type"}}}],
+                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.workflow.SchemaSpec",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "The specification of a schema at the source end of a workflow"}}}],
-            "body": {
-              "union": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "hydra",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A native Hydra schema"}}}],
-                      "body": {"variable": "hydra.ext.workflow.HydraSchemaSpec"}}}},
-                {
-                  "name": "file",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "A schema provided as a file, available at the given file path"}}}],
-                      "body": {"literal": {"string": {}}}}}},
-                {
-                  "name": "provided",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "A schema which will be provided within the workflow"}}}],
-                      "body": {"unit": {}}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "The specification of a schema at the source end of a workflow"}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "hydra",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A native Hydra schema"}}}],
+                        "body": {"variable": "hydra.ext.workflow.HydraSchemaSpec"}}}},
+                  {
+                    "name": "file",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "A schema provided as a file, available at the given file path"}}}],
+                        "body": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "provided",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "A schema which will be provided within the workflow"}}}],
+                        "body": {"unit": {}}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.workflow.TransformWorkflow",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "The specification of a workflow which takes a schema specification, reads data from a directory, and writes data to another directory"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "name",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A descriptive name for the workflow"}}}],
-                      "body": {"literal": {"string": {}}}}}},
-                {
-                  "name": "schemaSpec",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The schema specification"}}}],
-                      "body": {"variable": "hydra.ext.workflow.SchemaSpec"}}}},
-                {
-                  "name": "srcDir",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The source directory"}}}],
-                      "body": {"literal": {"string": {}}}}}},
-                {
-                  "name": "destDir",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The destination directory"}}}],
-                      "body": {"literal": {"string": {}}}}}}]}}}}}],
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "The specification of a workflow which takes a schema specification, reads data from a directory, and writes data to another directory"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A descriptive name for the workflow"}}}],
+                        "body": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "schemaSpec",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The schema specification"}}}],
+                        "body": {"variable": "hydra.ext.workflow.SchemaSpec"}}}},
+                  {
+                    "name": "srcDir",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The source directory"}}}],
+                        "body": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "destDir",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The destination directory"}}}],
+                        "body": {"literal": {"string": {}}}}}}]}}},
+          "variables": []}}}],
   "description": ["A model for Hydra transformation workflows"],
   "namespace": "hydra.ext.workflow",
-  "termDependencies": ["hydra.graph", "hydra.module"],
+  "termDependencies": ["hydra.graph", "hydra.packaging"],
   "typeDependencies": ["hydra.core"]}

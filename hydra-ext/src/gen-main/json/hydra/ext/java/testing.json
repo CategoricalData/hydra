@@ -28,11 +28,12 @@
                                           "argument": {"variable": "testModule"},
                                           "function": {
                                             "function": {
-                                              "elimination": {"record": {"field": "namespace", "typeName": "hydra.module.Module"}}}}}},
+                                              "elimination": {
+                                                "record": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}}}},
                                       "type": [
                                         {
                                           "constraints": null,
-                                          "type": {"variable": "hydra.module.Namespace"},
+                                          "type": {"variable": "hydra.packaging.Namespace"},
                                           "variables": []}]},
                                     {
                                       "name": "parts",
@@ -41,7 +42,7 @@
                                           "argument": {
                                             "application": {
                                               "argument": {"variable": "ns_"},
-                                              "function": {"function": {"elimination": {"wrap": "hydra.module.Namespace"}}}}},
+                                              "function": {"function": {"elimination": {"wrap": "hydra.packaging.Namespace"}}}}},
                                           "function": {
                                             "application": {
                                               "argument": {"literal": {"string": "."}},
@@ -185,7 +186,7 @@
                               "parameter": "testBody"}}},
                         "domain": [{"variable": "hydra.testing.TestGroup"}],
                         "parameter": "testGroup"}}},
-                  "domain": [{"variable": "hydra.module.Module"}],
+                  "domain": [{"variable": "hydra.packaging.Module"}],
                   "parameter": "testModule"}}}}},
         "type": [
           {
@@ -199,7 +200,7 @@
                         "codomain": {"literal": {"string": {}}},
                         "domain": {"literal": {"string": {}}}}},
                     "domain": {"variable": "hydra.testing.TestGroup"}}},
-                "domain": {"variable": "hydra.module.Module"}}},
+                "domain": {"variable": "hydra.packaging.Module"}}},
             "variables": []}]}},
     {
       "term": {
@@ -611,7 +612,7 @@
                                       "parameter": "_g"}}},
                                 "domain": [{"variable": "hydra.testing.TestGroup"}],
                                 "parameter": "testGroup"}}},
-                          "domain": [{"variable": "hydra.module.Module"}],
+                          "domain": [{"variable": "hydra.packaging.Module"}],
                           "parameter": "testModule"}}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
@@ -633,7 +634,7 @@
                                 "second": {"literal": {"string": {}}}}}}},
                         "domain": {"variable": "t0"}}},
                     "domain": {"variable": "hydra.testing.TestGroup"}}},
-                "domain": {"variable": "hydra.module.Module"}}},
+                "domain": {"variable": "hydra.packaging.Module"}}},
             "variables": ["t0", "t1"]}]}},
     {
       "term": {
@@ -1028,11 +1029,12 @@
                                                       "argument": {"variable": "testModule"},
                                                       "function": {
                                                         "function": {
-                                                          "elimination": {"record": {"field": "namespace", "typeName": "hydra.module.Module"}}}}}},
+                                                          "elimination": {
+                                                            "record": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}}}},
                                                   "type": [
                                                     {
                                                       "constraints": null,
-                                                      "type": {"variable": "hydra.module.Namespace"},
+                                                      "type": {"variable": "hydra.packaging.Namespace"},
                                                       "variables": []}]},
                                                 {
                                                   "name": "parts",
@@ -1041,7 +1043,7 @@
                                                       "argument": {
                                                         "application": {
                                                           "argument": {"variable": "ns_"},
-                                                          "function": {"function": {"elimination": {"wrap": "hydra.module.Namespace"}}}}},
+                                                          "function": {"function": {"elimination": {"wrap": "hydra.packaging.Namespace"}}}}},
                                                       "function": {
                                                         "application": {
                                                           "argument": {"literal": {"string": "."}},
@@ -1159,7 +1161,7 @@
                                         "type": {"variable": "t0"}}}}}}},
                             "domain": [{"variable": "hydra.testing.TestGroup"}],
                             "parameter": "testGroup"}}},
-                      "domain": [{"variable": "hydra.module.Module"}],
+                      "domain": [{"variable": "hydra.packaging.Module"}],
                       "parameter": "testModule"}}}}},
             "parameter": "t0"}},
         "type": [
@@ -1177,7 +1179,7 @@
                             "first": {"literal": {"string": {}}},
                             "second": {"literal": {"string": {}}}}}}},
                     "domain": {"variable": "hydra.testing.TestGroup"}}},
-                "domain": {"variable": "hydra.module.Module"}}},
+                "domain": {"variable": "hydra.packaging.Module"}}},
             "variables": ["t0"]}]}},
     {
       "term": {
@@ -1200,7 +1202,7 @@
                               "argument": {
                                 "application": {
                                   "argument": {"variable": "ns_"},
-                                  "function": {"function": {"elimination": {"wrap": "hydra.module.Namespace"}}}}},
+                                  "function": {"function": {"elimination": {"wrap": "hydra.packaging.Namespace"}}}}},
                               "function": {
                                 "application": {
                                   "argument": {"literal": {"string": "."}},
@@ -1219,7 +1221,7 @@
                         "application": {
                           "argument": {"literal": {"string": "."}},
                           "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}},
-                  "domain": [{"variable": "hydra.module.Namespace"}],
+                  "domain": [{"variable": "hydra.packaging.Namespace"}],
                   "parameter": "ns_"}}}}},
         "type": [
           {
@@ -1227,7 +1229,7 @@
             "type": {
               "function": {
                 "codomain": {"literal": {"string": {}}},
-                "domain": {"variable": "hydra.module.Namespace"}}},
+                "domain": {"variable": "hydra.packaging.Namespace"}}},
             "variables": []}]}}],
   "description": ["Java test code generation codec for JUnit-based generation tests"],
   "namespace": "hydra.ext.java.testing",
@@ -1252,7 +1254,6 @@
     "hydra.errors",
     "hydra.graph",
     "hydra.json.model",
-    "hydra.module",
     "hydra.packaging",
     "hydra.parsing",
     "hydra.phantoms",

@@ -5,7 +5,6 @@
 module Hydra.Ext.Lisp.Coder where
 
 import qualified Hydra.Analysis as Analysis
-import qualified Hydra.CoderUtils as CoderUtils
 import qualified Hydra.Core as Core
 import qualified Hydra.Environment as Environment
 import qualified Hydra.Ext.Lisp.Language as Language
@@ -21,8 +20,8 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Predicates as Predicates
 import qualified Hydra.Show.Core as Core_
 import qualified Hydra.Sorting as Sorting
@@ -339,11 +338,11 @@ encodeTerm dialect cx g term =
       Core.TermTypeLambda v0 -> encodeTerm dialect cx g (Core.typeLambdaBody v0)
       Core.TermWrap v0 -> encodeTerm dialect cx g (Core.wrappedTermBody v0)
 
-encodeTermDefinition :: Syntax.Dialect -> t0 -> t1 -> Module.TermDefinition -> Either t2 Syntax.TopLevelFormWithComments
+encodeTermDefinition :: Syntax.Dialect -> t0 -> t1 -> Packaging.TermDefinition -> Either t2 Syntax.TopLevelFormWithComments
 encodeTermDefinition dialect cx g tdef =
 
-      let name = Module.termDefinitionName tdef
-          term = Module.termDefinitionTerm tdef
+      let name = Packaging.termDefinitionName tdef
+          term = Packaging.termDefinitionTerm tdef
           lname = qualifiedSnakeName name
           dterm = Strip.deannotateTerm term
       in case dterm of
@@ -422,11 +421,11 @@ encodeTypeBody lname origTyp typ =
           Syntax.commentText = (Strings.cat2 (Strings.cat2 lname " = ") (Core_.type_ origTyp))})),
         Syntax.topLevelFormWithCommentsForm = (Syntax.TopLevelFormExpression (Syntax.ExpressionLiteral Syntax.LiteralNil))})
 
-encodeTypeDefinition :: t0 -> t1 -> Module.TypeDefinition -> Either t2 Syntax.TopLevelFormWithComments
+encodeTypeDefinition :: t0 -> t1 -> Packaging.TypeDefinition -> Either t2 Syntax.TopLevelFormWithComments
 encodeTypeDefinition cx g tdef =
 
-      let name = Module.typeDefinitionName tdef
-          typ = Module.typeDefinitionType tdef
+      let name = Packaging.typeDefinitionName tdef
+          typ = Core.typeSchemeType (Packaging.typeDefinitionType tdef)
           lname = qualifiedSnakeName name
           dtyp = Strip.deannotateType typ
       in (encodeTypeBody lname typ dtyp)
@@ -547,26 +546,27 @@ moduleExports forms =
         Syntax.ExportDeclaration {
           Syntax.exportDeclarationSymbols = symbols}])
 
-moduleImports :: Module.Namespace -> [Module.Definition] -> [Syntax.ImportDeclaration]
+moduleImports :: Packaging.Namespace -> [Packaging.Definition] -> [Syntax.ImportDeclaration]
 moduleImports focusNs defs =
 
       let depNss = Sets.toList (Sets.delete focusNs (Analysis.definitionDependencyNamespaces defs))
       in (Lists.map (\ns -> Syntax.ImportDeclaration {
-        Syntax.importDeclarationModule = (Syntax.NamespaceName (Module.unNamespace ns)),
+        Syntax.importDeclarationModule = (Syntax.NamespaceName (Packaging.unNamespace ns)),
         Syntax.importDeclarationSpec = Syntax.ImportSpecAll}) depNss)
 
-moduleToLisp :: Syntax.Dialect -> Module.Module -> [Module.Definition] -> t0 -> t1 -> Either t2 Syntax.Program
+moduleToLisp :: Syntax.Dialect -> Packaging.Module -> [Packaging.Definition] -> t0 -> t1 -> Either t2 Syntax.Program
 moduleToLisp dialect mod defs0 cx g =
 
-      let defs = CoderUtils.reorderDefs defs0
+      let defs = Environment.reorderDefs defs0
           partitioned = Environment.partitionDefinitions defs
           allTypeDefs = Pairs.first partitioned
           termDefs = Pairs.second partitioned
-          typeDefs = Lists.filter (\td -> Predicates.isNominalType (Module.typeDefinitionType td)) allTypeDefs
+          typeDefs =
+                  Lists.filter (\td -> Predicates.isNominalType (Core.typeSchemeType (Packaging.typeDefinitionType td))) allTypeDefs
       in (Eithers.bind (Eithers.mapList (encodeTypeDefinition cx g) typeDefs) (\typeItems -> Eithers.bind (Eithers.mapList (encodeTermDefinition dialect cx g) termDefs) (\termItems ->
         let allItems = Lists.concat2 typeItems termItems
-            nsName = Module.unNamespace (Module.moduleNamespace mod)
-            focusNs = Module.moduleNamespace mod
+            nsName = Packaging.unNamespace (Packaging.moduleNamespace mod)
+            focusNs = Packaging.moduleNamespace mod
             imports = moduleImports focusNs defs
             exports = moduleExports allItems
         in (Right (Syntax.Program {

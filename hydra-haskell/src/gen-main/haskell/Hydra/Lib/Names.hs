@@ -5,11 +5,11 @@
 module Hydra.Lib.Names where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Module as Module
+import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
-chars :: Module.Namespace
-chars = Module.Namespace "hydra.lib.chars"
+chars :: Packaging.Namespace
+chars = Packaging.Namespace "hydra.lib.chars"
 
 charsIsAlphaNum :: Core.Name
 charsIsAlphaNum = Core.Name "hydra.lib.chars.isAlphaNum"
@@ -29,8 +29,8 @@ charsToLower = Core.Name "hydra.lib.chars.toLower"
 charsToUpper :: Core.Name
 charsToUpper = Core.Name "hydra.lib.chars.toUpper"
 
-eithers :: Module.Namespace
-eithers = Module.Namespace "hydra.lib.eithers"
+eithers :: Packaging.Namespace
+eithers = Packaging.Namespace "hydra.lib.eithers"
 
 eithersBimap :: Core.Name
 eithersBimap = Core.Name "hydra.lib.eithers.bimap"
@@ -77,8 +77,8 @@ eithersPartitionEithers = Core.Name "hydra.lib.eithers.partitionEithers"
 eithersRights :: Core.Name
 eithersRights = Core.Name "hydra.lib.eithers.rights"
 
-equality :: Module.Namespace
-equality = Module.Namespace "hydra.lib.equality"
+equality :: Packaging.Namespace
+equality = Packaging.Namespace "hydra.lib.equality"
 
 equalityCompare :: Core.Name
 equalityCompare = Core.Name "hydra.lib.equality.compare"
@@ -107,8 +107,8 @@ equalityMax = Core.Name "hydra.lib.equality.max"
 equalityMin :: Core.Name
 equalityMin = Core.Name "hydra.lib.equality.min"
 
-lists :: Module.Namespace
-lists = Module.Namespace "hydra.lib.lists"
+lists :: Packaging.Namespace
+lists = Packaging.Namespace "hydra.lib.lists"
 
 listsApply :: Core.Name
 listsApply = Core.Name "hydra.lib.lists.apply"
@@ -236,8 +236,8 @@ listsZip = Core.Name "hydra.lib.lists.zip"
 listsZipWith :: Core.Name
 listsZipWith = Core.Name "hydra.lib.lists.zipWith"
 
-literals :: Module.Namespace
-literals = Module.Namespace "hydra.lib.literals"
+literals :: Packaging.Namespace
+literals = Packaging.Namespace "hydra.lib.literals"
 
 literalsBigfloatToBigint :: Core.Name
 literalsBigfloatToBigint = Core.Name "hydra.lib.literals.bigfloatToBigint"
@@ -398,8 +398,8 @@ literalsUint64ToBigint = Core.Name "hydra.lib.literals.uint64ToBigint"
 literalsUint8ToBigint :: Core.Name
 literalsUint8ToBigint = Core.Name "hydra.lib.literals.uint8ToBigint"
 
-logic :: Module.Namespace
-logic = Module.Namespace "hydra.lib.logic"
+logic :: Packaging.Namespace
+logic = Packaging.Namespace "hydra.lib.logic"
 
 logicAnd :: Core.Name
 logicAnd = Core.Name "hydra.lib.logic.and"
@@ -413,8 +413,8 @@ logicNot = Core.Name "hydra.lib.logic.not"
 logicOr :: Core.Name
 logicOr = Core.Name "hydra.lib.logic.or"
 
-maps :: Module.Namespace
-maps = Module.Namespace "hydra.lib.maps"
+maps :: Packaging.Namespace
+maps = Packaging.Namespace "hydra.lib.maps"
 
 mapsAlter :: Core.Name
 mapsAlter = Core.Name "hydra.lib.maps.alter"
@@ -476,8 +476,8 @@ mapsToList = Core.Name "hydra.lib.maps.toList"
 mapsUnion :: Core.Name
 mapsUnion = Core.Name "hydra.lib.maps.union"
 
-math :: Module.Namespace
-math = Module.Namespace "hydra.lib.math"
+math :: Packaging.Namespace
+math = Packaging.Namespace "hydra.lib.math"
 
 mathAbs :: Core.Name
 mathAbs = Core.Name "hydra.lib.math.abs"
@@ -623,8 +623,8 @@ mathTanh = Core.Name "hydra.lib.math.tanh"
 mathTruncate :: Core.Name
 mathTruncate = Core.Name "hydra.lib.math.truncate"
 
-maybes :: Module.Namespace
-maybes = Module.Namespace "hydra.lib.maybes"
+maybes :: Packaging.Namespace
+maybes = Packaging.Namespace "hydra.lib.maybes"
 
 maybesApply :: Core.Name
 maybesApply = Core.Name "hydra.lib.maybes.apply"
@@ -668,8 +668,8 @@ maybesPure = Core.Name "hydra.lib.maybes.pure"
 maybesToList :: Core.Name
 maybesToList = Core.Name "hydra.lib.maybes.toList"
 
-pairs :: Module.Namespace
-pairs = Module.Namespace "hydra.lib.pairs"
+pairs :: Packaging.Namespace
+pairs = Packaging.Namespace "hydra.lib.pairs"
 
 pairsBimap :: Core.Name
 pairsBimap = Core.Name "hydra.lib.pairs.bimap"
@@ -680,8 +680,8 @@ pairsFirst = Core.Name "hydra.lib.pairs.first"
 pairsSecond :: Core.Name
 pairsSecond = Core.Name "hydra.lib.pairs.second"
 
-regex :: Module.Namespace
-regex = Module.Namespace "hydra.lib.regex"
+regex :: Packaging.Namespace
+regex = Packaging.Namespace "hydra.lib.regex"
 
 regexFind :: Core.Name
 regexFind = Core.Name "hydra.lib.regex.find"
@@ -701,8 +701,8 @@ regexReplaceAll = Core.Name "hydra.lib.regex.replaceAll"
 regexSplit :: Core.Name
 regexSplit = Core.Name "hydra.lib.regex.split"
 
-sets :: Module.Namespace
-sets = Module.Namespace "hydra.lib.sets"
+sets :: Packaging.Namespace
+sets = Packaging.Namespace "hydra.lib.sets"
 
 setsDelete :: Core.Name
 setsDelete = Core.Name "hydra.lib.sets.delete"
@@ -746,8 +746,8 @@ setsUnion = Core.Name "hydra.lib.sets.union"
 setsUnions :: Core.Name
 setsUnions = Core.Name "hydra.lib.sets.unions"
 
-strings :: Module.Namespace
-strings = Module.Namespace "hydra.lib.strings"
+strings :: Packaging.Namespace
+strings = Packaging.Namespace "hydra.lib.strings"
 
 stringsCat :: Core.Name
 stringsCat = Core.Name "hydra.lib.strings.cat"
@@ -791,8 +791,8 @@ stringsToUpper = Core.Name "hydra.lib.strings.toUpper"
 stringsUnlines :: Core.Name
 stringsUnlines = Core.Name "hydra.lib.strings.unlines"
 
-typeclass :: Module.Namespace
-typeclass = Module.Namespace "hydra.typeclass"
+typeclass :: Packaging.Namespace
+typeclass = Packaging.Namespace "hydra.typeclass"
 
 typeclassEq :: Core.Name
 typeclassEq = Core.Name "hydra.typeclass.Eq"

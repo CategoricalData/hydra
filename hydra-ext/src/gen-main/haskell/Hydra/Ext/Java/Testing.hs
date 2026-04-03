@@ -11,17 +11,17 @@ import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
 -- | Build the complete Java test module content
-buildJavaTestModule :: Module.Module -> Testing.TestGroup -> String -> String
+buildJavaTestModule :: Packaging.Module -> Testing.TestGroup -> String -> String
 buildJavaTestModule testModule testGroup testBody =
 
-      let ns_ = Module.moduleNamespace testModule
-          parts = Strings.splitOn "." (Module.unNamespace ns_)
+      let ns_ = Packaging.moduleNamespace testModule
+          parts = Strings.splitOn "." (Packaging.unNamespace ns_)
           packageName = Strings.intercalate "." (Lists.init parts)
           className_ = Strings.cat2 (Formatting.capitalize (Lists.last parts)) "Test"
           groupName_ = Testing.testGroupName testGroup
@@ -101,7 +101,7 @@ generateJavaTestCase groupPath tcm =
             "    }"])
 
 -- | Generate a Java test file for a test group
-generateJavaTestFile :: Module.Module -> Testing.TestGroup -> t0 -> Either t1 (String, String)
+generateJavaTestFile :: Packaging.Module -> Testing.TestGroup -> t0 -> Either t1 (String, String)
 generateJavaTestFile testModule testGroup _g = generateTestFileWithJavaCodec testModule testGroup
 
 -- | Generate test hierarchy for Java with nested subgroups
@@ -123,12 +123,12 @@ generateJavaTestGroupHierarchy groupPath testGroup =
           groupName]) subgroup))) subgroups))))
 
 -- | Generate a complete test file for Java
-generateTestFileWithJavaCodec :: Module.Module -> Testing.TestGroup -> Either t0 (String, String)
+generateTestFileWithJavaCodec :: Packaging.Module -> Testing.TestGroup -> Either t0 (String, String)
 generateTestFileWithJavaCodec testModule testGroup =
     Eithers.map (\testBody ->
       let testModuleContent = buildJavaTestModule testModule testGroup testBody
-          ns_ = Module.moduleNamespace testModule
-          parts = Strings.splitOn "." (Module.unNamespace ns_)
+          ns_ = Packaging.moduleNamespace testModule
+          parts = Strings.splitOn "." (Packaging.unNamespace ns_)
           dirParts = Lists.drop 1 (Lists.init parts)
           className_ = Strings.cat2 (Formatting.capitalize (Lists.last parts)) "Test"
           fileName = Strings.cat2 className_ ".java"
@@ -140,6 +140,6 @@ generateTestFileWithJavaCodec testModule testGroup =
       in (filePath, testModuleContent)) (generateJavaTestGroupHierarchy [] testGroup)
 
 -- | Convert namespace to Java class name
-namespaceToJavaClassName :: Module.Namespace -> String
+namespaceToJavaClassName :: Packaging.Namespace -> String
 namespaceToJavaClassName ns_ =
-    Strings.intercalate "." (Lists.map Formatting.capitalize (Strings.splitOn "." (Module.unNamespace ns_)))
+    Strings.intercalate "." (Lists.map Formatting.capitalize (Strings.splitOn "." (Packaging.unNamespace ns_)))

@@ -52,7 +52,7 @@ moduleToGraphql mod defs cx g =
 
 encodeTypeDefinition :: Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Module.TypeDefinition -> Either (Context.InContext Errors.Error) Syntax.TypeDefinition
 encodeTypeDefinition cx g prefixes tdef =
-    encodeNamedType cx g prefixes (Module.typeDefinitionName tdef) (Module.typeDefinitionType tdef)
+    encodeNamedType cx g prefixes (Module.typeDefinitionName tdef) (Core.typeSchemeType (Module.typeDefinitionType tdef))
 
 descriptionFromType :: Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Errors.Error) (Maybe Syntax.Description)
 descriptionFromType cx g typ =

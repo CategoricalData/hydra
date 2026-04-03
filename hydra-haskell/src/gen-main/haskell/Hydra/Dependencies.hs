@@ -21,8 +21,8 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Strip as Strip
@@ -37,7 +37,7 @@ definitionsWithDependencies cx graph original =
 
       let depNames = \el -> Sets.toList (termDependencyNames True False False (Core.bindingTerm el))
           allDepNames = Lists.nub (Lists.concat2 (Lists.map Core.bindingName original) (Lists.concat (Lists.map depNames original)))
-      in (Eithers.mapList (\name -> Lexical.requireElement cx graph name) allDepNames)
+      in (Eithers.mapList (\name -> Lexical.requireBinding cx graph name) allDepNames)
 
 -- | Flatten nested let expressions
 flattenLetTerms :: Core.Term -> Core.Term
@@ -316,12 +316,12 @@ topologicalSortBindings els =
       in (Sorting.topologicalSort (Lists.map adjlist els))
 
 -- | Topologically sort type definitions by dependencies
-topologicalSortTypeDefinitions :: [Module.TypeDefinition] -> [[Module.TypeDefinition]]
+topologicalSortTypeDefinitions :: [Packaging.TypeDefinition] -> [[Packaging.TypeDefinition]]
 topologicalSortTypeDefinitions defs =
 
       let toPair =
-              \def -> (Module.typeDefinitionName def, (Sets.toList (typeDependencyNames False (Module.typeDefinitionType def))))
-          nameToDef = Maps.fromList (Lists.map (\d -> (Module.typeDefinitionName d, d)) defs)
+              \def -> (Packaging.typeDefinitionName def, (Sets.toList (typeDependencyNames False (Core.typeSchemeType (Packaging.typeDefinitionType def)))))
+          nameToDef = Maps.fromList (Lists.map (\d -> (Packaging.typeDefinitionName d, d)) defs)
           sorted = Sorting.topologicalSortComponents (Lists.map toPair defs)
       in (Lists.map (\names -> Maybes.cat (Lists.map (\n -> Maps.lookup n nameToDef) names)) sorted)
 

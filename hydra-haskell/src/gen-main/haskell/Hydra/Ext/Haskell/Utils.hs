@@ -21,8 +21,8 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Set as S
@@ -35,18 +35,18 @@ applicationPattern name args =
       Syntax.applicationPatternArgs = args})
 
 -- | Generate a Haskell name reference for a Hydra element
-elementReference :: Module.Namespaces Syntax.ModuleName -> Core.Name -> Syntax.Name
+elementReference :: Packaging.Namespaces Syntax.ModuleName -> Core.Name -> Syntax.Name
 elementReference namespaces name =
 
-      let namespacePair = Module.namespacesFocus namespaces
+      let namespacePair = Packaging.namespacesFocus namespaces
           gname = Pairs.first namespacePair
           gmod = Syntax.unModuleName (Pairs.second namespacePair)
-          namespacesMap = Module.namespacesMapping namespaces
+          namespacesMap = Packaging.namespacesMapping namespaces
           qname = Names.qualifyName name
-          local = Module.qualifiedNameLocal qname
+          local = Packaging.qualifiedNameLocal qname
           escLocal = sanitizeHaskellName local
-          mns = Module.qualifiedNameNamespace qname
-      in (Maybes.cases (Module.qualifiedNameNamespace qname) (simpleName local) (\ns -> Maybes.cases (Maps.lookup ns namespacesMap) (simpleName local) (\mn ->
+          mns = Packaging.qualifiedNameNamespace qname
+      in (Maybes.cases (Packaging.qualifiedNameNamespace qname) (simpleName local) (\ns -> Maybes.cases (Maps.lookup ns namespacesMap) (simpleName local) (\mn ->
         let aliasStr = Syntax.unModuleName mn
         in (Logic.ifElse (Equality.equal ns gname) (simpleName escLocal) (rawName (Strings.cat [
           aliasStr,
@@ -77,13 +77,13 @@ hsvar :: String -> Syntax.Expression
 hsvar s = Syntax.ExpressionVariable (rawName s)
 
 -- | Compute the Haskell module namespaces for a Hydra module
-namespacesForModule :: Module.Module -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Module.Namespaces Syntax.ModuleName)
+namespacesForModule :: Packaging.Module -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Packaging.Namespaces Syntax.ModuleName)
 namespacesForModule mod cx g =
     Eithers.bind (Analysis.moduleDependencyNamespaces cx g True True True True mod) (\nss ->
-      let ns = Module.moduleNamespace mod
+      let ns = Packaging.moduleNamespace mod
           toModuleName =
                   \namespace ->
-                    let namespaceStr = Module.unNamespace namespace
+                    let namespaceStr = Packaging.unNamespace namespace
                         parts = Strings.splitOn "." namespaceStr
                         lastPart = Lists.last parts
                         capitalized = Formatting.capitalize lastPart
@@ -103,9 +103,9 @@ namespacesForModule mod cx g =
           emptyState = (Maps.empty, Sets.empty)
           finalState = Lists.foldl addPair emptyState nssPairs
           resultMap = Pairs.first finalState
-      in (Right (Module.Namespaces {
-        Module.namespacesFocus = focusPair,
-        Module.namespacesMapping = resultMap})))
+      in (Right (Packaging.Namespaces {
+        Packaging.namespacesFocus = focusPair,
+        Packaging.namespacesMapping = resultMap})))
 
 -- | Generate an accessor name for a newtype wrapper (e.g., 'unFoo' for Foo)
 newtypeAccessorName :: Core.Name -> String
@@ -119,20 +119,20 @@ rawName n =
       Syntax.qualifiedNameUnqualified = (Syntax.NamePart n)})
 
 -- | Generate a Haskell name for a record field accessor
-recordFieldReference :: Module.Namespaces Syntax.ModuleName -> Core.Name -> Core.Name -> Syntax.Name
+recordFieldReference :: Packaging.Namespaces Syntax.ModuleName -> Core.Name -> Core.Name -> Syntax.Name
 recordFieldReference namespaces sname fname =
 
       let fnameStr = Core.unName fname
           qname = Names.qualifyName sname
-          ns = Module.qualifiedNameNamespace qname
+          ns = Packaging.qualifiedNameNamespace qname
           typeNameStr = typeNameForRecord sname
           decapitalized = Formatting.decapitalize typeNameStr
           capitalized = Formatting.capitalize fnameStr
           nm = Strings.cat2 decapitalized capitalized
           qualName =
-                  Module.QualifiedName {
-                    Module.qualifiedNameNamespace = ns,
-                    Module.qualifiedNameLocal = nm}
+                  Packaging.QualifiedName {
+                    Packaging.qualifiedNameNamespace = ns,
+                    Packaging.qualifiedNameLocal = nm}
           unqualName = Names.unqualifyName qualName
       in (elementReference namespaces unqualName)
 
@@ -177,27 +177,27 @@ typeNameForRecord sname =
       in (Lists.last parts)
 
 -- | Generate a Haskell name for a union variant constructor, with disambiguation
-unionFieldReference :: S.Set Core.Name -> Module.Namespaces Syntax.ModuleName -> Core.Name -> Core.Name -> Syntax.Name
+unionFieldReference :: S.Set Core.Name -> Packaging.Namespaces Syntax.ModuleName -> Core.Name -> Core.Name -> Syntax.Name
 unionFieldReference boundNames namespaces sname fname =
 
       let fnameStr = Core.unName fname
           qname = Names.qualifyName sname
-          ns = Module.qualifiedNameNamespace qname
+          ns = Packaging.qualifiedNameNamespace qname
           typeNameStr = typeNameForRecord sname
           capitalizedTypeName = Formatting.capitalize typeNameStr
           capitalizedFieldName = Formatting.capitalize fnameStr
           deconflict =
                   \name ->
                     let tname =
-                            Names.unqualifyName (Module.QualifiedName {
-                              Module.qualifiedNameNamespace = ns,
-                              Module.qualifiedNameLocal = name})
+                            Names.unqualifyName (Packaging.QualifiedName {
+                              Packaging.qualifiedNameNamespace = ns,
+                              Packaging.qualifiedNameLocal = name})
                     in (Logic.ifElse (Sets.member tname boundNames) (deconflict (Strings.cat2 name "_")) name)
           nm = deconflict (Strings.cat2 capitalizedTypeName capitalizedFieldName)
           qualName =
-                  Module.QualifiedName {
-                    Module.qualifiedNameNamespace = ns,
-                    Module.qualifiedNameLocal = nm}
+                  Packaging.QualifiedName {
+                    Packaging.qualifiedNameNamespace = ns,
+                    Packaging.qualifiedNameLocal = nm}
           unqualName = Names.unqualifyName qualName
       in (elementReference namespaces unqualName)
 

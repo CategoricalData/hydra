@@ -284,11 +284,11 @@
         "term": {
           "wrap": {
             "body": {"literal": {"string": "testGraph"}},
-            "typeName": "hydra.module.Namespace"}},
+            "typeName": "hydra.packaging.Namespace"}},
         "type": [
           {
             "constraints": null,
-            "type": {"variable": "hydra.module.Namespace"},
+            "type": {"variable": "hydra.packaging.Namespace"},
             "variables": []}]}},
     {
       "term": {
@@ -296,11 +296,11 @@
         "term": {
           "wrap": {
             "body": {"literal": {"string": "testSchemaGraph"}},
-            "typeName": "hydra.module.Namespace"}},
+            "typeName": "hydra.packaging.Namespace"}},
         "type": [
           {
             "constraints": null,
-            "type": {"variable": "hydra.module.Namespace"},
+            "type": {"variable": "hydra.packaging.Namespace"},
             "variables": []}]}},
     {
       "term": {
@@ -337,7 +337,6 @@
     "hydra.errors",
     "hydra.graph",
     "hydra.json.model",
-    "hydra.module",
     "hydra.packaging",
     "hydra.parsing",
     "hydra.phantoms",

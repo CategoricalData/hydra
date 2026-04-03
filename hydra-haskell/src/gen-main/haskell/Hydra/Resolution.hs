@@ -34,7 +34,7 @@ import qualified Data.Map as M
 dereferenceType :: Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Errors.Error) (Maybe Core.Type)
 dereferenceType cx graph name =
 
-      let mel = Lexical.dereferenceElement graph name
+      let mel = Lexical.lookupBinding graph name
       in (Maybes.maybe (Right Nothing) (\el -> Eithers.map Maybes.pure (Eithers.bimap (\_wc_e -> Context.InContext {
         Context.inContextObject = _wc_e,
         Context.inContextContext = cx}) (\_wc_a -> _wc_a) (Eithers.bimap (\_e -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _e))) (\_a -> _a) (Core_.type_ graph (Core.bindingTerm el))))) mel)
@@ -68,7 +68,7 @@ fieldTypes cx graph t =
         Core.TypeForall v0 -> fieldTypes cx graph (Core.forallTypeBody v0)
         Core.TypeRecord v0 -> Right (toMap v0)
         Core.TypeUnion v0 -> Right (toMap v0)
-        Core.TypeVariable v0 -> Maybes.maybe (Eithers.bind (Lexical.requireElement cx graph v0) (\el -> Eithers.bind (Eithers.bimap (\_wc_e -> Context.InContext {
+        Core.TypeVariable v0 -> Maybes.maybe (Eithers.bind (Lexical.requireBinding cx graph v0) (\el -> Eithers.bind (Eithers.bimap (\_wc_e -> Context.InContext {
           Context.inContextObject = _wc_e,
           Context.inContextContext = cx}) (\_wc_a -> _wc_a) (Eithers.bimap (\_e -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _e))) (\_a -> _a) (Core_.type_ graph (Core.bindingTerm el)))) (\decodedType -> fieldTypes cx graph decodedType))) (\ts -> fieldTypes cx graph (Core.typeSchemeType ts)) (Maps.lookup v0 (Graph.graphSchemaTypes graph))
         _ -> Left (Context.InContext {

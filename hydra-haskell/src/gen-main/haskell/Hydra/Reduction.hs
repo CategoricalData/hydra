@@ -438,7 +438,7 @@ etaExpansionArity graph term =
         Core.FunctionPrimitive v1 -> Arity.primitiveArity (Maybes.fromJust (Lexical.lookupPrimitive graph v1))
       Core.TermTypeLambda v0 -> etaExpansionArity graph (Core.typeLambdaBody v0)
       Core.TermTypeApplication v0 -> etaExpansionArity graph (Core.typeApplicationTermBody v0)
-      Core.TermVariable v0 -> Maybes.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeType ts)) (Maybes.bind (Lexical.lookupElement graph v0) (\b -> Core.bindingType b))
+      Core.TermVariable v0 -> Maybes.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeType ts)) (Maybes.bind (Lexical.lookupBinding graph v0) (\b -> Core.bindingType b))
       _ -> 0
 
 -- | Eta-reduce a term by removing redundant lambda abstractions
@@ -560,7 +560,7 @@ reduceTerm cx graph eager term =
                           let arity = Arity.primitiveArity prim
                           in (Logic.ifElse (Equality.gt arity (Lists.length args)) (Right (applyToArguments original args)) (forPrimitive prim arity args)))
                       Core.TermVariable v0 ->
-                        let mBinding = Lexical.dereferenceElement graph v0
+                        let mBinding = Lexical.lookupBinding graph v0
                         in (Maybes.maybe (Right (applyToArguments original args)) (\binding -> applyIfNullary eager2 (Core.bindingTerm binding) args) mBinding)
                       Core.TermLet v0 ->
                         let bindings = Core.letBindings v0

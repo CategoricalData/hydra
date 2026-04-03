@@ -21,8 +21,8 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
@@ -61,8 +61,8 @@ dslBindingName n =
         Formatting.decapitalize (Names.localNameOf n)]))))) (Core.Name (Formatting.decapitalize (Names.localNameOf n))))
 
 -- | Generate a qualified DSL element name from a type name and local element name
-dslElementName :: Core.Name -> String -> Core.Name
-dslElementName typeName localName =
+dslDefinitionName :: Core.Name -> String -> Core.Name
+dslDefinitionName typeName localName =
 
       let parts = Strings.splitOn "." (Core.unName typeName)
           nsParts = Lists.init parts
@@ -76,10 +76,10 @@ dslElementName typeName localName =
         localName])))
 
 -- | Transform a type module into a DSL module
-dslModule :: Context.Context -> Graph.Graph -> Module.Module -> Either (Context.InContext Errors.Error) (Maybe Module.Module)
+dslModule :: Context.Context -> Graph.Graph -> Packaging.Module -> Either (Context.InContext Errors.Error) (Maybe Packaging.Module)
 dslModule cx graph mod =
     Eithers.bind (filterTypeBindings cx graph (Maybes.cat (Lists.map (\d -> case d of
-      Module.DefinitionType v0 -> Just ((\name -> \typ ->
+      Packaging.DefinitionType v0 -> Just ((\name -> \typ ->
         let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
             dataTerm =
                     Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -92,33 +92,33 @@ dslModule cx graph mod =
           Core.bindingType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-            Core.typeSchemeConstraints = Nothing}))}) (Module.typeDefinitionName v0) (Module.typeDefinitionType v0))
-      _ -> Nothing) (Module.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\ic -> Context.InContext {
+            Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeType (Packaging.typeDefinitionType v0)))
+      _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\ic -> Context.InContext {
       Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError (Context.inContextObject ic)))),
-      Context.inContextContext = (Context.inContextContext ic)}) (\x -> x) (generateBindingsForType cx graph b)) typeBindings) (\dslBindings -> Right (Just (Module.Module {
-      Module.moduleNamespace = (dslNamespace (Module.moduleNamespace mod)),
-      Module.moduleDefinitions = (Lists.map (\b -> Module.DefinitionTerm (Module.TermDefinition {
-        Module.termDefinitionName = (Core.bindingName b),
-        Module.termDefinitionTerm = (Core.bindingTerm b),
-        Module.termDefinitionType = (Core.bindingType b)})) (deduplicateBindings (Lists.concat dslBindings))),
-      Module.moduleTermDependencies = (Lists.nub (Lists.map dslNamespace (Module.moduleTypeDependencies mod))),
-      Module.moduleTypeDependencies = (Lists.nub (Lists.concat2 [
-        Module.moduleNamespace mod,
-        (Module.Namespace "hydra.phantoms")] (Module.moduleTypeDependencies mod))),
-      Module.moduleDescription = (Just (Strings.cat [
+      Context.inContextContext = (Context.inContextContext ic)}) (\x -> x) (generateBindingsForType cx graph b)) typeBindings) (\dslBindings -> Right (Just (Packaging.Module {
+      Packaging.moduleNamespace = (dslNamespace (Packaging.moduleNamespace mod)),
+      Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
+        Packaging.termDefinitionName = (Core.bindingName b),
+        Packaging.termDefinitionTerm = (Core.bindingTerm b),
+        Packaging.termDefinitionType = (Core.bindingType b)})) (deduplicateBindings (Lists.concat dslBindings))),
+      Packaging.moduleTermDependencies = (Lists.nub (Lists.map dslNamespace (Packaging.moduleTypeDependencies mod))),
+      Packaging.moduleTypeDependencies = (Lists.nub (Lists.concat2 [
+        Packaging.moduleNamespace mod,
+        (Packaging.Namespace "hydra.phantoms")] (Packaging.moduleTypeDependencies mod))),
+      Packaging.moduleDescription = (Just (Strings.cat [
         "DSL functions for ",
-        (Module.unNamespace (Module.moduleNamespace mod))]))})))))
+        (Packaging.unNamespace (Packaging.moduleNamespace mod))]))})))))
 
 -- | Generate a DSL module namespace from a source module namespace
-dslNamespace :: Module.Namespace -> Module.Namespace
+dslNamespace :: Packaging.Namespace -> Packaging.Namespace
 dslNamespace ns =
 
-      let parts = Strings.splitOn "." (Module.unNamespace ns)
-      in (Logic.ifElse (Equality.equal (Lists.head parts) "hydra") (Module.Namespace (Strings.cat [
+      let parts = Strings.splitOn "." (Packaging.unNamespace ns)
+      in (Logic.ifElse (Equality.equal (Lists.head parts) "hydra") (Packaging.Namespace (Strings.cat [
         "hydra.dsl.",
-        (Strings.intercalate "." (Lists.tail parts))])) (Module.Namespace (Strings.cat [
+        (Strings.intercalate "." (Lists.tail parts))])) (Packaging.Namespace (Strings.cat [
         "hydra.dsl.",
-        (Module.unNamespace ns)])))
+        (Packaging.unNamespace ns)])))
 
 -- | Build a TypeScheme with TTerm-wrapped parameter and result types
 dslTypeScheme :: Core.Type -> [Core.Type] -> Core.Type -> Core.TypeScheme
@@ -179,7 +179,7 @@ generateRecordAccessor origType typeName ft =
                   Strings.cat [
                     Formatting.decapitalize (Names.localNameOf typeName),
                     (Strings.intercalate "" (Lists.map (\s -> Formatting.capitalize s) (Strings.splitOn "." (Core.unName fieldName))))]
-          accessorName = dslElementName typeName accessorLocalName
+          accessorName = dslDefinitionName typeName accessorLocalName
           paramDomain =
                   Core.TypeApplication (Core.ApplicationType {
                     Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
@@ -300,7 +300,7 @@ generateRecordWithUpdater origType typeName allFields targetField =
                     Formatting.decapitalize (Names.localNameOf typeName),
                     "With",
                     (Strings.intercalate "" (Lists.map (\s -> Formatting.capitalize s) (Strings.splitOn "." (Core.unName targetFieldName))))]
-          updaterName = dslElementName typeName updaterLocalName
+          updaterName = dslDefinitionName typeName updaterLocalName
           dFields =
                   Lists.map (\ft -> Core.TermRecord (Core.Record {
                     Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -405,7 +405,7 @@ generateUnionInjector origType typeName ft =
                   Strings.cat [
                     Formatting.decapitalize (Names.localNameOf typeName),
                     (Strings.intercalate "" (Lists.map (\s -> Formatting.capitalize s) (Strings.splitOn "." (Core.unName fieldName))))]
-          injectorName = dslElementName typeName injectorLocalName
+          injectorName = dslDefinitionName typeName injectorLocalName
           isUnit =
                   (\t -> case (Strip.deannotateType t) of
                     Core.TypeUnit -> True
@@ -468,12 +468,12 @@ generateWrappedTypeAccessors :: Core.Type -> Core.Name -> Core.Type -> [Core.Bin
 generateWrappedTypeAccessors origType typeName innerType =
 
       let localName = Names.localNameOf typeName
-          wrapName = dslElementName typeName (Formatting.decapitalize localName)
+          wrapName = dslDefinitionName typeName (Formatting.decapitalize localName)
           unwrapLocalName =
                   Strings.cat [
                     "un",
                     localName]
-          unwrapName = dslElementName typeName unwrapLocalName
+          unwrapName = dslDefinitionName typeName unwrapLocalName
           wrapperType = nominalResultType typeName origType
           wrapDomain =
                   Core.TypeApplication (Core.ApplicationType {
@@ -560,7 +560,7 @@ isDslEligibleBinding :: t0 -> t1 -> Core.Binding -> Either t2 (Maybe Core.Bindin
 isDslEligibleBinding cx graph b =
 
       let ns = Names.namespaceOf (Core.bindingName b)
-      in (Logic.ifElse (Equality.equal (Maybes.maybe "" Module.unNamespace ns) "hydra.phantoms") (Right Nothing) (Right (Just b)))
+      in (Logic.ifElse (Equality.equal (Maybes.maybe "" Packaging.unNamespace ns) "hydra.phantoms") (Right Nothing) (Right (Just b)))
 
 -- | Build the nominal result type with type applications for forall variables
 nominalResultType :: Core.Name -> Core.Type -> Core.Type
