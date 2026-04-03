@@ -46,6 +46,10 @@ runs/
 analysis/
 debug_*.py
 debug_*.hs
+debug_*.clj
+
+# Working documents (local only)
+docs/work/
 
 # Other
 *.log
