@@ -344,7 +344,7 @@ constructModule = def "constructModule" $
     "desc">: Module.moduleDescription (var "mod"),
     "toDef">: "td" ~> lets [
       "name">: Module.typeDefinitionName (var "td"),
-      "typ">: Module.typeDefinitionType (var "td"),
+      "typ">: Core.typeSchemeType $ Module.typeDefinitionType (var "td"),
       "encodeDefEither">: "n" ~> "t" ~> asTerm encodeDefinition @@ var "cx" @@ var "g" @@ var "ns_" @@ var "n" @@ var "t",
       "flatTyp">: asTerm flattenType @@ var "typ",
       "enc">: var "encodeDefEither" @@ var "name"] $
@@ -353,7 +353,7 @@ constructModule = def "constructModule" $
           (Just ("adaptedType" <<~ Adapt.adaptTypeForLanguage @@ ProtobufLanguageSource.protobufLanguage @@ var "flatTyp" $
             var "enc" @@ var "adaptedType")) [
           _Type_variable>>: constant (var "enc" @@ var "flatTyp")]),
-    "types">: Lists.map ("td" ~> Module.typeDefinitionType (var "td")) (var "typeDefs"),
+    "types">: Lists.map ("td" ~> Core.typeSchemeType (Module.typeDefinitionType (var "td"))) (var "typeDefs"),
     "structRefs">: asTerm collectStructuralTypes @@ var "types",
     "javaOptions">: list [
       record P3._Option [
@@ -575,7 +575,7 @@ encodeFieldType = def "encodeFieldType" $
         _Type_unit>>: constant $ right (inject P3._SimpleType P3._SimpleType_reference (wrap P3._TypeName (string "google.protobuf.Empty"))),
         _Type_variable>>: "name" ~> Logic.ifElse (var "noms")
           (var "forNominal" @@ var "name")
-          ("el" <<~ (Lexical.requireElement @@ var "cx0" @@ var "g0" @@ var "name") $ lets [
+          ("el" <<~ (Lexical.requireBinding @@ var "cx0" @@ var "g0" @@ var "name") $ lets [
             "term">: Core.bindingTerm (var "el")] $
             Eithers.bind
               (Eithers.bimap

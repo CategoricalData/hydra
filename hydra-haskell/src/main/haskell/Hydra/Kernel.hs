@@ -38,7 +38,7 @@ module Hydra.Kernel (
   module Hydra.Inference,
   module Hydra.Lexical,
   module Hydra.Literals,
-  module Hydra.Module,
+  module Hydra.Packaging,
   module Hydra.Module.Compat,
   module Hydra.Parsing,
   module Hydra.Phantoms,
@@ -88,7 +88,7 @@ import Hydra.Graph
 import Hydra.Inference
 import Hydra.Lexical
 import Hydra.Literals
-import Hydra.Module
+import Hydra.Packaging
 import Hydra.Module.Compat
 import Hydra.Parsing
 import Hydra.Phantoms

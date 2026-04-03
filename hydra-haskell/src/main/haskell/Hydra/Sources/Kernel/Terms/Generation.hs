@@ -13,7 +13,7 @@ import Hydra.Kernel hiding (
   inferAndGenerateLexicon, inferModules,
   moduleToJson, moduleToSourceModule, modulesToGraph,
   moduleTermDepsTransitive, moduleTypeDepsTransitive,
-  namespaceToPath, stripModuleTypeSchemes, transitiveDeps)
+  namespaceToPath, transitiveDeps)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
@@ -79,8 +79,8 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Errors     as ShowError
 
 -- Dependencies on secondary generated modules (decode/encode)
 import qualified Hydra.Sources.Decode.Core                  as DecodeCore
-import qualified Hydra.Sources.Decode.Module                as DecodeModule
-import qualified Hydra.Sources.Encode.Module                as EncodeModule
+import qualified Hydra.Sources.Decode.Packaging              as DecodeModule
+import qualified Hydra.Sources.Encode.Packaging              as EncodeModule
 
 
 ns :: Namespace
@@ -98,7 +98,6 @@ module_ = Module ns elements
   where
     elements = [
       toDefinition namespaceToPath,
-      toDefinition stripModuleTypeSchemes,
       toDefinition transitiveDeps,
       toDefinition moduleTermDepsTransitive,
       toDefinition moduleTypeDepsTransitive,
@@ -126,7 +125,7 @@ moduleTypeBindings :: TTerm Module -> TTerm [Binding]
 moduleTypeBindings m = Maybes.cat $ Lists.map
   ("d" ~> cases _Definition (var "d") (Just nothing) [
     _Definition_type>>: "td" ~>
-      just (Annotations.typeBinding @@ (Module.typeDefinitionName $ var "td") @@ (Module.typeDefinitionType $ var "td"))])
+      just (Annotations.typeBinding @@ (Module.typeDefinitionName $ var "td") @@ (Core.typeSchemeType $ Module.typeDefinitionType $ var "td"))])
   (Module.moduleDefinitions m)
 
 -- | Extract term definitions from a module as Bindings (for elementsToGraph compatibility).
@@ -165,28 +164,6 @@ namespaceToPath = define "namespaceToPath" $
   doc "Convert a namespace to a file path (e.g., hydra.core -> hydra/core)" $
   "ns" ~>
   Strings.intercalate (string "/") (Strings.splitOn (string ".") (Module.unNamespace $ var "ns"))
-
--- | Strip TypeSchemes from term definitions in a module, preserving type definitions.
-stripModuleTypeSchemes :: TTermDefinition (Module -> Module)
-stripModuleTypeSchemes = define "stripModuleTypeSchemes" $
-  doc ("Strip TypeSchemes from term definitions in a module, preserving type definitions."
-    <> " JSON-loaded modules carry inferred TypeSchemes from the original compilation."
-    <> " After adaptation (e.g., bigfloat -> float64), these TypeSchemes become stale"
-    <> " and can cause inference errors. Stripping them allows the inference engine"
-    <> " to reconstruct correct TypeSchemes from scratch.") $
-  "m" ~>
-  "stripDef" <~ ("d" ~> cases _Definition (var "d") (Just (var "d")) [
-    _Definition_term>>: "td" ~>
-      Module.definitionTerm (Module.termDefinition
-        (Module.termDefinitionName $ var "td")
-        (Module.termDefinitionTerm $ var "td")
-        nothing)]) $
-  Module.module_
-    (Module.moduleNamespace $ var "m")
-    (Lists.map (var "stripDef") (Module.moduleDefinitions $ var "m"))
-    (Module.moduleTermDependencies $ var "m")
-    (Module.moduleTypeDependencies $ var "m")
-    (Module.moduleDescription $ var "m")
 
 -- | Compute transitive closure of dependencies.
 -- Given a function that extracts dependency namespaces from a module,
@@ -417,7 +394,7 @@ moduleToSourceModule = define "moduleToSourceModule" $
     (string "hydra.sources.") ++ Strings.intercalate (string ".")
       (Lists.drop (int32 1) (Strings.splitOn (string ".") (Module.unNamespace $ Module.moduleNamespace $ var "m")))) $
   -- The module type namespace
-  "modTypeNs" <~ (wrap _Namespace (string "hydra.module") :: TTerm Namespace) $
+  "modTypeNs" <~ (wrap _Namespace (string "hydra.packaging") :: TTerm Namespace) $
   -- Create binding: module_ = <encoded Module term>
   "moduleDef" <~ Module.definitionTerm (Module.termDefinition
     (wrap _Name (Module.unNamespace (var "sourceNs") ++ (string ".module_")))
@@ -579,16 +556,15 @@ escapeControlCharsInJson = define "escapeControlCharsInJson" $
   var "go" @@ boolean False @@ boolean False @@ var "input"
 
 -- | Decode a single module from a JSON value.
--- Given a bootstrap graph, universe modules, whether to strip TypeSchemes,
--- and a JSON value, decodes it to a Module.
+-- Given a bootstrap graph, universe modules, and a JSON value, decodes it to a Module.
 -- This is the pure core of the JSON module loading pipeline.
-decodeModuleFromJson :: TTermDefinition (Graph -> [Module] -> Bool -> JsonModel.Value -> Either String Module)
+decodeModuleFromJson :: TTermDefinition (Graph -> [Module] -> JsonModel.Value -> Either String Module)
 decodeModuleFromJson = define "decodeModuleFromJson" $
   doc "Decode a single module from a JSON value" $
-  "bsGraph" ~> "universeModules" ~> "doStripTypeSchemes" ~> "jsonVal" ~>
+  "bsGraph" ~> "universeModules" ~> "jsonVal" ~>
   "graph" <~ modulesToGraph @@ var "bsGraph" @@ var "universeModules" @@ var "universeModules" $
   "schemaMap" <~ buildSchemaMap @@ var "graph" $
-  "modType" <~ Core.typeVariable (wrap _Name (string "hydra.module.Module")) $
+  "modType" <~ Core.typeVariable (Core.nameLift _Module) $
   -- Step 1: JSON -> Term
   Eithers.either_
     ("err" ~> left (var "err"))
@@ -596,8 +572,6 @@ decodeModuleFromJson = define "decodeModuleFromJson" $
       -- Step 2: Term -> Module (via decoderFor _Module)
       Eithers.either_
         ("decErr" ~> left (unwrap _DecodingError @@ var "decErr"))
-        ("mod" ~> right (Logic.ifElse (var "doStripTypeSchemes")
-          (stripModuleTypeSchemes @@ var "mod")
-          (var "mod")))
+        ("mod" ~> right (var "mod"))
         (decoderFor _Module @@ var "graph" @@ var "term"))
     (JsonDecode.fromJson @@ var "schemaMap" @@ Core.nameLift _Module @@ var "modType" @@ var "jsonVal")

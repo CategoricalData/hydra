@@ -203,7 +203,7 @@ constructModule = haskellCoderDefinition "constructModule" $
     cases _Definition (var "def") Nothing [
       _Definition_type>>: "type" ~> lets [
         "name">: Module.typeDefinitionName $ var "type",
-        "typ">: Module.typeDefinitionType $ var "type"] $
+        "typ">: Core.typeSchemeType $ Module.typeDefinitionType $ var "type"] $
         toTypeDeclarationsFrom @@ var "namespaces" @@ var "name" @@ var "typ" @@ var "cx" @@ var "g",
       _Definition_term>>: "term" ~>
         "d" <<~ toDataDeclaration @@ var "namespaces" @@ var "term" @@ var "cx" @@ var "g" $

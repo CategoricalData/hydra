@@ -117,7 +117,7 @@ dereferenceType :: TTermDefinition (Context -> Graph -> Name -> Either (InContex
 dereferenceType = define "dereferenceType" $
   doc "Dereference a type name to get the actual type (Either version)" $
   "cx" ~> "graph" ~> "name" ~>
-  "mel" <~ Lexical.dereferenceElement @@ var "graph" @@ var "name" $
+  "mel" <~ Lexical.lookupBinding @@ var "graph" @@ var "name" $
   optCases (var "mel")
     (right nothing)
     ("el" ~> Eithers.map (unaryFunction just)
@@ -152,7 +152,7 @@ fieldTypes = define "fieldTypes" $
     _Type_variable>>: "name" ~>
       -- Try graphSchemaTypes first (type definitions), then fall back to graphBoundTerms (legacy)
       Maybes.maybe
-        (Eithers.bind (Lexical.requireElement @@ var "cx" @@ var "graph" @@ var "name") (
+        (Eithers.bind (Lexical.requireBinding @@ var "cx" @@ var "graph" @@ var "name") (
           "el" ~>
           Eithers.bind (Ctx.withContext (var "cx")
             (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")

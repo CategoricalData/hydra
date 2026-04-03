@@ -28,7 +28,6 @@ import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Dependencies   as Dependencies
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
-import qualified Hydra.Sources.CoderUtils                  as CoderUtils
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Predicates    as Predicates
 import qualified Hydra.Sources.Kernel.Terms.Resolution    as Resolution
@@ -1092,7 +1091,7 @@ serializeHeaderFile = def "serializeHeaderFile" $
 bindingNameToFilePath :: TTermDefinition (Name -> FilePath)
 bindingNameToFilePath = def "bindingNameToFilePath" $
   lambda "name" $
-    CoderUtils.nameToFilePath
+    Names.nameToFilePath
       @@ (inject _CaseConvention _CaseConvention_lowerSnake unit)
       @@ (inject _CaseConvention _CaseConvention_lowerSnake unit)
       @@ wrap _FileExtension (string "h")
@@ -1136,7 +1135,7 @@ findTypeDependencies = def "findTypeDependencies" $
           (just (Module.unNamespace (var "ns")))))
       (Sets.toList (Lists.foldl
         (lambda "acc" $ lambda "d" $
-          Sets.union (var "acc") (Dependencies.typeDependencyNames @@ boolean True @@ Module.typeDefinitionType (var "d")))
+          Sets.union (var "acc") (Dependencies.typeDependencyNames @@ boolean True @@ (Core.typeSchemeType $ Module.typeDefinitionType (var "d"))))
         (Sets.empty)
         (var "defs")))
 
@@ -1191,7 +1190,7 @@ generateTypeFile :: TTermDefinition (Namespace -> TypeDefinition -> Context -> G
 generateTypeFile = def "generateTypeFile" $
   lambda "ns" $ lambda "def_" $ "cx" ~> lambda "g" $
     "name" <~ Module.typeDefinitionName (var "def_") $
-    "typ" <~ Module.typeDefinitionType (var "def_") $
+    "typ" <~ (Core.typeSchemeType $ Module.typeDefinitionType (var "def_")) $
     "decls" <<~ (encodeTypeDefinition @@ var "cx" @@ var "g" @@ var "name" @@ var "typ") $
     "includes" <~ (findIncludes @@ boolean True @@ var "ns" @@ list [var "def_"]) $
       right (serializeHeaderFile @@ var "name" @@ var "includes"

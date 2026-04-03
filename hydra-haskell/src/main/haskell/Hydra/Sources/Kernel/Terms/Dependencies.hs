@@ -415,7 +415,7 @@ definitionsWithDependencies = define "definitionsWithDependencies" $
   "allDepNames" <~ Lists.nub (Lists.concat2
     (Lists.map (unaryFunction Core.bindingName) (var "original"))
     (Lists.concat (Lists.map (var "depNames") (var "original")))) $
-  Eithers.mapList ("name" ~> Lexical.requireElement @@ var "cx" @@ var "graph" @@ var "name") (var "allDepNames")
+  Eithers.mapList ("name" ~> Lexical.requireBinding @@ var "cx" @@ var "graph" @@ var "name") (var "allDepNames")
 
 topologicalSortTypeDefinitions :: TTermDefinition ([TypeDefinition] -> [[TypeDefinition]])
 topologicalSortTypeDefinitions = define "topologicalSortTypeDefinitions" $
@@ -423,7 +423,7 @@ topologicalSortTypeDefinitions = define "topologicalSortTypeDefinitions" $
   "defs" ~>
   "toPair" <~ ("def" ~> pair
     (Module.typeDefinitionName (var "def"))
-    (Sets.toList (typeDependencyNames @@ false @@ Module.typeDefinitionType (var "def")))) $
+    (Sets.toList (typeDependencyNames @@ false @@ (Core.typeSchemeType $ Module.typeDefinitionType (var "def"))))) $
   "nameToDef" <~ Maps.fromList (Lists.map
     ("d" ~> pair (Module.typeDefinitionName (var "d")) (var "d"))
     (var "defs")) $
