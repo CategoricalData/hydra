@@ -83,6 +83,7 @@ module_ = Module ns elements
       toDefinition intercalate_,
       toDefinition intersperse_,
       toDefinition map_,
+      toDefinition maybeHead_,
       toDefinition nub_,
       toDefinition partition_,
       toDefinition pure_,
@@ -557,6 +558,19 @@ intersperse_ = define "intersperse" $
       (Lists.concat $ Lists.map
         ("el" ~> list [var "sep", var "el"])
         (Lists.tail (var "elements"))))
+
+-- | Interpreter-friendly maybeHead for List terms.
+-- maybeHead xs = if null xs then Nothing else Just (head xs)
+maybeHead_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
+maybeHead_ = define "maybeHead" $
+  doc "Interpreter-friendly maybeHead for List terms." $
+  "cx" ~> "g" ~>
+  "listTerm" ~>
+  "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
+  right $ Logic.ifElse
+    (Lists.null (var "elements"))
+    (Core.termMaybe nothing)
+    (Core.termMaybe $ just $ Lists.head (var "elements"))
 
 -- | Interpreter-friendly nub for List terms.
 -- Removes duplicates using equality. nub xs = foldl (\acc x -> ifElse (elem x acc) acc (concat2 acc [x])) [] xs

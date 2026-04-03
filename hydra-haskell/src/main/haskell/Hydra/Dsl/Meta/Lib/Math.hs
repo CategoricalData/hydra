@@ -88,9 +88,17 @@ logBase = primitive2 _math_logBase
 max :: Ord a => TTerm a -> TTerm a -> TTerm a
 max = primitive2 _math_max
 
+-- | Divide two integers using integer division, returning Nothing on division by zero.
+maybeDiv :: TTerm Int -> TTerm Int -> TTerm (Maybe Int)
+maybeDiv = primitive2 _math_maybeDiv
+
 -- | Return the minimum of two values.
 min :: Ord a => TTerm a -> TTerm a -> TTerm a
 min = primitive2 _math_min
+
+-- | Mathematical modulo, returning Nothing on division by zero.
+maybeMod :: TTerm Int -> TTerm Int -> TTerm (Maybe Int)
+maybeMod = primitive2 _math_maybeMod
 
 -- | Mathematical modulo.
 mod :: Integral a => TTerm a -> TTerm a -> TTerm a
@@ -116,6 +124,10 @@ pi = primitive _math_pi
 pow :: TTerm Double -> TTerm Double -> TTerm Double
 pow = primitive2 _math_pow
 
+-- | Return the predecessor (x - 1), returning Nothing on minBound.
+maybePred :: TTerm Int -> TTerm (Maybe Int)
+maybePred = primitive1 _math_maybePred
+
 -- | Return the predecessor (x - 1).
 pred :: Enum a => TTerm a -> TTerm a
 pred = primitive1 _math_pred
@@ -123,6 +135,10 @@ pred = primitive1 _math_pred
 -- | Generate a range of values from start to end (inclusive).
 range :: Enum a => TTerm a -> TTerm a -> TTerm [a]
 range start end = primitive2 _math_range start end
+
+-- | Integer remainder, returning Nothing on division by zero.
+maybeRem :: TTerm Int -> TTerm Int -> TTerm (Maybe Int)
+maybeRem = primitive2 _math_maybeRem
 
 -- | Integer remainder.
 rem :: Integral a => TTerm a -> TTerm a -> TTerm a
@@ -163,6 +179,10 @@ sqrt = primitive1 _math_sqrt
 -- | Subtract two numbers.
 sub :: Num a => TTerm a -> TTerm a -> TTerm a
 sub = primitive2 _math_sub
+
+-- | Return the successor (x + 1), returning Nothing on maxBound.
+maybeSucc :: TTerm Int -> TTerm (Maybe Int)
+maybeSucc = primitive1 _math_maybeSucc
 
 -- | Return the successor (x + 1).
 succ :: Enum a => TTerm a -> TTerm a

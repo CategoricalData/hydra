@@ -463,6 +463,96 @@
 
   (assert (equal [1:int32, 2:int32, 3:int32] [1:int32, 2:int32, 3:int32])))
 
+;; maybeAt
+
+(defun test-lists-negmaybeat-negvalid-index ()
+
+  (assert (equal just(20:int32) just(20:int32))))
+
+(defun test-lists-negmaybeat-negfirst-element ()
+
+  (assert (equal just(10:int32) just(10:int32))))
+
+(defun test-lists-negmaybeat-neglast-element ()
+
+  (assert (equal just(30:int32) just(30:int32))))
+
+(defun test-lists-negmaybeat-negout-of-bounds ()
+
+  (assert (equal nothing nothing)))
+
+(defun test-lists-negmaybeat-negnegative-index ()
+
+  (assert (equal nothing nothing)))
+
+(defun test-lists-negmaybeat-negempty-list ()
+
+  (assert (equal nothing nothing)))
+
+;; maybeHead
+
+(defun test-lists-negmaybehead-negnon-negempty-int-list ()
+
+  (assert (equal just(1:int32) just(1:int32))))
+
+(defun test-lists-negmaybehead-negempty-int-list ()
+
+  (assert (equal nothing nothing)))
+
+(defun test-lists-negmaybehead-negsingle-element ()
+
+  (assert (equal just(42:int32) just(42:int32))))
+
+(defun test-lists-negmaybehead-negnon-negempty-string-list ()
+
+  (assert (equal just("hello") just("hello"))))
+
+(defun test-lists-negmaybehead-negempty-string-list ()
+
+  (assert (equal nothing nothing)))
+
+;; maybeInit
+
+(defun test-lists-negmaybeinit-negthree-elements ()
+
+  (assert (equal just([1:int32, 2:int32]) just([1:int32, 2:int32]))))
+
+(defun test-lists-negmaybeinit-negsingle-element ()
+
+  (assert (equal just([]) just([]))))
+
+(defun test-lists-negmaybeinit-negempty-list ()
+
+  (assert (equal nothing nothing)))
+
+;; maybeLast
+
+(defun test-lists-negmaybelast-negthree-elements ()
+
+  (assert (equal just(3:int32) just(3:int32))))
+
+(defun test-lists-negmaybelast-negsingle-element ()
+
+  (assert (equal just(42:int32) just(42:int32))))
+
+(defun test-lists-negmaybelast-negempty-list ()
+
+  (assert (equal nothing nothing)))
+
+;; maybeTail
+
+(defun test-lists-negmaybetail-negthree-elements ()
+
+  (assert (equal just([2:int32, 3:int32]) just([2:int32, 3:int32]))))
+
+(defun test-lists-negmaybetail-negsingle-element ()
+
+  (assert (equal just([]) just([]))))
+
+(defun test-lists-negmaybetail-negempty-list ()
+
+  (assert (equal nothing nothing)))
+
 ;; nub
 
 (defun test-lists-negnub-negremove-duplicates ()

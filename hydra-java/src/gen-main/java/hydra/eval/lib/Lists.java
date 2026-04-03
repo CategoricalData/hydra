@@ -143,6 +143,18 @@ public interface Lists {
         elements))))));
   }
 
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> maybeHead(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term listTerm) {
+    return hydra.lib.eithers.Bind.apply(
+      hydra.extract.Core.list(
+        cx,
+        g,
+        listTerm),
+      (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (elements -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(hydra.lib.logic.IfElse.lazy(
+        hydra.lib.lists.Null.apply(elements),
+        () -> new hydra.core.Term.Maybe((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())),
+        () -> new hydra.core.Term.Maybe(hydra.util.Maybe.just(hydra.lib.lists.Head.apply(elements)))))));
+  }
+
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> nub(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term listTerm) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.Core.list(

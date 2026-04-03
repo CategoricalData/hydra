@@ -20,6 +20,10 @@ import Hydra.Sources.Libraries
 import qualified Hydra.Lib.Math as Math
 
 
+optionalInt32 :: Maybe Int -> TTerm Term
+optionalInt32 Nothing = Core.termMaybe nothing
+optionalInt32 (Just x) = Core.termMaybe $ just (int32 x)
+
 ns :: Namespace
 ns = Namespace "hydra.test.lib.math"
 
@@ -79,6 +83,17 @@ mathMax = subgroup "max" [
     test name x y result = primCase name _math_max [int32 x, int32 y] (int32 result)
 
 mathMin :: TTerm TestGroup
+mathMaybeDiv :: TTerm TestGroup
+mathMaybeDiv = subgroup "maybeDiv" [
+  test "basic division" 10 3 (Just 3),
+  test "exact division" 10 2 (Just 5),
+  test "division by zero" 10 0 Nothing,
+  test "zero divided" 0 5 (Just 0),
+  test "negative dividend" (-10) 3 (Just (-4)),
+  test "negative divisor" 10 (-3) (Just (-4))]
+  where
+    test name x y result = primCase name _math_maybeDiv [int32 x, int32 y] (optionalInt32 result)
+
 mathMin = subgroup "min" [
   test "first is smaller" 5 10 5,
   test "second is smaller" 10 5 5,
@@ -88,6 +103,16 @@ mathMin = subgroup "min" [
   test "with zero" 0 42 0]
   where
     test name x y result = primCase name _math_min [int32 x, int32 y] (int32 result)
+
+mathMaybeMod :: TTerm TestGroup
+mathMaybeMod = subgroup "maybeMod" [
+  test "basic modulo" 10 3 (Just 1),
+  test "exact division" 10 2 (Just 0),
+  test "division by zero" 10 0 Nothing,
+  test "negative dividend" (-10) 3 (Just 2),
+  test "negative divisor" 10 (-3) (Just (-2))]
+  where
+    test name x y result = primCase name _math_maybeMod [int32 x, int32 y] (optionalInt32 result)
 
 mathMod :: TTerm TestGroup
 mathMod = subgroup "mod" [
@@ -126,6 +151,15 @@ mathOdd = subgroup "odd" [
   where
     test name x result = primCase name _math_odd [int32 x] result
 
+mathMaybePred :: TTerm TestGroup
+mathMaybePred = subgroup "maybePred" [
+  test "positive" 5 (Just 4),
+  test "zero" 0 (Just (-1)),
+  test "negative" (-5) (Just (-6)),
+  test "minBound" (-2147483648) Nothing]
+  where
+    test name x result = primCase name _math_maybePred [int32 x] (optionalInt32 result)
+
 mathPred :: TTerm TestGroup
 mathPred = subgroup "pred" [
   test "positive" 5 4,
@@ -142,6 +176,16 @@ mathRange = subgroup "range" [
   test "negative start" (-2) 2 [(-2), (-1), 0, 1, 2]]
   where
     test name start end result = primCase name _math_range [int32 start, int32 end] (list $ int32 <$> result)
+
+mathMaybeRem :: TTerm TestGroup
+mathMaybeRem = subgroup "maybeRem" [
+  test "basic remainder" 10 3 (Just 1),
+  test "exact division" 10 2 (Just 0),
+  test "division by zero" 10 0 Nothing,
+  test "negative dividend" (-10) 3 (Just (-1)),
+  test "negative divisor" 10 (-3) (Just 1)]
+  where
+    test name x y result = primCase name _math_maybeRem [int32 x, int32 y] (optionalInt32 result)
 
 mathRem :: TTerm TestGroup
 mathRem = subgroup "rem" [
@@ -168,6 +212,15 @@ mathSub = subgroup "sub" [
   test "with zero" 42 0 42]
   where
     test name x y result = primCase name _math_sub [int32 x, int32 y] (int32 result)
+
+mathMaybeSucc :: TTerm TestGroup
+mathMaybeSucc = subgroup "maybeSucc" [
+  test "positive" 5 (Just 6),
+  test "zero" 0 (Just 1),
+  test "negative" (-5) (Just (-4)),
+  test "maxBound" 2147483647 Nothing]
+  where
+    test name x result = primCase name _math_maybeSucc [int32 x] (optionalInt32 result)
 
 mathSucc :: TTerm TestGroup
 mathSucc = subgroup "succ" [
@@ -463,16 +516,21 @@ allTests = definitionInModule module_ "allTests" $
       mathDiv,
       mathEven,
       mathMax,
+      mathMaybeDiv,
       mathMin,
+      mathMaybeMod,
       mathMod,
       mathMul,
       mathNegate,
       mathOdd,
+      mathMaybePred,
       mathPred,
       mathRange,
+      mathMaybeRem,
       mathRem,
       mathSignum,
       mathSub,
+      mathMaybeSucc,
       mathSucc,
       -- Float64 primitives
       mathE,

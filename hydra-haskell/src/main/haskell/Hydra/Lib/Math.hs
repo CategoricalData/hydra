@@ -2,7 +2,7 @@
 
 module Hydra.Lib.Math where
 
-import Prelude (Num, Ord, Integral, Enum, Bool, Double, Int, Integer, Float, (.), ($), (+), (-), (*))
+import Prelude (Num, Ord, Integral, Enum, Bool, Double, Int, Integer, Float, Maybe(..), (.), ($), (+), (-), (*), (==))
 import qualified Prelude
 
 
@@ -87,9 +87,19 @@ logBase = Prelude.logBase
 max :: Ord a => a -> a -> a
 max = Prelude.max
 
+-- | Divide two integers using integer division, returning Nothing on division by zero.
+maybeDiv :: Int -> Int -> Maybe Int
+maybeDiv _ 0 = Nothing
+maybeDiv x y = Just (Prelude.div x y)
+
 -- | Return the minimum of two values.
 min :: Ord a => a -> a -> a
 min = Prelude.min
+
+-- | Mathematical modulo, returning Nothing on division by zero.
+maybeMod :: Int -> Int -> Maybe Int
+maybeMod _ 0 = Nothing
+maybeMod x y = Just (Prelude.mod x y)
 
 -- | Mathematical modulo.
 -- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
@@ -116,6 +126,12 @@ pi = Prelude.pi
 pow :: Double -> Double -> Double
 pow = (Prelude.**)
 
+-- | Return the predecessor (x - 1), returning Nothing on int32 minBound.
+maybePred :: Int -> Maybe Int
+maybePred x
+  | x == (-2147483648) = Nothing
+  | Prelude.otherwise = Just (x - 1)
+
 -- | Return the predecessor (x - 1).
 pred :: Enum a => a -> a
 pred = Prelude.pred
@@ -123,6 +139,11 @@ pred = Prelude.pred
 -- | Generate a range of values from start to end (inclusive).
 range :: Enum a => a -> a -> [a]
 range start end = [start .. end]
+
+-- | Integer remainder, returning Nothing on division by zero.
+maybeRem :: Int -> Int -> Maybe Int
+maybeRem _ 0 = Nothing
+maybeRem x y = Just (Prelude.rem x y)
 
 -- | Integer remainder.
 -- TODO: partial function. See https://github.com/CategoricalData/hydra/issues/201
@@ -172,6 +193,12 @@ sqrt = Prelude.sqrt
 -- | Subtract two numbers.
 sub :: Num a => a -> a -> a
 sub x y = x - y
+
+-- | Return the successor (x + 1), returning Nothing on int32 maxBound.
+maybeSucc :: Int -> Maybe Int
+maybeSucc x
+  | x == 2147483647 = Nothing
+  | Prelude.otherwise = Just (x + 1)
 
 -- | Return the successor (x + 1).
 succ :: Enum a => a -> a

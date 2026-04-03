@@ -3,7 +3,7 @@
 from __future__ import annotations
 from collections.abc import Sequence
 
-from hydra.dsl.python import frozenlist
+from hydra.dsl.python import frozenlist, Maybe, Just, Nothing
 
 
 def cat(xs: Sequence[str]) -> str:
@@ -45,6 +45,11 @@ def lines(s: str) -> frozenlist[str]:
     if result and result[-1] == '':
         result = result[:-1]
     return tuple(result)
+
+
+def maybe_char_at(i: int, s: str) -> Maybe[int]:
+    """Get the Unicode code point at a specific index, returning Nothing if out of bounds."""
+    return Just(ord(s[i])) if 0 <= i < len(s) else Nothing()
 
 
 def null(s: str) -> bool:

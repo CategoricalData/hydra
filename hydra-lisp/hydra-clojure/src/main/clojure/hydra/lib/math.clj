@@ -103,6 +103,46 @@
   "Return the maximum of two values."
   (fn [a] (fn [b] (max a b))))
 
+;; maybe_div :: Int -> Int -> Maybe Int
+(def hydra_lib_math_maybe_div
+  "Divide two integers, returning Nothing if the divisor is zero."
+  (fn [a] (fn [b]
+    (if (= b 0)
+      (list :nothing)
+      (list :just (Math/floorDiv (long a) (long b)))))))
+
+;; maybe_mod :: Int -> Int -> Maybe Int
+(def hydra_lib_math_maybe_mod
+  "Mathematical modulo, returning Nothing if the divisor is zero."
+  (fn [a] (fn [b]
+    (if (= b 0)
+      (list :nothing)
+      (list :just (Math/floorMod (long a) (long b)))))))
+
+;; maybe_pred :: Int -> Maybe Int
+(def hydra_lib_math_maybe_pred
+  "Return the predecessor, returning Nothing if x is minBound."
+  (fn [n]
+    (if (= n -2147483648)
+      (list :nothing)
+      (list :just (dec n)))))
+
+;; maybe_rem :: Int -> Int -> Maybe Int
+(def hydra_lib_math_maybe_rem
+  "Integer remainder, returning Nothing if the divisor is zero."
+  (fn [a] (fn [b]
+    (if (= b 0)
+      (list :nothing)
+      (list :just (rem a b))))))
+
+;; maybe_succ :: Int -> Maybe Int
+(def hydra_lib_math_maybe_succ
+  "Return the successor, returning Nothing if x is maxBound."
+  (fn [n]
+    (if (= n 2147483647)
+      (list :nothing)
+      (list :just (inc n)))))
+
 ;; min :: Int -> Int -> Int
 (def hydra_lib_math_min
   "Return the minimum of two values."

@@ -169,12 +169,12 @@ mono t = TypeScheme [] (asType t) Nothing
 nonNegativeInt32 :: Type
 nonNegativeInt32 = int32
 
--- | Maybe (optional/nullable) type
+-- | Maybe (nullable) type
 -- Example: maybe string
 maybe :: AsType a => a -> Type
 maybe = TypeMaybe . asType
 
--- | Optional (nullable) type (alias for 'maybe')
+-- | Maybe (nullable) type (alias for 'maybe')
 -- Example: optional string
 optional :: AsType a => a -> Type
 optional = maybe

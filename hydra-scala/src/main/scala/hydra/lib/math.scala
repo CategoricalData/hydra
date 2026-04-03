@@ -21,6 +21,11 @@ object math:
   def log(x: Double): Double = scala.math.log(x)
   def logBase(base: Double)(x: Double): Double = scala.math.log(x) / scala.math.log(base)
   def max(x: Int)(y: Int): Int = scala.math.max(x, y)
+  def maybeDiv(x: Int)(y: Int): Option[Int] = if y == 0 then None else Some(Math.floorDiv(x, y))
+  def maybeMod(x: Int)(y: Int): Option[Int] = if y == 0 then None else Some(Math.floorMod(x, y))
+  def maybePred(x: Int): Option[Int] = if x == -2147483648 then None else Some(x - 1)
+  def maybeRem(x: Int)(y: Int): Option[Int] = if y == 0 then None else Some(x % y)
+  def maybeSucc(x: Int): Option[Int] = if x == 2147483647 then None else Some(x + 1)
   def min(x: Int)(y: Int): Int = scala.math.min(x, y)
   def mod(x: Int)(y: Int): Int = if y == 0 then 0 else Math.floorMod(x, y)
   def mul(x: Int)(y: Int): Int = x * y

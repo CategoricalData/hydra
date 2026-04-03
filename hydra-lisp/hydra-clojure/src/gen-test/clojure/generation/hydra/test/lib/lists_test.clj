@@ -674,6 +674,136 @@
 
          [1:int32, 2:int32, 3:int32])))
 
+;; maybeAt
+
+(deftest test-lists-negmaybeat-negvalid-index
+
+  (is (= just(20:int32)
+
+         just(20:int32))))
+
+(deftest test-lists-negmaybeat-negfirst-element
+
+  (is (= just(10:int32)
+
+         just(10:int32))))
+
+(deftest test-lists-negmaybeat-neglast-element
+
+  (is (= just(30:int32)
+
+         just(30:int32))))
+
+(deftest test-lists-negmaybeat-negout-of-bounds
+
+  (is (= nothing
+
+         nothing)))
+
+(deftest test-lists-negmaybeat-negnegative-index
+
+  (is (= nothing
+
+         nothing)))
+
+(deftest test-lists-negmaybeat-negempty-list
+
+  (is (= nothing
+
+         nothing)))
+
+;; maybeHead
+
+(deftest test-lists-negmaybehead-negnon-negempty-int-list
+
+  (is (= just(1:int32)
+
+         just(1:int32))))
+
+(deftest test-lists-negmaybehead-negempty-int-list
+
+  (is (= nothing
+
+         nothing)))
+
+(deftest test-lists-negmaybehead-negsingle-element
+
+  (is (= just(42:int32)
+
+         just(42:int32))))
+
+(deftest test-lists-negmaybehead-negnon-negempty-string-list
+
+  (is (= just("hello")
+
+         just("hello"))))
+
+(deftest test-lists-negmaybehead-negempty-string-list
+
+  (is (= nothing
+
+         nothing)))
+
+;; maybeInit
+
+(deftest test-lists-negmaybeinit-negthree-elements
+
+  (is (= just([1:int32, 2:int32])
+
+         just([1:int32, 2:int32]))))
+
+(deftest test-lists-negmaybeinit-negsingle-element
+
+  (is (= just([])
+
+         just([]))))
+
+(deftest test-lists-negmaybeinit-negempty-list
+
+  (is (= nothing
+
+         nothing)))
+
+;; maybeLast
+
+(deftest test-lists-negmaybelast-negthree-elements
+
+  (is (= just(3:int32)
+
+         just(3:int32))))
+
+(deftest test-lists-negmaybelast-negsingle-element
+
+  (is (= just(42:int32)
+
+         just(42:int32))))
+
+(deftest test-lists-negmaybelast-negempty-list
+
+  (is (= nothing
+
+         nothing)))
+
+;; maybeTail
+
+(deftest test-lists-negmaybetail-negthree-elements
+
+  (is (= just([2:int32, 3:int32])
+
+         just([2:int32, 3:int32]))))
+
+(deftest test-lists-negmaybetail-negsingle-element
+
+  (is (= just([])
+
+         just([]))))
+
+(deftest test-lists-negmaybetail-negempty-list
+
+  (is (= nothing
+
+         nothing)))
+
 ;; nub
 
 (deftest test-lists-negnub-negremove-duplicates

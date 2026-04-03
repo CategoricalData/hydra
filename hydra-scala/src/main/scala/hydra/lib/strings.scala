@@ -14,6 +14,7 @@ object strings:
       val parts = s.split("\n", -1).toSeq
       // Haskell: lines "a\nb\n" = ["a","b"], lines "a\nb" = ["a","b"]
       if parts.last.isEmpty then parts.init else parts
+  def maybeCharAt(i: Int)(s: String): Option[Int] = if i >= 0 && i < s.length then Some(s.codePointAt(i)) else None
   def `null`(s: String): Boolean = s.isEmpty
   def splitOn(sep: String)(s: String): Seq[String] =
     if sep.isEmpty then

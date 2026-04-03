@@ -99,6 +99,32 @@
 
   (assert (equal 42:int32 42:int32)))
 
+;; maybeDiv
+
+(defun test-math-negmaybediv-negbasic-division ()
+
+  (assert (equal just(3:int32) just(3:int32))))
+
+(defun test-math-negmaybediv-negexact-division ()
+
+  (assert (equal just(5:int32) just(5:int32))))
+
+(defun test-math-negmaybediv-negdivision-by-zero ()
+
+  (assert (equal nothing nothing)))
+
+(defun test-math-negmaybediv-negzero-divided ()
+
+  (assert (equal just(0:int32) just(0:int32))))
+
+(defun test-math-negmaybediv-negnegative-dividend ()
+
+  (assert (equal just(-4:int32) just(-4:int32))))
+
+(defun test-math-negmaybediv-negnegative-divisor ()
+
+  (assert (equal just(-4:int32) just(-4:int32))))
+
 ;; min
 
 (defun test-math-negmin-negfirst-is-smaller ()
@@ -124,6 +150,28 @@
 (defun test-math-negmin-negwith-zero ()
 
   (assert (equal 0:int32 0:int32)))
+
+;; maybeMod
+
+(defun test-math-negmaybemod-negbasic-modulo ()
+
+  (assert (equal just(1:int32) just(1:int32))))
+
+(defun test-math-negmaybemod-negexact-division ()
+
+  (assert (equal just(0:int32) just(0:int32))))
+
+(defun test-math-negmaybemod-negdivision-by-zero ()
+
+  (assert (equal nothing nothing)))
+
+(defun test-math-negmaybemod-negnegative-dividend ()
+
+  (assert (equal just(2:int32) just(2:int32))))
+
+(defun test-math-negmaybemod-negnegative-divisor ()
+
+  (assert (equal just(-2:int32) just(-2:int32))))
 
 ;; mod
 
@@ -201,6 +249,24 @@
 
   (assert (equal false false)))
 
+;; maybePred
+
+(defun test-math-negmaybepred-negpositive ()
+
+  (assert (equal just(4:int32) just(4:int32))))
+
+(defun test-math-negmaybepred-negzero ()
+
+  (assert (equal just(-1:int32) just(-1:int32))))
+
+(defun test-math-negmaybepred-negnegative ()
+
+  (assert (equal just(-6:int32) just(-6:int32))))
+
+(defun test-math-negmaybepred-negminbound ()
+
+  (assert (equal nothing nothing)))
+
 ;; pred
 
 (defun test-math-negpred-negpositive ()
@@ -232,6 +298,28 @@
 (defun test-math-negrange-negnegative-start ()
 
   (assert (equal [-2:int32, -1:int32, 0:int32, 1:int32, 2:int32] [-2:int32, -1:int32, 0:int32, 1:int32, 2:int32])))
+
+;; maybeRem
+
+(defun test-math-negmayberem-negbasic-remainder ()
+
+  (assert (equal just(1:int32) just(1:int32))))
+
+(defun test-math-negmayberem-negexact-division ()
+
+  (assert (equal just(0:int32) just(0:int32))))
+
+(defun test-math-negmayberem-negdivision-by-zero ()
+
+  (assert (equal nothing nothing)))
+
+(defun test-math-negmayberem-negnegative-dividend ()
+
+  (assert (equal just(-1:int32) just(-1:int32))))
+
+(defun test-math-negmayberem-negnegative-divisor ()
+
+  (assert (equal just(1:int32) just(1:int32))))
 
 ;; rem
 
@@ -282,6 +370,24 @@
 (defun test-math-negsub-negwith-zero ()
 
   (assert (equal 42:int32 42:int32)))
+
+;; maybeSucc
+
+(defun test-math-negmaybesucc-negpositive ()
+
+  (assert (equal just(6:int32) just(6:int32))))
+
+(defun test-math-negmaybesucc-negzero ()
+
+  (assert (equal just(1:int32) just(1:int32))))
+
+(defun test-math-negmaybesucc-negnegative ()
+
+  (assert (equal just(-4:int32) just(-4:int32))))
+
+(defun test-math-negmaybesucc-negmaxbound ()
+
+  (assert (equal nothing nothing)))
 
 ;; succ
 
