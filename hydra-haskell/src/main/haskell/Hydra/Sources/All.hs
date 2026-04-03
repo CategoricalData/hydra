@@ -15,6 +15,7 @@ import Hydra.Sources.Test.All
 import qualified Hydra.Sources.CoderUtils as CoderUtils
 import qualified Hydra.Sources.Haskell.Syntax as HaskellSyntax
 import qualified Hydra.Sources.Haskell.Coder as HaskellCoder
+import qualified Hydra.Sources.Haskell.Environment as HaskellEnvironment
 import qualified Hydra.Sources.Haskell.Language as HaskellLanguage
 import qualified Hydra.Sources.Haskell.Operators as HaskellOperators
 import qualified Hydra.Sources.Haskell.Serde as HaskellSerde
@@ -51,6 +52,7 @@ haskellModules :: [Module]
 haskellModules = [
   HaskellSyntax.module_,
   HaskellCoder.module_,
+  HaskellEnvironment.module_,
   HaskellLanguage.module_,
   HaskellOperators.module_,
   HaskellSerde.module_,

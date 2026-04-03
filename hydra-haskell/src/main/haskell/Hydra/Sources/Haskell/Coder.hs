@@ -88,7 +88,9 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 -- Additional imports
+import qualified Hydra.Ext.Haskell.Environment as HE
 import qualified Hydra.Ext.Haskell.Syntax as H
+import qualified Hydra.Sources.Haskell.Environment as HaskellEnvironment
 import qualified Hydra.Sources.Haskell.Language as HaskellLanguage
 import qualified Hydra.Sources.Haskell.Syntax as HaskellSyntax
 import qualified Hydra.Sources.Haskell.Serde as HaskellSerde
@@ -112,7 +114,7 @@ module_ :: Module
 module_ = Module ns elements
     [HaskellSerde.ns, HaskellUtils.ns,
       Adapt.ns, Analysis.ns, Dependencies.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Serialization.ns, ShowError.ns, Strip.ns, Variables.ns]
-    (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces) $
+    (HaskellEnvironment.ns:HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Functions for encoding Hydra modules as Haskell modules"
   where
     ns = Namespace "hydra.ext.haskell.coder"
@@ -124,17 +126,25 @@ module_ = Module ns elements
       toDefinition constantForFieldName,
       toDefinition constantForTypeName,
       toDefinition constructModule,
+      toDefinition emptyMetadata,
       toDefinition encodeCaseExpression,
       toDefinition encodeFunction,
       toDefinition encodeLiteral,
       toDefinition encodeTerm,
       toDefinition encodeType,
       toDefinition encodeTypeWithClassAssertions,
+      toDefinition extendMetaForTerm,
+      toDefinition extendMetaForType,
       toDefinition findOrdVariables,
+      toDefinition gatherMetadata,
       toDefinition getImplicitTypeClasses,
       toDefinition moduleToHaskellModule,
       toDefinition moduleToHaskell,
       toDefinition nameDecls,
+      toDefinition setMetaUsesByteString,
+      toDefinition setMetaUsesInt,
+      toDefinition setMetaUsesMap,
+      toDefinition setMetaUsesSet,
       toDefinition toDataDeclaration,
 --      toDefinition toTypeDeclarations,
       toDefinition toTypeDeclarationsFrom,
@@ -212,6 +222,11 @@ constructModule = haskellCoderDefinition "constructModule" $
           H._Import_as>>: just $ var "alias",
           H._Import_spec>>: nothing]] $
       Lists.map (var "toImport") (Maps.toList $ Module.namespacesMapping $ var "namespaces"),
+    "meta">: gatherMetadata @@ var "defs",
+    "condImport">: "flag" ~> "triple" ~>
+      Logic.ifElse (var "flag")
+        (list [var "triple"])
+        (list ([] :: [TTerm ((String, Maybe String), [String])])),
     "standardImports">: lets [
       "toImport">: "triple" ~> lets [
         "name">: Pairs.first $ Pairs.first $ var "triple",
@@ -228,19 +243,28 @@ constructModule = haskellCoderDefinition "constructModule" $
           H._Import_module>>: wrap H._ModuleName $ var "name",
           H._Import_as>>: Maybes.map (unaryFunction $ wrap H._ModuleName) (var "malias"),
           H._Import_spec>>: var "spec"]] $
-      Lists.map (var "toImport") $ Lists.concat2
-        (list [
+      Lists.map (var "toImport") $ Lists.concat $ list [
+        -- Prelude is always imported (hides names that conflict with Hydra)
+        list [
           pair (pair (string "Prelude") nothing) (list $ string <$> [
-            "Enum", "Ordering", "decodeFloat", "encodeFloat", "fail", "map", "pure", "sum"]),
-          pair (pair (string "Data.ByteString") (just $ string "B")) (list ([] :: [TTerm String])),
-          pair (pair (string "Data.Int") (just $ string "I")) (list ([] :: [TTerm String])),
-          pair (pair (string "Data.List") (just $ string "L")) (list ([] :: [TTerm String])),
-          pair (pair (string "Data.Map") (just $ string "M")) (list ([] :: [TTerm String])),
-          pair (pair (string "Data.Set") (just $ string "S")) (list ([] :: [TTerm String]))])
+            "Enum", "Ordering", "decodeFloat", "encodeFloat", "fail", "map", "pure", "sum"])],
+        -- Conditional standard imports based on metadata
+        var "condImport"
+          @@ (project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesByteString @@ var "meta")
+          @@ pair (pair (string "Data.ByteString") (just $ string "B")) (list ([] :: [TTerm String])),
+        var "condImport"
+          @@ (project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesInt @@ var "meta")
+          @@ pair (pair (string "Data.Int") (just $ string "I")) (list ([] :: [TTerm String])),
+        var "condImport"
+          @@ (project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesMap @@ var "meta")
+          @@ pair (pair (string "Data.Map") (just $ string "M")) (list ([] :: [TTerm String])),
+        var "condImport"
+          @@ (project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesSet @@ var "meta")
+          @@ pair (pair (string "Data.Set") (just $ string "S")) (list ([] :: [TTerm String])),
         -- Conditionally add Hydra.Lib.Literals import if binary literals are present
-        (Logic.ifElse (Analysis.moduleContainsBinaryLiterals @@ var "mod")
+        Logic.ifElse (Analysis.moduleContainsBinaryLiterals @@ var "mod")
           (list [pair (pair (string "Hydra.Lib.Literals") (just $ string "Literals")) (list ([] :: [TTerm String]))])
-          (list ([] :: [TTerm ((String, Maybe String), [String])])))] $
+          (list ([] :: [TTerm ((String, Maybe String), [String])]))]] $
     "declLists" <<~ Eithers.mapList (var "createDeclarations") (var "defs") $ lets [
     "decls">: Lists.concat $ var "declLists",
     "mc">: Module.moduleDescription $ var "mod"] $
@@ -251,6 +275,15 @@ constructModule = haskellCoderDefinition "constructModule" $
         H._ModuleHead_exports>>: list ([] :: [TTerm H.Export])],
       H._Module_imports>>: var "imports",
       H._Module_declarations>>: var "decls"]
+
+emptyMetadata :: TTermDefinition HE.HaskellModuleMetadata
+emptyMetadata = haskellCoderDefinition "emptyMetadata" $
+  doc "Create an initial empty metadata record with all flags set to false" $
+  record HE._HaskellModuleMetadata [
+    HE._HaskellModuleMetadata_usesByteString>>: false,
+    HE._HaskellModuleMetadata_usesInt>>: false,
+    HE._HaskellModuleMetadata_usesMap>>: false,
+    HE._HaskellModuleMetadata_usesSet>>: false]
 
 encodeCaseExpression :: TTermDefinition (Int -> HaskellNamespaces -> CaseStatement -> H.Expression -> Context -> Graph -> Either (InContext Error) H.Expression)
 encodeCaseExpression = haskellCoderDefinition "encodeCaseExpression" $
@@ -656,6 +689,35 @@ encodeTypeWithClassAssertions = haskellCoderDefinition "encodeTypeWithClassAsser
             H._ContextType_ctx>>: var "hassert",
             H._ContextType_type>>: var "htyp"])
 
+extendMetaForTerm :: TTermDefinition (HE.HaskellModuleMetadata -> Term -> HE.HaskellModuleMetadata)
+extendMetaForTerm = haskellCoderDefinition "extendMetaForTerm" $
+  doc "Extend metadata by analyzing a term for standard import usage (bottom-up step function)" $
+  "meta" ~> "term" ~>
+    cases _Term (var "term") (Just $ var "meta") [
+      _Term_map>>: constant $
+        setMetaUsesMap @@ true @@ var "meta",
+      _Term_set>>: constant $
+        setMetaUsesSet @@ true @@ var "meta"]
+
+extendMetaForType :: TTermDefinition (HE.HaskellModuleMetadata -> Type -> HE.HaskellModuleMetadata)
+extendMetaForType = haskellCoderDefinition "extendMetaForType" $
+  doc "Extend metadata by analyzing a type for standard import usage (bottom-up step function)" $
+  "meta" ~> "typ" ~>
+    cases _Type (Strip.deannotateType @@ var "typ") (Just $ var "meta") [
+      _Type_literal>>: "lt" ~>
+        cases _LiteralType (var "lt") (Just $ var "meta") [
+          _LiteralType_binary>>: constant $
+            setMetaUsesByteString @@ true @@ var "meta",
+          _LiteralType_integer>>: "it" ~>
+            cases _IntegerType (var "it") (Just $ var "meta") [
+              _IntegerType_int8>>: constant $ setMetaUsesInt @@ true @@ var "meta",
+              _IntegerType_int16>>: constant $ setMetaUsesInt @@ true @@ var "meta",
+              _IntegerType_int64>>: constant $ setMetaUsesInt @@ true @@ var "meta"]],
+      _Type_map>>: constant $
+        setMetaUsesMap @@ true @@ var "meta",
+      _Type_set>>: constant $
+        setMetaUsesSet @@ true @@ var "meta"]
+
 findOrdVariables :: TTermDefinition (Type -> S.Set Name)
 findOrdVariables = haskellCoderDefinition "findOrdVariables" $
   doc "Find type variables that require an Ord constraint (used in maps or sets)" $
@@ -678,6 +740,27 @@ findOrdVariables = haskellCoderDefinition "findOrdVariables" $
             (Sets.insert (var "v") (var "names"))
             (var "names")]] $
     Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "fold" @@ Sets.empty @@ var "typ"
+
+gatherMetadata :: TTermDefinition ([Definition] -> HE.HaskellModuleMetadata)
+gatherMetadata = haskellCoderDefinition "gatherMetadata" $
+  doc "Gather metadata from definitions by bottom-up traversal of all terms and types" $
+  "defs" ~>
+    "addDef" <~ ("meta" ~> "def" ~>
+      cases _Definition (var "def") Nothing [
+        _Definition_term>>: "termDef" ~>
+          "term" <~ Module.termDefinitionTerm (var "termDef") $
+          "metaWithTerm" <~ (Rewriting.foldOverTerm @@ Coders.traversalOrderPre
+            @@ ("m" ~> "t" ~> extendMetaForTerm @@ var "m" @@ var "t") @@ var "meta" @@ var "term") $
+          Maybes.maybe (var "metaWithTerm")
+            ("ts" ~>
+              Rewriting.foldOverType @@ Coders.traversalOrderPre
+                @@ ("m" ~> "t" ~> extendMetaForType @@ var "m" @@ var "t") @@ var "metaWithTerm" @@ (Core.typeSchemeType $ var "ts"))
+            (Module.termDefinitionType $ var "termDef"),
+        _Definition_type>>: "typeDef" ~>
+          "typ" <~ Module.typeDefinitionType (var "typeDef") $
+          Rewriting.foldOverType @@ Coders.traversalOrderPre
+            @@ ("m" ~> "t" ~> extendMetaForType @@ var "m" @@ var "t") @@ var "meta" @@ var "typ"]) $
+    Lists.foldl (var "addDef") (asTerm emptyMetadata) (var "defs")
 
 getImplicitTypeClasses :: TTermDefinition (Type -> M.Map Name (S.Set TypeClass))
 getImplicitTypeClasses = haskellCoderDefinition "getImplicitTypeClasses" $
@@ -728,6 +811,54 @@ nameDecls = haskellCoderDefinition "nameDecls" $
     Logic.ifElse (useCoreImport)
       (Lists.cons (var "toDecl" @@ Core.nameLift _Name @@ var "nameDecl") (Lists.map (var "toDecl" @@ Core.nameLift _Name) (var "fieldDecls")))
       (list ([] :: [TTerm H.DeclarationWithComments]))
+
+setMetaUsesByteString :: TTermDefinition (Bool -> HE.HaskellModuleMetadata -> HE.HaskellModuleMetadata)
+setMetaUsesByteString = haskellCoderDefinition "setMetaUsesByteString" $
+  "b" ~> "m" ~>
+    record HE._HaskellModuleMetadata [
+      HE._HaskellModuleMetadata_usesByteString>>: var "b",
+      HE._HaskellModuleMetadata_usesInt>>:
+        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesInt @@ var "m",
+      HE._HaskellModuleMetadata_usesMap>>:
+        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesMap @@ var "m",
+      HE._HaskellModuleMetadata_usesSet>>:
+        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesSet @@ var "m"]
+
+setMetaUsesInt :: TTermDefinition (Bool -> HE.HaskellModuleMetadata -> HE.HaskellModuleMetadata)
+setMetaUsesInt = haskellCoderDefinition "setMetaUsesInt" $
+  "b" ~> "m" ~>
+    record HE._HaskellModuleMetadata [
+      HE._HaskellModuleMetadata_usesByteString>>:
+        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesByteString @@ var "m",
+      HE._HaskellModuleMetadata_usesInt>>: var "b",
+      HE._HaskellModuleMetadata_usesMap>>:
+        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesMap @@ var "m",
+      HE._HaskellModuleMetadata_usesSet>>:
+        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesSet @@ var "m"]
+
+setMetaUsesMap :: TTermDefinition (Bool -> HE.HaskellModuleMetadata -> HE.HaskellModuleMetadata)
+setMetaUsesMap = haskellCoderDefinition "setMetaUsesMap" $
+  "b" ~> "m" ~>
+    record HE._HaskellModuleMetadata [
+      HE._HaskellModuleMetadata_usesByteString>>:
+        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesByteString @@ var "m",
+      HE._HaskellModuleMetadata_usesInt>>:
+        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesInt @@ var "m",
+      HE._HaskellModuleMetadata_usesMap>>: var "b",
+      HE._HaskellModuleMetadata_usesSet>>:
+        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesSet @@ var "m"]
+
+setMetaUsesSet :: TTermDefinition (Bool -> HE.HaskellModuleMetadata -> HE.HaskellModuleMetadata)
+setMetaUsesSet = haskellCoderDefinition "setMetaUsesSet" $
+  "b" ~> "m" ~>
+    record HE._HaskellModuleMetadata [
+      HE._HaskellModuleMetadata_usesByteString>>:
+        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesByteString @@ var "m",
+      HE._HaskellModuleMetadata_usesInt>>:
+        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesInt @@ var "m",
+      HE._HaskellModuleMetadata_usesMap>>:
+        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesMap @@ var "m",
+      HE._HaskellModuleMetadata_usesSet>>: var "b"]
 
 toDataDeclaration :: TTermDefinition (HaskellNamespaces -> TermDefinition -> Context -> Graph -> Either (InContext Error) H.DeclarationWithComments)
 toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
