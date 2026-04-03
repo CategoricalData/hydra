@@ -284,7 +284,7 @@ encodeNamespace ns =
       "hydra.encode.",
       (Strings.intercalate "." (Lists.tail (Strings.splitOn "." (Packaging.unNamespace ns))))])
 
--- | Generate an encoder for an optional type
+-- | Generate an encoder for a Maybe type
 encodeOptionalType :: Core.Type -> Core.Term
 encodeOptionalType elemType =
     Core.TermFunction (Core.FunctionLambda (Core.Lambda {

@@ -757,7 +757,7 @@ gatherMetadata = haskellCoderDefinition "gatherMetadata" $
                 @@ ("m" ~> "t" ~> extendMetaForType @@ var "m" @@ var "t") @@ var "metaWithTerm" @@ (Core.typeSchemeType $ var "ts"))
             (Module.termDefinitionType $ var "termDef"),
         _Definition_type>>: "typeDef" ~>
-          "typ" <~ Module.typeDefinitionType (var "typeDef") $
+          "typ" <~ (Core.typeSchemeType $ Module.typeDefinitionType (var "typeDef")) $
           Rewriting.foldOverType @@ Coders.traversalOrderPre
             @@ ("m" ~> "t" ~> extendMetaForType @@ var "m" @@ var "t") @@ var "meta" @@ var "typ"]) $
     Lists.foldl (var "addDef") (asTerm emptyMetadata) (var "defs")

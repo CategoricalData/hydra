@@ -782,6 +782,66 @@
             "variables": []}]}},
     {
       "term": {
+        "name": "hydra.lib.names.listsMaybeAt",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.lists.maybeAt"}},
+            "typeName": "hydra.core.Name"}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"variable": "hydra.core.Name"},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.lib.names.listsMaybeHead",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.lists.maybeHead"}},
+            "typeName": "hydra.core.Name"}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"variable": "hydra.core.Name"},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.lib.names.listsMaybeInit",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.lists.maybeInit"}},
+            "typeName": "hydra.core.Name"}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"variable": "hydra.core.Name"},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.lib.names.listsMaybeLast",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.lists.maybeLast"}},
+            "typeName": "hydra.core.Name"}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"variable": "hydra.core.Name"},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.lib.names.listsMaybeTail",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.lists.maybeTail"}},
+            "typeName": "hydra.core.Name"}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"variable": "hydra.core.Name"},
+            "variables": []}]}},
+    {
+      "term": {
         "name": "hydra.lib.names.listsNub",
         "term": {
           "wrap": {
@@ -2138,6 +2198,66 @@
             "variables": []}]}},
     {
       "term": {
+        "name": "hydra.lib.names.mathMaybeDiv",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.math.maybeDiv"}},
+            "typeName": "hydra.core.Name"}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"variable": "hydra.core.Name"},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.lib.names.mathMaybeMod",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.math.maybeMod"}},
+            "typeName": "hydra.core.Name"}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"variable": "hydra.core.Name"},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.lib.names.mathMaybePred",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.math.maybePred"}},
+            "typeName": "hydra.core.Name"}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"variable": "hydra.core.Name"},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.lib.names.mathMaybeRem",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.math.maybeRem"}},
+            "typeName": "hydra.core.Name"}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"variable": "hydra.core.Name"},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.lib.names.mathMaybeSucc",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.math.maybeSucc"}},
+            "typeName": "hydra.core.Name"}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"variable": "hydra.core.Name"},
+            "variables": []}]}},
+    {
+      "term": {
         "name": "hydra.lib.names.mathMin",
         "term": {
           "wrap": {
@@ -2946,6 +3066,18 @@
         "term": {
           "wrap": {
             "body": {"literal": {"string": "hydra.lib.strings.lines"}},
+            "typeName": "hydra.core.Name"}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"variable": "hydra.core.Name"},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.lib.names.stringsMaybeCharAt",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.strings.maybeCharAt"}},
             "typeName": "hydra.core.Name"}},
         "type": [
           {

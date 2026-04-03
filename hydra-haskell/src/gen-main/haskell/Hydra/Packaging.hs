@@ -7,6 +7,7 @@ module Hydra.Packaging where
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Map as M
 
 -- | A definition, which may be either a term or type definition
 data Definition =
