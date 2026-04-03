@@ -786,7 +786,7 @@ expr =
 ### Pattern 4: Pattern matching
 
 ```haskell
--- Match on an optional value
+-- Match on a Maybe value
 handleMaybe = match _Maybe (Just defaultValue) [
   _Maybe_nothing >>: "unit" ~> defaultValue,
   _Maybe_just >>: "val" ~> processValue (var "val")]

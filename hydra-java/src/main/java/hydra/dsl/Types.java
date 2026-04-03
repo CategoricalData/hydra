@@ -639,7 +639,7 @@ public interface Types {
     }
 
     /**
-     * Maybe (optional/nullable) type.
+     * Maybe (nullable) type.
      * Example: maybe(string())
      * @param elements the element type
      * @return the maybe type
