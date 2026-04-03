@@ -2,7 +2,7 @@
 
 (require 'hydra.core)
 
-(require 'hydra.module)
+(require 'hydra.packaging)
 
 (defvar hydra_lib_names_chars "hydra.lib.chars")
 

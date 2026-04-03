@@ -177,29 +177,33 @@ public interface Encoding {
     return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("m"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("map"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.maps.bimap"))), hydra.Encoding.encodeType((mt).keys))), hydra.Encoding.encodeType((mt).values))), new hydra.core.Term.Variable(new hydra.core.Name("m"))))))))));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.module.Module>> encodeModule(hydra.context.Context cx, hydra.graph.Graph graph, hydra.module.Module mod) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.packaging.Module>> encodeModule(hydra.context.Context cx, hydra.graph.Graph graph, hydra.packaging.Module mod) {
     return hydra.lib.eithers.Bind.apply(
       hydra.Encoding.filterTypeBindings(
         cx,
         graph,
         hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
-          (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+          (java.util.function.Function<hydra.packaging.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.packaging.Definition.PartialVisitor<>() {
             @Override
-            public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.module.Definition instance) {
+            public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.packaging.Definition instance) {
               return (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing());
             }
 
             @Override
-            public hydra.util.Maybe<hydra.core.Binding> visit(hydra.module.Definition.Type td) {
-              return hydra.util.Maybe.just(hydra.Annotations.typeElement(
-                (td).value.name,
-                (td).value.type));
+            public hydra.util.Maybe<hydra.core.Binding> visit(hydra.packaging.Definition.Type td) {
+              return hydra.util.Maybe.just(((java.util.function.Supplier<hydra.core.Binding>) (() -> {
+                hydra.core.Term schemaTerm = new hydra.core.Term.Variable(new hydra.core.Name("hydra.core.Type"));
+                return ((java.util.function.Supplier<hydra.core.Binding>) (() -> {
+                  hydra.util.Lazy<hydra.core.Term> dataTerm = new hydra.util.Lazy<>(() -> hydra.Annotations.normalizeTermAnnotations(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(hydra.encode.Core.type((td).value.type.type), hydra.lib.maps.FromList.apply(hydra.util.ConsList.of((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Term>(hydra.Constants.key_type(), schemaTerm)))))))));
+                  return new hydra.core.Binding((td).value.name, dataTerm.get(), hydra.util.Maybe.just(new hydra.core.TypeScheme((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), (hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))));
+                })).get();
+              })).get());
             }
           })),
           (mod).definitions))),
-      (java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.module.Module>>>) (typeBindings -> hydra.lib.logic.IfElse.lazy(
+      (java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.packaging.Module>>>) (typeBindings -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(typeBindings),
-        () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.module.Module>>right((hydra.util.Maybe<hydra.module.Module>) (hydra.util.Maybe.<hydra.module.Module>nothing())),
+        () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.packaging.Module>>right((hydra.util.Maybe<hydra.packaging.Module>) (hydra.util.Maybe.<hydra.packaging.Module>nothing())),
         () -> hydra.lib.eithers.Bind.apply(
           hydra.lib.eithers.MapList.apply(
             (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Binding>>) (b -> hydra.lib.eithers.Bimap.apply(
@@ -210,8 +214,8 @@ public interface Encoding {
                 graph,
                 b))),
             typeBindings),
-          (java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.module.Module>>>) (encodedBindings -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.module.Module>>right(hydra.util.Maybe.just(new hydra.module.Module(hydra.Encoding.encodeNamespace((mod).namespace), hydra.lib.lists.Map.apply(
-            (java.util.function.Function<hydra.core.Binding, hydra.module.Definition>) (b -> new hydra.module.Definition.Term(new hydra.module.TermDefinition((b).name, (b).term, (b).type))),
+          (java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.packaging.Module>>>) (encodedBindings -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.packaging.Module>>right(hydra.util.Maybe.just(new hydra.packaging.Module(hydra.Encoding.encodeNamespace((mod).namespace), hydra.lib.lists.Map.apply(
+            (java.util.function.Function<hydra.core.Binding, hydra.packaging.Definition>) (b -> new hydra.packaging.Definition.Term(new hydra.packaging.TermDefinition((b).name, (b).term, (b).type))),
             encodedBindings), hydra.lib.lists.Nub.apply(hydra.lib.lists.Concat2.apply(
             hydra.lib.lists.Map.apply(
               hydra.Encoding::encodeNamespace,
@@ -227,8 +231,8 @@ public interface Encoding {
     return new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.core.Name"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((n).value))));
   }
 
-  static hydra.module.Namespace encodeNamespace(hydra.module.Namespace ns) {
-    return new hydra.module.Namespace(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+  static hydra.packaging.Namespace encodeNamespace(hydra.packaging.Namespace ns) {
+    return new hydra.packaging.Namespace(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
       "hydra.encode.",
       hydra.lib.strings.Intercalate.apply(
         ".",

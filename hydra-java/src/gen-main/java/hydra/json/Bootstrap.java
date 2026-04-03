@@ -820,25 +820,25 @@ public interface Bootstrap {
           new hydra.core.Name("description"),
           new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms."))))))),
       hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.module.Definition"),
+        new hydra.core.Name("hydra.packaging.Definition"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Union(hydra.util.ConsList.of(
-          new hydra.core.FieldType(new hydra.core.Name("term"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.module.TermDefinition")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("term"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.packaging.TermDefinition")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A term definition"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("type"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.module.TypeDefinition")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("type"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.packaging.TypeDefinition")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type definition"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
           new hydra.core.Name("description"),
           new hydra.core.Term.Literal(new hydra.core.Literal.String_("A definition, which may be either a term or type definition"))))))),
       hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.module.FileExtension"),
+        new hydra.core.Name("hydra.packaging.FileExtension"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Wrap(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
           new hydra.core.Name("description"),
           new hydra.core.Term.Literal(new hydra.core.Literal.String_("A file extension (without the dot), e.g. \"json\" or \"py\""))))))),
       hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.module.Library"),
+        new hydra.core.Name("hydra.packaging.Library"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(hydra.util.ConsList.of(
-          new hydra.core.FieldType(new hydra.core.Name("namespace"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.module.Namespace")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("namespace"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.packaging.Namespace")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A common prefix for all primitive function names in the library"))))))),
           new hydra.core.FieldType(new hydra.core.Name("prefix"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
@@ -850,18 +850,18 @@ public interface Bootstrap {
           new hydra.core.Name("description"),
           new hydra.core.Term.Literal(new hydra.core.Literal.String_("A library of primitive functions"))))))),
       hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.module.Module"),
+        new hydra.core.Name("hydra.packaging.Module"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(hydra.util.ConsList.of(
-          new hydra.core.FieldType(new hydra.core.Name("namespace"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.module.Namespace")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("namespace"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.packaging.Namespace")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A common prefix for all element names in the module"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("definitions"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.List(new hydra.core.Type.Variable(new hydra.core.Name("hydra.module.Definition"))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("definitions"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.List(new hydra.core.Type.Variable(new hydra.core.Name("hydra.packaging.Definition"))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("The definitions in this module"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("termDependencies"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.List(new hydra.core.Type.Variable(new hydra.core.Name("hydra.module.Namespace"))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("termDependencies"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.List(new hydra.core.Type.Variable(new hydra.core.Name("hydra.packaging.Namespace"))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("Any modules which the term expressions of this module directly depend upon"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("typeDependencies"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.List(new hydra.core.Type.Variable(new hydra.core.Name("hydra.module.Namespace"))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("typeDependencies"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.List(new hydra.core.Type.Variable(new hydra.core.Name("hydra.packaging.Namespace"))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("Any modules which the type expressions of this module directly depend upon"))))))),
           new hydra.core.FieldType(new hydra.core.Name("description"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Maybe(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
@@ -870,25 +870,47 @@ public interface Bootstrap {
           new hydra.core.Name("description"),
           new hydra.core.Term.Literal(new hydra.core.Literal.String_("A logical collection of elements in the same namespace, having dependencies on zero or more other modules"))))))),
       hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.module.Namespace"),
+        new hydra.core.Name("hydra.packaging.Namespace"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Wrap(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
           new hydra.core.Name("description"),
           new hydra.core.Term.Literal(new hydra.core.Literal.String_("A prefix for element names"))))))),
       hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.module.Namespaces"),
+        new hydra.core.Name("hydra.packaging.Namespaces"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("n"), new hydra.core.Type.Record(hydra.util.ConsList.of(
-          new hydra.core.FieldType(new hydra.core.Name("focus"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Pair(new hydra.core.PairType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.module.Namespace")), new hydra.core.Type.Variable(new hydra.core.Name("n")))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("focus"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Pair(new hydra.core.PairType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.packaging.Namespace")), new hydra.core.Type.Variable(new hydra.core.Name("n")))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("The namespace in focus, together with its associated value"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("mapping"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Map(new hydra.core.MapType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.module.Namespace")), new hydra.core.Type.Variable(new hydra.core.Name("n")))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("mapping"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Map(new hydra.core.MapType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.packaging.Namespace")), new hydra.core.Type.Variable(new hydra.core.Name("n")))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A mapping of namespaces to values"))))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
           new hydra.core.Name("description"),
           new hydra.core.Term.Literal(new hydra.core.Literal.String_("A mapping from namespaces to values of type n, with a focus on one namespace"))))))),
       hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.module.QualifiedName"),
+        new hydra.core.Name("hydra.packaging.Package"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(hydra.util.ConsList.of(
-          new hydra.core.FieldType(new hydra.core.Name("namespace"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Maybe(new hydra.core.Type.Variable(new hydra.core.Name("hydra.module.Namespace"))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("name"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.packaging.PackageName")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The name of the package"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("modules"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.List(new hydra.core.Type.Variable(new hydra.core.Name("hydra.packaging.Module"))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The modules in this package"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("dependencies"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.List(new hydra.core.Type.Variable(new hydra.core.Name("hydra.packaging.PackageName"))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The packages which this package depends on"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("description"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Maybe(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("An optional human-readable description of the package"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A package, which is a named collection of modules with metadata and dependencies"))))))),
+      hydra.util.PersistentMap.entry(
+        new hydra.core.Name("hydra.packaging.PackageName"),
+        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Wrap(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("The unique name of a package, e.g. \"hydra-kernel\" or \"hydra-python\""))))))),
+      hydra.util.PersistentMap.entry(
+        new hydra.core.Name("hydra.packaging.QualifiedName"),
+        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(hydra.util.ConsList.of(
+          new hydra.core.FieldType(new hydra.core.Name("namespace"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Maybe(new hydra.core.Type.Variable(new hydra.core.Name("hydra.packaging.Namespace"))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("The optional namespace"))))))),
           new hydra.core.FieldType(new hydra.core.Name("local"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
@@ -897,7 +919,7 @@ public interface Bootstrap {
           new hydra.core.Name("description"),
           new hydra.core.Term.Literal(new hydra.core.Literal.String_("A qualified name consisting of an optional namespace together with a mandatory local name"))))))),
       hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.module.TermDefinition"),
+        new hydra.core.Name("hydra.packaging.TermDefinition"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(hydra.util.ConsList.of(
           new hydra.core.FieldType(new hydra.core.Name("name"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
@@ -911,16 +933,16 @@ public interface Bootstrap {
           new hydra.core.Name("description"),
           new hydra.core.Term.Literal(new hydra.core.Literal.String_("A term-level definition, including a name, a term, and the type scheme of the term"))))))),
       hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.module.TypeDefinition"),
+        new hydra.core.Name("hydra.packaging.TypeDefinition"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(hydra.util.ConsList.of(
           new hydra.core.FieldType(new hydra.core.Name("name"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("The name of the type"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("type"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("type"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.TypeScheme")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The type being defined"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The type scheme being defined"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
           new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type-level definition, including a name and the type"))))))),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type-level definition, including a name and the type scheme"))))))),
       hydra.util.PersistentMap.entry(
         new hydra.core.Name("hydra.util.CaseConvention"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Union(hydra.util.ConsList.of(

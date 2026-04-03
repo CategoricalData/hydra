@@ -7,7 +7,7 @@ package hydra;
  */
 public interface Resolution {
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.core.Type>> dereferenceType(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Name name) {
-    hydra.util.Maybe<hydra.core.Binding> mel = hydra.Lexical.dereferenceElement(
+    hydra.util.Maybe<hydra.core.Binding> mel = hydra.Lexical.lookupBinding(
       graph,
       name);
     return hydra.lib.maybes.Maybe.applyLazy(
@@ -93,7 +93,7 @@ public interface Resolution {
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>> visit(hydra.core.Type.Variable name) {
         return hydra.lib.maybes.Maybe.applyLazy(
           () -> hydra.lib.eithers.Bind.apply(
-            hydra.Lexical.requireElement(
+            hydra.Lexical.requireBinding(
               cx,
               graph,
               (name).value),

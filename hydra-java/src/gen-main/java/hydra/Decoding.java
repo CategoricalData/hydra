@@ -422,29 +422,33 @@ public interface Decoding {
     return new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.extract.core.decodeMaybe")), elemDecoder));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.module.Module>> decodeModule(hydra.context.Context cx, hydra.graph.Graph graph, hydra.module.Module mod) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.packaging.Module>> decodeModule(hydra.context.Context cx, hydra.graph.Graph graph, hydra.packaging.Module mod) {
     return hydra.lib.eithers.Bind.apply(
       hydra.Decoding.filterTypeBindings(
         cx,
         graph,
         hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
-          (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+          (java.util.function.Function<hydra.packaging.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.packaging.Definition.PartialVisitor<>() {
             @Override
-            public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.module.Definition instance) {
+            public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.packaging.Definition instance) {
               return (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing());
             }
 
             @Override
-            public hydra.util.Maybe<hydra.core.Binding> visit(hydra.module.Definition.Type td) {
-              return hydra.util.Maybe.just(hydra.Annotations.typeElement(
-                (td).value.name,
-                (td).value.type));
+            public hydra.util.Maybe<hydra.core.Binding> visit(hydra.packaging.Definition.Type td) {
+              return hydra.util.Maybe.just(((java.util.function.Supplier<hydra.core.Binding>) (() -> {
+                hydra.core.Term schemaTerm = new hydra.core.Term.Variable(new hydra.core.Name("hydra.core.Type"));
+                return ((java.util.function.Supplier<hydra.core.Binding>) (() -> {
+                  hydra.util.Lazy<hydra.core.Term> dataTerm = new hydra.util.Lazy<>(() -> hydra.Annotations.normalizeTermAnnotations(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(hydra.encode.Core.type((td).value.type.type), hydra.lib.maps.FromList.apply(hydra.util.ConsList.of((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Term>(hydra.Constants.key_type(), schemaTerm)))))))));
+                  return new hydra.core.Binding((td).value.name, dataTerm.get(), hydra.util.Maybe.just(new hydra.core.TypeScheme((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), (hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))));
+                })).get();
+              })).get());
             }
           })),
           (mod).definitions))),
-      (java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.module.Module>>>) (typeBindings -> hydra.lib.logic.IfElse.lazy(
+      (java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.packaging.Module>>>) (typeBindings -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(typeBindings),
-        () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.module.Module>>right((hydra.util.Maybe<hydra.module.Module>) (hydra.util.Maybe.<hydra.module.Module>nothing())),
+        () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.packaging.Module>>right((hydra.util.Maybe<hydra.packaging.Module>) (hydra.util.Maybe.<hydra.packaging.Module>nothing())),
         () -> hydra.lib.eithers.Bind.apply(
           hydra.lib.eithers.MapList.apply(
             (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Binding>>) (b -> hydra.lib.eithers.Bimap.apply(
@@ -455,33 +459,33 @@ public interface Decoding {
                 graph,
                 b))),
             typeBindings),
-          (java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.module.Module>>>) (decodedBindings -> {
-            hydra.util.Lazy<hydra.util.ConsList<hydra.module.Namespace>> decodedTermDeps = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+          (java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.packaging.Module>>>) (decodedBindings -> {
+            hydra.util.Lazy<hydra.util.ConsList<hydra.packaging.Namespace>> decodedTermDeps = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
               hydra.Decoding::decodeNamespace,
               (mod).termDependencies));
-            hydra.util.Lazy<hydra.util.ConsList<hydra.module.Namespace>> decodedTypeDeps = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+            hydra.util.Lazy<hydra.util.ConsList<hydra.packaging.Namespace>> decodedTypeDeps = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
               hydra.Decoding::decodeNamespace,
               (mod).typeDependencies));
-            hydra.util.Lazy<hydra.util.ConsList<hydra.module.Namespace>> allDecodedDeps = new hydra.util.Lazy<>(() -> hydra.lib.lists.Nub.apply(hydra.lib.lists.Concat2.apply(
+            hydra.util.Lazy<hydra.util.ConsList<hydra.packaging.Namespace>> allDecodedDeps = new hydra.util.Lazy<>(() -> hydra.lib.lists.Nub.apply(hydra.lib.lists.Concat2.apply(
               decodedTypeDeps.get(),
               decodedTermDeps.get())));
-            return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.module.Module>>right(hydra.util.Maybe.just(new hydra.module.Module(hydra.Decoding.decodeNamespace((mod).namespace), hydra.lib.lists.Map.apply(
-              (java.util.function.Function<hydra.core.Binding, hydra.module.Definition>) (b -> new hydra.module.Definition.Term(new hydra.module.TermDefinition((b).name, (b).term, (b).type))),
+            return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.packaging.Module>>right(hydra.util.Maybe.just(new hydra.packaging.Module(hydra.Decoding.decodeNamespace((mod).namespace), hydra.lib.lists.Map.apply(
+              (java.util.function.Function<hydra.core.Binding, hydra.packaging.Definition>) (b -> new hydra.packaging.Definition.Term(new hydra.packaging.TermDefinition((b).name, (b).term, (b).type))),
               decodedBindings), hydra.lib.lists.Concat2.apply(
               hydra.util.ConsList.of(
-                new hydra.module.Namespace("hydra.extract.core"),
-                new hydra.module.Namespace("hydra.lexical"),
-                new hydra.module.Namespace("hydra.rewriting")),
+                new hydra.packaging.Namespace("hydra.extract.core"),
+                new hydra.packaging.Namespace("hydra.lexical"),
+                new hydra.packaging.Namespace("hydra.rewriting")),
               allDecodedDeps.get()), hydra.util.ConsList.of(
               (mod).namespace,
-              new hydra.module.Namespace("hydra.util")), hydra.util.Maybe.just(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+              new hydra.packaging.Namespace("hydra.util")), hydra.util.Maybe.just(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "Term decoders for ",
               (mod).namespace.value))))));
           })))));
   }
 
-  static hydra.module.Namespace decodeNamespace(hydra.module.Namespace ns) {
-    return new hydra.module.Namespace(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+  static hydra.packaging.Namespace decodeNamespace(hydra.packaging.Namespace ns) {
+    return new hydra.packaging.Namespace(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
       "hydra.decode.",
       hydra.lib.strings.Intercalate.apply(
         ".",

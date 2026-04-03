@@ -138,62 +138,7 @@ public interface Reduction {
     return true;
   }
 
-  static hydra.core.Term etaExpandTerm(hydra.graph.Graph graph, hydra.core.Term term) {
-    java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.core.Term>>> expand = (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.core.Term>>>) (args -> (java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (arity -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> {
-      hydra.util.Lazy<hydra.core.Term> apps = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-        (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (lhs -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (arg -> new hydra.core.Term.Application(new hydra.core.Application(lhs, arg)))),
-        t,
-        args));
-      hydra.util.Lazy<hydra.util.ConsList<Integer>> is = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
-        hydra.lib.equality.Lte.apply(
-          arity,
-          hydra.lib.lists.Length.apply(args)),
-        () -> (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty()),
-        () -> hydra.lib.math.Range.apply(
-          1,
-          hydra.lib.math.Sub.apply(
-            arity,
-            hydra.lib.lists.Length.apply(args)))));
-      java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.ConsList<Integer>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>> pad = new java.util.concurrent.atomic.AtomicReference<>();
-      pad.set((java.util.function.Function<hydra.util.ConsList<Integer>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (indices -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t2 -> hydra.lib.logic.IfElse.lazy(
-        hydra.lib.lists.Null.apply(indices),
-        () -> t2,
-        () -> new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name(hydra.lib.strings.Cat2.apply(
-          "v",
-          hydra.lib.literals.ShowInt32.apply(hydra.lib.lists.Head.apply(indices)))), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), pad.get().apply(hydra.lib.lists.Tail.apply(indices)).apply(new hydra.core.Term.Application(new hydra.core.Application(t2, new hydra.core.Term.Variable(new hydra.core.Name(hydra.lib.strings.Cat2.apply(
-          "v",
-          hydra.lib.literals.ShowInt32.apply(hydra.lib.lists.Head.apply(indices)))))))))))))));
-      return pad.get().apply(is.get()).apply(apps.get());
-    })));
-    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>>> rewrite = new java.util.concurrent.atomic.AtomicReference<>();
-    rewrite.set((java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>>) (args -> (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (recurse -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> {
-      java.util.function.Function<hydra.core.Term, hydra.core.Term> afterRecursion = (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (term2 -> (expand).apply(args).apply(hydra.Reduction.etaExpansionArity(
-        graph,
-        term2)).apply(term2));
-      hydra.core.Term t2 = hydra.Strip.detypeTerm(t);
-      return (t2).accept(new hydra.core.Term.PartialVisitor<>() {
-        @Override
-        public hydra.core.Term otherwise(hydra.core.Term instance) {
-          return (afterRecursion).apply((recurse).apply(t2));
-        }
-
-        @Override
-        public hydra.core.Term visit(hydra.core.Term.Application app) {
-          hydra.core.Term rhs = (app).value.argument;
-          hydra.util.Lazy<hydra.core.Term> erhs = new hydra.util.Lazy<>(() -> rewrite.get().apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty())).apply(recurse).apply(rhs));
-          hydra.core.Term lhs = (app).value.function;
-          return rewrite.get().apply(hydra.lib.lists.Cons.apply(
-            erhs.get(),
-            args)).apply(recurse).apply(lhs);
-        }
-      });
-    }))));
-    return hydra.Reduction.contractTerm(hydra.Rewriting.rewriteTerm(
-      (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (v2 -> rewrite.get().apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty())).apply(v1).apply(v2))),
-      term));
-  }
-
-  static hydra.core.Term etaExpandTermNew(hydra.graph.Graph tx0, hydra.core.Term term0) {
+  static hydra.core.Term etaExpandTerm(hydra.graph.Graph tx0, hydra.core.Term term0) {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<Integer, java.util.function.Function<hydra.util.Maybe<hydra.core.Type>, hydra.util.ConsList<hydra.util.Maybe<hydra.core.Type>>>>> domainTypes = new java.util.concurrent.atomic.AtomicReference<>();
     domainTypes.set((java.util.function.Function<Integer, java.util.function.Function<hydra.util.Maybe<hydra.core.Type>, hydra.util.ConsList<hydra.util.Maybe<hydra.core.Type>>>>) (n -> (java.util.function.Function<hydra.util.Maybe<hydra.core.Type>, hydra.util.ConsList<hydra.util.Maybe<hydra.core.Type>>>) (mt -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Lte.apply(
@@ -1083,7 +1028,7 @@ public interface Reduction {
           () -> 0,
           (java.util.function.Function<hydra.core.TypeScheme, Integer>) (ts -> hydra.Arity.typeArity((ts).type)),
           hydra.lib.maybes.Bind.apply(
-            hydra.Lexical.lookupElement(
+            hydra.Lexical.lookupBinding(
               graph,
               (name).value),
             (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.TypeScheme>>) (b -> (b).type)));
@@ -1357,7 +1302,7 @@ public interface Reduction {
 
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> visit(hydra.core.Term.Variable v) {
-          hydra.util.Maybe<hydra.core.Binding> mBinding = hydra.Lexical.dereferenceElement(
+          hydra.util.Maybe<hydra.core.Binding> mBinding = hydra.Lexical.lookupBinding(
             graph,
             (v).value);
           return hydra.lib.maybes.Maybe.applyLazy(

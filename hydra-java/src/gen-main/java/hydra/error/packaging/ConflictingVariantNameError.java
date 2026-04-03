@@ -21,7 +21,7 @@ public class ConflictingVariantNameError implements Serializable, Comparable<Con
   /**
    * The namespace of the module containing the conflict
    */
-  public final hydra.module.Namespace namespace;
+  public final hydra.packaging.Namespace namespace;
 
   /**
    * The name of the union type
@@ -38,7 +38,7 @@ public class ConflictingVariantNameError implements Serializable, Comparable<Con
    */
   public final hydra.core.Name conflictingName;
 
-  public ConflictingVariantNameError (hydra.module.Namespace namespace, hydra.core.Name typeName, hydra.core.Name variantName, hydra.core.Name conflictingName) {
+  public ConflictingVariantNameError (hydra.packaging.Namespace namespace, hydra.core.Name typeName, hydra.core.Name variantName, hydra.core.Name conflictingName) {
     this.namespace = namespace;
     this.typeName = typeName;
     this.variantName = variantName;
@@ -86,7 +86,7 @@ public class ConflictingVariantNameError implements Serializable, Comparable<Con
     return ((Comparable) conflictingName).compareTo(other.conflictingName);
   }
 
-  public ConflictingVariantNameError withNamespace(hydra.module.Namespace namespace) {
+  public ConflictingVariantNameError withNamespace(hydra.packaging.Namespace namespace) {
     return new ConflictingVariantNameError(namespace, typeName, variantName, conflictingName);
   }
 

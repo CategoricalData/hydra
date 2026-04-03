@@ -1251,6 +1251,16 @@ public interface Checking {
       })).get());
   }
 
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Type> typeOfTerm(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term term) {
+    return hydra.lib.eithers.Map.apply(
+      (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.core.Type>) ((java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.core.Type>) (hydra.lib.pairs.First::apply)),
+      hydra.Checking.typeOf(
+        cx,
+        g,
+        (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
+        term));
+  }
+
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>> typeOfTypeApplication(hydra.context.Context cx, hydra.graph.Graph tx, hydra.util.ConsList<hydra.core.Type> typeArgs, hydra.core.TypeApplicationTerm tyapp) {
     hydra.core.Term body = (tyapp).body;
     hydra.core.Type t = (tyapp).type;

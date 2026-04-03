@@ -12,6 +12,8 @@ import hydra.lib.logic
 
 import hydra.lib.maps
 
+import hydra.lib.math
+
 import hydra.lib.maybes
 
 import hydra.lib.pairs
@@ -105,6 +107,18 @@ def nonAlnumToUnderscores(input: scala.Predef.String): scala.Predef.String =
   lazy val result: Tuple2[Seq[Int], Boolean] = hydra.lib.lists.foldl[Tuple2[Seq[Int], Boolean], Int](replace)(Tuple2(Seq(),
      false))(hydra.lib.strings.toList(input))
   hydra.lib.strings.fromList(hydra.lib.lists.reverse[Int](hydra.lib.pairs.first[Seq[Int], Boolean](result)))
+}
+
+def normalizeComment(s: scala.Predef.String): scala.Predef.String =
+  {
+  lazy val stripped: scala.Predef.String = hydra.formatting.stripLeadingAndTrailingWhitespace(s)
+  hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.strings.`null`(stripped))("")({
+    lazy val lastIdx: Int = hydra.lib.math.sub(hydra.lib.strings.length(stripped))(1)
+    {
+      lazy val lastChar: Int = hydra.lib.strings.charAt(lastIdx)(stripped)
+      hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](lastChar)(46))(stripped)(hydra.lib.strings.cat2(stripped)("."))
+    }
+  })
 }
 
 def sanitizeWithUnderscores(reserved: scala.collection.immutable.Set[scala.Predef.String])(s: scala.Predef.String): scala.Predef.String =

@@ -7,7 +7,7 @@ package hydra.ext.python;
  */
 public interface Coder {
   static <T0> hydra.util.Either<T0, hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>> analyzePythonFunction(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Term term) {
-    return hydra.CoderUtils.analyzeFunctionTermWith(
+    return hydra.Analysis.analyzeFunctionTermWith(
       cx,
       (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (p0 -> p1 -> hydra.ext.python.Coder.pythonBindingMetadata(
         p0,
@@ -351,13 +351,13 @@ public interface Coder {
     return go.get().apply(term0);
   }
 
-  static hydra.ext.python.environment.PythonModuleMetadata emptyMetadata(hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> ns) {
+  static hydra.ext.python.environment.PythonModuleMetadata emptyMetadata(hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName> ns) {
     return new hydra.ext.python.environment.PythonModuleMetadata(ns, (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false);
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression> encodeApplication(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Application app) {
     hydra.core.Term term = new hydra.core.Term.Application(app);
-    hydra.util.Lazy<hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>> gathered = new hydra.util.Lazy<>(() -> hydra.CoderUtils.gatherArgs(
+    hydra.util.Lazy<hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>> gathered = new hydra.util.Lazy<>(() -> hydra.Analysis.gatherArgs(
       term,
       (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty())));
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> args = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(gathered.get()));
@@ -565,7 +565,7 @@ public interface Coder {
                   consumedArgs.get()), remainingArgs.get())))));
             }),
             (el).type)),
-          hydra.Lexical.lookupElement(
+          hydra.Lexical.lookupBinding(
             g,
             (name).value));
       }
@@ -929,7 +929,7 @@ public interface Coder {
           term1),
         (java.util.function.Function<hydra.util.Maybe<String>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (comment -> {
           hydra.util.Lazy<hydra.util.Maybe<String>> normComment = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Map.apply(
-            hydra.CoderUtils::normalizeComment,
+            hydra.Formatting::normalizeComment,
             comment));
           return hydra.ext.python.Coder.encodeTermAssignment(
             cx,
@@ -959,11 +959,11 @@ public interface Coder {
         term),
       (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.NamedExpression>>) (pbody -> {
         hydra.graph.Graph tc = (env).graph;
-        Boolean isComplexVar = hydra.CoderUtils.isComplexVariable(
+        Boolean isComplexVar = hydra.Predicates.isComplexVariable(
           tc,
           name);
-        Boolean isTrivial = hydra.CoderUtils.isTrivialTerm(term);
-        Boolean termIsComplex = hydra.CoderUtils.isComplexTerm(
+        Boolean isTrivial = hydra.Predicates.isTrivialTerm(term);
+        Boolean termIsComplex = hydra.Predicates.isComplexTerm(
           tc,
           term);
         hydra.util.Lazy<Boolean> needsThunk = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
@@ -1096,10 +1096,10 @@ public interface Coder {
       }));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>> encodeDefinition(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.module.Definition def_) {
-    return (def_).accept(new hydra.module.Definition.PartialVisitor<>() {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>> encodeDefinition(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.packaging.Definition def_) {
+    return (def_).accept(new hydra.packaging.Definition.PartialVisitor<>() {
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>> visit(hydra.module.Definition.Term td) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>> visit(hydra.packaging.Definition.Term td) {
         hydra.core.Name name = (td).value.name;
         hydra.core.Term term = (td).value.term;
         hydra.util.Lazy<hydra.core.TypeScheme> typ = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
@@ -1113,7 +1113,7 @@ public interface Coder {
             term),
           (java.util.function.Function<hydra.util.Maybe<String>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>>) (comment -> {
             hydra.util.Lazy<hydra.util.Maybe<String>> normComment = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Map.apply(
-              hydra.CoderUtils::normalizeComment,
+              hydra.Formatting::normalizeComment,
               comment));
             return hydra.lib.eithers.Bind.apply(
               hydra.ext.python.Coder.encodeTermAssignment(
@@ -1128,9 +1128,9 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>> visit(hydra.module.Definition.Type td) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>> visit(hydra.packaging.Definition.Type td) {
         hydra.core.Name name = (td).value.name;
-        hydra.core.Type typ = (td).value.type;
+        hydra.core.Type typ = (td).value.type.type;
         return hydra.lib.eithers.Bind.apply(
           hydra.Annotations.getTypeDescription(
             cx,
@@ -1138,7 +1138,7 @@ public interface Coder {
             typ),
           (java.util.function.Function<hydra.util.Maybe<String>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>>) (comment -> {
             hydra.util.Lazy<hydra.util.Maybe<String>> normComment = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Map.apply(
-              hydra.CoderUtils::normalizeComment,
+              hydra.Formatting::normalizeComment,
               comment));
             return hydra.ext.python.Coder.encodeTypeAssignment(
               cx,
@@ -1475,7 +1475,7 @@ public interface Coder {
       (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (pyArgs -> {
         hydra.util.Lazy<Boolean> isTCO = new hydra.util.Lazy<>(() -> hydra.lib.logic.And.apply(
           hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply(args)),
-          hydra.CoderUtils.isSelfTailRecursive(
+          hydra.Analysis.isSelfTailRecursive(
             name,
             body)));
         hydra.util.Lazy<hydra.ext.python.syntax.Parameters> pyParams = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.Parameters.ParamNoDefault(new hydra.ext.python.syntax.ParamNoDefaultParameters(pyArgs, (hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault>) (hydra.util.ConsList.<hydra.ext.python.syntax.ParamWithDefault>empty()), (hydra.util.Maybe<hydra.ext.python.syntax.StarEtc>) (hydra.util.Maybe.<hydra.ext.python.syntax.StarEtc>nothing()))));
@@ -1868,12 +1868,12 @@ public interface Coder {
         fieldPairs.get()));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Module> encodePythonModule(hydra.context.Context cx, hydra.graph.Graph g, hydra.module.Module mod, hydra.util.ConsList<hydra.module.Definition> defs0) {
-    hydra.util.ConsList<hydra.module.Definition> defs = hydra.CoderUtils.reorderDefs(defs0);
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Module> encodePythonModule(hydra.context.Context cx, hydra.graph.Graph g, hydra.packaging.Module mod, hydra.util.ConsList<hydra.packaging.Definition> defs0) {
+    hydra.util.ConsList<hydra.packaging.Definition> defs = hydra.Environment.reorderDefs(defs0);
     hydra.ext.python.environment.PythonModuleMetadata meta0 = hydra.ext.python.Coder.gatherMetadata(
       (mod).namespace,
       defs);
-    hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces0 = (meta0).namespaces;
+    hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName> namespaces0 = (meta0).namespaces;
     hydra.ext.python.environment.PythonEnvironment env0 = hydra.ext.python.Coder.initialEnvironment(
       namespaces0,
       g);
@@ -1885,7 +1885,7 @@ public interface Coder {
         hydra.lib.eithers.Map.apply(
           (java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (xs -> hydra.lib.lists.Concat.apply(xs)),
           hydra.lib.eithers.MapList.apply(
-            (java.util.function.Function<hydra.module.Definition, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>>) (d -> hydra.ext.python.Coder.encodeDefinition(
+            (java.util.function.Function<hydra.packaging.Definition, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>>) (d -> hydra.ext.python.Coder.encodeDefinition(
               cx,
               env,
               d)),
@@ -1895,7 +1895,7 @@ public interface Coder {
             () -> (hydra.util.ConsList<hydra.ext.python.syntax.Statement>) (hydra.util.ConsList.<hydra.ext.python.syntax.Statement>empty()),
             (java.util.function.Function<String, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>) (c -> hydra.util.ConsList.of(hydra.ext.python.Utils.commentStatement(c))),
             hydra.lib.maybes.Map.apply(
-              hydra.CoderUtils::normalizeComment,
+              hydra.Formatting::normalizeComment,
               (mod).description)));
           hydra.util.Lazy<hydra.ext.python.environment.PythonModuleMetadata> meta2 = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
             hydra.lib.logic.And.apply(
@@ -1915,7 +1915,7 @@ public interface Coder {
               meta2.get(),
               true),
             () -> meta2.get()));
-          hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces = (meta0).namespaces;
+          hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName> namespaces = (meta0).namespaces;
           hydra.util.ConsList<hydra.ext.python.syntax.Statement> importStmts = hydra.ext.python.Coder.moduleImports(
             namespaces,
             meta.get());
@@ -1992,10 +1992,10 @@ public interface Coder {
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Type>> doms = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, hydra.util.ConsList<hydra.core.Type>>) (projected -> projected.domains)).apply(fs));
         hydra.util.Lazy<hydra.ext.python.environment.PythonEnvironment> env2 = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, hydra.ext.python.environment.PythonEnvironment>) (projected -> projected.environment)).apply(fs));
         hydra.graph.Graph tc = env2.get().graph;
-        Boolean isComplex = hydra.CoderUtils.isComplexBinding(
+        Boolean isComplex = hydra.Predicates.isComplexBinding(
           tc,
           binding);
-        Boolean isTrivial = hydra.CoderUtils.isTrivialTerm(term);
+        Boolean isTrivial = hydra.Predicates.isTrivialTerm(term);
         hydra.util.Lazy<hydra.util.Maybe<hydra.core.Type>> mcod = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, hydra.util.Maybe<hydra.core.Type>>) (projected -> projected.codomain)).apply(fs));
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> params = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, hydra.util.ConsList<hydra.core.Name>>) (projected -> projected.params)).apply(fs));
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> tparams = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, hydra.util.ConsList<hydra.core.Name>>) (projected -> projected.typeParams)).apply(fs));
@@ -2422,7 +2422,7 @@ public interface Coder {
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> encodeTermMultiline(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Term term) {
-    hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term> gathered = hydra.CoderUtils.gatherApplications(term);
+    hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term> gathered = hydra.Analysis.gatherApplications(term);
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> args = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered));
     hydra.util.Lazy<hydra.core.Term> body = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(gathered));
     hydra.util.Lazy<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>> dfltLogic = new hydra.util.Lazy<>(() -> hydra.lib.eithers.Bind.apply(
@@ -2553,7 +2553,7 @@ public interface Coder {
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> encodeTermMultilineTCO(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name funcName, hydra.util.ConsList<hydra.core.Name> paramNames, hydra.core.Term term) {
     hydra.core.Term stripped = hydra.Strip.deannotateAndDetypeTerm(term);
-    hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term> gathered = hydra.CoderUtils.gatherApplications(stripped);
+    hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term> gathered = hydra.Analysis.gatherApplications(stripped);
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> gatherArgs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered));
     hydra.util.Lazy<hydra.core.Term> gatherFun = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(gathered));
     hydra.core.Term strippedFun = hydra.Strip.deannotateAndDetypeTerm(gatherFun.get());
@@ -2606,7 +2606,7 @@ public interface Coder {
             hydra.util.ConsList.of(continueStmt)));
         })),
       () -> ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (() -> {
-        hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term> gathered2 = hydra.CoderUtils.gatherApplications(term);
+        hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term> gathered2 = hydra.Analysis.gatherApplications(term);
         return ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (() -> {
           hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> args2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered2));
           return ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (() -> {
@@ -3352,7 +3352,7 @@ public interface Coder {
                     name,
                     tcMetadata)),
                 (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (el -> {
-                  Boolean elTrivial1 = hydra.CoderUtils.isTrivialTerm((el).term);
+                  Boolean elTrivial1 = hydra.Predicates.isTrivialTerm((el).term);
                   return hydra.lib.maybes.Maybe.applyLazy(
                     () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>right(asVariable),
                     (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (ts -> hydra.lib.logic.IfElse.lazy(
@@ -3361,7 +3361,7 @@ public interface Coder {
                           hydra.lib.equality.Equal.apply(
                             hydra.Arity.typeSchemeArity(ts),
                             0),
-                          hydra.CoderUtils.isComplexBinding(
+                          hydra.Predicates.isComplexBinding(
                             tc,
                             el)),
                         hydra.lib.logic.Not.apply(elTrivial1)),
@@ -3377,7 +3377,7 @@ public interface Coder {
                       })).get())),
                     (el).type);
                 }),
-                hydra.Lexical.lookupElement(
+                hydra.Lexical.lookupBinding(
                   g,
                   name)),
               (java.util.function.Function<hydra.graph.Primitive, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (prim -> {
@@ -3436,7 +3436,7 @@ public interface Coder {
                   return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>right(asFunctionRef.get());
                 })).get(),
                 (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (el -> {
-                  Boolean elTrivial = hydra.CoderUtils.isTrivialTerm((el).term);
+                  Boolean elTrivial = hydra.Predicates.isTrivialTerm((el).term);
                   return hydra.lib.maybes.Maybe.applyLazy(
                     () -> hydra.lib.logic.IfElse.lazy(
                       hydra.lib.logic.And.apply(
@@ -3460,7 +3460,7 @@ public interface Coder {
                           hydra.lib.equality.Equal.apply(
                             hydra.Arity.typeArity(typ),
                             0),
-                          hydra.CoderUtils.isComplexBinding(
+                          hydra.Predicates.isComplexBinding(
                             tc,
                             el)),
                         hydra.lib.logic.Not.apply(elTrivial)),
@@ -3476,7 +3476,7 @@ public interface Coder {
                       })).get())),
                     (el).type);
                 }),
-                hydra.Lexical.lookupElement(
+                hydra.Lexical.lookupBinding(
                   g,
                   name)),
               () -> hydra.lib.logic.IfElse.lazy(
@@ -3484,7 +3484,7 @@ public interface Coder {
                   hydra.lib.equality.Equal.apply(
                     hydra.Arity.typeArity(typ),
                     0),
-                  hydra.CoderUtils.isComplexVariable(
+                  hydra.Predicates.isComplexVariable(
                     tc,
                     name)),
                 () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>right(asFunctionCall),
@@ -3660,7 +3660,7 @@ public interface Coder {
               (java.util.function.Function<hydra.core.TypeScheme, hydra.ext.python.environment.PythonModuleMetadata>) (ts -> {
                 hydra.core.Term term1 = (b).term;
                 return hydra.lib.logic.IfElse.lazy(
-                  hydra.CoderUtils.isSimpleAssignment(term1),
+                  hydra.Analysis.isSimpleAssignment(term1),
                   () -> m,
                   () -> hydra.ext.python.Coder.extendMetaForType(
                     true,
@@ -3908,13 +3908,13 @@ public interface Coder {
   }
 
   static hydra.ext.python.environment.PythonModuleMetadata extendMetaForTypes(hydra.util.ConsList<hydra.core.Type> types, hydra.ext.python.environment.PythonModuleMetadata meta) {
-    hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> currentNs = (meta).namespaces;
+    hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName> currentNs = (meta).namespaces;
     hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> names = new hydra.util.Lazy<>(() -> hydra.lib.sets.Unions.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.core.Type, hydra.util.PersistentSet<hydra.core.Name>>) (t -> hydra.Dependencies.typeDependencyNames(
         false,
         t)),
       types)));
-    hydra.util.Lazy<hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>> updatedNs = new hydra.util.Lazy<>(() -> hydra.Analysis.addNamesToNamespaces(
+    hydra.util.Lazy<hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName>> updatedNs = new hydra.util.Lazy<>(() -> hydra.Analysis.addNamesToNamespaces(
       hydra.ext.python.Names::encodeNamespace,
       names.get(),
       currentNs));
@@ -4036,10 +4036,10 @@ public interface Coder {
     return go.get().apply((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty())).apply(term);
   }
 
-  static hydra.ext.python.environment.PythonModuleMetadata gatherMetadata(hydra.module.Namespace focusNs, hydra.util.ConsList<hydra.module.Definition> defs) {
-    java.util.function.Function<hydra.ext.python.environment.PythonModuleMetadata, java.util.function.Function<hydra.module.Definition, hydra.ext.python.environment.PythonModuleMetadata>> addDef = (java.util.function.Function<hydra.ext.python.environment.PythonModuleMetadata, java.util.function.Function<hydra.module.Definition, hydra.ext.python.environment.PythonModuleMetadata>>) (meta -> (java.util.function.Function<hydra.module.Definition, hydra.ext.python.environment.PythonModuleMetadata>) (def -> (def).accept(new hydra.module.Definition.PartialVisitor<>() {
+  static hydra.ext.python.environment.PythonModuleMetadata gatherMetadata(hydra.packaging.Namespace focusNs, hydra.util.ConsList<hydra.packaging.Definition> defs) {
+    java.util.function.Function<hydra.ext.python.environment.PythonModuleMetadata, java.util.function.Function<hydra.packaging.Definition, hydra.ext.python.environment.PythonModuleMetadata>> addDef = (java.util.function.Function<hydra.ext.python.environment.PythonModuleMetadata, java.util.function.Function<hydra.packaging.Definition, hydra.ext.python.environment.PythonModuleMetadata>>) (meta -> (java.util.function.Function<hydra.packaging.Definition, hydra.ext.python.environment.PythonModuleMetadata>) (def -> (def).accept(new hydra.packaging.Definition.PartialVisitor<>() {
       @Override
-      public hydra.ext.python.environment.PythonModuleMetadata visit(hydra.module.Definition.Term termDef) {
+      public hydra.ext.python.environment.PythonModuleMetadata visit(hydra.packaging.Definition.Term termDef) {
         hydra.util.Lazy<hydra.core.Type> typ = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
           () -> new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Unit")),
           projected -> projected.type,
@@ -4057,11 +4057,11 @@ public interface Coder {
       }
 
       @Override
-      public hydra.ext.python.environment.PythonModuleMetadata visit(hydra.module.Definition.Type typeDef) {
+      public hydra.ext.python.environment.PythonModuleMetadata visit(hydra.packaging.Definition.Type typeDef) {
         hydra.ext.python.environment.PythonModuleMetadata meta2 = hydra.ext.python.Coder.setMetaUsesName(
           meta,
           true);
-        hydra.core.Type typ = (typeDef).value.type;
+        hydra.core.Type typ = (typeDef).value.type.type;
         return hydra.Rewriting.foldOverType(
           new hydra.coders.TraversalOrder.Pre(),
           (java.util.function.Function<hydra.ext.python.environment.PythonModuleMetadata, java.util.function.Function<hydra.core.Type, hydra.ext.python.environment.PythonModuleMetadata>>) (m -> (java.util.function.Function<hydra.core.Type, hydra.ext.python.environment.PythonModuleMetadata>) (t -> hydra.ext.python.Coder.extendMetaForType(
@@ -4102,18 +4102,18 @@ public interface Coder {
           tparamList)))));
   }
 
-  static hydra.ext.python.environment.PythonEnvironment initialEnvironment(hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces, hydra.graph.Graph tcontext) {
+  static hydra.ext.python.environment.PythonEnvironment initialEnvironment(hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName> namespaces, hydra.graph.Graph tcontext) {
     return new hydra.ext.python.environment.PythonEnvironment(namespaces, (hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()), (hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.ext.python.syntax.Name>apply()))))), tcontext, (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), hydra.ext.python.Coder.targetPythonVersion(), true, (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()));
   }
 
-  static hydra.ext.python.environment.PythonModuleMetadata initialMetadata(hydra.module.Namespace ns) {
+  static hydra.ext.python.environment.PythonModuleMetadata initialMetadata(hydra.packaging.Namespace ns) {
     hydra.ext.python.syntax.DottedName dottedNs = hydra.ext.python.Names.encodeNamespace(ns);
-    hydra.util.Lazy<hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>> emptyNs = new hydra.util.Lazy<>(() -> (hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>) (new hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>((hydra.util.Pair<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>) ((hydra.util.Pair<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>) (new hydra.util.Pair<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>(ns, dottedNs))), (hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>) ((hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>) (hydra.lib.maps.Empty.<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>apply())))));
+    hydra.util.Lazy<hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName>> emptyNs = new hydra.util.Lazy<>(() -> (hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName>) (new hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName>((hydra.util.Pair<hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName>) ((hydra.util.Pair<hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName>) (new hydra.util.Pair<hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName>(ns, dottedNs))), (hydra.util.PersistentMap<hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName>) ((hydra.util.PersistentMap<hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName>) (hydra.lib.maps.Empty.<hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName>apply())))));
     return new hydra.ext.python.environment.PythonModuleMetadata(emptyNs.get(), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false);
   }
 
   static hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>>> isCaseStatementApplication(hydra.core.Term term) {
-    hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term> gathered = hydra.CoderUtils.gatherApplications(term);
+    hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term> gathered = hydra.Analysis.gatherApplications(term);
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> args = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered));
     hydra.util.Lazy<hydra.core.Term> body = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(gathered));
     return hydra.lib.logic.IfElse.lazy(
@@ -4165,16 +4165,16 @@ public interface Coder {
       numFields.get()));
   }
 
-  static Boolean isTypeModuleCheck(hydra.util.ConsList<hydra.module.Definition> defs) {
+  static Boolean isTypeModuleCheck(hydra.util.ConsList<hydra.packaging.Definition> defs) {
     return hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply(hydra.lib.lists.Filter.apply(
-      (java.util.function.Function<hydra.module.Definition, Boolean>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+      (java.util.function.Function<hydra.packaging.Definition, Boolean>) (d -> (d).accept(new hydra.packaging.Definition.PartialVisitor<>() {
         @Override
-        public Boolean otherwise(hydra.module.Definition instance) {
+        public Boolean otherwise(hydra.packaging.Definition instance) {
           return false;
         }
 
         @Override
-        public Boolean visit(hydra.module.Definition.Type ignored) {
+        public Boolean visit(hydra.packaging.Definition.Type ignored) {
           return true;
         }
       })),
@@ -4255,14 +4255,14 @@ public interface Coder {
       params), (hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamWithDefault>) (hydra.util.ConsList.<hydra.ext.python.syntax.LambdaParamWithDefault>empty()), (hydra.util.Maybe<hydra.ext.python.syntax.LambdaStarEtc>) (hydra.util.Maybe.<hydra.ext.python.syntax.LambdaStarEtc>nothing())), body));
   }
 
-  static hydra.util.ConsList<hydra.ext.python.syntax.ImportStatement> moduleDomainImports(hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces) {
-    hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.DottedName>> names = new hydra.util.Lazy<>(() -> hydra.lib.lists.Sort.apply(hydra.lib.maps.Elems.apply(((java.util.function.Function<hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>, hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>>) (projected -> projected.mapping)).apply(namespaces))));
+  static hydra.util.ConsList<hydra.ext.python.syntax.ImportStatement> moduleDomainImports(hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName> namespaces) {
+    hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.DottedName>> names = new hydra.util.Lazy<>(() -> hydra.lib.lists.Sort.apply(hydra.lib.maps.Elems.apply(((java.util.function.Function<hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName>, hydra.util.PersistentMap<hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName>>) (projected -> projected.mapping)).apply(namespaces))));
     return hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.ext.python.syntax.DottedName, hydra.ext.python.syntax.ImportStatement>) (ns -> new hydra.ext.python.syntax.ImportStatement.Name(new hydra.ext.python.syntax.ImportName(hydra.util.ConsList.of(new hydra.ext.python.syntax.DottedAsName(ns, (hydra.util.Maybe<hydra.ext.python.syntax.Name>) (hydra.util.Maybe.<hydra.ext.python.syntax.Name>nothing())))))),
       names.get());
   }
 
-  static hydra.util.ConsList<hydra.ext.python.syntax.Statement> moduleImports(hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces, hydra.ext.python.environment.PythonModuleMetadata meta) {
+  static hydra.util.ConsList<hydra.ext.python.syntax.Statement> moduleImports(hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName> namespaces, hydra.ext.python.environment.PythonModuleMetadata meta) {
     return hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.ext.python.syntax.ImportStatement, hydra.ext.python.syntax.Statement>) (imp -> hydra.ext.python.Utils.pySimpleStatementToPyStatement(new hydra.ext.python.syntax.SimpleStatement.Import(imp))),
       hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
@@ -4351,7 +4351,7 @@ public interface Coder {
       simplified.get());
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<String, String>> moduleToPython(hydra.module.Module mod, hydra.util.ConsList<hydra.module.Definition> defs, hydra.context.Context cx, hydra.graph.Graph g) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<String, String>> moduleToPython(hydra.packaging.Module mod, hydra.util.ConsList<hydra.packaging.Definition> defs, hydra.context.Context cx, hydra.graph.Graph g) {
     return hydra.lib.eithers.Bind.apply(
       hydra.ext.python.Coder.encodePythonModule(
         cx,
@@ -4361,7 +4361,7 @@ public interface Coder {
       (java.util.function.Function<hydra.ext.python.syntax.Module, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<String, String>>>) (file -> {
         String path = hydra.Names.namespaceToFilePath(
           new hydra.util.CaseConvention.LowerSnake(),
-          new hydra.module.FileExtension("py"),
+          new hydra.packaging.FileExtension("py"),
           (mod).namespace);
         String s = hydra.Serialization.printExpr(hydra.Serialization.parenthesize(hydra.ext.python.Serde.encodeModule(file)));
         return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<String, String>>right(hydra.lib.maps.Singleton.apply(
@@ -4387,9 +4387,12 @@ public interface Coder {
       hydra.ext.python.Coder.shouldThunkBinding(
         g,
         b),
-      () -> hydra.CoderUtils.bindingMetadata(
-        g,
-        b),
+      () -> hydra.lib.logic.IfElse.lazy(
+        hydra.Predicates.isComplexBinding(
+          g,
+          b),
+        () -> hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(true))),
+        () -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())),
       () -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()));
   }
 
@@ -4401,7 +4404,7 @@ public interface Coder {
     return new hydra.ext.python.environment.PythonEnvironment((env).namespaces, (env).boundTypeVariables, tc, (env).nullaryBindings, (env).version, (env).skipCasts, (env).inlineVariables);
   }
 
-  static hydra.ext.python.environment.PythonModuleMetadata setMetaNamespaces(hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> ns, hydra.ext.python.environment.PythonModuleMetadata m) {
+  static hydra.ext.python.environment.PythonModuleMetadata setMetaNamespaces(hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName> ns, hydra.ext.python.environment.PythonModuleMetadata m) {
     return new hydra.ext.python.environment.PythonModuleMetadata(ns, (m).typeVariables, (m).usesAnnotated, (m).usesCallable, (m).usesCast, (m).usesLruCache, (m).usesTypeAlias, (m).usesDataclass, (m).usesDecimal, (m).usesEither, (m).usesEnum, (m).usesFrozenDict, (m).usesFrozenList, (m).usesGeneric, (m).usesJust, (m).usesLeft, (m).usesMaybe, (m).usesName, (m).usesNode, (m).usesNothing, (m).usesRight, (m).usesTypeVar);
   }
 
@@ -4491,10 +4494,10 @@ public interface Coder {
 
   static Boolean shouldThunkBinding(hydra.graph.Graph g, hydra.core.Binding b) {
     return hydra.lib.logic.And.apply(
-      hydra.CoderUtils.isComplexBinding(
+      hydra.Predicates.isComplexBinding(
         g,
         b),
-      hydra.lib.logic.Not.apply(hydra.CoderUtils.isTrivialTerm((b).term)));
+      hydra.lib.logic.Not.apply(hydra.Predicates.isTrivialTerm((b).term)));
   }
 
   static hydra.ext.python.syntax.ImportStatement standardImportStatement(String modName, hydra.util.ConsList<String> symbols) {
@@ -4540,7 +4543,7 @@ public interface Coder {
             () -> hydra.Arity.termArity((el).term),
             (java.util.function.Function<hydra.core.TypeScheme, Integer>) (ts -> hydra.Arity.typeSchemeArity(ts)),
             (el).type)),
-          hydra.Lexical.lookupElement(
+          hydra.Lexical.lookupBinding(
             graph,
             (name).value));
       }
@@ -4641,21 +4644,21 @@ public interface Coder {
       hydra.util.ConsList.of(hydra.util.ConsList.of(stmt))));
   }
 
-  static <T0> T0 withDefinitions(hydra.ext.python.environment.PythonEnvironment env, hydra.util.ConsList<hydra.module.Definition> defs, java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, T0> body) {
+  static <T0> T0 withDefinitions(hydra.ext.python.environment.PythonEnvironment env, hydra.util.ConsList<hydra.packaging.Definition> defs, java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, T0> body) {
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> bindings = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.core.Binding>>) (def_ -> (def_).accept(new hydra.module.Definition.PartialVisitor<>() {
+      (java.util.function.Function<hydra.packaging.Definition, hydra.util.Maybe<hydra.core.Binding>>) (def_ -> (def_).accept(new hydra.packaging.Definition.PartialVisitor<>() {
         @Override
-        public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.module.Definition instance) {
+        public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.packaging.Definition instance) {
           return (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing());
         }
 
         @Override
-        public hydra.util.Maybe<hydra.core.Binding> visit(hydra.module.Definition.Term td) {
+        public hydra.util.Maybe<hydra.core.Binding> visit(hydra.packaging.Definition.Term td) {
           return hydra.util.Maybe.just(new hydra.core.Binding((td).value.name, (td).value.term, (td).value.type));
         }
 
         @Override
-        public hydra.util.Maybe<hydra.core.Binding> visit(hydra.module.Definition.Type ignored) {
+        public hydra.util.Maybe<hydra.core.Binding> visit(hydra.packaging.Definition.Type ignored) {
           return (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing());
         }
       })),

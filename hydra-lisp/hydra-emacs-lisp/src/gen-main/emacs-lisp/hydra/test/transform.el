@@ -14,7 +14,7 @@
 
 (require 'hydra.lib.strings)
 
-(require 'hydra.module)
+(require 'hydra.packaging)
 
 (require 'hydra.testing)
 
@@ -42,7 +42,7 @@
 
 (defvar hydra_test_transform_encode_either_list_list (lambda (e) (list :either (funcall (funcall (hydra_lib_eithers_bimap (lambda (cycles) (hydra_test_transform_encode_list_list cycles))) (lambda (sorted) (hydra_test_transform_encode_int_list sorted))) e))))
 
-(defvar hydra_test_transform_transform_module (lambda (m) (make-hydra_module_module (hydra_test_transform_add_generation_prefix (funcall (lambda (v) (hydra_module_module-namespace v)) m)) (funcall (lambda (v) (hydra_module_module-definitions v)) m) (funcall (lambda (v) (hydra_module_module-term_dependencies v)) m) (funcall (lambda (v) (hydra_module_module-type_dependencies v)) m) (funcall (lambda (v) (hydra_module_module-description v)) m))))
+(defvar hydra_test_transform_transform_module (lambda (m) (make-hydra_packaging_module (hydra_test_transform_add_generation_prefix (funcall (lambda (v) (hydra_packaging_module-namespace v)) m)) (funcall (lambda (v) (hydra_packaging_module-definitions v)) m) (funcall (lambda (v) (hydra_packaging_module-term_dependencies v)) m) (funcall (lambda (v) (hydra_packaging_module-type_dependencies v)) m) (funcall (lambda (v) (hydra_packaging_module-description v)) m))))
 
 (defvar hydra_test_transform_transform_test_case (lambda (tcm) (list :just tcm)))
 

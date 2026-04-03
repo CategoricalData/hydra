@@ -6,9 +6,9 @@ from __future__ import annotations
 from functools import lru_cache
 from typing import cast
 import hydra.core
-import hydra.module
+import hydra.packaging
 
-chars = hydra.module.Namespace("hydra.lib.chars")
+chars = hydra.packaging.Namespace("hydra.lib.chars")
 
 chars_is_alpha_num = hydra.core.Name("hydra.lib.chars.isAlphaNum")
 
@@ -22,7 +22,7 @@ chars_to_lower = hydra.core.Name("hydra.lib.chars.toLower")
 
 chars_to_upper = hydra.core.Name("hydra.lib.chars.toUpper")
 
-eithers = hydra.module.Namespace("hydra.lib.eithers")
+eithers = hydra.packaging.Namespace("hydra.lib.eithers")
 
 eithers_bimap = hydra.core.Name("hydra.lib.eithers.bimap")
 
@@ -54,7 +54,7 @@ eithers_partition_eithers = hydra.core.Name("hydra.lib.eithers.partitionEithers"
 
 eithers_rights = hydra.core.Name("hydra.lib.eithers.rights")
 
-equality = hydra.module.Namespace("hydra.lib.equality")
+equality = hydra.packaging.Namespace("hydra.lib.equality")
 
 equality_compare = hydra.core.Name("hydra.lib.equality.compare")
 
@@ -74,7 +74,7 @@ equality_max = hydra.core.Name("hydra.lib.equality.max")
 
 equality_min = hydra.core.Name("hydra.lib.equality.min")
 
-lists = hydra.module.Namespace("hydra.lib.lists")
+lists = hydra.packaging.Namespace("hydra.lib.lists")
 
 lists_apply = hydra.core.Name("hydra.lib.lists.apply")
 
@@ -150,7 +150,7 @@ lists_zip = hydra.core.Name("hydra.lib.lists.zip")
 
 lists_zip_with = hydra.core.Name("hydra.lib.lists.zipWith")
 
-literals = hydra.module.Namespace("hydra.lib.literals")
+literals = hydra.packaging.Namespace("hydra.lib.literals")
 
 literals_bigfloat_to_bigint = hydra.core.Name("hydra.lib.literals.bigfloatToBigint")
 
@@ -258,7 +258,7 @@ literals_uint64_to_bigint = hydra.core.Name("hydra.lib.literals.uint64ToBigint")
 
 literals_uint8_to_bigint = hydra.core.Name("hydra.lib.literals.uint8ToBigint")
 
-logic = hydra.module.Namespace("hydra.lib.logic")
+logic = hydra.packaging.Namespace("hydra.lib.logic")
 
 logic_and = hydra.core.Name("hydra.lib.logic.and")
 
@@ -268,7 +268,7 @@ logic_not = hydra.core.Name("hydra.lib.logic.not")
 
 logic_or = hydra.core.Name("hydra.lib.logic.or")
 
-maps = hydra.module.Namespace("hydra.lib.maps")
+maps = hydra.packaging.Namespace("hydra.lib.maps")
 
 maps_alter = hydra.core.Name("hydra.lib.maps.alter")
 
@@ -310,7 +310,7 @@ maps_to_list = hydra.core.Name("hydra.lib.maps.toList")
 
 maps_union = hydra.core.Name("hydra.lib.maps.union")
 
-math = hydra.module.Namespace("hydra.lib.math")
+math = hydra.packaging.Namespace("hydra.lib.math")
 
 math_abs = hydra.core.Name("hydra.lib.math.abs")
 
@@ -398,7 +398,7 @@ math_tanh = hydra.core.Name("hydra.lib.math.tanh")
 
 math_truncate = hydra.core.Name("hydra.lib.math.truncate")
 
-maybes = hydra.module.Namespace("hydra.lib.maybes")
+maybes = hydra.packaging.Namespace("hydra.lib.maybes")
 
 maybes_apply = hydra.core.Name("hydra.lib.maybes.apply")
 
@@ -428,7 +428,7 @@ maybes_pure = hydra.core.Name("hydra.lib.maybes.pure")
 
 maybes_to_list = hydra.core.Name("hydra.lib.maybes.toList")
 
-pairs = hydra.module.Namespace("hydra.lib.pairs")
+pairs = hydra.packaging.Namespace("hydra.lib.pairs")
 
 pairs_bimap = hydra.core.Name("hydra.lib.pairs.bimap")
 
@@ -436,7 +436,7 @@ pairs_first = hydra.core.Name("hydra.lib.pairs.first")
 
 pairs_second = hydra.core.Name("hydra.lib.pairs.second")
 
-regex = hydra.module.Namespace("hydra.lib.regex")
+regex = hydra.packaging.Namespace("hydra.lib.regex")
 
 regex_find = hydra.core.Name("hydra.lib.regex.find")
 
@@ -450,7 +450,7 @@ regex_replace_all = hydra.core.Name("hydra.lib.regex.replaceAll")
 
 regex_split = hydra.core.Name("hydra.lib.regex.split")
 
-sets = hydra.module.Namespace("hydra.lib.sets")
+sets = hydra.packaging.Namespace("hydra.lib.sets")
 
 sets_delete = hydra.core.Name("hydra.lib.sets.delete")
 
@@ -480,7 +480,7 @@ sets_union = hydra.core.Name("hydra.lib.sets.union")
 
 sets_unions = hydra.core.Name("hydra.lib.sets.unions")
 
-strings = hydra.module.Namespace("hydra.lib.strings")
+strings = hydra.packaging.Namespace("hydra.lib.strings")
 
 strings_cat = hydra.core.Name("hydra.lib.strings.cat")
 
@@ -508,7 +508,7 @@ strings_to_upper = hydra.core.Name("hydra.lib.strings.toUpper")
 
 strings_unlines = hydra.core.Name("hydra.lib.strings.unlines")
 
-typeclass = hydra.module.Namespace("hydra.typeclass")
+typeclass = hydra.packaging.Namespace("hydra.typeclass")
 
 typeclass_eq = hydra.core.Name("hydra.typeclass.Eq")
 

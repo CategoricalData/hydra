@@ -4,7 +4,7 @@ import hydra.core.*
 
 import hydra.ext.scala.syntax.*
 
-import hydra.module.*
+import hydra.packaging.*
 
 import hydra.lib.equality
 
@@ -76,8 +76,8 @@ def sname(s: scala.Predef.String): hydra.ext.scala.syntax.Data =
 
 def sprim(name: hydra.core.Name): hydra.ext.scala.syntax.Data =
   {
-  lazy val qname: hydra.module.QualifiedName = hydra.names.qualifyName(name)
-  lazy val prefix: scala.Predef.String = hydra.lib.maybes.fromJust[hydra.module.Namespace](qname.namespace)
+  lazy val qname: hydra.packaging.QualifiedName = hydra.names.qualifyName(name)
+  lazy val prefix: scala.Predef.String = hydra.lib.maybes.fromJust[hydra.packaging.Namespace](qname.namespace)
   lazy val local: scala.Predef.String = hydra.ext.scala.utils.scalaEscapeName(qname.local)
   hydra.ext.scala.utils.sname(hydra.lib.strings.cat2(hydra.lib.strings.cat2(prefix)("."))(local))
 }

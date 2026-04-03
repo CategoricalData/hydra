@@ -9,7 +9,6 @@ from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Just, Maybe, Nothing, Right, frozenlist
 from typing import TypeVar, cast
 import hydra.analysis
-import hydra.coder_utils
 import hydra.core
 import hydra.environment
 import hydra.ext.lisp.language
@@ -25,8 +24,8 @@ import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
-import hydra.module
 import hydra.names
+import hydra.packaging
 import hydra.predicates
 import hydra.show.core
 import hydra.sorting
@@ -396,7 +395,7 @@ def encode_let_as_lambda_app(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: 
 def lisp_top_form(form: hydra.ext.lisp.syntax.TopLevelForm) -> hydra.ext.lisp.syntax.TopLevelFormWithComments:
     return hydra.ext.lisp.syntax.TopLevelFormWithComments(Nothing(), Nothing(), form)
 
-def encode_term_definition(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, tdef: hydra.module.TermDefinition):
+def encode_term_definition(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, tdef: hydra.packaging.TermDefinition):
     name = tdef.name
     term = tdef.term
     @lru_cache(1)
@@ -515,9 +514,9 @@ def encode_type_body(lname: str, orig_typ: hydra.core.Type, typ: hydra.core.Type
             case _:
                 return Right(hydra.ext.lisp.syntax.TopLevelFormWithComments(Nothing(), Just(hydra.ext.lisp.syntax.Comment(hydra.ext.lisp.syntax.CommentStyle.LINE, hydra.lib.strings.cat2(hydra.lib.strings.cat2(lname, " = "), hydra.show.core.type(orig_typ)))), cast(hydra.ext.lisp.syntax.TopLevelForm, hydra.ext.lisp.syntax.TopLevelFormExpression(cast(hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.ExpressionLiteral(cast(hydra.ext.lisp.syntax.Literal, hydra.ext.lisp.syntax.LiteralNil())))))))
 
-def encode_type_definition(cx: T0, g: T1, tdef: hydra.module.TypeDefinition) -> Either[T2, hydra.ext.lisp.syntax.TopLevelFormWithComments]:
+def encode_type_definition(cx: T0, g: T1, tdef: hydra.packaging.TypeDefinition) -> Either[T2, hydra.ext.lisp.syntax.TopLevelFormWithComments]:
     name = tdef.name
-    typ = tdef.type
+    typ = tdef.type.type
     @lru_cache(1)
     def lname() -> str:
         return qualified_snake_name(name)
@@ -550,28 +549,28 @@ def module_exports(forms: frozenlist[hydra.ext.lisp.syntax.TopLevelFormWithComme
         return hydra.lib.lists.concat(hydra.lib.lists.map((lambda fwc: (form := fwc.form, _hoist_form_body_1 := (lambda v1: (lambda vd: (vd.name,))(v1.value) if isinstance(v1, hydra.ext.lisp.syntax.TopLevelFormVariable) else (lambda rdef: (rname := rdef.name.value, fields := rdef.fields, field_syms := hydra.lib.lists.map((lambda f: (fn := f.name.value, hydra.ext.lisp.syntax.Symbol(hydra.lib.strings.cat((rname, "-", fn))))[1]), fields), hydra.lib.lists.concat(((hydra.ext.lisp.syntax.Symbol(hydra.lib.strings.cat2("make-", rname)), hydra.ext.lisp.syntax.Symbol(hydra.lib.strings.cat2(rname, "?"))), field_syms)))[3])(v1.value) if isinstance(v1, hydra.ext.lisp.syntax.TopLevelFormRecordType) else ()), _hoist_form_body_1(form))[2]), forms))
     return hydra.lib.logic.if_else(hydra.lib.lists.null(symbols()), (lambda : ()), (lambda : (hydra.ext.lisp.syntax.ExportDeclaration(symbols()),)))
 
-def module_imports(focus_ns: hydra.module.Namespace, defs: frozenlist[hydra.module.Definition]) -> frozenlist[hydra.ext.lisp.syntax.ImportDeclaration]:
+def module_imports(focus_ns: hydra.packaging.Namespace, defs: frozenlist[hydra.packaging.Definition]) -> frozenlist[hydra.ext.lisp.syntax.ImportDeclaration]:
     @lru_cache(1)
-    def dep_nss() -> frozenlist[hydra.module.Namespace]:
+    def dep_nss() -> frozenlist[hydra.packaging.Namespace]:
         return hydra.lib.sets.to_list(hydra.lib.sets.delete(focus_ns, hydra.analysis.definition_dependency_namespaces(defs)))
     return hydra.lib.lists.map((lambda ns: hydra.ext.lisp.syntax.ImportDeclaration(hydra.ext.lisp.syntax.NamespaceName(ns.value), cast(hydra.ext.lisp.syntax.ImportSpec, hydra.ext.lisp.syntax.ImportSpecAll()))), dep_nss())
 
-def module_to_lisp(dialect: hydra.ext.lisp.syntax.Dialect, mod: hydra.module.Module, defs0: frozenlist[hydra.module.Definition], cx: T0, g: T1) -> Either[hydra.ext.lisp.syntax.Program, hydra.ext.lisp.syntax.Program]:
+def module_to_lisp(dialect: hydra.ext.lisp.syntax.Dialect, mod: hydra.packaging.Module, defs0: frozenlist[hydra.packaging.Definition], cx: T0, g: T1) -> Either[hydra.ext.lisp.syntax.Program, hydra.ext.lisp.syntax.Program]:
     @lru_cache(1)
-    def defs() -> frozenlist[hydra.module.Definition]:
-        return hydra.coder_utils.reorder_defs(defs0)
+    def defs() -> frozenlist[hydra.packaging.Definition]:
+        return hydra.environment.reorder_defs(defs0)
     @lru_cache(1)
-    def partitioned() -> tuple[frozenlist[hydra.module.TypeDefinition], frozenlist[hydra.module.TermDefinition]]:
+    def partitioned() -> tuple[frozenlist[hydra.packaging.TypeDefinition], frozenlist[hydra.packaging.TermDefinition]]:
         return hydra.environment.partition_definitions(defs())
     @lru_cache(1)
-    def all_type_defs() -> frozenlist[hydra.module.TypeDefinition]:
+    def all_type_defs() -> frozenlist[hydra.packaging.TypeDefinition]:
         return hydra.lib.pairs.first(partitioned())
     @lru_cache(1)
-    def term_defs() -> frozenlist[hydra.module.TermDefinition]:
+    def term_defs() -> frozenlist[hydra.packaging.TermDefinition]:
         return hydra.lib.pairs.second(partitioned())
     @lru_cache(1)
-    def type_defs() -> frozenlist[hydra.module.TypeDefinition]:
-        return hydra.lib.lists.filter((lambda td: hydra.predicates.is_nominal_type(td.type)), all_type_defs())
+    def type_defs() -> frozenlist[hydra.packaging.TypeDefinition]:
+        return hydra.lib.lists.filter((lambda td: hydra.predicates.is_nominal_type(td.type.type)), all_type_defs())
     return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v1: encode_type_definition(cx, g, v1)), type_defs()), (lambda type_items: hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v1: encode_term_definition(dialect, cx, g, v1)), term_defs()), (lambda term_items: (all_items := hydra.lib.lists.concat2(type_items, term_items), ns_name := mod.namespace.value, focus_ns := mod.namespace, imports := module_imports(focus_ns, defs()), exports := module_exports(all_items), Right(hydra.ext.lisp.syntax.Program(dialect, Just(hydra.ext.lisp.syntax.ModuleDeclaration(hydra.ext.lisp.syntax.NamespaceName(ns_name), Nothing())), imports, exports, all_items)))[5]))))
 
 def qualified_type_name(name: hydra.core.Name) -> str:

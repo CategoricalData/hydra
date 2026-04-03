@@ -1,5 +1,5 @@
 (ns hydra.test.transform
-  (:require [hydra.core :refer :all] [hydra.lib.eithers :refer :all] [hydra.lib.lists :refer :all] [hydra.lib.logic :refer :all] [hydra.lib.maybes :refer :all] [hydra.lib.pairs :refer :all] [hydra.lib.strings :refer :all] [hydra.module :refer :all] [hydra.testing :refer :all] [hydra.util :refer :all]
+  (:require [hydra.core :refer :all] [hydra.lib.eithers :refer :all] [hydra.lib.lists :refer :all] [hydra.lib.logic :refer :all] [hydra.lib.maybes :refer :all] [hydra.lib.pairs :refer :all] [hydra.lib.strings :refer :all] [hydra.packaging :refer :all] [hydra.testing :refer :all] [hydra.util :refer :all]
 ))
 
 (declare hydra_test_transform_add_generation_prefix hydra_test_transform_encode_case_convention hydra_test_transform_build_convert_case_call hydra_test_transform_encode_int hydra_test_transform_encode_adjacency_list hydra_test_transform_build_topological_sort_call hydra_test_transform_build_topological_sort_s_c_c_call hydra_test_transform_collect_test_cases hydra_test_transform_encode_int_list hydra_test_transform_encode_list_list hydra_test_transform_encode_either_list_list hydra_test_transform_transform_module hydra_test_transform_transform_test_case hydra_test_transform_transform_to_compiled_tests)
@@ -26,7 +26,7 @@
 
 (def hydra_test_transform_encode_either_list_list (fn [e] (list :either (((hydra_lib_eithers_bimap (fn [cycles] (hydra_test_transform_encode_list_list cycles))) (fn [sorted] (hydra_test_transform_encode_int_list sorted))) e))))
 
-(def hydra_test_transform_transform_module (fn [m] (->hydra_module_module (hydra_test_transform_add_generation_prefix ((fn [v] (:namespace v)) m)) ((fn [v] (:definitions v)) m) ((fn [v] (:term_dependencies v)) m) ((fn [v] (:type_dependencies v)) m) ((fn [v] (:description v)) m))))
+(def hydra_test_transform_transform_module (fn [m] (->hydra_packaging_module (hydra_test_transform_add_generation_prefix ((fn [v] (:namespace v)) m)) ((fn [v] (:definitions v)) m) ((fn [v] (:term_dependencies v)) m) ((fn [v] (:type_dependencies v)) m) ((fn [v] (:description v)) m))))
 
 (def hydra_test_transform_transform_test_case (fn [tcm] (list :just tcm)))
 

@@ -1,5 +1,5 @@
 (ns hydra.ext.java.testing
-  (:require [hydra.constants :refer :all] [hydra.formatting :refer :all] [hydra.lib.eithers :refer :all] [hydra.lib.equality :refer :all] [hydra.lib.lists :refer :all] [hydra.lib.logic :refer :all] [hydra.lib.strings :refer :all] [hydra.module :refer :all] [hydra.testing :refer :all] [hydra.util :refer :all]
+  (:require [hydra.constants :refer :all] [hydra.formatting :refer :all] [hydra.lib.eithers :refer :all] [hydra.lib.equality :refer :all] [hydra.lib.lists :refer :all] [hydra.lib.logic :refer :all] [hydra.lib.strings :refer :all] [hydra.packaging :refer :all] [hydra.testing :refer :all] [hydra.util :refer :all]
 ))
 
 (declare hydra_ext_java_testing_build_java_test_module hydra_ext_java_testing_find_java_imports hydra_ext_java_testing_format_java_test_name hydra_ext_java_testing_generate_java_test_case hydra_ext_java_testing_generate_java_test_group_hierarchy hydra_ext_java_testing_generate_test_file_with_java_codec hydra_ext_java_testing_generate_java_test_file hydra_ext_java_testing_namespace_to_java_class_name)
