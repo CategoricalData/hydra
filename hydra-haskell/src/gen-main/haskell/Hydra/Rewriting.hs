@@ -17,11 +17,6 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Scoping as Scoping
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Apply a term-level function inside any leading type lambdas
 applyInsideTypeLambdasAndAnnotations :: (Core.Term -> Core.Term) -> Core.Term -> Core.Term
@@ -77,7 +72,7 @@ rewriteAndFoldTerm :: ((t0 -> Core.Term -> (t0, Core.Term)) -> t0 -> Core.Term -
 rewriteAndFoldTerm f term0 =
 
       let fsub =
-              \recurse -> \val0 -> \term0 ->
+              \recurse -> \val0 -> \term02 ->
                 let forSingle =
                         \rec -> \cons -> \val -> \term ->
                           let r = rec val term
@@ -134,8 +129,8 @@ rewriteAndFoldTerm f term0 =
                                   Core.lambdaDomain = (Core.lambdaDomain v0),
                                   Core.lambdaBody = (Pairs.second rl)})))
                               _ -> (val, fun)
-                    dflt = (val0, term0)
-                in case term0 of
+                    dflt = (val0, term02)
+                in case term02 of
                   Core.TermAnnotated v0 -> forSingle recurse (\t -> Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = t,
                     Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v0)})) val0 (Core.annotatedTermBody v0)
@@ -150,7 +145,7 @@ rewriteAndFoldTerm f term0 =
                     in (Pairs.first rl, (Core.TermEither (Left (Pairs.second rl))))) (\r ->
                     let rr = recurse val0 r
                     in (Pairs.first rr, (Core.TermEither (Right (Pairs.second rr))))) v0
-                  Core.TermFunction v0 -> forSingle forFunction (\f -> Core.TermFunction f) val0 v0
+                  Core.TermFunction v0 -> forSingle forFunction (\f3 -> Core.TermFunction f3) val0 v0
                   Core.TermLet v0 ->
                     let renv = recurse val0 (Core.letBody v0)
                     in (forMany forBinding (\bins -> Core.TermLet (Core.Let {
@@ -198,7 +193,7 @@ rewriteAndFoldTermWithGraph f cx0 val0 term0 =
                               Core.TermFunction v0 -> case v0 of
                                 Core.FunctionLambda v1 -> Scoping.extendGraphForLambda cx v1
                                 _ -> cx
-                              Core.TermLet v0 -> Scoping.extendGraphForLet (\_ -> \_ -> Nothing) cx v0
+                              Core.TermLet v0 -> Scoping.extendGraphForLet (\_ -> \_2 -> Nothing) cx v0
                               Core.TermTypeLambda v0 -> Scoping.extendGraphForTypeLambda cx v0
                               _ -> cx
                     recurseForUser =
@@ -223,7 +218,7 @@ rewriteAndFoldTermWithGraphAndPath f cx0 val0 term0 =
                               Core.TermFunction v0 -> case v0 of
                                 Core.FunctionLambda v1 -> Scoping.extendGraphForLambda cx v1
                                 _ -> cx
-                              Core.TermLet v0 -> Scoping.extendGraphForLet (\_ -> \_ -> Nothing) cx v0
+                              Core.TermLet v0 -> Scoping.extendGraphForLet (\_ -> \_2 -> Nothing) cx v0
                               Core.TermTypeLambda v0 -> Scoping.extendGraphForTypeLambda cx v0
                               _ -> cx
                     recurseForUser =
@@ -240,7 +235,7 @@ rewriteAndFoldTermWithPath :: (([Paths.SubtermStep] -> t0 -> Core.Term -> (t0, C
 rewriteAndFoldTermWithPath f term0 =
 
       let fsub =
-              \recurse -> \path -> \val0 -> \term0 ->
+              \recurse -> \path -> \val0 -> \term02 ->
                 let forSingleWithAccessor =
                         \rec -> \cons -> \accessor -> \val -> \term ->
                           let r = rec (Lists.concat2 path [
@@ -288,7 +283,7 @@ rewriteAndFoldTermWithPath f term0 =
                                                     Paths.SubtermStepUnionCasesDefault]) val def) (Core.caseStatementDefault v0)
                                               val1 = Maybes.maybe val Pairs.first rmd
                                               rcases =
-                                                      forManyWithAccessors recurse (\x -> x) val1 (Lists.map (\f -> (Paths.SubtermStepUnionCasesBranch (Core.fieldName f), (Core.fieldTerm f))) (Core.caseStatementCases v0))
+                                                      forManyWithAccessors recurse (\x -> x) val1 (Lists.map (\f2 -> (Paths.SubtermStepUnionCasesBranch (Core.fieldName f2), (Core.fieldTerm f2))) (Core.caseStatementCases v0))
                                           in (Pairs.first rcases, (Core.EliminationUnion (Core.CaseStatement {
                                             Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
                                             Core.caseStatementDefault = (Maybes.map Pairs.second rmd),
@@ -310,8 +305,8 @@ rewriteAndFoldTermWithPath f term0 =
                                   Core.lambdaDomain = (Core.lambdaDomain v0),
                                   Core.lambdaBody = (Pairs.second rl)})))
                               _ -> (val, fun)
-                    dflt = (val0, term0)
-                in case term0 of
+                    dflt = (val0, term02)
+                in case term02 of
                   Core.TermAnnotated v0 -> forSingleWithAccessor recurse (\t -> Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = t,
                     Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v0)})) Paths.SubtermStepAnnotatedBody val0 (Core.annotatedTermBody v0)
@@ -370,7 +365,7 @@ rewriteAndFoldTermWithPath f term0 =
                     in (Pairs.first rs, (Core.TermPair (Pairs.second rf, (Pairs.second rs))))
                   Core.TermRecord v0 ->
                     let rfields =
-                            forManyWithAccessors recurse (\x -> x) val0 (Lists.map (\f -> (Paths.SubtermStepRecordField (Core.fieldName f), (Core.fieldTerm f))) (Core.recordFields v0))
+                            forManyWithAccessors recurse (\x -> x) val0 (Lists.map (\f2 -> (Paths.SubtermStepRecordField (Core.fieldName f2), (Core.fieldTerm f2))) (Core.recordFields v0))
                     in (Pairs.first rfields, (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.recordTypeName v0),
                       Core.recordFields = (Lists.map (\ft -> Core.Field {
@@ -408,9 +403,9 @@ rewriteTerm f term0 =
       let fsub =
               \recurse -> \term ->
                 let forField =
-                        \f -> Core.Field {
-                          Core.fieldName = (Core.fieldName f),
-                          Core.fieldTerm = (recurse (Core.fieldTerm f))}
+                        \f2 -> Core.Field {
+                          Core.fieldName = (Core.fieldName f2),
+                          Core.fieldTerm = (recurse (Core.fieldTerm f2))}
                     forElimination =
                             \elm -> case elm of
                               Core.EliminationRecord v0 -> Core.EliminationRecord v0
@@ -516,7 +511,7 @@ rewriteTermM f term0 =
                                   Core.caseStatementCases = rcases}))) (Eithers.mapList forField cases)))
                               Core.EliminationWrap v1 -> Right (Core.FunctionElimination (Core.EliminationWrap v1))
                         forFun =
-                                \fun -> case fun of
+                                \fun2 -> case fun2 of
                                   Core.FunctionElimination v1 -> forElm v1
                                   Core.FunctionLambda v1 ->
                                     let v = Core.lambdaParameter v1
@@ -750,21 +745,21 @@ rewriteTermWithGraph f cx0 term0 =
 
       let f2 =
               \recurse -> \cx -> \term ->
-                let recurse1 = \term -> recurse cx term
+                let recurse1 = \term2 -> recurse cx term2
                 in case term of
                   Core.TermFunction v0 -> case v0 of
                     Core.FunctionLambda v1 ->
                       let cx1 = Scoping.extendGraphForLambda cx v1
-                          recurse2 = \term -> recurse cx1 term
+                          recurse2 = \term2 -> recurse cx1 term2
                       in (f recurse2 cx1 term)
                     _ -> f recurse1 cx term
                   Core.TermLet v0 ->
-                    let cx1 = Scoping.extendGraphForLet (\_ -> \_ -> Nothing) cx v0
-                        recurse2 = \term -> recurse cx1 term
+                    let cx1 = Scoping.extendGraphForLet (\_ -> \_2 -> Nothing) cx v0
+                        recurse2 = \term2 -> recurse cx1 term2
                     in (f recurse2 cx1 term)
                   Core.TermTypeLambda v0 ->
                     let cx1 = Scoping.extendGraphForTypeLambda cx v0
-                        recurse2 = \term -> recurse cx1 term
+                        recurse2 = \term2 -> recurse cx1 term2
                     in (f recurse2 cx1 term)
                   _ -> f recurse1 cx term
           rewrite = \cx -> \term -> f2 rewrite cx term
@@ -846,15 +841,15 @@ rewriteTypeM f typ0 =
                 Core.TypeMaybe v0 -> Eithers.bind (recurse v0) (\rt -> Right (Core.TypeMaybe rt))
                 Core.TypeRecord v0 ->
                   let forField =
-                          \f -> Eithers.bind (recurse (Core.fieldTypeType f)) (\t -> Right (Core.FieldType {
-                            Core.fieldTypeName = (Core.fieldTypeName f),
+                          \f2 -> Eithers.bind (recurse (Core.fieldTypeType f2)) (\t -> Right (Core.FieldType {
+                            Core.fieldTypeName = (Core.fieldTypeName f2),
                             Core.fieldTypeType = t}))
                   in (Eithers.bind (Eithers.mapList forField v0) (\rfields -> Right (Core.TypeRecord rfields)))
                 Core.TypeSet v0 -> Eithers.bind (recurse v0) (\rt -> Right (Core.TypeSet rt))
                 Core.TypeUnion v0 ->
                   let forField =
-                          \f -> Eithers.bind (recurse (Core.fieldTypeType f)) (\t -> Right (Core.FieldType {
-                            Core.fieldTypeName = (Core.fieldTypeName f),
+                          \f2 -> Eithers.bind (recurse (Core.fieldTypeType f2)) (\t -> Right (Core.FieldType {
+                            Core.fieldTypeName = (Core.fieldTypeName f2),
                             Core.fieldTypeType = t}))
                   in (Eithers.bind (Eithers.mapList forField v0) (\rfields -> Right (Core.TypeUnion rfields)))
                 Core.TypeUnit -> Right Core.TypeUnit

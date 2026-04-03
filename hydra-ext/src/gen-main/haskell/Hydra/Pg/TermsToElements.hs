@@ -26,11 +26,7 @@ import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Show.Core as Core__
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Apply a parsed pattern to a term, producing string terms
 applyPattern :: Context.Context -> String -> [([String], String)] -> Core.Term -> Either (Context.InContext Errors.Error) [Core.Term]

@@ -143,7 +143,7 @@ public interface Dependencies {
       typ);
   }
 
-  static <T0> hydra.util.Either<String, hydra.core.Type> inlineType_f(java.util.function.Function<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>, java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>> hydra_dependencies_inlineType2, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> schema, java.util.function.Function<T0, hydra.util.Either<String, hydra.core.Type>> recurse, T0 typ) {
+  static <T0> hydra.util.Either<String, hydra.core.Type> inlineType_f(java.util.function.Function<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>, java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>> hydra_dependencies_inlineType, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> schema, java.util.function.Function<T0, hydra.util.Either<String, hydra.core.Type>> recurse, T0 typ) {
     java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>> afterRecurse = (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>) (tr -> (tr).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Either<String, hydra.core.Type> otherwise(hydra.core.Type instance) {
@@ -156,7 +156,7 @@ public interface Dependencies {
           () -> hydra.util.Either.<String, hydra.core.Type>left(hydra.lib.strings.Cat2.apply(
             "No such type in schema: ",
             (v).value.value)),
-          (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>) (v1 -> (hydra_dependencies_inlineType2).apply(schema).apply(v1)),
+          (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>) (v1 -> (hydra_dependencies_inlineType).apply(schema).apply(v1)),
           hydra.lib.maps.Lookup.apply(
             (v).value,
             schema));
@@ -364,8 +364,8 @@ public interface Dependencies {
       term);
   }
 
-  static <T0> T0 simplifyTerm_simplify(java.util.function.Function<hydra.core.Term, hydra.core.Term> hydra_dependencies_simplifyTerm2, java.util.function.Function<hydra.core.Term, hydra.core.Term> hydra_strip_deannotateTerm2, java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>> hydra_variables_freeVariablesInTerm2, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.core.Term>>> hydra_variables_substituteVariable2, java.util.function.Function<hydra.core.Term, T0> recurse, hydra.core.Term term) {
-    java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.core.Term>>> forRhs = (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.core.Term>>>) (rhs -> (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (var -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (body -> (hydra_strip_deannotateTerm2).apply(rhs).accept(new hydra.core.Term.PartialVisitor<>() {
+  static <T0> T0 simplifyTerm_simplify(java.util.function.Function<hydra.core.Term, hydra.core.Term> hydra_dependencies_simplifyTerm, java.util.function.Function<hydra.core.Term, hydra.core.Term> hydra_strip_deannotateTerm, java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>> hydra_variables_freeVariablesInTerm, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.core.Term>>> hydra_variables_substituteVariable, java.util.function.Function<hydra.core.Term, T0> recurse, hydra.core.Term term) {
+    java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.core.Term>>> forRhs = (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.core.Term>>>) (rhs -> (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (var -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (body -> (hydra_strip_deannotateTerm).apply(rhs).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.core.Term otherwise(hydra.core.Term instance) {
         return term;
@@ -373,7 +373,7 @@ public interface Dependencies {
 
       @Override
       public hydra.core.Term visit(hydra.core.Term.Variable v) {
-        return (hydra_dependencies_simplifyTerm2).apply((hydra_variables_substituteVariable2).apply(var).apply((v).value).apply(body));
+        return (hydra_dependencies_simplifyTerm).apply((hydra_variables_substituteVariable).apply(var).apply((v).value).apply(body));
       }
     }))));
     java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Term, hydra.core.Term>> forLhs = (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (lhs -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (rhs -> {
@@ -390,12 +390,12 @@ public interface Dependencies {
           return hydra.lib.logic.IfElse.lazy(
             hydra.lib.sets.Member.apply(
               var,
-              (hydra_variables_freeVariablesInTerm2).apply(body)),
+              (hydra_variables_freeVariablesInTerm).apply(body)),
             () -> (forRhs).apply(rhs).apply(var).apply(body),
-            () -> (hydra_dependencies_simplifyTerm2).apply(body));
+            () -> (hydra_dependencies_simplifyTerm).apply(body));
         }
       }));
-      return (hydra_strip_deannotateTerm2).apply(lhs).accept(new hydra.core.Term.PartialVisitor<>() {
+      return (hydra_strip_deannotateTerm).apply(lhs).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.core.Term otherwise(hydra.core.Term instance) {
           return term;
@@ -420,7 +420,7 @@ public interface Dependencies {
         return (forLhs).apply(lhs).apply(rhs);
       }
     }));
-    hydra.core.Term stripped = (hydra_strip_deannotateTerm2).apply(term);
+    hydra.core.Term stripped = (hydra_strip_deannotateTerm).apply(term);
     return (recurse).apply((forTerm).apply(stripped));
   }
 
@@ -605,14 +605,14 @@ public interface Dependencies {
         bindings.get())));
   }
 
-  static <T0> hydra.util.Pair<T0, hydra.util.ConsList<hydra.core.Name>> topologicalSortBindingMap_depsOf(java.util.function.Function<hydra.core.Term, Boolean> hasTypeAnnotation, java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>> hydra_variables_freeVariablesInTerm2, hydra.util.PersistentSet<hydra.core.Name> keys, hydra.util.Pair<T0, hydra.core.Term> nameAndTerm) {
+  static <T0> hydra.util.Pair<T0, hydra.util.ConsList<hydra.core.Name>> topologicalSortBindingMap_depsOf(java.util.function.Function<hydra.core.Term, Boolean> hasTypeAnnotation, java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>> hydra_variables_freeVariablesInTerm, hydra.util.PersistentSet<hydra.core.Name> keys, hydra.util.Pair<T0, hydra.core.Term> nameAndTerm) {
     hydra.util.Lazy<hydra.core.Term> term = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(nameAndTerm));
     return (hydra.util.Pair<T0, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<T0, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<T0, hydra.util.ConsList<hydra.core.Name>>(hydra.Dependencies.<T0>topologicalSortBindingMap_name(nameAndTerm), hydra.lib.logic.IfElse.lazy(
       (hasTypeAnnotation).apply(term.get()),
       () -> (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()),
       () -> hydra.lib.sets.ToList.apply(hydra.lib.sets.Intersection.apply(
         keys,
-        (hydra_variables_freeVariablesInTerm2).apply(term.get())))))));
+        (hydra_variables_freeVariablesInTerm).apply(term.get())))))));
   }
 
   static <T0> T0 topologicalSortBindingMap_name(hydra.util.Pair<T0, hydra.core.Term> nameAndTerm) {

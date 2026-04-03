@@ -7,11 +7,6 @@ module Hydra.Lib.Names where
 import qualified Hydra.Core as Core
 import qualified Hydra.Module as Module
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 chars :: Module.Namespace
 chars = Module.Namespace "hydra.lib.chars"
@@ -177,6 +172,21 @@ listsLength = Core.Name "hydra.lib.lists.length"
 
 listsMap :: Core.Name
 listsMap = Core.Name "hydra.lib.lists.map"
+
+listsMaybeAt :: Core.Name
+listsMaybeAt = Core.Name "hydra.lib.lists.maybeAt"
+
+listsMaybeHead :: Core.Name
+listsMaybeHead = Core.Name "hydra.lib.lists.maybeHead"
+
+listsMaybeInit :: Core.Name
+listsMaybeInit = Core.Name "hydra.lib.lists.maybeInit"
+
+listsMaybeLast :: Core.Name
+listsMaybeLast = Core.Name "hydra.lib.lists.maybeLast"
+
+listsMaybeTail :: Core.Name
+listsMaybeTail = Core.Name "hydra.lib.lists.maybeTail"
 
 listsNub :: Core.Name
 listsNub = Core.Name "hydra.lib.lists.nub"
@@ -529,8 +539,14 @@ mathLogBase = Core.Name "hydra.lib.math.logBase"
 mathMax :: Core.Name
 mathMax = Core.Name "hydra.lib.math.max"
 
+mathMaybeDiv :: Core.Name
+mathMaybeDiv = Core.Name "hydra.lib.math.maybeDiv"
+
 mathMin :: Core.Name
 mathMin = Core.Name "hydra.lib.math.min"
+
+mathMaybeMod :: Core.Name
+mathMaybeMod = Core.Name "hydra.lib.math.maybeMod"
 
 mathMod :: Core.Name
 mathMod = Core.Name "hydra.lib.math.mod"
@@ -550,11 +566,17 @@ mathPi = Core.Name "hydra.lib.math.pi"
 mathPow :: Core.Name
 mathPow = Core.Name "hydra.lib.math.pow"
 
+mathMaybePred :: Core.Name
+mathMaybePred = Core.Name "hydra.lib.math.maybePred"
+
 mathPred :: Core.Name
 mathPred = Core.Name "hydra.lib.math.pred"
 
 mathRange :: Core.Name
 mathRange = Core.Name "hydra.lib.math.range"
+
+mathMaybeRem :: Core.Name
+mathMaybeRem = Core.Name "hydra.lib.math.maybeRem"
 
 mathRem :: Core.Name
 mathRem = Core.Name "hydra.lib.math.rem"
@@ -585,6 +607,9 @@ mathSqrt = Core.Name "hydra.lib.math.sqrt"
 
 mathSub :: Core.Name
 mathSub = Core.Name "hydra.lib.math.sub"
+
+mathMaybeSucc :: Core.Name
+mathMaybeSucc = Core.Name "hydra.lib.math.maybeSucc"
 
 mathSucc :: Core.Name
 mathSucc = Core.Name "hydra.lib.math.succ"
@@ -744,6 +769,9 @@ stringsLength = Core.Name "hydra.lib.strings.length"
 
 stringsLines :: Core.Name
 stringsLines = Core.Name "hydra.lib.strings.lines"
+
+stringsMaybeCharAt :: Core.Name
+stringsMaybeCharAt = Core.Name "hydra.lib.strings.maybeCharAt"
 
 stringsNull :: Core.Name
 stringsNull = Core.Name "hydra.lib.strings.null"

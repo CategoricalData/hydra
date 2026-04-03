@@ -9,11 +9,6 @@ import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Relational as Relational
 import qualified Hydra.Tabular as Tabular
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 columnType :: Phantoms.TTerm Relational.ColumnName -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Tabular.ColumnType
 columnType name type_ =

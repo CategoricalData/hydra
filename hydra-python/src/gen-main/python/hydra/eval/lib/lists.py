@@ -84,6 +84,11 @@ def map(cx: hydra.context.Context, g: hydra.graph.Graph, fun_term: hydra.core.Te
 
     return hydra.lib.eithers.bind(hydra.extract.core.list(cx, g, list_term), (lambda elements: Right(cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.reverse(hydra.lib.lists.foldl((lambda acc, el: hydra.lib.lists.cons(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, el))), acc)), (), elements)))))))
 
+def maybe_head(cx: hydra.context.Context, g: hydra.graph.Graph, list_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
+    r"""Interpreter-friendly maybeHead for List terms."""
+
+    return hydra.lib.eithers.bind(hydra.extract.core.list(cx, g, list_term), (lambda elements: Right(hydra.lib.logic.if_else(hydra.lib.lists.null(elements), (lambda : cast(hydra.core.Term, hydra.core.TermMaybe(Nothing()))), (lambda : cast(hydra.core.Term, hydra.core.TermMaybe(Just(hydra.lib.lists.head(elements)))))))))
+
 def nub(cx: hydra.context.Context, g: hydra.graph.Graph, list_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
     r"""Interpreter-friendly nub for List terms."""
 

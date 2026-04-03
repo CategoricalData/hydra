@@ -9,10 +9,6 @@ import qualified Hydra.Ext.Protobuf.Any as Any
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 any :: Phantoms.TTerm String -> Phantoms.TTerm B.ByteString -> Phantoms.TTerm Any.Any
 any typeUrl value =

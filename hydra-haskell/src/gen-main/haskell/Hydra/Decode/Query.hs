@@ -16,11 +16,6 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Query as Query
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 comparisonConstraint :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.ComparisonConstraint
 comparisonConstraint cx raw =
@@ -155,19 +150,19 @@ range cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core__.toFieldMap v0
-        in (Eithers.bind (Core__.requireField "min" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+        in (Eithers.bind (Core__.requireField "min" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralInteger v2 -> case v2 of
               Core.IntegerValueInt32 v3 -> Right v3
               _ -> Left (Errors.DecodingError "expected int32 value")
             _ -> Left (Errors.DecodingError "expected int32 literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_min -> Eithers.bind (Core__.requireField "max" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_min -> Eithers.bind (Core__.requireField "max" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralInteger v2 -> case v2 of
               Core.IntegerValueInt32 v3 -> Right v3
               _ -> Left (Errors.DecodingError "expected int32 value")
             _ -> Left (Errors.DecodingError "expected int32 literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_max -> Right (Query.Range {
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_max -> Right (Query.Range {
           Query.rangeMin = field_min,
           Query.rangeMax = field_max}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -185,14 +180,14 @@ regexQuantifier cx raw =
                       (Core.Name "zeroOrOne", (\input -> Eithers.map (\t -> Query.RegexQuantifierZeroOrOne) (Core__.decodeUnit cx input))),
                       (Core.Name "zeroOrMore", (\input -> Eithers.map (\t -> Query.RegexQuantifierZeroOrMore) (Core__.decodeUnit cx input))),
                       (Core.Name "oneOrMore", (\input -> Eithers.map (\t -> Query.RegexQuantifierOneOrMore) (Core__.decodeUnit cx input))),
-                      (Core.Name "exactly", (\input -> Eithers.map (\t -> Query.RegexQuantifierExactly t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+                      (Core.Name "exactly", (\input -> Eithers.map (\t -> Query.RegexQuantifierExactly t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
                         Core.TermLiteral v1 -> case v1 of
                           Core.LiteralInteger v2 -> case v2 of
                             Core.IntegerValueInt32 v3 -> Right v3
                             _ -> Left (Errors.DecodingError "expected int32 value")
                           _ -> Left (Errors.DecodingError "expected int32 literal")
                         _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx input)))),
-                      (Core.Name "atLeast", (\input -> Eithers.map (\t -> Query.RegexQuantifierAtLeast t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+                      (Core.Name "atLeast", (\input -> Eithers.map (\t -> Query.RegexQuantifierAtLeast t) (Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
                         Core.TermLiteral v1 -> case v1 of
                           Core.LiteralInteger v2 -> case v2 of
                             Core.IntegerValueInt32 v3 -> Right v3
@@ -248,9 +243,9 @@ triplePattern cx raw =
 variable :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Variable
 variable cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
-      Core.TermWrap v0 -> Eithers.map (\b -> Query.Variable b) ((\raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+      Core.TermWrap v0 -> Eithers.map (\b -> Query.Variable b) ((\raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
         Core.TermLiteral v1 -> case v1 of
           Core.LiteralString v2 -> Right v2
           _ -> Left (Errors.DecodingError "expected string literal")
-        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0))
+        _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (Lexical.stripAndDereferenceTermEither cx raw)

@@ -14,11 +14,6 @@ import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 functionStructure :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Typing.FunctionStructure t0)
 functionStructure env cx raw =
@@ -59,11 +54,11 @@ typeConstraint cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Core__.toFieldMap v0
-        in (Eithers.bind (Core__.requireField "left" Core_.type_ fieldMap cx) (\field_left -> Eithers.bind (Core__.requireField "right" Core_.type_ fieldMap cx) (\field_right -> Eithers.bind (Core__.requireField "comment" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+        in (Eithers.bind (Core__.requireField "left" Core_.type_ fieldMap cx) (\field_left -> Eithers.bind (Core__.requireField "right" Core_.type_ fieldMap cx) (\field_right -> Eithers.bind (Core__.requireField "comment" (\cx2 -> \raw2 -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped2 -> case stripped2 of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_comment -> Right (Typing.TypeConstraint {
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx2 raw2)) fieldMap cx) (\field_comment -> Right (Typing.TypeConstraint {
           Typing.typeConstraintLeft = field_left,
           Typing.typeConstraintRight = field_right,
           Typing.typeConstraintComment = field_comment})))))

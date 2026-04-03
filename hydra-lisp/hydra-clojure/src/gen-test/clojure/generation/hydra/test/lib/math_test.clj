@@ -146,6 +146,44 @@
 
          42:int32)))
 
+;; maybeDiv
+
+(deftest test-math-negmaybediv-negbasic-division
+
+  (is (= just(3:int32)
+
+         just(3:int32))))
+
+(deftest test-math-negmaybediv-negexact-division
+
+  (is (= just(5:int32)
+
+         just(5:int32))))
+
+(deftest test-math-negmaybediv-negdivision-by-zero
+
+  (is (= nothing
+
+         nothing)))
+
+(deftest test-math-negmaybediv-negzero-divided
+
+  (is (= just(0:int32)
+
+         just(0:int32))))
+
+(deftest test-math-negmaybediv-negnegative-dividend
+
+  (is (= just(-4:int32)
+
+         just(-4:int32))))
+
+(deftest test-math-negmaybediv-negnegative-divisor
+
+  (is (= just(-4:int32)
+
+         just(-4:int32))))
+
 ;; min
 
 (deftest test-math-negmin-negfirst-is-smaller
@@ -183,6 +221,38 @@
   (is (= 0:int32
 
          0:int32)))
+
+;; maybeMod
+
+(deftest test-math-negmaybemod-negbasic-modulo
+
+  (is (= just(1:int32)
+
+         just(1:int32))))
+
+(deftest test-math-negmaybemod-negexact-division
+
+  (is (= just(0:int32)
+
+         just(0:int32))))
+
+(deftest test-math-negmaybemod-negdivision-by-zero
+
+  (is (= nothing
+
+         nothing)))
+
+(deftest test-math-negmaybemod-negnegative-dividend
+
+  (is (= just(2:int32)
+
+         just(2:int32))))
+
+(deftest test-math-negmaybemod-negnegative-divisor
+
+  (is (= just(-2:int32)
+
+         just(-2:int32))))
 
 ;; mod
 
@@ -294,6 +364,32 @@
 
          false)))
 
+;; maybePred
+
+(deftest test-math-negmaybepred-negpositive
+
+  (is (= just(4:int32)
+
+         just(4:int32))))
+
+(deftest test-math-negmaybepred-negzero
+
+  (is (= just(-1:int32)
+
+         just(-1:int32))))
+
+(deftest test-math-negmaybepred-negnegative
+
+  (is (= just(-6:int32)
+
+         just(-6:int32))))
+
+(deftest test-math-negmaybepred-negminbound
+
+  (is (= nothing
+
+         nothing)))
+
 ;; pred
 
 (deftest test-math-negpred-negpositive
@@ -339,6 +435,38 @@
   (is (= [-2:int32, -1:int32, 0:int32, 1:int32, 2:int32]
 
          [-2:int32, -1:int32, 0:int32, 1:int32, 2:int32])))
+
+;; maybeRem
+
+(deftest test-math-negmayberem-negbasic-remainder
+
+  (is (= just(1:int32)
+
+         just(1:int32))))
+
+(deftest test-math-negmayberem-negexact-division
+
+  (is (= just(0:int32)
+
+         just(0:int32))))
+
+(deftest test-math-negmayberem-negdivision-by-zero
+
+  (is (= nothing
+
+         nothing)))
+
+(deftest test-math-negmayberem-negnegative-dividend
+
+  (is (= just(-1:int32)
+
+         just(-1:int32))))
+
+(deftest test-math-negmayberem-negnegative-divisor
+
+  (is (= just(1:int32)
+
+         just(1:int32))))
 
 ;; rem
 
@@ -411,6 +539,32 @@
   (is (= 42:int32
 
          42:int32)))
+
+;; maybeSucc
+
+(deftest test-math-negmaybesucc-negpositive
+
+  (is (= just(6:int32)
+
+         just(6:int32))))
+
+(deftest test-math-negmaybesucc-negzero
+
+  (is (= just(1:int32)
+
+         just(1:int32))))
+
+(deftest test-math-negmaybesucc-negnegative
+
+  (is (= just(-4:int32)
+
+         just(-4:int32))))
+
+(deftest test-math-negmaybesucc-negmaxbound
+
+  (is (= nothing
+
+         nothing)))
 
 ;; succ
 

@@ -28,11 +28,7 @@ import qualified Hydra.Substitution as Substitution
 import qualified Hydra.Typing as Typing
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Dereference a type name to get the actual type (Either version)
 dereferenceType :: Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Errors.Error) (Maybe Core.Type)

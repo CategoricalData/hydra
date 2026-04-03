@@ -23,11 +23,6 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Show.Core as Core__
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Decode a YAML value to a record term
 decodeRecord :: Core.Name -> [(Core.FieldType, (Coders.Coder Core.Term Model.Node))] -> Context.Context -> Model.Node -> Either (Context.InContext Errors.Error) Core.Term
@@ -132,8 +127,8 @@ recordCoder tname rt cx g =
 
       let getCoder = \f -> Eithers.bind (termCoder (Core.fieldTypeType f) cx g) (\coder -> Right (f, coder))
       in (Eithers.bind (Eithers.mapList getCoder rt) (\coders -> Right (Coders.Coder {
-        Coders.coderEncode = (\cx -> \term -> encodeRecord coders cx g term),
-        Coders.coderDecode = (\cx -> \val -> decodeRecord tname coders cx val)})))
+        Coders.coderEncode = (\cx2 -> \term -> encodeRecord coders cx2 g term),
+        Coders.coderDecode = (\cx2 -> \val -> decodeRecord tname coders cx2 val)})))
 
 -- | Create a YAML coder for term types
 termCoder :: Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Coders.Coder Core.Term Model.Node)
@@ -141,52 +136,52 @@ termCoder typ cx g =
 
       let stripped = Strip.deannotateType typ
           encodeLiteral =
-                  \ac -> \cx -> \term -> case term of
-                    Core.TermLiteral v0 -> Eithers.bind (Coders.coderEncode ac cx v0) (\scalar -> Right (Model.NodeScalar scalar))
+                  \ac -> \cx2 -> \term -> case term of
+                    Core.TermLiteral v0 -> Eithers.bind (Coders.coderEncode ac cx2 v0) (\scalar -> Right (Model.NodeScalar scalar))
                     _ -> Left (Context.InContext {
                       Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                         "expected literal term, found: ",
                         (Core__.term term)]))),
-                      Context.inContextContext = cx})
+                      Context.inContextContext = cx2})
           encodeList =
-                  \lc -> \cx -> \term -> case term of
-                    Core.TermList v0 -> Eithers.bind (Eithers.mapList (\el -> Coders.coderEncode lc cx el) v0) (\encodedEls -> Right (Model.NodeSequence encodedEls))
+                  \lc -> \cx2 -> \term -> case term of
+                    Core.TermList v0 -> Eithers.bind (Eithers.mapList (\el -> Coders.coderEncode lc cx2 el) v0) (\encodedEls -> Right (Model.NodeSequence encodedEls))
                     _ -> Left (Context.InContext {
                       Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                         "expected list term, found: ",
                         (Core__.term term)]))),
-                      Context.inContextContext = cx})
+                      Context.inContextContext = cx2})
           decodeList =
-                  \lc -> \cx -> \n -> case n of
-                    Model.NodeSequence v0 -> Eithers.bind (Eithers.mapList (\node -> Coders.coderDecode lc cx node) v0) (\decodedNodes -> Right (Core.TermList decodedNodes))
+                  \lc -> \cx2 -> \n -> case n of
+                    Model.NodeSequence v0 -> Eithers.bind (Eithers.mapList (\node -> Coders.coderDecode lc cx2 node) v0) (\decodedNodes -> Right (Core.TermList decodedNodes))
                     _ -> Left (Context.InContext {
                       Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "expected sequence")),
-                      Context.inContextContext = cx})
+                      Context.inContextContext = cx2})
           encodeMaybe =
-                  \maybeElementCoder -> \cx -> \maybeTerm ->
+                  \maybeElementCoder -> \cx2 -> \maybeTerm ->
                     let strippedMaybeTerm = Strip.deannotateTerm maybeTerm
                     in case strippedMaybeTerm of
-                      Core.TermMaybe v0 -> Logic.ifElse (Maybes.isNothing v0) (Right (Model.NodeScalar Model.ScalarNull)) (Eithers.bind (Coders.coderEncode maybeElementCoder cx (Maybes.fromJust v0)) (\encodedInner -> Right encodedInner))
+                      Core.TermMaybe v0 -> Logic.ifElse (Maybes.isNothing v0) (Right (Model.NodeScalar Model.ScalarNull)) (Eithers.bind (Coders.coderEncode maybeElementCoder cx2 (Maybes.fromJust v0)) (\encodedInner -> Right encodedInner))
                       _ -> Left (Context.InContext {
                         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                           "expected optional term, found: ",
                           (Core__.term maybeTerm)]))),
-                        Context.inContextContext = cx})
+                        Context.inContextContext = cx2})
           decodeMaybe =
-                  \maybeElementCoder -> \cx -> \yamlVal -> case yamlVal of
+                  \maybeElementCoder -> \cx2 -> \yamlVal -> case yamlVal of
                     Model.NodeScalar v0 -> case v0 of
                       Model.ScalarNull -> Right (Core.TermMaybe Nothing)
-                      _ -> Eithers.bind (Coders.coderDecode maybeElementCoder cx yamlVal) (\decodedInner -> Right (Core.TermMaybe (Just decodedInner)))
-                    _ -> Eithers.bind (Coders.coderDecode maybeElementCoder cx yamlVal) (\decodedInner -> Right (Core.TermMaybe (Just decodedInner)))
+                      _ -> Eithers.bind (Coders.coderDecode maybeElementCoder cx2 yamlVal) (\decodedInner -> Right (Core.TermMaybe (Just decodedInner)))
+                    _ -> Eithers.bind (Coders.coderDecode maybeElementCoder cx2 yamlVal) (\decodedInner -> Right (Core.TermMaybe (Just decodedInner)))
           result =
                   case stripped of
                     Core.TypeLiteral v0 -> Eithers.bind (literalYamlCoder v0) (\ac -> Right (Coders.Coder {
                       Coders.coderEncode = (encodeLiteral ac),
-                      Coders.coderDecode = (\cx -> \n -> case n of
-                        Model.NodeScalar v1 -> Eithers.bind (Coders.coderDecode ac cx v1) (\lit -> Right (Core.TermLiteral lit))
+                      Coders.coderDecode = (\cx2 -> \n -> case n of
+                        Model.NodeScalar v1 -> Eithers.bind (Coders.coderDecode ac cx2 v1) (\lit -> Right (Core.TermLiteral lit))
                         _ -> Left (Context.InContext {
                           Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "expected scalar node")),
-                          Context.inContextContext = cx}))}))
+                          Context.inContextContext = cx2}))}))
                     Core.TypeList v0 -> Eithers.bind (termCoder v0 cx g) (\lc -> Right (Coders.Coder {
                       Coders.coderEncode = (encodeList lc),
                       Coders.coderDecode = (decodeList lc)}))
@@ -195,28 +190,28 @@ termCoder typ cx g =
                           vt = Core.mapTypeValues v0
                       in (Eithers.bind (termCoder kt cx g) (\kc -> Eithers.bind (termCoder vt cx g) (\vc ->
                         let encodeEntry =
-                                \cx -> \kv ->
+                                \cx2 -> \kv ->
                                   let k = Pairs.first kv
                                       v = Pairs.second kv
-                                  in (Eithers.bind (Coders.coderEncode kc cx k) (\encodedK -> Eithers.bind (Coders.coderEncode vc cx v) (\encodedV -> Right (encodedK, encodedV))))
+                                  in (Eithers.bind (Coders.coderEncode kc cx2 k) (\encodedK -> Eithers.bind (Coders.coderEncode vc cx2 v) (\encodedV -> Right (encodedK, encodedV))))
                             decodeEntry =
-                                    \cx -> \kv ->
+                                    \cx2 -> \kv ->
                                       let k = Pairs.first kv
                                           v = Pairs.second kv
-                                      in (Eithers.bind (Coders.coderDecode kc cx k) (\decodedK -> Eithers.bind (Coders.coderDecode vc cx v) (\decodedV -> Right (decodedK, decodedV))))
+                                      in (Eithers.bind (Coders.coderDecode kc cx2 k) (\decodedK -> Eithers.bind (Coders.coderDecode vc cx2 v) (\decodedV -> Right (decodedK, decodedV))))
                         in (Right (Coders.Coder {
-                          Coders.coderEncode = (\cx -> \term -> case term of
-                            Core.TermMap v1 -> Eithers.bind (Eithers.mapList (\entry -> encodeEntry cx entry) (Maps.toList v1)) (\entries -> Right (Model.NodeMapping (Maps.fromList entries)))
+                          Coders.coderEncode = (\cx2 -> \term -> case term of
+                            Core.TermMap v1 -> Eithers.bind (Eithers.mapList (\entry -> encodeEntry cx2 entry) (Maps.toList v1)) (\entries -> Right (Model.NodeMapping (Maps.fromList entries)))
                             _ -> Left (Context.InContext {
                               Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                                 "expected map term, found: ",
                                 (Core__.term term)]))),
-                              Context.inContextContext = cx})),
-                          Coders.coderDecode = (\cx -> \n -> case n of
-                            Model.NodeMapping v1 -> Eithers.bind (Eithers.mapList (\entry -> decodeEntry cx entry) (Maps.toList v1)) (\entries -> Right (Core.TermMap (Maps.fromList entries)))
+                              Context.inContextContext = cx2})),
+                          Coders.coderDecode = (\cx2 -> \n -> case n of
+                            Model.NodeMapping v1 -> Eithers.bind (Eithers.mapList (\entry -> decodeEntry cx2 entry) (Maps.toList v1)) (\entries -> Right (Core.TermMap (Maps.fromList entries)))
                             _ -> Left (Context.InContext {
                               Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "expected mapping")),
-                              Context.inContextContext = cx}))})))))
+                              Context.inContextContext = cx2}))})))))
                     Core.TypeMaybe v0 -> Eithers.bind (termCoder v0 cx g) (\maybeElementCoder -> Right (Coders.Coder {
                       Coders.coderEncode = (encodeMaybe maybeElementCoder),
                       Coders.coderDecode = (decodeMaybe maybeElementCoder)}))

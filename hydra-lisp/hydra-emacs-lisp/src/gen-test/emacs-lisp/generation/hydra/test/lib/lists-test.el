@@ -465,6 +465,96 @@
 
   (should (equal [1:int32, 2:int32, 3:int32] [1:int32, 2:int32, 3:int32])))
 
+;; maybeAt
+
+(ert-deftest test-lists-negmaybeat-negvalid-index ()
+
+  (should (equal just(20:int32) just(20:int32))))
+
+(ert-deftest test-lists-negmaybeat-negfirst-element ()
+
+  (should (equal just(10:int32) just(10:int32))))
+
+(ert-deftest test-lists-negmaybeat-neglast-element ()
+
+  (should (equal just(30:int32) just(30:int32))))
+
+(ert-deftest test-lists-negmaybeat-negout-of-bounds ()
+
+  (should (equal nothing nothing)))
+
+(ert-deftest test-lists-negmaybeat-negnegative-index ()
+
+  (should (equal nothing nothing)))
+
+(ert-deftest test-lists-negmaybeat-negempty-list ()
+
+  (should (equal nothing nothing)))
+
+;; maybeHead
+
+(ert-deftest test-lists-negmaybehead-negnon-negempty-int-list ()
+
+  (should (equal just(1:int32) just(1:int32))))
+
+(ert-deftest test-lists-negmaybehead-negempty-int-list ()
+
+  (should (equal nothing nothing)))
+
+(ert-deftest test-lists-negmaybehead-negsingle-element ()
+
+  (should (equal just(42:int32) just(42:int32))))
+
+(ert-deftest test-lists-negmaybehead-negnon-negempty-string-list ()
+
+  (should (equal just("hello") just("hello"))))
+
+(ert-deftest test-lists-negmaybehead-negempty-string-list ()
+
+  (should (equal nothing nothing)))
+
+;; maybeInit
+
+(ert-deftest test-lists-negmaybeinit-negthree-elements ()
+
+  (should (equal just([1:int32, 2:int32]) just([1:int32, 2:int32]))))
+
+(ert-deftest test-lists-negmaybeinit-negsingle-element ()
+
+  (should (equal just([]) just([]))))
+
+(ert-deftest test-lists-negmaybeinit-negempty-list ()
+
+  (should (equal nothing nothing)))
+
+;; maybeLast
+
+(ert-deftest test-lists-negmaybelast-negthree-elements ()
+
+  (should (equal just(3:int32) just(3:int32))))
+
+(ert-deftest test-lists-negmaybelast-negsingle-element ()
+
+  (should (equal just(42:int32) just(42:int32))))
+
+(ert-deftest test-lists-negmaybelast-negempty-list ()
+
+  (should (equal nothing nothing)))
+
+;; maybeTail
+
+(ert-deftest test-lists-negmaybetail-negthree-elements ()
+
+  (should (equal just([2:int32, 3:int32]) just([2:int32, 3:int32]))))
+
+(ert-deftest test-lists-negmaybetail-negsingle-element ()
+
+  (should (equal just([]) just([]))))
+
+(ert-deftest test-lists-negmaybetail-negempty-list ()
+
+  (should (equal nothing nothing)))
+
 ;; nub
 
 (ert-deftest test-lists-negnub-negremove-duplicates ()

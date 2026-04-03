@@ -101,6 +101,32 @@
 
   (should (equal 42:int32 42:int32)))
 
+;; maybeDiv
+
+(ert-deftest test-math-negmaybediv-negbasic-division ()
+
+  (should (equal just(3:int32) just(3:int32))))
+
+(ert-deftest test-math-negmaybediv-negexact-division ()
+
+  (should (equal just(5:int32) just(5:int32))))
+
+(ert-deftest test-math-negmaybediv-negdivision-by-zero ()
+
+  (should (equal nothing nothing)))
+
+(ert-deftest test-math-negmaybediv-negzero-divided ()
+
+  (should (equal just(0:int32) just(0:int32))))
+
+(ert-deftest test-math-negmaybediv-negnegative-dividend ()
+
+  (should (equal just(-4:int32) just(-4:int32))))
+
+(ert-deftest test-math-negmaybediv-negnegative-divisor ()
+
+  (should (equal just(-4:int32) just(-4:int32))))
+
 ;; min
 
 (ert-deftest test-math-negmin-negfirst-is-smaller ()
@@ -126,6 +152,28 @@
 (ert-deftest test-math-negmin-negwith-zero ()
 
   (should (equal 0:int32 0:int32)))
+
+;; maybeMod
+
+(ert-deftest test-math-negmaybemod-negbasic-modulo ()
+
+  (should (equal just(1:int32) just(1:int32))))
+
+(ert-deftest test-math-negmaybemod-negexact-division ()
+
+  (should (equal just(0:int32) just(0:int32))))
+
+(ert-deftest test-math-negmaybemod-negdivision-by-zero ()
+
+  (should (equal nothing nothing)))
+
+(ert-deftest test-math-negmaybemod-negnegative-dividend ()
+
+  (should (equal just(2:int32) just(2:int32))))
+
+(ert-deftest test-math-negmaybemod-negnegative-divisor ()
+
+  (should (equal just(-2:int32) just(-2:int32))))
 
 ;; mod
 
@@ -203,6 +251,24 @@
 
   (should (equal false false)))
 
+;; maybePred
+
+(ert-deftest test-math-negmaybepred-negpositive ()
+
+  (should (equal just(4:int32) just(4:int32))))
+
+(ert-deftest test-math-negmaybepred-negzero ()
+
+  (should (equal just(-1:int32) just(-1:int32))))
+
+(ert-deftest test-math-negmaybepred-negnegative ()
+
+  (should (equal just(-6:int32) just(-6:int32))))
+
+(ert-deftest test-math-negmaybepred-negminbound ()
+
+  (should (equal nothing nothing)))
+
 ;; pred
 
 (ert-deftest test-math-negpred-negpositive ()
@@ -234,6 +300,28 @@
 (ert-deftest test-math-negrange-negnegative-start ()
 
   (should (equal [-2:int32, -1:int32, 0:int32, 1:int32, 2:int32] [-2:int32, -1:int32, 0:int32, 1:int32, 2:int32])))
+
+;; maybeRem
+
+(ert-deftest test-math-negmayberem-negbasic-remainder ()
+
+  (should (equal just(1:int32) just(1:int32))))
+
+(ert-deftest test-math-negmayberem-negexact-division ()
+
+  (should (equal just(0:int32) just(0:int32))))
+
+(ert-deftest test-math-negmayberem-negdivision-by-zero ()
+
+  (should (equal nothing nothing)))
+
+(ert-deftest test-math-negmayberem-negnegative-dividend ()
+
+  (should (equal just(-1:int32) just(-1:int32))))
+
+(ert-deftest test-math-negmayberem-negnegative-divisor ()
+
+  (should (equal just(1:int32) just(1:int32))))
 
 ;; rem
 
@@ -284,6 +372,24 @@
 (ert-deftest test-math-negsub-negwith-zero ()
 
   (should (equal 42:int32 42:int32)))
+
+;; maybeSucc
+
+(ert-deftest test-math-negmaybesucc-negpositive ()
+
+  (should (equal just(6:int32) just(6:int32))))
+
+(ert-deftest test-math-negmaybesucc-negzero ()
+
+  (should (equal just(1:int32) just(1:int32))))
+
+(ert-deftest test-math-negmaybesucc-negnegative ()
+
+  (should (equal just(-4:int32) just(-4:int32))))
+
+(ert-deftest test-math-negmaybesucc-negmaxbound ()
+
+  (should (equal nothing nothing)))
 
 ;; succ
 

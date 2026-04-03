@@ -16,11 +16,6 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Show.Core as Core_
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 -- | Encode a float value to JSON. Float64/Bigfloat use native numbers; Float32 uses string.
 encodeFloat :: Core.FloatValue -> Either t0 Model.Value

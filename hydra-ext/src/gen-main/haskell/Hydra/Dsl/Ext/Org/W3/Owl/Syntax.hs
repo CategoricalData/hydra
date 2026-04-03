@@ -10,11 +10,6 @@ import qualified Hydra.Ext.Org.W3.Rdf.Syntax as Syntax_
 import qualified Hydra.Ext.Org.W3.Xml.Schema as Schema
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 annotation :: Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.AnnotationProperty -> Phantoms.TTerm Syntax.AnnotationValue -> Phantoms.TTerm Syntax.Annotation
 annotation annotations property value =

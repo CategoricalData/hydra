@@ -8,11 +8,7 @@ import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 
 context :: Phantoms.TTerm [String] -> Phantoms.TTerm [String] -> Phantoms.TTerm (M.Map Core.Name Core.Term) -> Phantoms.TTerm Context.Context
 context trace messages other =

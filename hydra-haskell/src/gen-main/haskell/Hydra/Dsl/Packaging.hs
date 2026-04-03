@@ -9,11 +9,6 @@ import qualified Hydra.Module as Module
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
-import qualified Data.ByteString as B
-import qualified Data.Int as I
-import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Set as S
 
 package :: Phantoms.TTerm Packaging.PackageName -> Phantoms.TTerm [Module.Module] -> Phantoms.TTerm [Packaging.PackageName] -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Packaging.Package
 package name modules dependencies description =
