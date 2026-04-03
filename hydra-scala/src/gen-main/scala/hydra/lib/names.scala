@@ -114,6 +114,16 @@ lazy val listsLength: hydra.core.Name = "hydra.lib.lists.length"
 
 lazy val listsMap: hydra.core.Name = "hydra.lib.lists.map"
 
+lazy val listsMaybeAt: hydra.core.Name = "hydra.lib.lists.maybeAt"
+
+lazy val listsMaybeHead: hydra.core.Name = "hydra.lib.lists.maybeHead"
+
+lazy val listsMaybeInit: hydra.core.Name = "hydra.lib.lists.maybeInit"
+
+lazy val listsMaybeLast: hydra.core.Name = "hydra.lib.lists.maybeLast"
+
+lazy val listsMaybeTail: hydra.core.Name = "hydra.lib.lists.maybeTail"
+
 lazy val listsNub: hydra.core.Name = "hydra.lib.lists.nub"
 
 lazy val listsNull: hydra.core.Name = "hydra.lib.lists.null"
@@ -348,6 +358,16 @@ lazy val mathLogBase: hydra.core.Name = "hydra.lib.math.logBase"
 
 lazy val mathMax: hydra.core.Name = "hydra.lib.math.max"
 
+lazy val mathMaybeDiv: hydra.core.Name = "hydra.lib.math.maybeDiv"
+
+lazy val mathMaybeMod: hydra.core.Name = "hydra.lib.math.maybeMod"
+
+lazy val mathMaybePred: hydra.core.Name = "hydra.lib.math.maybePred"
+
+lazy val mathMaybeRem: hydra.core.Name = "hydra.lib.math.maybeRem"
+
+lazy val mathMaybeSucc: hydra.core.Name = "hydra.lib.math.maybeSucc"
+
 lazy val mathMin: hydra.core.Name = "hydra.lib.math.min"
 
 lazy val mathMod: hydra.core.Name = "hydra.lib.math.mod"
@@ -491,6 +511,8 @@ lazy val stringsIntercalate: hydra.core.Name = "hydra.lib.strings.intercalate"
 lazy val stringsLength: hydra.core.Name = "hydra.lib.strings.length"
 
 lazy val stringsLines: hydra.core.Name = "hydra.lib.strings.lines"
+
+lazy val stringsMaybeCharAt: hydra.core.Name = "hydra.lib.strings.maybeCharAt"
 
 lazy val stringsNull: hydra.core.Name = "hydra.lib.strings.null"
 

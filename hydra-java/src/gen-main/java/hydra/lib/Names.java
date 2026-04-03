@@ -226,6 +226,26 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.lists.map");
   }
 
+  static hydra.core.Name listsMaybeAt() {
+    return new hydra.core.Name("hydra.lib.lists.maybeAt");
+  }
+
+  static hydra.core.Name listsMaybeHead() {
+    return new hydra.core.Name("hydra.lib.lists.maybeHead");
+  }
+
+  static hydra.core.Name listsMaybeInit() {
+    return new hydra.core.Name("hydra.lib.lists.maybeInit");
+  }
+
+  static hydra.core.Name listsMaybeLast() {
+    return new hydra.core.Name("hydra.lib.lists.maybeLast");
+  }
+
+  static hydra.core.Name listsMaybeTail() {
+    return new hydra.core.Name("hydra.lib.lists.maybeTail");
+  }
+
   static hydra.core.Name listsNub() {
     return new hydra.core.Name("hydra.lib.lists.nub");
   }
@@ -694,6 +714,26 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.math.max");
   }
 
+  static hydra.core.Name mathMaybeDiv() {
+    return new hydra.core.Name("hydra.lib.math.maybeDiv");
+  }
+
+  static hydra.core.Name mathMaybeMod() {
+    return new hydra.core.Name("hydra.lib.math.maybeMod");
+  }
+
+  static hydra.core.Name mathMaybePred() {
+    return new hydra.core.Name("hydra.lib.math.maybePred");
+  }
+
+  static hydra.core.Name mathMaybeRem() {
+    return new hydra.core.Name("hydra.lib.math.maybeRem");
+  }
+
+  static hydra.core.Name mathMaybeSucc() {
+    return new hydra.core.Name("hydra.lib.math.maybeSucc");
+  }
+
   static hydra.core.Name mathMin() {
     return new hydra.core.Name("hydra.lib.math.min");
   }
@@ -980,6 +1020,10 @@ public interface Names {
 
   static hydra.core.Name stringsLines() {
     return new hydra.core.Name("hydra.lib.strings.lines");
+  }
+
+  static hydra.core.Name stringsMaybeCharAt() {
+    return new hydra.core.Name("hydra.lib.strings.maybeCharAt");
   }
 
   static hydra.core.Name stringsNull() {

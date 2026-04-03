@@ -4,397 +4,430 @@
       "type": {
         "name": "hydra.error.pg.InvalidEdgeError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {"literal": {"string": "An error indicating that an edge is invalid"}}}],
-            "body": {
-              "union": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "id",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The edge id value is invalid"}}}],
-                      "body": {"variable": "hydra.error.pg.InvalidValueError"}}}},
-                {
-                  "name": "inVertexLabel",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The in-vertex has the wrong label"}}}],
-                      "body": {"variable": "hydra.error.pg.WrongVertexLabelError"}}}},
-                {
-                  "name": "inVertexNotFound",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The in-vertex does not exist in the graph"}}}],
-                      "body": {"unit": {}}}}},
-                {
-                  "name": "label",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The edge label does not exist in the schema"}}}],
-                      "body": {"variable": "hydra.error.pg.NoSuchEdgeLabelError"}}}},
-                {
-                  "name": "outVertexLabel",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The out-vertex has the wrong label"}}}],
-                      "body": {"variable": "hydra.error.pg.WrongVertexLabelError"}}}},
-                {
-                  "name": "outVertexNotFound",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The out-vertex does not exist in the graph"}}}],
-                      "body": {"unit": {}}}}},
-                {
-                  "name": "property",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A property of the edge is invalid"}}}],
-                      "body": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {"literal": {"string": "An error indicating that an edge is invalid"}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "id",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The edge id value is invalid"}}}],
+                        "body": {"variable": "hydra.error.pg.InvalidValueError"}}}},
+                  {
+                    "name": "inVertexLabel",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The in-vertex has the wrong label"}}}],
+                        "body": {"variable": "hydra.error.pg.WrongVertexLabelError"}}}},
+                  {
+                    "name": "inVertexNotFound",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The in-vertex does not exist in the graph"}}}],
+                        "body": {"unit": {}}}}},
+                  {
+                    "name": "label",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The edge label does not exist in the schema"}}}],
+                        "body": {"variable": "hydra.error.pg.NoSuchEdgeLabelError"}}}},
+                  {
+                    "name": "outVertexLabel",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The out-vertex has the wrong label"}}}],
+                        "body": {"variable": "hydra.error.pg.WrongVertexLabelError"}}}},
+                  {
+                    "name": "outVertexNotFound",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The out-vertex does not exist in the graph"}}}],
+                        "body": {"unit": {}}}}},
+                  {
+                    "name": "property",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A property of the edge is invalid"}}}],
+                        "body": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.error.pg.InvalidElementPropertyError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "An invalid property on a vertex or edge, identified by its key"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "key",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The key of the invalid property"}}}],
-                      "body": {"variable": "hydra.pg.model.PropertyKey"}}}},
-                {
-                  "name": "error",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The specific error"}}}],
-                      "body": {"variable": "hydra.error.pg.InvalidPropertyError"}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "An invalid property on a vertex or edge, identified by its key"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "key",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The key of the invalid property"}}}],
+                        "body": {"variable": "hydra.pg.model.PropertyKey"}}}},
+                  {
+                    "name": "error",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The specific error"}}}],
+                        "body": {"variable": "hydra.error.pg.InvalidPropertyError"}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.error.pg.InvalidGraphEdgeError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "An invalid edge within a graph, identified by its id"}}}],
-            "body": {
-              "forall": {
-                "body": {
-                  "record": [
-                    {
-                      "name": "id",
-                      "type": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The id of the invalid edge"}}}],
-                          "body": {"variable": "v"}}}},
-                    {
-                      "name": "error",
-                      "type": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The specific error"}}}],
-                          "body": {"variable": "hydra.error.pg.InvalidEdgeError"}}}}]},
-                "parameter": "v"}}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "An invalid edge within a graph, identified by its id"}}}],
+              "body": {
+                "forall": {
+                  "body": {
+                    "record": [
+                      {
+                        "name": "id",
+                        "type": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {"literal": {"string": "The id of the invalid edge"}}}],
+                            "body": {"variable": "v"}}}},
+                      {
+                        "name": "error",
+                        "type": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {"literal": {"string": "The specific error"}}}],
+                            "body": {"variable": "hydra.error.pg.InvalidEdgeError"}}}}]},
+                  "parameter": "v"}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.error.pg.InvalidGraphError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "An error indicating that a property graph is invalid"}}}],
-            "body": {
-              "forall": {
-                "body": {
-                  "union": [
-                    {
-                      "name": "edge",
-                      "type": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "An edge in the graph is invalid"}}}],
-                          "body": {
-                            "application": {
-                              "argument": {"variable": "v"},
-                              "function": {"variable": "hydra.error.pg.InvalidGraphEdgeError"}}}}}},
-                    {
-                      "name": "vertex",
-                      "type": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A vertex in the graph is invalid"}}}],
-                          "body": {
-                            "application": {
-                              "argument": {"variable": "v"},
-                              "function": {"variable": "hydra.error.pg.InvalidGraphVertexError"}}}}}}]},
-                "parameter": "v"}}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "An error indicating that a property graph is invalid"}}}],
+              "body": {
+                "forall": {
+                  "body": {
+                    "union": [
+                      {
+                        "name": "edge",
+                        "type": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {"literal": {"string": "An edge in the graph is invalid"}}}],
+                            "body": {
+                              "application": {
+                                "argument": {"variable": "v"},
+                                "function": {"variable": "hydra.error.pg.InvalidGraphEdgeError"}}}}}},
+                      {
+                        "name": "vertex",
+                        "type": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {"literal": {"string": "A vertex in the graph is invalid"}}}],
+                            "body": {
+                              "application": {
+                                "argument": {"variable": "v"},
+                                "function": {"variable": "hydra.error.pg.InvalidGraphVertexError"}}}}}}]},
+                  "parameter": "v"}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.error.pg.InvalidGraphVertexError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "An invalid vertex within a graph, identified by its id"}}}],
-            "body": {
-              "forall": {
-                "body": {
-                  "record": [
-                    {
-                      "name": "id",
-                      "type": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The id of the invalid vertex"}}}],
-                          "body": {"variable": "v"}}}},
-                    {
-                      "name": "error",
-                      "type": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The specific error"}}}],
-                          "body": {"variable": "hydra.error.pg.InvalidVertexError"}}}}]},
-                "parameter": "v"}}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "An invalid vertex within a graph, identified by its id"}}}],
+              "body": {
+                "forall": {
+                  "body": {
+                    "record": [
+                      {
+                        "name": "id",
+                        "type": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {"literal": {"string": "The id of the invalid vertex"}}}],
+                            "body": {"variable": "v"}}}},
+                      {
+                        "name": "error",
+                        "type": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {"literal": {"string": "The specific error"}}}],
+                            "body": {"variable": "hydra.error.pg.InvalidVertexError"}}}}]},
+                  "parameter": "v"}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.error.pg.InvalidPropertyError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "An error indicating that a property is invalid"}}}],
-            "body": {
-              "union": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "invalidValue",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The property value failed type validation"}}}],
-                      "body": {"variable": "hydra.error.pg.InvalidValueError"}}}},
-                {
-                  "name": "missingRequired",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A required property is missing"}}}],
-                      "body": {"variable": "hydra.pg.model.PropertyKey"}}}},
-                {
-                  "name": "unexpectedKey",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "A property has an unexpected key not in the schema"}}}],
-                      "body": {"variable": "hydra.pg.model.PropertyKey"}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "An error indicating that a property is invalid"}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "invalidValue",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The property value failed type validation"}}}],
+                        "body": {"variable": "hydra.error.pg.InvalidValueError"}}}},
+                  {
+                    "name": "missingRequired",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A required property is missing"}}}],
+                        "body": {"variable": "hydra.pg.model.PropertyKey"}}}},
+                  {
+                    "name": "unexpectedKey",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "A property has an unexpected key not in the schema"}}}],
+                        "body": {"variable": "hydra.pg.model.PropertyKey"}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.error.pg.InvalidValueError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "An error indicating that a value does not match the expected type"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "expectedType",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The expected type, as a string"}}}],
-                      "body": {"literal": {"string": {}}}}}},
-                {
-                  "name": "value",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The actual value, as a string"}}}],
-                      "body": {"literal": {"string": {}}}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "An error indicating that a value does not match the expected type"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "expectedType",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The expected type, as a string"}}}],
+                        "body": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "value",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The actual value, as a string"}}}],
+                        "body": {"literal": {"string": {}}}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.error.pg.InvalidVertexError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "An error indicating that a vertex is invalid"}}}],
-            "body": {
-              "union": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "id",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The vertex id value is invalid"}}}],
-                      "body": {"variable": "hydra.error.pg.InvalidValueError"}}}},
-                {
-                  "name": "label",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "The vertex label does not exist in the schema"}}}],
-                      "body": {"variable": "hydra.error.pg.NoSuchVertexLabelError"}}}},
-                {
-                  "name": "property",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A property of the vertex is invalid"}}}],
-                      "body": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "An error indicating that a vertex is invalid"}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "id",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The vertex id value is invalid"}}}],
+                        "body": {"variable": "hydra.error.pg.InvalidValueError"}}}},
+                  {
+                    "name": "label",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "The vertex label does not exist in the schema"}}}],
+                        "body": {"variable": "hydra.error.pg.NoSuchVertexLabelError"}}}},
+                  {
+                    "name": "property",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A property of the vertex is invalid"}}}],
+                        "body": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.error.pg.NoSuchEdgeLabelError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "An error indicating that an edge label does not exist in the schema"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "label",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The edge label that was not found"}}}],
-                      "body": {"variable": "hydra.pg.model.EdgeLabel"}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "An error indicating that an edge label does not exist in the schema"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "label",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The edge label that was not found"}}}],
+                        "body": {"variable": "hydra.pg.model.EdgeLabel"}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.error.pg.NoSuchVertexLabelError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "An error indicating that a vertex label does not exist in the schema"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "label",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The vertex label that was not found"}}}],
-                      "body": {"variable": "hydra.pg.model.VertexLabel"}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "An error indicating that a vertex label does not exist in the schema"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "label",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The vertex label that was not found"}}}],
+                        "body": {"variable": "hydra.pg.model.VertexLabel"}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.error.pg.WrongVertexLabelError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "An error indicating that a vertex has the wrong label"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "expected",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The expected vertex label"}}}],
-                      "body": {"variable": "hydra.pg.model.VertexLabel"}}}},
-                {
-                  "name": "actual",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The actual vertex label"}}}],
-                      "body": {"variable": "hydra.pg.model.VertexLabel"}}}}]}}}}}],
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "An error indicating that a vertex has the wrong label"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "expected",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The expected vertex label"}}}],
+                        "body": {"variable": "hydra.pg.model.VertexLabel"}}}},
+                  {
+                    "name": "actual",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The actual vertex label"}}}],
+                        "body": {"variable": "hydra.pg.model.VertexLabel"}}}}]}}},
+          "variables": []}}}],
   "description": ["Error types for property graph validation"],
   "namespace": "hydra.error.pg",
   "termDependencies": [],

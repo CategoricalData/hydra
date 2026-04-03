@@ -48,7 +48,7 @@ adaptDataGraph constraints doExpand els0 cx graph0 =
               \g -> \term ->
                 let tx = g
                     t1 = Variables.unshadowVariables (pushTypeAppsInward term)
-                    t2 = Variables.unshadowVariables (Logic.ifElse doExpand (pushTypeAppsInward (Reduction.etaExpandTermNew tx t1)) t1)
+                    t2 = Variables.unshadowVariables (Logic.ifElse doExpand (pushTypeAppsInward (Reduction.etaExpandTerm tx t1)) t1)
                 in (Dependencies.liftLambdaAboveLet t2)
           transformBinding =
                   \g -> \el -> Core.Binding {
@@ -58,7 +58,7 @@ adaptDataGraph constraints doExpand els0 cx graph0 =
           litmap = adaptLiteralTypesMap constraints
           prims0 = Graph.graphPrimitives graph0
           schemaTypes0 = Graph.graphSchemaTypes graph0
-          schemaBindings = Environment.typesToElements (Maps.map (\ts -> Scoping.typeSchemeToFType ts) schemaTypes0)
+          schemaBindings = Environment.typesToDefinitions (Maps.map (\ts -> Scoping.typeSchemeToFType ts) schemaTypes0)
       in (Eithers.bind (Logic.ifElse (Maps.null schemaTypes0) (Right Maps.empty) (Eithers.bind (Eithers.bimap (\ic -> Errors.unDecodingError (Context.inContextObject ic)) (\x -> x) (Environment.graphAsTypes cx graph0 schemaBindings)) (\tmap0 -> Eithers.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 -> Right (Maps.map (\t -> Resolution.typeToTypeScheme t) tmap1))))) (\schemaResult ->
         let adaptedSchemaTypes = schemaResult
             adaptBinding =

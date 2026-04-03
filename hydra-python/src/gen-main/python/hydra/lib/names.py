@@ -118,6 +118,16 @@ lists_length = hydra.core.Name("hydra.lib.lists.length")
 
 lists_map = hydra.core.Name("hydra.lib.lists.map")
 
+lists_maybe_at = hydra.core.Name("hydra.lib.lists.maybeAt")
+
+lists_maybe_head = hydra.core.Name("hydra.lib.lists.maybeHead")
+
+lists_maybe_init = hydra.core.Name("hydra.lib.lists.maybeInit")
+
+lists_maybe_last = hydra.core.Name("hydra.lib.lists.maybeLast")
+
+lists_maybe_tail = hydra.core.Name("hydra.lib.lists.maybeTail")
+
 lists_nub = hydra.core.Name("hydra.lib.lists.nub")
 
 lists_null = hydra.core.Name("hydra.lib.lists.null")
@@ -352,6 +362,16 @@ math_log_base = hydra.core.Name("hydra.lib.math.logBase")
 
 math_max = hydra.core.Name("hydra.lib.math.max")
 
+math_maybe_div = hydra.core.Name("hydra.lib.math.maybeDiv")
+
+math_maybe_mod = hydra.core.Name("hydra.lib.math.maybeMod")
+
+math_maybe_pred = hydra.core.Name("hydra.lib.math.maybePred")
+
+math_maybe_rem = hydra.core.Name("hydra.lib.math.maybeRem")
+
+math_maybe_succ = hydra.core.Name("hydra.lib.math.maybeSucc")
+
 math_min = hydra.core.Name("hydra.lib.math.min")
 
 math_mod = hydra.core.Name("hydra.lib.math.mod")
@@ -495,6 +515,8 @@ strings_intercalate = hydra.core.Name("hydra.lib.strings.intercalate")
 strings_length = hydra.core.Name("hydra.lib.strings.length")
 
 strings_lines = hydra.core.Name("hydra.lib.strings.lines")
+
+strings_maybe_char_at = hydra.core.Name("hydra.lib.strings.maybeCharAt")
 
 strings_null = hydra.core.Name("hydra.lib.strings.null")
 

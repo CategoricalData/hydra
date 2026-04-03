@@ -264,20 +264,20 @@ def extend_meta_for_type(meta: hydra.ext.haskell.environment.HaskellModuleMetada
         case _:
             return meta
 
-def gather_metadata(defs: frozenlist[hydra.module.Definition]) -> hydra.ext.haskell.environment.HaskellModuleMetadata:
+def gather_metadata(defs: frozenlist[hydra.packaging.Definition]) -> hydra.ext.haskell.environment.HaskellModuleMetadata:
     r"""Gather metadata from definitions by bottom-up traversal of all terms and types."""
 
-    def add_def(meta: hydra.ext.haskell.environment.HaskellModuleMetadata, def_: hydra.module.Definition) -> hydra.ext.haskell.environment.HaskellModuleMetadata:
+    def add_def(meta: hydra.ext.haskell.environment.HaskellModuleMetadata, def_: hydra.packaging.Definition) -> hydra.ext.haskell.environment.HaskellModuleMetadata:
         match def_:
-            case hydra.module.DefinitionTerm(value=term_def):
+            case hydra.packaging.DefinitionTerm(value=term_def):
                 term = term_def.term
                 @lru_cache(1)
                 def meta_with_term() -> hydra.ext.haskell.environment.HaskellModuleMetadata:
                     return hydra.rewriting.fold_over_term(hydra.coders.TraversalOrder.PRE, (lambda m, t: extend_meta_for_term(m, t)), meta, term)
                 return hydra.lib.maybes.maybe((lambda : meta_with_term()), (lambda ts: hydra.rewriting.fold_over_type(hydra.coders.TraversalOrder.PRE, (lambda m, t: extend_meta_for_type(m, t)), meta_with_term(), ts.type)), term_def.type)
 
-            case hydra.module.DefinitionType(value=type_def):
-                typ = type_def.type
+            case hydra.packaging.DefinitionType(value=type_def):
+                typ = type_def.type.type
                 return hydra.rewriting.fold_over_type(hydra.coders.TraversalOrder.PRE, (lambda m, t: extend_meta_for_type(m, t)), meta, typ)
 
             case _:

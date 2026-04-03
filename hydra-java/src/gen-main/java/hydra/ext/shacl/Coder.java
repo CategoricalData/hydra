@@ -468,8 +468,8 @@ public interface Coder {
     });
   }
 
-  static <T0> hydra.util.Either<T0, hydra.ext.org.w3.shacl.model.CommonProperties> encodeType_any(java.util.function.Function<hydra.util.ConsList<hydra.ext.org.w3.shacl.model.CommonConstraint>, hydra.ext.org.w3.shacl.model.CommonProperties> hydra_ext_shacl_coder_common2) {
-    return hydra.util.Either.<T0, hydra.ext.org.w3.shacl.model.CommonProperties>right((hydra_ext_shacl_coder_common2).apply((hydra.util.ConsList<hydra.ext.org.w3.shacl.model.CommonConstraint>) (hydra.util.ConsList.<hydra.ext.org.w3.shacl.model.CommonConstraint>empty())));
+  static <T0> hydra.util.Either<T0, hydra.ext.org.w3.shacl.model.CommonProperties> encodeType_any(java.util.function.Function<hydra.util.ConsList<hydra.ext.org.w3.shacl.model.CommonConstraint>, hydra.ext.org.w3.shacl.model.CommonProperties> hydra_ext_shacl_coder_common) {
+    return hydra.util.Either.<T0, hydra.ext.org.w3.shacl.model.CommonProperties>right((hydra_ext_shacl_coder_common).apply((hydra.util.ConsList<hydra.ext.org.w3.shacl.model.CommonConstraint>) (hydra.util.ConsList.<hydra.ext.org.w3.shacl.model.CommonConstraint>empty())));
   }
 
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T0> err(hydra.context.Context cx, String msg) {
@@ -500,7 +500,7 @@ public interface Coder {
     return new hydra.ext.org.w3.shacl.model.PropertyShape(hydra.ext.shacl.Coder.defaultCommonProperties(), (hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.PropertyShapeConstraint>) (hydra.lib.sets.Empty.<hydra.ext.org.w3.shacl.model.PropertyShapeConstraint>apply()), (hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.Node>) (hydra.util.Maybe.<hydra.ext.org.w3.rdf.syntax.Node>nothing()), new hydra.ext.org.w3.rdf.syntax.LangStrings((hydra.util.PersistentMap<hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag>, String>) ((hydra.util.PersistentMap<hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag>, String>) (hydra.lib.maps.Empty.<hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag>, String>apply()))), new hydra.ext.org.w3.rdf.syntax.LangStrings((hydra.util.PersistentMap<hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag>, String>) ((hydra.util.PersistentMap<hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag>, String>) (hydra.lib.maps.Empty.<hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag>, String>apply()))), (hydra.util.Maybe<java.math.BigInteger>) (hydra.util.Maybe.<java.math.BigInteger>nothing()), iri);
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.org.w3.shacl.model.ShapesGraph, hydra.context.Context>> shaclCoder(hydra.module.Module mod, hydra.context.Context cx, hydra.graph.Graph g) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.org.w3.shacl.model.ShapesGraph, hydra.context.Context>> shaclCoder(hydra.packaging.Module mod, hydra.context.Context cx, hydra.graph.Graph g) {
     java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.Shape>>> toShape = (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.Shape>>>) (el -> hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.Bimap.apply(
         (java.util.function.Function<hydra.errors.DecodingError, hydra.context.InContext<hydra.errors.Error_>>) (_de -> (hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError((_de).value)), cx))),
@@ -515,17 +515,21 @@ public interface Coder {
           _typ,
           cx)))));
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> typeEls = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+      (java.util.function.Function<hydra.packaging.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.packaging.Definition.PartialVisitor<>() {
         @Override
-        public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.module.Definition instance) {
+        public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.packaging.Definition instance) {
           return (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing());
         }
 
         @Override
-        public hydra.util.Maybe<hydra.core.Binding> visit(hydra.module.Definition.Type td) {
-          return hydra.util.Maybe.just(hydra.Annotations.typeElement(
-            (td).value.name,
-            (td).value.type));
+        public hydra.util.Maybe<hydra.core.Binding> visit(hydra.packaging.Definition.Type td) {
+          return hydra.util.Maybe.just(((java.util.function.Supplier<hydra.core.Binding>) (() -> {
+            hydra.core.Term schemaTerm = new hydra.core.Term.Variable(new hydra.core.Name("hydra.core.Type"));
+            return ((java.util.function.Supplier<hydra.core.Binding>) (() -> {
+              hydra.util.Lazy<hydra.core.Term> dataTerm = new hydra.util.Lazy<>(() -> hydra.Annotations.normalizeTermAnnotations(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(hydra.encode.Core.type((td).value.type.type), hydra.lib.maps.FromList.apply(hydra.util.ConsList.of((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Term>(hydra.Constants.key_type(), schemaTerm)))))))));
+              return new hydra.core.Binding((td).value.name, dataTerm.get(), hydra.util.Maybe.just(new hydra.core.TypeScheme((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), (hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))));
+            })).get();
+          })).get());
         }
       })),
       (mod).definitions)));
