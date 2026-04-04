@@ -107,12 +107,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.avro.encoder"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [ExtractCore.ns, Strip.ns]
     (avroEnvironmentNs:AvroSchema.ns:jsonModelNs:KernelTypes.kernelTypesNamespaces) $
     Just "Hydra-to-Avro encoder: converts Hydra types and terms to Avro schemas and JSON values"
   where
-    elements = [
+    definitions = [
       toDefinition buildAvroField,
       toDefinition emptyEncodeEnvironment,
       toDefinition encodeType,

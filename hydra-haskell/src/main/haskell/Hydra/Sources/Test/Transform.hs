@@ -65,12 +65,12 @@ ns = Namespace "hydra.test.transform"
 
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Formatting.ns, Sorting.ns]
     KernelTypes.kernelTypesNamespaces $
     Just "Transform test cases for code generation, filtering to tests that can be compiled to target languages"
   where
-    elements = [
+    definitions = [
       toDefinition transformToCompiledTests,
       toDefinition transformTestCase,
       toDefinition buildConvertCaseCall,

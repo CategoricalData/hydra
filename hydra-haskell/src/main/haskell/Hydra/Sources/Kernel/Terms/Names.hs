@@ -63,12 +63,12 @@ ns :: Namespace
 ns = Namespace "hydra.names"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Annotations.ns, Constants.ns, Formatting.ns]
     kernelTypesNamespaces $
     Just ("Functions for working with qualified names.")
   where
-   elements = [
+   definitions = [
      toDefinition compactName,
      toDefinition freshName,
      toDefinition freshNames,

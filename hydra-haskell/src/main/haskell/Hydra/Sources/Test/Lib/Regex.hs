@@ -23,12 +23,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.lib.regex"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [TestGraph.ns, Namespace "hydra.reduction", Namespace "hydra.show.core"]
     kernelTypesNamespaces
     (Just "Test cases for hydra.lib.regex primitives")
   where
-    elements = [
+    definitions = [
         Phantoms.toDefinition allTests]
 
 define :: String -> TTerm a -> TTermDefinition a

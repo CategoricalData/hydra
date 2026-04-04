@@ -90,12 +90,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.protobuf.serde"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Formatting.ns, Serialization.ns]
     (Proto3Syntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Serialization functions for converting Protocol Buffers v3 AST to abstract expressions"
   where
-    elements = [
+    definitions = [
       toDefinition deprecatedOptionName,
       toDefinition descriptionOptionName,
       toDefinition excludeInternalOptions,

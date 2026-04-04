@@ -23,10 +23,10 @@ rdf :: String -> Type
 rdf = typeref ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [Core.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
     Just "An RDF 1.1 syntax model"
   where
-    elements = [
+    definitions = [
       blankNode,
       rdfsClass,
       dataset,

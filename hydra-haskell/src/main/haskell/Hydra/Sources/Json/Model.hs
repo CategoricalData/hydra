@@ -18,10 +18,10 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [] [Core.ns] $
+module_ = Module ns (map toTypeDef definitions) [] [Core.ns] $
     Just "A JSON syntax model. See the BNF at https://www.json.org"
   where
-    elements = [
+    definitions = [
       value]
 
 value :: Binding

@@ -107,12 +107,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.cpp.utils"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     []
     (CppSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "C++ utilities for constructing C++ syntax trees"
   where
-    elements = [
+    definitions = [
       toDefinition constParameter,
       toDefinition cppClassDeclaration,
       toDefinition cppEnumDeclaration,

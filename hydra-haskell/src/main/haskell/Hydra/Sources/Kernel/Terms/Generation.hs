@@ -87,7 +87,7 @@ ns :: Namespace
 ns = Namespace "hydra.codegen"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Adapt.ns, Annotations.ns, Inference.ns, JsonDecode.ns, Lexical.ns, Names.ns,
      Environment.ns, ShowCore.ns, ShowError.ns, Strip.ns,
      Namespace "hydra.decoding", Namespace "hydra.encoding",
@@ -96,7 +96,7 @@ module_ = Module ns elements
     kernelTypesNamespaces $
     Just "Pure code generation pipeline for bootstrapping Hydra across languages."
   where
-    elements = [
+    definitions = [
       toDefinition namespaceToPath,
       toDefinition transitiveDeps,
       toDefinition moduleTermDepsTransitive,

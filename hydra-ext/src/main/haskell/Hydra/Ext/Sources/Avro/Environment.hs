@@ -40,11 +40,11 @@ localType :: String -> Type
 localType = typeref ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) []
+module_ = Module ns (map toTypeDef definitions) []
     [CoreTypes.ns, CodersTypes.ns, Namespace "hydra.ext.org.apache.avro.schema", Namespace "hydra.json.model"] $
     Just "Type definitions for the Avro code generation environment"
   where
-    elements = [
+    definitions = [
       avroQualifiedNameType,
       avroForeignKeyType,
       avroPrimaryKeyType,

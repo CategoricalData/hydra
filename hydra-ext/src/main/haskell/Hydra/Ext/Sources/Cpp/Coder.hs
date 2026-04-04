@@ -62,7 +62,7 @@ ns :: Namespace
 ns = Namespace "hydra.ext.cpp.coder"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [moduleNamespace CppLanguageSource.module_,
       CppSerde.ns,
       Formatting.ns, Names.ns, Dependencies.ns, Strip.ns, Environment.ns, Predicates.ns, Resolution.ns, Lexical.ns,
@@ -71,7 +71,7 @@ module_ = Module ns elements
     (CppSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "C++ code generator: converts Hydra modules to C++ header files"
   where
-    elements = [
+    definitions = [
       -- Cpp AST helper functions
       toDefinition cppClassDeclaration,
       toDefinition cppEnumDeclaration,

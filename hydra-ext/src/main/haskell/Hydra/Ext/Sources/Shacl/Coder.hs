@@ -95,12 +95,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.shacl.coder"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Names.ns, Strip.ns, Annotations.ns, moduleNamespace DecodeCore.module_, ExtractCore.ns, Formatting.ns, Lexical.ns, RdfUtils.ns]
     (ShaclModel.ns:RdfSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "SHACL coder: converts Hydra types and terms to SHACL shapes and RDF descriptions"
   where
-    elements = [
+    definitions = [
       toDefinition err,
       toDefinition unexpectedE,
       toDefinition shaclCoder,

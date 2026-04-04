@@ -61,12 +61,12 @@ ns :: Namespace
 ns = Namespace "hydra.extract.util"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [ExtractCore.ns, ShowError.ns]
     kernelTypesNamespaces $
     Just ("Extraction and validation for hydra.util types")
   where
-   elements = [
+   definitions = [
      toDefinition comparison]
 
 define :: String -> TTerm a -> TTermDefinition a

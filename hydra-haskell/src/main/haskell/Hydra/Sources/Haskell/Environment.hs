@@ -18,10 +18,10 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [] [] $
+module_ = Module ns (map toTypeDef definitions) [] [] $
     Just "Environment types for Haskell code generation"
   where
-    elements = [
+    definitions = [
       haskellModuleMetadata]
 
 -- | Metadata for Haskell module generation.

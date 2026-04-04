@@ -20,14 +20,14 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [Core.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
     Just ("A partial XML Schema model, focusing on datatypes. All simple datatypes (i.e. xsd:anySimpleType and below) are included.\n" ++
       "See: https://www.w3.org/TR/xmlschema-2\n" ++
       "Note: for most of the XML Schema datatype definitions included here, the associated Hydra type is simply\n" ++
       "      the string type. Exceptions are made for xsd:boolean and most of the numeric types, where there is a clearly\n" ++
       "      corresponding Hydra literal type.")
   where
-    elements = datatypes ++ others
+    definitions = datatypes ++ others
     datatypes = [
       anySimpleType,
       anyType,

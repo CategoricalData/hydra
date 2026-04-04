@@ -19,12 +19,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.testTypes"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     []
     kernelTypesNamespaces
     (Just "Type definitions for the test suite")
   where
-    elements = [
+    definitions = [
       toDefinition testTypeBuddyListA,
       toDefinition testTypeBuddyListAName,
       toDefinition testTypeBuddyListB,

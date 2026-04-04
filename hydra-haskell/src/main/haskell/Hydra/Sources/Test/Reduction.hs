@@ -29,10 +29,10 @@ ns :: Namespace
 ns = Namespace "hydra.test.reduction"
 
 module_ :: Module
-module_ = Module ns elements [Namespace "hydra.reduction", Namespace "hydra.inference", Namespace "hydra.show.core"] [] $
+module_ = Module ns definitions [Namespace "hydra.reduction", Namespace "hydra.inference", Namespace "hydra.show.core"] [] $
     Just "Test cases for term reduction/evaluation mechanics"
   where
-    elements = [Phantoms.toDefinition allTests]
+    definitions = [Phantoms.toDefinition allTests]
 
 -- Local alias for polymorphic application (Phantoms.@@ applies TBindings; Terms.@@ only works on TTerm Term)
 (#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b

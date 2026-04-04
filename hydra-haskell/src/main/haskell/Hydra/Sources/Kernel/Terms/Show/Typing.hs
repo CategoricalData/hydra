@@ -58,12 +58,12 @@ ns :: Namespace
 ns = Namespace "hydra.show.typing"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [ShowCore.ns]
     kernelTypesNamespaces $
     Just "String representations of hydra.typing types"
   where
-   elements = [
+   definitions = [
      toDefinition typeConstraint,
      toDefinition typeSubst]
 
