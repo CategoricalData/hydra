@@ -5,14 +5,14 @@
 module Hydra.Ext.Workflow where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Module as Module
+import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
 -- | The specification of a Hydra schema, provided as a set of modules and a distinguished type
 data HydraSchemaSpec =
   HydraSchemaSpec {
     -- | The modules to include in the schema graph
-    hydraSchemaSpecModules :: [Module.Module],
+    hydraSchemaSpecModules :: [Packaging.Module],
     -- | The name of the top-level type; all data which passes through the workflow will be instances of this type
     hydraSchemaSpecTypeName :: Core.Name}
   deriving (Eq, Ord, Read, Show)

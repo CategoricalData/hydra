@@ -26,6 +26,7 @@ import hydra.pg.model
 import hydra.reduction
 import hydra.relational
 import hydra.rewriting
+import hydra.strip
 import hydra.tabular
 
 T0 = TypeVar("T0")
@@ -223,7 +224,7 @@ def evaluate_properties(cx: hydra.context.Context, g: hydra.graph.Graph, specs: 
 
             case _:
                 raise TypeError("Unsupported Term")
-    return hydra.lib.eithers.map((lambda pairs: hydra.lib.maps.from_list(hydra.lib.maybes.cat(pairs))), hydra.lib.eithers.map_list((lambda pair: (k := hydra.lib.pairs.first(pair), spec := hydra.lib.pairs.second(pair), hydra.lib.eithers.bind(hydra.reduction.reduce_term(cx, g, True, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(spec, record)))), (lambda value: extract_maybe(k, hydra.rewriting.deannotate_term(value)))))[2]), hydra.lib.maps.to_list(specs)))
+    return hydra.lib.eithers.map((lambda pairs: hydra.lib.maps.from_list(hydra.lib.maybes.cat(pairs))), hydra.lib.eithers.map_list((lambda pair: (k := hydra.lib.pairs.first(pair), spec := hydra.lib.pairs.second(pair), hydra.lib.eithers.bind(hydra.reduction.reduce_term(cx, g, True, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(spec, record)))), (lambda value: extract_maybe(k, hydra.strip.deannotate_term(value)))))[2]), hydra.lib.maps.to_list(specs)))
 
 def evaluate_edge(cx: hydra.context.Context, g: hydra.graph.Graph, edge_spec: hydra.pg.model.Edge[hydra.core.Term], record: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], Maybe[hydra.pg.model.Edge[hydra.core.Term]]]:
     r"""Evaluate an edge specification against a record term to produce an optional edge."""

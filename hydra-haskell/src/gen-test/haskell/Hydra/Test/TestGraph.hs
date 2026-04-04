@@ -10,7 +10,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Test.TestEnv as TestEnv
 import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Module as Module
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Test.TestTerms as TestTerms
 import qualified Hydra.Test.TestTypes as TestTypes
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -22,11 +22,11 @@ testContext = TestEnv.testContext
 testGraph :: Graph.Graph
 testGraph = TestEnv.testGraph testTypes
 
-testNamespace :: Module.Namespace
-testNamespace = Module.Namespace "testGraph"
+testNamespace :: Packaging.Namespace
+testNamespace = Packaging.Namespace "testGraph"
 
-testSchemaNamespace :: Module.Namespace
-testSchemaNamespace = Module.Namespace "testSchemaGraph"
+testSchemaNamespace :: Packaging.Namespace
+testSchemaNamespace = Packaging.Namespace "testSchemaGraph"
 
 testTerms :: M.Map Core.Name Core.Term
 testTerms = Maps.fromList [

@@ -6,6 +6,7 @@ module Hydra.Test.TestSuite where
 
 import qualified Hydra.Test.Annotations as Annotations
 import qualified Hydra.Test.Checking.All as All
+import qualified Hydra.Test.Dependencies as Dependencies
 import qualified Hydra.Test.EtaExpansion as EtaExpansion
 import qualified Hydra.Test.Formatting as Formatting
 import qualified Hydra.Test.Hoisting.All as All_
@@ -29,9 +30,11 @@ import qualified Hydra.Test.Reduction as Reduction
 import qualified Hydra.Test.Rewriting as Rewriting
 import qualified Hydra.Test.Serialization as Serialization
 import qualified Hydra.Test.Sorting as Sorting
+import qualified Hydra.Test.Strip as Strip
 import qualified Hydra.Test.Substitution as Substitution
 import qualified Hydra.Test.Unification as Unification
 import qualified Hydra.Test.Validate.All as All___
+import qualified Hydra.Test.Variables as Variables
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
@@ -57,6 +60,7 @@ allTests =
         Strings.allTests,
         Annotations.allTests,
         All.allTests,
+        Dependencies.allTests,
         EtaExpansion.allTests,
         Formatting.allTests,
         All_.allTests,
@@ -67,7 +71,9 @@ allTests =
         Rewriting.allTests,
         Serialization.allTests,
         Sorting.allTests,
+        Strip.allTests,
         Substitution.allTests,
         Unification.allTests,
-        All___.allTests],
+        All___.allTests,
+        Variables.allTests],
       Testing.testGroupCases = []}

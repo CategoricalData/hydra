@@ -35,7 +35,6 @@ import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
-import hydra.module
 import hydra.names
 import hydra.parsing
 import hydra.paths

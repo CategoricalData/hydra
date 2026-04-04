@@ -6,15 +6,15 @@ package hydra;
  * Functions for working with qualified names.
  */
 public interface Names {
-  static String compactName(java.util.Map<hydra.module.Namespace, String> namespaces, hydra.core.Name name) {
-    hydra.module.QualifiedName qualName = hydra.Names.qualifyName(name);
+  static String compactName(hydra.util.PersistentMap<hydra.packaging.Namespace, String> namespaces, hydra.core.Name name) {
+    hydra.packaging.QualifiedName qualName = hydra.Names.qualifyName(name);
     String local = (qualName).local;
-    hydra.util.Maybe<hydra.module.Namespace> mns = (qualName).namespace;
+    hydra.util.Maybe<hydra.packaging.Namespace> mns = (qualName).namespace;
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> (name).value,
-      (java.util.function.Function<hydra.module.Namespace, String>) (ns -> hydra.lib.maybes.Maybe.applyLazy(
+      (java.util.function.Function<hydra.packaging.Namespace, String>) (ns -> hydra.lib.maybes.Maybe.applyLazy(
         () -> local,
-        (java.util.function.Function<String, String>) (pre -> hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
+        (java.util.function.Function<String, String>) (pre -> hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
           pre,
           ":",
           local))),
@@ -36,25 +36,25 @@ public interface Names {
       cx))));
   }
 
-  static hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.context.Context> freshNames(Integer n, hydra.context.Context cx) {
+  static hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context> freshNames(Integer n, hydra.context.Context cx) {
     return hydra.lib.lists.Foldl.apply(
-      (java.util.function.Function<hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.context.Context>, java.util.function.Function<java.lang.Void, hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.context.Context>>>) (v1 -> (java.util.function.Function<java.lang.Void, hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.context.Context>>) (v2 -> hydra.Names.freshNames_go(
+      (java.util.function.Function<hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context>, java.util.function.Function<java.lang.Void, hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context>>>) (v1 -> (java.util.function.Function<java.lang.Void, hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context>>) (v2 -> hydra.Names.freshNames_go(
         hydra.Names::freshName,
         v1,
         v2))),
-      (hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.context.Context>) ((hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.context.Context>) (new hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.context.Context>((java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()), cx))),
+      (hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context>((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()), cx))),
       hydra.lib.lists.Replicate.apply(
         n,
         null));
   }
 
-  static <T0> hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.context.Context> freshNames_go(java.util.function.Function<hydra.context.Context, hydra.util.Pair<hydra.core.Name, hydra.context.Context>> hydra_names_freshName, hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.context.Context> acc, T0 ignored) {
+  static <T0> hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context> freshNames_go(java.util.function.Function<hydra.context.Context, hydra.util.Pair<hydra.core.Name, hydra.context.Context>> hydra_names_freshName, hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context> acc, T0 ignored) {
     hydra.util.Lazy<hydra.context.Context> cx0 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(acc));
     hydra.util.Pair<hydra.core.Name, hydra.context.Context> result = (hydra_names_freshName).apply(cx0.get());
     hydra.util.Lazy<hydra.context.Context> cx1 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(result));
     hydra.util.Lazy<hydra.core.Name> name = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(result));
-    hydra.util.Lazy<java.util.List<hydra.core.Name>> names = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(acc));
-    return (hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.context.Context>) ((hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.context.Context>) (new hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.context.Context>(hydra.lib.lists.Concat2.apply(
+    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> names = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(acc));
+    return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.context.Context>(hydra.lib.lists.Concat2.apply(
       names.get(),
       hydra.lib.lists.Pure.apply(name.get())), cx1.get())));
   }
@@ -63,12 +63,43 @@ public interface Names {
     return hydra.Names.qualifyName(arg_).local;
   }
 
-  static hydra.util.Maybe<hydra.module.Namespace> namespaceOf(hydra.core.Name arg_) {
+  static String nameToFilePath(hydra.util.CaseConvention nsConv, hydra.util.CaseConvention localConv, hydra.packaging.FileExtension ext, hydra.core.Name name) {
+    hydra.packaging.QualifiedName qualName = hydra.Names.qualifyName(name);
+    String local = (qualName).local;
+    hydra.util.Maybe<hydra.packaging.Namespace> ns = (qualName).namespace;
+    java.util.function.Function<hydra.packaging.Namespace, String> nsToFilePath = (java.util.function.Function<hydra.packaging.Namespace, String>) (ns2 -> hydra.lib.strings.Intercalate.apply(
+      "/",
+      hydra.lib.lists.Map.apply(
+        (java.util.function.Function<String, String>) (part -> hydra.Formatting.convertCase(
+          new hydra.util.CaseConvention.Camel(),
+          nsConv,
+          part)),
+        hydra.lib.strings.SplitOn.apply(
+          ".",
+          (ns2).value))));
+    hydra.util.Lazy<String> prefix = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+      () -> "",
+      (java.util.function.Function<hydra.packaging.Namespace, String>) (n -> hydra.lib.strings.Cat2.apply(
+        (nsToFilePath).apply(n),
+        "/")),
+      ns));
+    String suffix = hydra.Formatting.convertCase(
+      new hydra.util.CaseConvention.Pascal(),
+      localConv,
+      local);
+    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+      prefix.get(),
+      suffix,
+      ".",
+      (ext).value));
+  }
+
+  static hydra.util.Maybe<hydra.packaging.Namespace> namespaceOf(hydra.core.Name arg_) {
     return hydra.Names.qualifyName(arg_).namespace;
   }
 
-  static String namespaceToFilePath(hydra.util.CaseConvention caseConv, hydra.module.FileExtension ext, hydra.module.Namespace ns) {
-    hydra.util.Lazy<java.util.List<String>> parts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+  static String namespaceToFilePath(hydra.util.CaseConvention caseConv, hydra.packaging.FileExtension ext, hydra.packaging.Namespace ns) {
+    hydra.util.Lazy<hydra.util.ConsList<String>> parts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (java.util.function.Function<String, String>) (v1 -> hydra.Formatting.convertCase(
         new hydra.util.CaseConvention.Camel(),
         caseConv,
@@ -91,28 +122,28 @@ public interface Names {
       hydra.lib.literals.ShowInt32.apply(i)));
   }
 
-  static hydra.core.Name qname(hydra.module.Namespace ns, String name) {
-    return new hydra.core.Name(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
+  static hydra.core.Name qname(hydra.packaging.Namespace ns, String name) {
+    return new hydra.core.Name(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
       (ns).value,
       ".",
       name)));
   }
 
-  static hydra.module.QualifiedName qualifyName(hydra.core.Name name) {
-    hydra.util.Lazy<java.util.List<String>> parts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Reverse.apply(hydra.lib.strings.SplitOn.apply(
+  static hydra.packaging.QualifiedName qualifyName(hydra.core.Name name) {
+    hydra.util.Lazy<hydra.util.ConsList<String>> parts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Reverse.apply(hydra.lib.strings.SplitOn.apply(
       ".",
       (name).value)));
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Equal.apply(
         1,
         hydra.lib.lists.Length.apply(parts.get())),
-      () -> new hydra.module.QualifiedName((hydra.util.Maybe<hydra.module.Namespace>) (hydra.util.Maybe.<hydra.module.Namespace>nothing()), (name).value),
-      () -> new hydra.module.QualifiedName(hydra.util.Maybe.just(new hydra.module.Namespace(hydra.lib.strings.Intercalate.apply(
+      () -> new hydra.packaging.QualifiedName((hydra.util.Maybe<hydra.packaging.Namespace>) (hydra.util.Maybe.<hydra.packaging.Namespace>nothing()), (name).value),
+      () -> new hydra.packaging.QualifiedName(hydra.util.Maybe.just(new hydra.packaging.Namespace(hydra.lib.strings.Intercalate.apply(
         ".",
         hydra.lib.lists.Reverse.apply(hydra.lib.lists.Tail.apply(parts.get()))))), hydra.lib.lists.Head.apply(parts.get())));
   }
 
-  static String uniqueLabel(java.util.Set<String> visited, String l) {
+  static String uniqueLabel(hydra.util.PersistentSet<String> visited, String l) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.sets.Member.apply(
         l,
@@ -125,10 +156,10 @@ public interface Names {
       () -> l);
   }
 
-  static hydra.core.Name unqualifyName(hydra.module.QualifiedName qname) {
+  static hydra.core.Name unqualifyName(hydra.packaging.QualifiedName qname) {
     hydra.util.Lazy<String> prefix = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
       () -> "",
-      (java.util.function.Function<hydra.module.Namespace, String>) (n -> hydra.lib.strings.Cat2.apply(
+      (java.util.function.Function<hydra.packaging.Namespace, String>) (n -> hydra.lib.strings.Cat2.apply(
         (n).value,
         ".")),
       (qname).namespace));

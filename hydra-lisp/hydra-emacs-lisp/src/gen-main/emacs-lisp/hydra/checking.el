@@ -140,4 +140,6 @@
 
 (defvar hydra_checking_type_lists_effectively_equal (lambda (tx) (lambda (tlist1) (lambda (tlist2) (if (funcall (hydra_lib_equality_equal (hydra_lib_lists_length tlist1)) (hydra_lib_lists_length tlist2)) (funcall (funcall (hydra_lib_lists_foldl hydra_lib_logic_and) t) (funcall (funcall (hydra_lib_lists_zip_with (hydra_checking_types_effectively_equal tx)) tlist1) tlist2)) nil)))))
 
+(defvar hydra_checking_type_of_term (lambda (cx) (lambda (g) (lambda (term) (funcall (hydra_lib_eithers_map hydra_lib_pairs_first) (funcall (funcall (funcall (hydra_checking_type_of cx) g) (list)) term))))))
+
 (provide 'hydra.checking)

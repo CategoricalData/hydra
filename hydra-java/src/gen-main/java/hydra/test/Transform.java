@@ -6,8 +6,8 @@ package hydra.test;
  * Transform test cases for code generation, filtering to tests that can be compiled to target languages
  */
 public interface Transform {
-  static hydra.module.Namespace addGenerationPrefix(hydra.module.Namespace ns_) {
-    return new hydra.module.Namespace(hydra.lib.strings.Cat2.apply(
+  static hydra.packaging.Namespace addGenerationPrefix(hydra.packaging.Namespace ns_) {
+    return new hydra.packaging.Namespace(hydra.lib.strings.Cat2.apply(
       "generation.",
       (ns_).value));
   }
@@ -87,8 +87,8 @@ public interface Transform {
       lists));
   }
 
-  static hydra.module.Module transformModule(hydra.module.Module m) {
-    return new hydra.module.Module(hydra.test.Transform.addGenerationPrefix((m).namespace), (m).definitions, (m).termDependencies, (m).typeDependencies, (m).description);
+  static hydra.packaging.Module transformModule(hydra.packaging.Module m) {
+    return new hydra.packaging.Module(hydra.test.Transform.addGenerationPrefix((m).namespace), (m).definitions, (m).termDependencies, (m).typeDependencies, (m).description);
   }
 
   static <T0> hydra.util.Maybe<T0> transformTestCase(T0 tcm) {

@@ -17,7 +17,6 @@ import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
-import hydra.module
 import hydra.names
 import hydra.packaging
 
@@ -25,24 +24,24 @@ def check_conflicting_module_namespaces(pkg: hydra.packaging.Package) -> Maybe[h
     r"""Check for module namespaces that conflict when mapped to target language paths."""
 
     @lru_cache(1)
-    def result() -> tuple[FrozenDict[str, hydra.module.Namespace], Maybe[hydra.error.packaging.InvalidPackageError]]:
+    def result() -> tuple[FrozenDict[str, hydra.packaging.Namespace], Maybe[hydra.error.packaging.InvalidPackageError]]:
         return hydra.lib.lists.foldl((lambda acc, mod: (seen := hydra.lib.pairs.first(acc), err := hydra.lib.pairs.second(acc), hydra.lib.maybes.cases(err, (lambda : (ns := mod.namespace, (key := hydra.lib.strings.to_lower(ns.value), (existing := hydra.lib.maps.lookup(key, seen), hydra.lib.maybes.cases(existing, (lambda : (hydra.lib.maps.insert(key, ns, seen), Nothing())), (lambda first: (seen, Just(cast(hydra.error.packaging.InvalidPackageError, hydra.error.packaging.InvalidPackageErrorConflictingModuleNamespace(hydra.error.packaging.ConflictingModuleNamespaceError(first, ns))))))))[1])[1])[1]), (lambda _: acc)))[2]), (hydra.lib.maps.empty(), Nothing()), pkg.modules)
     return hydra.lib.pairs.second(result())
 
-def definition_name(def_: hydra.module.Definition) -> hydra.core.Name:
+def definition_name(def_: hydra.packaging.Definition) -> hydra.core.Name:
     r"""Extract the name from a definition."""
 
     match def_:
-        case hydra.module.DefinitionTerm(value=td):
+        case hydra.packaging.DefinitionTerm(value=td):
             return td.name
 
-        case hydra.module.DefinitionType(value=td2):
+        case hydra.packaging.DefinitionType(value=td2):
             return td2.name
 
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def check_conflicting_variant_names(mod: hydra.module.Module):
+def check_conflicting_variant_names(mod: hydra.packaging.Module):
     r"""Check for union variant names that, when mapped to constructor names, conflict with other type definitions."""
 
     ns = mod.namespace
@@ -52,12 +51,12 @@ def check_conflicting_variant_names(mod: hydra.module.Module):
         return hydra.lib.lists.foldl((lambda acc, def_: hydra.lib.sets.insert(hydra.names.local_name_of(definition_name(def_)), acc)), hydra.lib.sets.empty(), defs)
     def _hoist_def_names_body_1(v1):
         match v1:
-            case hydra.module.DefinitionType(value=td):
+            case hydra.packaging.DefinitionType(value=td):
                 type_name = td.name
                 @lru_cache(1)
                 def local_type_name() -> str:
                     return hydra.names.local_name_of(type_name)
-                typ = td.type
+                typ = td.type.type
                 def _hoist_typ_body_1(v12):
                     match v12:
                         case hydra.core.TypeUnion(value=fields):
@@ -71,7 +70,7 @@ def check_conflicting_variant_names(mod: hydra.module.Module):
                 return Nothing()
     return hydra.lib.lists.foldl((lambda acc, def_: hydra.lib.maybes.cases(acc, (lambda : _hoist_def_names_body_1(def_)), (lambda _: acc))), Nothing(), defs)
 
-def check_definition_namespaces(mod: hydra.module.Module) -> Maybe[hydra.error.packaging.InvalidModuleError]:
+def check_definition_namespaces(mod: hydra.packaging.Module) -> Maybe[hydra.error.packaging.InvalidModuleError]:
     r"""Check that all definition names in a module have the module's namespace as a prefix."""
 
     ns = mod.namespace
@@ -79,7 +78,7 @@ def check_definition_namespaces(mod: hydra.module.Module) -> Maybe[hydra.error.p
     prefix_len = hydra.lib.strings.length(prefix)
     return hydra.lib.lists.foldl((lambda acc, def_: hydra.lib.maybes.cases(acc, (lambda : (name := definition_name(def_), (name_str := name.value, (name_prefix := hydra.lib.lists.take(prefix_len, hydra.lib.strings.to_list(name_str)), hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.strings.from_list(name_prefix), prefix), (lambda : Nothing()), (lambda : Just(cast(hydra.error.packaging.InvalidModuleError, hydra.error.packaging.InvalidModuleErrorDefinitionNotInModuleNamespace(hydra.error.packaging.DefinitionNotInModuleNamespaceError(ns, name)))))))[1])[1])[1]), (lambda _: acc))), Nothing(), mod.definitions)
 
-def check_duplicate_definition_names(mod: hydra.module.Module) -> Maybe[hydra.error.packaging.InvalidModuleError]:
+def check_duplicate_definition_names(mod: hydra.packaging.Module) -> Maybe[hydra.error.packaging.InvalidModuleError]:
     r"""Check for duplicate definition names in a module."""
 
     ns = mod.namespace
@@ -92,11 +91,11 @@ def check_duplicate_module_namespaces(pkg: hydra.packaging.Package) -> Maybe[hyd
     r"""Check for duplicate module namespaces in a package."""
 
     @lru_cache(1)
-    def result() -> tuple[frozenset[hydra.module.Namespace], Maybe[hydra.error.packaging.InvalidPackageError]]:
+    def result() -> tuple[frozenset[hydra.packaging.Namespace], Maybe[hydra.error.packaging.InvalidPackageError]]:
         return hydra.lib.lists.foldl((lambda acc, mod: (seen := hydra.lib.pairs.first(acc), err := hydra.lib.pairs.second(acc), hydra.lib.maybes.cases(err, (lambda : (ns := mod.namespace, hydra.lib.logic.if_else(hydra.lib.sets.member(ns, seen), (lambda : (seen, Just(cast(hydra.error.packaging.InvalidPackageError, hydra.error.packaging.InvalidPackageErrorDuplicateModuleNamespace(hydra.error.packaging.DuplicateModuleNamespaceError(ns)))))), (lambda : (hydra.lib.sets.insert(ns, seen), Nothing()))))[1]), (lambda _: acc)))[2]), (hydra.lib.sets.empty(), Nothing()), pkg.modules)
     return hydra.lib.pairs.second(result())
 
-def module(mod: hydra.module.Module) -> Maybe[hydra.error.packaging.InvalidModuleError]:
+def module(mod: hydra.packaging.Module) -> Maybe[hydra.error.packaging.InvalidModuleError]:
     r"""Validate a module, returning the first error found or nothing if valid."""
 
     @lru_cache(1)

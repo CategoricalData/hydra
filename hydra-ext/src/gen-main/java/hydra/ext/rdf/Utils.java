@@ -160,8 +160,8 @@ public interface Utils {
   }
 
   static hydra.ext.org.w3.rdf.syntax.Iri propertyIri(hydra.core.Name rname, hydra.core.Name fname) {
-    hydra.module.QualifiedName qualName = hydra.Names.qualifyName(rname);
-    hydra.util.Maybe<hydra.module.Namespace> gname = (qualName).namespace;
+    hydra.packaging.QualifiedName qualName = hydra.Names.qualifyName(rname);
+    hydra.util.Maybe<hydra.packaging.Namespace> gname = (qualName).namespace;
     String local_ = (qualName).local;
     return new hydra.ext.org.w3.rdf.syntax.Iri(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "urn:",

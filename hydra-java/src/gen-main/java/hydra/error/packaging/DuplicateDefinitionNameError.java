@@ -17,14 +17,14 @@ public class DuplicateDefinitionNameError implements Serializable, Comparable<Du
   /**
    * The namespace of the module containing the duplicates
    */
-  public final hydra.module.Namespace namespace;
+  public final hydra.packaging.Namespace namespace;
 
   /**
    * The duplicated definition name
    */
   public final hydra.core.Name name;
 
-  public DuplicateDefinitionNameError (hydra.module.Namespace namespace, hydra.core.Name name) {
+  public DuplicateDefinitionNameError (hydra.packaging.Namespace namespace, hydra.core.Name name) {
     this.namespace = namespace;
     this.name = name;
   }
@@ -62,7 +62,7 @@ public class DuplicateDefinitionNameError implements Serializable, Comparable<Du
       other.name);
   }
 
-  public DuplicateDefinitionNameError withNamespace(hydra.module.Namespace namespace) {
+  public DuplicateDefinitionNameError withNamespace(hydra.packaging.Namespace namespace) {
     return new DuplicateDefinitionNameError(namespace, name);
   }
 

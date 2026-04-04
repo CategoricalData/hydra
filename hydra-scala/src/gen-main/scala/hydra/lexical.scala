@@ -61,8 +61,6 @@ def chooseUniqueName(reserved: scala.collection.immutable.Set[hydra.core.Name])(
   tryName(1)
 }
 
-def dereferenceElement(graph: hydra.graph.Graph)(name: hydra.core.Name): Option[hydra.core.Binding] = hydra.lexical.lookupElement(graph)(name)
-
 def dereferenceSchemaType(name: hydra.core.Name)(types: Map[hydra.core.Name, hydra.core.TypeScheme]): Option[hydra.core.TypeScheme] =
   {
   def forType(t: hydra.core.Type): Option[hydra.core.TypeScheme] =
@@ -80,7 +78,7 @@ def dereferenceSchemaType(name: hydra.core.Name)(types: Map[hydra.core.Name, hyd
 }
 
 def dereferenceVariable(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[scala.Predef.String, hydra.core.Binding] =
-  hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Binding], hydra.core.Binding](Left(hydra.lib.strings.cat2("no such element: ")(name)))((`right_`: hydra.core.Binding) => Right(`right_`))(hydra.lexical.lookupElement(graph)(name))
+  hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Binding], hydra.core.Binding](Left(hydra.lib.strings.cat2("no such element: ")(name)))((`right_`: hydra.core.Binding) => Right(`right_`))(hydra.lexical.lookupBinding(graph)(name))
 
 def elementsToGraph(parent: hydra.graph.Graph)(schemaTypes: Map[hydra.core.Name, hydra.core.TypeScheme])(elements: Seq[hydra.core.Binding]): hydra.graph.Graph =
   {
@@ -122,7 +120,7 @@ def graphToBindings(g: hydra.graph.Graph): Seq[hydra.core.Binding] =
   }
 })(hydra.lib.maps.toList[hydra.core.Name, hydra.core.Term](g.boundTerms))
 
-def lookupElement(graph: hydra.graph.Graph)(name: hydra.core.Name): Option[hydra.core.Binding] =
+def lookupBinding(graph: hydra.graph.Graph)(name: hydra.core.Name): Option[hydra.core.Binding] =
   hydra.lib.maybes.map[hydra.core.Term, hydra.core.Binding]((term: hydra.core.Term) =>
   hydra.core.Binding(name, term, hydra.lib.maps.lookup[hydra.core.Name, hydra.core.TypeScheme](name)(graph.boundTypes)))(hydra.lib.maps.lookup[hydra.core.Name,
      hydra.core.Term](name)(graph.boundTerms))
@@ -161,7 +159,7 @@ def matchUnion[T0](cx: hydra.context.Context)(graph: hydra.graph.Graph)(tname: h
      T0]](pairs)
   stripped match
     case hydra.core.Term.variable(v_Term_variable_name) => hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error],
-       hydra.core.Binding, T0](hydra.lexical.requireElement(cx)(graph)(v_Term_variable_name))((el: hydra.core.Binding) => hydra.lexical.matchUnion(cx)(graph)(tname)(pairs)(el.term))
+       hydra.core.Binding, T0](hydra.lexical.requireBinding(cx)(graph)(v_Term_variable_name))((el: hydra.core.Binding) => hydra.lexical.matchUnion(cx)(graph)(tname)(pairs)(el.term))
     case hydra.core.Term.union(v_Term_union_injection) => {
       lazy val exp: Either[hydra.context.InContext[hydra.errors.Error], T0] = {
         lazy val fname: hydra.core.Name = (v_Term_union_injection.field.name)
@@ -186,7 +184,7 @@ def matchUnion[T0](cx: hydra.context.Context)(graph: hydra.graph.Graph)(tname: h
 
 def matchUnitField[T0, T1, T2, T3](fname: T0)(x: T1): Tuple2[T0, (T2 => Either[T3, T1])] = Tuple2(fname, (ignored: T2) => Right(x))
 
-def requireElement(cx: hydra.context.Context)(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.context.InContext[hydra.errors.Error],
+def requireBinding(cx: hydra.context.Context)(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.core.Binding] =
   {
   lazy val showAll: Boolean = false
@@ -195,7 +193,7 @@ def requireElement(cx: hydra.context.Context)(graph: hydra.graph.Graph)(name: hy
   lazy val errMsg: scala.Predef.String = hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("no such element: ")(name))(". Available elements: {"))(hydra.lib.strings.intercalate(", ")(ellipsis(hydra.lib.lists.map[hydra.core.Name,
      scala.Predef.String]((x) => x)(hydra.lib.maps.keys[hydra.core.Name, hydra.core.Term](graph.boundTerms))))))("}")
   hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Binding], hydra.core.Binding](Left(hydra.context.InContext(hydra.errors.Error.other(errMsg),
-     cx)))((x: hydra.core.Binding) => Right(x))(hydra.lexical.dereferenceElement(graph)(name))
+     cx)))((x: hydra.core.Binding) => Right(x))(hydra.lexical.lookupBinding(graph)(name))
 }
 
 def requirePrimitive(cx: hydra.context.Context)(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.context.InContext[hydra.errors.Error],

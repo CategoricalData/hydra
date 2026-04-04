@@ -30,7 +30,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
 import qualified Hydra.Dsl.Topology                   as Topology
@@ -160,12 +160,12 @@ constructModule = def "constructModule" $
        right (Maps.fromList (Lists.map (toPair @@ var "mod" @@ var "aliases") (var "schemas"))))
       -- Cycle found
       (lambda "cycle" $
-        err (var "cx") (Strings.cat2 (string "types form a cycle (unsupported in PDL): [") (Strings.cat2 (Strings.intercalate (string ", ") (Lists.map (lambda "td" $ Core.unName (Module.typeDefinitionName (var "td"))) (var "cycle"))) (string "]"))))
+        err (var "cx") (Strings.cat2 (string "types form a cycle (unsupported in PDL): [") (Strings.cat2 (Strings.intercalate (string ", ") (Lists.map (lambda "td" $ Core.unName (Packaging.typeDefinitionName (var "td"))) (var "cycle"))) (string "]"))))
 
 typeToSchema :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> Module -> TypeDefinition -> Either (InContext Error) (PDL.NamedSchema, [PDL.QualifiedName]))
 typeToSchema = def "typeToSchema" $
   "cx" ~> "g" ~> "aliases" ~> "mod" ~> "typeDef" ~>
-    "typ" <~ Module.typeDefinitionType (var "typeDef") $
+    "typ" <~ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "typeDef")) $
     "res" <<~ (encodeType_ @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
     "ptype" <~ (Eithers.either_
       (lambda "schema" $ inject PDL._NamedSchemaType PDL._NamedSchemaType_typeref (var "schema"))
@@ -173,7 +173,7 @@ typeToSchema = def "typeToSchema" $
       (var "res")) $
     "descr" <<~ (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ") $
     "anns" <~ (doc_ @@ var "descr") $
-    "qname" <~ (pdlNameForElement @@ var "aliases" @@ false @@ Module.typeDefinitionName (var "typeDef")) $
+    "qname" <~ (pdlNameForElement @@ var "aliases" @@ false @@ Packaging.typeDefinitionName (var "typeDef")) $
     right (pair (record PDL._NamedSchema [
       PDL._NamedSchema_qualifiedName>>: var "qname",
       PDL._NamedSchema_type>>: var "ptype",
@@ -187,7 +187,7 @@ toPair = def "toPair" $
     "imports" <~ Pairs.second (var "schemaPair") $
     "ns_" <~ (pdlNameForModule @@ var "mod") $
     "local" <~ (unwrap PDL._Name @@ (project PDL._QualifiedName PDL._QualifiedName_name @@ (project PDL._NamedSchema PDL._NamedSchema_qualifiedName @@ var "schema"))) $
-    "path" <~ (Names.namespaceToFilePath @@ Util.caseConventionCamel @@ wrap _FileExtension (string "pdl") @@ (wrap _Namespace (Strings.cat2 (unwrap _Namespace @@ Module.moduleNamespace (var "mod")) (Strings.cat2 (string "/") (var "local"))))) $
+    "path" <~ (Names.namespaceToFilePath @@ Util.caseConventionCamel @@ wrap _FileExtension (string "pdl") @@ (wrap _Namespace (Strings.cat2 (unwrap _Namespace @@ Packaging.moduleNamespace (var "mod")) (Strings.cat2 (string "/") (var "local"))))) $
     pair (var "path") (record PDL._SchemaFile [
       PDL._SchemaFile_namespace>>: var "ns_",
       PDL._SchemaFile_package>>: nothing,
@@ -458,7 +458,7 @@ pdlNameForElement = def "pdlNameForElement" $
 pdlNameForModule :: TTermDefinition (Module -> PDL.Namespace)
 pdlNameForModule = def "pdlNameForModule" $
   doc "Convert a module's namespace to a PDL namespace" $
-  "mod" ~> wrap PDL._Namespace (slashesToDots @@ (unwrap _Namespace @@ Module.moduleNamespace (var "mod")))
+  "mod" ~> wrap PDL._Namespace (slashesToDots @@ (unwrap _Namespace @@ Packaging.moduleNamespace (var "mod")))
 
 
 simpleUnionMember :: TTermDefinition (PDL.Schema -> PDL.UnionMember)

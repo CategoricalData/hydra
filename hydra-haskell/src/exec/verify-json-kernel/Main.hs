@@ -6,13 +6,13 @@
 module Main where
 
 import Hydra.Kernel
-import Hydra.Module (_Module)
+import Hydra.Packaging (_Module)
 import Hydra.Sources.All (kernelModules)
 import Hydra.Generation (modulesToGraph)
 import Hydra.Codegen (namespaceToPath)
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Decode as JsonDecode
-import qualified Hydra.Decode.Module as DecodeModule
+import qualified Hydra.Decode.Packaging as DecodePackaging
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Strip as Strip
 
@@ -113,7 +113,7 @@ main = do
 
             -- Decode JSON to Term using type-directed decoder with Module type
             -- The schemaMap is used to resolve type variables
-            case JsonDecode.fromJson schemaMap (Name "hydra.module.Module") modType jsonVal of
+            case JsonDecode.fromJson schemaMap _Module modType jsonVal of
               Left err -> do
                 flushPut $ "  ✗ " ++ nsStr ++ " (JSON decode error)"
                 flushPut $ "    " ++ err
@@ -122,7 +122,7 @@ main = do
                 flushPut $ "    JSON decoded to Term"
 
                 -- Decode Term to Module
-                case DecodeModule.module_ graph term of
+                case DecodePackaging.module_ graph term of
                   Left (DecodingError err) -> do
                     flushPut $ "  ✗ " ++ nsStr ++ " (module decode error)"
                     flushPut $ "    " ++ err

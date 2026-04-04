@@ -21,8 +21,8 @@ import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
-import hydra.module
 import hydra.names
+import hydra.packaging
 import hydra.strip
 
 T0 = TypeVar("T0")
@@ -49,23 +49,23 @@ def simple_name(arg_: str) -> hydra.ext.haskell.syntax.Name:
 
     return raw_name(sanitize_haskell_name(arg_))
 
-def element_reference(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName], name: hydra.core.Name) -> hydra.ext.haskell.syntax.Name:
+def element_reference(namespaces: hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName], name: hydra.core.Name) -> hydra.ext.haskell.syntax.Name:
     r"""Generate a Haskell name reference for a Hydra element."""
 
     @lru_cache(1)
-    def namespace_pair() -> tuple[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName]:
+    def namespace_pair() -> tuple[hydra.packaging.Namespace, hydra.ext.haskell.syntax.ModuleName]:
         return namespaces.focus
     @lru_cache(1)
-    def gname() -> hydra.module.Namespace:
+    def gname() -> hydra.packaging.Namespace:
         return hydra.lib.pairs.first(namespace_pair())
     @lru_cache(1)
     def gmod() -> str:
         return hydra.lib.pairs.second(namespace_pair()).value
     @lru_cache(1)
-    def namespaces_map() -> FrozenDict[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName]:
+    def namespaces_map() -> FrozenDict[hydra.packaging.Namespace, hydra.ext.haskell.syntax.ModuleName]:
         return namespaces.mapping
     @lru_cache(1)
-    def qname() -> hydra.module.QualifiedName:
+    def qname() -> hydra.packaging.QualifiedName:
         return hydra.names.qualify_name(name)
     local = qname().local
     @lru_cache(1)
@@ -94,10 +94,10 @@ def hsvar(s: str) -> hydra.ext.haskell.syntax.Expression:
 
     return cast(hydra.ext.haskell.syntax.Expression, hydra.ext.haskell.syntax.ExpressionVariable(raw_name(s)))
 
-def namespaces_for_module(mod: hydra.module.Module, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]]:
+def namespaces_for_module(mod: hydra.packaging.Module, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName]]:
     r"""Compute the Haskell module namespaces for a Hydra module."""
 
-    return hydra.lib.eithers.bind(hydra.analysis.module_dependency_namespaces(cx, g, True, True, True, True, mod), (lambda nss: (ns := mod.namespace, to_module_name := (lambda namespace: (namespace_str := namespace.value, parts := hydra.lib.strings.split_on(".", namespace_str), last_part := hydra.lib.lists.last(parts), capitalized := hydra.formatting.capitalize(last_part), hydra.ext.haskell.syntax.ModuleName(capitalized))[4]), to_pair := (lambda name: (name, to_module_name(name))), add_pair := (lambda state, name_pair: (current_map := hydra.lib.pairs.first(state), current_set := hydra.lib.pairs.second(state), name := hydra.lib.pairs.first(name_pair), alias := hydra.lib.pairs.second(name_pair), alias_str := alias.value, hydra.lib.logic.if_else(hydra.lib.sets.member(alias, current_set), (lambda : add_pair(state, (name, hydra.ext.haskell.syntax.ModuleName(hydra.lib.strings.cat2(alias_str, "_"))))), (lambda : (hydra.lib.maps.insert(name, alias, current_map), hydra.lib.sets.insert(alias, current_set)))))[5]), focus_pair := to_pair(ns), nss_as_list := hydra.lib.sets.to_list(nss), nss_pairs := hydra.lib.lists.map((lambda x1: to_pair(x1)), nss_as_list), empty_state := (hydra.lib.maps.empty(), hydra.lib.sets.empty()), final_state := hydra.lib.lists.foldl((lambda x1, x2: add_pair(x1, x2)), empty_state, nss_pairs), result_map := hydra.lib.pairs.first(final_state), Right(hydra.module.Namespaces(focus_pair, result_map)))[10]))
+    return hydra.lib.eithers.bind(hydra.analysis.module_dependency_namespaces(cx, g, True, True, True, True, mod), (lambda nss: (ns := mod.namespace, to_module_name := (lambda namespace: (namespace_str := namespace.value, parts := hydra.lib.strings.split_on(".", namespace_str), last_part := hydra.lib.lists.last(parts), capitalized := hydra.formatting.capitalize(last_part), hydra.ext.haskell.syntax.ModuleName(capitalized))[4]), to_pair := (lambda name: (name, to_module_name(name))), add_pair := (lambda state, name_pair: (current_map := hydra.lib.pairs.first(state), current_set := hydra.lib.pairs.second(state), name := hydra.lib.pairs.first(name_pair), alias := hydra.lib.pairs.second(name_pair), alias_str := alias.value, hydra.lib.logic.if_else(hydra.lib.sets.member(alias, current_set), (lambda : add_pair(state, (name, hydra.ext.haskell.syntax.ModuleName(hydra.lib.strings.cat2(alias_str, "_"))))), (lambda : (hydra.lib.maps.insert(name, alias, current_map), hydra.lib.sets.insert(alias, current_set)))))[5]), focus_pair := to_pair(ns), nss_as_list := hydra.lib.sets.to_list(nss), nss_pairs := hydra.lib.lists.map((lambda x1: to_pair(x1)), nss_as_list), empty_state := (hydra.lib.maps.empty(), hydra.lib.sets.empty()), final_state := hydra.lib.lists.foldl((lambda x1, x2: add_pair(x1, x2)), empty_state, nss_pairs), result_map := hydra.lib.pairs.first(final_state), Right(hydra.packaging.Namespaces(focus_pair, result_map)))[10]))
 
 def newtype_accessor_name(name: hydra.core.Name) -> str:
     r"""Generate an accessor name for a newtype wrapper (e.g., 'unFoo' for Foo)."""
@@ -111,12 +111,12 @@ def type_name_for_record(sname: hydra.core.Name) -> str:
     parts = hydra.lib.strings.split_on(".", sname_str)
     return hydra.lib.lists.last(parts)
 
-def record_field_reference(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName], sname: hydra.core.Name, fname: hydra.core.Name) -> hydra.ext.haskell.syntax.Name:
+def record_field_reference(namespaces: hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName], sname: hydra.core.Name, fname: hydra.core.Name) -> hydra.ext.haskell.syntax.Name:
     r"""Generate a Haskell name for a record field accessor."""
 
     fname_str = fname.value
     @lru_cache(1)
-    def qname() -> hydra.module.QualifiedName:
+    def qname() -> hydra.packaging.QualifiedName:
         return hydra.names.qualify_name(sname)
     ns = qname().namespace
     @lru_cache(1)
@@ -131,7 +131,7 @@ def record_field_reference(namespaces: hydra.module.Namespaces[hydra.ext.haskell
     @lru_cache(1)
     def nm() -> str:
         return hydra.lib.strings.cat2(decapitalized(), capitalized())
-    qual_name = hydra.module.QualifiedName(ns, nm())
+    qual_name = hydra.packaging.QualifiedName(ns, nm())
     @lru_cache(1)
     def unqual_name() -> hydra.core.Name:
         return hydra.names.unqualify_name(qual_name)
@@ -153,12 +153,12 @@ def to_type_application(types: frozenlist[hydra.ext.haskell.syntax.Type]) -> hyd
         return hydra.lib.logic.if_else(hydra.lib.equality.gt(hydra.lib.lists.length(l), 1), (lambda : cast(hydra.ext.haskell.syntax.Type, hydra.ext.haskell.syntax.TypeApplication(hydra.ext.haskell.syntax.ApplicationType(app(hydra.lib.lists.tail(l)), hydra.lib.lists.head(l))))), (lambda : hydra.lib.lists.head(l)))
     return app(hydra.lib.lists.reverse(types))
 
-def union_field_reference(bound_names: frozenset[hydra.core.Name], namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName], sname: hydra.core.Name, fname: hydra.core.Name) -> hydra.ext.haskell.syntax.Name:
+def union_field_reference(bound_names: frozenset[hydra.core.Name], namespaces: hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName], sname: hydra.core.Name, fname: hydra.core.Name) -> hydra.ext.haskell.syntax.Name:
     r"""Generate a Haskell name for a union variant constructor, with disambiguation."""
 
     fname_str = fname.value
     @lru_cache(1)
-    def qname() -> hydra.module.QualifiedName:
+    def qname() -> hydra.packaging.QualifiedName:
         return hydra.names.qualify_name(sname)
     ns = qname().namespace
     @lru_cache(1)
@@ -173,12 +173,12 @@ def union_field_reference(bound_names: frozenset[hydra.core.Name], namespaces: h
     def deconflict(name: str) -> str:
         @lru_cache(1)
         def tname() -> hydra.core.Name:
-            return hydra.names.unqualify_name(hydra.module.QualifiedName(ns, name))
+            return hydra.names.unqualify_name(hydra.packaging.QualifiedName(ns, name))
         return hydra.lib.logic.if_else(hydra.lib.sets.member(tname(), bound_names), (lambda : deconflict(hydra.lib.strings.cat2(name, "_"))), (lambda : name))
     @lru_cache(1)
     def nm() -> str:
         return deconflict(hydra.lib.strings.cat2(capitalized_type_name(), capitalized_field_name()))
-    qual_name = hydra.module.QualifiedName(ns, nm())
+    qual_name = hydra.packaging.QualifiedName(ns, nm())
     @lru_cache(1)
     def unqual_name() -> hydra.core.Name:
         return hydra.names.unqualify_name(qual_name)

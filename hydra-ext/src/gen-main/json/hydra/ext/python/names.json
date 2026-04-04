@@ -227,7 +227,7 @@
                                                 "type": {
                                                   "application": {
                                                     "argument": {"variable": "hydra.ext.python.syntax.DottedName"},
-                                                    "function": {"variable": "hydra.module.Namespaces"}}},
+                                                    "function": {"variable": "hydra.packaging.Namespaces"}}},
                                                 "variables": []}]},
                                           {
                                             "name": "focusPair",
@@ -238,14 +238,15 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "function": {
-                                                        "elimination": {"record": {"field": "focus", "typeName": "hydra.module.Namespaces"}}}},
+                                                        "elimination": {
+                                                          "record": {"field": "focus", "typeName": "hydra.packaging.Namespaces"}}}},
                                                     "type": {"variable": "hydra.ext.python.syntax.DottedName"}}}}},
                                             "type": [
                                               {
                                                 "constraints": null,
                                                 "type": {
                                                   "pair": {
-                                                    "first": {"variable": "hydra.module.Namespace"},
+                                                    "first": {"variable": "hydra.packaging.Namespace"},
                                                     "second": {"variable": "hydra.ext.python.syntax.DottedName"}}},
                                                 "variables": []}]},
                                           {
@@ -258,12 +259,12 @@
                                                     "body": {
                                                       "typeApplication": {
                                                         "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
-                                                        "type": {"variable": "hydra.module.Namespace"}}},
+                                                        "type": {"variable": "hydra.packaging.Namespace"}}},
                                                     "type": {"variable": "hydra.ext.python.syntax.DottedName"}}}}},
                                             "type": [
                                               {
                                                 "constraints": null,
-                                                "type": {"variable": "hydra.module.Namespace"},
+                                                "type": {"variable": "hydra.packaging.Namespace"},
                                                 "variables": []}]},
                                           {
                                             "name": "boundVars",
@@ -305,7 +306,7 @@
                                             "type": [
                                               {
                                                 "constraints": null,
-                                                "type": {"variable": "hydra.module.QualifiedName"},
+                                                "type": {"variable": "hydra.packaging.QualifiedName"},
                                                 "variables": []}]},
                                           {
                                             "name": "mns",
@@ -315,11 +316,11 @@
                                                 "function": {
                                                   "function": {
                                                     "elimination": {
-                                                      "record": {"field": "namespace", "typeName": "hydra.module.QualifiedName"}}}}}},
+                                                      "record": {"field": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}}}},
                                             "type": [
                                               {
                                                 "constraints": null,
-                                                "type": {"maybe": {"variable": "hydra.module.Namespace"}},
+                                                "type": {"maybe": {"variable": "hydra.packaging.Namespace"}},
                                                 "variables": []}]},
                                           {
                                             "name": "local",
@@ -329,7 +330,7 @@
                                                 "function": {
                                                   "function": {
                                                     "elimination": {
-                                                      "record": {"field": "local", "typeName": "hydra.module.QualifiedName"}}}}}},
+                                                      "record": {"field": "local", "typeName": "hydra.packaging.QualifiedName"}}}}}},
                                             "type": [
                                               {
                                                 "constraints": null,
@@ -372,7 +373,7 @@
                                                               "argument": {
                                                                 "application": {
                                                                   "argument": {"variable": "nsVal"},
-                                                                  "function": {"function": {"elimination": {"wrap": "hydra.module.Namespace"}}}}},
+                                                                  "function": {"function": {"elimination": {"wrap": "hydra.packaging.Namespace"}}}}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {"literal": {"string": "."}},
@@ -403,7 +404,7 @@
                                                         "application": {
                                                           "argument": {"literal": {"string": "."}},
                                                           "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}},
-                                                  "domain": [{"variable": "hydra.module.Namespace"}],
+                                                  "domain": [{"variable": "hydra.packaging.Namespace"}],
                                                   "parameter": "nsVal"}}},
                                             "type": [
                                               {
@@ -411,7 +412,7 @@
                                                 "type": {
                                                   "function": {
                                                     "codomain": {"literal": {"string": {}}},
-                                                    "domain": {"variable": "hydra.module.Namespace"}}},
+                                                    "domain": {"variable": "hydra.packaging.Namespace"}}},
                                                 "variables": []}]}],
                                         "body": {
                                           "application": {
@@ -473,7 +474,7 @@
                                                                                             "application": {"argument": {"variable": "nsVal"}, "function": {"variable": "pyNs"}}},
                                                                                           "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
                                                                                   "typeName": "hydra.ext.python.syntax.Name"}},
-                                                                              "domain": [{"variable": "hydra.module.Namespace"}],
+                                                                              "domain": [{"variable": "hydra.packaging.Namespace"}],
                                                                               "parameter": "nsVal"}}},
                                                                         "function": {
                                                                           "application": {
@@ -487,7 +488,7 @@
                                                                                   "typeApplication": {
                                                                                     "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
                                                                                     "type": {"variable": "hydra.ext.python.syntax.Name"}}},
-                                                                                "type": {"variable": "hydra.module.Namespace"}}}}}}}}},
+                                                                                "type": {"variable": "hydra.packaging.Namespace"}}}}}}}}},
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {
@@ -523,7 +524,7 @@
                                                                                 "function": {
                                                                                   "typeApplication": {
                                                                                     "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
-                                                                                    "type": {"maybe": {"variable": "hydra.module.Namespace"}}}}}}}},
+                                                                                    "type": {"maybe": {"variable": "hydra.packaging.Namespace"}}}}}}}},
                                                                         "function": {
                                                                           "typeApplication": {
                                                                             "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
@@ -603,7 +604,7 @@
                                     "type": {
                                       "application": {
                                         "argument": {"variable": "hydra.ext.python.syntax.DottedName"},
-                                        "function": {"variable": "hydra.module.Namespaces"}}},
+                                        "function": {"variable": "hydra.packaging.Namespaces"}}},
                                     "variables": []}]},
                               {
                                 "name": "focusPair",
@@ -614,14 +615,15 @@
                                       "typeApplication": {
                                         "body": {
                                           "function": {
-                                            "elimination": {"record": {"field": "focus", "typeName": "hydra.module.Namespaces"}}}},
+                                            "elimination": {
+                                              "record": {"field": "focus", "typeName": "hydra.packaging.Namespaces"}}}},
                                         "type": {"variable": "hydra.ext.python.syntax.DottedName"}}}}},
                                 "type": [
                                   {
                                     "constraints": null,
                                     "type": {
                                       "pair": {
-                                        "first": {"variable": "hydra.module.Namespace"},
+                                        "first": {"variable": "hydra.packaging.Namespace"},
                                         "second": {"variable": "hydra.ext.python.syntax.DottedName"}}},
                                     "variables": []}]},
                               {
@@ -634,12 +636,12 @@
                                         "body": {
                                           "typeApplication": {
                                             "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
-                                            "type": {"variable": "hydra.module.Namespace"}}},
+                                            "type": {"variable": "hydra.packaging.Namespace"}}},
                                         "type": {"variable": "hydra.ext.python.syntax.DottedName"}}}}},
                                 "type": [
                                   {
                                     "constraints": null,
-                                    "type": {"variable": "hydra.module.Namespace"},
+                                    "type": {"variable": "hydra.packaging.Namespace"},
                                     "variables": []}]},
                               {
                                 "name": "boundVars",
@@ -681,7 +683,7 @@
                                 "type": [
                                   {
                                     "constraints": null,
-                                    "type": {"variable": "hydra.module.QualifiedName"},
+                                    "type": {"variable": "hydra.packaging.QualifiedName"},
                                     "variables": []}]},
                               {
                                 "name": "mns",
@@ -691,11 +693,11 @@
                                     "function": {
                                       "function": {
                                         "elimination": {
-                                          "record": {"field": "namespace", "typeName": "hydra.module.QualifiedName"}}}}}},
+                                          "record": {"field": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}}}},
                                 "type": [
                                   {
                                     "constraints": null,
-                                    "type": {"maybe": {"variable": "hydra.module.Namespace"}},
+                                    "type": {"maybe": {"variable": "hydra.packaging.Namespace"}},
                                     "variables": []}]},
                               {
                                 "name": "local",
@@ -705,7 +707,7 @@
                                     "function": {
                                       "function": {
                                         "elimination": {
-                                          "record": {"field": "local", "typeName": "hydra.module.QualifiedName"}}}}}},
+                                          "record": {"field": "local", "typeName": "hydra.packaging.QualifiedName"}}}}}},
                                 "type": [
                                   {
                                     "constraints": null,
@@ -804,7 +806,7 @@
                                                             "function": {
                                                               "typeApplication": {
                                                                 "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
-                                                                "type": {"maybe": {"variable": "hydra.module.Namespace"}}}}}}}},
+                                                                "type": {"maybe": {"variable": "hydra.packaging.Namespace"}}}}}}}},
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
@@ -852,7 +854,7 @@
                               "argument": {
                                 "application": {
                                   "argument": {"variable": "nsVal"},
-                                  "function": {"function": {"elimination": {"wrap": "hydra.module.Namespace"}}}}},
+                                  "function": {"function": {"elimination": {"wrap": "hydra.packaging.Namespace"}}}}},
                               "function": {
                                 "application": {
                                   "argument": {"literal": {"string": "."}},
@@ -891,7 +893,7 @@
                                       "type": {"literal": {"string": {}}}}},
                                   "type": {"variable": "hydra.ext.python.syntax.Name"}}}}}}},
                       "typeName": "hydra.ext.python.syntax.DottedName"}},
-                  "domain": [{"variable": "hydra.module.Namespace"}],
+                  "domain": [{"variable": "hydra.packaging.Namespace"}],
                   "parameter": "nsVal"}}}}},
         "type": [
           {
@@ -899,7 +901,7 @@
             "type": {
               "function": {
                 "codomain": {"variable": "hydra.ext.python.syntax.DottedName"},
-                "domain": {"variable": "hydra.module.Namespace"}}},
+                "domain": {"variable": "hydra.packaging.Namespace"}}},
             "variables": []}]}},
     {
       "term": {
@@ -1238,7 +1240,7 @@
                                                 "type": {
                                                   "application": {
                                                     "argument": {"variable": "hydra.ext.python.syntax.DottedName"},
-                                                    "function": {"variable": "hydra.module.Namespaces"}}},
+                                                    "function": {"variable": "hydra.packaging.Namespaces"}}},
                                                 "variables": []}]},
                                           {
                                             "name": "focusPair",
@@ -1249,14 +1251,15 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "function": {
-                                                        "elimination": {"record": {"field": "focus", "typeName": "hydra.module.Namespaces"}}}},
+                                                        "elimination": {
+                                                          "record": {"field": "focus", "typeName": "hydra.packaging.Namespaces"}}}},
                                                     "type": {"variable": "hydra.ext.python.syntax.DottedName"}}}}},
                                             "type": [
                                               {
                                                 "constraints": null,
                                                 "type": {
                                                   "pair": {
-                                                    "first": {"variable": "hydra.module.Namespace"},
+                                                    "first": {"variable": "hydra.packaging.Namespace"},
                                                     "second": {"variable": "hydra.ext.python.syntax.DottedName"}}},
                                                 "variables": []}]},
                                           {
@@ -1269,12 +1272,12 @@
                                                     "body": {
                                                       "typeApplication": {
                                                         "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
-                                                        "type": {"variable": "hydra.module.Namespace"}}},
+                                                        "type": {"variable": "hydra.packaging.Namespace"}}},
                                                     "type": {"variable": "hydra.ext.python.syntax.DottedName"}}}}},
                                             "type": [
                                               {
                                                 "constraints": null,
-                                                "type": {"variable": "hydra.module.Namespace"},
+                                                "type": {"variable": "hydra.packaging.Namespace"},
                                                 "variables": []}]},
                                           {
                                             "name": "mns",
@@ -1285,7 +1288,7 @@
                                             "type": [
                                               {
                                                 "constraints": null,
-                                                "type": {"maybe": {"variable": "hydra.module.Namespace"}},
+                                                "type": {"maybe": {"variable": "hydra.packaging.Namespace"}},
                                                 "variables": []}]},
                                           {
                                             "name": "sameNamespace",
@@ -1306,8 +1309,8 @@
                                                                   "function": {
                                                                     "typeApplication": {
                                                                       "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
-                                                                      "type": {"variable": "hydra.module.Namespace"}}}}}}},
-                                                          "domain": [{"variable": "hydra.module.Namespace"}],
+                                                                      "type": {"variable": "hydra.packaging.Namespace"}}}}}}},
+                                                          "domain": [{"variable": "hydra.packaging.Namespace"}],
                                                           "parameter": "ns"}}},
                                                     "function": {
                                                       "application": {
@@ -1318,7 +1321,7 @@
                                                               "typeApplication": {
                                                                 "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
                                                                 "type": {"literal": {"boolean": {}}}}},
-                                                            "type": {"variable": "hydra.module.Namespace"}}}}}}}}},
+                                                            "type": {"variable": "hydra.packaging.Namespace"}}}}}}}}},
                                             "type": [
                                               {
                                                 "constraints": null,
@@ -1626,7 +1629,6 @@
     "hydra.errors",
     "hydra.graph",
     "hydra.json.model",
-    "hydra.module",
     "hydra.packaging",
     "hydra.parsing",
     "hydra.phantoms",

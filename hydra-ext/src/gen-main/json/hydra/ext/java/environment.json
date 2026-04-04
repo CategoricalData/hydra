@@ -4,268 +4,280 @@
       "type": {
         "name": "hydra.ext.java.environment.JavaSymbolClass",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "Classification of a Java symbol for code generation"}}}],
-            "body": {
-              "union": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "constant",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A constant value"}}}],
-                      "body": {"unit": {}}}}},
-                {
-                  "name": "nullaryFunction",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A nullary function (no arguments)"}}}],
-                      "body": {"unit": {}}}}},
-                {
-                  "name": "hoistedLambda",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "A hoisted lambda wrapped in type lambdas. The Int is the number of curried lambda parameters."}}}],
-                      "body": {"literal": {"integer": {"int32": {}}}}}}},
-                {
-                  "name": "unaryFunction",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A unary function (single argument)"}}}],
-                      "body": {"unit": {}}}}},
-                {
-                  "name": "localVariable",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A local variable"}}}],
-                      "body": {"unit": {}}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "Classification of a Java symbol for code generation"}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "constant",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A constant value"}}}],
+                        "body": {"unit": {}}}}},
+                  {
+                    "name": "nullaryFunction",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A nullary function (no arguments)"}}}],
+                        "body": {"unit": {}}}}},
+                  {
+                    "name": "hoistedLambda",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "A hoisted lambda wrapped in type lambdas. The Int is the number of curried lambda parameters."}}}],
+                        "body": {"literal": {"integer": {"int32": {}}}}}}},
+                  {
+                    "name": "unaryFunction",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A unary function (single argument)"}}}],
+                        "body": {"unit": {}}}}},
+                  {
+                    "name": "localVariable",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A local variable"}}}],
+                        "body": {"unit": {}}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.java.environment.JavaFeatures",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {"literal": {"string": "Feature flags for the target Java version"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "supportsDiamondOperator",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "Whether the diamond operator (<>) is supported (Java 7+)"}}}],
-                      "body": {"literal": {"boolean": {}}}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {"literal": {"string": "Feature flags for the target Java version"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "supportsDiamondOperator",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "Whether the diamond operator (<>) is supported (Java 7+)"}}}],
+                        "body": {"literal": {"boolean": {}}}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.java.environment.Aliases",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "Aliases and context for Java code generation"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "currentNamespace",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "Current module namespace context"}}}],
-                      "body": {"variable": "hydra.module.Namespace"}}}},
-                {
-                  "name": "packages",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "Maps namespaces to Java package names"}}}],
-                      "body": {
-                        "map": {
-                          "keys": {"variable": "hydra.module.Namespace"},
-                          "values": {"variable": "hydra.ext.java.syntax.PackageName"}}}}}},
-                {
-                  "name": "branchVars",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "Variables bound in pattern matching branches"}}}],
-                      "body": {"set": {"variable": "hydra.core.Name"}}}}},
-                {
-                  "name": "recursiveVars",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "Variables that are self-recursive"}}}],
-                      "body": {"set": {"variable": "hydra.core.Name"}}}}},
-                {
-                  "name": "inScopeTypeParams",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "Type parameters that are in scope (from method-level type parameters)"}}}],
-                      "body": {"set": {"variable": "hydra.core.Name"}}}}},
-                {
-                  "name": "polymorphicLocals",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "Local variables that have polymorphic types (declared with raw types)"}}}],
-                      "body": {"set": {"variable": "hydra.core.Name"}}}}},
-                {
-                  "name": "inScopeJavaVars",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "All in-scope Java variable names (for avoiding lambda parameter shadowing)"}}}],
-                      "body": {"set": {"variable": "hydra.core.Name"}}}}},
-                {
-                  "name": "varRenames",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "Variable renames for avoiding shadowing (maps Hydra name to Java name)"}}}],
-                      "body": {
-                        "map": {
-                          "keys": {"variable": "hydra.core.Name"},
-                          "values": {"variable": "hydra.core.Name"}}}}}},
-                {
-                  "name": "lambdaVars",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "Lambda-bound variables (including hoisted captures with qualified names)"}}}],
-                      "body": {"set": {"variable": "hydra.core.Name"}}}}},
-                {
-                  "name": "typeVarSubst",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "Type variable substitution: maps fresh inference variable names to canonical scheme variable names"}}}],
-                      "body": {
-                        "map": {
-                          "keys": {"variable": "hydra.core.Name"},
-                          "values": {"variable": "hydra.core.Name"}}}}}},
-                {
-                  "name": "trustedTypeVars",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "Type variables that actually appear in the method's formal parameter types"}}}],
-                      "body": {"set": {"variable": "hydra.core.Name"}}}}},
-                {
-                  "name": "methodCodomain",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "The enclosing method's codomain (return type), used for casting pair expressions"}}}],
-                      "body": {"maybe": {"variable": "hydra.core.Type"}}}}},
-                {
-                  "name": "thunkedVars",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "Variables that have been thunked (wrapped in Supplier) for lazy evaluation"}}}],
-                      "body": {"set": {"variable": "hydra.core.Name"}}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "Aliases and context for Java code generation"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "currentNamespace",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "Current module namespace context"}}}],
+                        "body": {"variable": "hydra.packaging.Namespace"}}}},
+                  {
+                    "name": "packages",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "Maps namespaces to Java package names"}}}],
+                        "body": {
+                          "map": {
+                            "keys": {"variable": "hydra.packaging.Namespace"},
+                            "values": {"variable": "hydra.ext.java.syntax.PackageName"}}}}}},
+                  {
+                    "name": "branchVars",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "Variables bound in pattern matching branches"}}}],
+                        "body": {"set": {"variable": "hydra.core.Name"}}}}},
+                  {
+                    "name": "recursiveVars",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "Variables that are self-recursive"}}}],
+                        "body": {"set": {"variable": "hydra.core.Name"}}}}},
+                  {
+                    "name": "inScopeTypeParams",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "Type parameters that are in scope (from method-level type parameters)"}}}],
+                        "body": {"set": {"variable": "hydra.core.Name"}}}}},
+                  {
+                    "name": "polymorphicLocals",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "Local variables that have polymorphic types (declared with raw types)"}}}],
+                        "body": {"set": {"variable": "hydra.core.Name"}}}}},
+                  {
+                    "name": "inScopeJavaVars",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "All in-scope Java variable names (for avoiding lambda parameter shadowing)"}}}],
+                        "body": {"set": {"variable": "hydra.core.Name"}}}}},
+                  {
+                    "name": "varRenames",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "Variable renames for avoiding shadowing (maps Hydra name to Java name)"}}}],
+                        "body": {
+                          "map": {
+                            "keys": {"variable": "hydra.core.Name"},
+                            "values": {"variable": "hydra.core.Name"}}}}}},
+                  {
+                    "name": "lambdaVars",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "Lambda-bound variables (including hoisted captures with qualified names)"}}}],
+                        "body": {"set": {"variable": "hydra.core.Name"}}}}},
+                  {
+                    "name": "typeVarSubst",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "Type variable substitution: maps fresh inference variable names to canonical scheme variable names"}}}],
+                        "body": {
+                          "map": {
+                            "keys": {"variable": "hydra.core.Name"},
+                            "values": {"variable": "hydra.core.Name"}}}}}},
+                  {
+                    "name": "trustedTypeVars",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "Type variables that actually appear in the method's formal parameter types"}}}],
+                        "body": {"set": {"variable": "hydra.core.Name"}}}}},
+                  {
+                    "name": "methodCodomain",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The enclosing method's codomain (return type), used for casting pair expressions"}}}],
+                        "body": {"maybe": {"variable": "hydra.core.Type"}}}}},
+                  {
+                    "name": "thunkedVars",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "Variables that have been thunked (wrapped in Supplier) for lazy evaluation"}}}],
+                        "body": {"set": {"variable": "hydra.core.Name"}}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.java.environment.JavaEnvironment",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {"literal": {"string": "Environment for Java code generation"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "aliases",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "Aliases and context state"}}}],
-                      "body": {"variable": "hydra.ext.java.environment.Aliases"}}}},
-                {
-                  "name": "graph",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "Graph context for type inference"}}}],
-                      "body": {"variable": "hydra.graph.Graph"}}}}]}}}}}],
+                  "@key": "description",
+                  "@value": {"literal": {"string": "Environment for Java code generation"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "aliases",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "Aliases and context state"}}}],
+                        "body": {"variable": "hydra.ext.java.environment.Aliases"}}}},
+                  {
+                    "name": "graph",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "Graph context for type inference"}}}],
+                        "body": {"variable": "hydra.graph.Graph"}}}}]}}},
+          "variables": []}}}],
   "description": ["Environment types for Java code generation"],
   "namespace": "hydra.ext.java.environment",
   "termDependencies": [],
@@ -273,5 +285,5 @@
     "hydra.ext.java.syntax",
     "hydra.core",
     "hydra.graph",
-    "hydra.module",
+    "hydra.packaging",
     "hydra.typing"]}

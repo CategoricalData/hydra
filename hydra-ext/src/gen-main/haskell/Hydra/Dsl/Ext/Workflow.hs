@@ -6,11 +6,11 @@ module Hydra.Dsl.Ext.Workflow where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Workflow as Workflow
-import qualified Hydra.Module as Module
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
-hydraSchemaSpec :: Phantoms.TTerm [Module.Module] -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Workflow.HydraSchemaSpec
+hydraSchemaSpec :: Phantoms.TTerm [Packaging.Module] -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Workflow.HydraSchemaSpec
 hydraSchemaSpec modules typeName =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.ext.workflow.HydraSchemaSpec"),
@@ -22,7 +22,7 @@ hydraSchemaSpec modules typeName =
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Phantoms.unTTerm typeName)}]}))
 
-hydraSchemaSpecModules :: Phantoms.TTerm Workflow.HydraSchemaSpec -> Phantoms.TTerm [Module.Module]
+hydraSchemaSpecModules :: Phantoms.TTerm Workflow.HydraSchemaSpec -> Phantoms.TTerm [Packaging.Module]
 hydraSchemaSpecModules x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -38,7 +38,7 @@ hydraSchemaSpecTypeName x =
         Core.projectionField = (Core.Name "typeName")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-hydraSchemaSpecWithModules :: Phantoms.TTerm Workflow.HydraSchemaSpec -> Phantoms.TTerm [Module.Module] -> Phantoms.TTerm Workflow.HydraSchemaSpec
+hydraSchemaSpecWithModules :: Phantoms.TTerm Workflow.HydraSchemaSpec -> Phantoms.TTerm [Packaging.Module] -> Phantoms.TTerm Workflow.HydraSchemaSpec
 hydraSchemaSpecWithModules original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.ext.workflow.HydraSchemaSpec"),

@@ -1686,7 +1686,7 @@
                   "domain": [
                     {
                       "map": {
-                        "keys": {"variable": "hydra.module.Namespace"},
+                        "keys": {"variable": "hydra.packaging.Namespace"},
                         "values": {"literal": {"string": {}}}}}],
                   "parameter": "namespaces"}}}}},
         "type": [
@@ -1700,7 +1700,7 @@
                     "domain": {"variable": "hydra.core.Term"}}},
                 "domain": {
                   "map": {
-                    "keys": {"variable": "hydra.module.Namespace"},
+                    "keys": {"variable": "hydra.packaging.Namespace"},
                     "values": {"literal": {"string": {}}}}}}},
             "variables": []}]}}],
   "description": ["Utilities for working with subterm steps and paths."],
@@ -1720,7 +1720,6 @@
     "hydra.errors",
     "hydra.graph",
     "hydra.json.model",
-    "hydra.module",
     "hydra.packaging",
     "hydra.parsing",
     "hydra.phantoms",

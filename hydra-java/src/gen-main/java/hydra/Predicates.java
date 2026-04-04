@@ -6,6 +6,93 @@ package hydra;
  * Type and term classification predicates
  */
 public interface Predicates {
+  static Boolean isComplexBinding(hydra.graph.Graph tc, hydra.core.Binding b) {
+    hydra.util.Maybe<hydra.core.TypeScheme> mts = (b).type;
+    hydra.core.Term term = (b).term;
+    return hydra.lib.maybes.Cases.applyLazy(
+      mts,
+      () -> hydra.Predicates.isComplexTerm(
+        tc,
+        term),
+      (java.util.function.Function<hydra.core.TypeScheme, Boolean>) (ts -> {
+        Boolean isComplex = hydra.Predicates.isComplexTerm(
+          tc,
+          term);
+        hydra.util.Lazy<Boolean> isNonNullary = new hydra.util.Lazy<>(() -> hydra.lib.equality.Gt.apply(
+          hydra.Arity.typeArity((ts).type),
+          0));
+        hydra.util.Lazy<Boolean> isPolymorphic = new hydra.util.Lazy<>(() -> hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply((ts).variables)));
+        return hydra.lib.logic.Or.apply(
+          hydra.lib.logic.Or.apply(
+            isPolymorphic.get(),
+            isNonNullary.get()),
+          isComplex);
+      }));
+  }
+
+  static Boolean isComplexTerm(hydra.graph.Graph tc, hydra.core.Term t) {
+    return (t).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public Boolean otherwise(hydra.core.Term instance) {
+        return hydra.lib.lists.Foldl.apply(
+          (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Term, Boolean>>) (b -> (java.util.function.Function<hydra.core.Term, Boolean>) (sub -> hydra.lib.logic.Or.apply(
+            b,
+            hydra.Predicates.isComplexTerm(
+              tc,
+              sub)))),
+          false,
+          hydra.Rewriting.subterms(t));
+      }
+
+      @Override
+      public Boolean visit(hydra.core.Term.Let ignored) {
+        return true;
+      }
+
+      @Override
+      public Boolean visit(hydra.core.Term.TypeApplication ignored) {
+        return true;
+      }
+
+      @Override
+      public Boolean visit(hydra.core.Term.TypeLambda ignored) {
+        return true;
+      }
+
+      @Override
+      public Boolean visit(hydra.core.Term.Variable name) {
+        return hydra.Predicates.isComplexVariable(
+          tc,
+          (name).value);
+      }
+    });
+  }
+
+  static Boolean isComplexVariable(hydra.graph.Graph tc, hydra.core.Name name) {
+    hydra.util.Lazy<hydra.util.Maybe<hydra.core.Term>> metaLookup = new hydra.util.Lazy<>(() -> hydra.lib.maps.Lookup.apply(
+      name,
+      (tc).metadata));
+    return hydra.lib.logic.IfElse.lazy(
+      hydra.lib.maybes.IsJust.apply(metaLookup.get()),
+      () -> true,
+      () -> hydra.lib.logic.IfElse.lazy(
+        hydra.lib.sets.Member.apply(
+          name,
+          (tc).lambdaVariables),
+        () -> true,
+        () -> ((java.util.function.Supplier<Boolean>) (() -> {
+          hydra.util.Lazy<hydra.util.Maybe<hydra.core.TypeScheme>> typeLookup = new hydra.util.Lazy<>(() -> hydra.lib.maps.Lookup.apply(
+            name,
+            (tc).boundTypes));
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> true,
+            (java.util.function.Function<hydra.core.TypeScheme, Boolean>) (ts -> hydra.lib.equality.Gt.apply(
+              hydra.Arity.typeSchemeArity(ts),
+              0)),
+            typeLookup.get());
+        })).get()));
+  }
+
   static Boolean isEncodedTerm(hydra.core.Term t) {
     return hydra.Strip.deannotateTerm(t).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
@@ -171,6 +258,105 @@ public interface Predicates {
       allVariants.get()));
   }
 
+  static Boolean isTrivialTerm(hydra.core.Term t) {
+    return hydra.Strip.deannotateTerm(t).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public Boolean otherwise(hydra.core.Term instance) {
+        return false;
+      }
+
+      @Override
+      public Boolean visit(hydra.core.Term.Literal ignored) {
+        return true;
+      }
+
+      @Override
+      public Boolean visit(hydra.core.Term.Variable ignored) {
+        return true;
+      }
+
+      @Override
+      public Boolean visit(hydra.core.Term.Unit ignored) {
+        return true;
+      }
+
+      @Override
+      public Boolean visit(hydra.core.Term.Application app) {
+        hydra.core.Term arg = (app).value.argument;
+        hydra.core.Term fun = (app).value.function;
+        return (fun).accept(new hydra.core.Term.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.core.Term instance) {
+            return false;
+          }
+
+          @Override
+          public Boolean visit(hydra.core.Term.Function f) {
+            return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
+              @Override
+              public Boolean otherwise(hydra.core.Function instance) {
+                return false;
+              }
+
+              @Override
+              public Boolean visit(hydra.core.Function.Elimination e) {
+                return (e).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
+                  @Override
+                  public Boolean otherwise(hydra.core.Elimination instance) {
+                    return false;
+                  }
+
+                  @Override
+                  public Boolean visit(hydra.core.Elimination.Record ignored) {
+                    return hydra.Predicates.isTrivialTerm(arg);
+                  }
+
+                  @Override
+                  public Boolean visit(hydra.core.Elimination.Wrap ignored) {
+                    return hydra.Predicates.isTrivialTerm(arg);
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+
+      @Override
+      public Boolean visit(hydra.core.Term.Maybe opt) {
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> true,
+          (java.util.function.Function<hydra.core.Term, Boolean>) (inner -> hydra.Predicates.isTrivialTerm(inner)),
+          (opt).value);
+      }
+
+      @Override
+      public Boolean visit(hydra.core.Term.Record rec) {
+        return hydra.lib.lists.Foldl.apply(
+          (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Field, Boolean>>) (acc -> (java.util.function.Function<hydra.core.Field, Boolean>) (fld -> hydra.lib.logic.And.apply(
+            acc,
+            hydra.Predicates.isTrivialTerm((fld).term)))),
+          true,
+          (rec).value.fields);
+      }
+
+      @Override
+      public Boolean visit(hydra.core.Term.Wrap wt) {
+        return hydra.Predicates.isTrivialTerm((wt).value.body);
+      }
+
+      @Override
+      public Boolean visit(hydra.core.Term.TypeApplication ta) {
+        return hydra.Predicates.isTrivialTerm((ta).value.body);
+      }
+
+      @Override
+      public Boolean visit(hydra.core.Term.TypeLambda tl) {
+        return hydra.Predicates.isTrivialTerm((tl).value.body);
+      }
+    });
+  }
+
   static Boolean isType(hydra.core.Type t) {
     return hydra.Strip.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
@@ -238,7 +424,7 @@ public interface Predicates {
           (name2).value),
         (cx).trace), (cx).messages, (cx).other));
       return hydra.lib.eithers.Bind.apply(
-        hydra.Lexical.requireElement(
+        hydra.Lexical.requireBinding(
           cx1.get(),
           graph,
           name2),

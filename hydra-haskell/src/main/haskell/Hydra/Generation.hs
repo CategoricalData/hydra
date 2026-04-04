@@ -10,7 +10,7 @@ import Hydra.Dsl.Annotations
 import Hydra.Dsl.Bootstrap
 import Hydra.Ext.Haskell.Coder
 import Hydra.Ext.Haskell.Language
-import Hydra.Module (_Module)
+import Hydra.Packaging (_Module)
 import Hydra.Testing (TestGroup(..), TestCaseWithMetadata(..), TestCase(..))
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
@@ -361,15 +361,14 @@ readManifestFieldWithFallback basePath primaryField fallbackField = do
 
 -- | Load modules from JSON files for a list of namespaces.
 -- Uses the universe modules to build the graph for type resolution.
--- When doStripTypeSchemes is True, TypeSchemes are stripped from term bindings.
-loadModulesFromJson :: Bool -> FilePath -> [Module] -> [Namespace] -> IO [Module]
-loadModulesFromJson doStripTypeSchemes basePath universeModules namespaces = do
+loadModulesFromJson :: FilePath -> [Module] -> [Namespace] -> IO [Module]
+loadModulesFromJson basePath universeModules namespaces = do
     CM.forM namespaces $ \ns -> do
       let filePath = basePath FP.</> CodeGeneration.namespaceToPath ns ++ ".json"
       parseResult <- parseJsonFile filePath
       case parseResult of
         Left err -> fail $ "JSON parse error for " ++ unNamespace ns ++ ": " ++ err
-        Right jsonVal -> case CodeGeneration.decodeModuleFromJson bootstrapGraph universeModules doStripTypeSchemes jsonVal of
+        Right jsonVal -> case CodeGeneration.decodeModuleFromJson bootstrapGraph universeModules jsonVal of
           Left err -> fail $ "Module decode error for " ++ unNamespace ns ++ ": " ++ err
           Right mod -> do
             putStrLn $ "  Loaded: " ++ unNamespace ns

@@ -4,6 +4,7 @@
 
 module Hydra.Predicates where
 
+import qualified Hydra.Arity as Arity
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
@@ -17,6 +18,7 @@ import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
+import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
@@ -26,6 +28,37 @@ import qualified Hydra.Strip as Strip
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Map as M
+
+-- | Check if a binding needs to be treated as a function
+isComplexBinding :: Graph.Graph -> Core.Binding -> Bool
+isComplexBinding tc b =
+
+      let term = Core.bindingTerm b
+          mts = Core.bindingType b
+      in (Maybes.cases mts (isComplexTerm tc term) (\ts ->
+        let isPolymorphic = Logic.not (Lists.null (Core.typeSchemeVariables ts))
+            isNonNullary = Equality.gt (Arity.typeArity (Core.typeSchemeType ts)) 0
+            isComplex = isComplexTerm tc term
+        in (Logic.or (Logic.or isPolymorphic isNonNullary) isComplex)))
+
+-- | Check if a term needs to be treated as a function rather than a simple value
+isComplexTerm :: Graph.Graph -> Core.Term -> Bool
+isComplexTerm tc t =
+    case t of
+      Core.TermLet _ -> True
+      Core.TermTypeApplication _ -> True
+      Core.TermTypeLambda _ -> True
+      Core.TermVariable v0 -> isComplexVariable tc v0
+      _ -> Lists.foldl (\b -> \sub -> Logic.or b (isComplexTerm tc sub)) False (Rewriting.subterms t)
+
+-- | Check if a variable is bound to a complex term
+isComplexVariable :: Graph.Graph -> Core.Name -> Bool
+isComplexVariable tc name =
+
+      let metaLookup = Maps.lookup name (Graph.graphMetadata tc)
+      in (Logic.ifElse (Maybes.isJust metaLookup) True (Logic.ifElse (Sets.member name (Graph.graphLambdaVariables tc)) True (
+        let typeLookup = Maps.lookup name (Graph.graphBoundTypes tc)
+        in (Maybes.maybe True (\ts -> Equality.gt (Arity.typeSchemeArity ts) 0) typeLookup))))
 
 -- | Determines whether a given term is an encoded term (meta-level term)
 isEncodedTerm :: Core.Term -> Bool
@@ -92,6 +125,31 @@ isSerializableType typ =
               Sets.fromList (Lists.map Reflect.typeVariant (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> Lists.cons t m) [] typ))
       in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))
 
+-- | Check if a term is trivially cheap (no thunking needed)
+isTrivialTerm :: Core.Term -> Bool
+isTrivialTerm t =
+    case (Strip.deannotateTerm t) of
+      Core.TermLiteral _ -> True
+      Core.TermVariable _ -> True
+      Core.TermUnit -> True
+      Core.TermApplication v0 ->
+        let fun = Core.applicationFunction v0
+            arg = Core.applicationArgument v0
+        in case fun of
+          Core.TermFunction v1 -> case v1 of
+            Core.FunctionElimination v2 -> case v2 of
+              Core.EliminationRecord _ -> isTrivialTerm arg
+              Core.EliminationWrap _ -> isTrivialTerm arg
+              _ -> False
+            _ -> False
+          _ -> False
+      Core.TermMaybe v0 -> Maybes.maybe True (\inner -> isTrivialTerm inner) v0
+      Core.TermRecord v0 -> Lists.foldl (\acc -> \fld -> Logic.and acc (isTrivialTerm (Core.fieldTerm fld))) True (Core.recordFields v0)
+      Core.TermWrap v0 -> isTrivialTerm (Core.wrappedTermBody v0)
+      Core.TermTypeApplication v0 -> isTrivialTerm (Core.typeApplicationTermBody v0)
+      Core.TermTypeLambda v0 -> isTrivialTerm (Core.typeLambdaBody v0)
+      _ -> False
+
 -- | Check whether a type is a type (always true for non-encoded types)
 isType :: Core.Type -> Bool
 isType t =
@@ -127,7 +185,7 @@ typeDependencies cx graph withSchema transform name =
                           Context.contextTrace = (Lists.cons (Strings.cat2 "type dependencies of " (Core.unName name2)) (Context.contextTrace cx)),
                           Context.contextMessages = (Context.contextMessages cx),
                           Context.contextOther = (Context.contextOther cx)}
-                in (Eithers.bind (Lexical.requireElement cx1 graph name2) (\el -> Eithers.bimap (\_wc_e -> Context.InContext {
+                in (Eithers.bind (Lexical.requireBinding cx1 graph name2) (\el -> Eithers.bimap (\_wc_e -> Context.InContext {
                   Context.inContextObject = _wc_e,
                   Context.inContextContext = cx1}) (\_wc_a -> _wc_a) (Eithers.bimap (\_e -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _e))) (\_a -> _a) (Core_.type_ graph (Core.bindingTerm el)))))
           toPair = \name2 -> Eithers.map (\typ -> (name2, (transform typ))) (requireType name2)

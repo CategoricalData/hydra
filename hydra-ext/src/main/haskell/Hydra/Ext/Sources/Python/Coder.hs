@@ -34,7 +34,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
 import qualified Hydra.Dsl.Topology                   as Topology
@@ -101,7 +101,6 @@ import qualified Hydra.Ext.Sources.Python.Serde as PySerde
 import qualified Hydra.Ext.Sources.Python.Names as PyNames
 import qualified Hydra.Ext.Sources.Python.Utils as PyUtils
 import qualified Hydra.Ext.Dsl.Python.Syntax as PyDsl
-import qualified Hydra.Sources.CoderUtils as CoderUtils
 import qualified Hydra.Typing as HydraTyping
 
 def :: String -> TTerm a -> TTermDefinition a
@@ -112,7 +111,7 @@ ns = Namespace "hydra.ext.python.coder"
 
 module_ :: Module
 module_ = Module ns elements
-    [PyUtils.ns, PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns, Environment.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, ShowCore.ns, CoderUtils.ns, Reduction.ns, Sorting.ns, Names.ns, Inference.ns]
+    [PyUtils.ns, PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns, Environment.ns, Formatting.ns, Names.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, ShowCore.ns, Reduction.ns, Sorting.ns, Inference.ns]
     (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Python code generator: converts Hydra modules to Python source code"
   where
@@ -120,7 +119,7 @@ module_ = Module ns elements
       toDefinition analyzePythonFunction,
       toDefinition classVariantPatternUnit,
       toDefinition classVariantPatternWithCapture,
-      toDefinition CoderUtils.reorderDefs,
+      toDefinition Environment.reorderDefs,
       toDefinition collectTypeVariables,
       toDefinition condImportSymbol,
       toDefinition dataclassDecorator,
@@ -247,13 +246,13 @@ module_ = Module ns elements
       toDefinition wrapLazyArguments]
 
 -- | Analyze a function term with Python-specific Graph management.
---   This is a wrapper around CoderUtils.analyzeFunctionTermWith that provides the Python-specific
+--   This is a wrapper around Analysis.analyzeFunctionTermWith that provides the Python-specific
 --   Graph getteranalyzePythonFunction/setter and Python-specific binding metadata (which skips trivial bindings).
 analyzePythonFunction :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Term -> Either (InContext Error) (FunctionStructure PyHelpers.PythonEnvironment))
 analyzePythonFunction = def "analyzePythonFunction" $
   doc "Analyze a function term with Python-specific Graph management" $
   lambda "cx" $ lambda "env" $ lambda "term" $
-    CoderUtils.analyzeFunctionTermWith @@ var "cx" @@
+    Analysis.analyzeFunctionTermWith @@ var "cx" @@
       pythonBindingMetadata @@
       pythonEnvironmentGetGraph @@
       pythonEnvironmentSetGraph @@
@@ -542,7 +541,7 @@ encodeApplication = def "encodeApplication" $
   "cx" ~> "env" ~> "app" ~>
     "g" <~ (pythonEnvironmentGetGraph @@ var "env") $
     "term" <~ (Core.termApplication $ var "app") $
-    "gathered" <~ (CoderUtils.gatherArgs @@ var "term" @@ list ([] :: [TTerm Term])) $
+    "gathered" <~ (Analysis.gatherArgs @@ var "term" @@ list ([] :: [TTerm Term])) $
     "fun" <~ (Pairs.first $ var "gathered") $
     "args" <~ (Pairs.second $ var "gathered") $
     -- Use term-based arity, but ensure it is at least the number of gathered args.
@@ -642,7 +641,7 @@ encodeApplicationInner = def "encodeApplicationInner" $
                     (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name")) @@ var "consumedArgs")
                     (var "remainingArgs")))
               (Core.bindingType $ var "el"))
-          (Lexical.lookupElement @@ var "g" @@ var "name")]
+          (Lexical.lookupBinding @@ var "g" @@ var "name")]
 
 -- | Encode an application type to Python expression.
 --   Gathers all type arguments and encodes as primary[args].
@@ -845,7 +844,7 @@ encodeBindingAs = def "encodeBindingAs" $
       -- Binding with type scheme - use encodeTermAssignment
       ("ts" ~>
         "comment" <<~ (Annotations.getTermDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "term1") $
-        "normComment" <~ (Maybes.map CoderUtils.normalizeComment (var "comment")) $
+        "normComment" <~ (Maybes.map Formatting.normalizeComment (var "comment")) $
         encodeTermAssignment @@ var "cx" @@ var "env" @@ var "name1" @@ var "term1" @@ var "ts" @@ var "normComment")
       (var "mts")
 
@@ -866,9 +865,9 @@ encodeBindingAsAssignment = def "encodeBindingAsAssignment" $
     "pyName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name") $
     "pbody" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
     "tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env") $
-    "isComplexVar" <~ (CoderUtils.isComplexVariable @@ var "tc" @@ var "name") $
-    "termIsComplex" <~ (CoderUtils.isComplexTerm @@ var "tc" @@ var "term") $
-    "isTrivial" <~ (CoderUtils.isTrivialTerm @@ var "term") $
+    "isComplexVar" <~ (Predicates.isComplexVariable @@ var "tc" @@ var "name") $
+    "termIsComplex" <~ (Predicates.isComplexTerm @@ var "tc" @@ var "term") $
+    "isTrivial" <~ (Predicates.isTrivialTerm @@ var "term") $
     -- Check if needs thunking based on type scheme arity and complexity
     -- Trivial terms (literals, variables, field projections) are never thunked
     "needsThunk" <~ Logic.ifElse (var "isTrivial") (boolean False)
@@ -986,14 +985,14 @@ encodeDefinition = def "encodeDefinition" $
           ("x" ~> var "x")
           (project _TermDefinition _TermDefinition_type @@ var "td") $
         "comment" <<~ (Annotations.getTermDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "term") $
-        "normComment" <~ (Maybes.map CoderUtils.normalizeComment (var "comment")) $
+        "normComment" <~ (Maybes.map Formatting.normalizeComment (var "comment")) $
         "stmt" <<~ (encodeTermAssignment @@ var "cx" @@ var "env" @@ var "name" @@ var "term" @@ var "typ" @@ var "normComment") $
         right $ list [list [var "stmt"]],
       _Definition_type>>: "td" ~>
         "name" <~ (project _TypeDefinition _TypeDefinition_name @@ var "td") $
-        "typ" <~ (project _TypeDefinition _TypeDefinition_type @@ var "td") $
+        "typ" <~ (Core.typeSchemeType $ project _TypeDefinition _TypeDefinition_type @@ var "td") $
         "comment" <<~ (Annotations.getTypeDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "typ") $
-        "normComment" <~ (Maybes.map CoderUtils.normalizeComment (var "comment")) $
+        "normComment" <~ (Maybes.map Formatting.normalizeComment (var "comment")) $
         encodeTypeAssignment @@ var "cx" @@ var "env" @@ var "name" @@ var "typ" @@ var "normComment"]
 
 -- | Encode an enum value assignment: ENUM_VALUE = Name("enum_value")
@@ -1174,7 +1173,7 @@ encodeFunctionDefinition = def "encodeFunctionDefinition" $
     -- Check for tail-call optimization opportunity
     "isTCO" <~ (Logic.and
       (Logic.not $ Lists.null (var "args"))
-      (CoderUtils.isSelfTailRecursive @@ var "name" @@ var "body")) $
+      (Analysis.isSelfTailRecursive @@ var "name" @@ var "body")) $
     "block" <<~ (Logic.ifElse (var "isTCO")
       -- TCO path: wrap body in while True loop
       -- Note: prefixes (let-binding statements) go INSIDE the while loop so they are
@@ -1348,8 +1347,8 @@ encodePythonModule :: TTermDefinition (Context -> Graph -> Module -> [Definition
 encodePythonModule = def "encodePythonModule" $
   doc "Encode a Hydra module to a Python module AST" $
   "cx" ~> "g" ~> "mod" ~> "defs0" ~>
-    "defs" <~ (CoderUtils.reorderDefs @@ var "defs0") $
-    "meta0" <~ (gatherMetadata @@ (Module.moduleNamespace $ var "mod") @@ var "defs") $
+    "defs" <~ (Environment.reorderDefs @@ var "defs0") $
+    "meta0" <~ (gatherMetadata @@ (Packaging.moduleNamespace $ var "mod") @@ var "defs") $
     "namespaces0" <~ (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "meta0") $
     "env0" <~ (initialEnvironment @@ var "namespaces0" @@ var "g") $
     "isTypeMod" <~ (isTypeModuleCheck @@ var "defs0") $
@@ -1369,7 +1368,7 @@ encodePythonModule = def "encodePythonModule" $
       "commentStmts" <~ (Maybes.maybe
         (list ([] :: [TTerm Py.Statement]))
         ("c" ~> list [PyUtils.commentStatement @@ var "c"])
-        (Maybes.map CoderUtils.normalizeComment (Module.moduleDescription $ var "mod"))) $
+        (Maybes.map Formatting.normalizeComment (Packaging.moduleDescription $ var "mod"))) $
       -- Generate import statements
       "importStmts" <~ (moduleImports @@ var "namespaces" @@ var "meta") $
       -- Generate type variable statements
@@ -1429,8 +1428,8 @@ encodeTermAssignment = def "encodeTermAssignment" $
     "env2" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_environment @@ var "fs") $
     "tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env2") $
     "binding" <~ (Core.binding (var "name") (var "term") (just $ var "ts")) $
-    "isComplex" <~ (CoderUtils.isComplexBinding @@ var "tc" @@ var "binding") $
-    "isTrivial" <~ (CoderUtils.isTrivialTerm @@ var "term") $
+    "isComplex" <~ (Predicates.isComplexBinding @@ var "tc" @@ var "binding") $
+    "isTrivial" <~ (Predicates.isTrivialTerm @@ var "term") $
     Logic.ifElse (Logic.and (var "isComplex") (Logic.not (var "isTrivial")))
       -- Complex binding (non-trivial): use function definition
       ("bindingStmts" <<~ (Eithers.mapList (encodeBindingAs @@ var "cx" @@ var "env2") (var "bindings")) $
@@ -1654,7 +1653,7 @@ encodeTermMultiline = def "encodeTermMultiline" $
           ("bindingStmts" <<~ (Eithers.mapList (encodeBindingAs @@ var "cx" @@ var "env2") (var "bindings")) $
             "bodyStmts" <<~ (encodeTermMultiline @@ var "cx" @@ var "env2" @@ var "innerBody") $
             right $ Lists.concat2 (var "bindingStmts") (var "bodyStmts"))) $
-    "gathered" <~ (CoderUtils.gatherApplications @@ var "term") $
+    "gathered" <~ (Analysis.gatherApplications @@ var "term") $
     "args" <~ Pairs.first (var "gathered") $
     "body" <~ Pairs.second (var "gathered") $
     -- Check if exactly one argument for potential case statement
@@ -1694,7 +1693,7 @@ encodeTermMultilineTCO = def "encodeTermMultilineTCO" $
   "cx" ~> "env" ~> "funcName" ~> "paramNames" ~> "term" ~>
     "stripped" <~ (Strip.deannotateAndDetypeTerm @@ var "term") $
     -- Check if this term is a direct self-tail-call: funcName(args...)
-    "gathered" <~ (CoderUtils.gatherApplications @@ var "stripped") $
+    "gathered" <~ (Analysis.gatherApplications @@ var "stripped") $
     "gatherArgs" <~ (Pairs.first $ var "gathered") $
     "gatherFun" <~ (Pairs.second $ var "gathered") $
     "strippedFun" <~ (Strip.deannotateAndDetypeTerm @@ var "gatherFun") $
@@ -1716,7 +1715,7 @@ encodeTermMultilineTCO = def "encodeTermMultilineTCO" $
         "continueStmt" <~ (PyDsl.statementSimple $ list [PyDsl.simpleStatementContinue]) $
         right $ Lists.concat2 (var "assignments") (list [var "continueStmt"]))
       -- NOT a self-call: check for case statement application
-      ("gathered2" <~ (CoderUtils.gatherApplications @@ var "term") $
+      ("gathered2" <~ (Analysis.gatherApplications @@ var "term") $
         "args2" <~ (Pairs.first $ var "gathered2") $
         "body2" <~ (Pairs.second $ var "gathered2") $
         Logic.ifElse (Equality.equal (Lists.length $ var "args2") (int32 1))
@@ -2085,12 +2084,12 @@ encodeVariable = def "encodeVariable" $
                   (Maps.lookup (var "name") (var "tcMetadata")))
               -- In graph elements
               ("el" ~>
-                "elTrivial1" <~ (CoderUtils.isTrivialTerm @@ (Core.bindingTerm $ var "el")) $
+                "elTrivial1" <~ (Predicates.isTrivialTerm @@ (Core.bindingTerm $ var "el")) $
                 Maybes.maybe
                   (right $ var "asVariable")
                   ("ts" ~>
                     Logic.ifElse (Logic.and (Logic.and (Equality.equal (Arity.typeSchemeArity @@ var "ts") (int32 0))
-                                                       (CoderUtils.isComplexBinding @@ var "tc" @@ var "el"))
+                                                       (Predicates.isComplexBinding @@ var "tc" @@ var "el"))
                                             (Logic.not (var "elTrivial1")))
                       (right $ var "asFunctionCall")
                       ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Lists.null (Core.typeSchemeVariables $ var "ts"))
@@ -2098,7 +2097,7 @@ encodeVariable = def "encodeVariable" $
                           (var "asVariable")) $
                         right $ var "asFunctionRef"))
                   (Core.bindingType $ var "el"))
-              (Lexical.lookupElement @@ var "g" @@ var "name"))
+              (Lexical.lookupBinding @@ var "g" @@ var "name"))
             -- Is a primitive with no args: check if nullary
             ("prim" ~>
               "primArity" <~ (Arity.primitiveArity @@ var "prim") $
@@ -2135,7 +2134,7 @@ encodeVariable = def "encodeVariable" $
                     right $ var "asFunctionRef")
                   -- In graph elements
                   ("el" ~>
-                    "elTrivial" <~ (CoderUtils.isTrivialTerm @@ (Core.bindingTerm $ var "el")) $
+                    "elTrivial" <~ (Predicates.isTrivialTerm @@ (Core.bindingTerm $ var "el")) $
                     Maybes.maybe
                       (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
                                                (Logic.not (var "elTrivial")))
@@ -2146,7 +2145,7 @@ encodeVariable = def "encodeVariable" $
                           right $ var "asFunctionRef"))
                       ("ts" ~>
                         Logic.ifElse (Logic.and (Logic.and (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
-                                                           (CoderUtils.isComplexBinding @@ var "tc" @@ var "el"))
+                                                           (Predicates.isComplexBinding @@ var "tc" @@ var "el"))
                                                 (Logic.not (var "elTrivial")))
                           (right $ var "asFunctionCall")
                           ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Variables.freeVariablesInType @@ var "typ"))
@@ -2154,10 +2153,10 @@ encodeVariable = def "encodeVariable" $
                               (var "asVariable")) $
                             right $ var "asFunctionRef"))
                       (Core.bindingType $ var "el"))
-                  (Lexical.lookupElement @@ var "g" @@ var "name"))
+                  (Lexical.lookupBinding @@ var "g" @@ var "name"))
                 -- Is in metadata: regular let binding
                 (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
-                                          (CoderUtils.isComplexVariable @@ var "tc" @@ var "name"))
+                                          (Predicates.isComplexVariable @@ var "tc" @@ var "name"))
                   (right $ var "asFunctionCall")
                   ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Variables.freeVariablesInType @@ var "typ"))
                       (makeSimpleLambda @@ (Arity.typeArity @@ var "typ") @@ var "asVariable")
@@ -2280,7 +2279,7 @@ extendMetaForTerm = def "extendMetaForTerm" $
               (var "m")
               ("ts" ~>
                 "term1" <~ Core.bindingTerm (var "b") $
-                Logic.ifElse (CoderUtils.isSimpleAssignment @@ var "term1")
+                Logic.ifElse (Analysis.isSimpleAssignment @@ var "term1")
                   (var "m")
                   (extendMetaForType @@ true @@ true @@ (Core.typeSchemeType $ var "ts") @@ var "m"))
               (Core.bindingType $ var "b")) $
@@ -2469,17 +2468,17 @@ gatherMetadata = def "gatherMetadata" $
     "addDef" <~ ("meta" ~> "def" ~>
       cases _Definition (var "def") Nothing [
         _Definition_term>>: "termDef" ~>
-          "term" <~ Module.termDefinitionTerm (var "termDef") $
+          "term" <~ Packaging.termDefinitionTerm (var "termDef") $
           "typ" <~ Maybes.maybe
             (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
             (unaryFunction Core.typeSchemeType)
-            (Module.termDefinitionType (var "termDef")) $
+            (Packaging.termDefinitionType (var "termDef")) $
           -- First extend for the type annotation (isTypeDef=True, isTermAnnot=True)
           "meta2" <~ (extendMetaForType @@ true @@ true @@ var "typ" @@ var "meta") $
           -- Then extend for the term body (isTopLevel=True)
           extendMetaForTerm @@ true @@ var "meta2" @@ var "term",
         _Definition_type>>: "typeDef" ~>
-          "typ" <~ Module.typeDefinitionType (var "typeDef") $
+          "typ" <~ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "typeDef")) $
           -- Set usesName=True for type definitions
           "meta2" <~ (setMetaUsesName @@ var "meta" @@ true) $
           -- Fold extendMetaForType over the type (isTypeDef=True, isTermAnnot=False)
@@ -2526,7 +2525,7 @@ initialMetadata = def "initialMetadata" $
   doc "Create initial empty metadata for a Python module" $
   "ns" ~>
     "dottedNs" <~ (PyNames.encodeNamespace @@ var "ns") $
-    "emptyNs" <~ (Module.namespaces (pair (var "ns") (var "dottedNs")) Maps.empty) $
+    "emptyNs" <~ (Packaging.namespaces (pair (var "ns") (var "dottedNs")) Maps.empty) $
     record PyHelpers._PythonModuleMetadata [
       PyHelpers._PythonModuleMetadata_namespaces>>: var "emptyNs",
       PyHelpers._PythonModuleMetadata_typeVariables>>: Sets.empty,
@@ -2568,7 +2567,7 @@ isCaseStatementApplication :: TTermDefinition (Term -> Maybe (Name, Maybe Term, 
 isCaseStatementApplication = def "isCaseStatementApplication" $
   doc "Check if a term is a case statement applied to exactly one argument" $
   "term" ~>
-    "gathered" <~ (CoderUtils.gatherApplications @@ var "term") $
+    "gathered" <~ (Analysis.gatherApplications @@ var "term") $
     "args" <~ (Pairs.first $ var "gathered") $
     "body" <~ (Pairs.second $ var "gathered") $
     -- Check for exactly one argument
@@ -2693,7 +2692,7 @@ moduleDomainImports :: TTermDefinition (Namespaces Py.DottedName -> [Py.ImportSt
 moduleDomainImports = def "moduleDomainImports" $
   doc "Generate domain import statements from namespace mappings" $
   "namespaces" ~>
-    "names" <~ (Lists.sort $ Maps.elems $ Module.namespacesMapping (var "namespaces")) $
+    "names" <~ (Lists.sort $ Maps.elems $ Packaging.namespacesMapping (var "namespaces")) $
     Lists.map
       ("ns" ~>
         inject Py._ImportStatement Py._ImportStatement_name
@@ -2789,7 +2788,7 @@ moduleToPython = def "moduleToPython" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
     "file" <<~ (encodePythonModule @@ var "cx" @@ var "g" @@ var "mod" @@ var "defs") $
     "s" <~ (Serialization.printExpr @@ (Serialization.parenthesize @@ (PySerde.encodeModule @@ var "file"))) $
-    "path" <~ (Names.namespaceToFilePath @@ Util.caseConventionLowerSnake @@ (wrap _FileExtension $ string "py") @@ (Module.moduleNamespace $ var "mod")) $
+    "path" <~ (Names.namespaceToFilePath @@ Util.caseConventionLowerSnake @@ (wrap _FileExtension $ string "py") @@ (Packaging.moduleNamespace $ var "mod")) $
     right $ Maps.singleton (var "path") (var "s")
 
 -- | Accessor for the graph field of PyGraph
@@ -2821,7 +2820,7 @@ pythonBindingMetadata = def "pythonBindingMetadata" $
   doc "Like bindingMetadata, but only for bindings that will actually be thunked" $
   "g" ~> "b" ~>
   Logic.ifElse (shouldThunkBinding @@ var "g" @@ var "b")
-    (CoderUtils.bindingMetadata @@ var "g" @@ var "b")
+    (Logic.ifElse (Predicates.isComplexBinding @@ var "g" @@ var "b") (just MetaTerms.true) nothing)
     nothing
 
 -- | Get the Graph from a PythonEnvironment
@@ -3924,8 +3923,8 @@ shouldThunkBinding = def "shouldThunkBinding" $
   doc "Determine if a binding should be thunked based on its complexity and triviality" $
   "g" ~> "b" ~>
   Logic.and
-    (CoderUtils.isComplexBinding @@ var "g" @@ var "b")
-    (Logic.not (CoderUtils.isTrivialTerm @@ (Core.bindingTerm $ var "b")))
+    (Predicates.isComplexBinding @@ var "g" @@ var "b")
+    (Logic.not (Predicates.isTrivialTerm @@ (Core.bindingTerm $ var "b")))
 
 -- | Generate a single "from X import Y, Z" standard import statement
 standardImportStatement :: TTermDefinition (String -> [String] -> Py.ImportStatement)
@@ -3967,7 +3966,7 @@ termArityWithPrimitives = def "termArityWithPrimitives" $
       -- Look up variables in the graph to compute arity from the binding's type scheme or term.
       -- This is important for hoisted case statement bindings which are local functions.
       _Term_variable>>: "name" ~>
-        optCases (Lexical.lookupElement @@ var "graph" @@ var "name")
+        optCases (Lexical.lookupBinding @@ var "graph" @@ var "name")
           (Phantoms.int 0)
           ("el" ~> optCases (Core.bindingType $ var "el")
             -- No type scheme: compute arity from the binding's term structure.

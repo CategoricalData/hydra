@@ -13,43 +13,43 @@ public interface Formatting {
   }
 
   static String convertCase(hydra.util.CaseConvention from, hydra.util.CaseConvention to, String original) {
-    java.util.function.Function<java.util.List<java.util.List<Integer>>, java.util.function.Function<Integer, java.util.List<java.util.List<Integer>>>> splitOnUppercase = (java.util.function.Function<java.util.List<java.util.List<Integer>>, java.util.function.Function<Integer, java.util.List<java.util.List<Integer>>>>) (acc -> (java.util.function.Function<Integer, java.util.List<java.util.List<Integer>>>) (c -> hydra.lib.lists.Concat2.apply(
+    java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<Integer>>, java.util.function.Function<Integer, hydra.util.ConsList<hydra.util.ConsList<Integer>>>> splitOnUppercase = (java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<Integer>>, java.util.function.Function<Integer, hydra.util.ConsList<hydra.util.ConsList<Integer>>>>) (acc -> (java.util.function.Function<Integer, hydra.util.ConsList<hydra.util.ConsList<Integer>>>) (c -> hydra.lib.lists.Concat2.apply(
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.chars.IsUpper.apply(c),
-        () -> java.util.Arrays.asList((java.util.List<Integer>) (java.util.Collections.<Integer>emptyList())),
-        () -> (java.util.List<java.util.List<Integer>>) (java.util.Collections.<java.util.List<Integer>>emptyList())),
+        () -> hydra.util.ConsList.of((hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty())),
+        () -> (hydra.util.ConsList<hydra.util.ConsList<Integer>>) (hydra.util.ConsList.<hydra.util.ConsList<Integer>>empty())),
       hydra.lib.lists.Cons.apply(
         hydra.lib.lists.Cons.apply(
           c,
           hydra.lib.lists.Head.apply(acc)),
         hydra.lib.lists.Tail.apply(acc)))));
-    hydra.util.Lazy<java.util.List<String>> byCaps = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+    hydra.util.Lazy<hydra.util.ConsList<String>> byCaps = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       hydra.lib.strings.FromList::apply,
       hydra.lib.lists.Foldl.apply(
         splitOnUppercase,
-        java.util.Arrays.asList((java.util.List<Integer>) (java.util.Collections.<Integer>emptyList())),
+        hydra.util.ConsList.of((hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty())),
         hydra.lib.lists.Reverse.apply(hydra.lib.strings.ToList.apply(hydra.Formatting.decapitalize(original))))));
-    java.util.List<String> byUnderscores = hydra.lib.strings.SplitOn.apply(
+    hydra.util.ConsList<String> byUnderscores = hydra.lib.strings.SplitOn.apply(
       "_",
       original);
-    java.util.List<String> parts = (from).accept(new hydra.util.CaseConvention.PartialVisitor<>() {
+    hydra.util.ConsList<String> parts = (from).accept(new hydra.util.CaseConvention.PartialVisitor<>() {
       @Override
-      public java.util.List<String> visit(hydra.util.CaseConvention.Camel ignored) {
+      public hydra.util.ConsList<String> visit(hydra.util.CaseConvention.Camel ignored) {
         return byCaps.get();
       }
 
       @Override
-      public java.util.List<String> visit(hydra.util.CaseConvention.Pascal ignored) {
+      public hydra.util.ConsList<String> visit(hydra.util.CaseConvention.Pascal ignored) {
         return byCaps.get();
       }
 
       @Override
-      public java.util.List<String> visit(hydra.util.CaseConvention.LowerSnake ignored) {
+      public hydra.util.ConsList<String> visit(hydra.util.CaseConvention.LowerSnake ignored) {
         return byUnderscores;
       }
 
       @Override
-      public java.util.List<String> visit(hydra.util.CaseConvention.UpperSnake ignored) {
+      public hydra.util.ConsList<String> visit(hydra.util.CaseConvention.UpperSnake ignored) {
         return byUnderscores;
       }
     });
@@ -89,10 +89,10 @@ public interface Formatting {
   }
 
   static String convertCaseCamelOrUnderscoreToLowerSnake(String s) {
-    java.util.List<String> parts = hydra.lib.strings.SplitOn.apply(
+    hydra.util.ConsList<String> parts = hydra.lib.strings.SplitOn.apply(
       "_",
       s);
-    hydra.util.Lazy<java.util.List<String>> snakeParts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+    hydra.util.Lazy<hydra.util.ConsList<String>> snakeParts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (java.util.function.Function<String, String>) (p -> hydra.Formatting.convertCaseCamelToLowerSnake(p)),
       parts));
     return hydra.lib.strings.Intercalate.apply(
@@ -127,7 +127,7 @@ public interface Formatting {
       v1);
   }
 
-  static String escapeWithUnderscore(java.util.Set<String> reserved, String s) {
+  static String escapeWithUnderscore(hydra.util.PersistentSet<String> reserved, String s) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.sets.Member.apply(
         s,
@@ -162,7 +162,7 @@ public interface Formatting {
       hydra.lib.strings.Null.apply(s),
       () -> s,
       () -> ((java.util.function.Supplier<String>) (() -> {
-        java.util.List<Integer> list = hydra.lib.strings.ToList.apply(s);
+        hydra.util.ConsList<Integer> list = hydra.lib.strings.ToList.apply(s);
         return ((java.util.function.Supplier<String>) (() -> {
           hydra.util.Lazy<String> firstLetter = new hydra.util.Lazy<>(() -> (mapping).apply(hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(hydra.lib.lists.Head.apply(list)))));
           return hydra.lib.strings.Cat2.apply(
@@ -196,36 +196,61 @@ public interface Formatting {
           hydra.lib.equality.Lte.apply(
             c,
             57)))));
-    java.util.function.Function<hydra.util.Pair<java.util.List<Integer>, Boolean>, java.util.function.Function<Integer, hydra.util.Pair<java.util.List<Integer>, Boolean>>> replace = (java.util.function.Function<hydra.util.Pair<java.util.List<Integer>, Boolean>, java.util.function.Function<Integer, hydra.util.Pair<java.util.List<Integer>, Boolean>>>) (p -> (java.util.function.Function<Integer, hydra.util.Pair<java.util.List<Integer>, Boolean>>) (c -> {
+    java.util.function.Function<hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>, java.util.function.Function<Integer, hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>>> replace = (java.util.function.Function<hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>, java.util.function.Function<Integer, hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>>>) (p -> (java.util.function.Function<Integer, hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>>) (c -> {
       hydra.util.Lazy<Boolean> b = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(p));
-      hydra.util.Lazy<java.util.List<Integer>> s = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(p));
+      hydra.util.Lazy<hydra.util.ConsList<Integer>> s = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(p));
       return hydra.lib.logic.IfElse.lazy(
         (isAlnum).apply(c),
-        () -> (hydra.util.Pair<java.util.List<Integer>, Boolean>) ((hydra.util.Pair<java.util.List<Integer>, Boolean>) (new hydra.util.Pair<java.util.List<Integer>, Boolean>(hydra.lib.lists.Cons.apply(
+        () -> (hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>) ((hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>) (new hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>(hydra.lib.lists.Cons.apply(
           c,
           s.get()), false))),
         () -> hydra.lib.logic.IfElse.lazy(
           b.get(),
-          () -> (hydra.util.Pair<java.util.List<Integer>, Boolean>) ((hydra.util.Pair<java.util.List<Integer>, Boolean>) (new hydra.util.Pair<java.util.List<Integer>, Boolean>(s.get(), true))),
-          () -> (hydra.util.Pair<java.util.List<Integer>, Boolean>) ((hydra.util.Pair<java.util.List<Integer>, Boolean>) (new hydra.util.Pair<java.util.List<Integer>, Boolean>(hydra.lib.lists.Cons.apply(
+          () -> (hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>) ((hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>) (new hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>(s.get(), true))),
+          () -> (hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>) ((hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>) (new hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>(hydra.lib.lists.Cons.apply(
             95,
             s.get()), true)))));
     }));
-    hydra.util.Lazy<hydra.util.Pair<java.util.List<Integer>, Boolean>> result = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+    hydra.util.Lazy<hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>> result = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
       replace,
-      (hydra.util.Pair<java.util.List<Integer>, Boolean>) ((hydra.util.Pair<java.util.List<Integer>, Boolean>) (new hydra.util.Pair<java.util.List<Integer>, Boolean>((java.util.List<Integer>) (java.util.Collections.<Integer>emptyList()), false))),
+      (hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>) ((hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>) (new hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>((hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty()), false))),
       hydra.lib.strings.ToList.apply(input)));
     return hydra.lib.strings.FromList.apply(hydra.lib.lists.Reverse.apply(hydra.lib.pairs.First.apply(result.get())));
   }
 
-  static String sanitizeWithUnderscores(java.util.Set<String> reserved, String s) {
+  static String normalizeComment(String s) {
+    String stripped = hydra.Formatting.stripLeadingAndTrailingWhitespace(s);
+    return hydra.lib.logic.IfElse.lazy(
+      hydra.lib.strings.Null.apply(stripped),
+      () -> "",
+      () -> ((java.util.function.Supplier<String>) (() -> {
+        Integer lastIdx = hydra.lib.math.Sub.apply(
+          hydra.lib.strings.Length.apply(stripped),
+          1);
+        return ((java.util.function.Supplier<String>) (() -> {
+          Integer lastChar = hydra.lib.strings.CharAt.apply(
+            lastIdx,
+            stripped);
+          return hydra.lib.logic.IfElse.lazy(
+            hydra.lib.equality.Equal.apply(
+              lastChar,
+              46),
+            () -> stripped,
+            () -> hydra.lib.strings.Cat2.apply(
+              stripped,
+              "."));
+        })).get();
+      })).get());
+  }
+
+  static String sanitizeWithUnderscores(hydra.util.PersistentSet<String> reserved, String s) {
     return hydra.Formatting.escapeWithUnderscore(
       reserved,
       hydra.Formatting.nonAlnumToUnderscores(s));
   }
 
-  static <T0> String showList(java.util.function.Function<T0, String> f, java.util.List<T0> els) {
-    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
+  static <T0> String showList(java.util.function.Function<T0, String> f, hydra.util.ConsList<T0> els) {
+    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
       "[",
       hydra.lib.strings.Intercalate.apply(
         ", ",
@@ -244,7 +269,7 @@ public interface Formatting {
   }
 
   static String withCharacterAliases(String original) {
-    hydra.util.Lazy<java.util.Map<Integer, String>> aliases = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.Arrays.asList(
+    hydra.util.Lazy<hydra.util.PersistentMap<Integer, String>> aliases = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
       (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(32, "sp"))),
       (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(33, "excl"))),
       (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(34, "quot"))),
@@ -278,7 +303,7 @@ public interface Formatting {
       (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(124, "verbar"))),
       (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(125, "rcub"))),
       (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(126, "tilde"))))));
-    java.util.function.Function<Integer, java.util.List<Integer>> alias = (java.util.function.Function<Integer, java.util.List<Integer>>) (c -> hydra.lib.maybes.FromMaybe.applyLazy(
+    java.util.function.Function<Integer, hydra.util.ConsList<Integer>> alias = (java.util.function.Function<Integer, hydra.util.ConsList<Integer>>) (c -> hydra.lib.maybes.FromMaybe.applyLazy(
       () -> hydra.lib.lists.Pure.apply(c),
       hydra.lib.maybes.Map.apply(
         hydra.lib.strings.ToList::apply,
@@ -293,12 +318,12 @@ public interface Formatting {
   }
 
   static String wrapLine(Integer maxlen, String input) {
-    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<java.util.List<Integer>>, java.util.function.Function<java.util.List<Integer>, java.util.List<java.util.List<Integer>>>>> helper = new java.util.concurrent.atomic.AtomicReference<>();
-    helper.set((java.util.function.Function<java.util.List<java.util.List<Integer>>, java.util.function.Function<java.util.List<Integer>, java.util.List<java.util.List<Integer>>>>) (prev -> (java.util.function.Function<java.util.List<Integer>, java.util.List<java.util.List<Integer>>>) (rem -> {
-      hydra.util.Lazy<java.util.List<Integer>> trunc = new hydra.util.Lazy<>(() -> hydra.lib.lists.Take.apply(
+    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<Integer>>, java.util.function.Function<hydra.util.ConsList<Integer>, hydra.util.ConsList<hydra.util.ConsList<Integer>>>>> helper = new java.util.concurrent.atomic.AtomicReference<>();
+    helper.set((java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<Integer>>, java.util.function.Function<hydra.util.ConsList<Integer>, hydra.util.ConsList<hydra.util.ConsList<Integer>>>>) (prev -> (java.util.function.Function<hydra.util.ConsList<Integer>, hydra.util.ConsList<hydra.util.ConsList<Integer>>>) (rem -> {
+      hydra.util.Lazy<hydra.util.ConsList<Integer>> trunc = new hydra.util.Lazy<>(() -> hydra.lib.lists.Take.apply(
         maxlen,
         rem));
-      hydra.util.Lazy<hydra.util.Pair<java.util.List<Integer>, java.util.List<Integer>>> spanResult = new hydra.util.Lazy<>(() -> hydra.lib.lists.Span.apply(
+      hydra.util.Lazy<hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.util.ConsList<Integer>>> spanResult = new hydra.util.Lazy<>(() -> hydra.lib.lists.Span.apply(
         (java.util.function.Function<Integer, Boolean>) (c -> hydra.lib.logic.And.apply(
           hydra.lib.logic.Not.apply(hydra.lib.equality.Equal.apply(
             c,
@@ -307,8 +332,8 @@ public interface Formatting {
             c,
             9)))),
         hydra.lib.lists.Reverse.apply(trunc.get())));
-      hydra.util.Lazy<java.util.List<Integer>> prefix = new hydra.util.Lazy<>(() -> hydra.lib.lists.Reverse.apply(hydra.lib.pairs.Second.apply(spanResult.get())));
-      hydra.util.Lazy<java.util.List<Integer>> suffix = new hydra.util.Lazy<>(() -> hydra.lib.lists.Reverse.apply(hydra.lib.pairs.First.apply(spanResult.get())));
+      hydra.util.Lazy<hydra.util.ConsList<Integer>> prefix = new hydra.util.Lazy<>(() -> hydra.lib.lists.Reverse.apply(hydra.lib.pairs.Second.apply(spanResult.get())));
+      hydra.util.Lazy<hydra.util.ConsList<Integer>> suffix = new hydra.util.Lazy<>(() -> hydra.lib.lists.Reverse.apply(hydra.lib.pairs.First.apply(spanResult.get())));
       return hydra.lib.logic.IfElse.lazy(
         hydra.lib.equality.Lte.apply(
           hydra.lib.lists.Length.apply(rem),
@@ -332,7 +357,7 @@ public interface Formatting {
               rem)))));
     })));
     return hydra.lib.strings.FromList.apply(hydra.lib.lists.Intercalate.apply(
-      java.util.Arrays.asList(10),
-      helper.get().apply((java.util.List<java.util.List<Integer>>) (java.util.Collections.<java.util.List<Integer>>emptyList())).apply(hydra.lib.strings.ToList.apply(input))));
+      hydra.util.ConsList.of(10),
+      helper.get().apply((hydra.util.ConsList<hydra.util.ConsList<Integer>>) (hydra.util.ConsList.<hydra.util.ConsList<Integer>>empty())).apply(hydra.lib.strings.ToList.apply(input))));
   }
 }

@@ -4,175 +4,187 @@
       "type": {
         "name": "hydra.errors.DecodingError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "An error that occurred during decoding of a term"}}}],
-            "body": {"wrap": {"literal": {"string": {}}}}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "An error that occurred during decoding of a term"}}}],
+              "body": {"wrap": {"literal": {"string": {}}}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.errors.Error",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "An error of any kind, with kernel errors particularly differentiated"}}}],
-            "body": {
-              "union": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "checking",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A type checking error"}}}],
-                      "body": {"variable": "hydra.error.checking.CheckingError"}}}},
-                {
-                  "name": "decoding",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "An error that occurred during decoding of a term"}}}],
-                      "body": {"variable": "hydra.errors.DecodingError"}}}},
-                {
-                  "name": "duplicateBinding",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A duplicate binding name error"}}}],
-                      "body": {"variable": "hydra.error.core.DuplicateBindingError"}}}},
-                {
-                  "name": "duplicateField",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A duplicate field name error"}}}],
-                      "body": {"variable": "hydra.error.core.DuplicateFieldError"}}}},
-                {
-                  "name": "other",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "Any other error"}}}],
-                      "body": {"variable": "hydra.errors.OtherError"}}}},
-                {
-                  "name": "undefinedField",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A reference to an undefined field"}}}],
-                      "body": {"variable": "hydra.error.core.UndefinedFieldError"}}}},
-                {
-                  "name": "undefinedTermVariable",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A reference to an undefined term variable"}}}],
-                      "body": {"variable": "hydra.error.core.UndefinedTermVariableError"}}}},
-                {
-                  "name": "untypedTermVariable",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A term variable whose type is not known"}}}],
-                      "body": {"variable": "hydra.error.core.UntypedTermVariableError"}}}},
-                {
-                  "name": "unexpectedTermVariant",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "An unexpected term variant"}}}],
-                      "body": {"variable": "hydra.error.core.UnexpectedTermVariantError"}}}},
-                {
-                  "name": "unexpectedTypeVariant",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "An unexpected type variant"}}}],
-                      "body": {"variable": "hydra.error.core.UnexpectedTypeVariantError"}}}},
-                {
-                  "name": "unification",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A type unification error"}}}],
-                      "body": {"variable": "hydra.errors.UnificationError"}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "An error of any kind, with kernel errors particularly differentiated"}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "checking",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A type checking error"}}}],
+                        "body": {"variable": "hydra.error.checking.CheckingError"}}}},
+                  {
+                    "name": "decoding",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "An error that occurred during decoding of a term"}}}],
+                        "body": {"variable": "hydra.errors.DecodingError"}}}},
+                  {
+                    "name": "duplicateBinding",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A duplicate binding name error"}}}],
+                        "body": {"variable": "hydra.error.core.DuplicateBindingError"}}}},
+                  {
+                    "name": "duplicateField",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A duplicate field name error"}}}],
+                        "body": {"variable": "hydra.error.core.DuplicateFieldError"}}}},
+                  {
+                    "name": "other",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "Any other error"}}}],
+                        "body": {"variable": "hydra.errors.OtherError"}}}},
+                  {
+                    "name": "undefinedField",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A reference to an undefined field"}}}],
+                        "body": {"variable": "hydra.error.core.UndefinedFieldError"}}}},
+                  {
+                    "name": "undefinedTermVariable",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A reference to an undefined term variable"}}}],
+                        "body": {"variable": "hydra.error.core.UndefinedTermVariableError"}}}},
+                  {
+                    "name": "untypedTermVariable",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A term variable whose type is not known"}}}],
+                        "body": {"variable": "hydra.error.core.UntypedTermVariableError"}}}},
+                  {
+                    "name": "unexpectedTermVariant",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "An unexpected term variant"}}}],
+                        "body": {"variable": "hydra.error.core.UnexpectedTermVariantError"}}}},
+                  {
+                    "name": "unexpectedTypeVariant",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "An unexpected type variant"}}}],
+                        "body": {"variable": "hydra.error.core.UnexpectedTypeVariantError"}}}},
+                  {
+                    "name": "unification",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A type unification error"}}}],
+                        "body": {"variable": "hydra.errors.UnificationError"}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.errors.OtherError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {"literal": {"string": "Any other error"}}}],
-            "body": {"wrap": {"literal": {"string": {}}}}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "Any other error"}}}],
+              "body": {"wrap": {"literal": {"string": {}}}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.errors.UnificationError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "An error that occurred during type unification"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "leftType",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The left-hand type in the unification"}}}],
-                      "body": {"variable": "hydra.core.Type"}}}},
-                {
-                  "name": "rightType",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The right-hand type in the unification"}}}],
-                      "body": {"variable": "hydra.core.Type"}}}},
-                {
-                  "name": "message",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A human-readable error message"}}}],
-                      "body": {"literal": {"string": {}}}}}}]}}}}}],
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "An error that occurred during type unification"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "leftType",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The left-hand type in the unification"}}}],
+                        "body": {"variable": "hydra.core.Type"}}}},
+                  {
+                    "name": "rightType",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The right-hand type in the unification"}}}],
+                        "body": {"variable": "hydra.core.Type"}}}},
+                  {
+                    "name": "message",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A human-readable error message"}}}],
+                        "body": {"literal": {"string": {}}}}}}]}}},
+          "variables": []}}}],
   "description": ["Top-level error types for the Hydra kernel"],
   "namespace": "hydra.errors",
   "termDependencies": [

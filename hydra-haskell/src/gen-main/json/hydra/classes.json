@@ -4,16 +4,19 @@
       "type": {
         "name": "hydra.classes.TypeClass",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "Any of a small number of built-in type classes"}}}],
-            "body": {
-              "union": [
-                {"name": "equality", "type": {"unit": {}}},
-                {"name": "ordering", "type": {"unit": {}}}]}}}}}],
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "Any of a small number of built-in type classes"}}}],
+              "body": {
+                "union": [
+                  {"name": "equality", "type": {"unit": {}}},
+                  {"name": "ordering", "type": {"unit": {}}}]}}},
+          "variables": []}}}],
   "description": ["Type classes"],
   "namespace": "hydra.classes",
   "termDependencies": ["hydra.core"],

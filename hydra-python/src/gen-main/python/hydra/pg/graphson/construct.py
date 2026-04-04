@@ -7,6 +7,7 @@ from collections.abc import Callable
 from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Just, Left, Nothing, Right, frozenlist
 from typing import TypeVar, cast
+import hydra.coders
 import hydra.context
 import hydra.core
 import hydra.errors
@@ -18,7 +19,6 @@ import hydra.lib.pairs
 import hydra.pg.graphson.coder
 import hydra.pg.graphson.syntax
 import hydra.pg.model
-import hydra.util
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
@@ -52,10 +52,10 @@ def aggregate_map(pairs: frozenlist[tuple[T0, T1]]) -> FrozenDict[T0, frozenlist
     return hydra.lib.lists.foldl((lambda m, p: (k := hydra.lib.pairs.first(p), v := hydra.lib.pairs.second(p), existing := hydra.lib.maps.lookup(k, m), hydra.lib.maps.insert(k, hydra.lib.maybes.maybe((lambda : hydra.lib.lists.pure(v)), (lambda vs: hydra.lib.lists.cons(v, vs)), existing), m))[3]), hydra.lib.maps.empty(), pairs)
 
 @lru_cache(1)
-def graphson_vertex_to_json_coder() -> hydra.util.Coder[hydra.pg.graphson.syntax.Vertex, hydra.json.model.Value]:
+def graphson_vertex_to_json_coder() -> hydra.coders.Coder[hydra.pg.graphson.syntax.Vertex, hydra.json.model.Value]:
     r"""A coder that converts GraphSON vertices to JSON. Decoding is not supported."""
 
-    return hydra.util.Coder((lambda _cx, v: Right(hydra.pg.graphson.coder.vertex_to_json(v))), (lambda _cx, _: Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("decoding GraphSON JSON is currently unsupported"))), _cx))))
+    return hydra.coders.Coder((lambda _cx, v: Right(hydra.pg.graphson.coder.vertex_to_json(v))), (lambda _cx, _: Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("decoding GraphSON JSON is currently unsupported"))), _cx))))
 
 def vertex_property_to_graphson(encode_value: Callable[[T0], Either[T1, hydra.pg.graphson.syntax.Value]], prop: tuple[hydra.pg.model.PropertyKey, T0]) -> Either[T1, tuple[hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.VertexPropertyValue]]:
     r"""Convert a property graph vertex property to a GraphSON vertex property."""

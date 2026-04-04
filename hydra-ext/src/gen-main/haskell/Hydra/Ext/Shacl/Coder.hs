@@ -5,14 +5,16 @@
 module Hydra.Ext.Shacl.Coder where
 
 import qualified Hydra.Annotations as Annotations
+import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Encode.Core as Core__
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Ext.Org.W3.Rdf.Syntax as Syntax
 import qualified Hydra.Ext.Org.W3.Shacl.Model as Model
 import qualified Hydra.Ext.Rdf.Utils as Utils
-import qualified Hydra.Extract.Core as Core__
+import qualified Hydra.Extract.Core as Core___
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Lists as Lists
@@ -24,7 +26,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
@@ -156,7 +158,7 @@ encodeTerm subject term cx g =
       Core.TermMap v0 -> Eithers.map (\_r -> ([
         Syntax.Description {
           Syntax.descriptionSubject = (Utils.resourceToNode subject),
-          Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Lists.concat (Pairs.first _r))))}], (Pairs.second _r))) (foldAccumResult (\_cx0 -> \kv -> Eithers.bind (Core__.string _cx0 g (Strip.deannotateTerm (Pairs.first kv))) (\_ks ->
+          Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Lists.concat (Pairs.first _r))))}], (Pairs.second _r))) (foldAccumResult (\_cx0 -> \kv -> Eithers.bind (Core___.string _cx0 g (Strip.deannotateTerm (Pairs.first kv))) (\_ks ->
         let pair2 = Utils.nextBlankNode _cx0
             node2 = Pairs.first pair2
             cx2 = Pairs.second pair2
@@ -242,13 +244,26 @@ property iri =
       Model.propertyShapePath = iri}
 
 -- | Encode a module's type elements as a SHACL ShapesGraph
-shaclCoder :: Module.Module -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Model.ShapesGraph, Context.Context)
+shaclCoder :: Packaging.Module -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Model.ShapesGraph, Context.Context)
 shaclCoder mod cx g =
 
       let typeEls =
               Maybes.cat (Lists.map (\d -> case d of
-                Module.DefinitionType v0 -> Just (Annotations.typeElement (Module.typeDefinitionName v0) (Module.typeDefinitionType v0))
-                _ -> Nothing) (Module.moduleDefinitions mod))
+                Packaging.DefinitionType v0 -> Just ((\name -> \typ ->
+                  let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
+                      dataTerm =
+                              Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
+                                Core.annotatedTermBody = (Core__.type_ typ),
+                                Core.annotatedTermAnnotation = (Maps.fromList [
+                                  (Constants.key_type, schemaTerm)])}))
+                  in Core.Binding {
+                    Core.bindingName = name,
+                    Core.bindingTerm = dataTerm,
+                    Core.bindingType = (Just (Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+                      Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeType (Packaging.typeDefinitionType v0)))
+                _ -> Nothing) (Packaging.moduleDefinitions mod))
           toShape =
                   \el -> Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
                     Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),

@@ -4,216 +4,243 @@
       "type": {
         "name": "hydra.relational.ColumnName",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "A name for a domain which serves to identify the role played by that domain in the given relation; a 'role name' in Codd"}}}],
-            "body": {"wrap": {"literal": {"string": {}}}}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A name for a domain which serves to identify the role played by that domain in the given relation; a 'role name' in Codd"}}}],
+              "body": {"wrap": {"literal": {"string": {}}}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.relational.ColumnSchema",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "An abstract specification of the domain represented by a column in a relation; a role"}}}],
-            "body": {
-              "forall": {
-                "body": {
-                  "record": [
-                    {
-                      "name": "name",
-                      "type": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A unique name for the column"}}}],
-                          "body": {"variable": "hydra.relational.ColumnName"}}}},
-                    {
-                      "name": "domain",
-                      "type": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "The domain (type) of the column"}}}],
-                          "body": {"variable": "t"}}}}]},
-                "parameter": "t"}}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "An abstract specification of the domain represented by a column in a relation; a role"}}}],
+              "body": {
+                "forall": {
+                  "body": {
+                    "record": [
+                      {
+                        "name": "name",
+                        "type": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {"literal": {"string": "A unique name for the column"}}}],
+                            "body": {"variable": "hydra.relational.ColumnName"}}}},
+                      {
+                        "name": "domain",
+                        "type": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {"literal": {"string": "The domain (type) of the column"}}}],
+                            "body": {"variable": "t"}}}}]},
+                  "parameter": "t"}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.relational.ForeignKey",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "A mapping from certain columns of a source relation to primary key columns of a target relation"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "foreignRelation",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The name of the target relation"}}}],
-                      "body": {"variable": "hydra.relational.RelationName"}}}},
-                {
-                  "name": "keys",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}}],
-                      "body": {
-                        "map": {
-                          "keys": {"variable": "hydra.relational.ColumnName"},
-                          "values": {"variable": "hydra.relational.ColumnName"}}}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A mapping from certain columns of a source relation to primary key columns of a target relation"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "foreignRelation",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The name of the target relation"}}}],
+                        "body": {"variable": "hydra.relational.RelationName"}}}},
+                  {
+                    "name": "keys",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}}],
+                        "body": {
+                          "map": {
+                            "keys": {"variable": "hydra.relational.ColumnName"},
+                            "values": {"variable": "hydra.relational.ColumnName"}}}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.relational.PrimaryKey",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "A primary key of a relation, specified either as a single column, or as a list of columns"}}}],
-            "body": {"wrap": {"list": {"variable": "hydra.relational.ColumnName"}}}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A primary key of a relation, specified either as a single column, or as a list of columns"}}}],
+              "body": {"wrap": {"list": {"variable": "hydra.relational.ColumnName"}}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.relational.Relation",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {"literal": {"string": "A set of distinct n-tuples; a table"}}}],
-            "body": {
-              "forall": {
-                "body": {
-                  "wrap": {
-                    "list": {
-                      "application": {
-                        "argument": {"variable": "v"},
-                        "function": {"variable": "hydra.relational.Row"}}}}},
-                "parameter": "v"}}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "A set of distinct n-tuples; a table"}}}],
+              "body": {
+                "forall": {
+                  "body": {
+                    "wrap": {
+                      "list": {
+                        "application": {
+                          "argument": {"variable": "v"},
+                          "function": {"variable": "hydra.relational.Row"}}}}},
+                  "parameter": "v"}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.relational.RelationName",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {"literal": {"string": "A unique relation (table) name"}}}],
-            "body": {"wrap": {"literal": {"string": {}}}}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "A unique relation (table) name"}}}],
+              "body": {"wrap": {"literal": {"string": {}}}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.relational.RelationSchema",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "An abstract relation; the name and columns of a relation without its actual data"}}}],
-            "body": {
-              "forall": {
-                "body": {
-                  "record": [
-                    {
-                      "name": "name",
-                      "type": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A unique name for the relation"}}}],
-                          "body": {"variable": "hydra.relational.RelationName"}}}},
-                    {
-                      "name": "columns",
-                      "type": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "A list of column specifications"}}}],
-                          "body": {
-                            "list": {
-                              "application": {
-                                "argument": {"variable": "t"},
-                                "function": {"variable": "hydra.relational.ColumnSchema"}}}}}}},
-                    {
-                      "name": "primaryKeys",
-                      "type": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "@key": "description",
-                              "@value": {
-                                "literal": {
-                                  "string": "Any number of primary keys for the relation, each of which must be valid for this relation"}}}],
-                          "body": {"list": {"variable": "hydra.relational.PrimaryKey"}}}}},
-                    {
-                      "name": "foreignKeys",
-                      "type": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "@key": "description",
-                              "@value": {
-                                "literal": {
-                                  "string": "Any number of foreign keys, each of which must be valid for both this relation and the target relation"}}}],
-                          "body": {"list": {"variable": "hydra.relational.ForeignKey"}}}}}]},
-                "parameter": "t"}}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "An abstract relation; the name and columns of a relation without its actual data"}}}],
+              "body": {
+                "forall": {
+                  "body": {
+                    "record": [
+                      {
+                        "name": "name",
+                        "type": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {"literal": {"string": "A unique name for the relation"}}}],
+                            "body": {"variable": "hydra.relational.RelationName"}}}},
+                      {
+                        "name": "columns",
+                        "type": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {"literal": {"string": "A list of column specifications"}}}],
+                            "body": {
+                              "list": {
+                                "application": {
+                                  "argument": {"variable": "t"},
+                                  "function": {"variable": "hydra.relational.ColumnSchema"}}}}}}},
+                      {
+                        "name": "primaryKeys",
+                        "type": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {
+                                  "literal": {
+                                    "string": "Any number of primary keys for the relation, each of which must be valid for this relation"}}}],
+                            "body": {"list": {"variable": "hydra.relational.PrimaryKey"}}}}},
+                      {
+                        "name": "foreignKeys",
+                        "type": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {
+                                  "literal": {
+                                    "string": "Any number of foreign keys, each of which must be valid for both this relation and the target relation"}}}],
+                            "body": {"list": {"variable": "hydra.relational.ForeignKey"}}}}}]},
+                  "parameter": "t"}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.relational.Relationship",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "A domain-unordered (string-indexed, rather than position-indexed) relation"}}}],
-            "body": {
-              "forall": {
-                "body": {
-                  "wrap": {
-                    "set": {
-                      "map": {
-                        "keys": {"variable": "hydra.relational.ColumnName"},
-                        "values": {"variable": "v"}}}}},
-                "parameter": "v"}}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A domain-unordered (string-indexed, rather than position-indexed) relation"}}}],
+              "body": {
+                "forall": {
+                  "body": {
+                    "wrap": {
+                      "set": {
+                        "map": {
+                          "keys": {"variable": "hydra.relational.ColumnName"},
+                          "values": {"variable": "v"}}}}},
+                  "parameter": "v"}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.relational.Row",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "An n-tuple which is an element of a given relation"}}}],
-            "body": {
-              "forall": {"body": {"wrap": {"list": {"variable": "v"}}}, "parameter": "v"}}}}}}],
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "An n-tuple which is an element of a given relation"}}}],
+              "body": {
+                "forall": {"body": {"wrap": {"list": {"variable": "v"}}}, "parameter": "v"}}}},
+          "variables": []}}}],
   "description": [
     "An interpretation of Codd's Relational Model, as described in 'A Relational Model of Data for Large Shared Data Banks' (1970). Types ('domains') and values are parameterized so as to allow for application-specific implementations. No special support is provided for 'nonsimple' domains; i.e. relations are assumed to be normalized."],
   "namespace": "hydra.relational",

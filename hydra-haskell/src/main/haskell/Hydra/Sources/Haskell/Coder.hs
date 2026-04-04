@@ -29,7 +29,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
 import qualified Hydra.Dsl.Topology                   as Topology
@@ -202,8 +202,8 @@ constructModule = haskellCoderDefinition "constructModule" $
   "createDeclarations">: "def" ~>
     cases _Definition (var "def") Nothing [
       _Definition_type>>: "type" ~> lets [
-        "name">: Module.typeDefinitionName $ var "type",
-        "typ">: Module.typeDefinitionType $ var "type"] $
+        "name">: Packaging.typeDefinitionName $ var "type",
+        "typ">: Core.typeSchemeType $ Packaging.typeDefinitionType $ var "type"] $
         toTypeDeclarationsFrom @@ var "namespaces" @@ var "name" @@ var "typ" @@ var "cx" @@ var "g",
       _Definition_term>>: "term" ~>
         "d" <<~ toDataDeclaration @@ var "namespaces" @@ var "term" @@ var "cx" @@ var "g" $
@@ -221,7 +221,7 @@ constructModule = haskellCoderDefinition "constructModule" $
           H._Import_module>>: var "importName" @@ var "name",
           H._Import_as>>: just $ var "alias",
           H._Import_spec>>: nothing]] $
-      Lists.map (var "toImport") (Maps.toList $ Module.namespacesMapping $ var "namespaces"),
+      Lists.map (var "toImport") (Maps.toList $ Packaging.namespacesMapping $ var "namespaces"),
     "meta">: gatherMetadata @@ var "defs",
     "condImport">: "flag" ~> "triple" ~>
       Logic.ifElse (var "flag")
@@ -267,11 +267,11 @@ constructModule = haskellCoderDefinition "constructModule" $
           (list ([] :: [TTerm ((String, Maybe String), [String])]))]] $
     "declLists" <<~ Eithers.mapList (var "createDeclarations") (var "defs") $ lets [
     "decls">: Lists.concat $ var "declLists",
-    "mc">: Module.moduleDescription $ var "mod"] $
+    "mc">: Packaging.moduleDescription $ var "mod"] $
     right $ record H._Module [
       H._Module_head>>: just $ record H._ModuleHead [
         H._ModuleHead_comments>>: var "mc",
-        H._ModuleHead_name>>: var "importName" @@ (var "h" @@ (Module.moduleNamespace $ var "mod")),
+        H._ModuleHead_name>>: var "importName" @@ (var "h" @@ (Packaging.moduleNamespace $ var "mod")),
         H._ModuleHead_exports>>: list ([] :: [TTerm H.Export])],
       H._Module_imports>>: var "imports",
       H._Module_declarations>>: var "decls"]
@@ -748,16 +748,16 @@ gatherMetadata = haskellCoderDefinition "gatherMetadata" $
     "addDef" <~ ("meta" ~> "def" ~>
       cases _Definition (var "def") Nothing [
         _Definition_term>>: "termDef" ~>
-          "term" <~ Module.termDefinitionTerm (var "termDef") $
+          "term" <~ Packaging.termDefinitionTerm (var "termDef") $
           "metaWithTerm" <~ (Rewriting.foldOverTerm @@ Coders.traversalOrderPre
             @@ ("m" ~> "t" ~> extendMetaForTerm @@ var "m" @@ var "t") @@ var "meta" @@ var "term") $
           Maybes.maybe (var "metaWithTerm")
             ("ts" ~>
               Rewriting.foldOverType @@ Coders.traversalOrderPre
                 @@ ("m" ~> "t" ~> extendMetaForType @@ var "m" @@ var "t") @@ var "metaWithTerm" @@ (Core.typeSchemeType $ var "ts"))
-            (Module.termDefinitionType $ var "termDef"),
+            (Packaging.termDefinitionType $ var "termDef"),
         _Definition_type>>: "typeDef" ~>
-          "typ" <~ Module.typeDefinitionType (var "typeDef") $
+          "typ" <~ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "typeDef")) $
           Rewriting.foldOverType @@ Coders.traversalOrderPre
             @@ ("m" ~> "t" ~> extendMetaForType @@ var "m" @@ var "t") @@ var "meta" @@ var "typ"]) $
     Lists.foldl (var "addDef") (asTerm emptyMetadata) (var "defs")
@@ -783,7 +783,7 @@ moduleToHaskell = haskellCoderDefinition "moduleToHaskell" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
   "hsmod" <<~ moduleToHaskellModule @@ var "mod" @@ var "defs" @@ var "cx" @@ var "g" $ lets [
   "s">: Serialization.printExpr @@ (Serialization.parenthesize @@ (HaskellSerde.moduleToExpr @@ var "hsmod")),
-  "filepath">: Names.namespaceToFilePath @@ Util.caseConventionPascal @@ (wrap _FileExtension $ string "hs") @@ (Module.moduleNamespace $ var "mod")] $
+  "filepath">: Names.namespaceToFilePath @@ Util.caseConventionPascal @@ (wrap _FileExtension $ string "hs") @@ (Packaging.moduleNamespace $ var "mod")] $
   right $ Maps.singleton (var "filepath") (var "s")
 
 nameDecls :: TTermDefinition (HaskellNamespaces -> Name -> Type -> [H.DeclarationWithComments])
@@ -864,9 +864,9 @@ toDataDeclaration :: TTermDefinition (HaskellNamespaces -> TermDefinition -> Con
 toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
   doc "Convert a Hydra term definition to a Haskell declaration with comments" $
   "namespaces" ~> "def" ~> "cx" ~> "g" ~> lets [
-    "name">: Module.termDefinitionName $ var "def",
-    "term">: Module.termDefinitionTerm $ var "def",
-    "typ">: Module.termDefinitionType $ var "def",
+    "name">: Packaging.termDefinitionName $ var "def",
+    "term">: Packaging.termDefinitionTerm $ var "def",
+    "typ">: Packaging.termDefinitionType $ var "def",
     "hname">: HaskellUtils.simpleName @@ (Names.localNameOf @@ var "name"),
     "rewriteValueBinding">: "vb" ~>
       cases H._ValueBinding (var "vb") Nothing [
@@ -985,7 +985,7 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
       "ftype">: Core.fieldTypeType $ var "fieldType",
       "deconflict">: "name" ~> lets [
         "tname">: Names.unqualifyName @@ record _QualifiedName [
-          _QualifiedName_namespace>>: just $ Pairs.first $ Module.namespacesFocus $ var "namespaces",
+          _QualifiedName_namespace>>: just $ Pairs.first $ Packaging.namespacesFocus $ var "namespaces",
           _QualifiedName_local>>: var "name"]] $
         Logic.ifElse (Sets.member (var "tname") (var "boundNames'"))
           (var "deconflict" @@ Strings.cat2 (var "name") (string "_"))
@@ -1084,8 +1084,8 @@ typeDecl = haskellCoderDefinition "typeDecl" $
             nothing),
       "forVariableType">: "vname" ~> lets [
         "qname">: Names.qualifyName @@ var "vname",
-        "mns">: Module.qualifiedNameNamespace $ var "qname",
-        "local">: Module.qualifiedNameLocal $ var "qname"] $
+        "mns">: Packaging.qualifiedNameNamespace $ var "qname",
+        "local">: Packaging.qualifiedNameLocal $ var "qname"] $
         Maybes.map ("ns" ~> Core.termVariable $ Names.qname @@ var "ns" @@ (Strings.cat $ list [string "_", var "local", string "_type_"])) (var "mns")] $
       Maybes.fromMaybe (var "recurse" @@ var "term") (Maybes.bind (var "variantResult") (var "forType")),
     "finalTerm">: Rewriting.rewriteTerm @@ var "rewrite" @@ var "rawTerm"] $

@@ -17,8 +17,8 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
+import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
 -- | Convert a list of descriptions to an RDF graph
@@ -149,11 +149,11 @@ propertyIri :: Core.Name -> Core.Name -> Syntax.Iri
 propertyIri rname fname =
 
       let qualName = Names.qualifyName rname
-          gname = Module.qualifiedNameNamespace qualName
-          local_ = Module.qualifiedNameLocal qualName
+          gname = Packaging.qualifiedNameNamespace qualName
+          local_ = Packaging.qualifiedNameLocal qualName
       in (Syntax.Iri (Strings.cat [
         "urn:",
-        (Maybes.maybe "" Module.unNamespace gname),
+        (Maybes.maybe "" Packaging.unNamespace gname),
         "#",
         (Formatting.decapitalize local_),
         (Formatting.capitalize (Core.unName fname))]))

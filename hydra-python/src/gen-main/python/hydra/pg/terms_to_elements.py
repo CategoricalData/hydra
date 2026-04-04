@@ -8,6 +8,7 @@ from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Left, Maybe, Right, frozenlist
 from typing import TypeVar, cast
 import hydra.annotations
+import hydra.coders
 import hydra.context
 import hydra.core
 import hydra.errors
@@ -23,10 +24,9 @@ import hydra.lib.pairs
 import hydra.lib.strings
 import hydra.pg.mapping
 import hydra.pg.model
-import hydra.rewriting
-import hydra.schemas
+import hydra.resolution
 import hydra.show.core
-import hydra.util
+import hydra.strip
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
@@ -45,7 +45,7 @@ def eval_step(cx: hydra.context.Context, step: str, term: hydra.core.Term):
                 return hydra.lib.maybes.maybe((lambda : Right(())), (lambda t: eval_step(cx, step, t)), mt)
 
             case hydra.core.TermRecord(value=rec):
-                return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2("No such field ", step), " in record")))), cx))), (lambda t: Right((t,))), hydra.lib.maps.lookup(hydra.core.Name(step), hydra.schemas.field_map(rec.fields)))
+                return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2("No such field ", step), " in record")))), cx))), (lambda t: Right((t,))), hydra.lib.maps.lookup(hydra.core.Name(step), hydra.resolution.field_map(rec.fields)))
 
             case hydra.core.TermUnion(value=inj):
                 return hydra.lib.logic.if_else(hydra.lib.equality.equal(inj.field.name.value, step), (lambda : eval_step(cx, step, inj.field.term)), (lambda : Right(())))
@@ -55,7 +55,7 @@ def eval_step(cx: hydra.context.Context, step: str, term: hydra.core.Term):
 
             case _:
                 return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2("Can't traverse through term for step ", step)))), cx))
-    return hydra.lib.logic.if_else(hydra.lib.strings.null(step), (lambda : Right((term,))), (lambda : _hoist_hydra_pg_terms_to_elements_eval_step_1(cx, step, hydra.rewriting.deannotate_term(term))))
+    return hydra.lib.logic.if_else(hydra.lib.strings.null(step), (lambda : Right((term,))), (lambda : _hoist_hydra_pg_terms_to_elements_eval_step_1(cx, step, hydra.strip.deannotate_term(term))))
 
 def eval_path(cx: hydra.context.Context, path: frozenlist[str], term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], frozenlist[hydra.core.Term]]:
     r"""Evaluate a path (list of steps) on a term, returning all resulting terms."""
@@ -93,7 +93,7 @@ def term_to_string(term: hydra.core.Term):
 
             case _:
                 return hydra.show.core.term(term)
-    match hydra.rewriting.deannotate_term(term):
+    match hydra.strip.deannotate_term(term):
         case hydra.core.TermLiteral(value=lit):
             return _hoist_hydra_pg_terms_to_elements_term_to_string_3(term, lit)
 
@@ -131,7 +131,7 @@ def decode_value_spec(cx: hydra.context.Context, g: hydra.graph.Graph, term: hyd
 
             case _:
                 return read_injection(cx, g, ((hydra.core.Name("value"), (lambda _: Right(cast(hydra.pg.mapping.ValueSpec, hydra.pg.mapping.ValueSpecValue())))), (hydra.core.Name("pattern"), (lambda t: hydra.lib.eithers.map((lambda _x: cast(hydra.pg.mapping.ValueSpec, hydra.pg.mapping.ValueSpecPattern(_x))), hydra.extract.core.string(cx, g, t))))), term)
-    match hydra.rewriting.deannotate_term(term):
+    match hydra.strip.deannotate_term(term):
         case hydra.core.TermLiteral(value=lit):
             return _hoist_hydra_pg_terms_to_elements_decode_value_spec_1(cx, g, term, lit)
 
@@ -261,8 +261,8 @@ def parse_element_spec(cx: T0, g: T1, schema: hydra.pg.mapping.Schema[T2, T3, T4
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def term_to_elements_adapter(cx: hydra.context.Context, g: hydra.graph.Graph, schema: hydra.pg.mapping.Schema[T0, T1, T2], typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.util.Adapter[hydra.core.Type, frozenlist[hydra.pg.model.Label], hydra.core.Term, frozenlist[hydra.pg.model.Element[T2]]]]:
+def term_to_elements_adapter(cx: hydra.context.Context, g: hydra.graph.Graph, schema: hydra.pg.mapping.Schema[T0, T1, T2], typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.coders.Adapter[hydra.core.Type, frozenlist[hydra.pg.model.Label], hydra.core.Term, frozenlist[hydra.pg.model.Element[T2]]]]:
     r"""Create an adapter that maps terms to property graph elements using a mapping specification."""
 
     key_elements = hydra.core.Name("elements")
-    return hydra.lib.maybes.maybe((lambda : Right(hydra.util.Adapter(False, typ, (), hydra.util.Coder((lambda _cx, _t: Right(())), (lambda cx_, _els: Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("no corresponding element type"))), cx_))))))), (lambda term: hydra.lib.eithers.bind(expect_list(cx, g, (lambda x1, x2, x3: decode_element_spec(x1, x2, x3)), term), (lambda spec_terms: hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v1: parse_element_spec(cx, g, schema, v1)), spec_terms), (lambda specs: (labels := hydra.lib.lists.nub(hydra.lib.lists.map((lambda _p: hydra.lib.pairs.first(_p)), specs)), encoders := hydra.lib.lists.map((lambda _p: hydra.lib.pairs.second(_p)), specs), Right(hydra.util.Adapter(False, typ, labels, hydra.util.Coder((lambda cx_, t: hydra.lib.eithers.map((lambda _xs: hydra.lib.lists.concat(_xs)), hydra.lib.eithers.map_list((lambda e: e(cx_, t)), encoders))), (lambda cx_, _els: Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("element decoding is not yet supported"))), cx_)))))))[2]))))), hydra.annotations.get_type_annotation(key_elements, typ))
+    return hydra.lib.maybes.maybe((lambda : Right(hydra.coders.Adapter(False, typ, (), hydra.coders.Coder((lambda _cx, _t: Right(())), (lambda cx_, _els: Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("no corresponding element type"))), cx_))))))), (lambda term: hydra.lib.eithers.bind(expect_list(cx, g, (lambda x1, x2, x3: decode_element_spec(x1, x2, x3)), term), (lambda spec_terms: hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v1: parse_element_spec(cx, g, schema, v1)), spec_terms), (lambda specs: (labels := hydra.lib.lists.nub(hydra.lib.lists.map((lambda _p: hydra.lib.pairs.first(_p)), specs)), encoders := hydra.lib.lists.map((lambda _p: hydra.lib.pairs.second(_p)), specs), Right(hydra.coders.Adapter(False, typ, labels, hydra.coders.Coder((lambda cx_, t: hydra.lib.eithers.map((lambda _xs: hydra.lib.lists.concat(_xs)), hydra.lib.eithers.map_list((lambda e: e(cx_, t)), encoders))), (lambda cx_, _els: Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("element decoding is not yet supported"))), cx_)))))))[2]))))), hydra.annotations.get_type_annotation(key_elements, typ))

@@ -6,7 +6,7 @@ import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:))
 import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
-import qualified Hydra.Sources.Kernel.Types.Module as Module
+import qualified Hydra.Sources.Kernel.Types.Packaging as Packaging
 
 
 ns :: Namespace
@@ -16,7 +16,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [Core.ns, Module.ns] [Core.ns, Module.ns] $
+module_ = Module ns (map toTypeDef elements) [Core.ns, Packaging.ns] [Core.ns, Packaging.ns] $
     Just "Error types for module and package validation"
   where
     elements = [
@@ -34,10 +34,10 @@ conflictingModuleNamespaceError = define "ConflictingModuleNamespaceError" $
   T.record [
     "first">:
       doc "The first module namespace" $
-      Module.namespace,
+      Packaging.namespace,
     "second">:
       doc "The second module namespace that conflicts with the first" $
-      Module.namespace]
+      Packaging.namespace]
 
 conflictingVariantNameError :: Binding
 conflictingVariantNameError = define "ConflictingVariantNameError" $
@@ -45,7 +45,7 @@ conflictingVariantNameError = define "ConflictingVariantNameError" $
   T.record [
     "namespace">:
       doc "The namespace of the module containing the conflict" $
-      Module.namespace,
+      Packaging.namespace,
     "typeName">:
       doc "The name of the union type" $
       Core.name,
@@ -62,7 +62,7 @@ definitionNotInModuleNamespaceError = define "DefinitionNotInModuleNamespaceErro
   T.record [
     "namespace">:
       doc "The namespace of the module" $
-      Module.namespace,
+      Packaging.namespace,
     "name">:
       doc "The definition name that does not match the module namespace" $
       Core.name]
@@ -73,7 +73,7 @@ duplicateDefinitionNameError = define "DuplicateDefinitionNameError" $
   T.record [
     "namespace">:
       doc "The namespace of the module containing the duplicates" $
-      Module.namespace,
+      Packaging.namespace,
     "name">:
       doc "The duplicated definition name" $
       Core.name]
@@ -84,7 +84,7 @@ duplicateModuleNamespaceError = define "DuplicateModuleNamespaceError" $
   T.record [
     "namespace">:
       doc "The duplicated module namespace" $
-      Module.namespace]
+      Packaging.namespace]
 
 invalidModuleError :: Binding
 invalidModuleError = define "InvalidModuleError" $

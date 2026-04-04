@@ -20,16 +20,19 @@ import hydra.lib.logic
 import hydra.lib.maps
 import hydra.lib.maybes
 import hydra.lib.pairs
-import hydra.module
+import hydra.lib.sets
+import hydra.packaging
 import hydra.scoping
+import hydra.sorting
 import hydra.strip
+import hydra.variables
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
 T2 = TypeVar("T2")
 
-def element_as_type_application_term(cx: hydra.context.Context, el: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.TypeApplicationTerm]:
-    r"""Convert an element to a typed term."""
+def definition_as_type_application_term(cx: hydra.context.Context, el: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.TypeApplicationTerm]:
+    r"""Convert a definition to a typed term."""
 
     return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("missing element type"))), cx))), (lambda ts: Right(hydra.core.TypeApplicationTerm(el.term, ts.type))), el.type)
 
@@ -50,30 +53,70 @@ def graph_as_types(cx: hydra.context.Context, graph: hydra.graph.Graph, els: fro
         return hydra.lib.eithers.map((lambda typ: (el.name, typ)), hydra.lib.eithers.bimap((lambda _wc_e: hydra.context.InContext(_wc_e, cx)), (lambda _wc_a: _wc_a), hydra.decode.core.type(graph, el.term)))
     return hydra.lib.eithers.map((lambda x1: hydra.lib.maps.from_list(x1)), hydra.lib.eithers.map_list((lambda x1: to_pair(x1)), els))
 
-def partition_definitions(defs: frozenlist[hydra.module.Definition]) -> tuple[frozenlist[hydra.module.TypeDefinition], frozenlist[hydra.module.TermDefinition]]:
+def partition_definitions(defs: frozenlist[hydra.packaging.Definition]) -> tuple[frozenlist[hydra.packaging.TypeDefinition], frozenlist[hydra.packaging.TermDefinition]]:
     r"""Partition a list of definitions into type definitions and term definitions."""
 
-    def get_type(def_: hydra.module.Definition) -> Maybe[hydra.module.TypeDefinition]:
+    def get_type(def_: hydra.packaging.Definition) -> Maybe[hydra.packaging.TypeDefinition]:
         match def_:
-            case hydra.module.DefinitionType(value=td):
+            case hydra.packaging.DefinitionType(value=td):
                 return Just(td)
 
-            case hydra.module.DefinitionTerm():
+            case hydra.packaging.DefinitionTerm():
                 return Nothing()
 
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    def get_term(def_: hydra.module.Definition) -> Maybe[hydra.module.TermDefinition]:
+    def get_term(def_: hydra.packaging.Definition) -> Maybe[hydra.packaging.TermDefinition]:
         match def_:
-            case hydra.module.DefinitionType():
+            case hydra.packaging.DefinitionType():
                 return Nothing()
 
-            case hydra.module.DefinitionTerm(value=td):
+            case hydra.packaging.DefinitionTerm(value=td):
                 return Just(td)
 
             case _:
                 raise AssertionError("Unreachable: all variants handled")
     return (hydra.lib.maybes.cat(hydra.lib.lists.map((lambda x1: get_type(x1)), defs)), hydra.lib.maybes.cat(hydra.lib.lists.map((lambda x1: get_term(x1)), defs)))
+
+def reorder_defs(defs: frozenlist[hydra.packaging.Definition]) -> frozenlist[hydra.packaging.Definition]:
+    r"""Reorder definitions: types first (with hydra.core.Name first among types), then topologically sorted terms."""
+
+    @lru_cache(1)
+    def partitioned() -> tuple[frozenlist[hydra.packaging.TypeDefinition], frozenlist[hydra.packaging.TermDefinition]]:
+        return partition_definitions(defs)
+    @lru_cache(1)
+    def type_defs_raw() -> frozenlist[hydra.packaging.TypeDefinition]:
+        return hydra.lib.pairs.first(partitioned())
+    @lru_cache(1)
+    def name_first() -> frozenlist[hydra.packaging.TypeDefinition]:
+        return hydra.lib.lists.filter((lambda td: hydra.lib.equality.equal(td.name, hydra.core.Name("hydra.core.Name"))), type_defs_raw())
+    @lru_cache(1)
+    def name_rest() -> frozenlist[hydra.packaging.TypeDefinition]:
+        return hydra.lib.lists.filter((lambda td: hydra.lib.logic.not_(hydra.lib.equality.equal(td.name, hydra.core.Name("hydra.core.Name")))), type_defs_raw())
+    @lru_cache(1)
+    def type_defs() -> frozenlist[hydra.packaging.Definition]:
+        return hydra.lib.lists.concat((hydra.lib.lists.map((lambda td: cast(hydra.packaging.Definition, hydra.packaging.DefinitionType(td))), name_first()), hydra.lib.lists.map((lambda td: cast(hydra.packaging.Definition, hydra.packaging.DefinitionType(td))), name_rest())))
+    @lru_cache(1)
+    def term_defs_wrapped() -> frozenlist[hydra.packaging.Definition]:
+        return hydra.lib.lists.map((lambda td: cast(hydra.packaging.Definition, hydra.packaging.DefinitionTerm(td))), hydra.lib.pairs.second(partitioned()))
+    @lru_cache(1)
+    def sorted_term_defs():
+        def _hoist_sorted_term_defs_1(v1):
+            match v1:
+                case hydra.packaging.DefinitionTerm(value=td):
+                    return td.name
+
+                case _:
+                    raise TypeError("Unsupported Definition")
+        def _hoist_sorted_term_defs_2(v1):
+            match v1:
+                case hydra.packaging.DefinitionTerm(value=td):
+                    return hydra.lib.sets.to_list(hydra.variables.free_variables_in_term(td.term))
+
+                case _:
+                    return ()
+        return hydra.lib.lists.concat(hydra.sorting.topological_sort_nodes((lambda d: _hoist_sorted_term_defs_1(d)), (lambda d: _hoist_sorted_term_defs_2(d)), term_defs_wrapped()))
+    return hydra.lib.lists.concat((type_defs(), sorted_term_defs()))
 
 def schema_graph_to_typing_environment(cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.errors.Error], FrozenDict[hydra.core.Name, hydra.core.TypeScheme]]:
     r"""Convert a schema graph to a typing environment (Either version)."""
@@ -116,8 +159,8 @@ def term_as_bindings(term: hydra.core.Term) -> frozenlist[hydra.core.Binding]:
         case _:
             return ()
 
-def types_to_elements(type_map: FrozenDict[hydra.core.Name, hydra.core.Type]) -> frozenlist[hydra.core.Binding]:
-    r"""Encode a map of named types to a list of elements."""
+def types_to_definitions(type_map: FrozenDict[hydra.core.Name, hydra.core.Type]) -> frozenlist[hydra.core.Binding]:
+    r"""Encode a map of named types to a list of bindings."""
 
     def to_element(pair: tuple[hydra.core.Name, hydra.core.Type]) -> hydra.core.Binding:
         @lru_cache(1)

@@ -22,7 +22,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
+import qualified Hydra.Packaging as Module
 import qualified Hydra.Names as Names
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Rewriting as Rewriting
@@ -52,7 +52,7 @@ moduleToGraphql mod defs cx g =
 
 encodeTypeDefinition :: Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Module.TypeDefinition -> Either (Context.InContext Errors.Error) Syntax.TypeDefinition
 encodeTypeDefinition cx g prefixes tdef =
-    encodeNamedType cx g prefixes (Module.typeDefinitionName tdef) (Module.typeDefinitionType tdef)
+    encodeNamedType cx g prefixes (Module.typeDefinitionName tdef) (Core.typeSchemeType (Module.typeDefinitionType tdef))
 
 descriptionFromType :: Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Errors.Error) (Maybe Syntax.Description)
 descriptionFromType cx g typ =

@@ -5,11 +5,13 @@
 module Hydra.Decoding where
 
 import qualified Hydra.Annotations as Annotations
+import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Encode.Core as Core__
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Extract.Core as Core__
+import qualified Hydra.Extract.Core as Core___
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
@@ -19,8 +21,8 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Predicates as Predicates
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
@@ -1086,39 +1088,52 @@ decodeMaybeType elemType =
         Core.applicationArgument = elemDecoder}))
 
 -- | Transform a type module into a decoder module
-decodeModule :: Context.Context -> Graph.Graph -> Module.Module -> Either (Context.InContext Errors.Error) (Maybe Module.Module)
+decodeModule :: Context.Context -> Graph.Graph -> Packaging.Module -> Either (Context.InContext Errors.Error) (Maybe Packaging.Module)
 decodeModule cx graph mod =
     Eithers.bind (filterTypeBindings cx graph (Maybes.cat (Lists.map (\d -> case d of
-      Module.DefinitionType v0 -> Just (Annotations.typeElement (Module.typeDefinitionName v0) (Module.typeDefinitionType v0))
-      _ -> Nothing) (Module.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\ic -> Context.InContext {
+      Packaging.DefinitionType v0 -> Just ((\name -> \typ ->
+        let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
+            dataTerm =
+                    Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
+                      Core.annotatedTermBody = (Core__.type_ typ),
+                      Core.annotatedTermAnnotation = (Maps.fromList [
+                        (Constants.key_type, schemaTerm)])}))
+        in Core.Binding {
+          Core.bindingName = name,
+          Core.bindingTerm = dataTerm,
+          Core.bindingType = (Just (Core.TypeScheme {
+            Core.typeSchemeVariables = [],
+            Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+            Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeType (Packaging.typeDefinitionType v0)))
+      _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\ic -> Context.InContext {
       Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError (Context.inContextObject ic)))),
       Context.inContextContext = (Context.inContextContext ic)}) (\x -> x) (decodeBinding cx graph b)) typeBindings) (\decodedBindings ->
-      let decodedTypeDeps = Lists.map decodeNamespace (Module.moduleTypeDependencies mod)
-          decodedTermDeps = Lists.map decodeNamespace (Module.moduleTermDependencies mod)
+      let decodedTypeDeps = Lists.map decodeNamespace (Packaging.moduleTypeDependencies mod)
+          decodedTermDeps = Lists.map decodeNamespace (Packaging.moduleTermDependencies mod)
           allDecodedDeps = Lists.nub (Lists.concat2 decodedTypeDeps decodedTermDeps)
-      in (Right (Just (Module.Module {
-        Module.moduleNamespace = (decodeNamespace (Module.moduleNamespace mod)),
-        Module.moduleDefinitions = (Lists.map (\b -> Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.bindingName b),
-          Module.termDefinitionTerm = (Core.bindingTerm b),
-          Module.termDefinitionType = (Core.bindingType b)})) decodedBindings),
-        Module.moduleTermDependencies = (Lists.concat2 [
-          Module.Namespace "hydra.extract.core",
-          (Module.Namespace "hydra.lexical"),
-          (Module.Namespace "hydra.rewriting")] allDecodedDeps),
-        Module.moduleTypeDependencies = [
-          Module.moduleNamespace mod,
-          (Module.Namespace "hydra.util")],
-        Module.moduleDescription = (Just (Strings.cat [
+      in (Right (Just (Packaging.Module {
+        Packaging.moduleNamespace = (decodeNamespace (Packaging.moduleNamespace mod)),
+        Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.bindingName b),
+          Packaging.termDefinitionTerm = (Core.bindingTerm b),
+          Packaging.termDefinitionType = (Core.bindingType b)})) decodedBindings),
+        Packaging.moduleTermDependencies = (Lists.concat2 [
+          Packaging.Namespace "hydra.extract.core",
+          (Packaging.Namespace "hydra.lexical"),
+          (Packaging.Namespace "hydra.rewriting")] allDecodedDeps),
+        Packaging.moduleTypeDependencies = [
+          Packaging.moduleNamespace mod,
+          (Packaging.Namespace "hydra.util")],
+        Packaging.moduleDescription = (Just (Strings.cat [
           "Term decoders for ",
-          (Module.unNamespace (Module.moduleNamespace mod))]))}))))))
+          (Packaging.unNamespace (Packaging.moduleNamespace mod))]))}))))))
 
 -- | Generate a decoder module namespace from a source module namespace
-decodeNamespace :: Module.Namespace -> Module.Namespace
+decodeNamespace :: Packaging.Namespace -> Packaging.Namespace
 decodeNamespace ns =
-    Module.Namespace (Strings.cat [
+    Packaging.Namespace (Strings.cat [
       "hydra.decode.",
-      (Strings.intercalate "." (Lists.tail (Strings.splitOn "." (Module.unNamespace ns))))])
+      (Strings.intercalate "." (Lists.tail (Strings.splitOn "." (Packaging.unNamespace ns))))])
 
 -- | Generate a decoder for a pair type
 decodePairType :: Core.PairType -> Core.Term

@@ -6,7 +6,7 @@ import hydra.ext.java.syntax.*
 
 import hydra.graph.*
 
-import hydra.module.*
+import hydra.packaging.*
 
 import hydra.core
 
@@ -14,7 +14,7 @@ import hydra.ext.java.syntax
 
 import hydra.graph
 
-import hydra.module
+import hydra.packaging
 
 enum JavaSymbolClass :
    case constant extends JavaSymbolClass
@@ -25,8 +25,8 @@ enum JavaSymbolClass :
 
 case class JavaFeatures(supportsDiamondOperator: Boolean)
 
-case class Aliases(currentNamespace: hydra.module.Namespace, packages: Map[hydra.module.Namespace, hydra.ext.java.syntax.PackageName],
-   branchVars: scala.collection.immutable.Set[hydra.core.Name], recursiveVars: scala.collection.immutable.Set[hydra.core.Name],
+case class Aliases(currentNamespace: hydra.packaging.Namespace, packages: Map[hydra.packaging.Namespace,
+   hydra.ext.java.syntax.PackageName], branchVars: scala.collection.immutable.Set[hydra.core.Name], recursiveVars: scala.collection.immutable.Set[hydra.core.Name],
    inScopeTypeParams: scala.collection.immutable.Set[hydra.core.Name], polymorphicLocals: scala.collection.immutable.Set[hydra.core.Name],
    inScopeJavaVars: scala.collection.immutable.Set[hydra.core.Name], varRenames: Map[hydra.core.Name,
    hydra.core.Name], lambdaVars: scala.collection.immutable.Set[hydra.core.Name], typeVarSubst: Map[hydra.core.Name,
