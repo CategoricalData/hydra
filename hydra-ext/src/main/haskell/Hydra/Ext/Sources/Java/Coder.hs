@@ -22,7 +22,7 @@ import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Errors                      as Error
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
@@ -601,10 +601,10 @@ bindingNameToFilePath :: TTermDefinition (Name -> String)
 bindingNameToFilePath = def "bindingNameToFilePath" $
   lambda "name" $ lets [
     "qn">: Names.qualifyName @@ var "name",
-    "ns_">: Module.qualifiedNameNamespace (var "qn"),
-    "local">: Module.qualifiedNameLocal (var "qn"),
+    "ns_">: Packaging.qualifiedNameNamespace (var "qn"),
+    "local">: Packaging.qualifiedNameLocal (var "qn"),
     "sanitized">: Formatting.sanitizeWithUnderscores @@ JavaLanguageSource.reservedWords @@ var "local",
-    "unq">: Names.unqualifyName @@ Module.qualifiedName (var "ns_") (var "sanitized")] $
+    "unq">: Names.unqualifyName @@ Packaging.qualifiedName (var "ns_") (var "sanitized")] $
     Names.nameToFilePath @@ Util.caseConventionCamel @@ Util.caseConventionPascal
       @@ wrap _FileExtension (string "java") @@ var "unq"
 
@@ -1329,7 +1329,7 @@ constantDeclForTypeName = def "constantDeclForTypeName" $
 constructElementsInterface :: TTermDefinition (Module -> [Java.InterfaceMemberDeclaration] -> (Name, Java.CompilationUnit))
 constructElementsInterface = def "constructElementsInterface" $
   lambda "mod" $ lambda "members" $ lets [
-    "ns">: Module.moduleNamespace (var "mod"),
+    "ns">: Packaging.moduleNamespace (var "mod"),
     "parentNs">: namespaceParent @@ var "ns",
     "pkg">: Maybes.cases (var "parentNs")
       (JavaUtilsSource.javaPackageDeclaration @@ var "ns")
@@ -1351,7 +1351,7 @@ constructElementsInterface = def "constructElementsInterface" $
           Java._NormalInterfaceDeclaration_body>>: var "body"])),
     "decl">: record Java._TypeDeclarationWithComments [
       Java._TypeDeclarationWithComments_value>>: var "itf",
-      Java._TypeDeclarationWithComments_comments>>: Module.moduleDescription (var "mod")]] $
+      Java._TypeDeclarationWithComments_comments>>: Packaging.moduleDescription (var "mod")]] $
     pair (var "elName")
       (inject Java._CompilationUnit Java._CompilationUnit_ordinary
         (record Java._OrdinaryCompilationUnit [
@@ -1822,8 +1822,8 @@ elementJavaIdentifier :: TTermDefinition (Bool -> Bool -> JavaHelpers.Aliases ->
 elementJavaIdentifier = def "elementJavaIdentifier" $
   lambda "isPrim" $ lambda "isMethod" $ lambda "aliases" $ lambda "name" $ lets [
     "qn">: Names.qualifyName @@ var "name",
-    "ns_">: Module.qualifiedNameNamespace (var "qn"),
-    "local">: Module.qualifiedNameLocal (var "qn"),
+    "ns_">: Packaging.qualifiedNameNamespace (var "qn"),
+    "local">: Packaging.qualifiedNameLocal (var "qn"),
     "sep">: Logic.ifElse (var "isMethod") (string "::") (string ".")] $
     Logic.ifElse (var "isPrim")
       (wrap Java._Identifier (Strings.cat2
@@ -1846,7 +1846,7 @@ elementJavaIdentifier_qualify :: TTermDefinition (JavaHelpers.Aliases -> Maybe N
 elementJavaIdentifier_qualify = def "elementJavaIdentifier_qualify" $
   lambda "aliases" $ lambda "mns" $ lambda "s" $
     unwrap Java._Identifier @@ (JavaUtilsSource.nameToJavaName @@ var "aliases"
-      @@ (Names.unqualifyName @@ Module.qualifiedName (var "mns") (var "s")))
+      @@ (Names.unqualifyName @@ Packaging.qualifiedName (var "mns") (var "s")))
 
 -- | Convert a namespace to an elements class name (e.g., "hydra.ext.java.syntax" -> "Syntax")
 elementsClassName :: TTermDefinition (Namespace -> String)
@@ -1862,7 +1862,7 @@ elementsClassName = def "elementsClassName" $
 elementsQualifiedName :: TTermDefinition (Namespace -> Name)
 elementsQualifiedName = def "elementsQualifiedName" $
   lambda "ns" $
-    Names.unqualifyName @@ Module.qualifiedName (namespaceParent @@ var "ns") (elementsClassName @@ var "ns")
+    Names.unqualifyName @@ Packaging.qualifiedName (namespaceParent @@ var "ns") (elementsClassName @@ var "ns")
 
 -- | Encode a function application.
 encodeApplication :: TTermDefinition (JavaHelpers.JavaEnvironment -> Application -> Context -> Graph -> Either (InContext Error) Java.Expression)
@@ -2010,7 +2010,7 @@ encodeDefinitions = def "encodeDefinitions" $
     "env" <~ (record JavaHelpers._JavaEnvironment [
       JavaHelpers._JavaEnvironment_aliases>>: var "aliases",
       JavaHelpers._JavaEnvironment_graph>>: var "g"]) $
-    "pkg" <~ (JavaUtilsSource.javaPackageDeclaration @@ (Module.moduleNamespace (var "mod"))) $
+    "pkg" <~ (JavaUtilsSource.javaPackageDeclaration @@ (Packaging.moduleNamespace (var "mod"))) $
     "partitioned" <~ (Environment.partitionDefinitions @@ var "defs") $
     "typeDefs" <~ Pairs.first (var "partitioned") $
     "termDefs" <~ Pairs.second (var "partitioned") $
@@ -3828,8 +3828,8 @@ functionCall = def "functionCall" $
                   (JavaDsl.methodInvocation_ (var "header") (var "jargs"))))
               -- With type applications: need qualified invocation
               ("qn" <~ (Names.qualifyName @@ var "name") $
-                "mns" <~ (Module.qualifiedNameNamespace (var "qn")) $
-                "localName" <~ (Module.qualifiedNameLocal (var "qn")) $
+                "mns" <~ (Packaging.qualifiedNameNamespace (var "qn")) $
+                "localName" <~ (Packaging.qualifiedNameLocal (var "qn")) $
                 Maybes.cases (var "mns")
                   -- No namespace: simple header
                   ("header" <~ JavaDsl.methodInvocationHeaderSimple
@@ -3840,7 +3840,7 @@ functionCall = def "functionCall" $
                     "classId" <~ (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ (elementsQualifiedName @@ var "ns_")) $
                     "methodId" <~ (Logic.ifElse (var "isPrim")
                       (var "overrideMethodName" @@ (JavaDsl.identifier (Strings.cat2
-                        (JavaDsl.unIdentifier (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ (Names.unqualifyName @@ (Module.qualifiedName (just (var "ns_")) (Formatting.capitalize @@ var "localName")))))
+                        (JavaDsl.unIdentifier (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ (Names.unqualifyName @@ (Packaging.qualifiedName (just (var "ns_")) (Formatting.capitalize @@ var "localName")))))
                         (Strings.cat2 (string ".") (asTerm JavaNamesSource.applyMethodName)))))
                       (JavaDsl.identifier (JavaUtilsSource.sanitizeJavaName @@ var "localName"))) $
                     "jTypeArgs" <<~ (Eithers.mapList (lambda "t" $
@@ -4072,7 +4072,7 @@ isLambdaBoundIn = def "isLambdaBoundIn" $
 -- | Helper: check if a name is qualified (has a namespace)
 isLambdaBoundIn_isQualified :: TTermDefinition (Name -> Bool)
 isLambdaBoundIn_isQualified = def "isLambdaBoundIn_isQualified" $
-  lambda "n" $ Maybes.isJust (Module.qualifiedNameNamespace (Names.qualifyName @@ var "n"))
+  lambda "n" $ Maybes.isJust (Packaging.qualifiedNameNamespace (Names.qualifyName @@ var "n"))
 
 -- | Check if a name (possibly qualified) is lambda-bound
 
@@ -4085,7 +4085,7 @@ isLambdaBoundVariable = def "isLambdaBoundVariable" $
 isLocalVariable :: TTermDefinition (Name -> Bool)
 isLocalVariable = def "isLocalVariable" $
   lambda "name" $ Maybes.isNothing
-    (Module.qualifiedNameNamespace (Names.qualifyName @@ var "name"))
+    (Packaging.qualifiedNameNamespace (Names.qualifyName @@ var "name"))
 
 -- | Check whether a Hydra type maps to a Java type that does not implement Comparable
 isNonComparableType :: TTermDefinition (Type -> Bool)
@@ -4998,8 +4998,8 @@ typeAppNullaryOrHoisted = def "typeAppNullaryOrHoisted" $
       lambda "cls" $ lambda "allTypeArgs" $
         "cx" ~> "g" ~>
         "qn" <~ (Names.qualifyName @@ var "varName") $
-        "mns" <~ Module.qualifiedNameNamespace (var "qn") $
-        "localName" <~ Module.qualifiedNameLocal (var "qn") $
+        "mns" <~ Packaging.qualifiedNameNamespace (var "qn") $
+        "localName" <~ Packaging.qualifiedNameLocal (var "qn") $
         cases JavaHelpers._JavaSymbolClass (var "cls")
           (Just $ typeAppFallbackCast @@ var "env" @@ var "aliases" @@ var "anns" @@ var "tyapps"
             @@ var "jatyp" @@ var "body" @@ var "correctedTyp" @@ var "cx" @@ var "g") [

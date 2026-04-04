@@ -31,7 +31,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
 import qualified Hydra.Dsl.Topology                   as Topology
@@ -154,20 +154,20 @@ encodeName = def "encodeName" $
     -- Get the namespaces from the environment
     "namespaces">: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_namespaces @@ var "env",
     -- Get the focus namespace (first element of the focus tuple)
-    "focusPair">: Module.namespacesFocus (var "namespaces"),
+    "focusPair">: Packaging.namespacesFocus (var "namespaces"),
     "focusNs">: Pairs.first $ var "focusPair",
     -- Get the bound type variables map from the environment
     "boundVars">: Pairs.second $ project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env",
     -- Qualify the name
     "qualName">: Names.qualifyName @@ var "name",
-    "mns">: Module.qualifiedNameNamespace $ var "qualName",
-    "local">: Module.qualifiedNameLocal $ var "qualName",
+    "mns">: Packaging.qualifiedNameNamespace $ var "qualName",
+    "local">: Packaging.qualifiedNameLocal $ var "qualName",
     -- Convert local name with case convention and sanitize
     "pyLocal">: sanitizePythonName @@ (Formatting.convertCase @@ Util.caseConventionCamel @@ var "conv" @@ var "local"),
     -- Convert namespace to Python dotted path
     "pyNs">: lambda "nsVal" $ Strings.intercalate (string ".") $
       Lists.map (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake)
-        (Strings.splitOn (string ".") (Module.unNamespace $ var "nsVal"))] $
+        (Strings.splitOn (string ".") (Packaging.unNamespace $ var "nsVal"))] $
     -- If qualified, check bound vars first, then namespace
     Logic.ifElse (var "isQualified")
       -- Check if name is a bound type variable
@@ -197,14 +197,14 @@ encodeNameQualified = def "encodeNameQualified" $
     -- Get the namespaces from the environment
     "namespaces">: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_namespaces @@ var "env",
     -- Get the focus namespace (first element of the focus tuple)
-    "focusPair">: Module.namespacesFocus (var "namespaces"),
+    "focusPair">: Packaging.namespacesFocus (var "namespaces"),
     "focusNs">: Pairs.first $ var "focusPair",
     -- Get the bound type variables map from the environment
     "boundVars">: Pairs.second $ project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env",
     -- Qualify the name
     "qualName">: Names.qualifyName @@ var "name",
-    "mns">: Module.qualifiedNameNamespace $ var "qualName",
-    "local">: Module.qualifiedNameLocal $ var "qualName"] $
+    "mns">: Packaging.qualifiedNameNamespace $ var "qualName",
+    "local">: Packaging.qualifiedNameLocal $ var "qualName"] $
     -- Check if name is a bound type variable
     Maybes.maybe
       -- Not a bound type variable
@@ -225,7 +225,7 @@ encodeNamespace = def "encodeNamespace" $
   lambda "nsVal" $ wrap Py._DottedName $
     Lists.map
       (lambda "part" $ wrap Py._Name $ Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake @@ var "part")
-      (Strings.splitOn (string ".") (Module.unNamespace $ var "nsVal"))
+      (Strings.splitOn (string ".") (Packaging.unNamespace $ var "nsVal"))
 
 -- | Encode a type variable name (capitalized).
 encodeTypeVariable :: TTermDefinition (Name -> Py.Name)
@@ -266,7 +266,7 @@ variableReference = def "variableReference" $
     "unquoted">: PyDsl.pyNameToPyExpression (var "pyName"),
     -- Check if name is in the same namespace (for quoting)
     "namespaces">: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_namespaces @@ var "env",
-    "focusPair">: Module.namespacesFocus (var "namespaces"),
+    "focusPair">: Packaging.namespacesFocus (var "namespaces"),
     "focusNs">: Pairs.first $ var "focusPair",
     "mns">: Names.namespaceOf @@ var "name",
     "sameNamespace">: Maybes.maybe false (lambda "ns" $ Equality.equal (var "ns") (var "focusNs")) (var "mns")] $

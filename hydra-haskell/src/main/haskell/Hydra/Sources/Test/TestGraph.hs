@@ -12,7 +12,7 @@ import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Hydra.Dsl.Meta.Graph         as Graph
-import qualified Hydra.Dsl.Module        as DModule
+import qualified Hydra.Dsl.Packaging        as DPackaging
 import qualified Hydra.Dsl.Meta.Lib.Chars     as Chars
 import qualified Hydra.Dsl.Meta.Lib.Equality  as Equality
 import qualified Hydra.Dsl.Meta.Lib.Lists     as Lists
@@ -59,7 +59,7 @@ testTerms = define "testTerms" $
     Phantoms.pair (name "testDataArthur") TestTerms.testDataArthur]
 
 testNamespace :: TTermDefinition Namespace
-testNamespace = define "testNamespace" $ DModule.namespace $ Phantoms.string "testGraph"
+testNamespace = define "testNamespace" $ DPackaging.namespace $ Phantoms.string "testGraph"
 
 testGraph :: TTermDefinition Graph
 testGraph = define "testGraph" $ asTerm Lexical.emptyGraph
@@ -94,4 +94,4 @@ testTypes = define "testTypes" $
     Phantoms.pair TestTypes.testTypeUnitName TestTypes.testTypeUnit]
 
 testSchemaNamespace :: TTermDefinition Namespace
-testSchemaNamespace = define "testSchemaNamespace" $ DModule.namespace $ Phantoms.string "testSchemaGraph"
+testSchemaNamespace = define "testSchemaNamespace" $ DPackaging.namespace $ Phantoms.string "testSchemaGraph"

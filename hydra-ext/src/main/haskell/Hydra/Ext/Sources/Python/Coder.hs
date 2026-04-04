@@ -34,7 +34,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
 import qualified Hydra.Dsl.Topology                   as Topology
@@ -1348,7 +1348,7 @@ encodePythonModule = def "encodePythonModule" $
   doc "Encode a Hydra module to a Python module AST" $
   "cx" ~> "g" ~> "mod" ~> "defs0" ~>
     "defs" <~ (Environment.reorderDefs @@ var "defs0") $
-    "meta0" <~ (gatherMetadata @@ (Module.moduleNamespace $ var "mod") @@ var "defs") $
+    "meta0" <~ (gatherMetadata @@ (Packaging.moduleNamespace $ var "mod") @@ var "defs") $
     "namespaces0" <~ (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "meta0") $
     "env0" <~ (initialEnvironment @@ var "namespaces0" @@ var "g") $
     "isTypeMod" <~ (isTypeModuleCheck @@ var "defs0") $
@@ -1368,7 +1368,7 @@ encodePythonModule = def "encodePythonModule" $
       "commentStmts" <~ (Maybes.maybe
         (list ([] :: [TTerm Py.Statement]))
         ("c" ~> list [PyUtils.commentStatement @@ var "c"])
-        (Maybes.map Formatting.normalizeComment (Module.moduleDescription $ var "mod"))) $
+        (Maybes.map Formatting.normalizeComment (Packaging.moduleDescription $ var "mod"))) $
       -- Generate import statements
       "importStmts" <~ (moduleImports @@ var "namespaces" @@ var "meta") $
       -- Generate type variable statements
@@ -2468,17 +2468,17 @@ gatherMetadata = def "gatherMetadata" $
     "addDef" <~ ("meta" ~> "def" ~>
       cases _Definition (var "def") Nothing [
         _Definition_term>>: "termDef" ~>
-          "term" <~ Module.termDefinitionTerm (var "termDef") $
+          "term" <~ Packaging.termDefinitionTerm (var "termDef") $
           "typ" <~ Maybes.maybe
             (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
             (unaryFunction Core.typeSchemeType)
-            (Module.termDefinitionType (var "termDef")) $
+            (Packaging.termDefinitionType (var "termDef")) $
           -- First extend for the type annotation (isTypeDef=True, isTermAnnot=True)
           "meta2" <~ (extendMetaForType @@ true @@ true @@ var "typ" @@ var "meta") $
           -- Then extend for the term body (isTopLevel=True)
           extendMetaForTerm @@ true @@ var "meta2" @@ var "term",
         _Definition_type>>: "typeDef" ~>
-          "typ" <~ (Core.typeSchemeType $ Module.typeDefinitionType (var "typeDef")) $
+          "typ" <~ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "typeDef")) $
           -- Set usesName=True for type definitions
           "meta2" <~ (setMetaUsesName @@ var "meta" @@ true) $
           -- Fold extendMetaForType over the type (isTypeDef=True, isTermAnnot=False)
@@ -2525,7 +2525,7 @@ initialMetadata = def "initialMetadata" $
   doc "Create initial empty metadata for a Python module" $
   "ns" ~>
     "dottedNs" <~ (PyNames.encodeNamespace @@ var "ns") $
-    "emptyNs" <~ (Module.namespaces (pair (var "ns") (var "dottedNs")) Maps.empty) $
+    "emptyNs" <~ (Packaging.namespaces (pair (var "ns") (var "dottedNs")) Maps.empty) $
     record PyHelpers._PythonModuleMetadata [
       PyHelpers._PythonModuleMetadata_namespaces>>: var "emptyNs",
       PyHelpers._PythonModuleMetadata_typeVariables>>: Sets.empty,
@@ -2692,7 +2692,7 @@ moduleDomainImports :: TTermDefinition (Namespaces Py.DottedName -> [Py.ImportSt
 moduleDomainImports = def "moduleDomainImports" $
   doc "Generate domain import statements from namespace mappings" $
   "namespaces" ~>
-    "names" <~ (Lists.sort $ Maps.elems $ Module.namespacesMapping (var "namespaces")) $
+    "names" <~ (Lists.sort $ Maps.elems $ Packaging.namespacesMapping (var "namespaces")) $
     Lists.map
       ("ns" ~>
         inject Py._ImportStatement Py._ImportStatement_name
@@ -2788,7 +2788,7 @@ moduleToPython = def "moduleToPython" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
     "file" <<~ (encodePythonModule @@ var "cx" @@ var "g" @@ var "mod" @@ var "defs") $
     "s" <~ (Serialization.printExpr @@ (Serialization.parenthesize @@ (PySerde.encodeModule @@ var "file"))) $
-    "path" <~ (Names.namespaceToFilePath @@ Util.caseConventionLowerSnake @@ (wrap _FileExtension $ string "py") @@ (Module.moduleNamespace $ var "mod")) $
+    "path" <~ (Names.namespaceToFilePath @@ Util.caseConventionLowerSnake @@ (wrap _FileExtension $ string "py") @@ (Packaging.moduleNamespace $ var "mod")) $
     right $ Maps.singleton (var "path") (var "s")
 
 -- | Accessor for the graph field of PyGraph

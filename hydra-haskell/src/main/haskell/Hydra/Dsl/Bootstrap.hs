@@ -19,7 +19,7 @@ import Hydra.Dsl.AsType
 import Hydra.Graph
 import Hydra.Lexical
 import Hydra.Annotations
-import Hydra.Module
+import Hydra.Packaging
 import Hydra.Sources.Libraries
 import qualified Hydra.Decode.Core as Decode
 import qualified Hydra.Encode.Core as Encode

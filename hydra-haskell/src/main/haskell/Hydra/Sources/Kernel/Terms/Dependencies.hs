@@ -44,7 +44,7 @@ import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
 import qualified Hydra.Dsl.Meta.Terms        as MetaTerms
 import qualified Hydra.Dsl.Meta.Types        as MetaTypes
-import qualified Hydra.Dsl.Module       as Module
+import qualified Hydra.Dsl.Packaging       as Packaging
 import qualified Hydra.Dsl.Parsing      as Parsing
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Prims             as Prims
@@ -422,10 +422,10 @@ topologicalSortTypeDefinitions = define "topologicalSortTypeDefinitions" $
   doc "Topologically sort type definitions by dependencies" $
   "defs" ~>
   "toPair" <~ ("def" ~> pair
-    (Module.typeDefinitionName (var "def"))
-    (Sets.toList (typeDependencyNames @@ false @@ (Core.typeSchemeType $ Module.typeDefinitionType (var "def"))))) $
+    (Packaging.typeDefinitionName (var "def"))
+    (Sets.toList (typeDependencyNames @@ false @@ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "def"))))) $
   "nameToDef" <~ Maps.fromList (Lists.map
-    ("d" ~> pair (Module.typeDefinitionName (var "d")) (var "d"))
+    ("d" ~> pair (Packaging.typeDefinitionName (var "d")) (var "d"))
     (var "defs")) $
   "sorted" <~ Sorting.topologicalSortComponents @@ Lists.map (var "toPair") (var "defs") $
   Lists.map ("names" ~> Maybes.cat (Lists.map ("n" ~> Maps.lookup (var "n") (var "nameToDef")) (var "names"))) (

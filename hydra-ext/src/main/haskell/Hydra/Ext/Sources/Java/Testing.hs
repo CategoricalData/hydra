@@ -33,7 +33,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
 import qualified Hydra.Dsl.Topology                   as Topology
@@ -123,7 +123,7 @@ buildJavaTestModule :: TTermDefinition (Module -> TestGroup -> String -> String)
 buildJavaTestModule = define "buildJavaTestModule" $
   doc "Build the complete Java test module content" $
   lambda "testModule" $ lambda "testGroup" $ lambda "testBody" $ lets [
-    "ns_">: Module.moduleNamespace (var "testModule"),
+    "ns_">: Packaging.moduleNamespace (var "testModule"),
     "parts">: Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns_"),
     "packageName">: Strings.intercalate (string ".") (Lists.init (var "parts")),
     "className_">: Strings.cat2 (Formatting.capitalize @@ (Lists.last (var "parts"))) (string "Test"),
@@ -250,7 +250,7 @@ generateTestFileWithJavaCodec = define "generateTestFileWithJavaCodec" $
     Eithers.map
       (lambda "testBody" $ lets [
         "testModuleContent">: buildJavaTestModule @@ var "testModule" @@ var "testGroup" @@ var "testBody",
-        "ns_">: Module.moduleNamespace (var "testModule"),
+        "ns_">: Packaging.moduleNamespace (var "testModule"),
         "parts">: Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns_"),
         "dirParts">: Lists.drop (int32 1) (Lists.init (var "parts")),
         "className_">: Strings.cat2 (Formatting.capitalize @@ (Lists.last (var "parts"))) (string "Test"),

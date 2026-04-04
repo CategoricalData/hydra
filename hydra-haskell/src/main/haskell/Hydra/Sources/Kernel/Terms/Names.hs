@@ -33,7 +33,7 @@ import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
 import qualified Hydra.Dsl.Meta.Terms        as MetaTerms
 import qualified Hydra.Dsl.Meta.Types        as MetaTypes
-import qualified Hydra.Dsl.Module       as Module
+import qualified Hydra.Dsl.Packaging       as Packaging
 import qualified Hydra.Dsl.Parsing      as Parsing
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Prims             as Prims
@@ -90,8 +90,8 @@ compactName = define "compactName" $
   doc "Given a mapping of namespaces to prefixes, convert a name to a compact string representation" $
   lambda "namespaces" $ lambda "name" $ lets [
     "qualName">: qualifyName @@ var "name",
-    "mns">: Module.qualifiedNameNamespace $ var "qualName",
-    "local">: Module.qualifiedNameLocal $ var "qualName"]
+    "mns">: Packaging.qualifiedNameNamespace $ var "qualName",
+    "local">: Packaging.qualifiedNameLocal $ var "qualName"]
     $ Maybes.maybe
         (Core.unName $ var "name")
         (lambda "ns" $
@@ -103,29 +103,29 @@ compactName = define "compactName" $
 localNameOf :: TTermDefinition (Name -> String)
 localNameOf = define "localNameOf" $
   doc "Extract the local part of a name" $
-  unaryFunction Module.qualifiedNameLocal <.> qualifyName
+  unaryFunction Packaging.qualifiedNameLocal <.> qualifyName
 
 nameToFilePath :: TTermDefinition (CaseConvention -> CaseConvention -> FileExtension -> Name -> FilePath)
 nameToFilePath = define "nameToFilePath" $
   doc "Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator" $
   "nsConv" ~> "localConv" ~> "ext" ~> "name" ~>
   "qualName" <~ qualifyName @@ var "name" $
-  "ns" <~ Module.qualifiedNameNamespace (var "qualName") $
-  "local" <~ Module.qualifiedNameLocal (var "qualName") $
+  "ns" <~ Packaging.qualifiedNameNamespace (var "qualName") $
+  "local" <~ Packaging.qualifiedNameLocal (var "qualName") $
   "nsToFilePath" <~ ("ns" ~>
     Strings.intercalate (string "/") (Lists.map
       ("part" ~> Formatting.convertCase @@ Util.caseConventionCamel @@ var "nsConv" @@ var "part")
-      (Strings.splitOn (string ".") (Module.unNamespace (var "ns"))))) $
+      (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))))) $
   "prefix" <~ Maybes.maybe (string "")
     ("n" ~> Strings.cat2 (var "nsToFilePath" @@ var "n") (string "/"))
     (var "ns") $
   "suffix" <~ Formatting.convertCase @@ Util.caseConventionPascal @@ var "localConv" @@ var "local" $
-  Strings.cat (list [var "prefix", var "suffix", string ".", Module.unFileExtension (var "ext")])
+  Strings.cat (list [var "prefix", var "suffix", string ".", Packaging.unFileExtension (var "ext")])
 
 namespaceOf :: TTermDefinition (Name -> Maybe Namespace)
 namespaceOf = define "namespaceOf" $
   doc "Extract the namespace of a name, if any" $
-  unaryFunction Module.qualifiedNameNamespace <.> qualifyName
+  unaryFunction Packaging.qualifiedNameNamespace <.> qualifyName
 
 namespaceToFilePath :: TTermDefinition (CaseConvention -> FileExtension -> Namespace -> String)
 namespaceToFilePath = define "namespaceToFilePath" $
@@ -133,8 +133,8 @@ namespaceToFilePath = define "namespaceToFilePath" $
   lambda "caseConv" $ lambda "ext" $ lambda "ns" $ lets [
     "parts">: Lists.map
       (Formatting.convertCase @@ Util.caseConventionCamel @@ var "caseConv")
-      (Strings.splitOn (string ".") (Module.unNamespace $ var "ns"))]
-    $ (Strings.intercalate (string "/") $ var "parts") ++ string "." ++ (Module.unFileExtension $ var "ext")
+      (Strings.splitOn (string ".") (Packaging.unNamespace $ var "ns"))]
+    $ (Strings.intercalate (string "/") $ var "parts") ++ string "." ++ (Packaging.unFileExtension $ var "ext")
 
 qname :: TTermDefinition (Namespace -> String -> Name)
 qname = define "qname" $
@@ -151,8 +151,8 @@ qualifyName = define "qualifyName" $
     "parts">: Lists.reverse (Strings.splitOn (string ".") (Core.unName $ var "name"))]
     $ Logic.ifElse
       (Equality.equal (int32 1) (Lists.length $ var "parts"))
-      (Module.qualifiedName nothing (Core.unName $ var "name"))
-      (Module.qualifiedName
+      (Packaging.qualifiedName nothing (Core.unName $ var "name"))
+      (Packaging.qualifiedName
         (just $ wrap _Namespace (Strings.intercalate (string ".") (Lists.reverse (Lists.tail $ var "parts"))))
         (Lists.head $ var "parts"))
 

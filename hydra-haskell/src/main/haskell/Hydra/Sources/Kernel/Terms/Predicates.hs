@@ -46,7 +46,7 @@ import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
 import qualified Hydra.Dsl.Meta.Terms        as MetaTerms
 import qualified Hydra.Dsl.Meta.Types        as MetaTypes
-import qualified Hydra.Dsl.Module       as Module
+import qualified Hydra.Dsl.Packaging       as Packaging
 import qualified Hydra.Dsl.Parsing      as Parsing
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Prims             as Prims

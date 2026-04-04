@@ -29,7 +29,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
 import qualified Hydra.Dsl.Topology                   as Topology
@@ -133,15 +133,15 @@ elementReference :: TTermDefinition (HaskellNamespaces -> Name -> H.Name)
 elementReference = haskellUtilsDefinition "elementReference" $
   doc "Generate a Haskell name reference for a Hydra element" $
   "namespaces" ~> "name" ~> lets [
-    "namespacePair">: Module.namespacesFocus $ var "namespaces",
+    "namespacePair">: Packaging.namespacesFocus $ var "namespaces",
     "gname">: Pairs.first $ var "namespacePair",
     "gmod">: unwrap H._ModuleName @@ (Pairs.second $ var "namespacePair"),
-    "namespacesMap">: Module.namespacesMapping $ var "namespaces",
+    "namespacesMap">: Packaging.namespacesMapping $ var "namespaces",
     "qname">: Names.qualifyName @@ var "name",
-    "local">: Module.qualifiedNameLocal $ var "qname",
+    "local">: Packaging.qualifiedNameLocal $ var "qname",
     "escLocal">: sanitizeHaskellName @@ var "local",
-    "mns">: Module.qualifiedNameNamespace $ var "qname"] $
-    Maybes.cases (Module.qualifiedNameNamespace $ var "qname")
+    "mns">: Packaging.qualifiedNameNamespace $ var "qname"] $
+    Maybes.cases (Packaging.qualifiedNameNamespace $ var "qname")
       (simpleName @@ var "local") $
       "ns" ~>
         Maybes.cases (Maps.lookup (var "ns") (var "namespacesMap"))
@@ -190,7 +190,7 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
   doc "Compute the Haskell module namespaces for a Hydra module" $
   "mod" ~> "cx" ~> "g" ~>
     "nss" <<~ Analysis.moduleDependencyNamespaces @@ var "cx" @@ var "g" @@ true @@ true @@ true @@ true @@ var "mod" $
-    "ns" <~ (Module.moduleNamespace $ var "mod") $
+    "ns" <~ (Packaging.moduleNamespace $ var "mod") $
     "toModuleName" <~ ("namespace" ~> lets [
       "namespaceStr">: unwrap _Namespace @@ var "namespace",
       "parts">: Strings.splitOn (string ".") (var "namespaceStr"),
@@ -214,7 +214,7 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
     "emptyState" <~ (pair Maps.empty Sets.empty) $
     "finalState" <~ (Lists.foldl (var "addPair") (var "emptyState") (var "nssPairs")) $
     "resultMap" <~ (Pairs.first $ var "finalState") $
-    right $ Module.namespaces (var "focusPair") (var "resultMap")
+    right $ Packaging.namespaces (var "focusPair") (var "resultMap")
 
 newtypeAccessorName :: TTermDefinition (Name -> String)
 newtypeAccessorName = haskellUtilsDefinition "newtypeAccessorName" $
@@ -237,7 +237,7 @@ recordFieldReference = haskellUtilsDefinition "recordFieldReference" $
   "namespaces" ~> "sname" ~> "fname" ~> lets [
     "fnameStr">: unwrap _Name @@ var "fname",
     "qname">: Names.qualifyName @@ var "sname",
-    "ns">: Module.qualifiedNameNamespace $ var "qname",
+    "ns">: Packaging.qualifiedNameNamespace $ var "qname",
     "typeNameStr">: typeNameForRecord @@ var "sname",
     "decapitalized">: Formatting.decapitalize @@ var "typeNameStr",
     "capitalized">: Formatting.capitalize @@ var "fnameStr",
@@ -299,7 +299,7 @@ unionFieldReference = haskellUtilsDefinition "unionFieldReference" $
   "boundNames" ~> "namespaces" ~> "sname" ~> "fname" ~> lets [
     "fnameStr">: unwrap _Name @@ var "fname",
     "qname">: Names.qualifyName @@ var "sname",
-    "ns">: Module.qualifiedNameNamespace $ var "qname",
+    "ns">: Packaging.qualifiedNameNamespace $ var "qname",
     "typeNameStr">: typeNameForRecord @@ var "sname",
     "capitalizedTypeName">: Formatting.capitalize @@ var "typeNameStr",
     "capitalizedFieldName">: Formatting.capitalize @@ var "fnameStr",

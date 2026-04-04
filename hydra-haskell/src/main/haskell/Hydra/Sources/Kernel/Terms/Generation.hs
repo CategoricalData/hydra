@@ -42,7 +42,7 @@ import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
 import qualified Hydra.Dsl.Meta.Terms        as MetaTerms
 import qualified Hydra.Dsl.Meta.Types        as MetaTypes
-import qualified Hydra.Dsl.Module       as Module
+import qualified Hydra.Dsl.Packaging       as Packaging
 import qualified Hydra.Dsl.Parsing      as Parsing
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Prims             as Prims
@@ -125,8 +125,8 @@ moduleTypeBindings :: TTerm Module -> TTerm [Binding]
 moduleTypeBindings m = Maybes.cat $ Lists.map
   ("d" ~> cases _Definition (var "d") (Just nothing) [
     _Definition_type>>: "td" ~>
-      just (Annotations.typeBinding @@ (Module.typeDefinitionName $ var "td") @@ (Core.typeSchemeType $ Module.typeDefinitionType $ var "td"))])
-  (Module.moduleDefinitions m)
+      just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeType $ Packaging.typeDefinitionType $ var "td"))])
+  (Packaging.moduleDefinitions m)
 
 -- | Extract term definitions from a module as Bindings (for elementsToGraph compatibility).
 moduleTermBindings :: TTerm Module -> TTerm [Binding]
@@ -134,10 +134,10 @@ moduleTermBindings m = Maybes.cat $ Lists.map
   ("d" ~> cases _Definition (var "d") (Just nothing) [
     _Definition_term>>: "td" ~>
       just (Core.binding
-        (Module.termDefinitionName $ var "td")
-        (Module.termDefinitionTerm $ var "td")
-        (Module.termDefinitionType $ var "td"))])
-  (Module.moduleDefinitions m)
+        (Packaging.termDefinitionName $ var "td")
+        (Packaging.termDefinitionTerm $ var "td")
+        (Packaging.termDefinitionType $ var "td"))])
+  (Packaging.moduleDefinitions m)
 
 -- | Extract all definitions from a module as Bindings.
 moduleAllBindings :: TTerm Module -> TTerm [Binding]
@@ -155,15 +155,15 @@ hasTermDefinitions m = Logic.not $ Lists.null $ moduleTermBindings m
 moduleTypeNames :: TTerm Module -> TTerm [Name]
 moduleTypeNames m = Maybes.cat $ Lists.map
   ("d" ~> cases _Definition (var "d") (Just nothing) [
-    _Definition_type>>: "td" ~> just (Module.typeDefinitionName $ var "td")])
-  (Module.moduleDefinitions m)
+    _Definition_type>>: "td" ~> just (Packaging.typeDefinitionName $ var "td")])
+  (Packaging.moduleDefinitions m)
 
 -- | Convert a namespace to a file path (e.g., "hydra.core" -> "hydra/core").
 namespaceToPath :: TTermDefinition (Namespace -> String)
 namespaceToPath = define "namespaceToPath" $
   doc "Convert a namespace to a file path (e.g., hydra.core -> hydra/core)" $
   "ns" ~>
-  Strings.intercalate (string "/") (Strings.splitOn (string ".") (Module.unNamespace $ var "ns"))
+  Strings.intercalate (string "/") (Strings.splitOn (string ".") (Packaging.unNamespace $ var "ns"))
 
 -- | Compute transitive closure of dependencies.
 -- Given a function that extracts dependency namespaces from a module,
@@ -176,7 +176,7 @@ transitiveDeps = define "transitiveDeps" $
   -- Start with dependencies of start modules, excluding self-references
   "initialDeps" <~ Sets.fromList (Lists.concat (Lists.map
     ("m" ~> Lists.filter
-      ("dep" ~> Logic.not $ Equality.equal (var "dep") (Module.moduleNamespace $ var "m"))
+      ("dep" ~> Logic.not $ Equality.equal (var "dep") (Packaging.moduleNamespace $ var "m"))
       (var "getDeps" @@ var "m"))
     (var "startMods"))) $
   -- Iterative closure: go pending visited
@@ -200,8 +200,8 @@ moduleTermDepsTransitive = define "moduleTermDepsTransitive" $
   doc "Compute transitive closure of term dependencies for a set of modules" $
   "nsMap" ~> "modules" ~>
   "closure" <~ Sets.union
-    (transitiveDeps @@ ("m" ~> Module.moduleTermDependencies (var "m")) @@ var "nsMap" @@ var "modules")
-    (Sets.fromList $ Lists.map ("m" ~> Module.moduleNamespace (var "m")) (var "modules")) $
+    (transitiveDeps @@ ("m" ~> Packaging.moduleTermDependencies (var "m")) @@ var "nsMap" @@ var "modules")
+    (Sets.fromList $ Lists.map ("m" ~> Packaging.moduleNamespace (var "m")) (var "modules")) $
   Maybes.cat $ Lists.map
     ("n" ~> Maps.lookup (var "n") (var "nsMap"))
     (Sets.toList $ var "closure")
@@ -213,7 +213,7 @@ moduleTypeDepsTransitive = define "moduleTypeDepsTransitive" $
   doc "Compute transitive closure of type dependencies for a set of modules" $
   "nsMap" ~> "modules" ~>
   "termMods" <~ moduleTermDepsTransitive @@ var "nsMap" @@ var "modules" $
-  "typeNamespaces" <~ Sets.toList (transitiveDeps @@ ("m" ~> Module.moduleTypeDependencies (var "m")) @@ var "nsMap" @@ var "termMods") $
+  "typeNamespaces" <~ Sets.toList (transitiveDeps @@ ("m" ~> Packaging.moduleTypeDependencies (var "m")) @@ var "nsMap" @@ var "termMods") $
   Maybes.cat $ Lists.map
     ("n" ~> Maps.lookup (var "n") (var "nsMap"))
     (var "typeNamespaces")
@@ -225,7 +225,7 @@ modulesToGraph = define "modulesToGraph" $
   doc "Build a graph from universe modules and working modules, using an explicit bootstrap graph" $
   "bsGraph" ~> "universeModules" ~> "modules" ~>
   "universe" <~ Maps.fromList (Lists.map
-    ("m" ~> pair (Module.moduleNamespace $ var "m") (var "m"))
+    ("m" ~> pair (Packaging.moduleNamespace $ var "m") (var "m"))
     (Lists.concat2 (var "universeModules") (var "modules"))) $
   "schemaModules" <~ moduleTypeDepsTransitive @@ var "universe" @@ var "modules" $
   "dataModules" <~ moduleTermDepsTransitive @@ var "universe" @@ var "modules" $
@@ -258,7 +258,7 @@ generateSourceFiles = define "generateSourceFiles" $
   "bsGraph" ~> "universeModules" ~> "modsToGenerate" ~> "cx" ~>
 
   "namespaceMap" <~ Maps.fromList (Lists.map
-    ("m" ~> pair (Module.moduleNamespace $ var "m") (var "m"))
+    ("m" ~> pair (Packaging.moduleNamespace $ var "m") (var "m"))
     (Lists.concat2 (var "universeModules") (var "modsToGenerate"))) $
 
   "constraints" <~ Coders.languageConstraints (var "lang") $
@@ -294,13 +294,13 @@ generateSourceFiles = define "generateSourceFiles" $
           "mod" <~ Pairs.first (var "p") $
           "defs" <~ Pairs.second (var "p") $
           Eithers.map ("m" ~> Maps.toList (var "m")) $
-            var "printDefinitions" @@ var "mod" @@ Lists.map ("d" ~> Module.definitionType (var "d")) (var "defs") @@ var "cx" @@ var "schemaGraphWithTypes")
+            var "printDefinitions" @@ var "mod" @@ Lists.map ("d" ~> Packaging.definitionType (var "d")) (var "defs") @@ var "cx" @@ var "schemaGraphWithTypes")
         (Lists.zip (var "typeModulesToGenerate") (var "defLists"))) $
 
   -- Generate term modules
   "termFiles" <<~ Logic.ifElse (Lists.null $ var "termModulesToGenerate")
     (right (TTerm (Terms.list []) :: TTerm [(String, String)]))
-    ("namespaces" <~ Lists.map ("m" ~> Module.moduleNamespace (var "m")) (var "termModulesToGenerate") $
+    ("namespaces" <~ Lists.map ("m" ~> Packaging.moduleNamespace (var "m")) (var "termModulesToGenerate") $
       "dataResult" <<~ Eithers.bimap ("s" ~> Ctx.inContext (Error.errorOther $ Error.otherError (var "s")) (var "cx")) ("r" ~> var "r")
         (Adapt.dataGraphToDefinitions
           @@ var "constraints"
@@ -310,35 +310,35 @@ generateSourceFiles = define "generateSourceFiles" $
       "defLists" <~ Pairs.second (var "dataResult") $
       -- Refresh modules with elements from the inferred graph
       "defName" <~ ("d" ~> cases _Definition (var "d") Nothing [
-        _Definition_term>>: "td" ~> Module.termDefinitionName (var "td"),
-        _Definition_type>>: "td" ~> Module.typeDefinitionName (var "td")]) $
+        _Definition_term>>: "td" ~> Packaging.termDefinitionName (var "td"),
+        _Definition_type>>: "td" ~> Packaging.typeDefinitionName (var "td")]) $
       "refreshModule" <~ ("els" ~> "m" ~>
-        Module.module_
-          (Module.moduleNamespace $ var "m")
+        Packaging.module_
+          (Packaging.moduleNamespace $ var "m")
           (Maybes.cat $ Lists.map
             ("d" ~> cases _Definition (var "d") Nothing [
-              _Definition_type>>: "td" ~> just (Module.definitionType (var "td")),
+              _Definition_type>>: "td" ~> just (Packaging.definitionType (var "td")),
               _Definition_term>>: "td" ~> Maybes.map
-                ("b" ~> Module.definitionTerm (Module.termDefinition
+                ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
                   (Core.bindingName $ var "b")
                   (Core.bindingTerm $ var "b")
                   (Core.bindingType $ var "b")))
-                (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Module.termDefinitionName $ var "td")) (var "els"))])
-            (Module.moduleDefinitions $ var "m"))
-          (Module.moduleTermDependencies $ var "m")
-          (Module.moduleTypeDependencies $ var "m")
-          (Module.moduleDescription $ var "m")) $
+                (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Packaging.termDefinitionName $ var "td")) (var "els"))])
+            (Packaging.moduleDefinitions $ var "m"))
+          (Packaging.moduleTermDependencies $ var "m")
+          (Packaging.moduleTypeDependencies $ var "m")
+          (Packaging.moduleDescription $ var "m")) $
       "allBindings" <~ Lexical.graphToBindings @@ var "g1" $
       "refreshedMods" <~ Lists.map ("m" ~> var "refreshModule" @@ var "allBindings" @@ var "m") (var "termModulesToGenerate") $
       -- Deduplicate definitions by name to avoid duplicate functions in generated code
-      "dedupDefs" <~ ("defs" ~> Maps.elems (Maps.fromList (Lists.map ("d" ~> pair (Module.termDefinitionName (var "d")) (var "d")) (var "defs")))) $
+      "dedupDefs" <~ ("defs" ~> Maps.elems (Maps.fromList (Lists.map ("d" ~> pair (Packaging.termDefinitionName (var "d")) (var "d")) (var "defs")))) $
       "dedupedDefLists" <~ Lists.map (var "dedupDefs") (var "defLists") $
       Eithers.map ("xs" ~> Lists.concat (var "xs")) $
         Eithers.mapList ("p" ~>
           "mod" <~ Pairs.first (var "p") $
           "defs" <~ Pairs.second (var "p") $
           Eithers.map ("m" ~> Maps.toList (var "m")) $
-            var "printDefinitions" @@ var "mod" @@ Lists.map ("d" ~> Module.definitionTerm (var "d")) (var "defs") @@ var "cx" @@ var "g1")
+            var "printDefinitions" @@ var "mod" @@ Lists.map ("d" ~> Packaging.definitionTerm (var "d")) (var "defs") @@ var "cx" @@ var "g1")
         (Lists.zip (var "refreshedMods") (var "dedupedDefLists"))) $
 
   -- Combine results
@@ -392,20 +392,20 @@ moduleToSourceModule = define "moduleToSourceModule" $
   -- Transform namespace: hydra.encode.util -> hydra.sources.encode.util
   "sourceNs" <~ wrap _Namespace (
     (string "hydra.sources.") ++ Strings.intercalate (string ".")
-      (Lists.drop (int32 1) (Strings.splitOn (string ".") (Module.unNamespace $ Module.moduleNamespace $ var "m")))) $
+      (Lists.drop (int32 1) (Strings.splitOn (string ".") (Packaging.unNamespace $ Packaging.moduleNamespace $ var "m")))) $
   -- The module type namespace
   "modTypeNs" <~ (wrap _Namespace (string "hydra.packaging") :: TTerm Namespace) $
   -- Create binding: module_ = <encoded Module term>
-  "moduleDef" <~ Module.definitionTerm (Module.termDefinition
-    (wrap _Name (Module.unNamespace (var "sourceNs") ++ (string ".module_")))
+  "moduleDef" <~ Packaging.definitionTerm (Packaging.termDefinition
+    (wrap _Name (Packaging.unNamespace (var "sourceNs") ++ (string ".module_")))
     (encoderFor _Module @@ var "m")
     nothing) $
-  Module.module_
+  Packaging.module_
     (var "sourceNs")
     (list [var "moduleDef"])
     (list [var "modTypeNs"])
     (list [var "modTypeNs"])
-    (just $ (string "Source module for ") ++ Module.unNamespace (Module.moduleNamespace $ var "m"))
+    (just $ (string "Source module for ") ++ Packaging.unNamespace (Packaging.moduleNamespace $ var "m"))
 
 -- | Generate the lexicon content from a graph.
 -- Lists all primitives, types, and terms with their types.
@@ -454,27 +454,27 @@ inferModules = define "inferModules" $
   "inferredElements" <~ Pairs.second (var "inferResult") $
   "isTypeOnlyModule" <~ ("mod" ~> Logic.not $ hasTermDefinitions (var "mod")) $
   "defName" <~ ("d" ~> cases _Definition (var "d") Nothing [
-    _Definition_term>>: "td" ~> Module.termDefinitionName (var "td"),
-    _Definition_type>>: "td" ~> Module.typeDefinitionName (var "td")]) $
+    _Definition_term>>: "td" ~> Packaging.termDefinitionName (var "td"),
+    _Definition_type>>: "td" ~> Packaging.typeDefinitionName (var "td")]) $
   "refreshModule" <~ ("m" ~>
     Logic.ifElse (var "isTypeOnlyModule" @@ var "m")
       (var "m")
-      (Module.module_
-        (Module.moduleNamespace $ var "m")
+      (Packaging.module_
+        (Packaging.moduleNamespace $ var "m")
         (Maybes.cat $ Lists.map
           ("d" ~> cases _Definition (var "d") Nothing [
-            _Definition_type>>: "td" ~> just (Module.definitionType (var "td")),
+            _Definition_type>>: "td" ~> just (Packaging.definitionType (var "td")),
             _Definition_term>>: "td" ~> Maybes.map
-              ("b" ~> Module.definitionTerm (Module.termDefinition
+              ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
                 (Core.bindingName $ var "b")
                 (Core.bindingTerm $ var "b")
                 (Core.bindingType $ var "b")))
-              (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Module.termDefinitionName $ var "td"))
+              (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Packaging.termDefinitionName $ var "td"))
                 (var "inferredElements"))])
-          (Module.moduleDefinitions $ var "m"))
-        (Module.moduleTermDependencies $ var "m")
-        (Module.moduleTypeDependencies $ var "m")
-        (Module.moduleDescription $ var "m"))) $
+          (Packaging.moduleDefinitions $ var "m"))
+        (Packaging.moduleTermDependencies $ var "m")
+        (Packaging.moduleTypeDependencies $ var "m")
+        (Packaging.moduleDescription $ var "m"))) $
   right $ Lists.map (var "refreshModule") (var "targetMods")
 
 -- | Generate encoder or decoder modules for a list of type modules.
@@ -488,7 +488,7 @@ generateCoderModules = define "generateCoderModules" $
   "codec" ~> "bsGraph" ~> "universeModules" ~> "typeModules" ~> "cx" ~>
   -- Build a graph that includes both schema and data elements, since codecs need to dereference type elements
   "universe" <~ Maps.fromList (Lists.map
-    ("m" ~> pair (Module.moduleNamespace $ var "m") (var "m"))
+    ("m" ~> pair (Packaging.moduleNamespace $ var "m") (var "m"))
     (Lists.concat2 (var "universeModules") (var "universeModules"))) $
   "schemaModules" <~ moduleTypeDepsTransitive @@ var "universe" @@ var "universeModules" $
   "dataModules" <~ moduleTermDepsTransitive @@ var "universe" @@ var "universeModules" $
@@ -556,7 +556,7 @@ escapeControlCharsInJson = define "escapeControlCharsInJson" $
   var "go" @@ boolean False @@ boolean False @@ var "input"
 
 -- | Decode a single module from a JSON value.
--- Given a bootstrap graph, universe modules, and a JSON value, decodes it to a Module.
+-- Given a bootstrap graph, universe modules, and a JSON value, decodes it to a Packaging.
 -- This is the pure core of the JSON module loading pipeline.
 decodeModuleFromJson :: TTermDefinition (Graph -> [Module] -> JsonModel.Value -> Either String Module)
 decodeModuleFromJson = define "decodeModuleFromJson" $

@@ -39,7 +39,7 @@ import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
 import qualified Hydra.Dsl.Meta.Terms        as MetaTerms
 import qualified Hydra.Dsl.Meta.Types        as MetaTypes
-import qualified Hydra.Dsl.Module       as Module
+import qualified Hydra.Dsl.Packaging       as Packaging
 import qualified Hydra.Dsl.Parsing      as Parsing
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Prims             as Prims
@@ -679,7 +679,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
   -- Construct term definitions grouped by namespace
   "toDef" <~ ("el" ~>
     Maybes.map
-      ("ts" ~> Module.termDefinition
+      ("ts" ~> Packaging.termDefinition
         (Core.bindingName $ var "el")
         (Core.bindingTerm $ var "el")
         (just $ var "ts"))
@@ -736,7 +736,7 @@ schemaGraphToDefinitions = define "schemaGraphToDefinitions" $
   "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
   "tmap0" <<~ Eithers.bimap formatDecodingError ("x" ~> var "x") (Environment.graphAsTypes @@ var "cx" @@ var "graph" @@ (Lexical.graphToBindings @@ var "graph")) $
   "tmap1" <<~ adaptGraphSchema @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
-  "toDef" <~ ("pair" ~> Module.typeDefinition (Pairs.first $ var "pair") (Core.typeScheme (list ([] :: [TTerm Name])) (Pairs.second $ var "pair") nothing)) $
+  "toDef" <~ ("pair" ~> Packaging.typeDefinition (Pairs.first $ var "pair") (Core.typeScheme (list ([] :: [TTerm Name])) (Pairs.second $ var "pair") nothing)) $
   right $ pair
     (var "tmap1")
     (Lists.map

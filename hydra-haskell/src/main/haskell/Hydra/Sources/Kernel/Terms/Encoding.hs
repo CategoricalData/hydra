@@ -31,7 +31,7 @@ import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
 import qualified Hydra.Dsl.Meta.Terms        as MetaTerms
 import qualified Hydra.Dsl.Meta.Types        as MetaTypes
-import qualified Hydra.Dsl.Module       as Module
+import qualified Hydra.Dsl.Packaging       as Packaging
 import qualified Hydra.Dsl.Parsing      as Parsing
 import qualified Hydra.Dsl.Meta.Phantoms     as Phantoms
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms hiding (
@@ -502,8 +502,8 @@ encodeModule = define "encodeModule" $
       (Maybes.cat $ Lists.map
         ("d" ~> cases _Definition (var "d") (Just nothing) [
           _Definition_type>>: "td" ~>
-            just (Annotations.typeBinding @@ (Module.typeDefinitionName $ var "td") @@ (Core.typeSchemeType $ Module.typeDefinitionType $ var "td"))])
-        (Module.moduleDefinitions (var "mod")))) $
+            just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeType $ Packaging.typeDefinitionType $ var "td"))])
+        (Packaging.moduleDefinitions (var "mod")))) $
     Logic.ifElse (Lists.null (var "typeBindings"))
       (right nothing)
       ("encodedBindings" <<~ Eithers.mapList ("b" ~>
@@ -513,21 +513,21 @@ encodeModule = define "encodeModule" $
           (encodeBinding @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
         -- The encoder module depends on encoder modules for both the type and term dependencies
         -- E.g., hydra.encode.constraints depends on hydra.encode.core (type dep) and hydra.encode.query (term dep)
-        right (just (Module.module_
-          (encodeNamespace @@ (Module.moduleNamespace (var "mod")))
-          (Lists.map ("b" ~> Module.definitionTerm (Module.termDefinition
+        right (just (Packaging.module_
+          (encodeNamespace @@ (Packaging.moduleNamespace (var "mod")))
+          (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
             (Core.bindingType $ var "b")))
             (var "encodedBindings"))
           -- Transform both type and term dependency namespaces to their encoder namespaces
           (Lists.nub (Lists.concat2
-            (primitive _lists_map @@ encodeNamespace @@ (Module.moduleTypeDependencies (var "mod")))
-            (primitive _lists_map @@ encodeNamespace @@ (Module.moduleTermDependencies (var "mod")))))
+            (primitive _lists_map @@ encodeNamespace @@ (Packaging.moduleTypeDependencies (var "mod")))
+            (primitive _lists_map @@ encodeNamespace @@ (Packaging.moduleTermDependencies (var "mod")))))
           -- The encoder module depends on the original type module
-          (list [Module.moduleNamespace (var "mod")])
+          (list [Packaging.moduleNamespace (var "mod")])
           (just (Strings.cat $ list [
             string "Term encoders for ",
-            Module.unNamespace (Module.moduleNamespace (var "mod"))])))))
+            Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))])))))
 
 -- | Encode a Name as a Term (produces a wrapped term of type hydra.core.Name)
 encodeName :: TTermDefinition (Name -> Term)
@@ -541,11 +541,11 @@ encodeNamespace :: TTermDefinition (Namespace -> Namespace)
 encodeNamespace = define "encodeNamespace" $
   doc "Generate an encoder module namespace from a source module namespace" $
   "ns" ~> (
-    Module.namespace (
+    Packaging.namespace (
       Strings.cat $ list [
         string "hydra.encode.",
         Strings.intercalate (string ".")
-          (Lists.tail (Strings.splitOn (string ".") (Module.unNamespace (var "ns"))))]))
+          (Lists.tail (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))))]))
 
 -- | Generate an encoder for a record type
 -- For records, project each field, encode it, and build an encoded record
