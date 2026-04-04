@@ -7,7 +7,7 @@ package hydra.test;
  */
 public interface TestSuite {
   static hydra.testing.TestGroup allTests() {
-    return new hydra.testing.TestGroup("common", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), hydra.util.ConsList.of(
+    return new hydra.testing.TestGroup("common", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(
       hydra.test.lib.Chars.allTests(),
       hydra.test.lib.Eithers.allTests(),
       hydra.test.lib.Equality.allTests(),
@@ -38,6 +38,6 @@ public interface TestSuite {
       hydra.test.Substitution.allTests(),
       hydra.test.Unification.allTests(),
       hydra.test.validate.All.allTests(),
-      hydra.test.Variables.allTests()), (hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>) (hydra.util.ConsList.<hydra.testing.TestCaseWithMetadata>empty()));
+      hydra.test.Variables.allTests()), (java.util.List<hydra.testing.TestCaseWithMetadata>) (java.util.Collections.<hydra.testing.TestCaseWithMetadata>emptyList()));
   }
 }

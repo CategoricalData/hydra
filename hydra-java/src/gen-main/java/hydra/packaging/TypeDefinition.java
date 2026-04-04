@@ -51,11 +51,15 @@ public class TypeDefinition implements Serializable, Comparable<TypeDefinition> 
   @SuppressWarnings("unchecked")
   public int compareTo(TypeDefinition other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) type).compareTo(other.type);
+    return hydra.util.Comparing.compare(
+      type,
+      other.type);
   }
 
   public TypeDefinition withName(hydra.core.Name name) {
