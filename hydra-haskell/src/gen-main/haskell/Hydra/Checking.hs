@@ -609,6 +609,10 @@ typeOfSet cx tx typeArgs els =
             cx2 = Pairs.second foldR
         in (Eithers.bind (checkSameType cx2 tx "set elements" eltypes) (\unifiedType -> Right (Core.TypeSet unifiedType, cx2))))))
 
+-- | Check the type of a term
+typeOfTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Core.Type
+typeOfTerm cx g term = Eithers.map Pairs.first (typeOf cx g [] term)
+
 -- | Reconstruct the type of a type application term (Either/Context version)
 typeOfTypeApplication :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.TypeApplicationTerm -> Either (Context.InContext Errors.Error) (Core.Type, Context.Context)
 typeOfTypeApplication cx tx typeArgs tyapp =

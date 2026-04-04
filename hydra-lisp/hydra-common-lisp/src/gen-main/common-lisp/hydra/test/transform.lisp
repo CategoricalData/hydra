@@ -1,5 +1,5 @@
 (defpackage :hydra.test.transform
-(:use :cl :hydra.core :hydra.lib.eithers :hydra.lib.lists :hydra.lib.logic :hydra.lib.maybes :hydra.lib.pairs :hydra.lib.strings :hydra.module :hydra.testing :hydra.util)
+(:use :cl :hydra.core :hydra.lib.eithers :hydra.lib.lists :hydra.lib.logic :hydra.lib.maybes :hydra.lib.pairs :hydra.lib.strings :hydra.packaging :hydra.testing :hydra.util)
 (:export :hydra_test_transform_add_generation_prefix :hydra_test_transform_encode_case_convention :hydra_test_transform_build_convert_case_call :hydra_test_transform_encode_int :hydra_test_transform_encode_adjacency_list :hydra_test_transform_build_topological_sort_call :hydra_test_transform_build_topological_sort_s_c_c_call :hydra_test_transform_collect_test_cases :hydra_test_transform_encode_int_list :hydra_test_transform_encode_list_list :hydra_test_transform_encode_either_list_list :hydra_test_transform_transform_module :hydra_test_transform_transform_test_case :hydra_test_transform_transform_to_compiled_tests))
 
 (in-package :hydra.test.transform)
@@ -26,7 +26,7 @@
 
 (cl:defvar hydra_test_transform_encode_either_list_list (cl:lambda (e) (list :either (((hydra_lib_eithers_bimap (cl:lambda (cycles) (hydra_test_transform_encode_list_list cycles))) (cl:lambda (sorted) (hydra_test_transform_encode_int_list sorted))) e))))
 
-(cl:defvar hydra_test_transform_transform_module (cl:lambda (m) (make-hydra_module_module (hydra_test_transform_add_generation_prefix ((cl:lambda (v) (hydra_module_module-namespace v)) m)) ((cl:lambda (v) (hydra_module_module-definitions v)) m) ((cl:lambda (v) (hydra_module_module-term_dependencies v)) m) ((cl:lambda (v) (hydra_module_module-type_dependencies v)) m) ((cl:lambda (v) (hydra_module_module-description v)) m))))
+(cl:defvar hydra_test_transform_transform_module (cl:lambda (m) (make-hydra_packaging_module (hydra_test_transform_add_generation_prefix ((cl:lambda (v) (hydra_packaging_module-namespace v)) m)) ((cl:lambda (v) (hydra_packaging_module-definitions v)) m) ((cl:lambda (v) (hydra_packaging_module-term_dependencies v)) m) ((cl:lambda (v) (hydra_packaging_module-type_dependencies v)) m) ((cl:lambda (v) (hydra_packaging_module-description v)) m))))
 
 (cl:defvar hydra_test_transform_transform_test_case (cl:lambda (tcm) (list :just tcm)))
 

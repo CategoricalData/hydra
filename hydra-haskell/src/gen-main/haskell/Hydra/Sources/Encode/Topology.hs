@@ -5,17 +5,17 @@
 module Hydra.Sources.Encode.Topology where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Module as Module
+import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
-module_ :: Module.Module
+module_ :: Packaging.Module
 module_ =
-    Module.Module {
-      Module.moduleNamespace = (Module.Namespace "hydra.encode.topology"),
-      Module.moduleDefinitions = [
-        Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.encode.topology.graph"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+    Packaging.Module {
+      Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.topology"),
+      Packaging.moduleDefinitions = [
+        Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.topology.graph"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "m"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -40,7 +40,7 @@ module_ =
                               Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.topology.vertex"))})),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}}))})))})),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}}))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeMap (Core.MapType {
@@ -48,9 +48,9 @@ module_ =
                 Core.mapTypeValues = (Core.TypeList (Core.TypeVariable (Core.Name "hydra.topology.Vertex")))})),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))}),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.encode.topology.tarjanState"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.topology.tarjanState"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -285,15 +285,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
                                     Core.projectionField = (Core.Name "sccs")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.topology.TarjanState")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))})),
-        (Module.DefinitionTerm (Module.TermDefinition {
-          Module.termDefinitionName = (Core.Name "hydra.encode.topology.vertex"),
-          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.topology.vertex"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -309,14 +309,14 @@ module_ =
                       Core.injectionField = Core.Field {
                         Core.fieldName = (Core.Name "int32"),
                         Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))}}))}))),
-          Module.termDefinitionType = (Just (Core.TypeScheme {
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Literal")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))}))],
-      Module.moduleTermDependencies = [
-        Module.Namespace "hydra.encode.core"],
-      Module.moduleTypeDependencies = [
-        Module.Namespace "hydra.topology"],
-      Module.moduleDescription = (Just "Term encoders for hydra.topology")}
+      Packaging.moduleTermDependencies = [
+        Packaging.Namespace "hydra.encode.core"],
+      Packaging.moduleTypeDependencies = [
+        Packaging.Namespace "hydra.topology"],
+      Packaging.moduleDescription = (Just "Term encoders for hydra.topology")}

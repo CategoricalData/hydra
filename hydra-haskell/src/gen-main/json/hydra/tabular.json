@@ -4,104 +4,119 @@
       "type": {
         "name": "hydra.tabular.ColumnType",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "A column type, consisting of a name and a value type"}}}],
-            "body": {
-              "record": [
-                {"name": "name", "type": {"variable": "hydra.relational.ColumnName"}},
-                {"name": "type", "type": {"variable": "hydra.core.Type"}}]}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "A column type, consisting of a name and a value type"}}}],
+              "body": {
+                "record": [
+                  {"name": "name", "type": {"variable": "hydra.relational.ColumnName"}},
+                  {"name": "type", "type": {"variable": "hydra.core.Type"}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.tabular.DataRow",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "A data row, containing optional-valued cells; one per column"}}}],
-            "body": {
-              "forall": {
-                "body": {"wrap": {"list": {"maybe": {"variable": "v"}}}},
-                "parameter": "v"}}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A data row, containing optional-valued cells; one per column"}}}],
+              "body": {
+                "forall": {
+                  "body": {"wrap": {"list": {"maybe": {"variable": "v"}}}},
+                  "parameter": "v"}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.tabular.HeaderRow",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "A header row, containing column names (but no types or data)"}}}],
-            "body": {"wrap": {"list": {"literal": {"string": {}}}}}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A header row, containing column names (but no types or data)"}}}],
+              "body": {"wrap": {"list": {"literal": {"string": {}}}}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.tabular.Table",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "A simple table as in a CSV file, having an optional header row and any number of data rows"}}}],
-            "body": {
-              "forall": {
-                "body": {
-                  "record": [
-                    {
-                      "name": "header",
-                      "type": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "@key": "description",
-                              "@value": {
-                                "literal": {
-                                  "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
-                          "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}}},
-                    {
-                      "name": "data",
-                      "type": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "@key": "description",
-                              "@value": {
-                                "literal": {
-                                  "string": "The data rows of the table. Each row must have the same number of cells."}}}],
-                          "body": {
-                            "list": {
-                              "application": {
-                                "argument": {"variable": "v"},
-                                "function": {"variable": "hydra.tabular.DataRow"}}}}}}}]},
-                "parameter": "v"}}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A simple table as in a CSV file, having an optional header row and any number of data rows"}}}],
+              "body": {
+                "forall": {
+                  "body": {
+                    "record": [
+                      {
+                        "name": "header",
+                        "type": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {
+                                  "literal": {
+                                    "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
+                            "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}}},
+                      {
+                        "name": "data",
+                        "type": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {
+                                  "literal": {
+                                    "string": "The data rows of the table. Each row must have the same number of cells."}}}],
+                            "body": {
+                              "list": {
+                                "application": {
+                                  "argument": {"variable": "v"},
+                                  "function": {"variable": "hydra.tabular.DataRow"}}}}}}}]},
+                  "parameter": "v"}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.tabular.TableType",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "A type definition for a table, including column names and types"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "name",
-                  "type": {"variable": "hydra.relational.RelationName"}},
-                {
-                  "name": "columns",
-                  "type": {"list": {"variable": "hydra.tabular.ColumnType"}}}]}}}}}],
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A type definition for a table, including column names and types"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {"variable": "hydra.relational.RelationName"}},
+                  {
+                    "name": "columns",
+                    "type": {"list": {"variable": "hydra.tabular.ColumnType"}}}]}}},
+          "variables": []}}}],
   "description": ["A simple, untyped tabular data model, suitable for CSVs and TSVs"],
   "namespace": "hydra.tabular",
   "termDependencies": ["hydra.core", "hydra.relational"],

@@ -54,14 +54,17 @@ import qualified Hydra.Sources.Test.Json.Writer as JsonWriter
 import qualified Hydra.Sources.Test.Hoisting.All as HoistingAll
 import qualified Hydra.Sources.Test.Hoisting.Cases as HoistingCases
 import qualified Hydra.Sources.Test.Hoisting.Let as HoistingLet
+import qualified Hydra.Sources.Test.Dependencies as Dependencies
 import qualified Hydra.Sources.Test.Reduction as Reduction
 import qualified Hydra.Sources.Test.Rewriting as Rewriting
 import qualified Hydra.Sources.Test.Serialization as Serialization
 import qualified Hydra.Sources.Test.Sorting as Sorting
+import qualified Hydra.Sources.Test.Strip as Strip
 import qualified Hydra.Sources.Test.Substitution as Substitution
 import qualified Hydra.Sources.Test.Unification as Unification
 import qualified Hydra.Sources.Test.Validate.All as ValidateAll
 import qualified Hydra.Sources.Test.Validate.Core as ValidateCore
+import qualified Hydra.Sources.Test.Variables as Variables
 
 
 ns :: Namespace
@@ -102,6 +105,7 @@ otherPairs :: [(Namespace, TTermDefinition TestGroup)]
 otherPairs = [
   (Annotations.ns, Annotations.allTests),
   (CheckingAll.ns, CheckingAll.allTests),
+  (Dependencies.ns, Dependencies.allTests),
   (EtaExpansion.ns, EtaExpansion.allTests),
   (Formatting.ns, Formatting.allTests),
   (HoistingAll.ns, HoistingAll.allTests),
@@ -115,9 +119,11 @@ otherPairs = [
   (Rewriting.ns, Rewriting.allTests),
   (Serialization.ns, Serialization.allTests),
   (Sorting.ns, Sorting.allTests),
+  (Strip.ns, Strip.allTests),
   (Substitution.ns, Substitution.allTests),
   (Unification.ns, Unification.allTests),
-  (ValidateAll.ns, ValidateAll.allTests)]
+  (ValidateAll.ns, ValidateAll.allTests),
+  (Variables.ns, Variables.allTests)]
 
 testPairs :: [(Namespace, TTermDefinition TestGroup)]
 testPairs = libPairs ++ otherPairs
@@ -132,9 +138,10 @@ testSuiteModules =
    -- Hoisting tests (including sub-modules)
    HoistingAll.module_, HoistingCases.module_, HoistingLet.module_,
    -- Other tests
-   Annotations.module_, EtaExpansion.module_, Formatting.module_,
+   Annotations.module_, Dependencies.module_, EtaExpansion.module_, Formatting.module_,
    JsonRoundtrip.module_, JsonWriter.module_,
    Reduction.module_, Rewriting.module_, Serialization.module_, Sorting.module_,
+   Strip.module_, Variables.module_,
    -- TODO: Ordering.module_ temporarily removed - needs investigation
    -- Checking tests (including sub-modules)
    CheckingAll.module_,

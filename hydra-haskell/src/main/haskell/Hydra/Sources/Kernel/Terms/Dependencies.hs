@@ -2,7 +2,7 @@ module Hydra.Sources.Kernel.Terms.Dependencies where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  elementsWithDependencies,
+  definitionsWithDependencies,
   flattenLetTerms,
   inlineType,
   isLambda,
@@ -86,7 +86,7 @@ module_ = Module ns elements
     Just ("Dependency extraction, binding sort, and let normalization")
   where
    elements = [
-     toDefinition elementsWithDependencies,
+     toDefinition definitionsWithDependencies,
      toDefinition flattenLetTerms,
      toDefinition inlineType,
      toDefinition isLambda,
@@ -407,15 +407,15 @@ typeNamesInType = define "typeNamesInType" $
   "addNames" <~ ("names" ~> "typ" ~> var "names") $
   Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty @@ var "typ0"
 
-elementsWithDependencies :: TTermDefinition (Context -> Graph -> [Binding] -> Either (InContext Error) [Binding])
-elementsWithDependencies = define "elementsWithDependencies" $
-  doc "Get elements with their dependencies" $
+definitionsWithDependencies :: TTermDefinition (Context -> Graph -> [Binding] -> Either (InContext Error) [Binding])
+definitionsWithDependencies = define "definitionsWithDependencies" $
+  doc "Get definitions with their dependencies" $
   "cx" ~> "graph" ~> "original" ~>
   "depNames" <~ ("el" ~> Sets.toList (termDependencyNames @@ true @@ false @@ false @@ (Core.bindingTerm (var "el")))) $
   "allDepNames" <~ Lists.nub (Lists.concat2
     (Lists.map (unaryFunction Core.bindingName) (var "original"))
     (Lists.concat (Lists.map (var "depNames") (var "original")))) $
-  Eithers.mapList ("name" ~> Lexical.requireElement @@ var "cx" @@ var "graph" @@ var "name") (var "allDepNames")
+  Eithers.mapList ("name" ~> Lexical.requireBinding @@ var "cx" @@ var "graph" @@ var "name") (var "allDepNames")
 
 topologicalSortTypeDefinitions :: TTermDefinition ([TypeDefinition] -> [[TypeDefinition]])
 topologicalSortTypeDefinitions = define "topologicalSortTypeDefinitions" $
@@ -423,7 +423,7 @@ topologicalSortTypeDefinitions = define "topologicalSortTypeDefinitions" $
   "defs" ~>
   "toPair" <~ ("def" ~> pair
     (Module.typeDefinitionName (var "def"))
-    (Sets.toList (typeDependencyNames @@ false @@ Module.typeDefinitionType (var "def")))) $
+    (Sets.toList (typeDependencyNames @@ false @@ (Core.typeSchemeType $ Module.typeDefinitionType (var "def"))))) $
   "nameToDef" <~ Maps.fromList (Lists.map
     ("d" ~> pair (Module.typeDefinitionName (var "d")) (var "d"))
     (var "defs")) $

@@ -401,7 +401,7 @@
                                       "parameter": "_g"}}},
                                 "domain": [{"variable": "hydra.testing.TestGroup"}],
                                 "parameter": "testGroup"}}},
-                          "domain": [{"variable": "hydra.module.Module"}],
+                          "domain": [{"variable": "hydra.packaging.Module"}],
                           "parameter": "testModule"}}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
@@ -423,7 +423,7 @@
                                 "second": {"literal": {"string": {}}}}}}},
                         "domain": {"variable": "t0"}}},
                     "domain": {"variable": "hydra.testing.TestGroup"}}},
-                "domain": {"variable": "hydra.module.Module"}}},
+                "domain": {"variable": "hydra.packaging.Module"}}},
             "variables": ["t0", "t1"]}]}},
     {
       "term": {
@@ -797,7 +797,7 @@
                                                               "function": {
                                                                 "typeApplication": {
                                                                   "body": {"variable": "hydra.ext.python.testing.buildPythonTestModule"},
-                                                                  "type": {"variable": "hydra.module.Module"}}}}}}}}},
+                                                                  "type": {"variable": "hydra.packaging.Module"}}}}}}}}},
                                                   "type": [
                                                     {
                                                       "constraints": null,
@@ -810,11 +810,12 @@
                                                       "argument": {"variable": "testModule"},
                                                       "function": {
                                                         "function": {
-                                                          "elimination": {"record": {"field": "namespace", "typeName": "hydra.module.Module"}}}}}},
+                                                          "elimination": {
+                                                            "record": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}}}},
                                                   "type": [
                                                     {
                                                       "constraints": null,
-                                                      "type": {"variable": "hydra.module.Namespace"},
+                                                      "type": {"variable": "hydra.packaging.Namespace"},
                                                       "variables": []}]},
                                                 {
                                                   "name": "parts",
@@ -823,7 +824,7 @@
                                                       "argument": {
                                                         "application": {
                                                           "argument": {"variable": "ns_"},
-                                                          "function": {"function": {"elimination": {"wrap": "hydra.module.Namespace"}}}}},
+                                                          "function": {"function": {"elimination": {"wrap": "hydra.packaging.Namespace"}}}}},
                                                       "function": {
                                                         "application": {
                                                           "argument": {"literal": {"string": "."}},
@@ -916,7 +917,7 @@
                                         "type": {"variable": "t0"}}}}}}},
                             "domain": [{"variable": "hydra.testing.TestGroup"}],
                             "parameter": "testGroup"}}},
-                      "domain": [{"variable": "hydra.module.Module"}],
+                      "domain": [{"variable": "hydra.packaging.Module"}],
                       "parameter": "testModule"}}}}},
             "parameter": "t0"}},
         "type": [
@@ -934,7 +935,7 @@
                             "first": {"literal": {"string": {}}},
                             "second": {"literal": {"string": {}}}}}}},
                     "domain": {"variable": "hydra.testing.TestGroup"}}},
-                "domain": {"variable": "hydra.module.Module"}}},
+                "domain": {"variable": "hydra.packaging.Module"}}},
             "variables": ["t0"]}]}}],
   "description": [
     "Python test code generation codec for pytest-based generation tests"],
@@ -960,7 +961,6 @@
     "hydra.errors",
     "hydra.graph",
     "hydra.json.model",
-    "hydra.module",
     "hydra.packaging",
     "hydra.parsing",
     "hydra.phantoms",

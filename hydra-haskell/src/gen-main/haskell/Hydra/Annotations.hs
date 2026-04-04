@@ -37,6 +37,14 @@ aggregateAnnotations getValue getX getAnns t =
               \rest -> \t2 -> Maybes.maybe rest (\yy -> toPairs (Lists.cons (Maps.toList (getAnns yy)) rest) (getX yy)) (getValue t2)
       in (Maps.fromList (Lists.concat (toPairs [] t)))
 
+-- | Extract comments/description from a Binding
+commentsFromBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Errors.Error) (Maybe String)
+commentsFromBinding cx g b = getTermDescription cx g (Core.bindingTerm b)
+
+-- | Extract comments/description from a FieldType
+commentsFromFieldType :: Context.Context -> Graph.Graph -> Core.FieldType -> Either (Context.InContext Errors.Error) (Maybe String)
+commentsFromFieldType cx g ft = getTypeDescription cx g (Core.fieldTypeType ft)
+
 -- | Debug if the debug ID matches (Either version)
 debugIf :: Context.Context -> String -> String -> Either (Context.InContext Errors.Error) ()
 debugIf cx debugId message =
@@ -296,24 +304,6 @@ typeAnnotationInternal typ =
                 Core.TypeAnnotated v0 -> Just v0
                 _ -> Nothing
       in (aggregateAnnotations getAnn (\at -> Core.annotatedTypeBody at) (\at -> Core.annotatedTypeAnnotation at) typ)
-
--- | Create a type element with proper annotations
-typeElement :: Core.Name -> Core.Type -> Core.Binding
-typeElement name typ =
-
-      let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
-          dataTerm =
-                  normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
-                    Core.annotatedTermBody = (Core__.type_ typ),
-                    Core.annotatedTermAnnotation = (Maps.fromList [
-                      (Constants.key_type, schemaTerm)])}))
-      in Core.Binding {
-        Core.bindingName = name,
-        Core.bindingTerm = dataTerm,
-        Core.bindingType = (Just (Core.TypeScheme {
-          Core.typeSchemeVariables = [],
-          Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
-          Core.typeSchemeConstraints = Nothing}))}
 
 -- | Execute different branches based on flag (Either version)
 whenFlag :: Context.Context -> Core.Name -> Either (Context.InContext Errors.Error) t0 -> Either (Context.InContext Errors.Error) t0 -> Either (Context.InContext Errors.Error) t0

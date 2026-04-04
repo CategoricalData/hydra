@@ -1,6 +1,6 @@
 package hydra.ext.java.testing
 
-import hydra.module.*
+import hydra.packaging.*
 
 import hydra.testing.*
 
@@ -16,9 +16,9 @@ import hydra.lib.logic
 
 import hydra.lib.strings
 
-def buildJavaTestModule(testModule: hydra.module.Module)(testGroup: hydra.testing.TestGroup)(testBody: scala.Predef.String): scala.Predef.String =
+def buildJavaTestModule(testModule: hydra.packaging.Module)(testGroup: hydra.testing.TestGroup)(testBody: scala.Predef.String): scala.Predef.String =
   {
-  lazy val `ns_`: hydra.module.Namespace = (testModule.namespace)
+  lazy val `ns_`: hydra.packaging.Namespace = (testModule.namespace)
   lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(`ns_`)
   lazy val packageName: scala.Predef.String = hydra.lib.strings.intercalate(".")(hydra.lib.lists.init[scala.Predef.String](parts))
   lazy val `className_`: scala.Predef.String = hydra.lib.strings.cat2(hydra.formatting.capitalize(hydra.lib.lists.last[scala.Predef.String](parts)))("Test")
@@ -59,7 +59,7 @@ def generateJavaTestCase[T0](groupPath: Seq[scala.Predef.String])(tcm: hydra.tes
     }
 }
 
-def generateJavaTestFile[T0, T1](testModule: hydra.module.Module)(testGroup: hydra.testing.TestGroup)(_g: T0): Either[T1,
+def generateJavaTestFile[T0, T1](testModule: hydra.packaging.Module)(testGroup: hydra.testing.TestGroup)(_g: T0): Either[T1,
    Tuple2[scala.Predef.String, scala.Predef.String]] = hydra.ext.java.testing.generateTestFileWithJavaCodec(testModule)(testGroup)
 
 def generateJavaTestGroupHierarchy[T0](groupPath: Seq[scala.Predef.String])(testGroup: hydra.testing.TestGroup): Either[T0, scala.Predef.String] =
@@ -82,12 +82,12 @@ def generateJavaTestGroupHierarchy[T0](groupPath: Seq[scala.Predef.String])(test
   })(subgroups))))
 }
 
-def generateTestFileWithJavaCodec[T0](testModule: hydra.module.Module)(testGroup: hydra.testing.TestGroup): Either[T0,
+def generateTestFileWithJavaCodec[T0](testModule: hydra.packaging.Module)(testGroup: hydra.testing.TestGroup): Either[T0,
    Tuple2[scala.Predef.String, scala.Predef.String]] =
   hydra.lib.eithers.map[scala.Predef.String, Tuple2[scala.Predef.String, scala.Predef.String], T0]((testBody: scala.Predef.String) =>
   {
   lazy val testModuleContent: scala.Predef.String = hydra.ext.java.testing.buildJavaTestModule(testModule)(testGroup)(testBody)
-  lazy val `ns_`: hydra.module.Namespace = (testModule.namespace)
+  lazy val `ns_`: hydra.packaging.Namespace = (testModule.namespace)
   lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(`ns_`)
   lazy val dirParts: Seq[scala.Predef.String] = hydra.lib.lists.drop[scala.Predef.String](1)(hydra.lib.lists.init[scala.Predef.String](parts))
   lazy val `className_`: scala.Predef.String = hydra.lib.strings.cat2(hydra.formatting.capitalize(hydra.lib.lists.last[scala.Predef.String](parts)))("Test")
@@ -96,5 +96,5 @@ def generateTestFileWithJavaCodec[T0](testModule: hydra.module.Module)(testGroup
   Tuple2(filePath, testModuleContent)
 })(hydra.ext.java.testing.generateJavaTestGroupHierarchy(Seq())(testGroup))
 
-def namespaceToJavaClassName(`ns_`: hydra.module.Namespace): scala.Predef.String =
+def namespaceToJavaClassName(`ns_`: hydra.packaging.Namespace): scala.Predef.String =
   hydra.lib.strings.intercalate(".")(hydra.lib.lists.map[scala.Predef.String, scala.Predef.String](hydra.formatting.capitalize)(hydra.lib.strings.splitOn(".")(`ns_`)))

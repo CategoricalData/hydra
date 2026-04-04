@@ -75,7 +75,7 @@
                                   "@value": {
                                     "literal": {
                                       "string": "The second module namespace that conflicts with the first"}}}],
-                              "body": {"variable": "hydra.module.Namespace"}}},
+                              "body": {"variable": "hydra.packaging.Namespace"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "second"}}},
               "domain": [
@@ -87,7 +87,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The first module namespace"}}}],
-                        "body": {"variable": "hydra.module.Namespace"}}},
+                        "body": {"variable": "hydra.packaging.Namespace"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "first"}}},
         "type": [
@@ -111,7 +111,7 @@
                                 "@value": {
                                   "literal": {
                                     "string": "The second module namespace that conflicts with the first"}}}],
-                            "body": {"variable": "hydra.module.Namespace"}}},
+                            "body": {"variable": "hydra.packaging.Namespace"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -121,7 +121,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The first module namespace"}}}],
-                        "body": {"variable": "hydra.module.Namespace"}}},
+                        "body": {"variable": "hydra.packaging.Namespace"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -201,7 +201,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The first module namespace"}}}],
-                        "body": {"variable": "hydra.module.Namespace"}}},
+                        "body": {"variable": "hydra.packaging.Namespace"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -287,7 +287,7 @@
                             "@value": {
                               "literal": {
                                 "string": "The second module namespace that conflicts with the first"}}}],
-                        "body": {"variable": "hydra.module.Namespace"}}},
+                        "body": {"variable": "hydra.packaging.Namespace"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -412,7 +412,7 @@
                                 {
                                   "@key": "description",
                                   "@value": {"literal": {"string": "The first module namespace"}}}],
-                              "body": {"variable": "hydra.module.Namespace"}}},
+                              "body": {"variable": "hydra.packaging.Namespace"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -440,7 +440,7 @@
                               {
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The first module namespace"}}}],
-                            "body": {"variable": "hydra.module.Namespace"}}},
+                            "body": {"variable": "hydra.packaging.Namespace"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -567,7 +567,7 @@
                                   "@value": {
                                     "literal": {
                                       "string": "The second module namespace that conflicts with the first"}}}],
-                              "body": {"variable": "hydra.module.Namespace"}}},
+                              "body": {"variable": "hydra.packaging.Namespace"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -597,7 +597,7 @@
                                 "@value": {
                                   "literal": {
                                     "string": "The second module namespace that conflicts with the first"}}}],
-                            "body": {"variable": "hydra.module.Namespace"}}},
+                            "body": {"variable": "hydra.packaging.Namespace"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -755,7 +755,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The namespace of the module containing the conflict"}}}],
-                        "body": {"variable": "hydra.module.Namespace"}}},
+                        "body": {"variable": "hydra.packaging.Namespace"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "namespace"}}},
         "type": [
@@ -815,7 +815,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The namespace of the module containing the conflict"}}}],
-                        "body": {"variable": "hydra.module.Namespace"}}},
+                        "body": {"variable": "hydra.packaging.Namespace"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -896,7 +896,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The namespace of the module containing the conflict"}}}],
-                        "body": {"variable": "hydra.module.Namespace"}}},
+                        "body": {"variable": "hydra.packaging.Namespace"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -1399,7 +1399,7 @@
                                   "@key": "description",
                                   "@value": {
                                     "literal": {"string": "The namespace of the module containing the conflict"}}}],
-                              "body": {"variable": "hydra.module.Namespace"}}},
+                              "body": {"variable": "hydra.packaging.Namespace"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -1428,7 +1428,7 @@
                                 "@key": "description",
                                 "@value": {
                                   "literal": {"string": "The namespace of the module containing the conflict"}}}],
-                            "body": {"variable": "hydra.module.Namespace"}}},
+                            "body": {"variable": "hydra.packaging.Namespace"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -2354,7 +2354,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The namespace of the module"}}}],
-                        "body": {"variable": "hydra.module.Namespace"}}},
+                        "body": {"variable": "hydra.packaging.Namespace"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "namespace"}}},
         "type": [
@@ -2389,7 +2389,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The namespace of the module"}}}],
-                        "body": {"variable": "hydra.module.Namespace"}}},
+                        "body": {"variable": "hydra.packaging.Namespace"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -2471,7 +2471,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The namespace of the module"}}}],
-                        "body": {"variable": "hydra.module.Namespace"}}},
+                        "body": {"variable": "hydra.packaging.Namespace"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -2688,7 +2688,7 @@
                                 {
                                   "@key": "description",
                                   "@value": {"literal": {"string": "The namespace of the module"}}}],
-                              "body": {"variable": "hydra.module.Namespace"}}},
+                              "body": {"variable": "hydra.packaging.Namespace"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -2718,7 +2718,7 @@
                               {
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The namespace of the module"}}}],
-                            "body": {"variable": "hydra.module.Namespace"}}},
+                            "body": {"variable": "hydra.packaging.Namespace"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -2974,7 +2974,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The namespace of the module containing the duplicates"}}}],
-                        "body": {"variable": "hydra.module.Namespace"}}},
+                        "body": {"variable": "hydra.packaging.Namespace"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "namespace"}}},
         "type": [
@@ -3007,7 +3007,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The namespace of the module containing the duplicates"}}}],
-                        "body": {"variable": "hydra.module.Namespace"}}},
+                        "body": {"variable": "hydra.packaging.Namespace"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -3088,7 +3088,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The namespace of the module containing the duplicates"}}}],
-                        "body": {"variable": "hydra.module.Namespace"}}},
+                        "body": {"variable": "hydra.packaging.Namespace"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -3298,7 +3298,7 @@
                                   "@key": "description",
                                   "@value": {
                                     "literal": {"string": "The namespace of the module containing the duplicates"}}}],
-                              "body": {"variable": "hydra.module.Namespace"}}},
+                              "body": {"variable": "hydra.packaging.Namespace"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -3327,7 +3327,7 @@
                                 "@key": "description",
                                 "@value": {
                                   "literal": {"string": "The namespace of the module containing the duplicates"}}}],
-                            "body": {"variable": "hydra.module.Namespace"}}},
+                            "body": {"variable": "hydra.packaging.Namespace"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -3541,7 +3541,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The duplicated module namespace"}}}],
-                        "body": {"variable": "hydra.module.Namespace"}}},
+                        "body": {"variable": "hydra.packaging.Namespace"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "namespace"}}},
         "type": [
@@ -3561,7 +3561,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The duplicated module namespace"}}}],
-                        "body": {"variable": "hydra.module.Namespace"}}},
+                        "body": {"variable": "hydra.packaging.Namespace"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -3641,7 +3641,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The duplicated module namespace"}}}],
-                        "body": {"variable": "hydra.module.Namespace"}}},
+                        "body": {"variable": "hydra.packaging.Namespace"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -3705,7 +3705,7 @@
                                 {
                                   "@key": "description",
                                   "@value": {"literal": {"string": "The duplicated module namespace"}}}],
-                              "body": {"variable": "hydra.module.Namespace"}}},
+                              "body": {"variable": "hydra.packaging.Namespace"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -3733,7 +3733,7 @@
                               {
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The duplicated module namespace"}}}],
-                            "body": {"variable": "hydra.module.Namespace"}}},
+                            "body": {"variable": "hydra.packaging.Namespace"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -4208,9 +4208,9 @@
             "variables": []}]}}],
   "description": ["DSL functions for hydra.error.packaging"],
   "namespace": "hydra.dsl.error.packaging",
-  "termDependencies": ["hydra.dsl.core", "hydra.dsl.module"],
+  "termDependencies": ["hydra.dsl.core", "hydra.dsl.packaging"],
   "typeDependencies": [
     "hydra.error.packaging",
     "hydra.phantoms",
     "hydra.core",
-    "hydra.module"]}
+    "hydra.packaging"]}

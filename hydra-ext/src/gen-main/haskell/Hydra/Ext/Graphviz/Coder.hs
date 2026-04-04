@@ -15,8 +15,8 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Paths as Paths_
@@ -75,25 +75,25 @@ nodeStyleVariable :: String
 nodeStyleVariable = "variable"
 
 -- | Construct a map from namespace to prefix for all standard libraries
-standardNamespaces :: M.Map Module.Namespace String
+standardNamespaces :: M.Map Packaging.Namespace String
 standardNamespaces =
     M.fromList [
-      (Module.Namespace "hydra.lib.chars", "chars"),
-      (Module.Namespace "hydra.lib.eithers", "eithers"),
-      (Module.Namespace "hydra.lib.equality", "equality"),
-      (Module.Namespace "hydra.lib.lists", "lists"),
-      (Module.Namespace "hydra.lib.literals", "literals"),
-      (Module.Namespace "hydra.lib.logic", "logic"),
-      (Module.Namespace "hydra.lib.maps", "maps"),
-      (Module.Namespace "hydra.lib.math", "math"),
-      (Module.Namespace "hydra.lib.maybes", "maybes"),
-      (Module.Namespace "hydra.lib.pairs", "pairs"),
-      (Module.Namespace "hydra.lib.regex", "regex"),
-      (Module.Namespace "hydra.lib.sets", "sets"),
-      (Module.Namespace "hydra.lib.strings", "strings")]
+      (Packaging.Namespace "hydra.lib.chars", "chars"),
+      (Packaging.Namespace "hydra.lib.eithers", "eithers"),
+      (Packaging.Namespace "hydra.lib.equality", "equality"),
+      (Packaging.Namespace "hydra.lib.lists", "lists"),
+      (Packaging.Namespace "hydra.lib.literals", "literals"),
+      (Packaging.Namespace "hydra.lib.logic", "logic"),
+      (Packaging.Namespace "hydra.lib.maps", "maps"),
+      (Packaging.Namespace "hydra.lib.math", "math"),
+      (Packaging.Namespace "hydra.lib.maybes", "maybes"),
+      (Packaging.Namespace "hydra.lib.pairs", "pairs"),
+      (Packaging.Namespace "hydra.lib.regex", "regex"),
+      (Packaging.Namespace "hydra.lib.sets", "sets"),
+      (Packaging.Namespace "hydra.lib.strings", "strings")]
 
 -- | Compute a label and node style for a term
-termLabel :: Bool -> M.Map Module.Namespace String -> Core.Term -> (String, String)
+termLabel :: Bool -> M.Map Packaging.Namespace String -> Core.Term -> (String, String)
 termLabel compact namespaces term =
 
       let simpleLabel = \lab -> (lab, nodeStyleSimple)
@@ -165,7 +165,7 @@ termToDotGraph term =
       Dot.graphStatements = (termToDotStmts standardNamespaces term)}
 
 -- | Convert a term to full DOT statements showing term structure
-termToDotStmts :: M.Map Module.Namespace String -> Core.Term -> [Dot.Stmt]
+termToDotStmts :: M.Map Packaging.Namespace String -> Core.Term -> [Dot.Stmt]
 termToDotStmts namespaces term =
 
       let encode =
@@ -273,7 +273,7 @@ termToSubtermDotGraph term =
       Dot.graphStatements = (termToSubtermDotStmts standardNamespaces term)}
 
 -- | Convert a term to subterm-style DOT statements
-termToSubtermDotStmts :: M.Map Module.Namespace String -> Core.Term -> [Dot.Stmt]
+termToSubtermDotStmts :: M.Map Packaging.Namespace String -> Core.Term -> [Dot.Stmt]
 termToSubtermDotStmts namespaces term =
 
       let accessorGraph = Paths_.termToSubtermGraph namespaces term

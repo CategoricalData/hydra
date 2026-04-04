@@ -12,7 +12,6 @@ import Hydra.Sources.Kernel.Terms.All
 import Hydra.Sources.Kernel.Types.All
 import Hydra.Sources.Test.All
 
-import qualified Hydra.Sources.CoderUtils as CoderUtils
 import qualified Hydra.Sources.Haskell.Syntax as HaskellSyntax
 import qualified Hydra.Sources.Haskell.Coder as HaskellCoder
 import qualified Hydra.Sources.Haskell.Environment as HaskellEnvironment
@@ -71,7 +70,6 @@ jsonModules = [
 
 otherModules :: [Module]
 otherModules = [
-  CoderUtils.module_,
   TestTransform.module_,
   TestUtils.module_,
   YamlModel.module_,

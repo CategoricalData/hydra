@@ -165,7 +165,7 @@ constructModule = def "constructModule" $
 typeToSchema :: TTermDefinition (Context -> Graph -> M.Map Namespace String -> Module -> TypeDefinition -> Either (InContext Error) (PDL.NamedSchema, [PDL.QualifiedName]))
 typeToSchema = def "typeToSchema" $
   "cx" ~> "g" ~> "aliases" ~> "mod" ~> "typeDef" ~>
-    "typ" <~ Module.typeDefinitionType (var "typeDef") $
+    "typ" <~ (Core.typeSchemeType $ Module.typeDefinitionType (var "typeDef")) $
     "res" <<~ (encodeType_ @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
     "ptype" <~ (Eithers.either_
       (lambda "schema" $ inject PDL._NamedSchemaType PDL._NamedSchemaType_typeref (var "schema"))

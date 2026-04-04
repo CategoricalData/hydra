@@ -20,7 +20,7 @@ import hydra.lib.maps
 import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.strings
-import hydra.module
+import hydra.packaging
 import hydra.serialization
 
 T0 = TypeVar("T0")
@@ -234,14 +234,14 @@ def dotted_assignment_statement(obj: hydra.ext.python.syntax.Name, attr: hydra.e
         return cast(hydra.ext.python.syntax.StarTarget, hydra.ext.python.syntax.StarTargetUnstarred(cast(hydra.ext.python.syntax.TargetWithStarAtom, hydra.ext.python.syntax.TargetWithStarAtomProject(hydra.ext.python.syntax.TPrimaryAndName(cast(hydra.ext.python.syntax.TPrimary, hydra.ext.python.syntax.TPrimaryAtom(cast(hydra.ext.python.syntax.Atom, hydra.ext.python.syntax.AtomName(obj)))), attr)))))
     return py_assignment_to_py_statement(cast(hydra.ext.python.syntax.Assignment, hydra.ext.python.syntax.AssignmentUntyped(hydra.ext.python.syntax.UntypedAssignment((target(),), py_expression_to_py_annotated_rhs(expr), Nothing()))))
 
-def find_namespaces(focus_ns: hydra.module.Namespace, defs: frozenlist[hydra.module.Definition]) -> hydra.module.Namespaces[hydra.ext.python.syntax.DottedName]:
+def find_namespaces(focus_ns: hydra.packaging.Namespace, defs: frozenlist[hydra.packaging.Definition]) -> hydra.packaging.Namespaces[hydra.ext.python.syntax.DottedName]:
     r"""Find all namespaces referenced by a list of definitions, plus the core namespace."""
 
-    core_ns = hydra.module.Namespace("hydra.core")
+    core_ns = hydra.packaging.Namespace("hydra.core")
     @lru_cache(1)
-    def namespaces() -> hydra.module.Namespaces[hydra.ext.python.syntax.DottedName]:
+    def namespaces() -> hydra.packaging.Namespaces[hydra.ext.python.syntax.DottedName]:
         return hydra.analysis.namespaces_for_definitions((lambda x1: hydra.ext.python.names.encode_namespace(x1)), focus_ns, defs)
-    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.pairs.first(namespaces().focus).value, core_ns.value), (lambda : namespaces()), (lambda : hydra.module.Namespaces(namespaces().focus, hydra.lib.maps.insert(core_ns, hydra.ext.python.names.encode_namespace(core_ns), namespaces().mapping))))
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.pairs.first(namespaces().focus).value, core_ns.value), (lambda : namespaces()), (lambda : hydra.packaging.Namespaces(namespaces().focus, hydra.lib.maps.insert(core_ns, hydra.ext.python.names.encode_namespace(core_ns), namespaces().mapping))))
 
 @lru_cache(1)
 def get_item_params() -> hydra.ext.python.syntax.Parameters:

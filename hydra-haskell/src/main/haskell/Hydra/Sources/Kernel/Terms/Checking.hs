@@ -15,7 +15,7 @@ import Hydra.Kernel hiding (
   checkForUnboundTypeVariables, checkForUnboundTypeVariablesE,
   checkNominalApplication, checkNominalApplicationE,
   checkSameType, checkType, checkTypeSubst, checkTypeVariables, containsInScopeTypeVars, normalizeTypeFreeVars, toFContext,
-  typeListsEffectivelyEqual, typeOf, typeOfE, typesAllEffectivelyEqual, typesEffectivelyEqual,
+  typeListsEffectivelyEqual, typeOf, typeOfE, typeOfTerm, typesAllEffectivelyEqual, typesEffectivelyEqual,
   typeOfAnnotatedTerm, typeOfAnnotatedTermE,
   typeOfApplication, typeOfApplicationE,
   typeOfCaseStatement, typeOfCaseStatementE,
@@ -156,6 +156,7 @@ module_ = Module ns elements
       toDefinition typeOfUnwrap,
       toDefinition typeOfVariable,
       toDefinition typeOfWrappedTerm,
+      toDefinition typeOfTerm,
       toDefinition typesAllEffectivelyEqual,
       toDefinition typesEffectivelyEqual]
 
@@ -808,6 +809,13 @@ typeOfSet = define "typeOfSet" $
     "cx2" <~ Pairs.second (var "foldR") $
     "unifiedType" <<~ checkSameType @@ var "cx2" @@ var "tx" @@ (string "set elements") @@ var "eltypes" $
     right $ pair (Core.typeSet $ var "unifiedType") (var "cx2"))
+
+typeOfTerm :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Type)
+typeOfTerm = define "typeOfTerm" $
+  doc "Check the type of a term" $
+  "cx" ~> "g" ~> "term" ~>
+  Eithers.map (primitive _pairs_first)
+    (typeOf @@ var "cx" @@ var "g" @@ list ([] :: [TTerm Type]) @@ var "term")
 
 typeOfTypeApplication :: TTermDefinition (Context -> Graph -> [Type] -> TypeApplicationTerm -> Prelude.Either (InContext Error) (Type, Context))
 typeOfTypeApplication = define "typeOfTypeApplication" $

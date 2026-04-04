@@ -17,7 +17,6 @@ import qualified Hydra.Sources.Kernel.Types.Errors      as Errors
 import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
 import qualified Hydra.Sources.Json.Model               as JsonModel
 import qualified Hydra.Sources.Kernel.Types.Variants    as Variants
-import qualified Hydra.Sources.Kernel.Types.Module      as Module
 import qualified Hydra.Sources.Kernel.Types.Packaging   as Packaging
 import qualified Hydra.Sources.Kernel.Types.Parsing     as Parsing
 import qualified Hydra.Sources.Kernel.Types.Phantoms    as Phantoms
@@ -45,7 +44,6 @@ kernelTypesModules = [
   Errors.module_,
   Graph.module_,
   JsonModel.module_,
-  Module.module_,
   Packaging.module_,
   Parsing.module_,
   Phantoms.module_,

@@ -1,5 +1,5 @@
 (ns hydra.ext.python.environment
-  (:require [hydra.core :refer :all] [hydra.ext.python.syntax :refer :all] [hydra.graph :refer :all] [hydra.module :refer :all]
+  (:require [hydra.core :refer :all] [hydra.ext.python.syntax :refer :all] [hydra.graph :refer :all] [hydra.packaging :refer :all]
 ))
 
 (declare hydra_ext_python_environment_python_version-variants)

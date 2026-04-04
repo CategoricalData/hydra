@@ -6,12 +6,12 @@ module Hydra.Dsl.Ext.Cpp.Environment where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Cpp.Environment as Environment
-import qualified Hydra.Module as Module
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Map as M
 
-cppEnvironment :: Phantoms.TTerm (Module.Namespaces String) -> Phantoms.TTerm ([Core.Name], (M.Map Core.Name String)) -> Phantoms.TTerm Environment.CppEnvironment
+cppEnvironment :: Phantoms.TTerm (Packaging.Namespaces String) -> Phantoms.TTerm ([Core.Name], (M.Map Core.Name String)) -> Phantoms.TTerm Environment.CppEnvironment
 cppEnvironment namespaces boundTypeVariables =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.ext.cpp.environment.CppEnvironment"),
@@ -31,7 +31,7 @@ cppEnvironmentBoundTypeVariables x =
         Core.projectionField = (Core.Name "boundTypeVariables")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-cppEnvironmentNamespaces :: Phantoms.TTerm Environment.CppEnvironment -> Phantoms.TTerm (Module.Namespaces String)
+cppEnvironmentNamespaces :: Phantoms.TTerm Environment.CppEnvironment -> Phantoms.TTerm (Packaging.Namespaces String)
 cppEnvironmentNamespaces x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -55,7 +55,7 @@ cppEnvironmentWithBoundTypeVariables original newVal =
           Core.fieldName = (Core.Name "boundTypeVariables"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-cppEnvironmentWithNamespaces :: Phantoms.TTerm Environment.CppEnvironment -> Phantoms.TTerm (Module.Namespaces String) -> Phantoms.TTerm Environment.CppEnvironment
+cppEnvironmentWithNamespaces :: Phantoms.TTerm Environment.CppEnvironment -> Phantoms.TTerm (Packaging.Namespaces String) -> Phantoms.TTerm Environment.CppEnvironment
 cppEnvironmentWithNamespaces original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.ext.cpp.environment.CppEnvironment"),

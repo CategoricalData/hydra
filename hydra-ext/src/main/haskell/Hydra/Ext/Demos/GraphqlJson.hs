@@ -50,7 +50,7 @@ allKernelModules = kernelModules
 -- Skips types that fail to decode.
 bindingsToTypeDefinitions :: Graph -> [Binding] -> [TypeDefinition]
 bindingsToTypeDefinitions graph bindings =
-  [TypeDefinition (bindingName b) typ | b <- bindings,
+  [TypeDefinition (bindingName b) (TypeScheme [] typ Nothing) | b <- bindings,
    Annotations.isNativeType b,
    Right typ <- [DecodeCore.type_ graph (Strip.deannotateTerm (bindingTerm b))]]
 

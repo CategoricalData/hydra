@@ -776,7 +776,7 @@ inferTypeOfMap fcx cx m =
             kcons,
             vcons])) (\mcResult -> Right mcResult)))))))
 
--- | Infer the type of an optional (Either version)
+-- | Infer the type of a Maybe value
 inferTypeOfOptional :: Context.Context -> Graph.Graph -> Maybe Core.Term -> Either (Context.InContext Errors.Error) Typing_.InferenceResult
 inferTypeOfOptional fcx cx m =
 

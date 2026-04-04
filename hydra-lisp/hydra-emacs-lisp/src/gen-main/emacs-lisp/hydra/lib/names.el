@@ -2,7 +2,7 @@
 
 (require 'hydra.core)
 
-(require 'hydra.module)
+(require 'hydra.packaging)
 
 (defvar hydra_lib_names_chars "hydra.lib.chars")
 
@@ -113,6 +113,16 @@
 (defvar hydra_lib_names_lists_length "hydra.lib.lists.length")
 
 (defvar hydra_lib_names_lists_map "hydra.lib.lists.map")
+
+(defvar hydra_lib_names_lists_maybe_at "hydra.lib.lists.maybeAt")
+
+(defvar hydra_lib_names_lists_maybe_head "hydra.lib.lists.maybeHead")
+
+(defvar hydra_lib_names_lists_maybe_init "hydra.lib.lists.maybeInit")
+
+(defvar hydra_lib_names_lists_maybe_last "hydra.lib.lists.maybeLast")
+
+(defvar hydra_lib_names_lists_maybe_tail "hydra.lib.lists.maybeTail")
 
 (defvar hydra_lib_names_lists_nub "hydra.lib.lists.nub")
 
@@ -348,6 +358,16 @@
 
 (defvar hydra_lib_names_math_max "hydra.lib.math.max")
 
+(defvar hydra_lib_names_math_maybe_div "hydra.lib.math.maybeDiv")
+
+(defvar hydra_lib_names_math_maybe_mod "hydra.lib.math.maybeMod")
+
+(defvar hydra_lib_names_math_maybe_pred "hydra.lib.math.maybePred")
+
+(defvar hydra_lib_names_math_maybe_rem "hydra.lib.math.maybeRem")
+
+(defvar hydra_lib_names_math_maybe_succ "hydra.lib.math.maybeSucc")
+
 (defvar hydra_lib_names_math_min "hydra.lib.math.min")
 
 (defvar hydra_lib_names_math_mod "hydra.lib.math.mod")
@@ -491,6 +511,8 @@
 (defvar hydra_lib_names_strings_length "hydra.lib.strings.length")
 
 (defvar hydra_lib_names_strings_lines "hydra.lib.strings.lines")
+
+(defvar hydra_lib_names_strings_maybe_char_at "hydra.lib.strings.maybeCharAt")
 
 (defvar hydra_lib_names_strings_null "hydra.lib.strings.null")
 

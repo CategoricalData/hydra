@@ -1,5 +1,5 @@
 (ns hydra.ext.java.environment
-  (:require [hydra.core :refer :all] [hydra.ext.java.syntax :refer :all] [hydra.graph :refer :all] [hydra.module :refer :all]
+  (:require [hydra.core :refer :all] [hydra.ext.java.syntax :refer :all] [hydra.graph :refer :all] [hydra.packaging :refer :all]
 ))
 
 (declare hydra_ext_java_environment_java_symbol_class-variants)

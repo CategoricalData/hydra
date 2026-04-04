@@ -280,3 +280,61 @@
 (ert-deftest test-reduction-negtype-reduction-negoptional-type-applied ()
 
   (should (equal maybe<string> maybe<string>)))
+
+;; etaExpandTerm
+
+(ert-deftest test-reduction-negetaexpandterm-neginteger-literal-unchanged ()
+
+  (should (equal 42:int32 42:int32)))
+
+(ert-deftest test-reduction-negetaexpandterm-negstring-list-unchanged ()
+
+  (should (equal ["foo", "bar"] ["foo", "bar"])))
+
+(ert-deftest test-reduction-negetaexpandterm-negfully-applied-binary-function-unchanged ()
+
+  (should (equal (hydra.lib.strings.splitOn! @ "foo" @ "bar") (hydra.lib.strings.splitOn! @ "foo" @ "bar"))))
+
+(ert-deftest test-reduction-negetaexpandterm-neglambda-with-fully-applied-primitive-unchanged ()
+
+  (should (equal λx.(hydra.lib.strings.splitOn! @ "," @ x) λx.(hydra.lib.strings.splitOn! @ "," @ x))))
+
+(ert-deftest test-reduction-negetaexpandterm-neglambda-returning-constant-unchanged ()
+
+  (should (equal λx.42:int32 λx.42:int32)))
+
+(ert-deftest test-reduction-negetaexpandterm-negbare-unary-primitive-unchanged ()
+
+  (should (equal hydra.lib.strings.toLower! hydra.lib.strings.toLower!)))
+
+(ert-deftest test-reduction-negetaexpandterm-negbare-binary-primitive-unchanged ()
+
+  (should (equal hydra.lib.strings.splitOn! hydra.lib.strings.splitOn!)))
+
+(ert-deftest test-reduction-negetaexpandterm-negpartially-applied-binary-primitive-expands-to-one-lambda ()
+
+  (should (equal λv1.(hydra.lib.strings.splitOn! @ foo @ v1) λv1.(hydra.lib.strings.splitOn! @ foo @ v1))))
+
+(ert-deftest test-reduction-negetaexpandterm-negprojection-expands-to-lambda ()
+
+  (should (equal λv1.(project(Person){firstName} @ v1) λv1.(project(Person){firstName} @ v1))))
+
+(ert-deftest test-reduction-negetaexpandterm-negpartial-application-inside-lambda-expands ()
+
+  (should (equal λx.λv1.(hydra.lib.strings.splitOn! @ x @ v1) λx.λv1.(hydra.lib.strings.splitOn! @ x @ v1))))
+
+(ert-deftest test-reduction-negetaexpandterm-neglet-with-constant-body-unchanged ()
+
+  (should (equal let foo = 137:int32 in 42:int32 let foo = 137:int32 in 42:int32)))
+
+(ert-deftest test-reduction-negetaexpandterm-neglet-with-bare-primitive-value-unchanged ()
+
+  (should (equal let foo = hydra.lib.strings.splitOn! in foo let foo = hydra.lib.strings.splitOn! in foo)))
+
+(ert-deftest test-reduction-negetaexpandterm-negfully-applied-unary-unchanged ()
+
+  (should (equal (hydra.lib.strings.toLower! @ "FOO") (hydra.lib.strings.toLower! @ "FOO"))))
+
+(ert-deftest test-reduction-negetaexpandterm-negpartial-application-in-list-expands ()
+
+  (should (equal [λx.["foo"], λv1.(hydra.lib.strings.splitOn! @ "bar" @ v1)] [λx.["foo"], λv1.(hydra.lib.strings.splitOn! @ "bar" @ v1)])))

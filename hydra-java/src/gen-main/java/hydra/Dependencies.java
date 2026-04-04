@@ -6,7 +6,7 @@ package hydra;
  * Dependency extraction, binding sort, and let normalization
  */
 public interface Dependencies {
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.core.Binding>> elementsWithDependencies(hydra.context.Context cx, hydra.graph.Graph graph, hydra.util.ConsList<hydra.core.Binding> original) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.core.Binding>> definitionsWithDependencies(hydra.context.Context cx, hydra.graph.Graph graph, hydra.util.ConsList<hydra.core.Binding> original) {
     java.util.function.Function<hydra.core.Binding, hydra.util.ConsList<hydra.core.Name>> depNames = (java.util.function.Function<hydra.core.Binding, hydra.util.ConsList<hydra.core.Name>>) (el -> hydra.lib.sets.ToList.apply(hydra.Dependencies.termDependencyNames(
       true,
       false,
@@ -20,7 +20,7 @@ public interface Dependencies {
         depNames,
         original)))));
     return hydra.lib.eithers.MapList.apply(
-      (java.util.function.Function<hydra.core.Name, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Binding>>) (name -> hydra.Lexical.requireElement(
+      (java.util.function.Function<hydra.core.Name, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Binding>>) (name -> hydra.Lexical.requireBinding(
         cx,
         graph,
         name)),
@@ -630,19 +630,19 @@ public interface Dependencies {
       els));
   }
 
-  static hydra.util.ConsList<hydra.util.ConsList<hydra.module.TypeDefinition>> topologicalSortTypeDefinitions(hydra.util.ConsList<hydra.module.TypeDefinition> defs) {
-    hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.module.TypeDefinition>> nameToDef = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.module.TypeDefinition, hydra.util.Pair<hydra.core.Name, hydra.module.TypeDefinition>>) (d -> (hydra.util.Pair<hydra.core.Name, hydra.module.TypeDefinition>) ((hydra.util.Pair<hydra.core.Name, hydra.module.TypeDefinition>) (new hydra.util.Pair<hydra.core.Name, hydra.module.TypeDefinition>((d).name, d)))),
+  static hydra.util.ConsList<hydra.util.ConsList<hydra.packaging.TypeDefinition>> topologicalSortTypeDefinitions(hydra.util.ConsList<hydra.packaging.TypeDefinition> defs) {
+    hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.packaging.TypeDefinition>> nameToDef = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.packaging.TypeDefinition, hydra.util.Pair<hydra.core.Name, hydra.packaging.TypeDefinition>>) (d -> (hydra.util.Pair<hydra.core.Name, hydra.packaging.TypeDefinition>) ((hydra.util.Pair<hydra.core.Name, hydra.packaging.TypeDefinition>) (new hydra.util.Pair<hydra.core.Name, hydra.packaging.TypeDefinition>((d).name, d)))),
       defs)));
-    java.util.function.Function<hydra.module.TypeDefinition, hydra.util.Pair<hydra.core.Name, hydra.util.ConsList<hydra.core.Name>>> toPair = (java.util.function.Function<hydra.module.TypeDefinition, hydra.util.Pair<hydra.core.Name, hydra.util.ConsList<hydra.core.Name>>>) (def -> (hydra.util.Pair<hydra.core.Name, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Name, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Name, hydra.util.ConsList<hydra.core.Name>>((def).name, hydra.lib.sets.ToList.apply(hydra.Dependencies.typeDependencyNames(
+    java.util.function.Function<hydra.packaging.TypeDefinition, hydra.util.Pair<hydra.core.Name, hydra.util.ConsList<hydra.core.Name>>> toPair = (java.util.function.Function<hydra.packaging.TypeDefinition, hydra.util.Pair<hydra.core.Name, hydra.util.ConsList<hydra.core.Name>>>) (def -> (hydra.util.Pair<hydra.core.Name, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Name, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Name, hydra.util.ConsList<hydra.core.Name>>((def).name, hydra.lib.sets.ToList.apply(hydra.Dependencies.typeDependencyNames(
       false,
-      (def).type))))));
+      (def).type.type))))));
     hydra.util.Lazy<hydra.util.ConsList<hydra.util.ConsList<hydra.core.Name>>> sorted = new hydra.util.Lazy<>(() -> hydra.Sorting.topologicalSortComponents(hydra.lib.lists.Map.apply(
       toPair,
       defs)));
     return hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.util.ConsList<hydra.core.Name>, hydra.util.ConsList<hydra.module.TypeDefinition>>) (names -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.core.Name, hydra.util.Maybe<hydra.module.TypeDefinition>>) (n -> hydra.lib.maps.Lookup.apply(
+      (java.util.function.Function<hydra.util.ConsList<hydra.core.Name>, hydra.util.ConsList<hydra.packaging.TypeDefinition>>) (names -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.core.Name, hydra.util.Maybe<hydra.packaging.TypeDefinition>>) (n -> hydra.lib.maps.Lookup.apply(
           n,
           nameToDef.get())),
         names))),

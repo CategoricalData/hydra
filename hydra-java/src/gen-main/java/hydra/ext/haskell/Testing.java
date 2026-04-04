@@ -6,44 +6,44 @@ package hydra.ext.haskell;
  * Haskell test code generation for HSpec-based generation tests
  */
 public interface Testing {
-  static hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName> addNamespacesToNamespaces(hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName> ns0, hydra.util.PersistentSet<hydra.core.Name> names) {
-    hydra.util.Lazy<hydra.util.PersistentSet<hydra.module.Namespace>> newNamespaces = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+  static hydra.packaging.Namespaces<hydra.ext.haskell.syntax.ModuleName> addNamespacesToNamespaces(hydra.packaging.Namespaces<hydra.ext.haskell.syntax.ModuleName> ns0, hydra.util.PersistentSet<hydra.core.Name> names) {
+    hydra.util.Lazy<hydra.util.PersistentSet<hydra.packaging.Namespace>> newNamespaces = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
       hydra.Names::namespaceOf,
       hydra.lib.sets.ToList.apply(names)))));
-    java.util.function.Function<hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName> toModuleName = (java.util.function.Function<hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName>) (namespace -> new hydra.ext.haskell.syntax.ModuleName(hydra.Formatting.capitalize(hydra.lib.lists.Last.apply(hydra.lib.strings.SplitOn.apply(
+    java.util.function.Function<hydra.packaging.Namespace, hydra.ext.haskell.syntax.ModuleName> toModuleName = (java.util.function.Function<hydra.packaging.Namespace, hydra.ext.haskell.syntax.ModuleName>) (namespace -> new hydra.ext.haskell.syntax.ModuleName(hydra.Formatting.capitalize(hydra.lib.lists.Last.apply(hydra.lib.strings.SplitOn.apply(
       ".",
       (namespace).value)))));
-    hydra.util.Lazy<hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName>> newMappings = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.module.Namespace, hydra.util.Pair<hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName>>) (ns_ -> (hydra.util.Pair<hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName>) ((hydra.util.Pair<hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName>) (new hydra.util.Pair<hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName>(ns_, (toModuleName).apply(ns_))))),
+    hydra.util.Lazy<hydra.util.PersistentMap<hydra.packaging.Namespace, hydra.ext.haskell.syntax.ModuleName>> newMappings = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.packaging.Namespace, hydra.util.Pair<hydra.packaging.Namespace, hydra.ext.haskell.syntax.ModuleName>>) (ns_ -> (hydra.util.Pair<hydra.packaging.Namespace, hydra.ext.haskell.syntax.ModuleName>) ((hydra.util.Pair<hydra.packaging.Namespace, hydra.ext.haskell.syntax.ModuleName>) (new hydra.util.Pair<hydra.packaging.Namespace, hydra.ext.haskell.syntax.ModuleName>(ns_, (toModuleName).apply(ns_))))),
       hydra.lib.sets.ToList.apply(newNamespaces.get()))));
-    return (hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>) (new hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>(((java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>, hydra.util.Pair<hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName>>) (projected -> projected.focus)).apply(ns0), hydra.lib.maps.Union.apply(
-      ((java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>, hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName>>) (projected -> projected.mapping)).apply(ns0),
+    return (hydra.packaging.Namespaces<hydra.ext.haskell.syntax.ModuleName>) (new hydra.packaging.Namespaces<hydra.ext.haskell.syntax.ModuleName>(((java.util.function.Function<hydra.packaging.Namespaces<hydra.ext.haskell.syntax.ModuleName>, hydra.util.Pair<hydra.packaging.Namespace, hydra.ext.haskell.syntax.ModuleName>>) (projected -> projected.focus)).apply(ns0), hydra.lib.maps.Union.apply(
+      ((java.util.function.Function<hydra.packaging.Namespaces<hydra.ext.haskell.syntax.ModuleName>, hydra.util.PersistentMap<hydra.packaging.Namespace, hydra.ext.haskell.syntax.ModuleName>>) (projected -> projected.mapping)).apply(ns0),
       newMappings.get())));
   }
 
-  static hydra.util.Either<String, hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>> buildNamespacesForTestGroup(hydra.module.Module mod, hydra.testing.TestGroup tgroup, hydra.graph.Graph graph_) {
+  static hydra.util.Either<String, hydra.packaging.Namespaces<hydra.ext.haskell.syntax.ModuleName>> buildNamespacesForTestGroup(hydra.packaging.Module mod, hydra.testing.TestGroup tgroup, hydra.graph.Graph graph_) {
     hydra.util.ConsList<hydra.testing.TestCaseWithMetadata> testCases_ = hydra.ext.haskell.Testing.collectTestCases(tgroup);
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> testBindings = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.core.Term, hydra.core.Binding>) (term -> new hydra.core.Binding(new hydra.core.Name("_test_"), term, (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing()))),
       hydra.ext.haskell.Testing.buildNamespacesForTestGroup_testTerms(testCases_)));
-    hydra.util.Lazy<hydra.module.Module> tempModule = new hydra.util.Lazy<>(() -> new hydra.module.Module((mod).namespace, hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.core.Binding, hydra.module.Definition>) (b -> new hydra.module.Definition.Term(new hydra.module.TermDefinition((b).name, (b).term, (b).type))),
+    hydra.util.Lazy<hydra.packaging.Module> tempModule = new hydra.util.Lazy<>(() -> new hydra.packaging.Module((mod).namespace, hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.core.Binding, hydra.packaging.Definition>) (b -> new hydra.packaging.Definition.Term(new hydra.packaging.TermDefinition((b).name, (b).term, (b).type))),
       testBindings.get()), (mod).termDependencies, (mod).typeDependencies, (mod).description));
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.Bimap.apply(
         (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ic -> hydra.show.Errors.error(((java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, hydra.errors.Error_>) (projected -> projected.object)).apply(ic))),
-        (java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>, hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>>) (a -> a),
+        (java.util.function.Function<hydra.packaging.Namespaces<hydra.ext.haskell.syntax.ModuleName>, hydra.packaging.Namespaces<hydra.ext.haskell.syntax.ModuleName>>) (a -> a),
         hydra.ext.haskell.Utils.namespacesForModule(
           tempModule.get(),
           hydra.Lexical.emptyContext(),
           graph_)),
-      (java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>, hydra.util.Either<String, hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>>>) (baseNamespaces -> {
+      (java.util.function.Function<hydra.packaging.Namespaces<hydra.ext.haskell.syntax.ModuleName>, hydra.util.Either<String, hydra.packaging.Namespaces<hydra.ext.haskell.syntax.ModuleName>>>) (baseNamespaces -> {
         hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> encodedNames = new hydra.util.Lazy<>(() -> hydra.lib.sets.Unions.apply(hydra.lib.lists.Map.apply(
           (java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>>) (t -> hydra.ext.haskell.Testing.extractEncodedTermVariableNames(
             graph_,
             t)),
           hydra.ext.haskell.Testing.buildNamespacesForTestGroup_testTerms(testCases_))));
-        return hydra.util.Either.<String, hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>>right(hydra.ext.haskell.Testing.addNamespacesToNamespaces(
+        return hydra.util.Either.<String, hydra.packaging.Namespaces<hydra.ext.haskell.syntax.ModuleName>>right(hydra.ext.haskell.Testing.addNamespacesToNamespaces(
           baseNamespaces,
           encodedNames.get()));
       }));
@@ -55,7 +55,7 @@ public interface Testing {
       testCases_));
   }
 
-  static <T0> String buildTestModule(hydra.module.Module testModule, hydra.testing.TestGroup testGroup, String testBody, hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName> namespaces) {
+  static <T0> String buildTestModule(hydra.packaging.Module testModule, hydra.testing.TestGroup testGroup, String testBody, hydra.packaging.Namespaces<hydra.ext.haskell.syntax.ModuleName> namespaces) {
     hydra.util.Lazy<hydra.util.ConsList<String>> domainImports = new hydra.util.Lazy<>(() -> hydra.ext.haskell.Testing.findHaskellImports(
       namespaces,
       (hydra.util.PersistentSet<T0>) (hydra.lib.sets.Empty.<T0>apply())));
@@ -70,8 +70,8 @@ public interface Testing {
       standardImports,
       domainImports.get()));
     String groupName_ = (testGroup).name;
-    hydra.module.Namespace ns_ = (testModule).namespace;
-    hydra.module.Namespace specNs = new hydra.module.Namespace(hydra.lib.strings.Cat2.apply(
+    hydra.packaging.Namespace ns_ = (testModule).namespace;
+    hydra.packaging.Namespace specNs = new hydra.packaging.Namespace(hydra.lib.strings.Cat2.apply(
       (ns_).value,
       "Spec"));
     String moduleNameString = hydra.ext.haskell.Testing.namespaceToModuleName(specNs);
@@ -149,17 +149,17 @@ public interface Testing {
     return (hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>empty());
   }
 
-  static <T0> hydra.util.ConsList<String> findHaskellImports(hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName> namespaces, T0 names_) {
-    hydra.util.Lazy<hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName>> mapping_ = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>, hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName>>) (projected -> projected.mapping)).apply(namespaces));
-    hydra.util.Lazy<hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName>> filtered = new hydra.util.Lazy<>(() -> hydra.lib.maps.FilterWithKey.apply(
-      (java.util.function.Function<hydra.module.Namespace, java.util.function.Function<hydra.ext.haskell.syntax.ModuleName, Boolean>>) (ns_ -> (java.util.function.Function<hydra.ext.haskell.syntax.ModuleName, Boolean>) (_v -> hydra.lib.logic.Not.apply(hydra.lib.equality.Equal.apply(
+  static <T0> hydra.util.ConsList<String> findHaskellImports(hydra.packaging.Namespaces<hydra.ext.haskell.syntax.ModuleName> namespaces, T0 names_) {
+    hydra.util.Lazy<hydra.util.PersistentMap<hydra.packaging.Namespace, hydra.ext.haskell.syntax.ModuleName>> mapping_ = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.packaging.Namespaces<hydra.ext.haskell.syntax.ModuleName>, hydra.util.PersistentMap<hydra.packaging.Namespace, hydra.ext.haskell.syntax.ModuleName>>) (projected -> projected.mapping)).apply(namespaces));
+    hydra.util.Lazy<hydra.util.PersistentMap<hydra.packaging.Namespace, hydra.ext.haskell.syntax.ModuleName>> filtered = new hydra.util.Lazy<>(() -> hydra.lib.maps.FilterWithKey.apply(
+      (java.util.function.Function<hydra.packaging.Namespace, java.util.function.Function<hydra.ext.haskell.syntax.ModuleName, Boolean>>) (ns_ -> (java.util.function.Function<hydra.ext.haskell.syntax.ModuleName, Boolean>) (_v -> hydra.lib.logic.Not.apply(hydra.lib.equality.Equal.apply(
         hydra.lib.lists.Head.apply(hydra.lib.strings.SplitOn.apply(
           "hydra.test.",
           (ns_).value)),
         "")))),
       mapping_.get()));
     return hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.util.Pair<hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName>, String>) (entry -> hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+      (java.util.function.Function<hydra.util.Pair<hydra.packaging.Namespace, hydra.ext.haskell.syntax.ModuleName>, String>) (entry -> hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
         "import qualified ",
         hydra.lib.strings.Intercalate.apply(
           ".",
@@ -173,13 +173,13 @@ public interface Testing {
       hydra.lib.maps.ToList.apply(filtered.get()));
   }
 
-  static hydra.util.Either<String, hydra.util.Pair<String, String>> generateHaskellTestFile(hydra.module.Module testModule, hydra.testing.TestGroup testGroup, hydra.graph.Graph g) {
+  static hydra.util.Either<String, hydra.util.Pair<String, String>> generateHaskellTestFile(hydra.packaging.Module testModule, hydra.testing.TestGroup testGroup, hydra.graph.Graph g) {
     return hydra.lib.eithers.Bind.apply(
       hydra.ext.haskell.Testing.buildNamespacesForTestGroup(
         testModule,
         testGroup,
         g),
-      (java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>, hydra.util.Either<String, hydra.util.Pair<String, String>>>) (namespaces -> hydra.ext.haskell.Testing.generateTestFile(
+      (java.util.function.Function<hydra.packaging.Namespaces<hydra.ext.haskell.syntax.ModuleName>, hydra.util.Either<String, hydra.util.Pair<String, String>>>) (namespaces -> hydra.ext.haskell.Testing.generateTestFile(
         testModule,
         testGroup,
         namespaces)));
@@ -211,16 +211,16 @@ public interface Testing {
         ")"))));
   }
 
-  static <T0> hydra.util.Either<T0, hydra.util.Pair<String, String>> generateTestFile(hydra.module.Module testModule, hydra.testing.TestGroup testGroup, hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName> namespaces) {
+  static <T0> hydra.util.Either<T0, hydra.util.Pair<String, String>> generateTestFile(hydra.packaging.Module testModule, hydra.testing.TestGroup testGroup, hydra.packaging.Namespaces<hydra.ext.haskell.syntax.ModuleName> namespaces) {
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<String, hydra.util.Pair<String, String>>) (testBody -> {
-        hydra.module.Namespace ns_ = (testModule).namespace;
-        hydra.module.Namespace specNs = new hydra.module.Namespace(hydra.lib.strings.Cat2.apply(
+        hydra.packaging.Namespace ns_ = (testModule).namespace;
+        hydra.packaging.Namespace specNs = new hydra.packaging.Namespace(hydra.lib.strings.Cat2.apply(
           (ns_).value,
           "Spec"));
         String filePath = hydra.Names.namespaceToFilePath(
           new hydra.util.CaseConvention.Pascal(),
-          new hydra.module.FileExtension("hs"),
+          new hydra.packaging.FileExtension("hs"),
           specNs);
         String testModuleContent = hydra.ext.haskell.Testing.buildTestModule(
           testModule,
@@ -297,7 +297,7 @@ public interface Testing {
       }));
   }
 
-  static String namespaceToModuleName(hydra.module.Namespace ns_) {
+  static String namespaceToModuleName(hydra.packaging.Namespace ns_) {
     return hydra.lib.strings.Intercalate.apply(
       ".",
       hydra.lib.lists.Map.apply(

@@ -492,43 +492,6 @@
             "variables": []}]}},
     {
       "term": {
-        "name": "hydra.lexical.dereferenceElement",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {"literal": {"string": "Look up an element in a graph"}}}],
-            "body": {
-              "function": {
-                "lambda": {
-                  "body": {
-                    "function": {
-                      "lambda": {
-                        "body": {
-                          "application": {
-                            "argument": {"variable": "name"},
-                            "function": {
-                              "application": {
-                                "argument": {"variable": "graph"},
-                                "function": {"variable": "hydra.lexical.lookupElement"}}}}},
-                        "domain": [{"variable": "hydra.core.Name"}],
-                        "parameter": "name"}}},
-                  "domain": [{"variable": "hydra.graph.Graph"}],
-                  "parameter": "graph"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"maybe": {"variable": "hydra.core.Binding"}},
-                    "domain": {"variable": "hydra.core.Name"}}},
-                "domain": {"variable": "hydra.graph.Graph"}}},
-            "variables": []}]}},
-    {
-      "term": {
         "name": "hydra.lexical.dereferenceSchemaType",
         "term": {
           "annotated": {
@@ -845,7 +808,7 @@
                                 "function": {
                                   "application": {
                                     "argument": {"variable": "graph"},
-                                    "function": {"variable": "hydra.lexical.lookupElement"}}}}},
+                                    "function": {"variable": "hydra.lexical.lookupBinding"}}}}},
                             "function": {
                               "application": {
                                 "argument": {
@@ -1552,7 +1515,7 @@
             "variables": ["t0", "t1"]}]}},
     {
       "term": {
-        "name": "hydra.lexical.lookupElement",
+        "name": "hydra.lexical.lookupBinding",
         "term": {
           "annotated": {
             "annotation": [
@@ -2223,7 +2186,7 @@
                                                                                         "function": {
                                                                                           "application": {
                                                                                             "argument": {"variable": "cx"},
-                                                                                            "function": {"variable": "hydra.lexical.requireElement"}}}}}}},
+                                                                                            "function": {"variable": "hydra.lexical.requireBinding"}}}}}}},
                                                                                 "function": {
                                                                                   "typeApplication": {
                                                                                     "body": {
@@ -2766,7 +2729,7 @@
             "variables": ["t0", "t1", "t2", "t3"]}]}},
     {
       "term": {
-        "name": "hydra.lexical.requireElement",
+        "name": "hydra.lexical.requireBinding",
         "term": {
           "function": {
             "lambda": {
@@ -2941,7 +2904,7 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {"variable": "graph"},
-                                                  "function": {"variable": "hydra.lexical.dereferenceElement"}}}}},
+                                                  "function": {"variable": "hydra.lexical.lookupBinding"}}}}},
                                           "function": {
                                             "application": {
                                               "argument": {
@@ -3805,7 +3768,6 @@
     "hydra.errors",
     "hydra.graph",
     "hydra.json.model",
-    "hydra.module",
     "hydra.packaging",
     "hydra.parsing",
     "hydra.phantoms",

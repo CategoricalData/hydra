@@ -550,6 +550,113 @@ public interface Reduction {
           hydra.Reduction.betaReduceType(
             hydra.test.TestGraph.testContext(),
             hydra.test.TestGraph.testGraph(),
-            new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("a"), new hydra.core.Type.Maybe(new hydra.core.Type.Variable(new hydra.core.Name("a"))))), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()))))), hydra.show.Core.type(new hydra.core.Type.Maybe(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty()))))), (hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>) (hydra.util.ConsList.<hydra.testing.TestCaseWithMetadata>empty()));
+            new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("a"), new hydra.core.Type.Maybe(new hydra.core.Type.Variable(new hydra.core.Name("a"))))), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()))))), hydra.show.Core.type(new hydra.core.Type.Maybe(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())))),
+      new hydra.testing.TestGroup("etaExpandTerm", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.TestGroup>) (hydra.util.ConsList.<hydra.testing.TestGroup>empty()), hydra.util.ConsList.of(
+        new hydra.testing.TestCaseWithMetadata("integer literal unchanged", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
+          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ignored -> "eta expansion failed"),
+          (java.util.function.Function<hydra.core.Term, String>) (t -> hydra.show.Core.term(t)),
+          hydra.Reduction.etaExpandTypedTerm(
+            hydra.test.TestGraph.testContext(),
+            hydra.test.TestGraph.testGraph(),
+            new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))))), hydra.show.Core.term(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42)))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        new hydra.testing.TestCaseWithMetadata("string list unchanged", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
+          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ignored -> "eta expansion failed"),
+          (java.util.function.Function<hydra.core.Term, String>) (t -> hydra.show.Core.term(t)),
+          hydra.Reduction.etaExpandTypedTerm(
+            hydra.test.TestGraph.testContext(),
+            hydra.test.TestGraph.testGraph(),
+            new hydra.core.Term.List(hydra.util.ConsList.of(
+              new hydra.core.Term.Literal(new hydra.core.Literal.String_("foo")),
+              new hydra.core.Term.Literal(new hydra.core.Literal.String_("bar")))))), hydra.show.Core.term(new hydra.core.Term.List(hydra.util.ConsList.of(
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("foo")),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("bar"))))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        new hydra.testing.TestCaseWithMetadata("fully applied binary function unchanged", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
+          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ignored -> "eta expansion failed"),
+          (java.util.function.Function<hydra.core.Term, String>) (t -> hydra.show.Core.term(t)),
+          hydra.Reduction.etaExpandTypedTerm(
+            hydra.test.TestGraph.testContext(),
+            hydra.test.TestGraph.testGraph(),
+            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.strings.splitOn"))), new hydra.core.Term.Literal(new hydra.core.Literal.String_("foo")))), new hydra.core.Term.Literal(new hydra.core.Literal.String_("bar")))))), hydra.show.Core.term(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.strings.splitOn"))), new hydra.core.Term.Literal(new hydra.core.Literal.String_("foo")))), new hydra.core.Term.Literal(new hydra.core.Literal.String_("bar"))))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        new hydra.testing.TestCaseWithMetadata("lambda with fully applied primitive unchanged", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
+          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ignored -> "eta expansion failed"),
+          (java.util.function.Function<hydra.core.Term, String>) (t -> hydra.show.Core.term(t)),
+          hydra.Reduction.etaExpandTypedTerm(
+            hydra.test.TestGraph.testContext(),
+            hydra.test.TestGraph.testGraph(),
+            new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.strings.splitOn"))), new hydra.core.Term.Literal(new hydra.core.Literal.String_(",")))), new hydra.core.Term.Variable(new hydra.core.Name("x"))))))))), hydra.show.Core.term(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.strings.splitOn"))), new hydra.core.Term.Literal(new hydra.core.Literal.String_(",")))), new hydra.core.Term.Variable(new hydra.core.Name("x")))))))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        new hydra.testing.TestCaseWithMetadata("lambda returning constant unchanged", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
+          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ignored -> "eta expansion failed"),
+          (java.util.function.Function<hydra.core.Term, String>) (t -> hydra.show.Core.term(t)),
+          hydra.Reduction.etaExpandTypedTerm(
+            hydra.test.TestGraph.testContext(),
+            hydra.test.TestGraph.testGraph(),
+            new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42)))))))), hydra.show.Core.term(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))))))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        new hydra.testing.TestCaseWithMetadata("bare unary primitive unchanged", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
+          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ignored -> "eta expansion failed"),
+          (java.util.function.Function<hydra.core.Term, String>) (t -> hydra.show.Core.term(t)),
+          hydra.Reduction.etaExpandTypedTerm(
+            hydra.test.TestGraph.testContext(),
+            hydra.test.TestGraph.testGraph(),
+            new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.strings.toLower"))))), hydra.show.Core.term(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.strings.toLower")))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        new hydra.testing.TestCaseWithMetadata("bare binary primitive unchanged", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
+          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ignored -> "eta expansion failed"),
+          (java.util.function.Function<hydra.core.Term, String>) (t -> hydra.show.Core.term(t)),
+          hydra.Reduction.etaExpandTypedTerm(
+            hydra.test.TestGraph.testContext(),
+            hydra.test.TestGraph.testGraph(),
+            new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.strings.splitOn"))))), hydra.show.Core.term(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.strings.splitOn")))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        new hydra.testing.TestCaseWithMetadata("partially applied binary primitive expands to one lambda", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
+          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ignored -> "eta expansion failed"),
+          (java.util.function.Function<hydra.core.Term, String>) (t -> hydra.show.Core.term(t)),
+          hydra.Reduction.etaExpandTypedTerm(
+            hydra.test.TestGraph.testContext(),
+            hydra.test.TestGraph.testGraph(),
+            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.strings.splitOn"))), new hydra.core.Term.Variable(new hydra.core.Name("foo")))))), hydra.show.Core.term(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("v1"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.strings.splitOn"))), new hydra.core.Term.Variable(new hydra.core.Name("foo")))), new hydra.core.Term.Variable(new hydra.core.Name("v1")))))))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        new hydra.testing.TestCaseWithMetadata("projection expands to lambda", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
+          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ignored -> "eta expansion failed"),
+          (java.util.function.Function<hydra.core.Term, String>) (t -> hydra.show.Core.term(t)),
+          hydra.Reduction.etaExpandTypedTerm(
+            hydra.test.TestGraph.testContext(),
+            hydra.test.TestGraph.testGraph(),
+            new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("Person"), new hydra.core.Name("firstName"))))))), hydra.show.Core.term(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("v1"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("Person"), new hydra.core.Name("firstName"))))), new hydra.core.Term.Variable(new hydra.core.Name("v1")))))))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        new hydra.testing.TestCaseWithMetadata("partial application inside lambda expands", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
+          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ignored -> "eta expansion failed"),
+          (java.util.function.Function<hydra.core.Term, String>) (t -> hydra.show.Core.term(t)),
+          hydra.Reduction.etaExpandTypedTerm(
+            hydra.test.TestGraph.testContext(),
+            hydra.test.TestGraph.testGraph(),
+            new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.strings.splitOn"))), new hydra.core.Term.Variable(new hydra.core.Name("x"))))))))), hydra.show.Core.term(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("v1"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.strings.splitOn"))), new hydra.core.Term.Variable(new hydra.core.Name("x")))), new hydra.core.Term.Variable(new hydra.core.Name("v1"))))))))))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        new hydra.testing.TestCaseWithMetadata("let with constant body unchanged", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
+          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ignored -> "eta expansion failed"),
+          (java.util.function.Function<hydra.core.Term, String>) (t -> hydra.show.Core.term(t)),
+          hydra.Reduction.etaExpandTypedTerm(
+            hydra.test.TestGraph.testContext(),
+            hydra.test.TestGraph.testGraph(),
+            new hydra.core.Term.Let(new hydra.core.Let(hydra.util.ConsList.of(new hydra.core.Binding(new hydra.core.Name("foo"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(137))), (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing()))), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))))))), hydra.show.Core.term(new hydra.core.Term.Let(new hydra.core.Let(hydra.util.ConsList.of(new hydra.core.Binding(new hydra.core.Name("foo"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(137))), (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing()))), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42)))))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        new hydra.testing.TestCaseWithMetadata("let with bare primitive value unchanged", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
+          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ignored -> "eta expansion failed"),
+          (java.util.function.Function<hydra.core.Term, String>) (t -> hydra.show.Core.term(t)),
+          hydra.Reduction.etaExpandTypedTerm(
+            hydra.test.TestGraph.testContext(),
+            hydra.test.TestGraph.testGraph(),
+            new hydra.core.Term.Let(new hydra.core.Let(hydra.util.ConsList.of(new hydra.core.Binding(new hydra.core.Name("foo"), new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.strings.splitOn"))), (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing()))), new hydra.core.Term.Variable(new hydra.core.Name("foo")))))), hydra.show.Core.term(new hydra.core.Term.Let(new hydra.core.Let(hydra.util.ConsList.of(new hydra.core.Binding(new hydra.core.Name("foo"), new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.strings.splitOn"))), (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing()))), new hydra.core.Term.Variable(new hydra.core.Name("foo"))))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        new hydra.testing.TestCaseWithMetadata("fully applied unary unchanged", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
+          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ignored -> "eta expansion failed"),
+          (java.util.function.Function<hydra.core.Term, String>) (t -> hydra.show.Core.term(t)),
+          hydra.Reduction.etaExpandTypedTerm(
+            hydra.test.TestGraph.testContext(),
+            hydra.test.TestGraph.testGraph(),
+            new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.strings.toLower"))), new hydra.core.Term.Literal(new hydra.core.Literal.String_("FOO")))))), hydra.show.Core.term(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.strings.toLower"))), new hydra.core.Term.Literal(new hydra.core.Literal.String_("FOO"))))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        new hydra.testing.TestCaseWithMetadata("partial application in list expands", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.lib.eithers.Either.apply(
+          (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ignored -> "eta expansion failed"),
+          (java.util.function.Function<hydra.core.Term, String>) (t -> hydra.show.Core.term(t)),
+          hydra.Reduction.etaExpandTypedTerm(
+            hydra.test.TestGraph.testContext(),
+            hydra.test.TestGraph.testGraph(),
+            new hydra.core.Term.List(hydra.util.ConsList.of(
+              new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.List(hydra.util.ConsList.of(new hydra.core.Term.Literal(new hydra.core.Literal.String_("foo"))))))),
+              new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.strings.splitOn"))), new hydra.core.Term.Literal(new hydra.core.Literal.String_("bar")))))))), hydra.show.Core.term(new hydra.core.Term.List(hydra.util.ConsList.of(
+          new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.List(hydra.util.ConsList.of(new hydra.core.Term.Literal(new hydra.core.Literal.String_("foo"))))))),
+          new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("v1"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.strings.splitOn"))), new hydra.core.Term.Literal(new hydra.core.Literal.String_("bar")))), new hydra.core.Term.Variable(new hydra.core.Name("v1")))))))))))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty()))))), (hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>) (hydra.util.ConsList.<hydra.testing.TestCaseWithMetadata>empty()));
   }
 }

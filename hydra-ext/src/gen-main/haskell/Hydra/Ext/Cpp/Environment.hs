@@ -5,7 +5,7 @@
 module Hydra.Ext.Cpp.Environment where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Module as Module
+import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Map as M
 
@@ -13,7 +13,7 @@ import qualified Data.Map as M
 data CppEnvironment =
   CppEnvironment {
     -- | Namespace mapping for code generation
-    cppEnvironmentNamespaces :: (Module.Namespaces String),
+    cppEnvironmentNamespaces :: (Packaging.Namespaces String),
     -- | Type variables in scope, with their C++ names
     cppEnvironmentBoundTypeVariables :: ([Core.Name], (M.Map Core.Name String))}
   deriving (Eq, Ord, Read, Show)

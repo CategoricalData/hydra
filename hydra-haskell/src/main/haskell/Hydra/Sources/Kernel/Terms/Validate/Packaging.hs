@@ -111,7 +111,7 @@ checkConflictingVariantNames = define "checkConflictingVariantNames" $
           _Definition_type>>: "td" ~>
             "typeName" <~ Module.typeDefinitionName (var "td") $
             "localTypeName" <~ (Names.localNameOf @@ var "typeName") $
-            "typ" <~ Module.typeDefinitionType (var "td") $
+            "typ" <~ (Core.typeSchemeType $ Module.typeDefinitionType (var "td")) $
             cases _Type (var "typ") (Just nothing) [
               _Type_union>>: "fields" ~>
                 -- Check each field of the union

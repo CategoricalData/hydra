@@ -2,11 +2,15 @@
 
 (require 'hydra.annotations)
 
+(require 'hydra.constants)
+
 (require 'hydra.context)
 
 (require 'hydra.core)
 
 (require 'hydra.decode.core)
+
+(require 'hydra.encode.core)
 
 (require 'hydra.errors)
 
@@ -26,9 +30,9 @@
 
 (require 'hydra.lib.strings)
 
-(require 'hydra.module)
-
 (require 'hydra.names)
+
+(require 'hydra.packaging)
 
 (require 'hydra.predicates)
 
@@ -96,7 +100,7 @@
 
 (defvar hydra_decoding_filter_type_bindings (lambda (cx) (lambda (graph) (lambda (bindings) (funcall (hydra_lib_eithers_map hydra_lib_maybes_cat) (funcall (hydra_lib_eithers_map_list (funcall (hydra_decoding_is_decodable_binding cx) graph)) (funcall (hydra_lib_lists_filter hydra_annotations_is_native_type) bindings)))))))
 
-(defvar hydra_decoding_decode_module (lambda (cx) (lambda (graph) (lambda (mod) (funcall (hydra_lib_eithers_bind (funcall (funcall (hydra_decoding_filter_type_bindings cx) graph) (hydra_lib_maybes_cat (funcall (hydra_lib_lists_map (lambda (d) (funcall (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :type) (funcall (lambda (td) (list :just (funcall (hydra_annotations_type_element (funcall (lambda (v) (hydra_module_type_definition-name v)) td)) (funcall (lambda (v) (hydra_module_type_definition-type v)) td)))) match_value)) (t (list :nothing)))) (cadr match_target))) d))) (funcall (lambda (v) (hydra_module_module-definitions v)) mod))))) (lambda (type_bindings) (if (hydra_lib_lists_null type_bindings) (list :right (list :nothing)) (funcall (hydra_lib_eithers_bind (funcall (hydra_lib_eithers_map_list (lambda (b) (funcall (funcall (hydra_lib_eithers_bimap (lambda (ic) (make-hydra_context_in_context (list :other (funcall (lambda (v) v) (funcall (lambda (v) (hydra_context_in_context-object v)) ic))) (funcall (lambda (v) (hydra_context_in_context-context v)) ic)))) (lambda (x) x)) (funcall (funcall (hydra_decoding_decode_binding cx) graph) b)))) type_bindings)) (lambda (decoded_bindings) (let ((decoded_type_deps (funcall (hydra_lib_lists_map hydra_decoding_decode_namespace) (funcall (lambda (v) (hydra_module_module-type_dependencies v)) mod)))) (let ((decoded_term_deps (funcall (hydra_lib_lists_map hydra_decoding_decode_namespace) (funcall (lambda (v) (hydra_module_module-term_dependencies v)) mod)))) (let ((all_decoded_deps (hydra_lib_lists_nub (funcall (hydra_lib_lists_concat2 decoded_type_deps) decoded_term_deps)))) (list :right (list :just (make-hydra_module_module (hydra_decoding_decode_namespace (funcall (lambda (v) (hydra_module_module-namespace v)) mod)) (funcall (hydra_lib_lists_map (lambda (b) (list :term (make-hydra_module_term_definition (funcall (lambda (v) (hydra_core_binding-name v)) b) (funcall (lambda (v) (hydra_core_binding-term v)) b) (funcall (lambda (v) (hydra_core_binding-type v)) b))))) decoded_bindings) (funcall (hydra_lib_lists_concat2 (list "hydra.extract.core" "hydra.lexical" "hydra.rewriting")) all_decoded_deps) (list (funcall (lambda (v) (hydra_module_module-namespace v)) mod) "hydra.util") (list :just (hydra_lib_strings_cat (list "Term decoders for " (funcall (lambda (v) v) (funcall (lambda (v) (hydra_module_module-namespace v)) mod))))))))))))))))))))
+(defvar hydra_decoding_decode_module (lambda (cx) (lambda (graph) (lambda (mod) (funcall (hydra_lib_eithers_bind (funcall (funcall (hydra_decoding_filter_type_bindings cx) graph) (hydra_lib_maybes_cat (funcall (hydra_lib_lists_map (lambda (d) (funcall (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :type) (funcall (lambda (td) (list :just (funcall (funcall (lambda (name) (lambda (typ) (let ((schema_term (list :variable "hydra.core.Type"))) (let ((data_term (hydra_annotations_normalize_term_annotations (list :annotated (make-hydra_core_annotated_term (hydra_encode_core_type typ) (hydra_lib_maps_from_list (list (list hydra_constants_key_type schema_term)))))))) (make-hydra_core_binding name data_term (list :just (make-hydra_core_type_scheme (list) (list :variable "hydra.core.Type") (list :nothing)))))))) (funcall (lambda (v) (hydra_packaging_type_definition-name v)) td)) (funcall (lambda (v) (hydra_core_type_scheme-type v)) (funcall (lambda (v) (hydra_packaging_type_definition-type v)) td))))) match_value)) (t (list :nothing)))) (cadr match_target))) d))) (funcall (lambda (v) (hydra_packaging_module-definitions v)) mod))))) (lambda (type_bindings) (if (hydra_lib_lists_null type_bindings) (list :right (list :nothing)) (funcall (hydra_lib_eithers_bind (funcall (hydra_lib_eithers_map_list (lambda (b) (funcall (funcall (hydra_lib_eithers_bimap (lambda (ic) (make-hydra_context_in_context (list :other (funcall (lambda (v) v) (funcall (lambda (v) (hydra_context_in_context-object v)) ic))) (funcall (lambda (v) (hydra_context_in_context-context v)) ic)))) (lambda (x) x)) (funcall (funcall (hydra_decoding_decode_binding cx) graph) b)))) type_bindings)) (lambda (decoded_bindings) (let ((decoded_type_deps (funcall (hydra_lib_lists_map hydra_decoding_decode_namespace) (funcall (lambda (v) (hydra_packaging_module-type_dependencies v)) mod)))) (let ((decoded_term_deps (funcall (hydra_lib_lists_map hydra_decoding_decode_namespace) (funcall (lambda (v) (hydra_packaging_module-term_dependencies v)) mod)))) (let ((all_decoded_deps (hydra_lib_lists_nub (funcall (hydra_lib_lists_concat2 decoded_type_deps) decoded_term_deps)))) (list :right (list :just (make-hydra_packaging_module (hydra_decoding_decode_namespace (funcall (lambda (v) (hydra_packaging_module-namespace v)) mod)) (funcall (hydra_lib_lists_map (lambda (b) (list :term (make-hydra_packaging_term_definition (funcall (lambda (v) (hydra_core_binding-name v)) b) (funcall (lambda (v) (hydra_core_binding-term v)) b) (funcall (lambda (v) (hydra_core_binding-type v)) b))))) decoded_bindings) (funcall (hydra_lib_lists_concat2 (list "hydra.extract.core" "hydra.lexical" "hydra.rewriting")) all_decoded_deps) (list (funcall (lambda (v) (hydra_packaging_module-namespace v)) mod) "hydra.util") (list :just (hydra_lib_strings_cat (list "Term decoders for " (funcall (lambda (v) v) (funcall (lambda (v) (hydra_packaging_module-namespace v)) mod))))))))))))))))))))
 
 (defvar hydra_decoding_decoder_result_type (lambda (typ) (funcall (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :annotated) (funcall (lambda (at) (hydra_decoding_decoder_result_type (funcall (lambda (v) (hydra_core_annotated_type-body v)) at))) match_value)) ((equal (car match_target) :application) (funcall (lambda (app_type) (hydra_decoding_decoder_result_type (funcall (lambda (v) (hydra_core_application_type-function v)) app_type))) match_value)) ((equal (car match_target) :forall) (funcall (lambda (ft) (hydra_decoding_decoder_result_type (funcall (lambda (v) (hydra_core_forall_type-body v)) ft))) match_value)) ((equal (car match_target) :literal) (funcall (lambda (_) "hydra.core.Literal") match_value)) ((equal (car match_target) :record) (funcall (lambda (_) "hydra.core.Term") match_value)) ((equal (car match_target) :union) (funcall (lambda (_) "hydra.core.Term") match_value)) ((equal (car match_target) :wrap) (funcall (lambda (_) "hydra.core.Term") match_value)) (t "hydra.core.Term"))) (cadr match_target))) typ)))
 

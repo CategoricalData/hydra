@@ -17,14 +17,14 @@ public class ConflictingModuleNamespaceError implements Serializable, Comparable
   /**
    * The first module namespace
    */
-  public final hydra.module.Namespace first;
+  public final hydra.packaging.Namespace first;
 
   /**
    * The second module namespace that conflicts with the first
    */
-  public final hydra.module.Namespace second;
+  public final hydra.packaging.Namespace second;
 
-  public ConflictingModuleNamespaceError (hydra.module.Namespace first, hydra.module.Namespace second) {
+  public ConflictingModuleNamespaceError (hydra.packaging.Namespace first, hydra.packaging.Namespace second) {
     this.first = first;
     this.second = second;
   }
@@ -58,11 +58,11 @@ public class ConflictingModuleNamespaceError implements Serializable, Comparable
     return ((Comparable) second).compareTo(other.second);
   }
 
-  public ConflictingModuleNamespaceError withFirst(hydra.module.Namespace first) {
+  public ConflictingModuleNamespaceError withFirst(hydra.packaging.Namespace first) {
     return new ConflictingModuleNamespaceError(first, second);
   }
 
-  public ConflictingModuleNamespaceError withSecond(hydra.module.Namespace second) {
+  public ConflictingModuleNamespaceError withSecond(hydra.packaging.Namespace second) {
     return new ConflictingModuleNamespaceError(first, second);
   }
 }

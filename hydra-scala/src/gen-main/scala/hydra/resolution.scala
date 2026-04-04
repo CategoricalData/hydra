@@ -33,7 +33,7 @@ import hydra.lib.strings
 def dereferenceType(cx: hydra.context.Context)(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.context.InContext[hydra.errors.Error],
    Option[hydra.core.Type]] =
   {
-  lazy val mel: Option[hydra.core.Binding] = hydra.lexical.dereferenceElement(graph)(name)
+  lazy val mel: Option[hydra.core.Binding] = hydra.lexical.lookupBinding(graph)(name)
   hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error], Option[hydra.core.Type]],
      hydra.core.Binding](Right(None))((el: hydra.core.Binding) =>
     hydra.lib.eithers.map[hydra.core.Type, Option[hydra.core.Type], hydra.context.InContext[hydra.errors.Error]](hydra.lib.maybes.pure[hydra.core.Type])(hydra.lib.eithers.bimap[hydra.errors.Error,
@@ -72,7 +72,7 @@ def fieldTypes(cx: hydra.context.Context)(graph: hydra.graph.Graph)(t: hydra.cor
     case hydra.core.Type.union(v_Type_union_rt) => Right(toMap(v_Type_union_rt))
     case hydra.core.Type.variable(v_Type_variable_name) => hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error],
        Map[hydra.core.Name, hydra.core.Type]], hydra.core.TypeScheme](hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error],
-       hydra.core.Binding, Map[hydra.core.Name, hydra.core.Type]](hydra.lexical.requireElement(cx)(graph)(v_Type_variable_name))((el: hydra.core.Binding) =>
+       hydra.core.Binding, Map[hydra.core.Name, hydra.core.Type]](hydra.lexical.requireBinding(cx)(graph)(v_Type_variable_name))((el: hydra.core.Binding) =>
       hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Type, Map[hydra.core.Name,
          hydra.core.Type]](hydra.lib.eithers.bimap[hydra.errors.Error, hydra.core.Type, hydra.context.InContext[hydra.errors.Error],
          hydra.core.Type]((_wc_e: hydra.errors.Error) => hydra.context.InContext(_wc_e, cx))((_wc_a: hydra.core.Type) => _wc_a)(hydra.lib.eithers.bimap[hydra.errors.DecodingError,

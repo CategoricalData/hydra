@@ -110,8 +110,8 @@ public interface Utils {
       hydra.util.Maybe.just(new hydra.ext.java.syntax.VariableInitializer.Expression(rhs)))))));
   }
 
-  static hydra.ext.java.environment.Aliases importAliasesForModule(hydra.module.Module mod) {
-    return new hydra.ext.java.environment.Aliases((mod).namespace, (hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>) ((hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>) (hydra.lib.maps.Empty.<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()));
+  static hydra.ext.java.environment.Aliases importAliasesForModule(hydra.packaging.Module mod) {
+    return new hydra.ext.java.environment.Aliases((mod).namespace, (hydra.util.PersistentMap<hydra.packaging.Namespace, hydra.ext.java.syntax.PackageName>) ((hydra.util.PersistentMap<hydra.packaging.Namespace, hydra.ext.java.syntax.PackageName>) (hydra.lib.maps.Empty.<hydra.packaging.Namespace, hydra.ext.java.syntax.PackageName>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()));
   }
 
   static hydra.ext.java.syntax.InterfaceMemberDeclaration interfaceMethodDeclaration(hydra.util.ConsList<hydra.ext.java.syntax.InterfaceMethodModifier> mods, hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> tparams, String methodName, hydra.util.ConsList<hydra.ext.java.syntax.FormalParameter> params, hydra.ext.java.syntax.Result result, hydra.util.Maybe<hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>> stmts) {
@@ -529,7 +529,7 @@ public interface Utils {
     return new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(me)));
   }
 
-  static hydra.ext.java.syntax.PackageDeclaration javaPackageDeclaration(hydra.module.Namespace ns) {
+  static hydra.ext.java.syntax.PackageDeclaration javaPackageDeclaration(hydra.packaging.Namespace ns) {
     return new hydra.ext.java.syntax.PackageDeclaration((hydra.util.ConsList<hydra.ext.java.syntax.PackageModifier>) (hydra.util.ConsList.<hydra.ext.java.syntax.PackageModifier>empty()), hydra.lib.lists.Map.apply(
       (java.util.function.Function<String, hydra.ext.java.syntax.Identifier>) (s -> new hydra.ext.java.syntax.Identifier(s)),
       hydra.lib.strings.SplitOn.apply(
@@ -816,16 +816,16 @@ public interface Utils {
   }
 
   static hydra.ext.java.syntax.Identifier nameToJavaName(hydra.ext.java.environment.Aliases aliases, hydra.core.Name name) {
-    hydra.module.QualifiedName qn = hydra.Names.qualifyName(name);
+    hydra.packaging.QualifiedName qn = hydra.Names.qualifyName(name);
     String local = (qn).local;
-    hydra.util.Maybe<hydra.module.Namespace> ns_ = (qn).namespace;
+    hydra.util.Maybe<hydra.packaging.Namespace> ns_ = (qn).namespace;
     return hydra.lib.logic.IfElse.lazy(
       hydra.ext.java.Utils.isEscaped((name).value),
       () -> new hydra.ext.java.syntax.Identifier(hydra.ext.java.Utils.sanitizeJavaName(local)),
       () -> hydra.lib.maybes.Cases.applyLazy(
         ns_,
         () -> new hydra.ext.java.syntax.Identifier(local),
-        (java.util.function.Function<hydra.module.Namespace, hydra.ext.java.syntax.Identifier>) (gname -> {
+        (java.util.function.Function<hydra.packaging.Namespace, hydra.ext.java.syntax.Identifier>) (gname -> {
           hydra.util.Lazy<hydra.util.ConsList<String>> parts = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cases.applyLazy(
             hydra.lib.maps.Lookup.apply(
               gname,
@@ -863,12 +863,12 @@ public interface Utils {
   }
 
   static hydra.util.Pair<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier> nameToQualifiedJavaName(hydra.ext.java.environment.Aliases aliases, Boolean qualify, hydra.core.Name name, hydra.util.Maybe<String> mlocal) {
-    hydra.module.QualifiedName qn = hydra.Names.qualifyName(name);
-    hydra.util.Maybe<hydra.module.Namespace> ns_ = (qn).namespace;
+    hydra.packaging.QualifiedName qn = hydra.Names.qualifyName(name);
+    hydra.util.Maybe<hydra.packaging.Namespace> ns_ = (qn).namespace;
     hydra.util.Lazy<hydra.util.Maybe<hydra.ext.java.syntax.PackageName>> alias = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cases.applyLazy(
       ns_,
       () -> (hydra.util.Maybe<hydra.ext.java.syntax.PackageName>) (hydra.util.Maybe.<hydra.ext.java.syntax.PackageName>nothing()),
-      (java.util.function.Function<hydra.module.Namespace, hydra.util.Maybe<hydra.ext.java.syntax.PackageName>>) (n -> hydra.util.Maybe.just(hydra.lib.maybes.Cases.applyLazy(
+      (java.util.function.Function<hydra.packaging.Namespace, hydra.util.Maybe<hydra.ext.java.syntax.PackageName>>) (n -> hydra.util.Maybe.just(hydra.lib.maybes.Cases.applyLazy(
         hydra.lib.maps.Lookup.apply(
           n,
           (aliases).packages),
@@ -1075,7 +1075,7 @@ public interface Utils {
 
   static hydra.core.Name variantClassName(Boolean qualify, hydra.core.Name elName, hydra.core.Name fname) {
     String flocal = hydra.Formatting.capitalize((fname).value);
-    hydra.module.QualifiedName qn = hydra.Names.qualifyName(elName);
+    hydra.packaging.QualifiedName qn = hydra.Names.qualifyName(elName);
     String local = (qn).local;
     hydra.util.Lazy<String> local1 = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
       qualify,
@@ -1092,8 +1092,8 @@ public interface Utils {
           flocal,
           "_"),
         () -> flocal)));
-    hydra.util.Maybe<hydra.module.Namespace> ns_ = (qn).namespace;
-    return hydra.Names.unqualifyName(new hydra.module.QualifiedName(ns_, local1.get()));
+    hydra.util.Maybe<hydra.packaging.Namespace> ns_ = (qn).namespace;
+    return hydra.Names.unqualifyName(new hydra.packaging.QualifiedName(ns_, local1.get()));
   }
 
   static hydra.ext.java.syntax.ReferenceType visitorTypeVariable() {

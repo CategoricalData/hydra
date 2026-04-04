@@ -3,14 +3,15 @@ module Hydra.Sources.Kernel.Terms.Environment where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  elementAsTypeApplicationTerm,
+  definitionAsTypeApplicationTerm,
   graphAsLet,
   graphAsTerm,
   graphAsTypes,
   partitionDefinitions,
+  reorderDefs,
   schemaGraphToTypingEnvironment,
   termAsBindings,
-  typesToElements,
+  typesToDefinitions,
   withLambdaContext,
   withLetContext,
   withTypeLambdaContext)
@@ -65,7 +66,9 @@ import qualified Data.Maybe                  as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Scoping      as Scoping
+import qualified Hydra.Sources.Kernel.Terms.Sorting      as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Strip        as Strip
+import qualified Hydra.Sources.Kernel.Terms.Variables    as Variables
 
 import qualified Hydra.Sources.Decode.Core  as DecodeCore
 import qualified Hydra.Sources.Encode.Core  as EncodeCore
@@ -79,26 +82,27 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [Lexical.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, Scoping.ns, Strip.ns]
+    [Lexical.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, Scoping.ns, Sorting.ns, Strip.ns, Variables.ns]
     kernelTypesNamespaces $
     Just ("Graph to type environment conversions")
   where
     elements = [
-      toDefinition elementAsTypeApplicationTerm,
+      toDefinition definitionAsTypeApplicationTerm,
       toDefinition graphAsLet,
       toDefinition graphAsTerm,
       toDefinition graphAsTypes,
       toDefinition partitionDefinitions,
+      toDefinition reorderDefs,
       toDefinition schemaGraphToTypingEnvironment,
       toDefinition termAsBindings,
-      toDefinition typesToElements,
+      toDefinition typesToDefinitions,
       toDefinition withLambdaContext,
       toDefinition withLetContext,
       toDefinition withTypeLambdaContext]
 
-elementAsTypeApplicationTerm :: TTermDefinition (Context -> Binding -> Either (InContext Error) TypeApplicationTerm)
-elementAsTypeApplicationTerm = define "elementAsTypeApplicationTerm" $
-  doc "Convert an element to a typed term" $
+definitionAsTypeApplicationTerm :: TTermDefinition (Context -> Binding -> Either (InContext Error) TypeApplicationTerm)
+definitionAsTypeApplicationTerm = define "definitionAsTypeApplicationTerm" $
+  doc "Convert a definition to a typed term" $
   "cx" ~> "el" ~>
   Maybes.maybe (Ctx.failInContext (Error.errorOther $ Error.otherError (string "missing element type")) (var "cx"))
     ("ts" ~> right (Core.typeApplicationTerm (Core.bindingTerm (var "el")) (Core.typeSchemeType (var "ts"))))
@@ -140,6 +144,39 @@ partitionDefinitions = define "partitionDefinitions" $
   pair
     (Maybes.cat $ Lists.map (var "getType") (var "defs"))
     (Maybes.cat $ Lists.map (var "getTerm") (var "defs"))
+
+reorderDefs :: TTermDefinition ([Definition] -> [Definition])
+reorderDefs = define "reorderDefs" $
+  doc "Reorder definitions: types first (with hydra.core.Name first among types), then topologically sorted terms" $
+  "defs" ~>
+    "partitioned" <~ (partitionDefinitions @@ var "defs") $
+    "typeDefsRaw" <~ Pairs.first (var "partitioned") $
+    -- Sort type defs: Name type first (it is referenced by almost everything else)
+    "nameFirst" <~ Lists.filter
+      ("td" ~> Equality.equal
+        (project _TypeDefinition _TypeDefinition_name @@ var "td")
+        (wrap _Name $ string "hydra.core.Name"))
+      (var "typeDefsRaw") $
+    "nameRest" <~ Lists.filter
+      ("td" ~> Logic.not $ Equality.equal
+        (project _TypeDefinition _TypeDefinition_name @@ var "td")
+        (wrap _Name $ string "hydra.core.Name"))
+      (var "typeDefsRaw") $
+    "typeDefs" <~ Lists.concat (list [
+      Lists.map ("td" ~> inject _Definition _Definition_type (var "td")) (var "nameFirst"),
+      Lists.map ("td" ~> inject _Definition _Definition_type (var "td")) (var "nameRest")]) $
+    "termDefsWrapped" <~ Lists.map ("td" ~> inject _Definition _Definition_term (var "td"))
+      (Pairs.second (var "partitioned")) $
+    -- Topologically sort term definitions by free variable dependencies
+    "sortedTermDefs" <~ (Lists.concat $ Sorting.topologicalSortNodes @@
+      ("d" ~> cases _Definition (var "d") Nothing [
+        _Definition_term>>: "td" ~> project _TermDefinition _TermDefinition_name @@ var "td"])
+      @@
+      ("d" ~> cases _Definition (var "d") (Just (list ([] :: [TTerm Name]))) [
+        _Definition_term>>: "td" ~>
+          Sets.toList $ Variables.freeVariablesInTerm @@ (project _TermDefinition _TermDefinition_term @@ var "td")])
+      @@ var "termDefsWrapped") $
+    Lists.concat (list [var "typeDefs", var "sortedTermDefs"])
 
 schemaGraphToTypingEnvironment :: TTermDefinition (Context -> Graph -> Either (InContext Error) (M.Map Name TypeScheme))
 schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
@@ -192,9 +229,9 @@ termAsBindings = define "termAsBindings" $
     (Just (list ([] :: [TTerm Binding]))) [
     _Term_let>>: "lt" ~> Core.letBindings (var "lt")]
 
-typesToElements :: TTermDefinition (M.Map Name Type -> [Binding])
-typesToElements = define "typesToElements" $
-  doc "Encode a map of named types to a list of elements" $
+typesToDefinitions :: TTermDefinition (M.Map Name Type -> [Binding])
+typesToDefinitions = define "typesToDefinitions" $
+  doc "Encode a map of named types to a list of bindings" $
   "typeMap" ~>
   "toElement" <~ ("pair" ~>
     "name" <~ Pairs.first (var "pair") $

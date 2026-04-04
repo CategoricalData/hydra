@@ -50,12 +50,6 @@ public interface Lexical {
     return tryName.get().apply(1);
   }
 
-  static hydra.util.Maybe<hydra.core.Binding> dereferenceElement(hydra.graph.Graph graph, hydra.core.Name name) {
-    return hydra.Lexical.lookupElement(
-      graph,
-      name);
-  }
-
   static hydra.util.Maybe<hydra.core.TypeScheme> dereferenceSchemaType(hydra.core.Name name, hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme> types) {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.TypeScheme>>> forType = new java.util.concurrent.atomic.AtomicReference<>();
     forType.set((java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.TypeScheme>>) (t -> (t).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -102,7 +96,7 @@ public interface Lexical {
         "no such element: ",
         (name).value)),
       (java.util.function.Function<hydra.core.Binding, hydra.util.Either<String, hydra.core.Binding>>) (right_ -> hydra.util.Either.<String, hydra.core.Binding>right(right_)),
-      hydra.Lexical.lookupElement(
+      hydra.Lexical.lookupBinding(
         graph,
         name));
   }
@@ -174,7 +168,7 @@ public interface Lexical {
       hydra.lib.maps.ToList.apply((g).boundTerms));
   }
 
-  static hydra.util.Maybe<hydra.core.Binding> lookupElement(hydra.graph.Graph graph, hydra.core.Name name) {
+  static hydra.util.Maybe<hydra.core.Binding> lookupBinding(hydra.graph.Graph graph, hydra.core.Name name) {
     return hydra.lib.maybes.Map.apply(
       (java.util.function.Function<hydra.core.Term, hydra.core.Binding>) (term -> new hydra.core.Binding(name, term, hydra.lib.maps.Lookup.apply(
         name,
@@ -249,7 +243,7 @@ public interface Lexical {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T0> visit(hydra.core.Term.Variable name) {
         return hydra.lib.eithers.Bind.apply(
-          hydra.Lexical.requireElement(
+          hydra.Lexical.requireBinding(
             cx,
             graph,
             (name).value),
@@ -308,7 +302,7 @@ public interface Lexical {
     return (hydra.util.Pair<T0, java.util.function.Function<T2, hydra.util.Either<T3, T1>>>) ((hydra.util.Pair<T0, java.util.function.Function<T2, hydra.util.Either<T3, T1>>>) (new hydra.util.Pair<T0, java.util.function.Function<T2, hydra.util.Either<T3, T1>>>(fname, (java.util.function.Function<T2, hydra.util.Either<T3, T1>>) (ignored -> hydra.util.Either.<T3, T1>right(x)))));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Binding> requireElement(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Name name) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Binding> requireBinding(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Name name) {
     Boolean showAll = false;
     java.util.function.Function<hydra.util.ConsList<String>, hydra.util.ConsList<String>> ellipsis = (java.util.function.Function<hydra.util.ConsList<String>, hydra.util.ConsList<String>>) (strings -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.logic.And.apply(
@@ -338,7 +332,7 @@ public interface Lexical {
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Binding>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError(errMsg.get())), cx))),
       (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Binding>>) (x -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Binding>right(x)),
-      hydra.Lexical.dereferenceElement(
+      hydra.Lexical.lookupBinding(
         graph,
         name));
   }

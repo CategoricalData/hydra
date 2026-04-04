@@ -23,6 +23,7 @@ public interface TestSuite {
       hydra.test.lib.Strings.allTests(),
       hydra.test.Annotations.allTests(),
       hydra.test.checking.All.allTests(),
+      hydra.test.Dependencies.allTests(),
       hydra.test.EtaExpansion.allTests(),
       hydra.test.Formatting.allTests(),
       hydra.test.hoisting.All.allTests(),
@@ -33,8 +34,10 @@ public interface TestSuite {
       hydra.test.Rewriting.allTests(),
       hydra.test.Serialization.allTests(),
       hydra.test.Sorting.allTests(),
+      hydra.test.Strip.allTests(),
       hydra.test.Substitution.allTests(),
       hydra.test.Unification.allTests(),
-      hydra.test.validate.All.allTests()), (hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>) (hydra.util.ConsList.<hydra.testing.TestCaseWithMetadata>empty()));
+      hydra.test.validate.All.allTests(),
+      hydra.test.Variables.allTests()), (hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>) (hydra.util.ConsList.<hydra.testing.TestCaseWithMetadata>empty()));
   }
 }

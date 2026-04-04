@@ -4,776 +4,818 @@
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.Closed",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "See https://www.w3.org/TR/shacl/#ClosedPatterConstraintComponent"}}}],
-            "body": {
-              "record": [
-                {"name": "isClosed", "type": {"literal": {"boolean": {}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "ignoredProperties",
-                  "type": {
-                    "maybe": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.Property"}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "See https://www.w3.org/TR/shacl/#ClosedPatterConstraintComponent"}}}],
+              "body": {
+                "record": [
+                  {"name": "isClosed", "type": {"literal": {"boolean": {}}}},
+                  {
+                    "name": "ignoredProperties",
+                    "type": {
+                      "maybe": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.Property"}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.CommonConstraint",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "Any of a number of constraint parameters which can be applied either to node or property shapes"}}}],
-            "body": {
-              "union": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "and",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "See https://www.w3.org/TR/shacl/#AndConstraintComponent"}}}],
-                      "body": {
-                        "set": {
-                          "application": {
-                            "argument": {"variable": "hydra.ext.org.w3.shacl.model.Shape"},
-                            "function": {"variable": "hydra.ext.org.w3.shacl.model.Reference"}}}}}}},
-                {
-                  "name": "closed",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "See https://www.w3.org/TR/shacl/#ClosedConstraintComponent"}}}],
-                      "body": {"variable": "hydra.ext.org.w3.shacl.model.Closed"}}}},
-                {
-                  "name": "class",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "See https://www.w3.org/TR/shacl/#ClassConstraintComponent"}}}],
-                      "body": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.RdfsClass"}}}}},
-                {
-                  "name": "datatype",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "See https://www.w3.org/TR/shacl/#DatatypeConstraintComponent"}}}],
-                      "body": {"variable": "hydra.ext.org.w3.rdf.syntax.Iri"}}}},
-                {
-                  "name": "disjoint",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "See https://www.w3.org/TR/shacl/#DisjointConstraintComponent"}}}],
-                      "body": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.Property"}}}}},
-                {
-                  "name": "equals",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "See https://www.w3.org/TR/shacl/#EqualsConstraintComponent"}}}],
-                      "body": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.Property"}}}}},
-                {
-                  "name": "hasValue",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "Specifies the condition that at least one value node is equal to the given RDF term. See https://www.w3.org/TR/shacl/#HasValueConstraintComponent"}}}],
-                      "body": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.Node"}}}}},
-                {
-                  "name": "in",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "Specifies the condition that each value node is a member of a provided SHACL list. See https://www.w3.org/TR/shacl/#InConstraintComponent"}}}],
-                      "body": {"list": {"variable": "hydra.ext.org.w3.rdf.syntax.Node"}}}}},
-                {
-                  "name": "languageIn",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "See https://www.w3.org/TR/shacl/#LanguageInConstraintComponent"}}}],
-                      "body": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.LanguageTag"}}}}},
-                {
-                  "name": "nodeKind",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "See https://www.w3.org/TR/shacl/#NodeKindConstraintComponent"}}}],
-                      "body": {"variable": "hydra.ext.org.w3.shacl.model.NodeKind"}}}},
-                {
-                  "name": "node",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "See https://www.w3.org/TR/shacl/#NodeConstraintComponent"}}}],
-                      "body": {
-                        "set": {
-                          "application": {
-                            "argument": {"variable": "hydra.ext.org.w3.shacl.model.NodeShape"},
-                            "function": {"variable": "hydra.ext.org.w3.shacl.model.Reference"}}}}}}},
-                {
-                  "name": "not",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "See https://www.w3.org/TR/shacl/#NotConstraintComponent"}}}],
-                      "body": {
-                        "set": {
-                          "application": {
-                            "argument": {"variable": "hydra.ext.org.w3.shacl.model.Shape"},
-                            "function": {"variable": "hydra.ext.org.w3.shacl.model.Reference"}}}}}}},
-                {
-                  "name": "maxExclusive",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "See https://www.w3.org/TR/shacl/#MaxExclusiveConstraintComponent"}}}],
-                      "body": {"variable": "hydra.ext.org.w3.rdf.syntax.Literal"}}}},
-                {
-                  "name": "maxInclusive",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "See https://www.w3.org/TR/shacl/#MaxInclusiveConstraintComponent"}}}],
-                      "body": {"variable": "hydra.ext.org.w3.rdf.syntax.Literal"}}}},
-                {
-                  "name": "maxLength",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "See https://www.w3.org/TR/shacl/#MaxLengthConstraintComponent"}}}],
-                      "body": {"literal": {"integer": {"bigint": {}}}}}}},
-                {
-                  "name": "minExclusive",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "See https://www.w3.org/TR/shacl/#MinExclusiveConstraintComponent"}}}],
-                      "body": {"variable": "hydra.ext.org.w3.rdf.syntax.Literal"}}}},
-                {
-                  "name": "minInclusive",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "See https://www.w3.org/TR/shacl/#MinInclusiveConstraintComponent"}}}],
-                      "body": {"variable": "hydra.ext.org.w3.rdf.syntax.Literal"}}}},
-                {
-                  "name": "minLength",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "See https://www.w3.org/TR/shacl/#MinLengthConstraintComponent"}}}],
-                      "body": {"literal": {"integer": {"bigint": {}}}}}}},
-                {
-                  "name": "pattern",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "See https://www.w3.org/TR/shacl/#PatternConstraintComponent"}}}],
-                      "body": {"variable": "hydra.ext.org.w3.shacl.model.Pattern"}}}},
-                {
-                  "name": "property",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "See https://www.w3.org/TR/shacl/#PropertyConstraintComponent"}}}],
-                      "body": {
-                        "set": {
-                          "application": {
-                            "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
-                            "function": {"variable": "hydra.ext.org.w3.shacl.model.Reference"}}}}}}},
-                {
-                  "name": "or",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "See https://www.w3.org/TR/shacl/#OrConstraintComponent"}}}],
-                      "body": {
-                        "set": {
-                          "application": {
-                            "argument": {"variable": "hydra.ext.org.w3.shacl.model.Shape"},
-                            "function": {"variable": "hydra.ext.org.w3.shacl.model.Reference"}}}}}}},
-                {
-                  "name": "xone",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "See https://www.w3.org/TR/shacl/#XoneConstraintComponent"}}}],
-                      "body": {
-                        "set": {
-                          "application": {
-                            "argument": {"variable": "hydra.ext.org.w3.shacl.model.Shape"},
-                            "function": {"variable": "hydra.ext.org.w3.shacl.model.Reference"}}}}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "Any of a number of constraint parameters which can be applied either to node or property shapes"}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "and",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "See https://www.w3.org/TR/shacl/#AndConstraintComponent"}}}],
+                        "body": {
+                          "set": {
+                            "application": {
+                              "argument": {"variable": "hydra.ext.org.w3.shacl.model.Shape"},
+                              "function": {"variable": "hydra.ext.org.w3.shacl.model.Reference"}}}}}}},
+                  {
+                    "name": "closed",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "See https://www.w3.org/TR/shacl/#ClosedConstraintComponent"}}}],
+                        "body": {"variable": "hydra.ext.org.w3.shacl.model.Closed"}}}},
+                  {
+                    "name": "class",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "See https://www.w3.org/TR/shacl/#ClassConstraintComponent"}}}],
+                        "body": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.RdfsClass"}}}}},
+                  {
+                    "name": "datatype",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "See https://www.w3.org/TR/shacl/#DatatypeConstraintComponent"}}}],
+                        "body": {"variable": "hydra.ext.org.w3.rdf.syntax.Iri"}}}},
+                  {
+                    "name": "disjoint",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "See https://www.w3.org/TR/shacl/#DisjointConstraintComponent"}}}],
+                        "body": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.Property"}}}}},
+                  {
+                    "name": "equals",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "See https://www.w3.org/TR/shacl/#EqualsConstraintComponent"}}}],
+                        "body": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.Property"}}}}},
+                  {
+                    "name": "hasValue",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "Specifies the condition that at least one value node is equal to the given RDF term. See https://www.w3.org/TR/shacl/#HasValueConstraintComponent"}}}],
+                        "body": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.Node"}}}}},
+                  {
+                    "name": "in",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "Specifies the condition that each value node is a member of a provided SHACL list. See https://www.w3.org/TR/shacl/#InConstraintComponent"}}}],
+                        "body": {"list": {"variable": "hydra.ext.org.w3.rdf.syntax.Node"}}}}},
+                  {
+                    "name": "languageIn",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "See https://www.w3.org/TR/shacl/#LanguageInConstraintComponent"}}}],
+                        "body": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.LanguageTag"}}}}},
+                  {
+                    "name": "nodeKind",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "See https://www.w3.org/TR/shacl/#NodeKindConstraintComponent"}}}],
+                        "body": {"variable": "hydra.ext.org.w3.shacl.model.NodeKind"}}}},
+                  {
+                    "name": "node",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "See https://www.w3.org/TR/shacl/#NodeConstraintComponent"}}}],
+                        "body": {
+                          "set": {
+                            "application": {
+                              "argument": {"variable": "hydra.ext.org.w3.shacl.model.NodeShape"},
+                              "function": {"variable": "hydra.ext.org.w3.shacl.model.Reference"}}}}}}},
+                  {
+                    "name": "not",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "See https://www.w3.org/TR/shacl/#NotConstraintComponent"}}}],
+                        "body": {
+                          "set": {
+                            "application": {
+                              "argument": {"variable": "hydra.ext.org.w3.shacl.model.Shape"},
+                              "function": {"variable": "hydra.ext.org.w3.shacl.model.Reference"}}}}}}},
+                  {
+                    "name": "maxExclusive",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "See https://www.w3.org/TR/shacl/#MaxExclusiveConstraintComponent"}}}],
+                        "body": {"variable": "hydra.ext.org.w3.rdf.syntax.Literal"}}}},
+                  {
+                    "name": "maxInclusive",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "See https://www.w3.org/TR/shacl/#MaxInclusiveConstraintComponent"}}}],
+                        "body": {"variable": "hydra.ext.org.w3.rdf.syntax.Literal"}}}},
+                  {
+                    "name": "maxLength",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "See https://www.w3.org/TR/shacl/#MaxLengthConstraintComponent"}}}],
+                        "body": {"literal": {"integer": {"bigint": {}}}}}}},
+                  {
+                    "name": "minExclusive",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "See https://www.w3.org/TR/shacl/#MinExclusiveConstraintComponent"}}}],
+                        "body": {"variable": "hydra.ext.org.w3.rdf.syntax.Literal"}}}},
+                  {
+                    "name": "minInclusive",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "See https://www.w3.org/TR/shacl/#MinInclusiveConstraintComponent"}}}],
+                        "body": {"variable": "hydra.ext.org.w3.rdf.syntax.Literal"}}}},
+                  {
+                    "name": "minLength",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "See https://www.w3.org/TR/shacl/#MinLengthConstraintComponent"}}}],
+                        "body": {"literal": {"integer": {"bigint": {}}}}}}},
+                  {
+                    "name": "pattern",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "See https://www.w3.org/TR/shacl/#PatternConstraintComponent"}}}],
+                        "body": {"variable": "hydra.ext.org.w3.shacl.model.Pattern"}}}},
+                  {
+                    "name": "property",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "See https://www.w3.org/TR/shacl/#PropertyConstraintComponent"}}}],
+                        "body": {
+                          "set": {
+                            "application": {
+                              "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
+                              "function": {"variable": "hydra.ext.org.w3.shacl.model.Reference"}}}}}}},
+                  {
+                    "name": "or",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "See https://www.w3.org/TR/shacl/#OrConstraintComponent"}}}],
+                        "body": {
+                          "set": {
+                            "application": {
+                              "argument": {"variable": "hydra.ext.org.w3.shacl.model.Shape"},
+                              "function": {"variable": "hydra.ext.org.w3.shacl.model.Reference"}}}}}}},
+                  {
+                    "name": "xone",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "See https://www.w3.org/TR/shacl/#XoneConstraintComponent"}}}],
+                        "body": {
+                          "set": {
+                            "application": {
+                              "argument": {"variable": "hydra.ext.org.w3.shacl.model.Shape"},
+                              "function": {"variable": "hydra.ext.org.w3.shacl.model.Reference"}}}}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.CommonProperties",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "Common constraint parameters and other properties for SHACL shapes"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "constraints",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "Common constraint parameters attached to this shape"}}}],
-                      "body": {"set": {"variable": "hydra.ext.org.w3.shacl.model.CommonConstraint"}}}}},
-                {
-                  "name": "deactivated",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "See https://www.w3.org/TR/shacl/#deactivated"}}}],
-                      "body": {"maybe": {"literal": {"boolean": {}}}}}}},
-                {
-                  "name": "message",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#message"}}}],
-                      "body": {"variable": "hydra.ext.org.w3.rdf.syntax.LangStrings"}}}},
-                {
-                  "name": "severity",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#severity"}}}],
-                      "body": {"variable": "hydra.ext.org.w3.shacl.model.Severity"}}}},
-                {
-                  "name": "targetClass",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "See https://www.w3.org/TR/shacl/#targetClass"}}}],
-                      "body": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.RdfsClass"}}}}},
-                {
-                  "name": "targetNode",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetNode"}}}],
-                      "body": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.IriOrLiteral"}}}}},
-                {
-                  "name": "targetObjectsOf",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "See https://www.w3.org/TR/shacl/#targetObjectsOf"}}}],
-                      "body": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.Property"}}}}},
-                {
-                  "name": "targetSubjectsOf",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "See https://www.w3.org/TR/shacl/#targetSubjectsOf"}}}],
-                      "body": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.Property"}}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "Common constraint parameters and other properties for SHACL shapes"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "constraints",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "Common constraint parameters attached to this shape"}}}],
+                        "body": {"set": {"variable": "hydra.ext.org.w3.shacl.model.CommonConstraint"}}}}},
+                  {
+                    "name": "deactivated",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "See https://www.w3.org/TR/shacl/#deactivated"}}}],
+                        "body": {"maybe": {"literal": {"boolean": {}}}}}}},
+                  {
+                    "name": "message",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#message"}}}],
+                        "body": {"variable": "hydra.ext.org.w3.rdf.syntax.LangStrings"}}}},
+                  {
+                    "name": "severity",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#severity"}}}],
+                        "body": {"variable": "hydra.ext.org.w3.shacl.model.Severity"}}}},
+                  {
+                    "name": "targetClass",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "See https://www.w3.org/TR/shacl/#targetClass"}}}],
+                        "body": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.RdfsClass"}}}}},
+                  {
+                    "name": "targetNode",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#targetNode"}}}],
+                        "body": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.IriOrLiteral"}}}}},
+                  {
+                    "name": "targetObjectsOf",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "See https://www.w3.org/TR/shacl/#targetObjectsOf"}}}],
+                        "body": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.Property"}}}}},
+                  {
+                    "name": "targetSubjectsOf",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "See https://www.w3.org/TR/shacl/#targetSubjectsOf"}}}],
+                        "body": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.Property"}}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.Definition",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "An instance of a type like sh:Shape or sh:NodeShape, together with a unique IRI for that instance"}}}],
-            "body": {
-              "forall": {
-                "body": {
-                  "record": [
-                    {
-                      "name": "iri",
-                      "type": {"variable": "hydra.ext.org.w3.rdf.syntax.Iri"}},
-                    {"name": "target", "type": {"variable": "a"}}]},
-                "parameter": "a"}}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "An instance of a type like sh:Shape or sh:NodeShape, together with a unique IRI for that instance"}}}],
+              "body": {
+                "forall": {
+                  "body": {
+                    "record": [
+                      {
+                        "name": "iri",
+                        "type": {"variable": "hydra.ext.org.w3.rdf.syntax.Iri"}},
+                      {"name": "target", "type": {"variable": "a"}}]},
+                  "parameter": "a"}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.NodeKind",
         "type": {
-          "union": [
-            {
-              "name": "blankNode",
-              "type": {
-                "annotated": {
-                  "annotation": [
-                    {
-                      "@key": "description",
-                      "@value": {"literal": {"string": "A blank node"}}}],
-                  "body": {"unit": {}}}}},
-            {
-              "name": "iri",
-              "type": {
-                "annotated": {
-                  "annotation": [{"@key": "description", "@value": {"literal": {"string": "An IRI"}}}],
-                  "body": {"unit": {}}}}},
-            {
-              "name": "literal",
-              "type": {
-                "annotated": {
-                  "annotation": [
-                    {
-                      "@key": "description",
-                      "@value": {"literal": {"string": "A literal"}}}],
-                  "body": {"unit": {}}}}},
-            {
-              "name": "blankNodeOrIri",
-              "type": {
-                "annotated": {
-                  "annotation": [
-                    {
-                      "@key": "description",
-                      "@value": {"literal": {"string": "A blank node or an IRI"}}}],
-                  "body": {"unit": {}}}}},
-            {
-              "name": "blankNodeOrLiteral",
-              "type": {
-                "annotated": {
-                  "annotation": [
-                    {
-                      "@key": "description",
-                      "@value": {"literal": {"string": "A blank node or a literal"}}}],
-                  "body": {"unit": {}}}}},
-            {
-              "name": "iriOrLiteral",
-              "type": {
-                "annotated": {
-                  "annotation": [
-                    {
-                      "@key": "description",
-                      "@value": {"literal": {"string": "An IRI or a literal"}}}],
-                  "body": {"unit": {}}}}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "blankNode",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "A blank node"}}}],
+                    "body": {"unit": {}}}}},
+              {
+                "name": "iri",
+                "type": {
+                  "annotated": {
+                    "annotation": [{"@key": "description", "@value": {"literal": {"string": "An IRI"}}}],
+                    "body": {"unit": {}}}}},
+              {
+                "name": "literal",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "A literal"}}}],
+                    "body": {"unit": {}}}}},
+              {
+                "name": "blankNodeOrIri",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "A blank node or an IRI"}}}],
+                    "body": {"unit": {}}}}},
+              {
+                "name": "blankNodeOrLiteral",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "A blank node or a literal"}}}],
+                    "body": {"unit": {}}}}},
+              {
+                "name": "iriOrLiteral",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "An IRI or a literal"}}}],
+                    "body": {"unit": {}}}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.NodeShape",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "A SHACL node shape. See https://www.w3.org/TR/shacl/#node-shapes"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "common",
-                  "type": {"variable": "hydra.ext.org.w3.shacl.model.CommonProperties"}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A SHACL node shape. See https://www.w3.org/TR/shacl/#node-shapes"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "common",
+                    "type": {"variable": "hydra.ext.org.w3.shacl.model.CommonProperties"}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.Pattern",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "A SHACL pattern. See https://www.w3.org/TR/shacl/#PatternConstraintComponent"}}}],
-            "body": {
-              "record": [
-                {"name": "regex", "type": {"literal": {"string": {}}}},
-                {"name": "flags", "type": {"maybe": {"literal": {"string": {}}}}}]}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A SHACL pattern. See https://www.w3.org/TR/shacl/#PatternConstraintComponent"}}}],
+              "body": {
+                "record": [
+                  {"name": "regex", "type": {"literal": {"string": {}}}},
+                  {"name": "flags", "type": {"maybe": {"literal": {"string": {}}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.PropertyShape",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "A SHACL property shape. See https://www.w3.org/TR/shacl/#property-shapes"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "common",
-                  "type": {"variable": "hydra.ext.org.w3.shacl.model.CommonProperties"}},
-                {
-                  "name": "constraints",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "Any property shape -specific constraint parameters"}}}],
-                      "body": {
-                        "set": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShapeConstraint"}}}}},
-                {
-                  "name": "defaultValue",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "See https://www.w3.org/TR/shacl/#defaultValue"}}}],
-                      "body": {"maybe": {"variable": "hydra.ext.org.w3.rdf.syntax.Node"}}}}},
-                {
-                  "name": "description",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}],
-                      "body": {"variable": "hydra.ext.org.w3.rdf.syntax.LangStrings"}}}},
-                {
-                  "name": "name",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}],
-                      "body": {"variable": "hydra.ext.org.w3.rdf.syntax.LangStrings"}}}},
-                {
-                  "name": "order",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#order"}}}],
-                      "body": {"maybe": {"literal": {"integer": {"bigint": {}}}}}}}},
-                {
-                  "name": "path",
-                  "type": {"variable": "hydra.ext.org.w3.rdf.syntax.Iri"}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A SHACL property shape. See https://www.w3.org/TR/shacl/#property-shapes"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "common",
+                    "type": {"variable": "hydra.ext.org.w3.shacl.model.CommonProperties"}},
+                  {
+                    "name": "constraints",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "Any property shape -specific constraint parameters"}}}],
+                        "body": {
+                          "set": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShapeConstraint"}}}}},
+                  {
+                    "name": "defaultValue",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "See https://www.w3.org/TR/shacl/#defaultValue"}}}],
+                        "body": {"maybe": {"variable": "hydra.ext.org.w3.rdf.syntax.Node"}}}}},
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}],
+                        "body": {"variable": "hydra.ext.org.w3.rdf.syntax.LangStrings"}}}},
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#name"}}}],
+                        "body": {"variable": "hydra.ext.org.w3.rdf.syntax.LangStrings"}}}},
+                  {
+                    "name": "order",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#order"}}}],
+                        "body": {"maybe": {"literal": {"integer": {"bigint": {}}}}}}}},
+                  {
+                    "name": "path",
+                    "type": {"variable": "hydra.ext.org.w3.rdf.syntax.Iri"}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.PropertyShapeConstraint",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "A number of constraint parameters which are specific to property shapes, and cannot be applied to node shapes"}}}],
-            "body": {
-              "union": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "lessThan",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "See https://www.w3.org/TR/shacl/#LessThanConstraintComponent"}}}],
-                      "body": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.Property"}}}}},
-                {
-                  "name": "lessThanOrEquals",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "See https://www.w3.org/TR/shacl/#LessThanOrEqualsConstraintComponent"}}}],
-                      "body": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.Property"}}}}},
-                {
-                  "name": "maxCount",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "The maximum cardinality. Node shapes cannot have any value for sh:maxCount. See https://www.w3.org/TR/shacl/#MaxCountConstraintComponent"}}}],
-                      "body": {"literal": {"integer": {"bigint": {}}}}}}},
-                {
-                  "name": "minCount",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "The minimum cardinality. Node shapes cannot have any value for sh:minCount. See https://www.w3.org/TR/shacl/#MinCountConstraintComponent"}}}],
-                      "body": {"literal": {"integer": {"bigint": {}}}}}}},
-                {
-                  "name": "uniqueLang",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "See https://www.w3.org/TR/shacl/#UniqueLangConstraintComponent"}}}],
-                      "body": {"literal": {"boolean": {}}}}}},
-                {
-                  "name": "qualifiedValueShape",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent"}}}],
-                      "body": {"variable": "hydra.ext.org.w3.shacl.model.QualifiedValueShape"}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A number of constraint parameters which are specific to property shapes, and cannot be applied to node shapes"}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "lessThan",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "See https://www.w3.org/TR/shacl/#LessThanConstraintComponent"}}}],
+                        "body": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.Property"}}}}},
+                  {
+                    "name": "lessThanOrEquals",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "See https://www.w3.org/TR/shacl/#LessThanOrEqualsConstraintComponent"}}}],
+                        "body": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.Property"}}}}},
+                  {
+                    "name": "maxCount",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The maximum cardinality. Node shapes cannot have any value for sh:maxCount. See https://www.w3.org/TR/shacl/#MaxCountConstraintComponent"}}}],
+                        "body": {"literal": {"integer": {"bigint": {}}}}}}},
+                  {
+                    "name": "minCount",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The minimum cardinality. Node shapes cannot have any value for sh:minCount. See https://www.w3.org/TR/shacl/#MinCountConstraintComponent"}}}],
+                        "body": {"literal": {"integer": {"bigint": {}}}}}}},
+                  {
+                    "name": "uniqueLang",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "See https://www.w3.org/TR/shacl/#UniqueLangConstraintComponent"}}}],
+                        "body": {"literal": {"boolean": {}}}}}},
+                  {
+                    "name": "qualifiedValueShape",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent"}}}],
+                        "body": {"variable": "hydra.ext.org.w3.shacl.model.QualifiedValueShape"}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.QualifiedValueShape",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "qualifiedValueShape",
-                  "type": {
-                    "application": {
-                      "argument": {"variable": "hydra.ext.org.w3.shacl.model.Shape"},
-                      "function": {"variable": "hydra.ext.org.w3.shacl.model.Reference"}}}},
-                {
-                  "name": "qualifiedMaxCount",
-                  "type": {"literal": {"integer": {"bigint": {}}}}},
-                {
-                  "name": "qualifiedMinCount",
-                  "type": {"literal": {"integer": {"bigint": {}}}}},
-                {
-                  "name": "qualifiedValueShapesDisjoint",
-                  "type": {"maybe": {"literal": {"boolean": {}}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "qualifiedValueShape",
+                    "type": {
+                      "application": {
+                        "argument": {"variable": "hydra.ext.org.w3.shacl.model.Shape"},
+                        "function": {"variable": "hydra.ext.org.w3.shacl.model.Reference"}}}},
+                  {
+                    "name": "qualifiedMaxCount",
+                    "type": {"literal": {"integer": {"bigint": {}}}}},
+                  {
+                    "name": "qualifiedMinCount",
+                    "type": {"literal": {"integer": {"bigint": {}}}}},
+                  {
+                    "name": "qualifiedValueShapesDisjoint",
+                    "type": {"maybe": {"literal": {"boolean": {}}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.Reference",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "Either an instance of a type like sh:Shape or sh:NodeShape, or an IRI which refers to an instance of that type"}}}],
-            "body": {
-              "forall": {
-                "body": {
-                  "union": [
-                    {
-                      "name": "named",
-                      "type": {"variable": "hydra.ext.org.w3.rdf.syntax.Iri"}},
-                    {
-                      "name": "anonymous",
-                      "type": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "An anonymous instance"}}}],
-                          "body": {"variable": "a"}}}},
-                    {
-                      "name": "definition",
-                      "type": {
-                        "annotated": {
-                          "annotation": [
-                            {
-                              "@key": "description",
-                              "@value": {"literal": {"string": "An inline definition"}}}],
-                          "body": {
-                            "application": {
-                              "argument": {"variable": "a"},
-                              "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}}}}]},
-                "parameter": "a"}}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "Either an instance of a type like sh:Shape or sh:NodeShape, or an IRI which refers to an instance of that type"}}}],
+              "body": {
+                "forall": {
+                  "body": {
+                    "union": [
+                      {
+                        "name": "named",
+                        "type": {"variable": "hydra.ext.org.w3.rdf.syntax.Iri"}},
+                      {
+                        "name": "anonymous",
+                        "type": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {"literal": {"string": "An anonymous instance"}}}],
+                            "body": {"variable": "a"}}}},
+                      {
+                        "name": "definition",
+                        "type": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {"literal": {"string": "An inline definition"}}}],
+                            "body": {
+                              "application": {
+                                "argument": {"variable": "a"},
+                                "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}}}}]},
+                  "parameter": "a"}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.Severity",
         "type": {
-          "union": [
-            {
-              "name": "info",
-              "type": {
-                "annotated": {
-                  "annotation": [
-                    {
-                      "@key": "description",
-                      "@value": {
-                        "literal": {
-                          "string": "A non-critical constraint violation indicating an informative message"}}}],
-                  "body": {"unit": {}}}}},
-            {
-              "name": "warning",
-              "type": {
-                "annotated": {
-                  "annotation": [
-                    {
-                      "@key": "description",
-                      "@value": {
-                        "literal": {"string": "A non-critical constraint violation indicating a warning"}}}],
-                  "body": {"unit": {}}}}},
-            {
-              "name": "violation",
-              "type": {
-                "annotated": {
-                  "annotation": [
-                    {
-                      "@key": "description",
-                      "@value": {"literal": {"string": "A constraint violation"}}}],
-                  "body": {"unit": {}}}}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "info",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {
+                          "literal": {
+                            "string": "A non-critical constraint violation indicating an informative message"}}}],
+                    "body": {"unit": {}}}}},
+              {
+                "name": "warning",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {
+                          "literal": {"string": "A non-critical constraint violation indicating a warning"}}}],
+                    "body": {"unit": {}}}}},
+              {
+                "name": "violation",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {"literal": {"string": "A constraint violation"}}}],
+                    "body": {"unit": {}}}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.Shape",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "A SHACL node or property shape. See https://www.w3.org/TR/shacl/#shapes"}}}],
-            "body": {
-              "union": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "node",
-                  "type": {"variable": "hydra.ext.org.w3.shacl.model.NodeShape"}},
-                {
-                  "name": "property",
-                  "type": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A SHACL node or property shape. See https://www.w3.org/TR/shacl/#shapes"}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "node",
+                    "type": {"variable": "hydra.ext.org.w3.shacl.model.NodeShape"}},
+                  {
+                    "name": "property",
+                    "type": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.ShapesGraph",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "An RDF graph containing zero or more shapes that is passed into a SHACL validation process so that a data graph can be validated against the shapes"}}}],
-            "body": {
-              "wrap": {
-                "set": {
-                  "application": {
-                    "argument": {"variable": "hydra.ext.org.w3.shacl.model.Shape"},
-                    "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}}}}}}}],
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "An RDF graph containing zero or more shapes that is passed into a SHACL validation process so that a data graph can be validated against the shapes"}}}],
+              "body": {
+                "wrap": {
+                  "set": {
+                    "application": {
+                      "argument": {"variable": "hydra.ext.org.w3.shacl.model.Shape"},
+                      "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}}}}},
+          "variables": []}}}],
   "description": ["A SHACL syntax model. See https://www.w3.org/TR/shacl"],
   "namespace": "hydra.ext.org.w3.shacl.model",
   "termDependencies": ["hydra.ext.org.w3.rdf.syntax"],
