@@ -121,7 +121,8 @@ Hydra-Java uses the **src/main vs src/gen-main** separation pattern
 
 - **`src/main/java/`** - Hand-written Java code
   - `hydra/lib/` - Primitive function implementations
-  - `hydra/util/` - Core utilities (Either, Maybe, Tuple, Unit, Lazy, etc.)
+  - `hydra/util/` - Core utilities (Either, Maybe, Pair, Lazy, etc.)
+    and internal collection classes (ConsList, PersistentMap, PersistentSet).
   - `hydra/tools/` - Framework classes (PrimitiveFunction, MapperBase, etc.)
   - Language-specific parsers and extensions
 
@@ -135,7 +136,6 @@ Hydra-Java uses the **src/main vs src/gen-main** separation pattern
 
 - **`src/gen-test/java/`** - Generated test suite
   - `hydra/test/` - Common tests ensuring parity with Haskell and Python
-  - `generation/` - Generation tests (terms generated to Java and executed)
 
 ## Generate Java Code
 
