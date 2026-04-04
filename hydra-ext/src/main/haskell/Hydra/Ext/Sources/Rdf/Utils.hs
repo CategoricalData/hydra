@@ -89,12 +89,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.rdf.utils"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Formatting.ns, Names.ns, Annotations.ns]
     (RdfSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Utility functions for working with RDF graphs and descriptions"
   where
-    elements = [
+    definitions = [
       toDefinition key_rdfBlankNodeCounter,
       toDefinition descriptionsToGraph,
       toDefinition emptyDescription,

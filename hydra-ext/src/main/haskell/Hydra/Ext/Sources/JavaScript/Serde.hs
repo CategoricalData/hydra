@@ -96,12 +96,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.javaScript.serde"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Constants.ns, Serialization.ns, JavaScriptOperators.ns]
     (JavaScriptSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Serialization functions for converting JavaScript AST to abstract expressions"
   where
-    elements = [
+    definitions = [
       -- Core conversions
       toDefinition identifierToExpr,
       toDefinition literalToExpr,

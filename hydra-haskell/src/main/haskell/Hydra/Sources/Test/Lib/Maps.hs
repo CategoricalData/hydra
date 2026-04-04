@@ -33,12 +33,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.lib.maps"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Namespace "hydra.reduction", ShowCore.ns]
     kernelTypesNamespaces $
     Just "Test cases for hydra.lib.maps primitives"
   where
-    elements = [Phantoms.toDefinition allTests]
+    definitions = [Phantoms.toDefinition allTests]
 
 (#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
 (#) = (Phantoms.@@)

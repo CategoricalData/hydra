@@ -22,12 +22,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.testTerms"
 
 module_ :: HydraModule
-module_ = Module ns elements
+module_ = Module ns definitions
     [TestTypes.ns]
     []
     (Just "Term definitions for the test suite")
   where
-    elements = [
+    definitions = [
       Phantoms.toDefinition latlonRecord,
       Phantoms.toDefinition testDataArthur,
       Phantoms.toDefinition testElementArthur,

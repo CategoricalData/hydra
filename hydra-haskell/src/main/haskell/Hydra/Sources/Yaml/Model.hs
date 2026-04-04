@@ -18,14 +18,14 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [Core.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
     Just ("A basic YAML representation model. Based on:\n" ++
       "  https://yaml.org/spec/1.2/spec.html\n" ++
       "The Serialization and Presentation properties of YAML,\n" ++
       "including directives, comments, anchors, style, formatting, and aliases, are not supported by this model.\n" ++
       "In addition, tags are omitted from this model, and non-standard scalars are unsupported.")
   where
-    elements = [
+    definitions = [
       node,
       scalar]
 

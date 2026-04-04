@@ -35,12 +35,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.unification"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [UnificationModule.ns, LexicalModule.ns, ShowCore.ns]
     kernelTypesNamespaces
     (Just "Test cases for type unification operations")
   where
-    elements = [Phantoms.toDefinition allTests]
+    definitions = [Phantoms.toDefinition allTests]
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_

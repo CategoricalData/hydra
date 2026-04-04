@@ -21,12 +21,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.checking.collections"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [TestGraph.ns, Namespace "hydra.rewriting"]
     kernelTypesNamespaces
     (Just "Collection type checking test cases: lists, sets, maps")
   where
-    elements = [
+    definitions = [
       Phantoms.toDefinition allTests,
       Phantoms.toDefinition listsTests,
       Phantoms.toDefinition listsOfLiteralsTests,

@@ -41,12 +41,12 @@ ns :: Namespace
 ns = Namespace "hydra.dsls"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Annotations.ns, Formatting.ns, Names.ns, Strip.ns]
     kernelTypesNamespaces $
     Just "Functions for generating domain-specific DSL modules from type modules"
   where
-    elements = [
+    definitions = [
       toDefinition dslBindingName,
       toDefinition dslDefinitionName,
       toDefinition dslModule,

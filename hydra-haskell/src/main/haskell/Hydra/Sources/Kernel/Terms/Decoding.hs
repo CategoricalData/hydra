@@ -74,12 +74,12 @@ ns :: Namespace
 ns = Namespace "hydra.decoding"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Annotations.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, ShowCore.ns]
     kernelTypesNamespaces $
     Just "Functions for generating term decoders from type modules"
   where
-    elements = [
+    definitions = [
       toDefinition collectForallVariables,
       toDefinition collectOrdConstrainedVariables,
       toDefinition collectTypeVariables,

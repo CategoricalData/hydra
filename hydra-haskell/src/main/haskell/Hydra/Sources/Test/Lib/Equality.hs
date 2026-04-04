@@ -23,10 +23,10 @@ ns :: Namespace
 ns = Namespace "hydra.test.lib.equality"
 
 module_ :: Module
-module_ = Module ns elements [Namespace "hydra.reduction", Namespace "hydra.show.core"] [] $
+module_ = Module ns definitions [Namespace "hydra.reduction", Namespace "hydra.show.core"] [] $
     Just "Test cases for hydra.lib.equality primitives"
   where
-    elements = [Phantoms.toDefinition allTests]
+    definitions = [Phantoms.toDefinition allTests]
 
 -- Test groups for hydra.lib.equality primitives
 

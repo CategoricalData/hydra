@@ -98,12 +98,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.pegasus.coder"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [PegasusSerdeSource.ns, moduleNamespace PegasusLanguageSource.module_, Formatting.ns, Names.ns, Analysis.ns, Environment.ns, Sorting.ns, Strip.ns, Annotations.ns, Serialization.ns, ShowCore.ns]
     (PdlSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Pegasus PDL code generator: converts Hydra modules to PDL schema files"
   where
-    elements = [
+    definitions = [
       toDefinition moduleToPdl,
       toDefinition constructModule,
       toDefinition typeToSchema,

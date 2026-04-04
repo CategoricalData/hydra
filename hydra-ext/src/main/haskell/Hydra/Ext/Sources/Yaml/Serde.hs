@@ -31,12 +31,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     []
     (KernelTypes.kernelTypesNamespaces L.++ [Namespace "hydra.ext.org.yaml.model"]) $
     Just "Native YAML serialization: YAML Node to String"
   where
-    elements = [
+    definitions = [
       toDefinition hydraYamlToString,
       toDefinition writeNode,
       toDefinition writeScalar,

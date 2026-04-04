@@ -58,13 +58,13 @@ ns :: Namespace
 ns = Namespace "hydra.ext.lisp.coder"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [moduleNamespace LispLanguageSource.module_,
       Formatting.ns, Names.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Sorting.ns, Lexical.ns]
     (LispSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Lisp code generator: converts Hydra type and term modules to Lisp AST"
   where
-    elements = [
+    definitions = [
       toDefinition dialectCadr,
       toDefinition dialectCar,
       toDefinition dialectConstructorPrefix,

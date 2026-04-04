@@ -33,12 +33,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.variables"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [ShowCore.ns, VariablesModule.ns, TestGraph.ns]
     kernelTypesNamespaces
     (Just "Test cases for variable analysis and manipulation")
   where
-    elements = [Phantoms.toDefinition allTests]
+    definitions = [Phantoms.toDefinition allTests]
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_

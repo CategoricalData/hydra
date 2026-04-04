@@ -14,12 +14,12 @@ ns :: Namespace
 ns = Namespace "hydra.lib.names"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     []
     kernelTypesNamespaces $
     Just "Namespaces and primitive names for the Hydra standard library"
   where
-    elements = [
+    definitions = [
       -- Namespace constants
       toDefinition chars,
       toDefinition eithers,

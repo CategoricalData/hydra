@@ -78,14 +78,14 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Arity.ns, Checking.ns, ExtractCore.ns, Hoisting.ns, Inference.ns, Lexical.ns,
       Rewriting.ns, Scoping.ns,
       Resolution.ns, ShowCore.ns, ShowError.ns, Strip.ns, Variables.ns]
     kernelTypesNamespaces $
     Just "Functions for reducing terms and types, i.e. performing computations."
   where
-   elements = [
+   definitions = [
      toDefinition alphaConvert,
      toDefinition betaReduceType,
      toDefinition contractTerm,

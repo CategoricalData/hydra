@@ -16,10 +16,10 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [Core.ns, Packaging.ns] [Core.ns, Packaging.ns] $
+module_ = Module ns (map toTypeDef definitions) [Core.ns, Packaging.ns] [Core.ns, Packaging.ns] $
     Just "Error types for module and package validation"
   where
-    elements = [
+    definitions = [
       conflictingModuleNamespaceError,
       conflictingVariantNameError,
       definitionNotInModuleNamespaceError,

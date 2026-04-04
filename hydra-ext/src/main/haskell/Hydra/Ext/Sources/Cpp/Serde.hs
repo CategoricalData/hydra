@@ -92,12 +92,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.cpp.serde"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Serialization.ns]
     (CppSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Serialization functions for converting C++ AST to abstract expressions"
   where
-    elements = [
+    definitions = [
       toDefinition encodeAccessSpecifier,
       toDefinition encodeAddOperation,
       toDefinition encodeAdditiveExpression,

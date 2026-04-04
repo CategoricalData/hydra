@@ -90,12 +90,12 @@ ns :: Namespace
 ns = Namespace "hydra.pg.printing"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     []
     (PgModel.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Printing functions for property graph elements"
   where
-    elements = [
+    definitions = [
       toDefinition printEdge,
       toDefinition printGraph,
       toDefinition printLazyGraph,

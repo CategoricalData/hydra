@@ -98,12 +98,12 @@ cppLanguageNs :: Namespace
 cppLanguageNs = Namespace "hydra.ext.cpp.language"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Names.ns, Formatting.ns, cppLanguageNs, CppUtils.ns]
     (CppEnvironment.ns:CppSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "C++ naming utilities: encoding Hydra names as C++ names"
   where
-    elements = [
+    definitions = [
       toDefinition className,
       toDefinition createTypeReference,
       toDefinition encodeEnumValue,

@@ -90,12 +90,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.tinkerpop.language"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Strip.ns]
     (TinkerpopFeatures.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Language constraints based on TinkerPop Graph.Features"
   where
-    elements = [
+    definitions = [
       toDefinition tinkerpopLanguage]
 
 

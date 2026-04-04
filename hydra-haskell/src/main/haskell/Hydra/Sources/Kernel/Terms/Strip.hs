@@ -74,12 +74,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Rewriting.ns]
     kernelTypesNamespaces $
     Just ("Annotation and type stripping and normalization")
   where
-   elements = [
+   definitions = [
      toDefinition deannotateAndDetypeTerm,
      toDefinition deannotateTerm,
      toDefinition deannotateType,

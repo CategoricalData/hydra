@@ -33,11 +33,11 @@ stac :: String -> Type
 stac = typeref ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [GeoJson.ns, IanaRelations.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef definitions) [GeoJson.ns, IanaRelations.ns] [Core.ns] $
     Just ("A model for SpatioTemporal Asset Catalog (STAC) Items. " ++
           "See https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md")
   where
-    elements = [
+    definitions = [
       asset,
       item,
       link,
