@@ -4,7 +4,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.QueryExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -26,7 +25,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.PathExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -123,7 +121,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.BaseExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -167,7 +164,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.GraphReference",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -180,7 +176,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.SelectionExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -200,7 +195,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.SelectionCondition",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -226,7 +220,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.SimpleCondition",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -253,7 +246,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.LabelCondition",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -272,7 +264,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.PropertyCondition",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -294,7 +285,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.PropertyComparisonCondition",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -319,7 +309,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.ComparisonOperator",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -340,7 +329,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.LiteralValue",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -358,7 +346,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.LengthCondition",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -372,7 +359,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.PathElement",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -390,7 +376,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.AndCondition",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -404,7 +389,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.OrCondition",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -418,7 +402,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.NotCondition",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -429,7 +412,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.JoinExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -449,7 +431,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.UnionExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -469,7 +450,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.RecursiveExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -489,7 +469,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.PathSemantics",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -508,7 +487,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.SolutionSpaceExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -528,7 +506,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.GroupByExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -548,7 +525,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.GroupByCriterion",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -571,7 +547,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.OrderByExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -593,7 +568,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.OrderByCriterion",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -615,7 +589,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.ProjectionExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -643,7 +616,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.ProjectionSpec",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -660,7 +632,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.ResultProjection",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -679,7 +650,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.PropertyExtraction",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -697,7 +667,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.PropertySource",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -720,7 +689,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.NodePropertyRef",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -738,7 +706,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.EdgePropertyRef",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -757,7 +724,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.expressions.PathPropertyRef",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -771,8 +737,7 @@
                   {"name": "startNode", "type": {"unit": {}}},
                   {"name": "endNode", "type": {"unit": {}}}]}}},
           "variables": []}}}],
-  "description": [
-    "Algebraic expression trees for the path algebra by Angles et al., extended for GQL support"],
+  "description": "Algebraic expression trees for the path algebra by Angles et al., extended for GQL support",
   "namespace": "com.gdblab.pathAlgebra.expressions",
   "termDependencies": [],
   "typeDependencies": [

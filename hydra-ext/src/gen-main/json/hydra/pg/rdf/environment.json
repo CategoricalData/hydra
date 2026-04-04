@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.pg.rdf.environment.PgRdfEnvironment",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -97,7 +96,7 @@
                                 "domain": {"variable": "v"}}}}}}]},
                   "parameter": "v"}}}},
           "variables": []}}}],
-  "description": ["Environment types for property graph to RDF mapping"],
+  "description": "Environment types for property graph to RDF mapping",
   "namespace": "hydra.pg.rdf.environment",
   "termDependencies": [],
   "typeDependencies": ["hydra.ext.org.w3.rdf.syntax", "hydra.pg.model", "hydra.core"]}

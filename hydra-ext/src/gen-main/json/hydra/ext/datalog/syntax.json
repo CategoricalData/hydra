@@ -3,29 +3,19 @@
     {
       "type": {
         "name": "hydra.ext.datalog.syntax.Constant",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.datalog.syntax.Relation",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.datalog.syntax.Variable",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.datalog.syntax.Program",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.datalog.syntax.Program_Elmt"}}},
           "variables": []}}},
@@ -33,7 +23,6 @@
       "type": {
         "name": "hydra.ext.datalog.syntax.Program_Elmt",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -47,7 +36,6 @@
       "type": {
         "name": "hydra.ext.datalog.syntax.Fact",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -61,7 +49,6 @@
       "type": {
         "name": "hydra.ext.datalog.syntax.Rule",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -75,7 +62,6 @@
       "type": {
         "name": "hydra.ext.datalog.syntax.Atom",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -89,7 +75,6 @@
       "type": {
         "name": "hydra.ext.datalog.syntax.AtomList",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -103,7 +88,6 @@
       "type": {
         "name": "hydra.ext.datalog.syntax.AtomList_Multiple",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -117,7 +101,6 @@
       "type": {
         "name": "hydra.ext.datalog.syntax.Term",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -131,7 +114,6 @@
       "type": {
         "name": "hydra.ext.datalog.syntax.TermList",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -145,7 +127,6 @@
       "type": {
         "name": "hydra.ext.datalog.syntax.TermList_Multiple",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -159,7 +140,6 @@
       "type": {
         "name": "hydra.ext.datalog.syntax.ConstantList",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -173,7 +153,6 @@
       "type": {
         "name": "hydra.ext.datalog.syntax.ConstantList_Multiple",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -183,7 +162,7 @@
                 "name": "ConstantList",
                 "type": {"variable": "hydra.ext.datalog.syntax.ConstantList"}}]},
           "variables": []}}}],
-  "description": ["A basic Datalog model"],
+  "description": "A basic Datalog model",
   "namespace": "hydra.ext.datalog.syntax",
   "termDependencies": [],
   "typeDependencies": []}

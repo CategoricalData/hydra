@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.protobuf.any.Any",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -38,8 +37,7 @@
                                 "string": "Must be a valid serialized protocol buffer of the above specified type."}}}],
                         "body": {"literal": {"binary": {}}}}}}]}}},
           "variables": []}}}],
-  "description": [
-    "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/any.proto"],
+  "description": "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/any.proto",
   "namespace": "hydra.ext.protobuf.any",
   "termDependencies": ["hydra.core"],
   "typeDependencies": ["hydra.core"]}

@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.Program",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -66,7 +65,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.TopLevelForm",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -134,7 +132,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.TopLevelFormWithComments",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -176,7 +173,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.FunctionDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -247,7 +243,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.VariableDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -290,7 +285,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.ConstantDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -333,7 +327,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.RecordTypeDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -376,7 +369,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.FieldDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -408,7 +400,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.MacroDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -460,7 +451,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.Expression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -711,7 +701,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.Application",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -744,7 +733,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.Lambda",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -798,7 +786,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.VariableReference",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -832,7 +819,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.FieldAccess",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -876,7 +862,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.TypeAnnotation",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -908,7 +893,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.IfExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -949,7 +933,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.CondExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -983,7 +966,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.CondClause",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1015,7 +997,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.CaseExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1058,7 +1039,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.CaseClause",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1091,7 +1071,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.AndExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1114,7 +1093,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.OrExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1137,7 +1115,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.NotExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1160,7 +1137,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.DoExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1185,7 +1161,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.BeginExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1210,7 +1185,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.QuoteExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1233,7 +1207,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.QuasiquoteExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1256,7 +1229,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.UnquoteExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1280,7 +1252,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.SplicingUnquoteExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1304,7 +1275,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.LetExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1347,7 +1317,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.LetKind",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1364,7 +1333,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.LetBinding",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1396,7 +1364,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.SimpleBinding",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1429,7 +1396,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.DestructuringBinding",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1461,7 +1427,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.DestructuringPattern",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1507,7 +1472,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.Pattern",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1560,7 +1524,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.ConstructorPattern",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1593,7 +1556,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.LiteralPattern",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1616,7 +1578,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.WildcardPattern",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1629,7 +1590,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.Literal",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1717,7 +1677,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.IntegerLiteral",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1751,7 +1710,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.FloatLiteral",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1785,7 +1743,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.CharacterLiteral",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1810,7 +1767,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.BooleanStyle",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1827,7 +1783,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.NilStyle",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1843,7 +1798,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.Symbol",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1856,7 +1810,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.Keyword",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1892,7 +1845,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.QualifiedSymbol",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1926,7 +1878,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.NamespaceName",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1939,7 +1890,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.ListLiteral",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1972,7 +1922,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.VectorLiteral",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1997,7 +1946,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.MapLiteral",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2022,7 +1970,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.MapEntry",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2054,7 +2001,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.SetLiteral",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2079,7 +2025,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.ConsExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2111,7 +2056,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.DottedPair",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2145,7 +2089,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.TypeHint",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2179,7 +2122,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.TypeSpecifier",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2274,7 +2216,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.ModuleDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2308,7 +2249,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.ImportDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2342,7 +2282,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.ImportSpec",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2398,7 +2337,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.ExportDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2423,7 +2361,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.Comment",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2455,7 +2392,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.CommentStyle",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2472,7 +2408,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.Docstring",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2485,7 +2420,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.Dialect",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2503,7 +2437,6 @@
       "type": {
         "name": "hydra.ext.lisp.syntax.SExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2533,8 +2466,7 @@
                             "@value": {"literal": {"string": "A list of S-expressions"}}}],
                         "body": {"list": {"variable": "hydra.ext.lisp.syntax.SExpression"}}}}}]}}},
           "variables": []}}}],
-  "description": [
-    "A unified Lisp syntax model covering Clojure, Emacs Lisp, Common Lisp, and Scheme (R7RS). Designed for code generation from Hydra types and terms."],
+  "description": "A unified Lisp syntax model covering Clojure, Emacs Lisp, Common Lisp, and Scheme (R7RS). Designed for code generation from Hydra types and terms.",
   "namespace": "hydra.ext.lisp.syntax",
   "termDependencies": ["hydra.core"],
   "typeDependencies": ["hydra.core"]}

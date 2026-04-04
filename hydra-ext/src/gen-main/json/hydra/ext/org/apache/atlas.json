@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.org.apache.atlas.AtlasAttributeDef",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -64,7 +63,6 @@
       "type": {
         "name": "hydra.ext.org.apache.atlas.AtlasAttributeDef_Cardinality",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "single", "type": {"unit": {}}},
@@ -75,7 +73,6 @@
       "type": {
         "name": "hydra.ext.org.apache.atlas.AtlasAttributeDef_IndexType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "default", "type": {"unit": {}}},
@@ -85,7 +82,6 @@
       "type": {
         "name": "hydra.ext.org.apache.atlas.AtlasBaseTypeDef",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -132,7 +128,6 @@
       "type": {
         "name": "hydra.ext.org.apache.atlas.AtlasConstraintDef",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -154,7 +149,6 @@
       "type": {
         "name": "hydra.ext.org.apache.atlas.AtlasEntityDef",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -211,7 +205,6 @@
       "type": {
         "name": "hydra.ext.org.apache.atlas.AtlasRelationshipAttributeDef",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -233,7 +226,6 @@
       "type": {
         "name": "hydra.ext.org.apache.atlas.AtlasStructDef",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -254,7 +246,6 @@
       "type": {
         "name": "hydra.ext.org.apache.atlas.TypeCategory",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "primitive", "type": {"unit": {}}},
@@ -268,8 +259,7 @@
               {"name": "relationship", "type": {"unit": {}}},
               {"name": "businessMetadata", "type": {"unit": {}}}]},
           "variables": []}}}],
-  "description": [
-    "The Apache Atlas meta-model\nBased on the the org.apache.atlas.model package in the master branch as of 2022-06-01\n  https://github.com/apache/atlas/tree/master/intg/src/main/java/org/apache/atlas/model"],
+  "description": "The Apache Atlas meta-model\nBased on the the org.apache.atlas.model package in the master branch as of 2022-06-01\n  https://github.com/apache/atlas/tree/master/intg/src/main/java/org/apache/atlas/model",
   "namespace": "hydra.ext.org.apache.atlas",
   "termDependencies": ["hydra.ext.org.w3.xml.schema"],
   "typeDependencies": []}

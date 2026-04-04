@@ -34,11 +34,9 @@
                           "typeApplication": {
                             "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
                             "type": {"variable": "hydra.variants.EliminationVariant"}}}}},
-                    "type": [
-                      {
-                        "constraints": null,
-                        "type": {"set": {"variable": "hydra.variants.EliminationVariant"}},
-                        "variables": []}]},
+                    "type": {
+                      "type": {"set": {"variable": "hydra.variants.EliminationVariant"}},
+                      "variables": []}},
                   {
                     "name": "literalVariants",
                     "term": {
@@ -69,11 +67,9 @@
                           "typeApplication": {
                             "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
                             "type": {"variable": "hydra.variants.LiteralVariant"}}}}},
-                    "type": [
-                      {
-                        "constraints": null,
-                        "type": {"set": {"variable": "hydra.variants.LiteralVariant"}},
-                        "variables": []}]},
+                    "type": {
+                      "type": {"set": {"variable": "hydra.variants.LiteralVariant"}},
+                      "variables": []}},
                   {
                     "name": "floatTypes",
                     "term": {
@@ -92,11 +88,9 @@
                           "typeApplication": {
                             "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
                             "type": {"variable": "hydra.core.FloatType"}}}}},
-                    "type": [
-                      {
-                        "constraints": null,
-                        "type": {"set": {"variable": "hydra.core.FloatType"}},
-                        "variables": []}]},
+                    "type": {
+                      "type": {"set": {"variable": "hydra.core.FloatType"}},
+                      "variables": []}},
                   {
                     "name": "functionVariants",
                     "term": {
@@ -119,11 +113,9 @@
                           "typeApplication": {
                             "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
                             "type": {"variable": "hydra.variants.FunctionVariant"}}}}},
-                    "type": [
-                      {
-                        "constraints": null,
-                        "type": {"set": {"variable": "hydra.variants.FunctionVariant"}},
-                        "variables": []}]},
+                    "type": {
+                      "type": {"set": {"variable": "hydra.variants.FunctionVariant"}},
+                      "variables": []}},
                   {
                     "name": "integerTypes",
                     "term": {
@@ -138,11 +130,9 @@
                           "typeApplication": {
                             "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
                             "type": {"variable": "hydra.core.IntegerType"}}}}},
-                    "type": [
-                      {
-                        "constraints": null,
-                        "type": {"set": {"variable": "hydra.core.IntegerType"}},
-                        "variables": []}]},
+                    "type": {
+                      "type": {"set": {"variable": "hydra.core.IntegerType"}},
+                      "variables": []}},
                   {
                     "name": "termVariants",
                     "term": {
@@ -225,11 +215,9 @@
                           "typeApplication": {
                             "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
                             "type": {"variable": "hydra.variants.TermVariant"}}}}},
-                    "type": [
-                      {
-                        "constraints": null,
-                        "type": {"set": {"variable": "hydra.variants.TermVariant"}},
-                        "variables": []}]},
+                    "type": {
+                      "type": {"set": {"variable": "hydra.variants.TermVariant"}},
+                      "variables": []}},
                   {
                     "name": "typeVariants",
                     "term": {
@@ -308,11 +296,9 @@
                           "typeApplication": {
                             "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
                             "type": {"variable": "hydra.variants.TypeVariant"}}}}},
-                    "type": [
-                      {
-                        "constraints": null,
-                        "type": {"set": {"variable": "hydra.variants.TypeVariant"}},
-                        "variables": []}]},
+                    "type": {
+                      "type": {"set": {"variable": "hydra.variants.TypeVariant"}},
+                      "variables": []}},
                   {
                     "name": "typePredicate",
                     "term": {
@@ -321,17 +307,15 @@
                           "function": {
                             "lambda": {
                               "body": {"literal": {"boolean": true}},
-                              "domain": [{"variable": "t0"}],
+                              "domain": {"variable": "t0"},
                               "parameter": "_"}}},
                         "parameter": "t0"}},
-                    "type": [
-                      {
-                        "constraints": null,
-                        "type": {
-                          "function": {
-                            "codomain": {"literal": {"boolean": {}}},
-                            "domain": {"variable": "t0"}}},
-                        "variables": ["t0"]}]}],
+                    "type": {
+                      "type": {
+                        "function": {
+                          "codomain": {"literal": {"boolean": {}}},
+                          "domain": {"variable": "t0"}}},
+                      "variables": ["t0"]}}],
                 "body": {
                   "record": {
                     "fields": [
@@ -363,11 +347,7 @@
                                     "type": {"variable": "hydra.core.Type"}}}}],
                             "typeName": "hydra.coders.LanguageConstraints"}}}],
                     "typeName": "hydra.coders.Language"}}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.coders.Language"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.coders.Language"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.python.language.pythonReservedWords",
@@ -427,11 +407,7 @@
                             {"literal": {"string": "while"}},
                             {"literal": {"string": "with"}},
                             {"literal": {"string": "yield"}}]}}},
-                    "type": [
-                      {
-                        "constraints": null,
-                        "type": {"list": {"literal": {"string": {}}}},
-                        "variables": []}]},
+                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "pythonBuiltInFunctions",
                     "term": {
@@ -443,11 +419,7 @@
                               "literal": {
                                 "string": "Some additional keywords we reserve in order to avoid collision with built-in functions"}}}],
                         "body": {"list": [{"literal": {"string": "range"}}]}}},
-                    "type": [
-                      {
-                        "constraints": null,
-                        "type": {"list": {"literal": {"string": {}}}},
-                        "variables": []}]},
+                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
                     "name": "hydraPythonKeywords",
                     "term": {
@@ -461,11 +433,7 @@
                           "list": [
                             {"literal": {"string": "Node"}},
                             {"literal": {"string": "FrozenDict"}}]}}},
-                    "type": [
-                      {
-                        "constraints": null,
-                        "type": {"list": {"literal": {"string": {}}}},
-                        "variables": []}]}],
+                    "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                 "body": {
                   "application": {
                     "argument": {
@@ -483,12 +451,8 @@
                       "typeApplication": {
                         "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
                         "type": {"literal": {"string": {}}}}}}}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"set": {"literal": {"string": {}}}},
-            "variables": []}]}}],
-  "description": ["Language constraints and reserved words for Python 3"],
+        "type": {"type": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
+  "description": "Language constraints and reserved words for Python 3",
   "namespace": "hydra.ext.python.language",
   "termDependencies": ["hydra.lexical"],
   "typeDependencies": [

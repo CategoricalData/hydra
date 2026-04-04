@@ -393,10 +393,11 @@ def moduleTermDepsTransitive(nsMap: Map[hydra.packaging.Namespace, hydra.packagi
     hydra.lib.maps.lookup[hydra.packaging.Namespace, hydra.packaging.Module](n)(nsMap))(hydra.lib.sets.toList[hydra.packaging.Namespace](closure)))
 }
 
-def moduleToJson(m: hydra.packaging.Module): Either[scala.Predef.String, scala.Predef.String] =
+def moduleToJson(schemaMap: Map[hydra.core.Name, hydra.core.Type])(m: hydra.packaging.Module): Either[scala.Predef.String, scala.Predef.String] =
   {
   lazy val term: hydra.core.Term = hydra.encode.packaging.module(m)
-  hydra.lib.eithers.map[hydra.json.model.Value, scala.Predef.String, scala.Predef.String]((json: hydra.json.model.Value) => hydra.json.writer.printJson(json))(hydra.json.encode.toJson(term))
+  lazy val modType: hydra.core.Type = hydra.core.Type.variable("hydra.packaging.Module")
+  hydra.lib.eithers.map[hydra.json.model.Value, scala.Predef.String, scala.Predef.String]((json: hydra.json.model.Value) => hydra.json.writer.printJson(json))(hydra.json.encode.toJson(schemaMap)("hydra.packaging.Module")(modType)(term))
 }
 
 def moduleToSourceModule(m: hydra.packaging.Module): hydra.packaging.Module =

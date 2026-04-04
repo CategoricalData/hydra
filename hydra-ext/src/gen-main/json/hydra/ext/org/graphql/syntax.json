@@ -3,36 +3,23 @@
     {
       "type": {
         "name": "hydra.ext.org.graphql.syntax.Name",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphql.syntax.IntValue",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphql.syntax.FloatValue",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphql.syntax.StringValue",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphql.syntax.Document",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.org.graphql.syntax.Definition"}}},
           "variables": []}}},
@@ -40,7 +27,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.Definition",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -55,7 +41,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.ExecutableDocument",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {
               "list": {"variable": "hydra.ext.org.graphql.syntax.ExecutableDefinition"}}},
@@ -64,7 +49,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.ExecutableDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -78,7 +62,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.OperationDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -93,7 +76,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.OperationDefinition_Sequence",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -117,7 +99,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.OperationType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "Query", "type": {"unit": {}}},
@@ -128,7 +109,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.SelectionSet",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.org.graphql.syntax.Selection"}}},
           "variables": []}}},
@@ -136,7 +116,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.Selection",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -153,7 +132,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.Field",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -176,7 +154,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.Alias",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -188,7 +165,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.Arguments",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.org.graphql.syntax.Argument"}}},
           "variables": []}}},
@@ -196,7 +172,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.Argument",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -210,7 +185,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.FragmentSpread",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -224,7 +198,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.InlineFragment",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -241,7 +214,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.FragmentDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -261,14 +233,12 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.FragmentName",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.org.graphql.syntax.Name"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphql.syntax.TypeCondition",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "On", "type": {"unit": {}}},
@@ -280,7 +250,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.Value",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -315,7 +284,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.BooleanValue",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "True", "type": {"unit": {}}},
@@ -324,19 +292,17 @@
     {
       "type": {
         "name": "hydra.ext.org.graphql.syntax.NullValue",
-        "type": {"constraints": null, "type": {"wrap": {"unit": {}}}, "variables": []}}},
+        "type": {"type": {"wrap": {"unit": {}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphql.syntax.EnumValue",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.org.graphql.syntax.Name"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphql.syntax.ListValue",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -349,12 +315,11 @@
     {
       "type": {
         "name": "hydra.ext.org.graphql.syntax.ListValue_Sequence",
-        "type": {"constraints": null, "type": {"record": []}, "variables": []}}},
+        "type": {"type": {"record": []}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphql.syntax.ObjectValue",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -367,12 +332,11 @@
     {
       "type": {
         "name": "hydra.ext.org.graphql.syntax.ObjectValue_Sequence",
-        "type": {"constraints": null, "type": {"record": []}, "variables": []}}},
+        "type": {"type": {"record": []}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphql.syntax.ObjectField",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -386,7 +350,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.VariablesDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -406,21 +369,18 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.Variable",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.org.graphql.syntax.Name"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphql.syntax.DefaultValue",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.org.graphql.syntax.Value"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphql.syntax.Type",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -437,21 +397,18 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.NamedType",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.org.graphql.syntax.Name"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphql.syntax.ListType",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.org.graphql.syntax.Type"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphql.syntax.NonNullType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -465,7 +422,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.Directives",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.org.graphql.syntax.Directive"}}},
           "variables": []}}},
@@ -473,7 +429,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.Directive",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -487,7 +442,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.TypeSystemDocment",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {
               "list": {"variable": "hydra.ext.org.graphql.syntax.TypeSystemDefinition"}}},
@@ -496,7 +450,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.TypeSystemDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -513,7 +466,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.TypeSystemExtensionDocument",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {
               "list": {
@@ -523,7 +475,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.TypeSystemDefinitionOrExtension",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -537,7 +488,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.TypeSystemExtension",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -551,7 +501,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.SchemaDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -569,7 +518,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.SchemaExtension",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -583,7 +531,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.SchemaExtension_Sequence",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -598,7 +545,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.RootOperationTypeDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -612,14 +558,12 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.Description",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.org.graphql.syntax.StringValue"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphql.syntax.TypeDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -645,7 +589,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.TypeExtension",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -671,7 +614,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.ScalarTypeDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -688,7 +630,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.ScalarTypeExtension",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -702,7 +643,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.ObjectTypeDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -727,7 +667,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.ObjectTypeExtension",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -747,7 +686,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.ObjectTypeExtension_Sequence",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -768,7 +706,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.ObjectTypeExtension_Sequence2",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -786,7 +723,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.ObjectTypeExtension_Sequence3",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -800,7 +736,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.ImplementsInterfaces",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -816,7 +751,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.ImplementsInterfaces_Sequence",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -830,7 +764,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.ImplementsInterfaces_Sequence2",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "Amp", "type": {"maybe": {"unit": {}}}},
@@ -842,7 +775,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.FieldsDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.org.graphql.syntax.FieldDefinition"}}},
           "variables": []}}},
@@ -850,7 +782,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.FieldDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -874,7 +805,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.ArgumentsDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {
               "list": {"variable": "hydra.ext.org.graphql.syntax.InputValueDefinition"}}},
@@ -883,7 +813,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.InputValueDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -906,7 +835,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.InterfaceTypeDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -922,7 +850,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.InterfaceTypeDefinition_Sequence",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -946,7 +873,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.InterfaceTypeDefinition_Sequence2",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -966,7 +892,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.InterfaceTypeExtension",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -986,7 +911,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.InterfaceTypeExtension_Sequence",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1007,7 +931,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.InterfaceTypeExtension_Sequence2",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1025,7 +948,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.InterfaceTypeExtension_Sequence3",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1039,7 +961,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.UnionTypeDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1060,7 +981,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.UnionMemberTypes",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1075,7 +995,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.UnionMemberTypes_Sequence",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1089,7 +1008,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.UnionMemberTypes_Sequence2",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "Or", "type": {"maybe": {"unit": {}}}},
@@ -1101,7 +1019,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.UnionTypeExtension",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1117,7 +1034,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.UnionTypeExtension_Sequence",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1134,7 +1050,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.UnionTypeExtension_Sequence2",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1148,7 +1063,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.EnumTypeDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1169,7 +1083,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.EnumValuesDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {
               "list": {"variable": "hydra.ext.org.graphql.syntax.EnumValueDefinition"}}},
@@ -1178,7 +1091,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.EnumValueDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1195,7 +1107,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.EnumTypeExtension",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1211,7 +1122,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.EnumTypeExtension_Sequence",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1228,7 +1138,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.EnumTypeExtension_Sequence2",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1242,7 +1151,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.InputObjectTypeDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1258,7 +1166,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.InputObjectTypeDefinition_Sequence",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1278,7 +1185,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.InputObjectTypeDefinition_Sequence2",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1295,7 +1201,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.InputFieldsDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {
               "list": {"variable": "hydra.ext.org.graphql.syntax.InputValueDefinition"}}},
@@ -1304,7 +1209,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.InputObjectTypeExtension",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1320,7 +1224,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.InputObjectTypeExtension_Sequence",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1337,7 +1240,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.InputObjectTypeExtension_Sequence2",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1351,7 +1253,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.DirectiveDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1373,7 +1274,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.DirectiveLocations",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1389,7 +1289,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.DirectiveLocations_Sequence",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1403,7 +1302,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.DirectiveLocations_Sequence2",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "Or", "type": {"maybe": {"unit": {}}}},
@@ -1415,7 +1313,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.DirectiveLocation",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1431,7 +1328,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.ExecutableDirectiveLocation",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "QUERY", "type": {"unit": {}}},
@@ -1447,7 +1343,6 @@
       "type": {
         "name": "hydra.ext.org.graphql.syntax.TypeSystemDirectiveLocation",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "SCHEMA", "type": {"unit": {}}},
@@ -1462,8 +1357,7 @@
               {"name": "INPUT_OBJECT", "type": {"unit": {}}},
               {"name": "INPUT_FIELD_DEFINITION", "type": {"unit": {}}}]},
           "variables": []}}}],
-  "description": [
-    "A GraphQL model. Based on the (extended) BNF at:\n  https://spec.graphql.org/draft/#sec-Appendix-Grammar-Summary"],
+  "description": "A GraphQL model. Based on the (extended) BNF at:\n  https://spec.graphql.org/draft/#sec-Appendix-Grammar-Summary",
   "namespace": "hydra.ext.org.graphql.syntax",
   "termDependencies": [],
   "typeDependencies": []}

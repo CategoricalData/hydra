@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.avro.environment.AvroQualifiedName",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -37,7 +36,6 @@
       "type": {
         "name": "hydra.ext.avro.environment.AvroForeignKey",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -77,7 +75,6 @@
       "type": {
         "name": "hydra.ext.avro.environment.AvroPrimaryKey",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -116,7 +113,6 @@
       "type": {
         "name": "hydra.ext.avro.environment.AvroEnvironment",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -177,7 +173,6 @@
       "type": {
         "name": "hydra.ext.avro.environment.EncodeEnvironment",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -227,7 +222,7 @@
                                             "argument": {"variable": "hydra.core.Type"},
                                             "function": {"variable": "hydra.coders.Adapter"}}}}}}}}}}}}}}]}}},
           "variables": []}}}],
-  "description": ["Type definitions for the Avro code generation environment"],
+  "description": "Type definitions for the Avro code generation environment",
   "namespace": "hydra.ext.avro.environment",
   "termDependencies": [],
   "typeDependencies": [

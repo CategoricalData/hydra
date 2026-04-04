@@ -3,316 +3,213 @@
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.AnySimpleType",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.AnyType",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.AnyURI",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.Base64Binary",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.Boolean",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"boolean": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"boolean": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.Byte",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"literal": {"integer": {"int8": {}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.Date",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.DateTime",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.Decimal",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.Double",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"literal": {"float": {"float64": {}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.Duration",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.ENTITIES",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.ENTITY",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.Float",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"literal": {"float": {"float32": {}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.GDay",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.GMonth",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.GMonthDay",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.GYear",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.GYearMonth",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.HexBinary",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.ID",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.IDREF",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.IDREFS",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.Int",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"literal": {"integer": {"int32": {}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.Integer",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"literal": {"integer": {"bigint": {}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.Language",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.Long",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"literal": {"integer": {"int64": {}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.NMTOKEN",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.NOTATION",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.Name",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.NegativeInteger",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"literal": {"integer": {"bigint": {}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.NonNegativeInteger",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"literal": {"integer": {"bigint": {}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.NonPositiveInteger",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"literal": {"integer": {"bigint": {}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.NormalizedString",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.PositiveInteger",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"literal": {"integer": {"bigint": {}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.QName",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.Short",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"literal": {"integer": {"int16": {}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.String",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.Time",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.Token",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.UnsignedByte",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"literal": {"integer": {"uint8": {}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.UnsignedInt",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"literal": {"integer": {"uint32": {}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.UnsignedLong",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"literal": {"integer": {"uint64": {}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.UnsignedShort",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"literal": {"integer": {"uint16": {}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.ConstrainingFacet",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -326,7 +223,6 @@
       "type": {
         "name": "hydra.ext.org.w3.xml.schema.Datatype",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "anySimpleType", "type": {"unit": {}}},
@@ -374,8 +270,7 @@
               {"name": "unsignedLong", "type": {"unit": {}}},
               {"name": "unsignedShort", "type": {"unit": {}}}]},
           "variables": []}}}],
-  "description": [
-    "A partial XML Schema model, focusing on datatypes. All simple datatypes (i.e. xsd:anySimpleType and below) are included.\nSee: https://www.w3.org/TR/xmlschema-2\nNote: for most of the XML Schema datatype definitions included here, the associated Hydra type is simply\n      the string type. Exceptions are made for xsd:boolean and most of the numeric types, where there is a clearly\n      corresponding Hydra literal type."],
+  "description": "A partial XML Schema model, focusing on datatypes. All simple datatypes (i.e. xsd:anySimpleType and below) are included.\nSee: https://www.w3.org/TR/xmlschema-2\nNote: for most of the XML Schema datatype definitions included here, the associated Hydra type is simply\n      the string type. Exceptions are made for xsd:boolean and most of the numeric types, where there is a clearly\n      corresponding Hydra literal type.",
   "namespace": "hydra.ext.org.w3.xml.schema",
   "termDependencies": ["hydra.core"],
   "typeDependencies": ["hydra.core"]}
