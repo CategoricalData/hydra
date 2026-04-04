@@ -28,13 +28,13 @@ data FeatureSet = FeatureSet {
   featureSetChildren :: [FeatureSet]}
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [Core.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
     Just ("A model for characterizing OpenCypher queries and implementations in terms of included features."
       ++ "Based on the OpenCypher grammar and the list of standard Cypher functions at "
       ++ "https://neo4j.com/docs/cypher-manual/current/functions."
       ++ " Current as of August 2024.")
   where
-    elements = featureSetToType <$> flatten openCypherFeatures
+    definitions = featureSetToType <$> flatten openCypherFeatures
       where
         flatten fs = if L.null children then [] else (fs:(L.concat (flatten <$> children)))
           where
@@ -218,12 +218,12 @@ openCypherFeatures =  FeatureSet "Cypher"
 -- Usage:
 --   writeProtobuf "/tmp/proto" [openCypherFeaturesEnumModule]
 openCypherFeaturesEnumModule :: Module
-openCypherFeaturesEnumModule = Module ns2 (map toTypeDef elements) [Core.ns] [Core.ns] $
+openCypherFeaturesEnumModule = Module ns2 (map toTypeDef definitions) [Core.ns] [Core.ns] $
     Just ("A model with an enumeration of (Open)Cypher features.")
   where
     ns2 = Namespace "hydra.org/opencypher/features"
     def = datatype ns2
-    elements = [
+    definitions = [
       def "CypherFeature" $
         doc "An enumeration of (Open)Cypher features."
         openCypherFeaturesEnum]

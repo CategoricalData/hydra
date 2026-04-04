@@ -23,11 +23,11 @@ dot :: String -> Type
 dot = typeref ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [] [Core.ns] $
+module_ = Module ns (map toTypeDef definitions) [] [Core.ns] $
     Just ("A model from the Graphviz DOT graph description language."
       ++ " Based on the grammar at https://graphviz.org/doc/info/lang.html")
   where
-    elements = [
+    definitions = [
       id_,
       graph_,
       stmt,

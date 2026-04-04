@@ -19,10 +19,10 @@ coreType :: String -> Type
 coreType = typeref CoreTypes.ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [] [CoreTypes.ns] $
+module_ = Module ns (map toTypeDef definitions) [] [CoreTypes.ns] $
     Just "Type definitions for the Protobuf code generation environment"
   where
-    elements = [
+    definitions = [
       structuralTypeRefType]
 
 -- | A reference to a structural type (Either or Pair) with its component types

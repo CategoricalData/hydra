@@ -17,10 +17,10 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [Graph.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef definitions) [Graph.ns] [Core.ns] $
     Just "A model for Hydra namespaces, modules, and packages"
   where
-    elements = [
+    definitions = [
       definition,
       fileExtension,
       library,

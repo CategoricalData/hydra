@@ -111,14 +111,14 @@ haskellCoderDefinition :: String -> TTerm a -> TTermDefinition a
 haskellCoderDefinition = definitionInModule module_
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [HaskellSerde.ns, HaskellUtils.ns,
       Adapt.ns, Analysis.ns, Dependencies.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Serialization.ns, ShowError.ns, Strip.ns, Variables.ns]
     (HaskellEnvironment.ns:HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Functions for encoding Hydra modules as Haskell modules"
   where
     ns = Namespace "hydra.ext.haskell.coder"
-    elements = [
+    definitions = [
       toDefinition includeTypeDefinitions,
       toDefinition useCoreImport,
       toDefinition keyHaskellVar,

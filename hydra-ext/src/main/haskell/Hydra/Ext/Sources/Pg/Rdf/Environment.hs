@@ -38,10 +38,10 @@ core :: String -> Type
 core = typeref Core.ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [] [RdfSyntax.ns, PgModel.ns, Core.ns] $
+module_ = Module ns (map toTypeDef definitions) [] [RdfSyntax.ns, PgModel.ns, Core.ns] $
     Just "Environment types for property graph to RDF mapping"
   where
-    elements = [
+    definitions = [
       pgRdfEnvironment]
 
 -- | The environment for property graph to RDF mapping, providing configurable

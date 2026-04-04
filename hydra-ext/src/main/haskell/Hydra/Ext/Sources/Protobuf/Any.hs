@@ -23,10 +23,10 @@ pbAny :: String -> Type
 pbAny = typeref ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [Core.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
     Just "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/any.proto"
   where
-    elements = [any_]
+    definitions = [any_]
 
 any_ :: Binding
 any_ = define "Any" $

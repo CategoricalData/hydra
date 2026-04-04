@@ -107,12 +107,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.avro.schemaJson"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [jsonWriterNs, jsonParserNs]
     (AvroSchema.ns:jsonModelNs:Namespace "hydra.parsing":KernelTypes.kernelTypesNamespaces) $
     Just "JSON serialization and deserialization for Avro schemas"
   where
-    elements = [
+    definitions = [
       -- String constants
       toDefinition avro_aliases,
       toDefinition avro_array,

@@ -28,11 +28,11 @@ lisp :: String -> Type
 lisp = typeref ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [Core.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
     Just ("A unified Lisp syntax model covering Clojure, Emacs Lisp, Common Lisp, and Scheme (R7RS)."
       ++ " Designed for code generation from Hydra types and terms.")
   where
-    elements = toplevel ++ definitions ++ expressions ++ specialForms ++ bindings
+    definitions = toplevel ++ defnTypes ++ expressions ++ specialForms ++ bindings
       ++ patterns ++ literals ++ names ++ collections ++ types ++ modules ++ misc
 
     -- Top-level constructs
@@ -42,7 +42,7 @@ module_ = Module ns (map toTypeDef elements) [Core.ns] [Core.ns] $
       topLevelFormWithComments]
 
     -- Definitions
-    definitions = [
+    defnTypes = [
       functionDefinition,
       variableDefinition,
       constantDefinition,

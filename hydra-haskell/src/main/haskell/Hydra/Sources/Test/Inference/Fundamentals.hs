@@ -19,12 +19,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.inference.fundamentals"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [TestGraph.ns]
     kernelTypesNamespaces
     (Just "Inference tests for fundamental language features")
   where
-    elements = [
+    definitions = [
       Phantoms.toDefinition allTests,
       Phantoms.toDefinition testGroupForLambdas,
       Phantoms.toDefinition testGroupForLet,

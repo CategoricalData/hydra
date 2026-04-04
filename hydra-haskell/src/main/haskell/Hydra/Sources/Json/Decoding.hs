@@ -88,12 +88,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.org.json.decoding"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     []
     KernelTypes.kernelTypesNamespaces $
     Just "Decoding functions for JSON data"
   where
-   elements = [
+   definitions = [
      Phantoms.toDefinition decodeArray,
      Phantoms.toDefinition decodeBoolean,
      Phantoms.toDefinition decodeField,

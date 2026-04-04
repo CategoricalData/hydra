@@ -93,14 +93,14 @@ ns :: Namespace
 ns = Namespace "hydra.ext.graphql.coder"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Formatting.ns, Names.ns, Strip.ns, Environment.ns, Predicates.ns, Annotations.ns, Serialization.ns,
       moduleNamespace GraphqlLanguage.module_,
       GraphqlSerde.ns]
     (moduleNamespace GraphqlSyntax.module_:KernelTypes.kernelTypesNamespaces) $
     Just "GraphQL code generator: converts Hydra modules to GraphQL schema definitions"
   where
-    elements = [
+    definitions = [
       toDefinition moduleToGraphql,
       toDefinition encodeTypeDefinition,
       toDefinition descriptionFromType,

@@ -31,12 +31,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.dependencies"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [ShowCore.ns, DependenciesModule.ns, TestGraph.ns]
     kernelTypesNamespaces
     (Just "Test cases for dependency analysis and let-term transformations")
   where
-    elements = [Phantoms.toDefinition allTests]
+    definitions = [Phantoms.toDefinition allTests]
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
