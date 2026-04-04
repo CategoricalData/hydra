@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.org.yaml.model.Node",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -48,7 +47,6 @@
       "type": {
         "name": "hydra.ext.org.yaml.model.Scalar",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -106,8 +104,7 @@
                             "@value": {"literal": {"string": "A string value"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}}],
-  "description": [
-    "A basic YAML representation model. Based on:\n  https://yaml.org/spec/1.2/spec.html\nThe Serialization and Presentation properties of YAML,\nincluding directives, comments, anchors, style, formatting, and aliases, are not supported by this model.\nIn addition, tags are omitted from this model, and non-standard scalars are unsupported."],
+  "description": "A basic YAML representation model. Based on:\n  https://yaml.org/spec/1.2/spec.html\nThe Serialization and Presentation properties of YAML,\nincluding directives, comments, anchors, style, formatting, and aliases, are not supported by this model.\nIn addition, tags are omitted from this model, and non-standard scalars are unsupported.",
   "namespace": "hydra.ext.org.yaml.model",
   "termDependencies": ["hydra.core"],
   "typeDependencies": ["hydra.core"]}

@@ -32,11 +32,7 @@
                         "body": {"list": []},
                         "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.testing.TestGroup"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.inference.kernelExamples.testGroupForNestedLet",
@@ -581,14 +577,13 @@
                                                                                     "type": {"variable": "hydra.core.Term"}}},
                                                                                 "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                                         "function": {"variable": "hydra.show.core.typeScheme"}}},
-                                                                    "domain": [
-                                                                      {
-                                                                        "pair": {
-                                                                          "first": {
-                                                                            "pair": {
-                                                                              "first": {"variable": "hydra.core.Term"},
-                                                                              "second": {"variable": "hydra.core.TypeScheme"}}},
-                                                                          "second": {"variable": "hydra.context.Context"}}}],
+                                                                    "domain": {
+                                                                      "pair": {
+                                                                        "first": {
+                                                                          "pair": {
+                                                                            "first": {"variable": "hydra.core.Term"},
+                                                                            "second": {"variable": "hydra.core.TypeScheme"}}},
+                                                                        "second": {"variable": "hydra.context.Context"}}},
                                                                     "parameter": "result"}}},
                                                               "function": {
                                                                 "application": {
@@ -602,11 +597,10 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                                        "domain": [
-                                                                          {
-                                                                            "application": {
-                                                                              "argument": {"variable": "hydra.errors.Error"},
-                                                                              "function": {"variable": "hydra.context.InContext"}}}],
+                                                                        "domain": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "hydra.errors.Error"},
+                                                                            "function": {"variable": "hydra.context.InContext"}}},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -1518,14 +1512,13 @@
                                                                                     "type": {"variable": "hydra.core.Term"}}},
                                                                                 "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                                         "function": {"variable": "hydra.show.core.typeScheme"}}},
-                                                                    "domain": [
-                                                                      {
-                                                                        "pair": {
-                                                                          "first": {
-                                                                            "pair": {
-                                                                              "first": {"variable": "hydra.core.Term"},
-                                                                              "second": {"variable": "hydra.core.TypeScheme"}}},
-                                                                          "second": {"variable": "hydra.context.Context"}}}],
+                                                                    "domain": {
+                                                                      "pair": {
+                                                                        "first": {
+                                                                          "pair": {
+                                                                            "first": {"variable": "hydra.core.Term"},
+                                                                            "second": {"variable": "hydra.core.TypeScheme"}}},
+                                                                        "second": {"variable": "hydra.context.Context"}}},
                                                                     "parameter": "result"}}},
                                                               "function": {
                                                                 "application": {
@@ -1539,11 +1532,10 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                                        "domain": [
-                                                                          {
-                                                                            "application": {
-                                                                              "argument": {"variable": "hydra.errors.Error"},
-                                                                              "function": {"variable": "hydra.context.InContext"}}}],
+                                                                        "domain": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "hydra.errors.Error"},
+                                                                            "function": {"variable": "hydra.context.InContext"}}},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -1862,36 +1854,35 @@
                                                                                                                                                                                                               {
                                                                                                                                                                                                                 "name": "default",
                                                                                                                                                                                                                 "term": {
-                                                                                                                                                                                                                  "maybe": [
-                                                                                                                                                                                                                    {
-                                                                                                                                                                                                                      "union": {
-                                                                                                                                                                                                                        "field": {
-                                                                                                                                                                                                                          "name": "pair",
-                                                                                                                                                                                                                          "term": {
-                                                                                                                                                                                                                            "typeApplication": {
-                                                                                                                                                                                                                              "body": {
-                                                                                                                                                                                                                                "typeApplication": {
-                                                                                                                                                                                                                                  "body": {
-                                                                                                                                                                                                                                    "pair": {
-                                                                                                                                                                                                                                      "@first": {
-                                                                                                                                                                                                                                        "union": {
-                                                                                                                                                                                                                                          "field": {
-                                                                                                                                                                                                                                            "name": "variable",
-                                                                                                                                                                                                                                            "term": {
-                                                                                                                                                                                                                                              "wrap": {
-                                                                                                                                                                                                                                                "body": {"literal": {"string": "subst"}},
-                                                                                                                                                                                                                                                "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                                                                                          "typeName": "hydra.core.Term"}},
-                                                                                                                                                                                                                                      "@second": {
-                                                                                                                                                                                                                                        "union": {
-                                                                                                                                                                                                                                          "field": {
-                                                                                                                                                                                                                                            "name": "variable",
-                                                                                                                                                                                                                                            "term": {
-                                                                                                                                                                                                                                              "wrap": {"body": {"literal": {"string": "t"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                                                                                          "typeName": "hydra.core.Term"}}}},
-                                                                                                                                                                                                                                  "type": {"variable": "hydra.core.Term"}}},
-                                                                                                                                                                                                                              "type": {"variable": "hydra.core.Term"}}}},
-                                                                                                                                                                                                                        "typeName": "hydra.core.Term"}}]}},
+                                                                                                                                                                                                                  "maybe": {
+                                                                                                                                                                                                                    "union": {
+                                                                                                                                                                                                                      "field": {
+                                                                                                                                                                                                                        "name": "pair",
+                                                                                                                                                                                                                        "term": {
+                                                                                                                                                                                                                          "typeApplication": {
+                                                                                                                                                                                                                            "body": {
+                                                                                                                                                                                                                              "typeApplication": {
+                                                                                                                                                                                                                                "body": {
+                                                                                                                                                                                                                                  "pair": {
+                                                                                                                                                                                                                                    "@first": {
+                                                                                                                                                                                                                                      "union": {
+                                                                                                                                                                                                                                        "field": {
+                                                                                                                                                                                                                                          "name": "variable",
+                                                                                                                                                                                                                                          "term": {
+                                                                                                                                                                                                                                            "wrap": {
+                                                                                                                                                                                                                                              "body": {"literal": {"string": "subst"}},
+                                                                                                                                                                                                                                              "typeName": "hydra.core.Name"}}},
+                                                                                                                                                                                                                                        "typeName": "hydra.core.Term"}},
+                                                                                                                                                                                                                                    "@second": {
+                                                                                                                                                                                                                                      "union": {
+                                                                                                                                                                                                                                        "field": {
+                                                                                                                                                                                                                                          "name": "variable",
+                                                                                                                                                                                                                                          "term": {
+                                                                                                                                                                                                                                            "wrap": {"body": {"literal": {"string": "t"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                                                                                                                                                        "typeName": "hydra.core.Term"}}}},
+                                                                                                                                                                                                                                "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                                                                                                                            "type": {"variable": "hydra.core.Term"}}}},
+                                                                                                                                                                                                                      "typeName": "hydra.core.Term"}}}},
                                                                                                                                                                                                               {
                                                                                                                                                                                                                 "name": "cases",
                                                                                                                                                                                                                 "term": {
@@ -2583,14 +2574,13 @@
                                                                                     "type": {"variable": "hydra.core.Term"}}},
                                                                                 "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                                         "function": {"variable": "hydra.show.core.typeScheme"}}},
-                                                                    "domain": [
-                                                                      {
-                                                                        "pair": {
-                                                                          "first": {
-                                                                            "pair": {
-                                                                              "first": {"variable": "hydra.core.Term"},
-                                                                              "second": {"variable": "hydra.core.TypeScheme"}}},
-                                                                          "second": {"variable": "hydra.context.Context"}}}],
+                                                                    "domain": {
+                                                                      "pair": {
+                                                                        "first": {
+                                                                          "pair": {
+                                                                            "first": {"variable": "hydra.core.Term"},
+                                                                            "second": {"variable": "hydra.core.TypeScheme"}}},
+                                                                        "second": {"variable": "hydra.context.Context"}}},
                                                                     "parameter": "result"}}},
                                                               "function": {
                                                                 "application": {
@@ -2604,11 +2594,10 @@
                                                                               "application": {
                                                                                 "argument": {"literal": {"string": "INFERENCE ERROR: "}},
                                                                                 "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                                        "domain": [
-                                                                          {
-                                                                            "application": {
-                                                                              "argument": {"variable": "hydra.errors.Error"},
-                                                                              "function": {"variable": "hydra.context.InContext"}}}],
+                                                                        "domain": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "hydra.errors.Error"},
+                                                                            "function": {"variable": "hydra.context.InContext"}}},
                                                                         "parameter": "e"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -2755,12 +2744,8 @@
                     "body": {"list": []},
                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
             "typeName": "hydra.testing.TestGroup"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.testing.TestGroup"},
-            "variables": []}]}}],
-  "description": ["Inference tests for examples from the Hydra kernel"],
+        "type": {"type": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+  "description": "Inference tests for examples from the Hydra kernel",
   "namespace": "hydra.test.inference.kernelExamples",
   "termDependencies": ["hydra.test.testGraph"],
   "typeDependencies": [
@@ -2772,7 +2757,6 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
-    "hydra.error.module",
     "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",
