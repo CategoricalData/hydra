@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Core                       as Core
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
@@ -729,7 +729,7 @@ javaPackageDeclaration :: TTermDefinition (Namespace -> Java.PackageDeclaration)
 javaPackageDeclaration = def "javaPackageDeclaration" $
   lambda "ns" $ JavaDsl.packageDeclaration
     (list ([] :: [TTerm Java.PackageModifier]))
-    (Lists.map (lambda "s" $ JavaDsl.identifier (var "s")) (Strings.splitOn (string ".") (Module.unNamespace $ var "ns")))
+    (Lists.map (lambda "s" $ JavaDsl.identifier (var "s")) (Strings.splitOn (string ".") (Packaging.unNamespace $ var "ns")))
 
 
 overrideAnnotation :: TTermDefinition Java.Annotation
@@ -833,8 +833,8 @@ nameToQualifiedJavaName :: TTermDefinition (JavaHelpers.Aliases -> Bool -> Name 
 nameToQualifiedJavaName = def "nameToQualifiedJavaName" $
   lambda "aliases" $ lambda "qualify" $ lambda "name" $ lambda "mlocal" $ lets [
     "qn">: Names.qualifyName @@ var "name",
-    "ns_">: Module.qualifiedNameNamespace (var "qn"),
-    "local">: Module.qualifiedNameLocal (var "qn"),
+    "ns_">: Packaging.qualifiedNameNamespace (var "qn"),
+    "local">: Packaging.qualifiedNameLocal (var "qn"),
     -- Build the alias: if ns is Just, look up in packages map; if not found, create from namespace
     "alias">: Maybes.cases (var "ns_")
       nothing
@@ -877,8 +877,8 @@ nameToJavaName :: TTermDefinition (JavaHelpers.Aliases -> Name -> Java.Identifie
 nameToJavaName = def "nameToJavaName" $
   lambda "aliases" $ lambda "name" $ lets [
     "qn">: Names.qualifyName @@ var "name",
-    "ns_">: Module.qualifiedNameNamespace (var "qn"),
-    "local">: Module.qualifiedNameLocal (var "qn")] $
+    "ns_">: Packaging.qualifiedNameNamespace (var "qn"),
+    "local">: Packaging.qualifiedNameLocal (var "qn")] $
     Logic.ifElse (isEscaped @@ (Core.unName $ var "name"))
       (JavaDsl.identifier (sanitizeJavaName @@ var "local"))
       (Maybes.cases (var "ns_")
@@ -954,15 +954,15 @@ variantClassName :: TTermDefinition (Bool -> Name -> Name -> Name)
 variantClassName = def "variantClassName" $
   lambda "qualify" $ lambda "elName" $ lambda "fname" $ lets [
     "qn">: Names.qualifyName @@ var "elName",
-    "ns_">: Module.qualifiedNameNamespace (var "qn"),
-    "local">: Module.qualifiedNameLocal (var "qn"),
+    "ns_">: Packaging.qualifiedNameNamespace (var "qn"),
+    "local">: Packaging.qualifiedNameLocal (var "qn"),
     "flocal">: Formatting.capitalize @@ (Core.unName $ var "fname"),
     "local1">: Logic.ifElse (var "qualify")
       (Strings.cat2 (Strings.cat2 (var "local") (string ".")) (var "flocal"))
       (Logic.ifElse (Equality.equal (var "flocal") (var "local"))
         (Strings.cat2 (var "flocal") (string "_"))
         (var "flocal"))] $
-    Names.unqualifyName @@ Module.qualifiedName (var "ns_") (var "local1")
+    Names.unqualifyName @@ Packaging.qualifiedName (var "ns_") (var "local1")
 
 
 -- | Create a variable declaration statement with an explicit type
@@ -1063,7 +1063,7 @@ importAliasesForModule :: TTermDefinition (Module -> JavaHelpers.Aliases)
 importAliasesForModule = def "importAliasesForModule" $
   lambda "mod" $
     record JavaHelpers._Aliases [
-      JavaHelpers._Aliases_currentNamespace>>: Module.moduleNamespace (var "mod"),
+      JavaHelpers._Aliases_currentNamespace>>: Packaging.moduleNamespace (var "mod"),
       JavaHelpers._Aliases_packages>>: (Maps.empty :: TTerm (M.Map Namespace Java.PackageName)),
       JavaHelpers._Aliases_branchVars>>: (Sets.empty :: TTerm (S.Set Name)),
       JavaHelpers._Aliases_recursiveVars>>: (Sets.empty :: TTerm (S.Set Name)),

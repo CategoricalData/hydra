@@ -6,7 +6,7 @@
 module Hydra.Dsl.AsType where
 
 import Hydra.Core
-import Hydra.Module
+import Hydra.Packaging
 
 
 -- | Type class for implicit coercion to Type

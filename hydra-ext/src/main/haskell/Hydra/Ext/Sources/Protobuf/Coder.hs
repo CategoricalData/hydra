@@ -23,7 +23,7 @@ import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Errors                      as Error
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Adapt           as Adapt
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
@@ -312,7 +312,7 @@ moduleToProtobuf :: TTermDefinition (Module -> [Definition] -> Context -> Graph 
 moduleToProtobuf = def "moduleToProtobuf" $
   doc "Convert a Hydra module to Protocol Buffers v3 source files" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~> lets [
-    "ns_">: Module.moduleNamespace (var "mod"),
+    "ns_">: Packaging.moduleNamespace (var "mod"),
     "partitioned">: Environment.partitionDefinitions @@ var "defs",
     "typeDefs">: Pairs.first (var "partitioned")] $
     "pfile" <<~ (asTerm constructModule @@ var "cx" @@ var "g" @@ var "mod" @@ var "typeDefs") $ lets [
@@ -340,11 +340,11 @@ constructModule :: TTermDefinition (Context -> Graph -> Module -> [TypeDefinitio
 constructModule = def "constructModule" $
   doc "Construct a Protobuf file from a Hydra module and its type definitions" $
   "cx" ~> "g" ~> "mod" ~> "typeDefs" ~> lets [
-    "ns_">: Module.moduleNamespace (var "mod"),
-    "desc">: Module.moduleDescription (var "mod"),
+    "ns_">: Packaging.moduleNamespace (var "mod"),
+    "desc">: Packaging.moduleDescription (var "mod"),
     "toDef">: "td" ~> lets [
-      "name">: Module.typeDefinitionName (var "td"),
-      "typ">: Core.typeSchemeType $ Module.typeDefinitionType (var "td"),
+      "name">: Packaging.typeDefinitionName (var "td"),
+      "typ">: Core.typeSchemeType $ Packaging.typeDefinitionType (var "td"),
       "encodeDefEither">: "n" ~> "t" ~> asTerm encodeDefinition @@ var "cx" @@ var "g" @@ var "ns_" @@ var "n" @@ var "t",
       "flatTyp">: asTerm flattenType @@ var "typ",
       "enc">: var "encodeDefEither" @@ var "name"] $
@@ -353,7 +353,7 @@ constructModule = def "constructModule" $
           (Just ("adaptedType" <<~ Adapt.adaptTypeForLanguage @@ ProtobufLanguageSource.protobufLanguage @@ var "flatTyp" $
             var "enc" @@ var "adaptedType")) [
           _Type_variable>>: constant (var "enc" @@ var "flatTyp")]),
-    "types">: Lists.map ("td" ~> Core.typeSchemeType (Module.typeDefinitionType (var "td"))) (var "typeDefs"),
+    "types">: Lists.map ("td" ~> Core.typeSchemeType (Packaging.typeDefinitionType (var "td"))) (var "typeDefs"),
     "structRefs">: asTerm collectStructuralTypes @@ var "types",
     "javaOptions">: list [
       record P3._Option [
@@ -681,8 +681,8 @@ encodeTypeReference = def "encodeTypeReference" $
   doc "Encode a Hydra name as a Protobuf type reference" $
   "localNs" ~> "name" ~> lets [
     "qn">: Names.qualifyName @@ var "name",
-    "local">: Module.qualifiedNameLocal (var "qn"),
-    "ns_">: Module.qualifiedNameNamespace (var "qn"),
+    "local">: Packaging.qualifiedNameLocal (var "qn"),
+    "ns_">: Packaging.qualifiedNameNamespace (var "qn"),
     "localNsParts">: Lists.init (Strings.splitOn (string ".") (unwrap _Namespace @@ var "localNs"))] $
     wrap P3._TypeName $
       Maybes.maybe

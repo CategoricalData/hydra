@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Errors                      as Error
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
@@ -704,8 +704,8 @@ encodeEnumVariant = def "encodeEnumVariant" $
 encodeTypeDefinition :: TTermDefinition (Context -> Graph -> TypeDefinition -> Either (InContext Error) R.ItemWithComments)
 encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
-    "name" <~ Module.typeDefinitionName (var "tdef") $
-    "typ" <~ (Core.typeSchemeType $ Module.typeDefinitionType (var "tdef")) $
+    "name" <~ Packaging.typeDefinitionName (var "tdef") $
+    "typ" <~ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "tdef")) $
     "lname" <~ (Formatting.capitalize @@ (Names.localNameOf @@ var "name")) $
     -- Filter free type variables to unqualified names only (type parameters, not type references)
     "freeVars" <~ (Lists.filter
@@ -776,13 +776,13 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
 encodeTermDefinition :: TTermDefinition (Context -> Graph -> TermDefinition -> Either (InContext Error) R.ItemWithComments)
 encodeTermDefinition = def "encodeTermDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
-    "name" <~ Module.termDefinitionName (var "tdef") $
-    "term" <~ Module.termDefinitionTerm (var "tdef") $
+    "name" <~ Packaging.termDefinitionName (var "tdef") $
+    "term" <~ Packaging.termDefinitionTerm (var "tdef") $
     "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ (Names.localNameOf @@ var "name")) $
     "typ" <~ Maybes.maybe
       (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
       (unaryFunction Core.typeSchemeType)
-      (Module.termDefinitionType (var "tdef")) $
+      (Packaging.termDefinitionType (var "tdef")) $
     "body" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "term") $
     "retType" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
       right (record R._ItemWithComments [
@@ -820,5 +820,5 @@ moduleToRust = def "moduleToRust" $
     "allItems" <~ Lists.concat2 (var "typeItems") (var "termItems") $
     "crate" <~ (record R._Crate [R._Crate_items>>: var "allItems"]) $
     "code" <~ (SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (RustSerdeSource.crateToExpr @@ var "crate"))) $
-    "filePath" <~ (Names.namespaceToFilePath @@ Util.caseConventionLowerSnake @@ wrap _FileExtension (string "rs") @@ (Module.moduleNamespace (var "mod"))) $
+    "filePath" <~ (Names.namespaceToFilePath @@ Util.caseConventionLowerSnake @@ wrap _FileExtension (string "rs") @@ (Packaging.moduleNamespace (var "mod"))) $
       right (Maps.singleton (var "filePath") (var "code"))

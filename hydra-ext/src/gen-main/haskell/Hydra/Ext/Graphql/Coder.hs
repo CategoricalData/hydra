@@ -22,7 +22,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
+import qualified Hydra.Packaging as Module
 import qualified Hydra.Names as Names
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Rewriting as Rewriting

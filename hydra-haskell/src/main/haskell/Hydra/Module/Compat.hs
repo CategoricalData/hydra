@@ -9,7 +9,7 @@ module Hydra.Module.Compat (
 ) where
 
 import Hydra.Core
-import Hydra.Module
+import Hydra.Packaging
 import qualified Hydra.Encode.Core as EncodeCore
 
 import qualified Data.List as L

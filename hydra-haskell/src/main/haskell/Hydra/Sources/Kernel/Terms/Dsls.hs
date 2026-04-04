@@ -16,7 +16,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import           Hydra.Dsl.Meta.Lib.Strings  as Strings
-import qualified Hydra.Dsl.Module       as Module
+import qualified Hydra.Dsl.Packaging       as Packaging
 import qualified Hydra.Dsl.Meta.Phantoms     as Phantoms
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms hiding (
   elimination, field, fieldType, floatType, floatValue, function, injection, integerType, integerValue, lambda, literal,
@@ -218,16 +218,16 @@ dslNamespace :: TTermDefinition (Namespace -> Namespace)
 dslNamespace = define "dslNamespace" $
   doc "Generate a DSL module namespace from a source module namespace" $
   "ns" ~>
-  "parts" <~ (Strings.splitOn (string ".") (Module.unNamespace (var "ns"))) $
+  "parts" <~ (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))) $
   -- For hydra.* namespaces: hydra.foo -> hydra.dsl.foo
   -- For other namespaces: foo.bar -> hydra.dsl.foo.bar (preserve full path)
   Logic.ifElse (Equality.equal (Lists.head (var "parts")) (string "hydra"))
-    (Module.namespace (Strings.cat $ list [
+    (Packaging.namespace (Strings.cat $ list [
       string "hydra.dsl.",
       Strings.intercalate (string ".") (Lists.tail (var "parts"))]))
-    (Module.namespace (Strings.cat $ list [
+    (Packaging.namespace (Strings.cat $ list [
       string "hydra.dsl.",
-      Module.unNamespace (var "ns")]))
+      Packaging.unNamespace (var "ns")]))
 
 -- | Generate a fully qualified binding name for a DSL function from a type name
 -- For example, "hydra.core.AnnotatedTerm" -> "hydra.dsl.core.annotatedTerm"
@@ -537,7 +537,7 @@ isDslEligibleBinding = define "isDslEligibleBinding" $
   doc "Check if a binding is eligible for DSL generation" $
   "cx" ~> "graph" ~> "b" ~>
   "ns" <~ (Names.namespaceOf @@ Core.bindingName (var "b")) $
-  Logic.ifElse (Equality.equal (Maybes.maybe (string "") (unaryFunction Module.unNamespace) (var "ns")) (string "hydra.phantoms"))
+  Logic.ifElse (Equality.equal (Maybes.maybe (string "") (unaryFunction Packaging.unNamespace) (var "ns")) (string "hydra.phantoms"))
     (right nothing)
     (right (just (var "b")))
 
@@ -551,8 +551,8 @@ dslModule = define "dslModule" $
       (Maybes.cat $ Lists.map
         ("d" ~> cases _Definition (var "d") (Just nothing) [
           _Definition_type>>: "td" ~>
-            just (Annotations.typeBinding @@ (Module.typeDefinitionName $ var "td") @@ (Core.typeSchemeType $ Module.typeDefinitionType $ var "td"))])
-        (Module.moduleDefinitions (var "mod")))) $
+            just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeType $ Packaging.typeDefinitionType $ var "td"))])
+        (Packaging.moduleDefinitions (var "mod")))) $
     Logic.ifElse (Lists.null (var "typeBindings"))
       (right nothing)
       ("dslBindings" <<~ Eithers.mapList ("b" ~>
@@ -560,18 +560,18 @@ dslModule = define "dslModule" $
           ("ic" ~> Ctx.inContext (Error.errorOther $ Error.otherError (unwrap _DecodingError @@ Ctx.inContextObject (var "ic"))) (Ctx.inContextContext (var "ic")))
           ("x" ~> var "x")
           (generateBindingsForType @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
-        right (just (Module.module_
-          (dslNamespace @@ (Module.moduleNamespace (var "mod")))
-          (Lists.map ("b" ~> Module.definitionTerm (Module.termDefinition
+        right (just (Packaging.module_
+          (dslNamespace @@ (Packaging.moduleNamespace (var "mod")))
+          (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
             (Core.bindingType $ var "b")))
             (deduplicateBindings @@ Lists.concat (var "dslBindings")))
           -- DSL modules depend on DSL modules for type dependencies (to reference other types' DSL functions)
-          (Lists.nub (primitive _lists_map @@ dslNamespace @@ (Module.moduleTypeDependencies (var "mod"))))
+          (Lists.nub (primitive _lists_map @@ dslNamespace @@ (Packaging.moduleTypeDependencies (var "mod"))))
           -- Type dependencies: the original module + its type deps + hydra.phantoms (for TTerm)
           (Lists.nub (Lists.concat2
-            (list [Module.moduleNamespace (var "mod"), Module.namespace (string "hydra.phantoms")])
-            (Module.moduleTypeDependencies (var "mod"))))
+            (list [Packaging.moduleNamespace (var "mod"), Packaging.namespace (string "hydra.phantoms")])
+            (Packaging.moduleTypeDependencies (var "mod"))))
           (just (Strings.cat $ list [
             string "DSL functions for ",
-            Module.unNamespace (Module.moduleNamespace (var "mod"))])))))
+            Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))])))))

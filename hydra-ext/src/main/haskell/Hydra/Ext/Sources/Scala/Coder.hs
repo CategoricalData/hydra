@@ -22,7 +22,7 @@ import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Errors                      as Error
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
@@ -134,7 +134,7 @@ constructModule = def "constructModule" $
     "partitioned">: Environment.partitionDefinitions @@ var "defs",
     "typeDefs">: Pairs.first (var "partitioned"),
     "termDefs">: Pairs.second (var "partitioned"),
-    "nsName">: Module.unNamespace (Module.moduleNamespace (var "mod")),
+    "nsName">: Packaging.unNamespace (Packaging.moduleNamespace (var "mod")),
     "pname">: toScalaName (var "nsName"),
     "pref">: inject _Data_Ref _Data_Ref_name (var "pname")] $
     Eithers.bind
@@ -1333,7 +1333,7 @@ moduleToScala = def "moduleToScala" $
       ("pkg" ~> lets [
         "s">: SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (TTerm (TermVariable (Name "hydra.ext.scala.serde.writePkg")) @@ var "pkg"))] $
         right (Maps.singleton
-          (Names.namespaceToFilePath @@ Util.caseConventionCamel @@ wrap _FileExtension (string "scala") @@ Module.moduleNamespace (var "mod"))
+          (Names.namespaceToFilePath @@ Util.caseConventionCamel @@ wrap _FileExtension (string "scala") @@ Packaging.moduleNamespace (var "mod"))
           (var "s")))
 
 -- | Strip wrap eliminations from a term (newtypes are erased in Scala)
@@ -1382,7 +1382,7 @@ toElImport = def "toElImport" $
               _Importer_ref>>: inject _Data_Ref _Data_Ref_name (
                 record _Data_Name [
                   _Data_Name_value>>: wrap _PredefString (
-                    Strings.intercalate (string ".") (Strings.splitOn (string ".") (Module.unNamespace (var "ns"))))]),
+                    Strings.intercalate (string ".") (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))))]),
               _Importer_importees>>: list [inject _Importee _Importee_wildcard unit]]]]))
 
 toPrimImport :: TTermDefinition (Namespace -> Scala.Stat)
@@ -1397,7 +1397,7 @@ toPrimImport = def "toPrimImport" $
               _Importer_ref>>: inject _Data_Ref _Data_Ref_name (
                 record _Data_Name [
                   _Data_Name_value>>: wrap _PredefString (
-                    Strings.intercalate (string ".") (Strings.splitOn (string ".") (Module.unNamespace (var "ns"))))]),
+                    Strings.intercalate (string ".") (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))))]),
               _Importer_importees>>: emptyList]]]))
 
 typeParamToTypeVar :: TTermDefinition (Scala.Type_Param -> Scala.Type)

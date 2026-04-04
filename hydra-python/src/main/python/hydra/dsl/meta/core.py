@@ -133,7 +133,7 @@ def name_lift(n: Name) -> TTerm:
 
 def un_namespace(ns: TTerm) -> TTerm:
     """Unwrap a Namespace to its underlying string."""
-    _NAMESPACE_NAME = Name("hydra.module.Namespace")
+    _NAMESPACE_NAME = Name("hydra.packaging.Namespace")
     return Phantoms.apply(Phantoms.unwrap(_NAMESPACE_NAME), ns)
 
 

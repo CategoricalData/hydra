@@ -15,7 +15,7 @@ import hydra.formatting
 from hydra.classes import TypeClass
 from hydra.util import CaseConvention
 from hydra.core import Binding, Field, Name, Term, Type
-from hydra.module import Module, Namespace, QualifiedName
+from hydra.packaging import Module, Namespace, QualifiedName
 from hydra.phantoms import TBinding, TTerm
 from hydra.dsl.python import FrozenDict, Maybe, Just, Nothing
 

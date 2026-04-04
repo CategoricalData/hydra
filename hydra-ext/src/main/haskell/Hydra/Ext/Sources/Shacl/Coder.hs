@@ -30,7 +30,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
 import qualified Hydra.Dsl.Topology                   as Topology
@@ -145,8 +145,8 @@ shaclCoder = define "shaclCoder" $
     "typeEls">: Maybes.cat (Lists.map
       ("d" ~> cases _Definition (var "d") (Just nothing) [
         _Definition_type>>: "td" ~>
-          just (Annotations.typeBinding @@ (Module.typeDefinitionName $ var "td") @@ (Core.typeSchemeType $ Module.typeDefinitionType $ var "td"))])
-      (Module.moduleDefinitions (var "mod"))),
+          just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeType $ Packaging.typeDefinitionType $ var "td"))])
+      (Packaging.moduleDefinitions (var "mod"))),
     "toShape">: lambda "el" $
       Eithers.bind
         (Eithers.bimap

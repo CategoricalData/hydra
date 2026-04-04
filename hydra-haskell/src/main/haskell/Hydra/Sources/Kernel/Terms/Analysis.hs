@@ -46,7 +46,7 @@ import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
 import qualified Hydra.Dsl.Meta.Terms        as MetaTerms
 import qualified Hydra.Dsl.Meta.Types        as MetaTypes
-import qualified Hydra.Dsl.Module       as Module
+import qualified Hydra.Dsl.Packaging       as Packaging
 import qualified Hydra.Dsl.Parsing      as Parsing
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Prims             as Prims
@@ -120,8 +120,8 @@ addNamesToNamespaces = define "addNamesToNamespaces" $
 --  "nss" <~ Sets.empty $
   "nss" <~ Sets.fromList (Maybes.cat $ Lists.map (Names.namespaceOf) $ Sets.toList $ var "names") $
   "toPair" <~ ("ns" ~> pair (var "ns") (var "encodeNamespace" @@ var "ns")) $
-  Module.namespacesWithMapping (var "ns0") $ Maps.union
-    (Module.namespacesMapping $ var "ns0")
+  Packaging.namespacesWithMapping (var "ns0") $ Maps.union
+    (Packaging.namespacesMapping $ var "ns0")
     (Maps.fromList $ Lists.map (var "toPair") $ Sets.toList $ var "nss")
 
 analyzeFunctionTerm :: TTermDefinition (
@@ -254,9 +254,9 @@ definitionDependencyNamespaces = define "definitionDependencyNamespaces" $
   "defNames" <~ ("def" ~> cases _Definition (var "def")
     Nothing [
     _Definition_type>>: "typeDef" ~>
-      Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeType $ Module.typeDefinitionType (var "typeDef")),
+      Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "typeDef")),
     _Definition_term>>: "termDef" ~>
-      Dependencies.termDependencyNames @@ true @@ true @@ true @@ Module.termDefinitionTerm (var "termDef")]) $
+      Dependencies.termDependencyNames @@ true @@ true @@ true @@ Packaging.termDefinitionTerm (var "termDef")]) $
   "allNames" <~ Sets.unions (Lists.map (var "defNames") (var "defs")) $
   Sets.fromList (Maybes.cat (Lists.map (Names.namespaceOf) (Sets.toList (var "allNames"))))
 
@@ -490,8 +490,8 @@ moduleContainsBinaryLiterals = define "moduleContainsBinaryLiterals" $
     Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@ var "checkTerm" @@ false @@ var "term") $
   "defTerms" <~ Maybes.cat (Lists.map
     ("d" ~> cases _Definition (var "d") (Just nothing) [
-      _Definition_term>>: "td" ~> just (Module.termDefinitionTerm $ var "td")])
-    (Module.moduleDefinitions (var "mod"))) $
+      _Definition_term>>: "td" ~> just (Packaging.termDefinitionTerm $ var "td")])
+    (Packaging.moduleDefinitions (var "mod"))) $
   Lists.foldl
     ("acc" ~> "t" ~> Logic.or (var "acc") (var "termContainsBinary" @@ var "t"))
     false
@@ -504,13 +504,13 @@ moduleDependencyNamespaces = define "moduleDependencyNamespaces" $
   "allBindings" <~ Maybes.cat (Lists.map
     ("d" ~> cases _Definition (var "d") (Just nothing) [
       _Definition_type>>: "td" ~>
-        just (Annotations.typeBinding @@ (Module.typeDefinitionName $ var "td") @@ (Core.typeSchemeType $ Module.typeDefinitionType $ var "td")),
+        just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeType $ Packaging.typeDefinitionType $ var "td")),
       _Definition_term>>: "td" ~>
-        just (Core.binding (Module.termDefinitionName $ var "td") (Module.termDefinitionTerm $ var "td")
-          (Module.termDefinitionType $ var "td"))])
-    (Module.moduleDefinitions (var "mod"))) $
+        just (Core.binding (Packaging.termDefinitionName $ var "td") (Packaging.termDefinitionTerm $ var "td")
+          (Packaging.termDefinitionType $ var "td"))])
+    (Packaging.moduleDefinitions (var "mod"))) $
   Eithers.map
-    ("deps" ~> Sets.delete (Module.moduleNamespace (var "mod")) (var "deps"))
+    ("deps" ~> Sets.delete (Packaging.moduleNamespace (var "mod")) (var "deps"))
     (dependencyNamespaces @@ var "cx" @@ var "graph" @@ var "binds" @@ var "withPrims" @@ var "withNoms" @@ var "withSchema" @@
       (var "allBindings"))
 
@@ -520,5 +520,5 @@ namespacesForDefinitions = define "namespacesForDefinitions" $
   "encodeNamespace" ~> "focusNs" ~> "defs" ~>
   "nss" <~ Sets.delete (var "focusNs") (definitionDependencyNamespaces @@ var "defs") $
   "toPair" <~ ("ns" ~> pair (var "ns") (var "encodeNamespace" @@ var "ns")) $
-  Module.namespaces (var "toPair" @@ var "focusNs") (Maps.fromList (Lists.map (var "toPair") (Sets.toList (var "nss"))))
+  Packaging.namespaces (var "toPair" @@ var "focusNs") (Maps.fromList (Lists.map (var "toPair") (Sets.toList (var "nss"))))
 
