@@ -150,15 +150,23 @@ fromJson types tname typ value =
             let decoded = Eithers.mapList decodeElem arr
             in (Eithers.map (\elems -> Core.TermSet (Sets.fromList elems)) decoded)) arrResult)
         Core.TypeMaybe v0 ->
-          let decodeJust = \arr -> Eithers.map (\v -> Core.TermMaybe (Just v)) (fromJson types tname v0 (Lists.head arr))
-              decodeMaybeArray =
-                      \arr ->
-                        let len = Lists.length arr
-                        in (Logic.ifElse (Equality.equal len 0) (Right (Core.TermMaybe Nothing)) (Logic.ifElse (Equality.equal len 1) (decodeJust arr) (Left "expected single-element array for Just")))
-          in case value of
+          let innerStripped = Strip.deannotateType v0
+              isNestedMaybe =
+                      case innerStripped of
+                        Core.TypeMaybe _ -> True
+                        _ -> False
+          in (Logic.ifElse isNestedMaybe (
+            let decodeJust = \arr -> Eithers.map (\v -> Core.TermMaybe (Just v)) (fromJson types tname v0 (Lists.head arr))
+                decodeMaybeArray =
+                        \arr ->
+                          let len = Lists.length arr
+                          in (Logic.ifElse (Equality.equal len 0) (Right (Core.TermMaybe Nothing)) (Logic.ifElse (Equality.equal len 1) (decodeJust arr) (Left "expected single-element array for Just")))
+            in case value of
+              Model.ValueNull -> Right (Core.TermMaybe Nothing)
+              Model.ValueArray v1 -> decodeMaybeArray v1
+              _ -> Left "expected null or single-element array for nested Maybe") (case value of
             Model.ValueNull -> Right (Core.TermMaybe Nothing)
-            Model.ValueArray v1 -> decodeMaybeArray v1
-            _ -> Left "expected null or single-element array for Maybe"
+            _ -> Eithers.map (\v -> Core.TermMaybe (Just v)) (fromJson types tname v0 value)))
         Core.TypeRecord v0 ->
           let objResult = expectObject value
           in (Eithers.either (\err -> Left err) (\obj ->

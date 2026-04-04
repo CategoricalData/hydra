@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.paths.SubtermEdge",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -48,7 +47,6 @@
       "type": {
         "name": "hydra.paths.SubtermGraph",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -82,7 +80,6 @@
       "type": {
         "name": "hydra.paths.SubtermNode",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -125,7 +122,6 @@
       "type": {
         "name": "hydra.paths.SubtermPath",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -140,7 +136,6 @@
       "type": {
         "name": "hydra.paths.SubtermStep",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -341,7 +336,6 @@
       "type": {
         "name": "hydra.paths.SubtypeEdge",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -385,7 +379,6 @@
       "type": {
         "name": "hydra.paths.SubtypeGraph",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -419,7 +412,6 @@
       "type": {
         "name": "hydra.paths.SubtypeNode",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -462,7 +454,6 @@
       "type": {
         "name": "hydra.paths.SubtypePath",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -477,7 +468,6 @@
       "type": {
         "name": "hydra.paths.SubtypeStep",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -654,7 +644,7 @@
                             "@value": {"literal": {"string": "Access the type inside a wrapped type"}}}],
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}}],
-  "description": ["A model for subterm and subtype access patterns"],
+  "description": "A model for subterm and subtype access patterns",
   "namespace": "hydra.paths",
   "termDependencies": ["hydra.core"],
   "typeDependencies": ["hydra.core"]}

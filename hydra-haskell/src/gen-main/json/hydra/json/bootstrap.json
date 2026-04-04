@@ -15810,16 +15810,13 @@
                                           "typeName": "hydra.core.Term"}}}]}}],
                             "typeName": "hydra.core.AnnotatedType"}}},
                       "typeName": "hydra.core.Type"}}}}}]},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "map": {
-                "keys": {"variable": "hydra.core.Name"},
-                "values": {"variable": "hydra.core.Type"}}},
-            "variables": []}]}}],
-  "description": [
-    "A module which provides a minimal typing environment for decoding other modules from JSON. This avoids certain problems with generating entire source modules into target languages like Java, which is subject to method size limits for large modules like hydra.core."],
+        "type": {
+          "type": {
+            "map": {
+              "keys": {"variable": "hydra.core.Name"},
+              "values": {"variable": "hydra.core.Type"}}},
+          "variables": []}}}],
+  "description": "A module which provides a minimal typing environment for decoding other modules from JSON. This avoids certain problems with generating entire source modules into target languages like Java, which is subject to method size limits for large modules like hydra.core.",
   "namespace": "hydra.json.bootstrap",
   "termDependencies": [],
   "typeDependencies": ["hydra.core"]}

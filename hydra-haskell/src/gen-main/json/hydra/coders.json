@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.coders.Adapter",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -78,7 +77,6 @@
       "type": {
         "name": "hydra.coders.AdapterContext",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -138,7 +136,6 @@
       "type": {
         "name": "hydra.coders.Bicoder",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -214,7 +211,6 @@
       "type": {
         "name": "hydra.coders.Coder",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -282,7 +278,6 @@
       "type": {
         "name": "hydra.coders.CoderDirection",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -300,7 +295,6 @@
       "type": {
         "name": "hydra.coders.Language",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -335,7 +329,6 @@
       "type": {
         "name": "hydra.coders.LanguageConstraints",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -428,7 +421,6 @@
       "type": {
         "name": "hydra.coders.LanguageName",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -441,7 +433,6 @@
       "type": {
         "name": "hydra.coders.SymmetricAdapter",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -474,7 +465,6 @@
       "type": {
         "name": "hydra.coders.TraversalOrder",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -507,7 +497,6 @@
       "type": {
         "name": "hydra.coders.TypeAdapter",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -533,7 +522,7 @@
                       "domain": {"variable": "hydra.core.Type"}}},
                   "domain": {"variable": "hydra.coders.AdapterContext"}}}}},
           "variables": []}}}],
-  "description": ["Abstractions for paired transformations between languages"],
+  "description": "Abstractions for paired transformations between languages",
   "namespace": "hydra.coders",
   "termDependencies": ["hydra.context", "hydra.errors", "hydra.graph", "hydra.variants"],
   "typeDependencies": ["hydra.core"]}
