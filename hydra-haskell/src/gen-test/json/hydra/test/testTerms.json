@@ -77,21 +77,19 @@
                                           "typeName": "hydra.core.Field"}}]}}],
                               "typeName": "hydra.core.Record"}}},
                         "typeName": "hydra.core.Term"}},
-                    "domain": [{"literal": {"float": {"float32": {}}}}],
+                    "domain": {"literal": {"float": {"float32": {}}}},
                     "parameter": "lon"}}},
-              "domain": [{"literal": {"float": {"float32": {}}}}],
+              "domain": {"literal": {"float": {"float32": {}}}},
               "parameter": "lat"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {"literal": {"float": {"float32": {}}}}}},
-                "domain": {"literal": {"float": {"float32": {}}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {"literal": {"float": {"float32": {}}}}}},
+              "domain": {"literal": {"float": {"float32": {}}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTerms.testDataArthur",
@@ -179,11 +177,7 @@
                               "typeName": "hydra.core.Field"}}]}}],
                   "typeName": "hydra.core.Record"}}},
             "typeName": "hydra.core.Term"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Term"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTerms.testElementArthur",
@@ -202,38 +196,33 @@
               {
                 "name": "type",
                 "term": {
-                  "maybe": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "variables",
-                            "term": {
-                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                "typeName": "hydra.core.Type"}}},
-                          {
-                            "name": "constraints",
-                            "term": {
-                              "typeApplication": {
-                                "body": {"maybe": null},
-                                "type": {
-                                  "map": {
-                                    "keys": {"variable": "hydra.core.Name"},
-                                    "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
-                        "typeName": "hydra.core.TypeScheme"}}]}}],
+                  "maybe": {
+                    "record": {
+                      "fields": [
+                        {
+                          "name": "variables",
+                          "term": {
+                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
+                        {
+                          "name": "type",
+                          "term": {
+                            "union": {
+                              "field": {
+                                "name": "variable",
+                                "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
+                              "typeName": "hydra.core.Type"}}},
+                        {
+                          "name": "constraints",
+                          "term": {
+                            "typeApplication": {
+                              "body": {"maybe": null},
+                              "type": {
+                                "map": {
+                                  "keys": {"variable": "hydra.core.Name"},
+                                  "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                      "typeName": "hydra.core.TypeScheme"}}}}],
             "typeName": "hydra.core.Binding"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Binding"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Binding"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTerms.testElementFirstName",
@@ -279,61 +268,56 @@
               {
                 "name": "type",
                 "term": {
-                  "maybe": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "variables",
-                            "term": {
-                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "function",
-                                  "term": {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "domain",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "variable",
-                                                "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                              "typeName": "hydra.core.Type"}}},
-                                        {
-                                          "name": "codomain",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "literal",
-                                                "term": {
-                                                  "union": {
-                                                    "field": {"name": "string", "term": {"unit": {}}},
-                                                    "typeName": "hydra.core.LiteralType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FunctionType"}}},
-                                "typeName": "hydra.core.Type"}}},
-                          {
-                            "name": "constraints",
-                            "term": {
-                              "typeApplication": {
-                                "body": {"maybe": null},
-                                "type": {
-                                  "map": {
-                                    "keys": {"variable": "hydra.core.Name"},
-                                    "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
-                        "typeName": "hydra.core.TypeScheme"}}]}}],
+                  "maybe": {
+                    "record": {
+                      "fields": [
+                        {
+                          "name": "variables",
+                          "term": {
+                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
+                        {
+                          "name": "type",
+                          "term": {
+                            "union": {
+                              "field": {
+                                "name": "function",
+                                "term": {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "domain",
+                                        "term": {
+                                          "union": {
+                                            "field": {
+                                              "name": "variable",
+                                              "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
+                                            "typeName": "hydra.core.Type"}}},
+                                      {
+                                        "name": "codomain",
+                                        "term": {
+                                          "union": {
+                                            "field": {
+                                              "name": "literal",
+                                              "term": {
+                                                "union": {
+                                                  "field": {"name": "string", "term": {"unit": {}}},
+                                                  "typeName": "hydra.core.LiteralType"}}},
+                                            "typeName": "hydra.core.Type"}}}],
+                                    "typeName": "hydra.core.FunctionType"}}},
+                              "typeName": "hydra.core.Type"}}},
+                        {
+                          "name": "constraints",
+                          "term": {
+                            "typeApplication": {
+                              "body": {"maybe": null},
+                              "type": {
+                                "map": {
+                                  "keys": {"variable": "hydra.core.Name"},
+                                  "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                      "typeName": "hydra.core.TypeScheme"}}}}],
             "typeName": "hydra.core.Binding"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Binding"},
-            "variables": []}]}}],
-  "description": ["Term definitions for the test suite"],
+        "type": {"type": {"variable": "hydra.core.Binding"}, "variables": []}}}],
+  "description": "Term definitions for the test suite",
   "namespace": "hydra.test.testTerms",
   "termDependencies": ["hydra.test.testTypes"],
   "typeDependencies": []}

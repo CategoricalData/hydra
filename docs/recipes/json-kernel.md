@@ -225,16 +225,21 @@ The tool uses Aeson for fast JSON parsing to minimize overhead.
 ### Dependencies
 
 - **update-json-kernel/main/test**: Uses `Hydra.Generation.writeModulesJson` with type inference
+  and schema map for type-directed encoding
 - **verify-json-kernel**: Uses `Hydra.Json.Decode.fromJson` with type-directed decoding
 
 ### JSON encoding format
 
-Modules are encoded using Hydra's compact JSON format:
+Modules are encoded using Hydra's type-directed JSON format:
 - Records omit type names (inferred from schema)
 - Unions use single-key objects (`{"variant": value}`)
 - Wrapped types encode the inner value directly
 - Maps use `[{"@key": k, "@value": v}, ...]` format
-- Optionals use `null` for Nothing, `[value]` for Just
+- Simple optionals (`Maybe(T)` where `T` is not `Maybe`): `null` for Nothing,
+  plain value for Just.
+  In records, Nothing fields are omitted entirely.
+- Nested optionals (`Maybe(Maybe(T))`): `null` for Nothing, `[value]` for Just
+  (array-wrapped for round-trip fidelity)
 
 ## Related Documentation
 

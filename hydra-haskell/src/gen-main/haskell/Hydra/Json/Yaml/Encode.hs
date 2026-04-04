@@ -13,6 +13,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Pairs as Pairs
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Map as M
 
 -- | Convert a JSON value to a YAML node. Always succeeds since YAML is a superset of JSON.
 jsonToYaml :: Model_.Value -> Model.Node
@@ -26,5 +27,5 @@ jsonToYaml value =
       Model_.ValueString v0 -> Model.NodeScalar (Model.ScalarStr v0)
 
 -- | Encode a Hydra term to a YAML node via JSON encoding.
-toYaml :: Core.Term -> Either String Model.Node
-toYaml term = Eithers.map (\v -> jsonToYaml v) (Encode.toJson term)
+toYaml :: M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> Core.Term -> Either String Model.Node
+toYaml types tname typ term = Eithers.map (\v -> jsonToYaml v) (Encode.toJson types tname typ term)

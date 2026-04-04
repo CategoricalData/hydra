@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.graph.Graph",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -120,7 +119,6 @@
       "type": {
         "name": "hydra.graph.Primitive",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -179,7 +177,6 @@
       "type": {
         "name": "hydra.graph.TermCoder",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -250,7 +247,7 @@
                                 "domain": {"variable": "hydra.context.Context"}}}}}}]},
                   "parameter": "a"}}}},
           "variables": []}}}],
-  "description": ["The extension to graphs of Hydra's core type system (hydra.core)"],
+  "description": "The extension to graphs of Hydra's core type system (hydra.core)",
   "namespace": "hydra.graph",
   "termDependencies": ["hydra.context", "hydra.core", "hydra.errors"],
   "typeDependencies": ["hydra.context", "hydra.core", "hydra.errors"]}

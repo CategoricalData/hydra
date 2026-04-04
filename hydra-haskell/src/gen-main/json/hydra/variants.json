@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.variants.EliminationVariant",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -22,7 +21,6 @@
       "type": {
         "name": "hydra.variants.FunctionVariant",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -39,7 +37,6 @@
       "type": {
         "name": "hydra.variants.LiteralVariant",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -58,7 +55,6 @@
       "type": {
         "name": "hydra.variants.TermVariant",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -91,7 +87,6 @@
       "type": {
         "name": "hydra.variants.TypeVariant",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -118,8 +113,7 @@
                   {"name": "void", "type": {"unit": {}}},
                   {"name": "wrap", "type": {"unit": {}}}]}}},
           "variables": []}}}],
-  "description": [
-    "Variant types which describe the structure of Hydra core types and terms."],
+  "description": "Variant types which describe the structure of Hydra core types and terms.",
   "namespace": "hydra.variants",
   "termDependencies": ["hydra.core"],
   "typeDependencies": ["hydra.core"]}
