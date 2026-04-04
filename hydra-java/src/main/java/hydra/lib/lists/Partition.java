@@ -8,8 +8,6 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Pair;
 
-import hydra.util.ConsList;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -69,7 +67,7 @@ public class Partition extends PrimitiveFunction {
      * @param pred the predicate to test elements
      * @return a function that partitions a list by the predicate
      */
-    public static <X> Function<ConsList<X>, Pair<ConsList<X>, ConsList<X>>> apply(Function<X, Boolean> pred) {
+    public static <X> Function<List<X>, Pair<List<X>, List<X>>> apply(Function<X, Boolean> pred) {
         return lst -> apply(pred, lst);
     }
 
@@ -81,7 +79,7 @@ public class Partition extends PrimitiveFunction {
      * @return a pair where first contains elements satisfying the predicate,
      *         second contains elements not satisfying the predicate
      */
-    public static <X> Pair<ConsList<X>, ConsList<X>> apply(Function<X, Boolean> pred, ConsList<X> lst) {
+    public static <X> Pair<List<X>, List<X>> apply(Function<X, Boolean> pred, List<X> lst) {
         ArrayList<X> yes = new ArrayList<>();
         ArrayList<X> no = new ArrayList<>();
         for (X x : lst) {
@@ -91,6 +89,6 @@ public class Partition extends PrimitiveFunction {
                 no.add(x);
             }
         }
-        return new Pair<>(ConsList.fromList(yes), ConsList.fromList(no));
+        return new Pair<>(yes, no);
     }
 }

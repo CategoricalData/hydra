@@ -18,15 +18,15 @@ public class HasKey implements Serializable, Comparable<HasKey> {
 
   public static final hydra.core.Name DATA_PROPERTIES = new hydra.core.Name("dataProperties");
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
 
   public final hydra.ext.org.w3.owl.syntax.ClassExpression class_;
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> objectProperties;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> objectProperties;
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> dataProperties;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> dataProperties;
 
-  public HasKey (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ClassExpression class_, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> objectProperties, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> dataProperties) {
+  public HasKey (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ClassExpression class_, java.util.List<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> objectProperties, java.util.List<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> dataProperties) {
     this.annotations = annotations;
     this.class_ = class_;
     this.objectProperties = objectProperties;
@@ -59,22 +59,30 @@ public class HasKey implements Serializable, Comparable<HasKey> {
   @SuppressWarnings("unchecked")
   public int compareTo(HasKey other) {
     int cmp = 0;
-    cmp = ((Comparable) annotations).compareTo(other.annotations);
+    cmp = hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) class_).compareTo(other.class_);
+    cmp = hydra.util.Comparing.compare(
+      class_,
+      other.class_);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) objectProperties).compareTo(other.objectProperties);
+    cmp = hydra.util.Comparing.compare(
+      objectProperties,
+      other.objectProperties);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) dataProperties).compareTo(other.dataProperties);
+    return hydra.util.Comparing.compare(
+      dataProperties,
+      other.dataProperties);
   }
 
-  public HasKey withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public HasKey withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new HasKey(annotations, class_, objectProperties, dataProperties);
   }
 
@@ -82,11 +90,11 @@ public class HasKey implements Serializable, Comparable<HasKey> {
     return new HasKey(annotations, class_, objectProperties, dataProperties);
   }
 
-  public HasKey withObjectProperties(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> objectProperties) {
+  public HasKey withObjectProperties(java.util.List<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> objectProperties) {
     return new HasKey(annotations, class_, objectProperties, dataProperties);
   }
 
-  public HasKey withDataProperties(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> dataProperties) {
+  public HasKey withDataProperties(java.util.List<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> dataProperties) {
     return new HasKey(annotations, class_, objectProperties, dataProperties);
   }
 }

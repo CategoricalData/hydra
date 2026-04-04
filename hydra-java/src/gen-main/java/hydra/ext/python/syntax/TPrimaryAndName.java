@@ -42,11 +42,15 @@ public class TPrimaryAndName implements Serializable, Comparable<TPrimaryAndName
   @SuppressWarnings("unchecked")
   public int compareTo(TPrimaryAndName other) {
     int cmp = 0;
-    cmp = ((Comparable) primary).compareTo(other.primary);
+    cmp = hydra.util.Comparing.compare(
+      primary,
+      other.primary);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) name).compareTo(other.name);
+    return hydra.util.Comparing.compare(
+      name,
+      other.name);
   }
 
   public TPrimaryAndName withPrimary(hydra.ext.python.syntax.TPrimary primary) {

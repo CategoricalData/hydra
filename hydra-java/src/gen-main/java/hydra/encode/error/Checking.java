@@ -61,11 +61,11 @@ public interface Checking {
   }
 
   static hydra.core.Term incorrectUnificationError(hydra.error.checking.IncorrectUnificationError x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.IncorrectUnificationError"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("substitution"), hydra.encode.Typing.typeSubst((x).substitution)))));
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.IncorrectUnificationError"), java.util.Arrays.asList(new hydra.core.Field(new hydra.core.Name("substitution"), hydra.encode.Typing.typeSubst((x).substitution)))));
   }
 
   static hydra.core.Term notAForallTypeError(hydra.error.checking.NotAForallTypeError x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.NotAForallTypeError"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.NotAForallTypeError"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("type"), hydra.encode.Core.type((x).type)),
       new hydra.core.Field(new hydra.core.Name("typeArguments"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
         hydra.encode.Core::type,
@@ -73,11 +73,11 @@ public interface Checking {
   }
 
   static hydra.core.Term notAFunctionTypeError(hydra.error.checking.NotAFunctionTypeError x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.NotAFunctionTypeError"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("type"), hydra.encode.Core.type((x).type)))));
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.NotAFunctionTypeError"), java.util.Arrays.asList(new hydra.core.Field(new hydra.core.Name("type"), hydra.encode.Core.type((x).type)))));
   }
 
   static hydra.core.Term typeArityMismatchError(hydra.error.checking.TypeArityMismatchError x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.TypeArityMismatchError"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.TypeArityMismatchError"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("type"), hydra.encode.Core.type((x).type)),
       new hydra.core.Field(new hydra.core.Name("expectedArity"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32((x).expectedArity)))),
       new hydra.core.Field(new hydra.core.Name("actualArity"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32((x).actualArity)))),
@@ -87,13 +87,13 @@ public interface Checking {
   }
 
   static hydra.core.Term typeMismatchError(hydra.error.checking.TypeMismatchError x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.TypeMismatchError"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.TypeMismatchError"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("expectedType"), hydra.encode.Core.type((x).expectedType)),
       new hydra.core.Field(new hydra.core.Name("actualType"), hydra.encode.Core.type((x).actualType)))));
   }
 
   static hydra.core.Term unboundTypeVariablesError(hydra.error.checking.UnboundTypeVariablesError x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UnboundTypeVariablesError"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UnboundTypeVariablesError"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("variables"), new hydra.core.Term.Set(hydra.lib.sets.Map.apply(
         hydra.encode.Core::name,
         (x).variables))),
@@ -101,7 +101,7 @@ public interface Checking {
   }
 
   static hydra.core.Term unequalTypesError(hydra.error.checking.UnequalTypesError x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UnequalTypesError"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UnequalTypesError"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("types"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
         hydra.encode.Core::type,
         (x).types))),
@@ -109,14 +109,14 @@ public interface Checking {
   }
 
   static hydra.core.Term unsupportedTermVariantError(hydra.error.checking.UnsupportedTermVariantError x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UnsupportedTermVariantError"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("termVariant"), hydra.encode.Variants.termVariant((x).termVariant)))));
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UnsupportedTermVariantError"), java.util.Arrays.asList(new hydra.core.Field(new hydra.core.Name("termVariant"), hydra.encode.Variants.termVariant((x).termVariant)))));
   }
 
   static <T0> hydra.core.Term untypedLambdaError(T0 x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UntypedLambdaError"), (hydra.util.ConsList<hydra.core.Field>) (hydra.util.ConsList.<hydra.core.Field>empty())));
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UntypedLambdaError"), (java.util.List<hydra.core.Field>) (java.util.Collections.<hydra.core.Field>emptyList())));
   }
 
   static hydra.core.Term untypedLetBindingError(hydra.error.checking.UntypedLetBindingError x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UntypedLetBindingError"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("binding"), hydra.encode.Core.binding((x).binding)))));
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.checking.UntypedLetBindingError"), java.util.Arrays.asList(new hydra.core.Field(new hydra.core.Name("binding"), hydra.encode.Core.binding((x).binding)))));
   }
 }

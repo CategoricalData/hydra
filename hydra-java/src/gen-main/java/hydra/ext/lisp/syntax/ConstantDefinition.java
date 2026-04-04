@@ -61,15 +61,21 @@ public class ConstantDefinition implements Serializable, Comparable<ConstantDefi
   @SuppressWarnings("unchecked")
   public int compareTo(ConstantDefinition other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) value).compareTo(other.value);
+    cmp = hydra.util.Comparing.compare(
+      value,
+      other.value);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) doc).compareTo(other.doc);
+    return hydra.util.Comparing.compare(
+      doc,
+      other.doc);
   }
 
   public ConstantDefinition withName(hydra.ext.lisp.syntax.Symbol name) {

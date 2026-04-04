@@ -51,11 +51,15 @@ public class DefinitionNotInModuleNamespaceError implements Serializable, Compar
   @SuppressWarnings("unchecked")
   public int compareTo(DefinitionNotInModuleNamespaceError other) {
     int cmp = 0;
-    cmp = ((Comparable) namespace).compareTo(other.namespace);
+    cmp = hydra.util.Comparing.compare(
+      namespace,
+      other.namespace);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) name).compareTo(other.name);
+    return hydra.util.Comparing.compare(
+      name,
+      other.name);
   }
 
   public DefinitionNotInModuleNamespaceError withNamespace(hydra.module.Namespace namespace) {

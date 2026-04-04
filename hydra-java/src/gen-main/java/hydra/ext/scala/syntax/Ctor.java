@@ -68,7 +68,9 @@ public abstract class Ctor implements Serializable, Comparable<Ctor> {
         return tagCmp;
       }
       Primary o = (Primary) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class Ctor implements Serializable, Comparable<Ctor> {
         return tagCmp;
       }
       Secondary o = (Secondary) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

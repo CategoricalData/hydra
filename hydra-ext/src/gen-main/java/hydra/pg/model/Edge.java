@@ -43,9 +43,9 @@ public class Edge<V> implements Serializable, Comparable<Edge<V>> {
   /**
    * A key/value map of edge properties
    */
-  public final hydra.util.PersistentMap<hydra.pg.model.PropertyKey, V> properties;
+  public final java.util.Map<hydra.pg.model.PropertyKey, V> properties;
 
-  public Edge (hydra.pg.model.EdgeLabel label, V id, V out, V in, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, V> properties) {
+  public Edge (hydra.pg.model.EdgeLabel label, V id, V out, V in, java.util.Map<hydra.pg.model.PropertyKey, V> properties) {
     this.label = label;
     this.id = id;
     this.out = out;
@@ -81,23 +81,33 @@ public class Edge<V> implements Serializable, Comparable<Edge<V>> {
   @SuppressWarnings("unchecked")
   public int compareTo(Edge other) {
     int cmp = 0;
-    cmp = ((Comparable) label).compareTo(other.label);
+    cmp = hydra.util.Comparing.compare(
+      label,
+      other.label);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) id).compareTo(other.id);
+    cmp = hydra.util.Comparing.compare(
+      id,
+      other.id);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) out).compareTo(other.out);
+    cmp = hydra.util.Comparing.compare(
+      out,
+      other.out);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) in).compareTo(other.in);
+    cmp = hydra.util.Comparing.compare(
+      in,
+      other.in);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) properties).compareTo(other.properties);
+    return hydra.util.Comparing.compare(
+      properties,
+      other.properties);
   }
 
   public Edge withLabel(hydra.pg.model.EdgeLabel label) {
@@ -116,7 +126,7 @@ public class Edge<V> implements Serializable, Comparable<Edge<V>> {
     return new Edge(label, id, out, in, properties);
   }
 
-  public Edge withProperties(hydra.util.PersistentMap<hydra.pg.model.PropertyKey, V> properties) {
+  public Edge withProperties(java.util.Map<hydra.pg.model.PropertyKey, V> properties) {
     return new Edge(label, id, out, in, properties);
   }
 }

@@ -16,13 +16,13 @@ public class DisjointUnion implements Serializable, Comparable<DisjointUnion> {
 
   public static final hydra.core.Name CLASSES = new hydra.core.Name("classes");
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
 
   public final hydra.ext.org.w3.owl.syntax.Class_ class_;
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> classes;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> classes;
 
-  public DisjointUnion (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.Class_ class_, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> classes) {
+  public DisjointUnion (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.Class_ class_, java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> classes) {
     this.annotations = annotations;
     this.class_ = class_;
     this.classes = classes;
@@ -52,18 +52,24 @@ public class DisjointUnion implements Serializable, Comparable<DisjointUnion> {
   @SuppressWarnings("unchecked")
   public int compareTo(DisjointUnion other) {
     int cmp = 0;
-    cmp = ((Comparable) annotations).compareTo(other.annotations);
+    cmp = hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) class_).compareTo(other.class_);
+    cmp = hydra.util.Comparing.compare(
+      class_,
+      other.class_);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) classes).compareTo(other.classes);
+    return hydra.util.Comparing.compare(
+      classes,
+      other.classes);
   }
 
-  public DisjointUnion withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public DisjointUnion withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new DisjointUnion(annotations, class_, classes);
   }
 
@@ -71,7 +77,7 @@ public class DisjointUnion implements Serializable, Comparable<DisjointUnion> {
     return new DisjointUnion(annotations, class_, classes);
   }
 
-  public DisjointUnion withClasses(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> classes) {
+  public DisjointUnion withClasses(java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> classes) {
     return new DisjointUnion(annotations, class_, classes);
   }
 }

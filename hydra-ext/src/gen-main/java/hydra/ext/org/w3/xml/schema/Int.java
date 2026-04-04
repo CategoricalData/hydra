@@ -34,6 +34,8 @@ public class Int implements Serializable, Comparable<Int> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Int other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

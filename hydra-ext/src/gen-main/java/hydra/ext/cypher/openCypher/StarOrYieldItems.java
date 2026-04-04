@@ -103,7 +103,9 @@ public abstract class StarOrYieldItems implements Serializable, Comparable<StarO
         return tagCmp;
       }
       Items o = (Items) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

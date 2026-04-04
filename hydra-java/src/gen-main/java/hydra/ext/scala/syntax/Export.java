@@ -9,9 +9,9 @@ public class Export implements Serializable, Comparable<Export> {
 
   public static final hydra.core.Name IMPORTERS = new hydra.core.Name("importers");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Importer> importers;
+  public final java.util.List<hydra.ext.scala.syntax.Importer> importers;
 
-  public Export (hydra.util.ConsList<hydra.ext.scala.syntax.Importer> importers) {
+  public Export (java.util.List<hydra.ext.scala.syntax.Importer> importers) {
     this.importers = importers;
   }
 
@@ -34,6 +34,8 @@ public class Export implements Serializable, Comparable<Export> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Export other) {
-    return ((Comparable) importers).compareTo(other.importers);
+    return hydra.util.Comparing.compare(
+      importers,
+      other.importers);
   }
 }

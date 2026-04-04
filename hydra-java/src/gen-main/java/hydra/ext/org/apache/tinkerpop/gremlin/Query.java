@@ -84,7 +84,9 @@ public abstract class Query implements Serializable, Comparable<Query> {
         return tagCmp;
       }
       TraversalSource o = (TraversalSource) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -124,7 +126,9 @@ public abstract class Query implements Serializable, Comparable<Query> {
         return tagCmp;
       }
       RootTraversal o = (RootTraversal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

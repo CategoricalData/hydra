@@ -51,11 +51,15 @@ public class TypeSignature implements Serializable, Comparable<TypeSignature> {
   @SuppressWarnings("unchecked")
   public int compareTo(TypeSignature other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) type).compareTo(other.type);
+    return hydra.util.Comparing.compare(
+      type,
+      other.type);
   }
 
   public TypeSignature withName(hydra.ext.haskell.syntax.Name name) {

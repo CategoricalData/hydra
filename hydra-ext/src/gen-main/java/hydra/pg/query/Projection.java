@@ -42,11 +42,15 @@ public class Projection implements Serializable, Comparable<Projection> {
   @SuppressWarnings("unchecked")
   public int compareTo(Projection other) {
     int cmp = 0;
-    cmp = ((Comparable) value).compareTo(other.value);
+    cmp = hydra.util.Comparing.compare(
+      value,
+      other.value);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) as).compareTo(other.as);
+    return hydra.util.Comparing.compare(
+      as,
+      other.as);
   }
 
   public Projection withValue(hydra.pg.query.Expression value) {

@@ -8,8 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.ConsList;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -40,7 +38,7 @@ public class Nub extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-      return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<ConsList<Term>, Term>) l -> Terms.list(Nub.apply(l)), hydra.extract.Core.list(cx, graph, args.get(0)));
+      return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<List<Term>, Term>) l -> Terms.list(Nub.apply(l)), hydra.extract.Core.list(cx, graph, args.get(0)));
     }
 
     /**
@@ -49,7 +47,7 @@ public class Nub extends PrimitiveFunction {
      * @param arg the list to remove duplicates from
      * @return the list with duplicates removed
      */
-    public static <X> ConsList<X> apply(ConsList<X> arg) {
+    public static <X> List<X> apply(List<X> arg) {
         Set<X> visited = new HashSet<>();
         ArrayList<X> result = new ArrayList<>(arg.size());
         for (X x : arg) {
@@ -58,6 +56,6 @@ public class Nub extends PrimitiveFunction {
                 result.add(x);
             }
         }
-        return ConsList.fromList(result);
+        return result;
     }
 }

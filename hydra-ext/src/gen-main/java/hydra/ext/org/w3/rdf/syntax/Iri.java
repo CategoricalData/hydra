@@ -37,6 +37,8 @@ public class Iri implements Serializable, Comparable<Iri> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Iri other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

@@ -42,11 +42,15 @@ public class ExceptExpression implements Serializable, Comparable<ExceptExpressi
   @SuppressWarnings("unchecked")
   public int compareTo(ExceptExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) expression).compareTo(other.expression);
+    cmp = hydra.util.Comparing.compare(
+      expression,
+      other.expression);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) as).compareTo(other.as);
+    return hydra.util.Comparing.compare(
+      as,
+      other.as);
   }
 
   public ExceptExpression withExpression(hydra.ext.python.syntax.Expression expression) {

@@ -84,7 +84,9 @@ public abstract class PrimaryRhs implements Serializable, Comparable<PrimaryRhs>
         return tagCmp;
       }
       Project o = (Project) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -124,7 +126,9 @@ public abstract class PrimaryRhs implements Serializable, Comparable<PrimaryRhs>
         return tagCmp;
       }
       Genexp o = (Genexp) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -164,7 +168,9 @@ public abstract class PrimaryRhs implements Serializable, Comparable<PrimaryRhs>
         return tagCmp;
       }
       Call o = (Call) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +210,9 @@ public abstract class PrimaryRhs implements Serializable, Comparable<PrimaryRhs>
         return tagCmp;
       }
       Slices o = (Slices) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

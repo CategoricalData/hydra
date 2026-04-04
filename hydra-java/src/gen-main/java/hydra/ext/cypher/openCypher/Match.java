@@ -49,15 +49,21 @@ public class Match implements Serializable, Comparable<Match> {
   @SuppressWarnings("unchecked")
   public int compareTo(Match other) {
     int cmp = 0;
-    cmp = ((Comparable) optional).compareTo(other.optional);
+    cmp = hydra.util.Comparing.compare(
+      optional,
+      other.optional);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) pattern).compareTo(other.pattern);
+    cmp = hydra.util.Comparing.compare(
+      pattern,
+      other.pattern);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) where).compareTo(other.where);
+    return hydra.util.Comparing.compare(
+      where,
+      other.where);
   }
 
   public Match withOptional(Boolean optional) {

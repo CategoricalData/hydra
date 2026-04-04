@@ -9,9 +9,9 @@ public class Catches implements Serializable, Comparable<Catches> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.CatchClause> value;
+  public final java.util.List<hydra.ext.java.syntax.CatchClause> value;
 
-  public Catches (hydra.util.ConsList<hydra.ext.java.syntax.CatchClause> value) {
+  public Catches (java.util.List<hydra.ext.java.syntax.CatchClause> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class Catches implements Serializable, Comparable<Catches> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Catches other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

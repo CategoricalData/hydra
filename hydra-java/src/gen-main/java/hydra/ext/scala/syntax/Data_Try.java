@@ -15,11 +15,11 @@ public class Data_Try implements Serializable, Comparable<Data_Try> {
 
   public final hydra.ext.scala.syntax.Data expr;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Case> catchp;
+  public final java.util.List<hydra.ext.scala.syntax.Case> catchp;
 
   public final hydra.util.Maybe<hydra.ext.scala.syntax.Data> finallyp;
 
-  public Data_Try (hydra.ext.scala.syntax.Data expr, hydra.util.ConsList<hydra.ext.scala.syntax.Case> catchp, hydra.util.Maybe<hydra.ext.scala.syntax.Data> finallyp) {
+  public Data_Try (hydra.ext.scala.syntax.Data expr, java.util.List<hydra.ext.scala.syntax.Case> catchp, hydra.util.Maybe<hydra.ext.scala.syntax.Data> finallyp) {
     this.expr = expr;
     this.catchp = catchp;
     this.finallyp = finallyp;
@@ -49,22 +49,28 @@ public class Data_Try implements Serializable, Comparable<Data_Try> {
   @SuppressWarnings("unchecked")
   public int compareTo(Data_Try other) {
     int cmp = 0;
-    cmp = ((Comparable) expr).compareTo(other.expr);
+    cmp = hydra.util.Comparing.compare(
+      expr,
+      other.expr);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) catchp).compareTo(other.catchp);
+    cmp = hydra.util.Comparing.compare(
+      catchp,
+      other.catchp);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) finallyp).compareTo(other.finallyp);
+    return hydra.util.Comparing.compare(
+      finallyp,
+      other.finallyp);
   }
 
   public Data_Try withExpr(hydra.ext.scala.syntax.Data expr) {
     return new Data_Try(expr, catchp, finallyp);
   }
 
-  public Data_Try withCatchp(hydra.util.ConsList<hydra.ext.scala.syntax.Case> catchp) {
+  public Data_Try withCatchp(java.util.List<hydra.ext.scala.syntax.Case> catchp) {
     return new Data_Try(expr, catchp, finallyp);
   }
 

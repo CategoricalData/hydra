@@ -408,7 +408,9 @@ public abstract class SubtermStep implements Serializable, Comparable<SubtermSte
         return tagCmp;
       }
       UnionCasesBranch o = (UnionCasesBranch) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -489,7 +491,9 @@ public abstract class SubtermStep implements Serializable, Comparable<SubtermSte
         return tagCmp;
       }
       LetBinding o = (LetBinding) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -532,7 +536,9 @@ public abstract class SubtermStep implements Serializable, Comparable<SubtermSte
         return tagCmp;
       }
       ListElement o = (ListElement) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -575,7 +581,9 @@ public abstract class SubtermStep implements Serializable, Comparable<SubtermSte
         return tagCmp;
       }
       MapKey o = (MapKey) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -618,7 +626,9 @@ public abstract class SubtermStep implements Serializable, Comparable<SubtermSte
         return tagCmp;
       }
       MapValue o = (MapValue) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -699,7 +709,9 @@ public abstract class SubtermStep implements Serializable, Comparable<SubtermSte
         return tagCmp;
       }
       ProductTerm o = (ProductTerm) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -742,7 +754,9 @@ public abstract class SubtermStep implements Serializable, Comparable<SubtermSte
         return tagCmp;
       }
       RecordField o = (RecordField) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -785,7 +799,9 @@ public abstract class SubtermStep implements Serializable, Comparable<SubtermSte
         return tagCmp;
       }
       SetElement o = (SetElement) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

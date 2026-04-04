@@ -51,11 +51,15 @@ public class DeleteFeatures implements Serializable, Comparable<DeleteFeatures> 
   @SuppressWarnings("unchecked")
   public int compareTo(DeleteFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) delete).compareTo(other.delete);
+    cmp = hydra.util.Comparing.compare(
+      delete,
+      other.delete);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) detachDelete).compareTo(other.detachDelete);
+    return hydra.util.Comparing.compare(
+      detachDelete,
+      other.detachDelete);
   }
 
   public DeleteFeatures withDelete(Boolean delete) {

@@ -16,13 +16,13 @@ public class ObjectPropertyRange implements Serializable, Comparable<ObjectPrope
 
   public static final hydra.core.Name RANGE = new hydra.core.Name("range");
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
 
   public final hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property;
 
   public final hydra.ext.org.w3.owl.syntax.ClassExpression range;
 
-  public ObjectPropertyRange (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property, hydra.ext.org.w3.owl.syntax.ClassExpression range) {
+  public ObjectPropertyRange (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property, hydra.ext.org.w3.owl.syntax.ClassExpression range) {
     this.annotations = annotations;
     this.property = property;
     this.range = range;
@@ -52,18 +52,24 @@ public class ObjectPropertyRange implements Serializable, Comparable<ObjectPrope
   @SuppressWarnings("unchecked")
   public int compareTo(ObjectPropertyRange other) {
     int cmp = 0;
-    cmp = ((Comparable) annotations).compareTo(other.annotations);
+    cmp = hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) property).compareTo(other.property);
+    cmp = hydra.util.Comparing.compare(
+      property,
+      other.property);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) range).compareTo(other.range);
+    return hydra.util.Comparing.compare(
+      range,
+      other.range);
   }
 
-  public ObjectPropertyRange withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public ObjectPropertyRange withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new ObjectPropertyRange(annotations, property, range);
   }
 

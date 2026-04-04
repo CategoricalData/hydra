@@ -42,11 +42,15 @@ public class InlineShapeNot implements Serializable, Comparable<InlineShapeNot> 
   @SuppressWarnings("unchecked")
   public int compareTo(InlineShapeNot other) {
     int cmp = 0;
-    cmp = ((Comparable) NOT).compareTo(other.NOT);
+    cmp = hydra.util.Comparing.compare(
+      NOT,
+      other.NOT);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) InlineShapeAtom).compareTo(other.InlineShapeAtom);
+    return hydra.util.Comparing.compare(
+      InlineShapeAtom,
+      other.InlineShapeAtom);
   }
 
   public InlineShapeNot withNOT(hydra.util.Maybe<java.lang.Void> NOT) {

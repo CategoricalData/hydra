@@ -12,9 +12,9 @@ public class TypeSubst implements Serializable, Comparable<TypeSubst> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> value;
+  public final java.util.Map<hydra.core.Name, hydra.core.Type> value;
 
-  public TypeSubst (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> value) {
+  public TypeSubst (java.util.Map<hydra.core.Name, hydra.core.Type> value) {
     this.value = value;
   }
 
@@ -37,6 +37,8 @@ public class TypeSubst implements Serializable, Comparable<TypeSubst> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TypeSubst other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

@@ -106,7 +106,9 @@ public abstract class TopLevelForm implements Serializable, Comparable<TopLevelF
         return tagCmp;
       }
       Function o = (Function) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -149,7 +151,9 @@ public abstract class TopLevelForm implements Serializable, Comparable<TopLevelF
         return tagCmp;
       }
       Variable o = (Variable) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -192,7 +196,9 @@ public abstract class TopLevelForm implements Serializable, Comparable<TopLevelF
         return tagCmp;
       }
       Constant o = (Constant) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -235,7 +241,9 @@ public abstract class TopLevelForm implements Serializable, Comparable<TopLevelF
         return tagCmp;
       }
       RecordType o = (RecordType) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -278,7 +286,9 @@ public abstract class TopLevelForm implements Serializable, Comparable<TopLevelF
         return tagCmp;
       }
       Macro o = (Macro) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -321,7 +331,9 @@ public abstract class TopLevelForm implements Serializable, Comparable<TopLevelF
         return tagCmp;
       }
       Expression o = (Expression) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

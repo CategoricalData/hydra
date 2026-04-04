@@ -164,7 +164,9 @@ public abstract class SimpleStatement implements Serializable, Comparable<Simple
         return tagCmp;
       }
       Assignment o = (Assignment) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +206,9 @@ public abstract class SimpleStatement implements Serializable, Comparable<Simple
         return tagCmp;
       }
       TypeAlias o = (TypeAlias) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -214,9 +218,9 @@ public abstract class SimpleStatement implements Serializable, Comparable<Simple
   }
 
   public static final class StarExpressions extends hydra.ext.python.syntax.SimpleStatement implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.python.syntax.StarExpression> value;
+    public final java.util.List<hydra.ext.python.syntax.StarExpression> value;
 
-    public StarExpressions (hydra.util.ConsList<hydra.ext.python.syntax.StarExpression> value) {
+    public StarExpressions (java.util.List<hydra.ext.python.syntax.StarExpression> value) {
       this.value = value;
     }
 
@@ -244,7 +248,9 @@ public abstract class SimpleStatement implements Serializable, Comparable<Simple
         return tagCmp;
       }
       StarExpressions o = (StarExpressions) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -284,7 +290,9 @@ public abstract class SimpleStatement implements Serializable, Comparable<Simple
         return tagCmp;
       }
       Return o = (Return) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -324,7 +332,9 @@ public abstract class SimpleStatement implements Serializable, Comparable<Simple
         return tagCmp;
       }
       Import o = (Import) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -364,7 +374,9 @@ public abstract class SimpleStatement implements Serializable, Comparable<Simple
         return tagCmp;
       }
       Raise o = (Raise) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -439,7 +451,9 @@ public abstract class SimpleStatement implements Serializable, Comparable<Simple
         return tagCmp;
       }
       Del o = (Del) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -479,7 +493,9 @@ public abstract class SimpleStatement implements Serializable, Comparable<Simple
         return tagCmp;
       }
       Yield o = (Yield) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -519,7 +535,9 @@ public abstract class SimpleStatement implements Serializable, Comparable<Simple
         return tagCmp;
       }
       Assert o = (Assert) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -599,9 +617,9 @@ public abstract class SimpleStatement implements Serializable, Comparable<Simple
   }
 
   public static final class Global extends hydra.ext.python.syntax.SimpleStatement implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.python.syntax.Name> value;
+    public final java.util.List<hydra.ext.python.syntax.Name> value;
 
-    public Global (hydra.util.ConsList<hydra.ext.python.syntax.Name> value) {
+    public Global (java.util.List<hydra.ext.python.syntax.Name> value) {
       this.value = value;
     }
 
@@ -629,7 +647,9 @@ public abstract class SimpleStatement implements Serializable, Comparable<Simple
         return tagCmp;
       }
       Global o = (Global) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -639,9 +659,9 @@ public abstract class SimpleStatement implements Serializable, Comparable<Simple
   }
 
   public static final class Nonlocal extends hydra.ext.python.syntax.SimpleStatement implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.python.syntax.Name> value;
+    public final java.util.List<hydra.ext.python.syntax.Name> value;
 
-    public Nonlocal (hydra.util.ConsList<hydra.ext.python.syntax.Name> value) {
+    public Nonlocal (java.util.List<hydra.ext.python.syntax.Name> value) {
       this.value = value;
     }
 
@@ -669,7 +689,9 @@ public abstract class SimpleStatement implements Serializable, Comparable<Simple
         return tagCmp;
       }
       Nonlocal o = (Nonlocal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

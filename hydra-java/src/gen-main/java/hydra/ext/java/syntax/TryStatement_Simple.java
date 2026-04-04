@@ -42,11 +42,15 @@ public class TryStatement_Simple implements Serializable, Comparable<TryStatemen
   @SuppressWarnings("unchecked")
   public int compareTo(TryStatement_Simple other) {
     int cmp = 0;
-    cmp = ((Comparable) block).compareTo(other.block);
+    cmp = hydra.util.Comparing.compare(
+      block,
+      other.block);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) catches).compareTo(other.catches);
+    return hydra.util.Comparing.compare(
+      catches,
+      other.catches);
   }
 
   public TryStatement_Simple withBlock(hydra.ext.java.syntax.Block block) {

@@ -22,9 +22,9 @@ public class UpdateRecordExpression implements Serializable, Comparable<UpdateRe
   /**
    * The field updates
    */
-  public final hydra.util.ConsList<hydra.ext.haskell.syntax.FieldUpdate> fields;
+  public final java.util.List<hydra.ext.haskell.syntax.FieldUpdate> fields;
 
-  public UpdateRecordExpression (hydra.ext.haskell.syntax.Expression inner, hydra.util.ConsList<hydra.ext.haskell.syntax.FieldUpdate> fields) {
+  public UpdateRecordExpression (hydra.ext.haskell.syntax.Expression inner, java.util.List<hydra.ext.haskell.syntax.FieldUpdate> fields) {
     this.inner = inner;
     this.fields = fields;
   }
@@ -51,18 +51,22 @@ public class UpdateRecordExpression implements Serializable, Comparable<UpdateRe
   @SuppressWarnings("unchecked")
   public int compareTo(UpdateRecordExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) inner).compareTo(other.inner);
+    cmp = hydra.util.Comparing.compare(
+      inner,
+      other.inner);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) fields).compareTo(other.fields);
+    return hydra.util.Comparing.compare(
+      fields,
+      other.fields);
   }
 
   public UpdateRecordExpression withInner(hydra.ext.haskell.syntax.Expression inner) {
     return new UpdateRecordExpression(inner, fields);
   }
 
-  public UpdateRecordExpression withFields(hydra.util.ConsList<hydra.ext.haskell.syntax.FieldUpdate> fields) {
+  public UpdateRecordExpression withFields(java.util.List<hydra.ext.haskell.syntax.FieldUpdate> fields) {
     return new UpdateRecordExpression(inner, fields);
   }
 }

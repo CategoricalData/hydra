@@ -76,7 +76,9 @@ public abstract class TraversalCardinality implements Serializable, Comparable<T
         return tagCmp;
       }
       Single o = (Single) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class TraversalCardinality implements Serializable, Comparable<T
         return tagCmp;
       }
       Set o = (Set) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class TraversalCardinality implements Serializable, Comparable<T
         return tagCmp;
       }
       List o = (List) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

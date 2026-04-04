@@ -13,9 +13,9 @@ public class Data_Match implements Serializable, Comparable<Data_Match> {
 
   public final hydra.ext.scala.syntax.Data expr;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Case> cases;
+  public final java.util.List<hydra.ext.scala.syntax.Case> cases;
 
-  public Data_Match (hydra.ext.scala.syntax.Data expr, hydra.util.ConsList<hydra.ext.scala.syntax.Case> cases) {
+  public Data_Match (hydra.ext.scala.syntax.Data expr, java.util.List<hydra.ext.scala.syntax.Case> cases) {
     this.expr = expr;
     this.cases = cases;
   }
@@ -42,18 +42,22 @@ public class Data_Match implements Serializable, Comparable<Data_Match> {
   @SuppressWarnings("unchecked")
   public int compareTo(Data_Match other) {
     int cmp = 0;
-    cmp = ((Comparable) expr).compareTo(other.expr);
+    cmp = hydra.util.Comparing.compare(
+      expr,
+      other.expr);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) cases).compareTo(other.cases);
+    return hydra.util.Comparing.compare(
+      cases,
+      other.cases);
   }
 
   public Data_Match withExpr(hydra.ext.scala.syntax.Data expr) {
     return new Data_Match(expr, cases);
   }
 
-  public Data_Match withCases(hydra.util.ConsList<hydra.ext.scala.syntax.Case> cases) {
+  public Data_Match withCases(java.util.List<hydra.ext.scala.syntax.Case> cases) {
     return new Data_Match(expr, cases);
   }
 }

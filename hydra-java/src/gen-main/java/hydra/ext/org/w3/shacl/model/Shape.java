@@ -71,7 +71,9 @@ public abstract class Shape implements Serializable, Comparable<Shape> {
         return tagCmp;
       }
       Node o = (Node) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -111,7 +113,9 @@ public abstract class Shape implements Serializable, Comparable<Shape> {
         return tagCmp;
       }
       Property o = (Property) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

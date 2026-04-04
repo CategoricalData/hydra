@@ -76,7 +76,9 @@ public abstract class TypeDeclaration implements Serializable, Comparable<TypeDe
         return tagCmp;
       }
       Class_ o = (Class_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class TypeDeclaration implements Serializable, Comparable<TypeDe
         return tagCmp;
       }
       Interface o = (Interface) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

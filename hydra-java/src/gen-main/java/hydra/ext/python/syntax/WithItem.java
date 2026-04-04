@@ -42,11 +42,15 @@ public class WithItem implements Serializable, Comparable<WithItem> {
   @SuppressWarnings("unchecked")
   public int compareTo(WithItem other) {
     int cmp = 0;
-    cmp = ((Comparable) expression).compareTo(other.expression);
+    cmp = hydra.util.Comparing.compare(
+      expression,
+      other.expression);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) as).compareTo(other.as);
+    return hydra.util.Comparing.compare(
+      as,
+      other.as);
   }
 
   public WithItem withExpression(hydra.ext.python.syntax.Expression expression) {

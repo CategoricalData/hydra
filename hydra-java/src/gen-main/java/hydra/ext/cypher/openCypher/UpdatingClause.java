@@ -92,7 +92,9 @@ public abstract class UpdatingClause implements Serializable, Comparable<Updatin
         return tagCmp;
       }
       Create o = (Create) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -132,7 +134,9 @@ public abstract class UpdatingClause implements Serializable, Comparable<Updatin
         return tagCmp;
       }
       Merge o = (Merge) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -172,7 +176,9 @@ public abstract class UpdatingClause implements Serializable, Comparable<Updatin
         return tagCmp;
       }
       Delete o = (Delete) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -212,7 +218,9 @@ public abstract class UpdatingClause implements Serializable, Comparable<Updatin
         return tagCmp;
       }
       Set o = (Set) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -252,7 +260,9 @@ public abstract class UpdatingClause implements Serializable, Comparable<Updatin
         return tagCmp;
       }
       Remove o = (Remove) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

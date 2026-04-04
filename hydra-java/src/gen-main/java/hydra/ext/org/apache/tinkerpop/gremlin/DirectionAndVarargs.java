@@ -13,9 +13,9 @@ public class DirectionAndVarargs implements Serializable, Comparable<DirectionAn
 
   public final hydra.ext.org.apache.tinkerpop.gremlin.TraversalDirectionArgument direction;
 
-  public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> varargs;
+  public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> varargs;
 
-  public DirectionAndVarargs (hydra.ext.org.apache.tinkerpop.gremlin.TraversalDirectionArgument direction, hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> varargs) {
+  public DirectionAndVarargs (hydra.ext.org.apache.tinkerpop.gremlin.TraversalDirectionArgument direction, java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> varargs) {
     this.direction = direction;
     this.varargs = varargs;
   }
@@ -42,18 +42,22 @@ public class DirectionAndVarargs implements Serializable, Comparable<DirectionAn
   @SuppressWarnings("unchecked")
   public int compareTo(DirectionAndVarargs other) {
     int cmp = 0;
-    cmp = ((Comparable) direction).compareTo(other.direction);
+    cmp = hydra.util.Comparing.compare(
+      direction,
+      other.direction);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) varargs).compareTo(other.varargs);
+    return hydra.util.Comparing.compare(
+      varargs,
+      other.varargs);
   }
 
   public DirectionAndVarargs withDirection(hydra.ext.org.apache.tinkerpop.gremlin.TraversalDirectionArgument direction) {
     return new DirectionAndVarargs(direction, varargs);
   }
 
-  public DirectionAndVarargs withVarargs(hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> varargs) {
+  public DirectionAndVarargs withVarargs(java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> varargs) {
     return new DirectionAndVarargs(direction, varargs);
   }
 }

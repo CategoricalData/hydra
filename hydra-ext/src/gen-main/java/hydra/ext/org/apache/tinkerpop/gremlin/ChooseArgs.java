@@ -76,7 +76,9 @@ public abstract class ChooseArgs implements Serializable, Comparable<ChooseArgs>
         return tagCmp;
       }
       Function o = (Function) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class ChooseArgs implements Serializable, Comparable<ChooseArgs>
         return tagCmp;
       }
       PredicateTraversal o = (PredicateTraversal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class ChooseArgs implements Serializable, Comparable<ChooseArgs>
         return tagCmp;
       }
       Traversal o = (Traversal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -22,9 +22,9 @@ public class Namespaces<N> implements Serializable, Comparable<Namespaces<N>> {
   /**
    * A mapping of namespaces to values
    */
-  public final hydra.util.PersistentMap<hydra.module.Namespace, N> mapping;
+  public final java.util.Map<hydra.module.Namespace, N> mapping;
 
-  public Namespaces (hydra.util.Pair<hydra.module.Namespace, N> focus, hydra.util.PersistentMap<hydra.module.Namespace, N> mapping) {
+  public Namespaces (hydra.util.Pair<hydra.module.Namespace, N> focus, java.util.Map<hydra.module.Namespace, N> mapping) {
     this.focus = focus;
     this.mapping = mapping;
   }
@@ -51,18 +51,22 @@ public class Namespaces<N> implements Serializable, Comparable<Namespaces<N>> {
   @SuppressWarnings("unchecked")
   public int compareTo(Namespaces other) {
     int cmp = 0;
-    cmp = ((Comparable) focus).compareTo(other.focus);
+    cmp = hydra.util.Comparing.compare(
+      focus,
+      other.focus);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) mapping).compareTo(other.mapping);
+    return hydra.util.Comparing.compare(
+      mapping,
+      other.mapping);
   }
 
   public Namespaces withFocus(hydra.util.Pair<hydra.module.Namespace, N> focus) {
     return new Namespaces(focus, mapping);
   }
 
-  public Namespaces withMapping(hydra.util.PersistentMap<hydra.module.Namespace, N> mapping) {
+  public Namespaces withMapping(java.util.Map<hydra.module.Namespace, N> mapping) {
     return new Namespaces(focus, mapping);
   }
 }

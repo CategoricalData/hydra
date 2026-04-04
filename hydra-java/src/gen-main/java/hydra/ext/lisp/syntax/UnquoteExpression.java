@@ -40,6 +40,8 @@ public class UnquoteExpression implements Serializable, Comparable<UnquoteExpres
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(UnquoteExpression other) {
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 }

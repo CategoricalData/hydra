@@ -42,11 +42,15 @@ public class AssignmentExpression implements Serializable, Comparable<Assignment
   @SuppressWarnings("unchecked")
   public int compareTo(AssignmentExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) expression).compareTo(other.expression);
+    return hydra.util.Comparing.compare(
+      expression,
+      other.expression);
   }
 
   public AssignmentExpression withName(hydra.ext.python.syntax.Name name) {

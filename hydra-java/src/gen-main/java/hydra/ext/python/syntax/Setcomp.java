@@ -42,11 +42,15 @@ public class Setcomp implements Serializable, Comparable<Setcomp> {
   @SuppressWarnings("unchecked")
   public int compareTo(Setcomp other) {
     int cmp = 0;
-    cmp = ((Comparable) expression).compareTo(other.expression);
+    cmp = hydra.util.Comparing.compare(
+      expression,
+      other.expression);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) forIfClauses).compareTo(other.forIfClauses);
+    return hydra.util.Comparing.compare(
+      forIfClauses,
+      other.forIfClauses);
   }
 
   public Setcomp withExpression(hydra.ext.python.syntax.NamedExpression expression) {

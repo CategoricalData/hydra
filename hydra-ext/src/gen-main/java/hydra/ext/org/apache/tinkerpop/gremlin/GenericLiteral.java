@@ -212,7 +212,9 @@ public abstract class GenericLiteral implements Serializable, Comparable<Generic
         return tagCmp;
       }
       Numeric o = (Numeric) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -252,7 +254,9 @@ public abstract class GenericLiteral implements Serializable, Comparable<Generic
         return tagCmp;
       }
       Boolean_ o = (Boolean_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -292,7 +296,9 @@ public abstract class GenericLiteral implements Serializable, Comparable<Generic
         return tagCmp;
       }
       String_ o = (String_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -332,7 +338,9 @@ public abstract class GenericLiteral implements Serializable, Comparable<Generic
         return tagCmp;
       }
       Date o = (Date) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -477,7 +485,9 @@ public abstract class GenericLiteral implements Serializable, Comparable<Generic
         return tagCmp;
       }
       TraversalToken o = (TraversalToken) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -517,7 +527,9 @@ public abstract class GenericLiteral implements Serializable, Comparable<Generic
         return tagCmp;
       }
       TraversalCardinality o = (TraversalCardinality) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -557,7 +569,9 @@ public abstract class GenericLiteral implements Serializable, Comparable<Generic
         return tagCmp;
       }
       TraversalDirection o = (TraversalDirection) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -597,7 +611,9 @@ public abstract class GenericLiteral implements Serializable, Comparable<Generic
         return tagCmp;
       }
       TraversalMerge o = (TraversalMerge) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -637,7 +653,9 @@ public abstract class GenericLiteral implements Serializable, Comparable<Generic
         return tagCmp;
       }
       TraversalPick o = (TraversalPick) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -677,7 +695,9 @@ public abstract class GenericLiteral implements Serializable, Comparable<Generic
         return tagCmp;
       }
       TraversalDT o = (TraversalDT) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -717,7 +737,9 @@ public abstract class GenericLiteral implements Serializable, Comparable<Generic
         return tagCmp;
       }
       StructureVertex o = (StructureVertex) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -757,7 +779,9 @@ public abstract class GenericLiteral implements Serializable, Comparable<Generic
         return tagCmp;
       }
       GenericLiteralSet o = (GenericLiteralSet) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -797,7 +821,9 @@ public abstract class GenericLiteral implements Serializable, Comparable<Generic
         return tagCmp;
       }
       GenericLiteralCollection o = (GenericLiteralCollection) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -837,7 +863,9 @@ public abstract class GenericLiteral implements Serializable, Comparable<Generic
         return tagCmp;
       }
       GenericLiteralRange o = (GenericLiteralRange) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -877,7 +905,9 @@ public abstract class GenericLiteral implements Serializable, Comparable<Generic
         return tagCmp;
       }
       NestedTraversal o = (NestedTraversal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -917,7 +947,9 @@ public abstract class GenericLiteral implements Serializable, Comparable<Generic
         return tagCmp;
       }
       TerminatedTraversal o = (TerminatedTraversal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -957,7 +989,9 @@ public abstract class GenericLiteral implements Serializable, Comparable<Generic
         return tagCmp;
       }
       GenericLiteralMap o = (GenericLiteralMap) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -37,6 +37,8 @@ public class LanguageName implements Serializable, Comparable<LanguageName> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(LanguageName other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

@@ -42,11 +42,15 @@ public class LabeledStatementNoShortIf implements Serializable, Comparable<Label
   @SuppressWarnings("unchecked")
   public int compareTo(LabeledStatementNoShortIf other) {
     int cmp = 0;
-    cmp = ((Comparable) identifier).compareTo(other.identifier);
+    cmp = hydra.util.Comparing.compare(
+      identifier,
+      other.identifier);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) statement).compareTo(other.statement);
+    return hydra.util.Comparing.compare(
+      statement,
+      other.statement);
   }
 
   public LabeledStatementNoShortIf withIdentifier(hydra.ext.java.syntax.Identifier identifier) {

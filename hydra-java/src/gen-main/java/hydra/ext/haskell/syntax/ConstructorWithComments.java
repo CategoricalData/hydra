@@ -51,11 +51,15 @@ public class ConstructorWithComments implements Serializable, Comparable<Constru
   @SuppressWarnings("unchecked")
   public int compareTo(ConstructorWithComments other) {
     int cmp = 0;
-    cmp = ((Comparable) body).compareTo(other.body);
+    cmp = hydra.util.Comparing.compare(
+      body,
+      other.body);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) comments).compareTo(other.comments);
+    return hydra.util.Comparing.compare(
+      comments,
+      other.comments);
   }
 
   public ConstructorWithComments withBody(hydra.ext.haskell.syntax.Constructor body) {

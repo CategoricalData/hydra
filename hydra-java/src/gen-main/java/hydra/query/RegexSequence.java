@@ -51,11 +51,15 @@ public class RegexSequence implements Serializable, Comparable<RegexSequence> {
   @SuppressWarnings("unchecked")
   public int compareTo(RegexSequence other) {
     int cmp = 0;
-    cmp = ((Comparable) path).compareTo(other.path);
+    cmp = hydra.util.Comparing.compare(
+      path,
+      other.path);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) quantifier).compareTo(other.quantifier);
+    return hydra.util.Comparing.compare(
+      quantifier,
+      other.quantifier);
   }
 
   public RegexSequence withPath(hydra.query.Path path) {

@@ -13,13 +13,13 @@ public class ExplicitConstructorInvocation implements Serializable, Comparable<E
 
   public static final hydra.core.Name VARIANT = new hydra.core.Name("variant");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments;
+  public final java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments;
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.Expression> arguments;
+  public final java.util.List<hydra.ext.java.syntax.Expression> arguments;
 
   public final hydra.ext.java.syntax.ExplicitConstructorInvocation_Variant variant;
 
-  public ExplicitConstructorInvocation (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.util.ConsList<hydra.ext.java.syntax.Expression> arguments, hydra.ext.java.syntax.ExplicitConstructorInvocation_Variant variant) {
+  public ExplicitConstructorInvocation (java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments, java.util.List<hydra.ext.java.syntax.Expression> arguments, hydra.ext.java.syntax.ExplicitConstructorInvocation_Variant variant) {
     this.typeArguments = typeArguments;
     this.arguments = arguments;
     this.variant = variant;
@@ -49,22 +49,28 @@ public class ExplicitConstructorInvocation implements Serializable, Comparable<E
   @SuppressWarnings("unchecked")
   public int compareTo(ExplicitConstructorInvocation other) {
     int cmp = 0;
-    cmp = ((Comparable) typeArguments).compareTo(other.typeArguments);
+    cmp = hydra.util.Comparing.compare(
+      typeArguments,
+      other.typeArguments);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) arguments).compareTo(other.arguments);
+    cmp = hydra.util.Comparing.compare(
+      arguments,
+      other.arguments);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) variant).compareTo(other.variant);
+    return hydra.util.Comparing.compare(
+      variant,
+      other.variant);
   }
 
-  public ExplicitConstructorInvocation withTypeArguments(hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments) {
+  public ExplicitConstructorInvocation withTypeArguments(java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     return new ExplicitConstructorInvocation(typeArguments, arguments, variant);
   }
 
-  public ExplicitConstructorInvocation withArguments(hydra.util.ConsList<hydra.ext.java.syntax.Expression> arguments) {
+  public ExplicitConstructorInvocation withArguments(java.util.List<hydra.ext.java.syntax.Expression> arguments) {
     return new ExplicitConstructorInvocation(typeArguments, arguments, variant);
   }
 

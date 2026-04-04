@@ -45,11 +45,15 @@ public class Definition<A> implements Serializable, Comparable<Definition<A>> {
   @SuppressWarnings("unchecked")
   public int compareTo(Definition other) {
     int cmp = 0;
-    cmp = ((Comparable) iri).compareTo(other.iri);
+    cmp = hydra.util.Comparing.compare(
+      iri,
+      other.iri);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) target).compareTo(other.target);
+    return hydra.util.Comparing.compare(
+      target,
+      other.target);
   }
 
   public Definition withIri(hydra.ext.org.w3.rdf.syntax.Iri iri) {

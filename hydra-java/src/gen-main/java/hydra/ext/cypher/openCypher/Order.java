@@ -9,9 +9,9 @@ public class Order implements Serializable, Comparable<Order> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.SortItem> value;
+  public final java.util.List<hydra.ext.cypher.openCypher.SortItem> value;
 
-  public Order (hydra.util.ConsList<hydra.ext.cypher.openCypher.SortItem> value) {
+  public Order (java.util.List<hydra.ext.cypher.openCypher.SortItem> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class Order implements Serializable, Comparable<Order> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Order other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

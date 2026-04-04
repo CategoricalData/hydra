@@ -27,29 +27,29 @@ public class TarjanState implements Serializable, Comparable<TarjanState> {
   /**
    * Mapping from vertices to their indices in the DFS traversal
    */
-  public final hydra.util.PersistentMap<Integer, Integer> indices;
+  public final java.util.Map<Integer, Integer> indices;
 
   /**
    * Mapping from vertices to their lowest reachable index in the DFS traversal
    */
-  public final hydra.util.PersistentMap<Integer, Integer> lowLinks;
+  public final java.util.Map<Integer, Integer> lowLinks;
 
   /**
    * Current DFS stack, with vertices in reverse order
    */
-  public final hydra.util.ConsList<Integer> stack;
+  public final java.util.List<Integer> stack;
 
   /**
    * Set of vertices currently on the stack, for quick lookup
    */
-  public final hydra.util.PersistentSet<Integer> onStack;
+  public final java.util.Set<Integer> onStack;
 
   /**
    * Accumulated strongly connected components, each a list of vertices
    */
-  public final hydra.util.ConsList<hydra.util.ConsList<Integer>> sccs;
+  public final java.util.List<java.util.List<Integer>> sccs;
 
-  public TarjanState (Integer counter, hydra.util.PersistentMap<Integer, Integer> indices, hydra.util.PersistentMap<Integer, Integer> lowLinks, hydra.util.ConsList<Integer> stack, hydra.util.PersistentSet<Integer> onStack, hydra.util.ConsList<hydra.util.ConsList<Integer>> sccs) {
+  public TarjanState (Integer counter, java.util.Map<Integer, Integer> indices, java.util.Map<Integer, Integer> lowLinks, java.util.List<Integer> stack, java.util.Set<Integer> onStack, java.util.List<java.util.List<Integer>> sccs) {
     this.counter = counter;
     this.indices = indices;
     this.lowLinks = lowLinks;
@@ -88,50 +88,62 @@ public class TarjanState implements Serializable, Comparable<TarjanState> {
   @SuppressWarnings("unchecked")
   public int compareTo(TarjanState other) {
     int cmp = 0;
-    cmp = ((Comparable) counter).compareTo(other.counter);
+    cmp = hydra.util.Comparing.compare(
+      counter,
+      other.counter);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) indices).compareTo(other.indices);
+    cmp = hydra.util.Comparing.compare(
+      indices,
+      other.indices);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) lowLinks).compareTo(other.lowLinks);
+    cmp = hydra.util.Comparing.compare(
+      lowLinks,
+      other.lowLinks);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) stack).compareTo(other.stack);
+    cmp = hydra.util.Comparing.compare(
+      stack,
+      other.stack);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) onStack).compareTo(other.onStack);
+    cmp = hydra.util.Comparing.compare(
+      onStack,
+      other.onStack);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) sccs).compareTo(other.sccs);
+    return hydra.util.Comparing.compare(
+      sccs,
+      other.sccs);
   }
 
   public TarjanState withCounter(Integer counter) {
     return new TarjanState(counter, indices, lowLinks, stack, onStack, sccs);
   }
 
-  public TarjanState withIndices(hydra.util.PersistentMap<Integer, Integer> indices) {
+  public TarjanState withIndices(java.util.Map<Integer, Integer> indices) {
     return new TarjanState(counter, indices, lowLinks, stack, onStack, sccs);
   }
 
-  public TarjanState withLowLinks(hydra.util.PersistentMap<Integer, Integer> lowLinks) {
+  public TarjanState withLowLinks(java.util.Map<Integer, Integer> lowLinks) {
     return new TarjanState(counter, indices, lowLinks, stack, onStack, sccs);
   }
 
-  public TarjanState withStack(hydra.util.ConsList<Integer> stack) {
+  public TarjanState withStack(java.util.List<Integer> stack) {
     return new TarjanState(counter, indices, lowLinks, stack, onStack, sccs);
   }
 
-  public TarjanState withOnStack(hydra.util.PersistentSet<Integer> onStack) {
+  public TarjanState withOnStack(java.util.Set<Integer> onStack) {
     return new TarjanState(counter, indices, lowLinks, stack, onStack, sccs);
   }
 
-  public TarjanState withSccs(hydra.util.ConsList<hydra.util.ConsList<Integer>> sccs) {
+  public TarjanState withSccs(java.util.List<java.util.List<Integer>> sccs) {
     return new TarjanState(counter, indices, lowLinks, stack, onStack, sccs);
   }
 }

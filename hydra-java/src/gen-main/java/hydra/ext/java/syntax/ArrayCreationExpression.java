@@ -84,7 +84,9 @@ public abstract class ArrayCreationExpression implements Serializable, Comparabl
         return tagCmp;
       }
       Primitive o = (Primitive) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -124,7 +126,9 @@ public abstract class ArrayCreationExpression implements Serializable, Comparabl
         return tagCmp;
       }
       ClassOrInterface o = (ClassOrInterface) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -164,7 +168,9 @@ public abstract class ArrayCreationExpression implements Serializable, Comparabl
         return tagCmp;
       }
       PrimitiveArray o = (PrimitiveArray) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +210,9 @@ public abstract class ArrayCreationExpression implements Serializable, Comparabl
         return tagCmp;
       }
       ClassOrInterfaceArray o = (ClassOrInterfaceArray) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

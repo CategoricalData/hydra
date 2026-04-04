@@ -9,9 +9,9 @@ public class Pattern implements Serializable, Comparable<Pattern> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.PatternPart> value;
+  public final java.util.List<hydra.ext.cypher.openCypher.PatternPart> value;
 
-  public Pattern (hydra.util.ConsList<hydra.ext.cypher.openCypher.PatternPart> value) {
+  public Pattern (java.util.List<hydra.ext.cypher.openCypher.PatternPart> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class Pattern implements Serializable, Comparable<Pattern> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Pattern other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

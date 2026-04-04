@@ -42,11 +42,15 @@ public class ModuleName implements Serializable, Comparable<ModuleName> {
   @SuppressWarnings("unchecked")
   public int compareTo(ModuleName other) {
     int cmp = 0;
-    cmp = ((Comparable) identifier).compareTo(other.identifier);
+    cmp = hydra.util.Comparing.compare(
+      identifier,
+      other.identifier);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) name).compareTo(other.name);
+    return hydra.util.Comparing.compare(
+      name,
+      other.name);
   }
 
   public ModuleName withIdentifier(hydra.ext.java.syntax.Identifier identifier) {

@@ -34,6 +34,8 @@ public class BaseDecl implements Serializable, Comparable<BaseDecl> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(BaseDecl other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

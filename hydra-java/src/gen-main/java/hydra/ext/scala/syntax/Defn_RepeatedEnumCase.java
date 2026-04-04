@@ -11,11 +11,11 @@ public class Defn_RepeatedEnumCase implements Serializable, Comparable<Defn_Repe
 
   public static final hydra.core.Name CASES = new hydra.core.Name("cases");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods;
+  public final java.util.List<hydra.ext.scala.syntax.Mod> mods;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Data_Name> cases;
+  public final java.util.List<hydra.ext.scala.syntax.Data_Name> cases;
 
-  public Defn_RepeatedEnumCase (hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods, hydra.util.ConsList<hydra.ext.scala.syntax.Data_Name> cases) {
+  public Defn_RepeatedEnumCase (java.util.List<hydra.ext.scala.syntax.Mod> mods, java.util.List<hydra.ext.scala.syntax.Data_Name> cases) {
     this.mods = mods;
     this.cases = cases;
   }
@@ -42,18 +42,22 @@ public class Defn_RepeatedEnumCase implements Serializable, Comparable<Defn_Repe
   @SuppressWarnings("unchecked")
   public int compareTo(Defn_RepeatedEnumCase other) {
     int cmp = 0;
-    cmp = ((Comparable) mods).compareTo(other.mods);
+    cmp = hydra.util.Comparing.compare(
+      mods,
+      other.mods);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) cases).compareTo(other.cases);
+    return hydra.util.Comparing.compare(
+      cases,
+      other.cases);
   }
 
-  public Defn_RepeatedEnumCase withMods(hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods) {
+  public Defn_RepeatedEnumCase withMods(java.util.List<hydra.ext.scala.syntax.Mod> mods) {
     return new Defn_RepeatedEnumCase(mods, cases);
   }
 
-  public Defn_RepeatedEnumCase withCases(hydra.util.ConsList<hydra.ext.scala.syntax.Data_Name> cases) {
+  public Defn_RepeatedEnumCase withCases(java.util.List<hydra.ext.scala.syntax.Data_Name> cases) {
     return new Defn_RepeatedEnumCase(mods, cases);
   }
 }

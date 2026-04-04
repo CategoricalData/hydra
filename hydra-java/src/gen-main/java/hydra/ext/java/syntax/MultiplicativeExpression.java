@@ -84,7 +84,9 @@ public abstract class MultiplicativeExpression implements Serializable, Comparab
         return tagCmp;
       }
       Unary o = (Unary) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -124,7 +126,9 @@ public abstract class MultiplicativeExpression implements Serializable, Comparab
         return tagCmp;
       }
       Times o = (Times) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -164,7 +168,9 @@ public abstract class MultiplicativeExpression implements Serializable, Comparab
         return tagCmp;
       }
       Divide o = (Divide) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +210,9 @@ public abstract class MultiplicativeExpression implements Serializable, Comparab
         return tagCmp;
       }
       Mod o = (Mod) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -34,6 +34,8 @@ public class InlineShapeExpression implements Serializable, Comparable<InlineSha
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(InlineShapeExpression other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

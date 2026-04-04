@@ -68,7 +68,9 @@ public abstract class UnaryTripleExpr_Sequence_Alts implements Serializable, Com
         return tagCmp;
       }
       TripleConstraint o = (TripleConstraint) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class UnaryTripleExpr_Sequence_Alts implements Serializable, Com
         return tagCmp;
       }
       BracketedTripleExpr o = (BracketedTripleExpr) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

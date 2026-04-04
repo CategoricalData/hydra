@@ -92,7 +92,9 @@ public abstract class MethodInvocation_Variant implements Serializable, Comparab
         return tagCmp;
       }
       Type o = (Type) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -132,7 +134,9 @@ public abstract class MethodInvocation_Variant implements Serializable, Comparab
         return tagCmp;
       }
       Expression o = (Expression) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -172,7 +176,9 @@ public abstract class MethodInvocation_Variant implements Serializable, Comparab
         return tagCmp;
       }
       Primary o = (Primary) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -247,7 +253,9 @@ public abstract class MethodInvocation_Variant implements Serializable, Comparab
         return tagCmp;
       }
       TypeSuper o = (TypeSuper) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

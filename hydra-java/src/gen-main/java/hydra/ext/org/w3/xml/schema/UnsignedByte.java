@@ -34,6 +34,8 @@ public class UnsignedByte implements Serializable, Comparable<UnsignedByte> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(UnsignedByte other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

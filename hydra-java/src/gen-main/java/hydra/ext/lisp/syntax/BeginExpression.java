@@ -15,9 +15,9 @@ public class BeginExpression implements Serializable, Comparable<BeginExpression
   /**
    * The expressions to evaluate in sequence
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> expressions;
+  public final java.util.List<hydra.ext.lisp.syntax.Expression> expressions;
 
-  public BeginExpression (hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> expressions) {
+  public BeginExpression (java.util.List<hydra.ext.lisp.syntax.Expression> expressions) {
     this.expressions = expressions;
   }
 
@@ -40,6 +40,8 @@ public class BeginExpression implements Serializable, Comparable<BeginExpression
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(BeginExpression other) {
-    return ((Comparable) expressions).compareTo(other.expressions);
+    return hydra.util.Comparing.compare(
+      expressions,
+      other.expressions);
   }
 }

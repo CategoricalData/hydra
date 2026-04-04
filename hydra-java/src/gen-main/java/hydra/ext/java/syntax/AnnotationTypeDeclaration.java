@@ -13,13 +13,13 @@ public class AnnotationTypeDeclaration implements Serializable, Comparable<Annot
 
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.InterfaceModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.InterfaceModifier> modifiers;
 
   public final hydra.ext.java.syntax.TypeIdentifier identifier;
 
   public final hydra.ext.java.syntax.AnnotationTypeBody body;
 
-  public AnnotationTypeDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.InterfaceModifier> modifiers, hydra.ext.java.syntax.TypeIdentifier identifier, hydra.ext.java.syntax.AnnotationTypeBody body) {
+  public AnnotationTypeDeclaration (java.util.List<hydra.ext.java.syntax.InterfaceModifier> modifiers, hydra.ext.java.syntax.TypeIdentifier identifier, hydra.ext.java.syntax.AnnotationTypeBody body) {
     this.modifiers = modifiers;
     this.identifier = identifier;
     this.body = body;
@@ -49,18 +49,24 @@ public class AnnotationTypeDeclaration implements Serializable, Comparable<Annot
   @SuppressWarnings("unchecked")
   public int compareTo(AnnotationTypeDeclaration other) {
     int cmp = 0;
-    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
+    cmp = hydra.util.Comparing.compare(
+      modifiers,
+      other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) identifier).compareTo(other.identifier);
+    cmp = hydra.util.Comparing.compare(
+      identifier,
+      other.identifier);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
-  public AnnotationTypeDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.InterfaceModifier> modifiers) {
+  public AnnotationTypeDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.InterfaceModifier> modifiers) {
     return new AnnotationTypeDeclaration(modifiers, identifier, body);
   }
 

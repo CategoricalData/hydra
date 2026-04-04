@@ -174,7 +174,9 @@ public abstract class LiteralType implements Serializable, Comparable<LiteralTyp
         return tagCmp;
       }
       Float_ o = (Float_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -217,7 +219,9 @@ public abstract class LiteralType implements Serializable, Comparable<LiteralTyp
         return tagCmp;
       }
       Integer_ o = (Integer_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

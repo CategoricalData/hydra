@@ -40,6 +40,8 @@ public class UnsupportedTermVariantError implements Serializable, Comparable<Uns
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(UnsupportedTermVariantError other) {
-    return ((Comparable) termVariant).compareTo(other.termVariant);
+    return hydra.util.Comparing.compare(
+      termVariant,
+      other.termVariant);
   }
 }

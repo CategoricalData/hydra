@@ -15,9 +15,9 @@ public class AndExpression implements Serializable, Comparable<AndExpression> {
   /**
    * The operand expressions
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> expressions;
+  public final java.util.List<hydra.ext.lisp.syntax.Expression> expressions;
 
-  public AndExpression (hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> expressions) {
+  public AndExpression (java.util.List<hydra.ext.lisp.syntax.Expression> expressions) {
     this.expressions = expressions;
   }
 
@@ -40,6 +40,8 @@ public class AndExpression implements Serializable, Comparable<AndExpression> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(AndExpression other) {
-    return ((Comparable) expressions).compareTo(other.expressions);
+    return hydra.util.Comparing.compare(
+      expressions,
+      other.expressions);
   }
 }

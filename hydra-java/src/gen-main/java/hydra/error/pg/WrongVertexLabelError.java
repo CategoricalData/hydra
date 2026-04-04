@@ -51,11 +51,15 @@ public class WrongVertexLabelError implements Serializable, Comparable<WrongVert
   @SuppressWarnings("unchecked")
   public int compareTo(WrongVertexLabelError other) {
     int cmp = 0;
-    cmp = ((Comparable) expected).compareTo(other.expected);
+    cmp = hydra.util.Comparing.compare(
+      expected,
+      other.expected);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) actual).compareTo(other.actual);
+    return hydra.util.Comparing.compare(
+      actual,
+      other.actual);
   }
 
   public WrongVertexLabelError withExpected(hydra.pg.model.VertexLabel expected) {

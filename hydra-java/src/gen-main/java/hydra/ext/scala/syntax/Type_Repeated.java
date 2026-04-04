@@ -34,6 +34,8 @@ public class Type_Repeated implements Serializable, Comparable<Type_Repeated> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Type_Repeated other) {
-    return ((Comparable) tpe).compareTo(other.tpe);
+    return hydra.util.Comparing.compare(
+      tpe,
+      other.tpe);
   }
 }

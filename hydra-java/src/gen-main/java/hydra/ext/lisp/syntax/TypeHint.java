@@ -51,11 +51,15 @@ public class TypeHint implements Serializable, Comparable<TypeHint> {
   @SuppressWarnings("unchecked")
   public int compareTo(TypeHint other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) type).compareTo(other.type);
+    return hydra.util.Comparing.compare(
+      type,
+      other.type);
   }
 
   public TypeHint withName(hydra.ext.lisp.syntax.Symbol name) {

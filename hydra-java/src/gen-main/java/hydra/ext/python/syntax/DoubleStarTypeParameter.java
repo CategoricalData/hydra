@@ -42,11 +42,15 @@ public class DoubleStarTypeParameter implements Serializable, Comparable<DoubleS
   @SuppressWarnings("unchecked")
   public int compareTo(DoubleStarTypeParameter other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) default_).compareTo(other.default_);
+    return hydra.util.Comparing.compare(
+      default_,
+      other.default_);
   }
 
   public DoubleStarTypeParameter withName(hydra.ext.python.syntax.Name name) {

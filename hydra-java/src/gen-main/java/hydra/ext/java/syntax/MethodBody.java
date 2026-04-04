@@ -68,7 +68,9 @@ public abstract class MethodBody implements Serializable, Comparable<MethodBody>
         return tagCmp;
       }
       Block o = (Block) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

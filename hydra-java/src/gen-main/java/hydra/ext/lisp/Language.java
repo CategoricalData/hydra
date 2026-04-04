@@ -7,25 +7,25 @@ package hydra.ext.lisp;
  */
 public interface Language {
   static hydra.coders.Language lispLanguage() {
-    hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.EliminationVariant>> eliminationVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(
+    hydra.util.Lazy<java.util.Set<hydra.variants.EliminationVariant>> eliminationVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.variants.EliminationVariant.Record(),
       new hydra.variants.EliminationVariant.Union(),
       new hydra.variants.EliminationVariant.Wrap())));
-    hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.FloatType>> floatTypes = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(
+    hydra.util.Lazy<java.util.Set<hydra.core.FloatType>> floatTypes = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.core.FloatType.Bigfloat(),
       new hydra.core.FloatType.Float64())));
-    hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.FunctionVariant>> functionVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(
+    hydra.util.Lazy<java.util.Set<hydra.variants.FunctionVariant>> functionVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.variants.FunctionVariant.Elimination(),
       new hydra.variants.FunctionVariant.Lambda(),
       new hydra.variants.FunctionVariant.Primitive())));
-    hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.IntegerType>> integerTypes = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(new hydra.core.IntegerType.Bigint())));
-    hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.LiteralVariant>> literalVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(
+    hydra.util.Lazy<java.util.Set<hydra.core.IntegerType>> integerTypes = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.Arrays.asList(new hydra.core.IntegerType.Bigint())));
+    hydra.util.Lazy<java.util.Set<hydra.variants.LiteralVariant>> literalVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.variants.LiteralVariant.Binary(),
       new hydra.variants.LiteralVariant.Boolean_(),
       new hydra.variants.LiteralVariant.Float_(),
       new hydra.variants.LiteralVariant.Integer_(),
       new hydra.variants.LiteralVariant.String_())));
-    hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.TermVariant>> termVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(
+    hydra.util.Lazy<java.util.Set<hydra.variants.TermVariant>> termVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.variants.TermVariant.Annotated(),
       new hydra.variants.TermVariant.Application(),
       new hydra.variants.TermVariant.Either(),
@@ -42,7 +42,7 @@ public interface Language {
       new hydra.variants.TermVariant.Unit(),
       new hydra.variants.TermVariant.Variable(),
       new hydra.variants.TermVariant.Wrap())));
-    hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.TypeVariant>> typeVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(
+    hydra.util.Lazy<java.util.Set<hydra.variants.TypeVariant>> typeVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.variants.TypeVariant.Annotated(),
       new hydra.variants.TypeVariant.Application(),
       new hydra.variants.TypeVariant.Either(),
@@ -67,8 +67,8 @@ public interface Language {
     return true;
   }
 
-  static hydra.util.PersistentSet<String> lispReservedWords() {
-    hydra.util.ConsList<String> clojureKeywords = hydra.util.ConsList.of(
+  static java.util.Set<String> lispReservedWords() {
+    java.util.List<String> clojureKeywords = java.util.Arrays.asList(
       "def",
       "defn",
       "defn-",
@@ -112,7 +112,7 @@ public interface Language {
       "set!",
       "monitor-enter",
       "monitor-exit");
-    hydra.util.ConsList<String> commonLispKeywords = hydra.util.ConsList.of(
+    java.util.List<String> commonLispKeywords = java.util.Arrays.asList(
       "defun",
       "defvar",
       "defparameter",
@@ -182,7 +182,7 @@ public interface Language {
       "load-time-value",
       "locally",
       "the");
-    hydra.util.ConsList<String> emacsLispKeywords = hydra.util.ConsList.of(
+    java.util.List<String> emacsLispKeywords = java.util.Arrays.asList(
       "defun",
       "defvar",
       "defconst",
@@ -228,8 +228,8 @@ public interface Language {
       "pcase",
       "pcase-let",
       "seq-let");
-    hydra.util.ConsList<String> hydraLispKeywords = hydra.util.ConsList.of("Node");
-    hydra.util.ConsList<String> schemeKeywords = hydra.util.ConsList.of(
+    java.util.List<String> hydraLispKeywords = java.util.Arrays.asList("Node");
+    java.util.List<String> schemeKeywords = java.util.Arrays.asList(
       "define",
       "define-syntax",
       "define-record-type",
@@ -272,7 +272,7 @@ public interface Language {
       "guard",
       "parameterize",
       "else");
-    return hydra.lib.sets.FromList.apply(hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
+    return hydra.lib.sets.FromList.apply(hydra.lib.lists.Concat.apply(java.util.Arrays.asList(
       clojureKeywords,
       emacsLispKeywords,
       commonLispKeywords,

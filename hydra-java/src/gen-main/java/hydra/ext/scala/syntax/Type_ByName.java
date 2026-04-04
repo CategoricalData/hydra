@@ -34,6 +34,8 @@ public class Type_ByName implements Serializable, Comparable<Type_ByName> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Type_ByName other) {
-    return ((Comparable) tpe).compareTo(other.tpe);
+    return hydra.util.Comparing.compare(
+      tpe,
+      other.tpe);
   }
 }

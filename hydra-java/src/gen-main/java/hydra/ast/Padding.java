@@ -51,11 +51,15 @@ public class Padding implements Serializable, Comparable<Padding> {
   @SuppressWarnings("unchecked")
   public int compareTo(Padding other) {
     int cmp = 0;
-    cmp = ((Comparable) left).compareTo(other.left);
+    cmp = hydra.util.Comparing.compare(
+      left,
+      other.left);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) right).compareTo(other.right);
+    return hydra.util.Comparing.compare(
+      right,
+      other.right);
   }
 
   public Padding withLeft(hydra.ast.Ws left) {

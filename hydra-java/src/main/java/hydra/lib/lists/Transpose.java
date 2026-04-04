@@ -8,8 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.ConsList;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -92,31 +90,26 @@ public class Transpose extends PrimitiveFunction {
      * @param matrix the matrix to transpose
      * @return the transposed matrix
      */
-    public static <X> ConsList<ConsList<X>> apply(ConsList<ConsList<X>> matrix) {
+    public static <X> List<List<X>> apply(List<List<X>> matrix) {
         if (matrix.isEmpty()) {
-            return ConsList.empty();
-        }
-        // Convert to ArrayList for indexed access
-        ArrayList<ArrayList<X>> rows = new ArrayList<>();
-        for (ConsList<X> row : matrix) {
-            rows.add(new ArrayList<>(row));
+            return new ArrayList<>();
         }
         int maxCols = 0;
-        for (ArrayList<X> row : rows) {
+        for (List<X> row : matrix) {
             maxCols = Math.max(maxCols, row.size());
         }
-        ArrayList<ConsList<X>> result = new ArrayList<>();
+        ArrayList<List<X>> result = new ArrayList<>();
         for (int col = 0; col < maxCols; col++) {
             ArrayList<X> newRow = new ArrayList<>();
-            for (ArrayList<X> row : rows) {
+            for (List<X> row : matrix) {
                 if (col < row.size()) {
                     newRow.add(row.get(col));
                 }
             }
             if (!newRow.isEmpty()) {
-                result.add(ConsList.fromList(newRow));
+                result.add(newRow);
             }
         }
-        return ConsList.fromList(result);
+        return result;
     }
 }

@@ -42,11 +42,15 @@ public class Type_And implements Serializable, Comparable<Type_And> {
   @SuppressWarnings("unchecked")
   public int compareTo(Type_And other) {
     int cmp = 0;
-    cmp = ((Comparable) lhs).compareTo(other.lhs);
+    cmp = hydra.util.Comparing.compare(
+      lhs,
+      other.lhs);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) rhs).compareTo(other.rhs);
+    return hydra.util.Comparing.compare(
+      rhs,
+      other.rhs);
   }
 
   public Type_And withLhs(hydra.ext.scala.syntax.Type lhs) {

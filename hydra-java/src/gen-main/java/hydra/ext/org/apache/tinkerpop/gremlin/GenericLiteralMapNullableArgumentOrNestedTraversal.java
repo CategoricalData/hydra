@@ -68,7 +68,9 @@ public abstract class GenericLiteralMapNullableArgumentOrNestedTraversal impleme
         return tagCmp;
       }
       Map o = (Map) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class GenericLiteralMapNullableArgumentOrNestedTraversal impleme
         return tagCmp;
       }
       Traversal o = (Traversal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

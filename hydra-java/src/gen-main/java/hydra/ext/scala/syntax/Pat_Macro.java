@@ -34,6 +34,8 @@ public class Pat_Macro implements Serializable, Comparable<Pat_Macro> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Pat_Macro other) {
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 }

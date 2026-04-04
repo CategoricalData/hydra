@@ -76,7 +76,9 @@ public abstract class TargetWithStarAtom implements Serializable, Comparable<Tar
         return tagCmp;
       }
       Project o = (Project) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class TargetWithStarAtom implements Serializable, Comparable<Tar
         return tagCmp;
       }
       Slices o = (Slices) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class TargetWithStarAtom implements Serializable, Comparable<Tar
         return tagCmp;
       }
       Atom o = (Atom) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

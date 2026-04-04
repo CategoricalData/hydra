@@ -9,9 +9,9 @@ public class StarNamedExpressions implements Serializable, Comparable<StarNamedE
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.StarNamedExpression> value;
+  public final java.util.List<hydra.ext.python.syntax.StarNamedExpression> value;
 
-  public StarNamedExpressions (hydra.util.ConsList<hydra.ext.python.syntax.StarNamedExpression> value) {
+  public StarNamedExpressions (java.util.List<hydra.ext.python.syntax.StarNamedExpression> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class StarNamedExpressions implements Serializable, Comparable<StarNamedE
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(StarNamedExpressions other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

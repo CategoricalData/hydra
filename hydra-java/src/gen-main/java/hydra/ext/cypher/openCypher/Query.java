@@ -68,7 +68,9 @@ public abstract class Query implements Serializable, Comparable<Query> {
         return tagCmp;
       }
       Regular o = (Regular) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class Query implements Serializable, Comparable<Query> {
         return tagCmp;
       }
       Standalone o = (Standalone) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

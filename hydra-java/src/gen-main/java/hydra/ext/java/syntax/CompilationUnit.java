@@ -68,7 +68,9 @@ public abstract class CompilationUnit implements Serializable, Comparable<Compil
         return tagCmp;
       }
       Ordinary o = (Ordinary) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class CompilationUnit implements Serializable, Comparable<Compil
         return tagCmp;
       }
       Modular o = (Modular) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

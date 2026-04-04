@@ -61,15 +61,21 @@ public class BlockStyle implements Serializable, Comparable<BlockStyle> {
   @SuppressWarnings("unchecked")
   public int compareTo(BlockStyle other) {
     int cmp = 0;
-    cmp = ((Comparable) indent).compareTo(other.indent);
+    cmp = hydra.util.Comparing.compare(
+      indent,
+      other.indent);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) newlineBeforeContent).compareTo(other.newlineBeforeContent);
+    cmp = hydra.util.Comparing.compare(
+      newlineBeforeContent,
+      other.newlineBeforeContent);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) newlineAfterContent).compareTo(other.newlineAfterContent);
+    return hydra.util.Comparing.compare(
+      newlineAfterContent,
+      other.newlineAfterContent);
   }
 
   public BlockStyle withIndent(hydra.util.Maybe<String> indent) {

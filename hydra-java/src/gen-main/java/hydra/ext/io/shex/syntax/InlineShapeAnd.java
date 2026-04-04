@@ -13,9 +13,9 @@ public class InlineShapeAnd implements Serializable, Comparable<InlineShapeAnd> 
 
   public final hydra.ext.io.shex.syntax.InlineShapeNot InlineShapeNot;
 
-  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.InlineShapeNot> listOfSequence;
+  public final java.util.List<hydra.ext.io.shex.syntax.InlineShapeNot> listOfSequence;
 
-  public InlineShapeAnd (hydra.ext.io.shex.syntax.InlineShapeNot InlineShapeNot, hydra.util.ConsList<hydra.ext.io.shex.syntax.InlineShapeNot> listOfSequence) {
+  public InlineShapeAnd (hydra.ext.io.shex.syntax.InlineShapeNot InlineShapeNot, java.util.List<hydra.ext.io.shex.syntax.InlineShapeNot> listOfSequence) {
     this.InlineShapeNot = InlineShapeNot;
     this.listOfSequence = listOfSequence;
   }
@@ -42,18 +42,22 @@ public class InlineShapeAnd implements Serializable, Comparable<InlineShapeAnd> 
   @SuppressWarnings("unchecked")
   public int compareTo(InlineShapeAnd other) {
     int cmp = 0;
-    cmp = ((Comparable) InlineShapeNot).compareTo(other.InlineShapeNot);
+    cmp = hydra.util.Comparing.compare(
+      InlineShapeNot,
+      other.InlineShapeNot);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) listOfSequence).compareTo(other.listOfSequence);
+    return hydra.util.Comparing.compare(
+      listOfSequence,
+      other.listOfSequence);
   }
 
   public InlineShapeAnd withInlineShapeNot(hydra.ext.io.shex.syntax.InlineShapeNot InlineShapeNot) {
     return new InlineShapeAnd(InlineShapeNot, listOfSequence);
   }
 
-  public InlineShapeAnd withListOfSequence(hydra.util.ConsList<hydra.ext.io.shex.syntax.InlineShapeNot> listOfSequence) {
+  public InlineShapeAnd withListOfSequence(java.util.List<hydra.ext.io.shex.syntax.InlineShapeNot> listOfSequence) {
     return new InlineShapeAnd(InlineShapeNot, listOfSequence);
   }
 }

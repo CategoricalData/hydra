@@ -8,8 +8,6 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Maybe;
 
-import hydra.util.PersistentMap;
-
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -52,7 +50,7 @@ public class FindWithDefault extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply(
-                (Function<PersistentMap<Term, Term>, Term>) mp -> {
+                (Function<Map<Term, Term>, Term>) mp -> {
                     Maybe<Term> result = Lookup.apply(args.get(1), mp);
                     return result.orElse(args.get(0));
                 },
@@ -60,26 +58,26 @@ public class FindWithDefault extends PrimitiveFunction {
     }
 
     /**
-     * @deprecated Use {@link #applyLazy(Supplier, Object, PersistentMap)} instead. Eager evaluation of the default wastes memory.
+     * @deprecated Use {@link #applyLazy(Supplier, Object, Map)} instead. Eager evaluation of the default wastes memory.
      */
     @Deprecated
-    public static <K, V> Function<K, Function<PersistentMap<K, V>, V>> apply(V defaultValue) {
+    public static <K, V> Function<K, Function<Map<K, V>, V>> apply(V defaultValue) {
         return key -> mp -> apply(defaultValue, key, mp);
     }
 
     /**
-     * @deprecated Use {@link #applyLazy(Supplier, Object, PersistentMap)} instead. Eager evaluation of the default wastes memory.
+     * @deprecated Use {@link #applyLazy(Supplier, Object, Map)} instead. Eager evaluation of the default wastes memory.
      */
     @Deprecated
-    public static <K, V> V apply(V defaultValue, K key, PersistentMap<K, V> mp) {
-        return mp.lookup(key).orElse(defaultValue);
+    public static <K, V> V apply(V defaultValue, K key, Map<K, V> mp) {
+        return mp.containsKey(key) ? mp.get(key) : defaultValue;
     }
 
     /**
      * Lazily looks up a key in a map, returning a default if not found.
      * The default is only evaluated if the key is absent.
      */
-    public static <K, V> Function<K, Function<PersistentMap<K, V>, V>> applyLazy(Supplier<V> defaultValue) {
+    public static <K, V> Function<K, Function<Map<K, V>, V>> applyLazy(Supplier<V> defaultValue) {
         return key -> mp -> applyLazy(defaultValue, key, mp);
     }
 
@@ -87,7 +85,7 @@ public class FindWithDefault extends PrimitiveFunction {
      * Lazily looks up a key in a map, returning a default if not found.
      * The default is only evaluated if the key is absent.
      */
-    public static <K, V> V applyLazy(Supplier<V> defaultValue, K key, PersistentMap<K, V> mp) {
-        return mp.lookup(key).isJust() ? mp.get(key) : defaultValue.get();
+    public static <K, V> V applyLazy(Supplier<V> defaultValue, K key, Map<K, V> mp) {
+        return mp.containsKey(key) ? mp.get(key) : defaultValue.get();
     }
 }

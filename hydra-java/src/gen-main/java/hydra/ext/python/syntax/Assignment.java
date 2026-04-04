@@ -76,7 +76,9 @@ public abstract class Assignment implements Serializable, Comparable<Assignment>
         return tagCmp;
       }
       Typed o = (Typed) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class Assignment implements Serializable, Comparable<Assignment>
         return tagCmp;
       }
       Untyped o = (Untyped) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class Assignment implements Serializable, Comparable<Assignment>
         return tagCmp;
       }
       Aug o = (Aug) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

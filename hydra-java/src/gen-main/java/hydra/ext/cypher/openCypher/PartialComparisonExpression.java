@@ -42,11 +42,15 @@ public class PartialComparisonExpression implements Serializable, Comparable<Par
   @SuppressWarnings("unchecked")
   public int compareTo(PartialComparisonExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) operator).compareTo(other.operator);
+    cmp = hydra.util.Comparing.compare(
+      operator,
+      other.operator);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) right).compareTo(other.right);
+    return hydra.util.Comparing.compare(
+      right,
+      other.right);
   }
 
   public PartialComparisonExpression withOperator(hydra.ext.cypher.openCypher.ComparisonOperator operator) {

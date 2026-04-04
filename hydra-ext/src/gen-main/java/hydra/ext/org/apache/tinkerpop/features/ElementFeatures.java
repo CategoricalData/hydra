@@ -111,35 +111,51 @@ public class ElementFeatures implements Serializable, Comparable<ElementFeatures
   @SuppressWarnings("unchecked")
   public int compareTo(ElementFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) supportsAddProperty).compareTo(other.supportsAddProperty);
+    cmp = hydra.util.Comparing.compare(
+      supportsAddProperty,
+      other.supportsAddProperty);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsAnyIds).compareTo(other.supportsAnyIds);
+    cmp = hydra.util.Comparing.compare(
+      supportsAnyIds,
+      other.supportsAnyIds);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsCustomIds).compareTo(other.supportsCustomIds);
+    cmp = hydra.util.Comparing.compare(
+      supportsCustomIds,
+      other.supportsCustomIds);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsNumericIds).compareTo(other.supportsNumericIds);
+    cmp = hydra.util.Comparing.compare(
+      supportsNumericIds,
+      other.supportsNumericIds);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsRemoveProperty).compareTo(other.supportsRemoveProperty);
+    cmp = hydra.util.Comparing.compare(
+      supportsRemoveProperty,
+      other.supportsRemoveProperty);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsStringIds).compareTo(other.supportsStringIds);
+    cmp = hydra.util.Comparing.compare(
+      supportsStringIds,
+      other.supportsStringIds);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsUserSuppliedIds).compareTo(other.supportsUserSuppliedIds);
+    cmp = hydra.util.Comparing.compare(
+      supportsUserSuppliedIds,
+      other.supportsUserSuppliedIds);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) supportsUuidIds).compareTo(other.supportsUuidIds);
+    return hydra.util.Comparing.compare(
+      supportsUuidIds,
+      other.supportsUuidIds);
   }
 
   public ElementFeatures withSupportsAddProperty(Boolean supportsAddProperty) {

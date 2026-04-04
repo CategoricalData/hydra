@@ -22,9 +22,9 @@ public class AnnotatedTerm implements Serializable, Comparable<AnnotatedTerm> {
   /**
    * The annotation as a map from keys to values
    */
-  public final hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> annotation;
+  public final java.util.Map<hydra.core.Name, hydra.core.Term> annotation;
 
-  public AnnotatedTerm (hydra.core.Term body, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> annotation) {
+  public AnnotatedTerm (hydra.core.Term body, java.util.Map<hydra.core.Name, hydra.core.Term> annotation) {
     this.body = body;
     this.annotation = annotation;
   }
@@ -51,18 +51,22 @@ public class AnnotatedTerm implements Serializable, Comparable<AnnotatedTerm> {
   @SuppressWarnings("unchecked")
   public int compareTo(AnnotatedTerm other) {
     int cmp = 0;
-    cmp = ((Comparable) body).compareTo(other.body);
+    cmp = hydra.util.Comparing.compare(
+      body,
+      other.body);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) annotation).compareTo(other.annotation);
+    return hydra.util.Comparing.compare(
+      annotation,
+      other.annotation);
   }
 
   public AnnotatedTerm withBody(hydra.core.Term body) {
     return new AnnotatedTerm(body, annotation);
   }
 
-  public AnnotatedTerm withAnnotation(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> annotation) {
+  public AnnotatedTerm withAnnotation(java.util.Map<hydra.core.Name, hydra.core.Term> annotation) {
     return new AnnotatedTerm(body, annotation);
   }
 }

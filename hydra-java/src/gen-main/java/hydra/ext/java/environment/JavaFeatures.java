@@ -40,6 +40,8 @@ public class JavaFeatures implements Serializable, Comparable<JavaFeatures> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(JavaFeatures other) {
-    return ((Comparable) supportsDiamondOperator).compareTo(other.supportsDiamondOperator);
+    return hydra.util.Comparing.compare(
+      supportsDiamondOperator,
+      other.supportsDiamondOperator);
   }
 }

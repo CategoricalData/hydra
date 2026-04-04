@@ -42,11 +42,15 @@ public class PnLocal implements Serializable, Comparable<PnLocal> {
   @SuppressWarnings("unchecked")
   public int compareTo(PnLocal other) {
     int cmp = 0;
-    cmp = ((Comparable) alts).compareTo(other.alts);
+    cmp = hydra.util.Comparing.compare(
+      alts,
+      other.alts);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) Sequence).compareTo(other.Sequence);
+    return hydra.util.Comparing.compare(
+      Sequence,
+      other.Sequence);
   }
 
   public PnLocal withAlts(hydra.ext.io.shex.syntax.PnLocal_Alts alts) {

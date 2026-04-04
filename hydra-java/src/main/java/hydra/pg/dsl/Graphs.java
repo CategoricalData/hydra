@@ -8,7 +8,9 @@ import hydra.pg.model.GraphSchema;
 import hydra.pg.model.Vertex;
 import hydra.pg.model.VertexLabel;
 import hydra.pg.model.VertexType;
-import hydra.util.PersistentMap;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * DSL for constructing property graph types (vertex and edge types, property types)
@@ -105,13 +107,13 @@ public interface Graphs {
      * @return a graph
      */
     static <V> Graph<V> graph(java.util.List<Vertex<V>> vertices, java.util.List<Edge<V>> edges) {
-        PersistentMap<V, Vertex<V>> vertexMap = PersistentMap.empty();
+        Map<V, Vertex<V>> vertexMap = new HashMap<>();
         for (Vertex<V> v : vertices) {
-            vertexMap = vertexMap.insert(v.id, v);
+            vertexMap.put(v.id, v);
         }
-        PersistentMap<V, Edge<V>> edgeMap = PersistentMap.empty();
+        Map<V, Edge<V>> edgeMap = new HashMap<>();
         for (Edge<V> e : edges) {
-            edgeMap = edgeMap.insert(e.id, e);
+            edgeMap.put(e.id, e);
         }
         return new Graph<>(vertexMap, edgeMap);
     }
@@ -125,13 +127,13 @@ public interface Graphs {
      * @return a graph schema
      */
     static <T> GraphSchema<T> schema(java.util.List<VertexType<T>> vertexTypes, java.util.List<EdgeType<T>> edgeTypes) {
-        PersistentMap<VertexLabel, VertexType<T>> vertices = PersistentMap.empty();
+        Map<VertexLabel, VertexType<T>> vertices = new HashMap<>();
         for (VertexType<T> vt : vertexTypes) {
-            vertices = vertices.insert(vt.label, vt);
+            vertices.put(vt.label, vt);
         }
-        PersistentMap<EdgeLabel, EdgeType<T>> edges = PersistentMap.empty();
+        Map<EdgeLabel, EdgeType<T>> edges = new HashMap<>();
         for (EdgeType<T> et : edgeTypes) {
-            edges = edges.insert(et.label, et);
+            edges.put(et.label, et);
         }
         return new GraphSchema<>(vertices, edges);
     }

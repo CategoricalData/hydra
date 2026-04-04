@@ -21,13 +21,13 @@ public class ClassDefinition implements Serializable, Comparable<ClassDefinition
 
   public final hydra.ext.python.syntax.Name name;
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> typeParams;
+  public final java.util.List<hydra.ext.python.syntax.TypeParameter> typeParams;
 
   public final hydra.util.Maybe<hydra.ext.python.syntax.Args> arguments;
 
   public final hydra.ext.python.syntax.Block body;
 
-  public ClassDefinition (hydra.util.Maybe<hydra.ext.python.syntax.Decorators> decorators, hydra.ext.python.syntax.Name name, hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> typeParams, hydra.util.Maybe<hydra.ext.python.syntax.Args> arguments, hydra.ext.python.syntax.Block body) {
+  public ClassDefinition (hydra.util.Maybe<hydra.ext.python.syntax.Decorators> decorators, hydra.ext.python.syntax.Name name, java.util.List<hydra.ext.python.syntax.TypeParameter> typeParams, hydra.util.Maybe<hydra.ext.python.syntax.Args> arguments, hydra.ext.python.syntax.Block body) {
     this.decorators = decorators;
     this.name = name;
     this.typeParams = typeParams;
@@ -63,23 +63,33 @@ public class ClassDefinition implements Serializable, Comparable<ClassDefinition
   @SuppressWarnings("unchecked")
   public int compareTo(ClassDefinition other) {
     int cmp = 0;
-    cmp = ((Comparable) decorators).compareTo(other.decorators);
+    cmp = hydra.util.Comparing.compare(
+      decorators,
+      other.decorators);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) typeParams).compareTo(other.typeParams);
+    cmp = hydra.util.Comparing.compare(
+      typeParams,
+      other.typeParams);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) arguments).compareTo(other.arguments);
+    cmp = hydra.util.Comparing.compare(
+      arguments,
+      other.arguments);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
   public ClassDefinition withDecorators(hydra.util.Maybe<hydra.ext.python.syntax.Decorators> decorators) {
@@ -90,7 +100,7 @@ public class ClassDefinition implements Serializable, Comparable<ClassDefinition
     return new ClassDefinition(decorators, name, typeParams, arguments, body);
   }
 
-  public ClassDefinition withTypeParams(hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> typeParams) {
+  public ClassDefinition withTypeParams(java.util.List<hydra.ext.python.syntax.TypeParameter> typeParams) {
     return new ClassDefinition(decorators, name, typeParams, arguments, body);
   }
 

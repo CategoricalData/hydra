@@ -68,7 +68,9 @@ public abstract class ChainedTraversalElement implements Serializable, Comparabl
         return tagCmp;
       }
       Method o = (Method) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class ChainedTraversalElement implements Serializable, Comparabl
         return tagCmp;
       }
       Self o = (Self) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

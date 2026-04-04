@@ -42,11 +42,15 @@ public class RepeatRange implements Serializable, Comparable<RepeatRange> {
   @SuppressWarnings("unchecked")
   public int compareTo(RepeatRange other) {
     int cmp = 0;
-    cmp = ((Comparable) Integer_).compareTo(other.Integer_);
+    cmp = hydra.util.Comparing.compare(
+      Integer_,
+      other.Integer_);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) Sequence).compareTo(other.Sequence);
+    return hydra.util.Comparing.compare(
+      Sequence,
+      other.Sequence);
   }
 
   public RepeatRange withInteger(hydra.ext.io.shex.syntax.Integer_ Integer_) {

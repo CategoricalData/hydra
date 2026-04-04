@@ -68,7 +68,9 @@ public abstract class TraversalFunction implements Serializable, Comparable<Trav
         return tagCmp;
       }
       Token o = (Token) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class TraversalFunction implements Serializable, Comparable<Trav
         return tagCmp;
       }
       Column o = (Column) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

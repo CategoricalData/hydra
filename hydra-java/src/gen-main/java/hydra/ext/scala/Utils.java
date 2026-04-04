@@ -40,16 +40,16 @@ public interface Utils {
       hydra.ext.scala.Utils.scalaEscapeName((fname).value));
   }
 
-  static hydra.ext.scala.syntax.Data sapply(hydra.ext.scala.syntax.Data fun, hydra.util.ConsList<hydra.ext.scala.syntax.Data> args) {
+  static hydra.ext.scala.syntax.Data sapply(hydra.ext.scala.syntax.Data fun, java.util.List<hydra.ext.scala.syntax.Data> args) {
     return new hydra.ext.scala.syntax.Data.Apply(new hydra.ext.scala.syntax.Data_Apply(fun, args));
   }
 
-  static hydra.ext.scala.syntax.Data sapplyTypes(hydra.ext.scala.syntax.Data fun, hydra.util.ConsList<hydra.ext.scala.syntax.Type> typeArgs) {
+  static hydra.ext.scala.syntax.Data sapplyTypes(hydra.ext.scala.syntax.Data fun, java.util.List<hydra.ext.scala.syntax.Type> typeArgs) {
     java.util.function.Function<hydra.ext.scala.syntax.Type, String> typeToStr = (java.util.function.Function<hydra.ext.scala.syntax.Type, String>) (t -> hydra.ext.scala.Utils.typeToString(t));
-    hydra.util.Lazy<hydra.util.ConsList<String>> typeStrings = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+    hydra.util.Lazy<java.util.List<String>> typeStrings = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       typeToStr,
       typeArgs));
-    String typeArgStr = hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    String typeArgStr = hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "[",
       hydra.lib.strings.Intercalate.apply(
         ", ",
@@ -124,14 +124,14 @@ public interface Utils {
           95))));
     return hydra.lib.logic.IfElse.lazy(
       needsBackticks.get(),
-      () -> hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+      () -> hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
         "`",
         sanitized3.get(),
         "`")),
       () -> sanitized3.get());
   }
 
-  static hydra.util.PersistentSet<String> scalaReservedWords() {
+  static java.util.Set<String> scalaReservedWords() {
     return hydra.ext.scala.Language.scalaReservedWords();
   }
 
@@ -147,7 +147,7 @@ public interface Utils {
   }
 
   static hydra.ext.scala.syntax.Data slambda(String v, hydra.ext.scala.syntax.Data body, hydra.util.Maybe<hydra.ext.scala.syntax.Type> sdom) {
-    return new hydra.ext.scala.syntax.Data.FunctionData(new hydra.ext.scala.syntax.Data_FunctionData.Function(new hydra.ext.scala.syntax.Data_Function(hydra.util.ConsList.of(new hydra.ext.scala.syntax.Data_Param((hydra.util.ConsList<hydra.ext.scala.syntax.Mod>) (hydra.util.ConsList.<hydra.ext.scala.syntax.Mod>empty()), new hydra.ext.scala.syntax.Name.Value(v), sdom, (hydra.util.Maybe<hydra.ext.scala.syntax.Data>) (hydra.util.Maybe.<hydra.ext.scala.syntax.Data>nothing()))), body)));
+    return new hydra.ext.scala.syntax.Data.FunctionData(new hydra.ext.scala.syntax.Data_FunctionData.Function(new hydra.ext.scala.syntax.Data_Function(java.util.Arrays.asList(new hydra.ext.scala.syntax.Data_Param((java.util.List<hydra.ext.scala.syntax.Mod>) (java.util.Collections.<hydra.ext.scala.syntax.Mod>emptyList()), new hydra.ext.scala.syntax.Name.Value(v), sdom, (hydra.util.Maybe<hydra.ext.scala.syntax.Data>) (hydra.util.Maybe.<hydra.ext.scala.syntax.Data>nothing()))), body)));
   }
 
   static hydra.ext.scala.syntax.Data sname(String s) {
@@ -165,27 +165,27 @@ public interface Utils {
       local));
   }
 
-  static hydra.ext.scala.syntax.Type stapply(hydra.ext.scala.syntax.Type t, hydra.util.ConsList<hydra.ext.scala.syntax.Type> args) {
+  static hydra.ext.scala.syntax.Type stapply(hydra.ext.scala.syntax.Type t, java.util.List<hydra.ext.scala.syntax.Type> args) {
     return new hydra.ext.scala.syntax.Type.Apply(new hydra.ext.scala.syntax.Type_Apply(t, args));
   }
 
   static hydra.ext.scala.syntax.Type stapply1(hydra.ext.scala.syntax.Type t1, hydra.ext.scala.syntax.Type t2) {
     return hydra.ext.scala.Utils.stapply(
       t1,
-      hydra.util.ConsList.of(t2));
+      java.util.Arrays.asList(t2));
   }
 
   static hydra.ext.scala.syntax.Type stapply2(hydra.ext.scala.syntax.Type t1, hydra.ext.scala.syntax.Type t2, hydra.ext.scala.syntax.Type t3) {
     return hydra.ext.scala.Utils.stapply(
       t1,
-      hydra.util.ConsList.of(
+      java.util.Arrays.asList(
         t2,
         t3));
   }
 
   static hydra.ext.scala.syntax.Type_Param stparam(hydra.core.Name name) {
     String v = hydra.Formatting.capitalize((name).value);
-    return new hydra.ext.scala.syntax.Type_Param((hydra.util.ConsList<hydra.ext.scala.syntax.Mod>) (hydra.util.ConsList.<hydra.ext.scala.syntax.Mod>empty()), new hydra.ext.scala.syntax.Name.Value(v), (hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param>) (hydra.util.ConsList.<hydra.ext.scala.syntax.Type_Param>empty()), (hydra.util.ConsList<hydra.ext.scala.syntax.TypeBounds>) (hydra.util.ConsList.<hydra.ext.scala.syntax.TypeBounds>empty()), (hydra.util.ConsList<hydra.ext.scala.syntax.Type>) (hydra.util.ConsList.<hydra.ext.scala.syntax.Type>empty()), (hydra.util.ConsList<hydra.ext.scala.syntax.Type>) (hydra.util.ConsList.<hydra.ext.scala.syntax.Type>empty()));
+    return new hydra.ext.scala.syntax.Type_Param((java.util.List<hydra.ext.scala.syntax.Mod>) (java.util.Collections.<hydra.ext.scala.syntax.Mod>emptyList()), new hydra.ext.scala.syntax.Name.Value(v), (java.util.List<hydra.ext.scala.syntax.Type_Param>) (java.util.Collections.<hydra.ext.scala.syntax.Type_Param>emptyList()), (java.util.List<hydra.ext.scala.syntax.TypeBounds>) (java.util.Collections.<hydra.ext.scala.syntax.TypeBounds>emptyList()), (java.util.List<hydra.ext.scala.syntax.Type>) (java.util.Collections.<hydra.ext.scala.syntax.Type>emptyList()), (java.util.List<hydra.ext.scala.syntax.Type>) (java.util.Collections.<hydra.ext.scala.syntax.Type>emptyList()));
   }
 
   static hydra.ext.scala.syntax.Type stref(String s) {
@@ -234,11 +234,11 @@ public interface Utils {
 
           @Override
           public String visit(hydra.ext.scala.syntax.Type_FunctionType.Function fn) {
-            hydra.util.Lazy<hydra.util.ConsList<String>> params = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+            hydra.util.Lazy<java.util.List<String>> params = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
               hydra.ext.scala.Utils::typeToString,
               (fn).value.params));
             String res = hydra.ext.scala.Utils.typeToString((fn).value.res);
-            return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+            return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
               "(",
               hydra.lib.strings.Intercalate.apply(
                 ", ",
@@ -251,11 +251,11 @@ public interface Utils {
 
       @Override
       public String visit(hydra.ext.scala.syntax.Type.Apply ta) {
-        hydra.util.Lazy<hydra.util.ConsList<String>> argStrs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+        hydra.util.Lazy<java.util.List<String>> argStrs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
           hydra.ext.scala.Utils::typeToString,
           (ta).value.args));
         String base = hydra.ext.scala.Utils.typeToString((ta).value.tpe);
-        return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+        return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
           base,
           "[",
           hydra.lib.strings.Intercalate.apply(

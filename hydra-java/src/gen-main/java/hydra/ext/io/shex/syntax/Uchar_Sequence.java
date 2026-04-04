@@ -56,19 +56,27 @@ public class Uchar_Sequence implements Serializable, Comparable<Uchar_Sequence> 
   @SuppressWarnings("unchecked")
   public int compareTo(Uchar_Sequence other) {
     int cmp = 0;
-    cmp = ((Comparable) Hex).compareTo(other.Hex);
+    cmp = hydra.util.Comparing.compare(
+      Hex,
+      other.Hex);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) Hex2).compareTo(other.Hex2);
+    cmp = hydra.util.Comparing.compare(
+      Hex2,
+      other.Hex2);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) Hex3).compareTo(other.Hex3);
+    cmp = hydra.util.Comparing.compare(
+      Hex3,
+      other.Hex3);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) Hex4).compareTo(other.Hex4);
+    return hydra.util.Comparing.compare(
+      Hex4,
+      other.Hex4);
   }
 
   public Uchar_Sequence withHex(hydra.ext.io.shex.syntax.Hex Hex) {

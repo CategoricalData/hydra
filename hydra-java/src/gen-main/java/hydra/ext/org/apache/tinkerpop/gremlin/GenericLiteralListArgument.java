@@ -68,7 +68,9 @@ public abstract class GenericLiteralListArgument implements Serializable, Compar
         return tagCmp;
       }
       Value o = (Value) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class GenericLiteralListArgument implements Serializable, Compar
         return tagCmp;
       }
       Variable o = (Variable) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

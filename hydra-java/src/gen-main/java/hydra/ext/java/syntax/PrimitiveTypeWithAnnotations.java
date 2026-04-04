@@ -13,9 +13,9 @@ public class PrimitiveTypeWithAnnotations implements Serializable, Comparable<Pr
 
   public final hydra.ext.java.syntax.PrimitiveType type;
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations;
+  public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
 
-  public PrimitiveTypeWithAnnotations (hydra.ext.java.syntax.PrimitiveType type, hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {
+  public PrimitiveTypeWithAnnotations (hydra.ext.java.syntax.PrimitiveType type, java.util.List<hydra.ext.java.syntax.Annotation> annotations) {
     this.type = type;
     this.annotations = annotations;
   }
@@ -42,18 +42,22 @@ public class PrimitiveTypeWithAnnotations implements Serializable, Comparable<Pr
   @SuppressWarnings("unchecked")
   public int compareTo(PrimitiveTypeWithAnnotations other) {
     int cmp = 0;
-    cmp = ((Comparable) type).compareTo(other.type);
+    cmp = hydra.util.Comparing.compare(
+      type,
+      other.type);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) annotations).compareTo(other.annotations);
+    return hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
   }
 
   public PrimitiveTypeWithAnnotations withType(hydra.ext.java.syntax.PrimitiveType type) {
     return new PrimitiveTypeWithAnnotations(type, annotations);
   }
 
-  public PrimitiveTypeWithAnnotations withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {
+  public PrimitiveTypeWithAnnotations withAnnotations(java.util.List<hydra.ext.java.syntax.Annotation> annotations) {
     return new PrimitiveTypeWithAnnotations(type, annotations);
   }
 }

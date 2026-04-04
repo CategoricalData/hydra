@@ -91,27 +91,39 @@ public class ComparisonFeatures implements Serializable, Comparable<ComparisonFe
   @SuppressWarnings("unchecked")
   public int compareTo(ComparisonFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) equal).compareTo(other.equal);
+    cmp = hydra.util.Comparing.compare(
+      equal,
+      other.equal);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) greaterThan).compareTo(other.greaterThan);
+    cmp = hydra.util.Comparing.compare(
+      greaterThan,
+      other.greaterThan);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) greaterThanOrEqual).compareTo(other.greaterThanOrEqual);
+    cmp = hydra.util.Comparing.compare(
+      greaterThanOrEqual,
+      other.greaterThanOrEqual);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) lessThan).compareTo(other.lessThan);
+    cmp = hydra.util.Comparing.compare(
+      lessThan,
+      other.lessThan);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) lessThanOrEqual).compareTo(other.lessThanOrEqual);
+    cmp = hydra.util.Comparing.compare(
+      lessThanOrEqual,
+      other.lessThanOrEqual);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) notEqual).compareTo(other.notEqual);
+    return hydra.util.Comparing.compare(
+      notEqual,
+      other.notEqual);
   }
 
   public ComparisonFeatures withEqual(Boolean equal) {

@@ -42,11 +42,15 @@ public class With implements Serializable, Comparable<With> {
   @SuppressWarnings("unchecked")
   public int compareTo(With other) {
     int cmp = 0;
-    cmp = ((Comparable) projection).compareTo(other.projection);
+    cmp = hydra.util.Comparing.compare(
+      projection,
+      other.projection);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) where).compareTo(other.where);
+    return hydra.util.Comparing.compare(
+      where,
+      other.where);
   }
 
   public With withProjection(hydra.ext.cypher.openCypher.ProjectionBody projection) {

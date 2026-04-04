@@ -84,7 +84,9 @@ public abstract class PnLocal_Alts implements Serializable, Comparable<PnLocal_A
         return tagCmp;
       }
       PnCharsU o = (PnCharsU) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -159,7 +161,9 @@ public abstract class PnLocal_Alts implements Serializable, Comparable<PnLocal_A
         return tagCmp;
       }
       Regex o = (Regex) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -199,7 +203,9 @@ public abstract class PnLocal_Alts implements Serializable, Comparable<PnLocal_A
         return tagCmp;
       }
       Plx o = (Plx) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

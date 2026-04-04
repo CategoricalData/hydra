@@ -17,14 +17,14 @@ public class LambdaExpression implements Serializable, Comparable<LambdaExpressi
   /**
    * The patterns binding parameters
    */
-  public final hydra.util.ConsList<hydra.ext.haskell.syntax.Pattern> bindings;
+  public final java.util.List<hydra.ext.haskell.syntax.Pattern> bindings;
 
   /**
    * The body of the lambda
    */
   public final hydra.ext.haskell.syntax.Expression inner;
 
-  public LambdaExpression (hydra.util.ConsList<hydra.ext.haskell.syntax.Pattern> bindings, hydra.ext.haskell.syntax.Expression inner) {
+  public LambdaExpression (java.util.List<hydra.ext.haskell.syntax.Pattern> bindings, hydra.ext.haskell.syntax.Expression inner) {
     this.bindings = bindings;
     this.inner = inner;
   }
@@ -51,14 +51,18 @@ public class LambdaExpression implements Serializable, Comparable<LambdaExpressi
   @SuppressWarnings("unchecked")
   public int compareTo(LambdaExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) bindings).compareTo(other.bindings);
+    cmp = hydra.util.Comparing.compare(
+      bindings,
+      other.bindings);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) inner).compareTo(other.inner);
+    return hydra.util.Comparing.compare(
+      inner,
+      other.inner);
   }
 
-  public LambdaExpression withBindings(hydra.util.ConsList<hydra.ext.haskell.syntax.Pattern> bindings) {
+  public LambdaExpression withBindings(java.util.List<hydra.ext.haskell.syntax.Pattern> bindings) {
     return new LambdaExpression(bindings, inner);
   }
 

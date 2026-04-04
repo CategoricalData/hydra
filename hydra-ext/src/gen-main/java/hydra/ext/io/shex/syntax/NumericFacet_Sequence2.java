@@ -42,11 +42,15 @@ public class NumericFacet_Sequence2 implements Serializable, Comparable<NumericF
   @SuppressWarnings("unchecked")
   public int compareTo(NumericFacet_Sequence2 other) {
     int cmp = 0;
-    cmp = ((Comparable) NumericLength).compareTo(other.NumericLength);
+    cmp = hydra.util.Comparing.compare(
+      NumericLength,
+      other.NumericLength);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) Integer_).compareTo(other.Integer_);
+    return hydra.util.Comparing.compare(
+      Integer_,
+      other.Integer_);
   }
 
   public NumericFacet_Sequence2 withNumericLength(hydra.ext.io.shex.syntax.NumericLength NumericLength) {

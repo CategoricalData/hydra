@@ -61,15 +61,21 @@ public class OpExpr implements Serializable, Comparable<OpExpr> {
   @SuppressWarnings("unchecked")
   public int compareTo(OpExpr other) {
     int cmp = 0;
-    cmp = ((Comparable) op).compareTo(other.op);
+    cmp = hydra.util.Comparing.compare(
+      op,
+      other.op);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) lhs).compareTo(other.lhs);
+    cmp = hydra.util.Comparing.compare(
+      lhs,
+      other.lhs);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) rhs).compareTo(other.rhs);
+    return hydra.util.Comparing.compare(
+      rhs,
+      other.rhs);
   }
 
   public OpExpr withOp(hydra.ast.Op op) {

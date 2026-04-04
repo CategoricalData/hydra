@@ -19,19 +19,19 @@ public class NormalClassDeclaration implements Serializable, Comparable<NormalCl
 
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.ClassModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.ClassModifier> modifiers;
 
   public final hydra.ext.java.syntax.TypeIdentifier identifier;
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters;
+  public final java.util.List<hydra.ext.java.syntax.TypeParameter> parameters;
 
   public final hydra.util.Maybe<hydra.ext.java.syntax.ClassType> extends_;
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType> implements_;
+  public final java.util.List<hydra.ext.java.syntax.InterfaceType> implements_;
 
   public final hydra.ext.java.syntax.ClassBody body;
 
-  public NormalClassDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.ClassModifier> modifiers, hydra.ext.java.syntax.TypeIdentifier identifier, hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters, hydra.util.Maybe<hydra.ext.java.syntax.ClassType> extends_, hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType> implements_, hydra.ext.java.syntax.ClassBody body) {
+  public NormalClassDeclaration (java.util.List<hydra.ext.java.syntax.ClassModifier> modifiers, hydra.ext.java.syntax.TypeIdentifier identifier, java.util.List<hydra.ext.java.syntax.TypeParameter> parameters, hydra.util.Maybe<hydra.ext.java.syntax.ClassType> extends_, java.util.List<hydra.ext.java.syntax.InterfaceType> implements_, hydra.ext.java.syntax.ClassBody body) {
     this.modifiers = modifiers;
     this.identifier = identifier;
     this.parameters = parameters;
@@ -70,30 +70,42 @@ public class NormalClassDeclaration implements Serializable, Comparable<NormalCl
   @SuppressWarnings("unchecked")
   public int compareTo(NormalClassDeclaration other) {
     int cmp = 0;
-    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
+    cmp = hydra.util.Comparing.compare(
+      modifiers,
+      other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) identifier).compareTo(other.identifier);
+    cmp = hydra.util.Comparing.compare(
+      identifier,
+      other.identifier);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) parameters).compareTo(other.parameters);
+    cmp = hydra.util.Comparing.compare(
+      parameters,
+      other.parameters);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) extends_).compareTo(other.extends_);
+    cmp = hydra.util.Comparing.compare(
+      extends_,
+      other.extends_);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) implements_).compareTo(other.implements_);
+    cmp = hydra.util.Comparing.compare(
+      implements_,
+      other.implements_);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
-  public NormalClassDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.ClassModifier> modifiers) {
+  public NormalClassDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.ClassModifier> modifiers) {
     return new NormalClassDeclaration(modifiers, identifier, parameters, extends_, implements_, body);
   }
 
@@ -101,7 +113,7 @@ public class NormalClassDeclaration implements Serializable, Comparable<NormalCl
     return new NormalClassDeclaration(modifiers, identifier, parameters, extends_, implements_, body);
   }
 
-  public NormalClassDeclaration withParameters(hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters) {
+  public NormalClassDeclaration withParameters(java.util.List<hydra.ext.java.syntax.TypeParameter> parameters) {
     return new NormalClassDeclaration(modifiers, identifier, parameters, extends_, implements_, body);
   }
 
@@ -109,7 +121,7 @@ public class NormalClassDeclaration implements Serializable, Comparable<NormalCl
     return new NormalClassDeclaration(modifiers, identifier, parameters, extends_, implements_, body);
   }
 
-  public NormalClassDeclaration withImplements(hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType> implements_) {
+  public NormalClassDeclaration withImplements(java.util.List<hydra.ext.java.syntax.InterfaceType> implements_) {
     return new NormalClassDeclaration(modifiers, identifier, parameters, extends_, implements_, body);
   }
 

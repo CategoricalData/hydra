@@ -38,9 +38,9 @@ public abstract class ForInit implements Serializable, Comparable<ForInit> {
   }
 
   public static final class Statements extends hydra.ext.java.syntax.ForInit implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.java.syntax.StatementExpression> value;
+    public final java.util.List<hydra.ext.java.syntax.StatementExpression> value;
 
-    public Statements (hydra.util.ConsList<hydra.ext.java.syntax.StatementExpression> value) {
+    public Statements (java.util.List<hydra.ext.java.syntax.StatementExpression> value) {
       this.value = value;
     }
 
@@ -68,7 +68,9 @@ public abstract class ForInit implements Serializable, Comparable<ForInit> {
         return tagCmp;
       }
       Statements o = (Statements) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class ForInit implements Serializable, Comparable<ForInit> {
         return tagCmp;
       }
       LocalVariable o = (LocalVariable) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -100,7 +100,9 @@ public abstract class DataPropertyAxiom implements Serializable, Comparable<Data
         return tagCmp;
       }
       DataPropertyAxiom_ o = (DataPropertyAxiom_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -140,7 +142,9 @@ public abstract class DataPropertyAxiom implements Serializable, Comparable<Data
         return tagCmp;
       }
       DataPropertyRange o = (DataPropertyRange) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -180,7 +184,9 @@ public abstract class DataPropertyAxiom implements Serializable, Comparable<Data
         return tagCmp;
       }
       DisjointDataProperties o = (DisjointDataProperties) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -220,7 +226,9 @@ public abstract class DataPropertyAxiom implements Serializable, Comparable<Data
         return tagCmp;
       }
       EquivalentDataProperties o = (EquivalentDataProperties) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -260,7 +268,9 @@ public abstract class DataPropertyAxiom implements Serializable, Comparable<Data
         return tagCmp;
       }
       FunctionalDataProperty o = (FunctionalDataProperty) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -300,7 +310,9 @@ public abstract class DataPropertyAxiom implements Serializable, Comparable<Data
         return tagCmp;
       }
       SubDataPropertyOf o = (SubDataPropertyOf) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -40,6 +40,8 @@ public class CharacterLiteral implements Serializable, Comparable<CharacterLiter
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(CharacterLiteral other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

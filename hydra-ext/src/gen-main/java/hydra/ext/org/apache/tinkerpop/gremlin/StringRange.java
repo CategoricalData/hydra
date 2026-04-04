@@ -42,11 +42,15 @@ public class StringRange implements Serializable, Comparable<StringRange> {
   @SuppressWarnings("unchecked")
   public int compareTo(StringRange other) {
     int cmp = 0;
-    cmp = ((Comparable) left).compareTo(other.left);
+    cmp = hydra.util.Comparing.compare(
+      left,
+      other.left);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) right).compareTo(other.right);
+    return hydra.util.Comparing.compare(
+      right,
+      other.right);
   }
 
   public StringRange withLeft(String left) {

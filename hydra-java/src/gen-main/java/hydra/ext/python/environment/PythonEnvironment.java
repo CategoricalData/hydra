@@ -32,7 +32,7 @@ public class PythonEnvironment implements Serializable, Comparable<PythonEnviron
   /**
    * Type variables in scope, with their Python names
    */
-  public final hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>> boundTypeVariables;
+  public final hydra.util.Pair<java.util.List<hydra.core.Name>, java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>> boundTypeVariables;
 
   /**
    * Graph context for type inference
@@ -42,7 +42,7 @@ public class PythonEnvironment implements Serializable, Comparable<PythonEnviron
   /**
    * Set of nullary bindings (need call syntax)
    */
-  public final hydra.util.PersistentSet<hydra.core.Name> nullaryBindings;
+  public final java.util.Set<hydra.core.Name> nullaryBindings;
 
   /**
    * Target Python version
@@ -57,9 +57,9 @@ public class PythonEnvironment implements Serializable, Comparable<PythonEnviron
   /**
    * Variables that are inline let bindings (walrus operators)
    */
-  public final hydra.util.PersistentSet<hydra.core.Name> inlineVariables;
+  public final java.util.Set<hydra.core.Name> inlineVariables;
 
-  public PythonEnvironment (hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces, hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>> boundTypeVariables, hydra.graph.Graph graph, hydra.util.PersistentSet<hydra.core.Name> nullaryBindings, hydra.ext.python.environment.PythonVersion version, Boolean skipCasts, hydra.util.PersistentSet<hydra.core.Name> inlineVariables) {
+  public PythonEnvironment (hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces, hydra.util.Pair<java.util.List<hydra.core.Name>, java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>> boundTypeVariables, hydra.graph.Graph graph, java.util.Set<hydra.core.Name> nullaryBindings, hydra.ext.python.environment.PythonVersion version, Boolean skipCasts, java.util.Set<hydra.core.Name> inlineVariables) {
     this.namespaces = namespaces;
     this.boundTypeVariables = boundTypeVariables;
     this.graph = graph;
@@ -101,38 +101,52 @@ public class PythonEnvironment implements Serializable, Comparable<PythonEnviron
   @SuppressWarnings("unchecked")
   public int compareTo(PythonEnvironment other) {
     int cmp = 0;
-    cmp = ((Comparable) namespaces).compareTo(other.namespaces);
+    cmp = hydra.util.Comparing.compare(
+      namespaces,
+      other.namespaces);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) boundTypeVariables).compareTo(other.boundTypeVariables);
+    cmp = hydra.util.Comparing.compare(
+      boundTypeVariables,
+      other.boundTypeVariables);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) graph).compareTo(other.graph);
+    cmp = hydra.util.Comparing.compare(
+      graph,
+      other.graph);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) nullaryBindings).compareTo(other.nullaryBindings);
+    cmp = hydra.util.Comparing.compare(
+      nullaryBindings,
+      other.nullaryBindings);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) version).compareTo(other.version);
+    cmp = hydra.util.Comparing.compare(
+      version,
+      other.version);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) skipCasts).compareTo(other.skipCasts);
+    cmp = hydra.util.Comparing.compare(
+      skipCasts,
+      other.skipCasts);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) inlineVariables).compareTo(other.inlineVariables);
+    return hydra.util.Comparing.compare(
+      inlineVariables,
+      other.inlineVariables);
   }
 
   public PythonEnvironment withNamespaces(hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces) {
     return new PythonEnvironment(namespaces, boundTypeVariables, graph, nullaryBindings, version, skipCasts, inlineVariables);
   }
 
-  public PythonEnvironment withBoundTypeVariables(hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>> boundTypeVariables) {
+  public PythonEnvironment withBoundTypeVariables(hydra.util.Pair<java.util.List<hydra.core.Name>, java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>> boundTypeVariables) {
     return new PythonEnvironment(namespaces, boundTypeVariables, graph, nullaryBindings, version, skipCasts, inlineVariables);
   }
 
@@ -140,7 +154,7 @@ public class PythonEnvironment implements Serializable, Comparable<PythonEnviron
     return new PythonEnvironment(namespaces, boundTypeVariables, graph, nullaryBindings, version, skipCasts, inlineVariables);
   }
 
-  public PythonEnvironment withNullaryBindings(hydra.util.PersistentSet<hydra.core.Name> nullaryBindings) {
+  public PythonEnvironment withNullaryBindings(java.util.Set<hydra.core.Name> nullaryBindings) {
     return new PythonEnvironment(namespaces, boundTypeVariables, graph, nullaryBindings, version, skipCasts, inlineVariables);
   }
 
@@ -152,7 +166,7 @@ public class PythonEnvironment implements Serializable, Comparable<PythonEnviron
     return new PythonEnvironment(namespaces, boundTypeVariables, graph, nullaryBindings, version, skipCasts, inlineVariables);
   }
 
-  public PythonEnvironment withInlineVariables(hydra.util.PersistentSet<hydra.core.Name> inlineVariables) {
+  public PythonEnvironment withInlineVariables(java.util.Set<hydra.core.Name> inlineVariables) {
     return new PythonEnvironment(namespaces, boundTypeVariables, graph, nullaryBindings, version, skipCasts, inlineVariables);
   }
 }

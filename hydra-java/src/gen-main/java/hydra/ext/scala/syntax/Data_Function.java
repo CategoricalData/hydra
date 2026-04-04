@@ -11,11 +11,11 @@ public class Data_Function implements Serializable, Comparable<Data_Function> {
 
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param> params;
+  public final java.util.List<hydra.ext.scala.syntax.Data_Param> params;
 
   public final hydra.ext.scala.syntax.Data body;
 
-  public Data_Function (hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param> params, hydra.ext.scala.syntax.Data body) {
+  public Data_Function (java.util.List<hydra.ext.scala.syntax.Data_Param> params, hydra.ext.scala.syntax.Data body) {
     this.params = params;
     this.body = body;
   }
@@ -42,14 +42,18 @@ public class Data_Function implements Serializable, Comparable<Data_Function> {
   @SuppressWarnings("unchecked")
   public int compareTo(Data_Function other) {
     int cmp = 0;
-    cmp = ((Comparable) params).compareTo(other.params);
+    cmp = hydra.util.Comparing.compare(
+      params,
+      other.params);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
-  public Data_Function withParams(hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param> params) {
+  public Data_Function withParams(java.util.List<hydra.ext.scala.syntax.Data_Param> params) {
     return new Data_Function(params, body);
   }
 

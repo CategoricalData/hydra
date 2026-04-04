@@ -68,7 +68,9 @@ public abstract class Predicate implements Serializable, Comparable<Predicate> {
         return tagCmp;
       }
       Iri o = (Iri) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class Predicate implements Serializable, Comparable<Predicate> {
         return tagCmp;
       }
       RdfType o = (RdfType) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

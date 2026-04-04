@@ -34,6 +34,8 @@ public class AnySimpleType implements Serializable, Comparable<AnySimpleType> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(AnySimpleType other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

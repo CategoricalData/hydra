@@ -9,9 +9,9 @@ public class Data_For implements Serializable, Comparable<Data_For> {
 
   public static final hydra.core.Name ENUMS = new hydra.core.Name("enums");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Enumerator> enums;
+  public final java.util.List<hydra.ext.scala.syntax.Enumerator> enums;
 
-  public Data_For (hydra.util.ConsList<hydra.ext.scala.syntax.Enumerator> enums) {
+  public Data_For (java.util.List<hydra.ext.scala.syntax.Enumerator> enums) {
     this.enums = enums;
   }
 
@@ -34,6 +34,8 @@ public class Data_For implements Serializable, Comparable<Data_For> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Data_For other) {
-    return ((Comparable) enums).compareTo(other.enums);
+    return hydra.util.Comparing.compare(
+      enums,
+      other.enums);
   }
 }

@@ -9,9 +9,9 @@ public class ExclusiveOrExpression implements Serializable, Comparable<Exclusive
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.AndExpression> value;
+  public final java.util.List<hydra.ext.java.syntax.AndExpression> value;
 
-  public ExclusiveOrExpression (hydra.util.ConsList<hydra.ext.java.syntax.AndExpression> value) {
+  public ExclusiveOrExpression (java.util.List<hydra.ext.java.syntax.AndExpression> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class ExclusiveOrExpression implements Serializable, Comparable<Exclusive
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ExclusiveOrExpression other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

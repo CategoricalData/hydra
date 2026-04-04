@@ -49,15 +49,21 @@ public class SliceExpression implements Serializable, Comparable<SliceExpression
   @SuppressWarnings("unchecked")
   public int compareTo(SliceExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) start).compareTo(other.start);
+    cmp = hydra.util.Comparing.compare(
+      start,
+      other.start);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) stop).compareTo(other.stop);
+    cmp = hydra.util.Comparing.compare(
+      stop,
+      other.stop);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) step).compareTo(other.step);
+    return hydra.util.Comparing.compare(
+      step,
+      other.step);
   }
 
   public SliceExpression withStart(hydra.util.Maybe<hydra.ext.python.syntax.Expression> start) {

@@ -68,7 +68,9 @@ public abstract class DateDiffArgs implements Serializable, Comparable<DateDiffA
         return tagCmp;
       }
       Traversal o = (Traversal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class DateDiffArgs implements Serializable, Comparable<DateDiffA
         return tagCmp;
       }
       Date o = (Date) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

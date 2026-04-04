@@ -37,6 +37,8 @@ public class Statement implements Serializable, Comparable<Statement> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Statement other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

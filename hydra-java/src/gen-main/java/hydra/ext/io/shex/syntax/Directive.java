@@ -68,7 +68,9 @@ public abstract class Directive implements Serializable, Comparable<Directive> {
         return tagCmp;
       }
       BaseDecl o = (BaseDecl) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class Directive implements Serializable, Comparable<Directive> {
         return tagCmp;
       }
       PrefixDecl o = (PrefixDecl) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

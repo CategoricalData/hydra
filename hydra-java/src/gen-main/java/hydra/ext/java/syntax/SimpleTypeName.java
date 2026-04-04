@@ -34,6 +34,8 @@ public class SimpleTypeName implements Serializable, Comparable<SimpleTypeName> 
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(SimpleTypeName other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

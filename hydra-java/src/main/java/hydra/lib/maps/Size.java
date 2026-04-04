@@ -8,8 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.PersistentMap;
-
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -52,7 +50,7 @@ public class Size extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply(
-                (Function<PersistentMap<Term, Term>, Term>) mp -> Terms.int32(mp.size()),
+                (Function<Map<Term, Term>, Term>) mp -> Terms.int32(mp.size()),
                 hydra.extract.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(0)));
     }
 
@@ -63,7 +61,7 @@ public class Size extends PrimitiveFunction {
      * @param mp the map
      * @return the size
      */
-    public static <K, V> Integer apply(PersistentMap<K, V> mp) {
+    public static <K, V> Integer apply(Map<K, V> mp) {
         return mp.size();
     }
 }

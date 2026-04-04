@@ -42,11 +42,15 @@ public class AnnotatedStatement implements Serializable, Comparable<AnnotatedSta
   @SuppressWarnings("unchecked")
   public int compareTo(AnnotatedStatement other) {
     int cmp = 0;
-    cmp = ((Comparable) comment).compareTo(other.comment);
+    cmp = hydra.util.Comparing.compare(
+      comment,
+      other.comment);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) statement).compareTo(other.statement);
+    return hydra.util.Comparing.compare(
+      statement,
+      other.statement);
   }
 
   public AnnotatedStatement withComment(String comment) {

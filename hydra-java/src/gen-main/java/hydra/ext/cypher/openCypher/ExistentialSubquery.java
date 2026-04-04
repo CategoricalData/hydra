@@ -68,7 +68,9 @@ public abstract class ExistentialSubquery implements Serializable, Comparable<Ex
         return tagCmp;
       }
       Regular o = (Regular) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class ExistentialSubquery implements Serializable, Comparable<Ex
         return tagCmp;
       }
       Pattern o = (Pattern) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

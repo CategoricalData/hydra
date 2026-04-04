@@ -15,7 +15,7 @@ public class EnhancedForCond implements Serializable, Comparable<EnhancedForCond
 
   public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers;
 
   public final hydra.ext.java.syntax.LocalVariableType type;
 
@@ -23,7 +23,7 @@ public class EnhancedForCond implements Serializable, Comparable<EnhancedForCond
 
   public final hydra.ext.java.syntax.Expression expression;
 
-  public EnhancedForCond (hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.LocalVariableType type, hydra.ext.java.syntax.VariableDeclaratorId id, hydra.ext.java.syntax.Expression expression) {
+  public EnhancedForCond (java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.LocalVariableType type, hydra.ext.java.syntax.VariableDeclaratorId id, hydra.ext.java.syntax.Expression expression) {
     this.modifiers = modifiers;
     this.type = type;
     this.id = id;
@@ -56,22 +56,30 @@ public class EnhancedForCond implements Serializable, Comparable<EnhancedForCond
   @SuppressWarnings("unchecked")
   public int compareTo(EnhancedForCond other) {
     int cmp = 0;
-    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
+    cmp = hydra.util.Comparing.compare(
+      modifiers,
+      other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) type).compareTo(other.type);
+    cmp = hydra.util.Comparing.compare(
+      type,
+      other.type);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) id).compareTo(other.id);
+    cmp = hydra.util.Comparing.compare(
+      id,
+      other.id);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) expression).compareTo(other.expression);
+    return hydra.util.Comparing.compare(
+      expression,
+      other.expression);
   }
 
-  public EnhancedForCond withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers) {
+  public EnhancedForCond withModifiers(java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers) {
     return new EnhancedForCond(modifiers, type, id, expression);
   }
 

@@ -42,11 +42,15 @@ public class SwitchStatement implements Serializable, Comparable<SwitchStatement
   @SuppressWarnings("unchecked")
   public int compareTo(SwitchStatement other) {
     int cmp = 0;
-    cmp = ((Comparable) cond).compareTo(other.cond);
+    cmp = hydra.util.Comparing.compare(
+      cond,
+      other.cond);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) block).compareTo(other.block);
+    return hydra.util.Comparing.compare(
+      block,
+      other.block);
   }
 
   public SwitchStatement withCond(hydra.ext.java.syntax.Expression cond) {

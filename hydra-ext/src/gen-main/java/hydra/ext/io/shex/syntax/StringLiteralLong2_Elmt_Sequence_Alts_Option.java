@@ -103,7 +103,9 @@ public abstract class StringLiteralLong2_Elmt_Sequence_Alts_Option implements Se
         return tagCmp;
       }
       Sequence o = (Sequence) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

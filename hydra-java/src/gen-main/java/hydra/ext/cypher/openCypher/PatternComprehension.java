@@ -56,19 +56,27 @@ public class PatternComprehension implements Serializable, Comparable<PatternCom
   @SuppressWarnings("unchecked")
   public int compareTo(PatternComprehension other) {
     int cmp = 0;
-    cmp = ((Comparable) variable).compareTo(other.variable);
+    cmp = hydra.util.Comparing.compare(
+      variable,
+      other.variable);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) pattern).compareTo(other.pattern);
+    cmp = hydra.util.Comparing.compare(
+      pattern,
+      other.pattern);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) where).compareTo(other.where);
+    cmp = hydra.util.Comparing.compare(
+      where,
+      other.where);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) right).compareTo(other.right);
+    return hydra.util.Comparing.compare(
+      right,
+      other.right);
   }
 
   public PatternComprehension withVariable(hydra.util.Maybe<hydra.ext.cypher.openCypher.Variable> variable) {

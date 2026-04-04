@@ -34,6 +34,8 @@ public class Data_QuotedMacroExpr implements Serializable, Comparable<Data_Quote
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Data_QuotedMacroExpr other) {
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 }

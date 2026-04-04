@@ -68,7 +68,9 @@ public abstract class LiteralExpressionOrAttribute implements Serializable, Comp
         return tagCmp;
       }
       Literal o = (Literal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class LiteralExpressionOrAttribute implements Serializable, Comp
         return tagCmp;
       }
       Attribute o = (Attribute) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

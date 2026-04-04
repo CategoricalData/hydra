@@ -81,7 +81,7 @@ public interface Eithers {
         cx,
         g,
         listTerm),
-      (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (elements -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(hydra.lib.lists.Foldl.apply(
+      (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (elements -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(hydra.lib.lists.Foldl.apply(
         (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (acc -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (el -> new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.eithers.either"))), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("err"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>left(new hydra.core.Term.Variable(new hydra.core.Name("err"))))))))), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("a"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(funTerm, new hydra.core.Term.Variable(new hydra.core.Name("a")))), el))))))), acc)))),
         new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>right(initTerm)),
         elements))));
@@ -185,24 +185,24 @@ public interface Eithers {
         cx,
         g,
         listTerm),
-      (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (elements -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(new hydra.core.Term.List(hydra.lib.lists.Foldl.apply(
-        (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>>) (acc -> (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>) (el -> (el).accept(new hydra.core.Term.PartialVisitor<>() {
+      (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (elements -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(new hydra.core.Term.List(hydra.lib.lists.Foldl.apply(
+        (java.util.function.Function<java.util.List<hydra.core.Term>, java.util.function.Function<hydra.core.Term, java.util.List<hydra.core.Term>>>) (acc -> (java.util.function.Function<hydra.core.Term, java.util.List<hydra.core.Term>>) (el -> (el).accept(new hydra.core.Term.PartialVisitor<>() {
           @Override
-          public hydra.util.ConsList<hydra.core.Term> otherwise(hydra.core.Term instance) {
+          public java.util.List<hydra.core.Term> otherwise(hydra.core.Term instance) {
             return acc;
           }
 
           @Override
-          public hydra.util.ConsList<hydra.core.Term> visit(hydra.core.Term.Either e) {
+          public java.util.List<hydra.core.Term> visit(hydra.core.Term.Either e) {
             return hydra.lib.eithers.Either.apply(
-              (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>) (val -> hydra.lib.lists.Concat2.apply(
+              (java.util.function.Function<hydra.core.Term, java.util.List<hydra.core.Term>>) (val -> hydra.lib.lists.Concat2.apply(
                 acc,
                 hydra.lib.lists.Pure.apply(val))),
-              (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>) (ignored -> acc),
+              (java.util.function.Function<hydra.core.Term, java.util.List<hydra.core.Term>>) (ignored -> acc),
               (e).value);
           }
         }))),
-        (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()),
+        (java.util.List<hydra.core.Term>) (java.util.Collections.<hydra.core.Term>emptyList()),
         elements)))));
   }
 
@@ -235,9 +235,9 @@ public interface Eithers {
         cx,
         g,
         listTerm),
-      (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (elements -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(hydra.lib.lists.Foldl.apply(
+      (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (elements -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(hydra.lib.lists.Foldl.apply(
         (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (acc -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (el -> new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.eithers.either"))), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("err"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>left(new hydra.core.Term.Variable(new hydra.core.Name("err"))))))))), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("y"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.eithers.either"))), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("accErr"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>left(new hydra.core.Term.Variable(new hydra.core.Name("accErr"))))))))), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("ys"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>right(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.lists.cons"))), new hydra.core.Term.Variable(new hydra.core.Name("y")))), new hydra.core.Term.Variable(new hydra.core.Name("ys"))))))))))), acc))))))), new hydra.core.Term.Application(new hydra.core.Application(funTerm, el)))))),
-        new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>right(new hydra.core.Term.List((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty())))),
+        new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>right(new hydra.core.Term.List((java.util.List<hydra.core.Term>) (java.util.Collections.<hydra.core.Term>emptyList())))),
         hydra.lib.lists.Reverse.apply(elements)))));
   }
 
@@ -270,42 +270,42 @@ public interface Eithers {
         cx,
         g,
         setTerm),
-      (java.util.function.Function<hydra.util.PersistentSet<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (elements -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(hydra.lib.lists.Foldl.apply(
+      (java.util.function.Function<java.util.Set<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (elements -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(hydra.lib.lists.Foldl.apply(
         (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (acc -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (el -> new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.eithers.either"))), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("err"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>left(new hydra.core.Term.Variable(new hydra.core.Name("err"))))))))), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("y"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.eithers.either"))), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("accErr"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>left(new hydra.core.Term.Variable(new hydra.core.Name("accErr"))))))))), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("ys"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>right(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.sets.insert"))), new hydra.core.Term.Variable(new hydra.core.Name("y")))), new hydra.core.Term.Variable(new hydra.core.Name("ys"))))))))))), acc))))))), new hydra.core.Term.Application(new hydra.core.Application(funTerm, el)))))),
-        new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>right(new hydra.core.Term.Set(hydra.lib.sets.FromList.apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()))))),
+        new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>right(new hydra.core.Term.Set(hydra.lib.sets.FromList.apply((java.util.List<hydra.core.Term>) (java.util.Collections.<hydra.core.Term>emptyList()))))),
         hydra.lib.sets.ToList.apply(elements)))));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Term>>> partitionEithers(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term listTerm) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Term>>> partitionEithers(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term listTerm) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.Core.list(
         cx,
         g,
         listTerm),
-      (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Term>>>>) (elements -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Term>>>right(hydra.lib.lists.Foldl.apply(
-        (java.util.function.Function<hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Term>>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Term>>>>) (acc -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Term>>>) (el -> {
-          hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> ls = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(acc));
-          hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> rs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(acc));
+      (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Term>>>>) (elements -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Term>>>right(hydra.lib.lists.Foldl.apply(
+        (java.util.function.Function<hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Term>>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Term>>>>) (acc -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Term>>>) (el -> {
+          hydra.util.Lazy<java.util.List<hydra.core.Term>> ls = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(acc));
+          hydra.util.Lazy<java.util.List<hydra.core.Term>> rs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(acc));
           return (el).accept(new hydra.core.Term.PartialVisitor<>() {
             @Override
-            public hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Term>> otherwise(hydra.core.Term instance) {
+            public hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Term>> otherwise(hydra.core.Term instance) {
               return acc;
             }
 
             @Override
-            public hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Term>> visit(hydra.core.Term.Either e) {
+            public hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Term>> visit(hydra.core.Term.Either e) {
               return hydra.lib.eithers.Either.apply(
-                (java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Term>>>) (val -> (hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Term>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Term>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Term>>(hydra.lib.lists.Concat2.apply(
+                (java.util.function.Function<hydra.core.Term, hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Term>>>) (val -> (hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Term>>) ((hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Term>>) (new hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Term>>(hydra.lib.lists.Concat2.apply(
                   ls.get(),
                   hydra.lib.lists.Pure.apply(val)), rs.get())))),
-                (java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Term>>>) (val -> (hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Term>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Term>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Term>>(ls.get(), hydra.lib.lists.Concat2.apply(
+                (java.util.function.Function<hydra.core.Term, hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Term>>>) (val -> (hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Term>>) ((hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Term>>) (new hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Term>>(ls.get(), hydra.lib.lists.Concat2.apply(
                   rs.get(),
                   hydra.lib.lists.Pure.apply(val)))))),
                 (e).value);
             }
           });
         })),
-        (hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Term>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Term>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Term>>((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()), (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty())))),
+        (hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Term>>) ((hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Term>>) (new hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Term>>((java.util.List<hydra.core.Term>) (java.util.Collections.<hydra.core.Term>emptyList()), (java.util.List<hydra.core.Term>) (java.util.Collections.<hydra.core.Term>emptyList())))),
         elements))));
   }
 
@@ -315,24 +315,24 @@ public interface Eithers {
         cx,
         g,
         listTerm),
-      (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (elements -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(new hydra.core.Term.List(hydra.lib.lists.Foldl.apply(
-        (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>>) (acc -> (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>) (el -> (el).accept(new hydra.core.Term.PartialVisitor<>() {
+      (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (elements -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(new hydra.core.Term.List(hydra.lib.lists.Foldl.apply(
+        (java.util.function.Function<java.util.List<hydra.core.Term>, java.util.function.Function<hydra.core.Term, java.util.List<hydra.core.Term>>>) (acc -> (java.util.function.Function<hydra.core.Term, java.util.List<hydra.core.Term>>) (el -> (el).accept(new hydra.core.Term.PartialVisitor<>() {
           @Override
-          public hydra.util.ConsList<hydra.core.Term> otherwise(hydra.core.Term instance) {
+          public java.util.List<hydra.core.Term> otherwise(hydra.core.Term instance) {
             return acc;
           }
 
           @Override
-          public hydra.util.ConsList<hydra.core.Term> visit(hydra.core.Term.Either e) {
+          public java.util.List<hydra.core.Term> visit(hydra.core.Term.Either e) {
             return hydra.lib.eithers.Either.apply(
-              (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>) (ignored -> acc),
-              (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>) (val -> hydra.lib.lists.Concat2.apply(
+              (java.util.function.Function<hydra.core.Term, java.util.List<hydra.core.Term>>) (ignored -> acc),
+              (java.util.function.Function<hydra.core.Term, java.util.List<hydra.core.Term>>) (val -> hydra.lib.lists.Concat2.apply(
                 acc,
                 hydra.lib.lists.Pure.apply(val))),
               (e).value);
           }
         }))),
-        (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()),
+        (java.util.List<hydra.core.Term>) (java.util.Collections.<hydra.core.Term>emptyList()),
         elements)))));
   }
 }

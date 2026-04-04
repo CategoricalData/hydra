@@ -29,7 +29,7 @@ public class PropertyShape implements Serializable, Comparable<PropertyShape> {
   /**
    * Any property shape -specific constraint parameters
    */
-  public final hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.PropertyShapeConstraint> constraints;
+  public final java.util.Set<hydra.ext.org.w3.shacl.model.PropertyShapeConstraint> constraints;
 
   /**
    * See https://www.w3.org/TR/shacl/#defaultValue
@@ -53,7 +53,7 @@ public class PropertyShape implements Serializable, Comparable<PropertyShape> {
 
   public final hydra.ext.org.w3.rdf.syntax.Iri path;
 
-  public PropertyShape (hydra.ext.org.w3.shacl.model.CommonProperties common, hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.PropertyShapeConstraint> constraints, hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.Node> defaultValue, hydra.ext.org.w3.rdf.syntax.LangStrings description, hydra.ext.org.w3.rdf.syntax.LangStrings name, hydra.util.Maybe<java.math.BigInteger> order, hydra.ext.org.w3.rdf.syntax.Iri path) {
+  public PropertyShape (hydra.ext.org.w3.shacl.model.CommonProperties common, java.util.Set<hydra.ext.org.w3.shacl.model.PropertyShapeConstraint> constraints, hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.Node> defaultValue, hydra.ext.org.w3.rdf.syntax.LangStrings description, hydra.ext.org.w3.rdf.syntax.LangStrings name, hydra.util.Maybe<java.math.BigInteger> order, hydra.ext.org.w3.rdf.syntax.Iri path) {
     this.common = common;
     this.constraints = constraints;
     this.defaultValue = defaultValue;
@@ -95,38 +95,52 @@ public class PropertyShape implements Serializable, Comparable<PropertyShape> {
   @SuppressWarnings("unchecked")
   public int compareTo(PropertyShape other) {
     int cmp = 0;
-    cmp = ((Comparable) common).compareTo(other.common);
+    cmp = hydra.util.Comparing.compare(
+      common,
+      other.common);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) constraints).compareTo(other.constraints);
+    cmp = hydra.util.Comparing.compare(
+      constraints,
+      other.constraints);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) defaultValue).compareTo(other.defaultValue);
+    cmp = hydra.util.Comparing.compare(
+      defaultValue,
+      other.defaultValue);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) description).compareTo(other.description);
+    cmp = hydra.util.Comparing.compare(
+      description,
+      other.description);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) order).compareTo(other.order);
+    cmp = hydra.util.Comparing.compare(
+      order,
+      other.order);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) path).compareTo(other.path);
+    return hydra.util.Comparing.compare(
+      path,
+      other.path);
   }
 
   public PropertyShape withCommon(hydra.ext.org.w3.shacl.model.CommonProperties common) {
     return new PropertyShape(common, constraints, defaultValue, description, name, order, path);
   }
 
-  public PropertyShape withConstraints(hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.PropertyShapeConstraint> constraints) {
+  public PropertyShape withConstraints(java.util.Set<hydra.ext.org.w3.shacl.model.PropertyShapeConstraint> constraints) {
     return new PropertyShape(common, constraints, defaultValue, description, name, order, path);
   }
 

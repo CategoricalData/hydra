@@ -51,11 +51,15 @@ public class ModuleDeclaration implements Serializable, Comparable<ModuleDeclara
   @SuppressWarnings("unchecked")
   public int compareTo(ModuleDeclaration other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) doc).compareTo(other.doc);
+    return hydra.util.Comparing.compare(
+      doc,
+      other.doc);
   }
 
   public ModuleDeclaration withName(hydra.ext.lisp.syntax.NamespaceName name) {

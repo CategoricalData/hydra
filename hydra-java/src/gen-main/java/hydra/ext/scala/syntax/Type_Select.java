@@ -42,11 +42,15 @@ public class Type_Select implements Serializable, Comparable<Type_Select> {
   @SuppressWarnings("unchecked")
   public int compareTo(Type_Select other) {
     int cmp = 0;
-    cmp = ((Comparable) qual).compareTo(other.qual);
+    cmp = hydra.util.Comparing.compare(
+      qual,
+      other.qual);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) name).compareTo(other.name);
+    return hydra.util.Comparing.compare(
+      name,
+      other.name);
   }
 
   public Type_Select withQual(hydra.ext.scala.syntax.Data_Ref qual) {

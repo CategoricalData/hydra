@@ -68,7 +68,9 @@ public abstract class AnnotatedRhs implements Serializable, Comparable<Annotated
         return tagCmp;
       }
       Yield o = (Yield) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -78,9 +80,9 @@ public abstract class AnnotatedRhs implements Serializable, Comparable<Annotated
   }
 
   public static final class Star extends hydra.ext.python.syntax.AnnotatedRhs implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.python.syntax.StarExpression> value;
+    public final java.util.List<hydra.ext.python.syntax.StarExpression> value;
 
-    public Star (hydra.util.ConsList<hydra.ext.python.syntax.StarExpression> value) {
+    public Star (java.util.List<hydra.ext.python.syntax.StarExpression> value) {
       this.value = value;
     }
 
@@ -108,7 +110,9 @@ public abstract class AnnotatedRhs implements Serializable, Comparable<Annotated
         return tagCmp;
       }
       Star o = (Star) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

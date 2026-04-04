@@ -8,8 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.PersistentMap;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +60,7 @@ public class Singleton extends PrimitiveFunction {
      * @param key the key
      * @return a function that takes a value and returns the singleton map
      */
-    public static <K, V> Function<V, PersistentMap<K, V>> apply(K key) {
+    public static <K, V> Function<V, Map<K, V>> apply(K key) {
         return value -> apply(key, value);
     }
 
@@ -74,7 +72,7 @@ public class Singleton extends PrimitiveFunction {
      * @param value the value
      * @return the singleton map
      */
-    public static <K, V> PersistentMap<K, V> apply(K key, V value) {
-        return PersistentMap.singleton(key, value);
+    public static <K, V> Map<K, V> apply(K key, V value) {
+        return Collections.singletonMap(key, value);
     }
 }

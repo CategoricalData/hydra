@@ -42,11 +42,15 @@ public class Annotation implements Serializable, Comparable<Annotation> {
   @SuppressWarnings("unchecked")
   public int compareTo(Annotation other) {
     int cmp = 0;
-    cmp = ((Comparable) Predicate).compareTo(other.Predicate);
+    cmp = hydra.util.Comparing.compare(
+      Predicate,
+      other.Predicate);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) alts).compareTo(other.alts);
+    return hydra.util.Comparing.compare(
+      alts,
+      other.alts);
   }
 
   public Annotation withPredicate(hydra.ext.io.shex.syntax.Predicate Predicate) {

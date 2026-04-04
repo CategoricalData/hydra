@@ -42,11 +42,15 @@ public class RangeExpression implements Serializable, Comparable<RangeExpression
   @SuppressWarnings("unchecked")
   public int compareTo(RangeExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) start).compareTo(other.start);
+    cmp = hydra.util.Comparing.compare(
+      start,
+      other.start);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) end).compareTo(other.end);
+    return hydra.util.Comparing.compare(
+      end,
+      other.end);
   }
 
   public RangeExpression withStart(hydra.util.Maybe<hydra.ext.cypher.openCypher.Expression> start) {

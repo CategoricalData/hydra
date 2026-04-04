@@ -18,15 +18,15 @@ public class MethodDeclaration implements Serializable, Comparable<MethodDeclara
   /**
    * Note: simple methods cannot have annotations
    */
-  public final hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations;
+  public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.MethodModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.MethodModifier> modifiers;
 
   public final hydra.ext.java.syntax.MethodHeader header;
 
   public final hydra.ext.java.syntax.MethodBody body;
 
-  public MethodDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations, hydra.util.ConsList<hydra.ext.java.syntax.MethodModifier> modifiers, hydra.ext.java.syntax.MethodHeader header, hydra.ext.java.syntax.MethodBody body) {
+  public MethodDeclaration (java.util.List<hydra.ext.java.syntax.Annotation> annotations, java.util.List<hydra.ext.java.syntax.MethodModifier> modifiers, hydra.ext.java.syntax.MethodHeader header, hydra.ext.java.syntax.MethodBody body) {
     this.annotations = annotations;
     this.modifiers = modifiers;
     this.header = header;
@@ -59,26 +59,34 @@ public class MethodDeclaration implements Serializable, Comparable<MethodDeclara
   @SuppressWarnings("unchecked")
   public int compareTo(MethodDeclaration other) {
     int cmp = 0;
-    cmp = ((Comparable) annotations).compareTo(other.annotations);
+    cmp = hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
+    cmp = hydra.util.Comparing.compare(
+      modifiers,
+      other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) header).compareTo(other.header);
+    cmp = hydra.util.Comparing.compare(
+      header,
+      other.header);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
-  public MethodDeclaration withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {
+  public MethodDeclaration withAnnotations(java.util.List<hydra.ext.java.syntax.Annotation> annotations) {
     return new MethodDeclaration(annotations, modifiers, header, body);
   }
 
-  public MethodDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.MethodModifier> modifiers) {
+  public MethodDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.MethodModifier> modifiers) {
     return new MethodDeclaration(annotations, modifiers, header, body);
   }
 

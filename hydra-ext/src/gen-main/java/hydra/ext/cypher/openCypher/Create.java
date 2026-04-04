@@ -34,6 +34,8 @@ public class Create implements Serializable, Comparable<Create> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Create other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

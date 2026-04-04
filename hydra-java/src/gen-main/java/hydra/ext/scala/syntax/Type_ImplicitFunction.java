@@ -11,11 +11,11 @@ public class Type_ImplicitFunction implements Serializable, Comparable<Type_Impl
 
   public static final hydra.core.Name RES = new hydra.core.Name("res");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Type> params;
+  public final java.util.List<hydra.ext.scala.syntax.Type> params;
 
   public final hydra.ext.scala.syntax.Type res;
 
-  public Type_ImplicitFunction (hydra.util.ConsList<hydra.ext.scala.syntax.Type> params, hydra.ext.scala.syntax.Type res) {
+  public Type_ImplicitFunction (java.util.List<hydra.ext.scala.syntax.Type> params, hydra.ext.scala.syntax.Type res) {
     this.params = params;
     this.res = res;
   }
@@ -42,14 +42,18 @@ public class Type_ImplicitFunction implements Serializable, Comparable<Type_Impl
   @SuppressWarnings("unchecked")
   public int compareTo(Type_ImplicitFunction other) {
     int cmp = 0;
-    cmp = ((Comparable) params).compareTo(other.params);
+    cmp = hydra.util.Comparing.compare(
+      params,
+      other.params);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) res).compareTo(other.res);
+    return hydra.util.Comparing.compare(
+      res,
+      other.res);
   }
 
-  public Type_ImplicitFunction withParams(hydra.util.ConsList<hydra.ext.scala.syntax.Type> params) {
+  public Type_ImplicitFunction withParams(java.util.List<hydra.ext.scala.syntax.Type> params) {
     return new Type_ImplicitFunction(params, res);
   }
 

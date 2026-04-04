@@ -37,6 +37,8 @@ public class PackageName implements Serializable, Comparable<PackageName> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PackageName other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

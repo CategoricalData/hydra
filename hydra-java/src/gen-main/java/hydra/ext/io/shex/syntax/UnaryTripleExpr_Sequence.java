@@ -42,11 +42,15 @@ public class UnaryTripleExpr_Sequence implements Serializable, Comparable<UnaryT
   @SuppressWarnings("unchecked")
   public int compareTo(UnaryTripleExpr_Sequence other) {
     int cmp = 0;
-    cmp = ((Comparable) Sequence).compareTo(other.Sequence);
+    cmp = hydra.util.Comparing.compare(
+      Sequence,
+      other.Sequence);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) alts).compareTo(other.alts);
+    return hydra.util.Comparing.compare(
+      alts,
+      other.alts);
   }
 
   public UnaryTripleExpr_Sequence withSequence(hydra.util.Maybe<hydra.ext.io.shex.syntax.TripleExprLabel> Sequence) {

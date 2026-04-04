@@ -16,9 +16,9 @@ public class ModuleDirective_ExportsOrOpens implements Serializable, Comparable<
   /**
    * At least one module
    */
-  public final hydra.util.ConsList<hydra.ext.java.syntax.ModuleName> modules;
+  public final java.util.List<hydra.ext.java.syntax.ModuleName> modules;
 
-  public ModuleDirective_ExportsOrOpens (hydra.ext.java.syntax.PackageName package_, hydra.util.ConsList<hydra.ext.java.syntax.ModuleName> modules) {
+  public ModuleDirective_ExportsOrOpens (hydra.ext.java.syntax.PackageName package_, java.util.List<hydra.ext.java.syntax.ModuleName> modules) {
     this.package_ = package_;
     this.modules = modules;
   }
@@ -45,18 +45,22 @@ public class ModuleDirective_ExportsOrOpens implements Serializable, Comparable<
   @SuppressWarnings("unchecked")
   public int compareTo(ModuleDirective_ExportsOrOpens other) {
     int cmp = 0;
-    cmp = ((Comparable) package_).compareTo(other.package_);
+    cmp = hydra.util.Comparing.compare(
+      package_,
+      other.package_);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) modules).compareTo(other.modules);
+    return hydra.util.Comparing.compare(
+      modules,
+      other.modules);
   }
 
   public ModuleDirective_ExportsOrOpens withPackage(hydra.ext.java.syntax.PackageName package_) {
     return new ModuleDirective_ExportsOrOpens(package_, modules);
   }
 
-  public ModuleDirective_ExportsOrOpens withModules(hydra.util.ConsList<hydra.ext.java.syntax.ModuleName> modules) {
+  public ModuleDirective_ExportsOrOpens withModules(java.util.List<hydra.ext.java.syntax.ModuleName> modules) {
     return new ModuleDirective_ExportsOrOpens(package_, modules);
   }
 }

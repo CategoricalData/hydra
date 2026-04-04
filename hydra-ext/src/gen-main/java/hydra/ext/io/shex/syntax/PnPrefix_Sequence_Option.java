@@ -42,11 +42,15 @@ public class PnPrefix_Sequence_Option implements Serializable, Comparable<PnPref
   @SuppressWarnings("unchecked")
   public int compareTo(PnPrefix_Sequence_Option other) {
     int cmp = 0;
-    cmp = ((Comparable) alts).compareTo(other.alts);
+    cmp = hydra.util.Comparing.compare(
+      alts,
+      other.alts);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) PnChars).compareTo(other.PnChars);
+    return hydra.util.Comparing.compare(
+      PnChars,
+      other.PnChars);
   }
 
   public PnPrefix_Sequence_Option withAlts(hydra.ext.io.shex.syntax.PnPrefix_Sequence_Option_Alts alts) {

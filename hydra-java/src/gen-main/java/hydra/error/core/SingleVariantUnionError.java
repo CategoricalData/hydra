@@ -51,11 +51,15 @@ public class SingleVariantUnionError implements Serializable, Comparable<SingleV
   @SuppressWarnings("unchecked")
   public int compareTo(SingleVariantUnionError other) {
     int cmp = 0;
-    cmp = ((Comparable) location).compareTo(other.location);
+    cmp = hydra.util.Comparing.compare(
+      location,
+      other.location);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) fieldName).compareTo(other.fieldName);
+    return hydra.util.Comparing.compare(
+      fieldName,
+      other.fieldName);
   }
 
   public SingleVariantUnionError withLocation(hydra.paths.SubtermPath location) {

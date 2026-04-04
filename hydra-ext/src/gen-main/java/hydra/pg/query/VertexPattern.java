@@ -19,11 +19,11 @@ public class VertexPattern implements Serializable, Comparable<VertexPattern> {
 
   public final hydra.util.Maybe<hydra.pg.model.VertexLabel> label;
 
-  public final hydra.util.ConsList<hydra.pg.query.PropertyPattern> properties;
+  public final java.util.List<hydra.pg.query.PropertyPattern> properties;
 
-  public final hydra.util.ConsList<hydra.pg.query.EdgeProjectionPattern> edges;
+  public final java.util.List<hydra.pg.query.EdgeProjectionPattern> edges;
 
-  public VertexPattern (hydra.util.Maybe<hydra.pg.query.Variable> variable, hydra.util.Maybe<hydra.pg.model.VertexLabel> label, hydra.util.ConsList<hydra.pg.query.PropertyPattern> properties, hydra.util.ConsList<hydra.pg.query.EdgeProjectionPattern> edges) {
+  public VertexPattern (hydra.util.Maybe<hydra.pg.query.Variable> variable, hydra.util.Maybe<hydra.pg.model.VertexLabel> label, java.util.List<hydra.pg.query.PropertyPattern> properties, java.util.List<hydra.pg.query.EdgeProjectionPattern> edges) {
     this.variable = variable;
     this.label = label;
     this.properties = properties;
@@ -56,19 +56,27 @@ public class VertexPattern implements Serializable, Comparable<VertexPattern> {
   @SuppressWarnings("unchecked")
   public int compareTo(VertexPattern other) {
     int cmp = 0;
-    cmp = ((Comparable) variable).compareTo(other.variable);
+    cmp = hydra.util.Comparing.compare(
+      variable,
+      other.variable);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) label).compareTo(other.label);
+    cmp = hydra.util.Comparing.compare(
+      label,
+      other.label);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) properties).compareTo(other.properties);
+    cmp = hydra.util.Comparing.compare(
+      properties,
+      other.properties);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) edges).compareTo(other.edges);
+    return hydra.util.Comparing.compare(
+      edges,
+      other.edges);
   }
 
   public VertexPattern withVariable(hydra.util.Maybe<hydra.pg.query.Variable> variable) {
@@ -79,11 +87,11 @@ public class VertexPattern implements Serializable, Comparable<VertexPattern> {
     return new VertexPattern(variable, label, properties, edges);
   }
 
-  public VertexPattern withProperties(hydra.util.ConsList<hydra.pg.query.PropertyPattern> properties) {
+  public VertexPattern withProperties(java.util.List<hydra.pg.query.PropertyPattern> properties) {
     return new VertexPattern(variable, label, properties, edges);
   }
 
-  public VertexPattern withEdges(hydra.util.ConsList<hydra.pg.query.EdgeProjectionPattern> edges) {
+  public VertexPattern withEdges(java.util.List<hydra.pg.query.EdgeProjectionPattern> edges) {
     return new VertexPattern(variable, label, properties, edges);
   }
 }

@@ -34,6 +34,8 @@ public class ENTITY implements Serializable, Comparable<ENTITY> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ENTITY other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

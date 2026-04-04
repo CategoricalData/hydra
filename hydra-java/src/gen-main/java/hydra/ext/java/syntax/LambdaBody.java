@@ -68,7 +68,9 @@ public abstract class LambdaBody implements Serializable, Comparable<LambdaBody>
         return tagCmp;
       }
       Expression o = (Expression) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class LambdaBody implements Serializable, Comparable<LambdaBody>
         return tagCmp;
       }
       Block o = (Block) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

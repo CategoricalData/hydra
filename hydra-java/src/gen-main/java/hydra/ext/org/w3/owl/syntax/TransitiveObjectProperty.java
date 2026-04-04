@@ -11,11 +11,11 @@ public class TransitiveObjectProperty implements Serializable, Comparable<Transi
 
   public static final hydra.core.Name PROPERTY = new hydra.core.Name("property");
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
 
   public final hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property;
 
-  public TransitiveObjectProperty (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property) {
+  public TransitiveObjectProperty (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property) {
     this.annotations = annotations;
     this.property = property;
   }
@@ -42,14 +42,18 @@ public class TransitiveObjectProperty implements Serializable, Comparable<Transi
   @SuppressWarnings("unchecked")
   public int compareTo(TransitiveObjectProperty other) {
     int cmp = 0;
-    cmp = ((Comparable) annotations).compareTo(other.annotations);
+    cmp = hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) property).compareTo(other.property);
+    return hydra.util.Comparing.compare(
+      property,
+      other.property);
   }
 
-  public TransitiveObjectProperty withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public TransitiveObjectProperty withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new TransitiveObjectProperty(annotations, property);
   }
 

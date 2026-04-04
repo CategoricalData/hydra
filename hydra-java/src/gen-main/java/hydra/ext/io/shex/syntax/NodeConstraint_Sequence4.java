@@ -13,9 +13,9 @@ public class NodeConstraint_Sequence4 implements Serializable, Comparable<NodeCo
 
   public final hydra.ext.io.shex.syntax.ValueSet ValueSet;
 
-  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.XsFacet> listOfXsFacet;
+  public final java.util.List<hydra.ext.io.shex.syntax.XsFacet> listOfXsFacet;
 
-  public NodeConstraint_Sequence4 (hydra.ext.io.shex.syntax.ValueSet ValueSet, hydra.util.ConsList<hydra.ext.io.shex.syntax.XsFacet> listOfXsFacet) {
+  public NodeConstraint_Sequence4 (hydra.ext.io.shex.syntax.ValueSet ValueSet, java.util.List<hydra.ext.io.shex.syntax.XsFacet> listOfXsFacet) {
     this.ValueSet = ValueSet;
     this.listOfXsFacet = listOfXsFacet;
   }
@@ -42,18 +42,22 @@ public class NodeConstraint_Sequence4 implements Serializable, Comparable<NodeCo
   @SuppressWarnings("unchecked")
   public int compareTo(NodeConstraint_Sequence4 other) {
     int cmp = 0;
-    cmp = ((Comparable) ValueSet).compareTo(other.ValueSet);
+    cmp = hydra.util.Comparing.compare(
+      ValueSet,
+      other.ValueSet);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) listOfXsFacet).compareTo(other.listOfXsFacet);
+    return hydra.util.Comparing.compare(
+      listOfXsFacet,
+      other.listOfXsFacet);
   }
 
   public NodeConstraint_Sequence4 withValueSet(hydra.ext.io.shex.syntax.ValueSet ValueSet) {
     return new NodeConstraint_Sequence4(ValueSet, listOfXsFacet);
   }
 
-  public NodeConstraint_Sequence4 withListOfXsFacet(hydra.util.ConsList<hydra.ext.io.shex.syntax.XsFacet> listOfXsFacet) {
+  public NodeConstraint_Sequence4 withListOfXsFacet(java.util.List<hydra.ext.io.shex.syntax.XsFacet> listOfXsFacet) {
     return new NodeConstraint_Sequence4(ValueSet, listOfXsFacet);
   }
 }

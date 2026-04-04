@@ -76,7 +76,9 @@ public abstract class Code_Elmt implements Serializable, Comparable<Code_Elmt> {
         return tagCmp;
       }
       Regex o = (Regex) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class Code_Elmt implements Serializable, Comparable<Code_Elmt> {
         return tagCmp;
       }
       Sequence o = (Sequence) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class Code_Elmt implements Serializable, Comparable<Code_Elmt> {
         return tagCmp;
       }
       Uchar o = (Uchar) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

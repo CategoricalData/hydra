@@ -34,6 +34,8 @@ public class Mod_Annot implements Serializable, Comparable<Mod_Annot> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Mod_Annot other) {
-    return ((Comparable) init).compareTo(other.init);
+    return hydra.util.Comparing.compare(
+      init,
+      other.init);
   }
 }

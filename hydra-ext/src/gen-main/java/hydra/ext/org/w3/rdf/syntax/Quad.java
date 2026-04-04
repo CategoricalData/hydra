@@ -59,19 +59,27 @@ public class Quad implements Serializable, Comparable<Quad> {
   @SuppressWarnings("unchecked")
   public int compareTo(Quad other) {
     int cmp = 0;
-    cmp = ((Comparable) subject).compareTo(other.subject);
+    cmp = hydra.util.Comparing.compare(
+      subject,
+      other.subject);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) predicate).compareTo(other.predicate);
+    cmp = hydra.util.Comparing.compare(
+      predicate,
+      other.predicate);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) object).compareTo(other.object);
+    cmp = hydra.util.Comparing.compare(
+      object,
+      other.object);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) graph).compareTo(other.graph);
+    return hydra.util.Comparing.compare(
+      graph,
+      other.graph);
   }
 
   public Quad withSubject(hydra.ext.org.w3.rdf.syntax.Resource subject) {

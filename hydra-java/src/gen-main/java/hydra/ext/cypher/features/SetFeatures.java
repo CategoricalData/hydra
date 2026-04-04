@@ -71,19 +71,27 @@ public class SetFeatures implements Serializable, Comparable<SetFeatures> {
   @SuppressWarnings("unchecked")
   public int compareTo(SetFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) propertyEquals).compareTo(other.propertyEquals);
+    cmp = hydra.util.Comparing.compare(
+      propertyEquals,
+      other.propertyEquals);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) variableEquals).compareTo(other.variableEquals);
+    cmp = hydra.util.Comparing.compare(
+      variableEquals,
+      other.variableEquals);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) variablePlusEquals).compareTo(other.variablePlusEquals);
+    cmp = hydra.util.Comparing.compare(
+      variablePlusEquals,
+      other.variablePlusEquals);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) variableWithNodeLabels).compareTo(other.variableWithNodeLabels);
+    return hydra.util.Comparing.compare(
+      variableWithNodeLabels,
+      other.variableWithNodeLabels);
   }
 
   public SetFeatures withPropertyEquals(Boolean propertyEquals) {

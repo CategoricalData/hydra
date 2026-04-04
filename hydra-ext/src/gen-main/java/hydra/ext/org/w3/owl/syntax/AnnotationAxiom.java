@@ -84,7 +84,9 @@ public abstract class AnnotationAxiom implements Serializable, Comparable<Annota
         return tagCmp;
       }
       AnnotationAssertion o = (AnnotationAssertion) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -124,7 +126,9 @@ public abstract class AnnotationAxiom implements Serializable, Comparable<Annota
         return tagCmp;
       }
       AnnotationPropertyDomain o = (AnnotationPropertyDomain) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -164,7 +168,9 @@ public abstract class AnnotationAxiom implements Serializable, Comparable<Annota
         return tagCmp;
       }
       AnnotationPropertyRange o = (AnnotationPropertyRange) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +210,9 @@ public abstract class AnnotationAxiom implements Serializable, Comparable<Annota
         return tagCmp;
       }
       SubAnnotationPropertyOf o = (SubAnnotationPropertyOf) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

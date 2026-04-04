@@ -49,15 +49,21 @@ public class RelationshipPattern implements Serializable, Comparable<Relationshi
   @SuppressWarnings("unchecked")
   public int compareTo(RelationshipPattern other) {
     int cmp = 0;
-    cmp = ((Comparable) leftArrow).compareTo(other.leftArrow);
+    cmp = hydra.util.Comparing.compare(
+      leftArrow,
+      other.leftArrow);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) detail).compareTo(other.detail);
+    cmp = hydra.util.Comparing.compare(
+      detail,
+      other.detail);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) rightArrow).compareTo(other.rightArrow);
+    return hydra.util.Comparing.compare(
+      rightArrow,
+      other.rightArrow);
   }
 
   public RelationshipPattern withLeftArrow(Boolean leftArrow) {

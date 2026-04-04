@@ -68,7 +68,9 @@ public abstract class MethodInvocation_Header implements Serializable, Comparabl
         return tagCmp;
       }
       Simple o = (Simple) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class MethodInvocation_Header implements Serializable, Comparabl
         return tagCmp;
       }
       Complex o = (Complex) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

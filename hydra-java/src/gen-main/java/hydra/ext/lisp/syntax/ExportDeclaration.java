@@ -15,9 +15,9 @@ public class ExportDeclaration implements Serializable, Comparable<ExportDeclara
   /**
    * The symbols to export
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol> symbols;
+  public final java.util.List<hydra.ext.lisp.syntax.Symbol> symbols;
 
-  public ExportDeclaration (hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol> symbols) {
+  public ExportDeclaration (java.util.List<hydra.ext.lisp.syntax.Symbol> symbols) {
     this.symbols = symbols;
   }
 
@@ -40,6 +40,8 @@ public class ExportDeclaration implements Serializable, Comparable<ExportDeclara
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ExportDeclaration other) {
-    return ((Comparable) symbols).compareTo(other.symbols);
+    return hydra.util.Comparing.compare(
+      symbols,
+      other.symbols);
   }
 }

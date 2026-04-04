@@ -68,7 +68,9 @@ public abstract class ObjectPropertyExpression implements Serializable, Comparab
         return tagCmp;
       }
       Object_ o = (Object_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class ObjectPropertyExpression implements Serializable, Comparab
         return tagCmp;
       }
       InverseObject o = (InverseObject) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

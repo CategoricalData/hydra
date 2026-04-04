@@ -76,7 +76,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Conditional o = (Conditional) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Simple o = (Simple) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Lambda o = (Lambda) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

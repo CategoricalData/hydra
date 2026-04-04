@@ -7,7 +7,7 @@ package hydra.dsl;
  */
 public interface Parsing {
   static hydra.phantoms.TTerm<hydra.parsing.ParseError> parseError(hydra.phantoms.TTerm<String> message, hydra.phantoms.TTerm<String> remainder) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.parsing.ParseError"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.parsing.ParseError"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("message"), (message).value),
       new hydra.core.Field(new hydra.core.Name("remainder"), (remainder).value)))));
   }
@@ -21,13 +21,13 @@ public interface Parsing {
   }
 
   static hydra.phantoms.TTerm<hydra.parsing.ParseError> parseErrorWithMessage(hydra.phantoms.TTerm<hydra.parsing.ParseError> original, hydra.phantoms.TTerm<String> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.parsing.ParseError"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.parsing.ParseError"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("message"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("remainder"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.parsing.ParseError"), new hydra.core.Name("remainder"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.parsing.ParseError> parseErrorWithRemainder(hydra.phantoms.TTerm<hydra.parsing.ParseError> original, hydra.phantoms.TTerm<String> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.parsing.ParseError"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.parsing.ParseError"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("message"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.parsing.ParseError"), new hydra.core.Name("message"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("remainder"), (newVal).value)))));
   }
@@ -41,7 +41,7 @@ public interface Parsing {
   }
 
   static <A> hydra.phantoms.TTerm<hydra.parsing.ParseSuccess<A>> parseSuccess(hydra.phantoms.TTerm<A> value, hydra.phantoms.TTerm<String> remainder) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.parsing.ParseSuccess"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.parsing.ParseSuccess"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("value"), (value).value),
       new hydra.core.Field(new hydra.core.Name("remainder"), (remainder).value)))));
   }
@@ -55,13 +55,13 @@ public interface Parsing {
   }
 
   static <A> hydra.phantoms.TTerm<hydra.parsing.ParseSuccess<A>> parseSuccessWithRemainder(hydra.phantoms.TTerm<hydra.parsing.ParseSuccess<A>> original, hydra.phantoms.TTerm<String> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.parsing.ParseSuccess"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.parsing.ParseSuccess"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("value"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.parsing.ParseSuccess"), new hydra.core.Name("value"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("remainder"), (newVal).value)))));
   }
 
   static <A> hydra.phantoms.TTerm<hydra.parsing.ParseSuccess<A>> parseSuccessWithValue(hydra.phantoms.TTerm<hydra.parsing.ParseSuccess<A>> original, hydra.phantoms.TTerm<A> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.parsing.ParseSuccess"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.parsing.ParseSuccess"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("value"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("remainder"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.parsing.ParseSuccess"), new hydra.core.Name("remainder"))))), (original).value)))))));
   }

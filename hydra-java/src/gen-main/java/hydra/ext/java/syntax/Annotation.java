@@ -76,7 +76,9 @@ public abstract class Annotation implements Serializable, Comparable<Annotation>
         return tagCmp;
       }
       Normal o = (Normal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class Annotation implements Serializable, Comparable<Annotation>
         return tagCmp;
       }
       Marker o = (Marker) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class Annotation implements Serializable, Comparable<Annotation>
         return tagCmp;
       }
       SingleElement o = (SingleElement) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -68,7 +68,9 @@ public abstract class WildcardBounds implements Serializable, Comparable<Wildcar
         return tagCmp;
       }
       Extends o = (Extends) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class WildcardBounds implements Serializable, Comparable<Wildcar
         return tagCmp;
       }
       Super o = (Super) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

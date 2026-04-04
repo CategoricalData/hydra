@@ -68,7 +68,9 @@ public abstract class GenexpHead implements Serializable, Comparable<GenexpHead>
         return tagCmp;
       }
       Assignment o = (Assignment) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class GenexpHead implements Serializable, Comparable<GenexpHead>
         return tagCmp;
       }
       Expression o = (Expression) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -13,13 +13,13 @@ public class WithClause implements Serializable, Comparable<WithClause> {
 
   public static final hydra.core.Name WITH = new hydra.core.Name("with");
 
-  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.ReadingClause> reading;
+  public final java.util.List<hydra.ext.cypher.openCypher.ReadingClause> reading;
 
-  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.UpdatingClause> updating;
+  public final java.util.List<hydra.ext.cypher.openCypher.UpdatingClause> updating;
 
   public final hydra.ext.cypher.openCypher.With with;
 
-  public WithClause (hydra.util.ConsList<hydra.ext.cypher.openCypher.ReadingClause> reading, hydra.util.ConsList<hydra.ext.cypher.openCypher.UpdatingClause> updating, hydra.ext.cypher.openCypher.With with) {
+  public WithClause (java.util.List<hydra.ext.cypher.openCypher.ReadingClause> reading, java.util.List<hydra.ext.cypher.openCypher.UpdatingClause> updating, hydra.ext.cypher.openCypher.With with) {
     this.reading = reading;
     this.updating = updating;
     this.with = with;
@@ -49,22 +49,28 @@ public class WithClause implements Serializable, Comparable<WithClause> {
   @SuppressWarnings("unchecked")
   public int compareTo(WithClause other) {
     int cmp = 0;
-    cmp = ((Comparable) reading).compareTo(other.reading);
+    cmp = hydra.util.Comparing.compare(
+      reading,
+      other.reading);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) updating).compareTo(other.updating);
+    cmp = hydra.util.Comparing.compare(
+      updating,
+      other.updating);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) with).compareTo(other.with);
+    return hydra.util.Comparing.compare(
+      with,
+      other.with);
   }
 
-  public WithClause withReading(hydra.util.ConsList<hydra.ext.cypher.openCypher.ReadingClause> reading) {
+  public WithClause withReading(java.util.List<hydra.ext.cypher.openCypher.ReadingClause> reading) {
     return new WithClause(reading, updating, with);
   }
 
-  public WithClause withUpdating(hydra.util.ConsList<hydra.ext.cypher.openCypher.UpdatingClause> updating) {
+  public WithClause withUpdating(java.util.List<hydra.ext.cypher.openCypher.UpdatingClause> updating) {
     return new WithClause(reading, updating, with);
   }
 

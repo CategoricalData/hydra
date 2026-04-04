@@ -42,11 +42,15 @@ public class CatchClause implements Serializable, Comparable<CatchClause> {
   @SuppressWarnings("unchecked")
   public int compareTo(CatchClause other) {
     int cmp = 0;
-    cmp = ((Comparable) parameter).compareTo(other.parameter);
+    cmp = hydra.util.Comparing.compare(
+      parameter,
+      other.parameter);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) block).compareTo(other.block);
+    return hydra.util.Comparing.compare(
+      block,
+      other.block);
   }
 
   public CatchClause withParameter(hydra.util.Maybe<hydra.ext.java.syntax.CatchFormalParameter> parameter) {

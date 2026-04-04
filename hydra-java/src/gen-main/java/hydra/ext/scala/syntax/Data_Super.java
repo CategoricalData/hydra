@@ -42,11 +42,15 @@ public class Data_Super implements Serializable, Comparable<Data_Super> {
   @SuppressWarnings("unchecked")
   public int compareTo(Data_Super other) {
     int cmp = 0;
-    cmp = ((Comparable) thisp).compareTo(other.thisp);
+    cmp = hydra.util.Comparing.compare(
+      thisp,
+      other.thisp);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) superp).compareTo(other.superp);
+    return hydra.util.Comparing.compare(
+      superp,
+      other.superp);
   }
 
   public Data_Super withThisp(hydra.ext.scala.syntax.Name thisp) {

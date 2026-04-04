@@ -9,9 +9,9 @@ public class Pat_Tuple implements Serializable, Comparable<Pat_Tuple> {
 
   public static final hydra.core.Name ARGS = new hydra.core.Name("args");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Pat> args;
+  public final java.util.List<hydra.ext.scala.syntax.Pat> args;
 
-  public Pat_Tuple (hydra.util.ConsList<hydra.ext.scala.syntax.Pat> args) {
+  public Pat_Tuple (java.util.List<hydra.ext.scala.syntax.Pat> args) {
     this.args = args;
   }
 
@@ -34,6 +34,8 @@ public class Pat_Tuple implements Serializable, Comparable<Pat_Tuple> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Pat_Tuple other) {
-    return ((Comparable) args).compareTo(other.args);
+    return hydra.util.Comparing.compare(
+      args,
+      other.args);
   }
 }

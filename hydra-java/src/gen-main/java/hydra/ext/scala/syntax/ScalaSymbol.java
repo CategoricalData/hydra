@@ -34,6 +34,8 @@ public class ScalaSymbol implements Serializable, Comparable<ScalaSymbol> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ScalaSymbol other) {
-    return ((Comparable) name).compareTo(other.name);
+    return hydra.util.Comparing.compare(
+      name,
+      other.name);
   }
 }

@@ -82,7 +82,9 @@ public abstract class InvalidPropertyError implements Serializable, Comparable<I
         return tagCmp;
       }
       InvalidValue o = (InvalidValue) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -125,7 +127,9 @@ public abstract class InvalidPropertyError implements Serializable, Comparable<I
         return tagCmp;
       }
       MissingRequired o = (MissingRequired) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -168,7 +172,9 @@ public abstract class InvalidPropertyError implements Serializable, Comparable<I
         return tagCmp;
       }
       UnexpectedKey o = (UnexpectedKey) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

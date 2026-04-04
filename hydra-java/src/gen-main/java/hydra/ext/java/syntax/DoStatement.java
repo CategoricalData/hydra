@@ -42,11 +42,15 @@ public class DoStatement implements Serializable, Comparable<DoStatement> {
   @SuppressWarnings("unchecked")
   public int compareTo(DoStatement other) {
     int cmp = 0;
-    cmp = ((Comparable) body).compareTo(other.body);
+    cmp = hydra.util.Comparing.compare(
+      body,
+      other.body);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) conde).compareTo(other.conde);
+    return hydra.util.Comparing.compare(
+      conde,
+      other.conde);
   }
 
   public DoStatement withBody(hydra.ext.java.syntax.Statement body) {

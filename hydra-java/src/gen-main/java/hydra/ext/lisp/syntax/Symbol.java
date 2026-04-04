@@ -37,6 +37,8 @@ public class Symbol implements Serializable, Comparable<Symbol> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Symbol other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

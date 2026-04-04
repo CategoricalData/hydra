@@ -51,11 +51,15 @@ public class IndentedExpression implements Serializable, Comparable<IndentedExpr
   @SuppressWarnings("unchecked")
   public int compareTo(IndentedExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) style).compareTo(other.style);
+    cmp = hydra.util.Comparing.compare(
+      style,
+      other.style);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) expr).compareTo(other.expr);
+    return hydra.util.Comparing.compare(
+      expr,
+      other.expr);
   }
 
   public IndentedExpression withStyle(hydra.ast.IndentStyle style) {

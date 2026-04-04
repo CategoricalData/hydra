@@ -13,9 +13,9 @@ public class PopStringsArgument implements Serializable, Comparable<PopStringsAr
 
   public final hydra.ext.org.apache.tinkerpop.gremlin.TraversalPopArgument pop;
 
-  public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringArgument> string;
+  public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringArgument> string;
 
-  public PopStringsArgument (hydra.ext.org.apache.tinkerpop.gremlin.TraversalPopArgument pop, hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringArgument> string) {
+  public PopStringsArgument (hydra.ext.org.apache.tinkerpop.gremlin.TraversalPopArgument pop, java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringArgument> string) {
     this.pop = pop;
     this.string = string;
   }
@@ -42,18 +42,22 @@ public class PopStringsArgument implements Serializable, Comparable<PopStringsAr
   @SuppressWarnings("unchecked")
   public int compareTo(PopStringsArgument other) {
     int cmp = 0;
-    cmp = ((Comparable) pop).compareTo(other.pop);
+    cmp = hydra.util.Comparing.compare(
+      pop,
+      other.pop);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) string).compareTo(other.string);
+    return hydra.util.Comparing.compare(
+      string,
+      other.string);
   }
 
   public PopStringsArgument withPop(hydra.ext.org.apache.tinkerpop.gremlin.TraversalPopArgument pop) {
     return new PopStringsArgument(pop, string);
   }
 
-  public PopStringsArgument withString(hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringArgument> string) {
+  public PopStringsArgument withString(java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringArgument> string) {
     return new PopStringsArgument(pop, string);
   }
 }

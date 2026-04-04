@@ -108,7 +108,9 @@ public abstract class Assertion implements Serializable, Comparable<Assertion> {
         return tagCmp;
       }
       ClassAssertion o = (ClassAssertion) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -148,7 +150,9 @@ public abstract class Assertion implements Serializable, Comparable<Assertion> {
         return tagCmp;
       }
       DataPropertyAssertion o = (DataPropertyAssertion) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -188,7 +192,9 @@ public abstract class Assertion implements Serializable, Comparable<Assertion> {
         return tagCmp;
       }
       DifferentIndividuals o = (DifferentIndividuals) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -228,7 +234,9 @@ public abstract class Assertion implements Serializable, Comparable<Assertion> {
         return tagCmp;
       }
       ObjectPropertyAssertion o = (ObjectPropertyAssertion) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -268,7 +276,9 @@ public abstract class Assertion implements Serializable, Comparable<Assertion> {
         return tagCmp;
       }
       NegativeDataPropertyAssertion o = (NegativeDataPropertyAssertion) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -308,7 +318,9 @@ public abstract class Assertion implements Serializable, Comparable<Assertion> {
         return tagCmp;
       }
       NegativeObjectPropertyAssertion o = (NegativeObjectPropertyAssertion) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -348,7 +360,9 @@ public abstract class Assertion implements Serializable, Comparable<Assertion> {
         return tagCmp;
       }
       SameIndividual o = (SameIndividual) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
