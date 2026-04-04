@@ -104,12 +104,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.python.testing"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [SerializationSource.ns, Formatting.ns, Names.ns, TestUtils.ns, Constants.ns]
     (PySyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Python test code generation codec for pytest-based generation tests"
   where
-    elements = [
+    definitions = [
       toDefinition buildPythonTestModule,
       toDefinition formatPythonTestName,
       toDefinition generatePythonTestCase,

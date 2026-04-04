@@ -57,12 +57,12 @@ ns :: Namespace
 ns = Namespace "hydra.show.graph"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [ShowCore.ns]
     kernelTypesNamespaces $
     Just "String representations of hydra.graph types"
   where
-   elements = [
+   definitions = [
      toDefinition graph]
 
 define :: String -> TTerm a -> TTermDefinition a

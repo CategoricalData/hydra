@@ -21,12 +21,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.checking.failures"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [TestGraph.ns, Namespace "hydra.rewriting"]
     kernelTypesNamespaces
     (Just "Type checking failure test cases")
   where
-    elements = [
+    definitions = [
       Phantoms.toDefinition allTests,
       Phantoms.toDefinition failOnUntypedTests,
       Phantoms.toDefinition untypedLambdasTests]

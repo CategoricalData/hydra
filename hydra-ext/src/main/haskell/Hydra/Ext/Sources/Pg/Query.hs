@@ -29,10 +29,10 @@ q :: String -> Type
 q = typeref ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [PgModel.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef definitions) [PgModel.ns] [Core.ns] $
     Just ("A common model for pattern-matching queries over property graphs")
   where
-    elements = [
+    definitions = [
       aggregationQuery,
       applicationQuery,
       associativeExpression,

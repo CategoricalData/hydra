@@ -95,12 +95,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.json.schema.serde"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [jsonWriterNs]
     (jsonSchemaSyntaxNs:KernelTypes.kernelTypesNamespaces) $
     Just "Serialization functions for converting JSON Schema documents to JSON values"
   where
-    elements = [
+    definitions = [
       toDefinition key_additionalItems,
       toDefinition key_additionalProperties,
       toDefinition key_allOf,

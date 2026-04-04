@@ -110,12 +110,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.python.coder"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [PyUtils.ns, PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns, Environment.ns, Formatting.ns, Names.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, ShowCore.ns, Reduction.ns, Sorting.ns, Inference.ns]
     (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Python code generator: converts Hydra modules to Python source code"
   where
-    elements = [
+    definitions = [
       toDefinition analyzePythonFunction,
       toDefinition classVariantPatternUnit,
       toDefinition classVariantPatternWithCapture,

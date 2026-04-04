@@ -81,12 +81,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Lexical.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, Scoping.ns, Sorting.ns, Strip.ns, Variables.ns]
     kernelTypesNamespaces $
     Just ("Graph to type environment conversions")
   where
-    elements = [
+    definitions = [
       toDefinition definitionAsTypeApplicationTerm,
       toDefinition graphAsLet,
       toDefinition graphAsTerm,

@@ -80,12 +80,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Lexical.ns, Names.ns, Rewriting.ns, Sorting.ns, Strip.ns, Variables.ns]
     kernelTypesNamespaces $
     Just ("Dependency extraction, binding sort, and let normalization")
   where
-   elements = [
+   definitions = [
      toDefinition definitionsWithDependencies,
      toDefinition flattenLetTerms,
      toDefinition inlineType,

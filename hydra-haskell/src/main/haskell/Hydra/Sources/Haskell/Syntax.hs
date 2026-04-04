@@ -18,10 +18,10 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [Core.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
     Just "A Haskell syntax model, loosely based on Language.Haskell.Tools.AST"
   where
-    elements = [
+    definitions = [
       alternative,
       assertion,
       classAssertion,
