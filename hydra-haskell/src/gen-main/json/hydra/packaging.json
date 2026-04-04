@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.packaging.Definition",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -38,7 +37,6 @@
       "type": {
         "name": "hydra.packaging.FileExtension",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -53,7 +51,6 @@
       "type": {
         "name": "hydra.packaging.Library",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -98,7 +95,6 @@
       "type": {
         "name": "hydra.packaging.Module",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -165,7 +161,6 @@
       "type": {
         "name": "hydra.packaging.Namespace",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -178,7 +173,6 @@
       "type": {
         "name": "hydra.packaging.Namespaces",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -223,7 +217,6 @@
       "type": {
         "name": "hydra.packaging.Package",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -276,7 +269,6 @@
       "type": {
         "name": "hydra.packaging.PackageName",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -291,7 +283,6 @@
       "type": {
         "name": "hydra.packaging.QualifiedName",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -325,7 +316,6 @@
       "type": {
         "name": "hydra.packaging.TermDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -370,7 +360,6 @@
       "type": {
         "name": "hydra.packaging.TypeDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -400,7 +389,7 @@
                             "@value": {"literal": {"string": "The type scheme being defined"}}}],
                         "body": {"variable": "hydra.core.TypeScheme"}}}}]}}},
           "variables": []}}}],
-  "description": ["A model for Hydra namespaces, modules, and packages"],
+  "description": "A model for Hydra namespaces, modules, and packages",
   "namespace": "hydra.packaging",
   "termDependencies": ["hydra.graph"],
   "typeDependencies": ["hydra.core"]}

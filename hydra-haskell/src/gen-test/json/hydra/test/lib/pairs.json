@@ -81,7 +81,7 @@
                                                                               "application": {
                                                                                 "argument": {"variable": "s"},
                                                                                 "function": {"function": {"primitive": "hydra.lib.strings.length"}}}},
-                                                                            "domain": [{"literal": {"string": {}}}],
+                                                                            "domain": {"literal": {"string": {}}},
                                                                             "parameter": "s"}}},
                                                                       "function": {
                                                                         "application": {
@@ -95,7 +95,7 @@
                                                                                       "application": {
                                                                                         "argument": {"variable": "x"},
                                                                                         "function": {"function": {"primitive": "hydra.lib.math.mul"}}}}}},
-                                                                                "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                                                "domain": {"literal": {"integer": {"int32": {}}}},
                                                                                 "parameter": "x"}}},
                                                                           "function": {
                                                                             "typeApplication": {
@@ -147,11 +147,10 @@
                                                                                 "function": {"function": {"primitive": "hydra.lib.literals.showInt32"}}}},
                                                                             {"literal": {"string": ")"}}]},
                                                                         "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
-                                                                    "domain": [
-                                                                      {
-                                                                        "pair": {
-                                                                          "first": {"literal": {"integer": {"int32": {}}}},
-                                                                          "second": {"literal": {"integer": {"int32": {}}}}}}],
+                                                                    "domain": {
+                                                                      "pair": {
+                                                                        "first": {"literal": {"integer": {"int32": {}}}},
+                                                                        "second": {"literal": {"integer": {"int32": {}}}}}},
                                                                     "parameter": "p"}}}}}},
                                                         {
                                                           "name": "expected",
@@ -204,11 +203,10 @@
                                                                                 "function": {"function": {"primitive": "hydra.lib.literals.showInt32"}}}},
                                                                             {"literal": {"string": ")"}}]},
                                                                         "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
-                                                                    "domain": [
-                                                                      {
-                                                                        "pair": {
-                                                                          "first": {"literal": {"integer": {"int32": {}}}},
-                                                                          "second": {"literal": {"integer": {"int32": {}}}}}}],
+                                                                    "domain": {
+                                                                      "pair": {
+                                                                        "first": {"literal": {"integer": {"int32": {}}}},
+                                                                        "second": {"literal": {"integer": {"int32": {}}}}}},
                                                                     "parameter": "p"}}}}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
@@ -259,7 +257,7 @@
                                                                               "application": {
                                                                                 "argument": {"variable": "s"},
                                                                                 "function": {"function": {"primitive": "hydra.lib.strings.length"}}}},
-                                                                            "domain": [{"literal": {"string": {}}}],
+                                                                            "domain": {"literal": {"string": {}}},
                                                                             "parameter": "s"}}},
                                                                       "function": {
                                                                         "application": {
@@ -273,7 +271,7 @@
                                                                                       "application": {
                                                                                         "argument": {"variable": "x"},
                                                                                         "function": {"function": {"primitive": "hydra.lib.math.mul"}}}}}},
-                                                                                "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                                                "domain": {"literal": {"integer": {"int32": {}}}},
                                                                                 "parameter": "x"}}},
                                                                           "function": {
                                                                             "typeApplication": {
@@ -325,11 +323,10 @@
                                                                                 "function": {"function": {"primitive": "hydra.lib.literals.showInt32"}}}},
                                                                             {"literal": {"string": ")"}}]},
                                                                         "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
-                                                                    "domain": [
-                                                                      {
-                                                                        "pair": {
-                                                                          "first": {"literal": {"integer": {"int32": {}}}},
-                                                                          "second": {"literal": {"integer": {"int32": {}}}}}}],
+                                                                    "domain": {
+                                                                      "pair": {
+                                                                        "first": {"literal": {"integer": {"int32": {}}}},
+                                                                        "second": {"literal": {"integer": {"int32": {}}}}}},
                                                                     "parameter": "p"}}}}}},
                                                         {
                                                           "name": "expected",
@@ -382,11 +379,10 @@
                                                                                 "function": {"function": {"primitive": "hydra.lib.literals.showInt32"}}}},
                                                                             {"literal": {"string": ")"}}]},
                                                                         "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
-                                                                    "domain": [
-                                                                      {
-                                                                        "pair": {
-                                                                          "first": {"literal": {"integer": {"int32": {}}}},
-                                                                          "second": {"literal": {"integer": {"int32": {}}}}}}],
+                                                                    "domain": {
+                                                                      "pair": {
+                                                                        "first": {"literal": {"integer": {"int32": {}}}},
+                                                                        "second": {"literal": {"integer": {"int32": {}}}}}},
                                                                     "parameter": "p"}}}}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
@@ -463,7 +459,7 @@
                                                                       "application": {
                                                                         "argument": {"variable": "n"},
                                                                         "function": {"function": {"primitive": "hydra.lib.literals.showInt32"}}}},
-                                                                    "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                                    "domain": {"literal": {"integer": {"int32": {}}}},
                                                                     "parameter": "n"}}}}}},
                                                         {
                                                           "name": "expected",
@@ -477,7 +473,7 @@
                                                                       "application": {
                                                                         "argument": {"variable": "n"},
                                                                         "function": {"function": {"primitive": "hydra.lib.literals.showInt32"}}}},
-                                                                    "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                                    "domain": {"literal": {"integer": {"int32": {}}}},
                                                                     "parameter": "n"}}}}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
@@ -533,7 +529,7 @@
                                                                       "application": {
                                                                         "argument": {"variable": "n"},
                                                                         "function": {"function": {"primitive": "hydra.lib.literals.showInt32"}}}},
-                                                                    "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                                    "domain": {"literal": {"integer": {"int32": {}}}},
                                                                     "parameter": "n"}}}}}},
                                                         {
                                                           "name": "expected",
@@ -547,7 +543,7 @@
                                                                       "application": {
                                                                         "argument": {"variable": "n"},
                                                                         "function": {"function": {"primitive": "hydra.lib.literals.showInt32"}}}},
-                                                                    "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                                    "domain": {"literal": {"integer": {"int32": {}}}},
                                                                     "parameter": "n"}}}}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
@@ -603,7 +599,7 @@
                                                                       "application": {
                                                                         "argument": {"variable": "n"},
                                                                         "function": {"function": {"primitive": "hydra.lib.literals.showInt32"}}}},
-                                                                    "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                                    "domain": {"literal": {"integer": {"int32": {}}}},
                                                                     "parameter": "n"}}}}}},
                                                         {
                                                           "name": "expected",
@@ -617,7 +613,7 @@
                                                                       "application": {
                                                                         "argument": {"variable": "n"},
                                                                         "function": {"function": {"primitive": "hydra.lib.literals.showInt32"}}}},
-                                                                    "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                                    "domain": {"literal": {"integer": {"int32": {}}}},
                                                                     "parameter": "n"}}}}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
@@ -691,7 +687,7 @@
                                                                 "function": {
                                                                   "lambda": {
                                                                     "body": {"variable": "s"},
-                                                                    "domain": [{"literal": {"string": {}}}],
+                                                                    "domain": {"literal": {"string": {}}},
                                                                     "parameter": "s"}}}}}},
                                                         {
                                                           "name": "expected",
@@ -702,7 +698,7 @@
                                                                 "function": {
                                                                   "lambda": {
                                                                     "body": {"variable": "s"},
-                                                                    "domain": [{"literal": {"string": {}}}],
+                                                                    "domain": {"literal": {"string": {}}},
                                                                     "parameter": "s"}}}}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
@@ -755,7 +751,7 @@
                                                                 "function": {
                                                                   "lambda": {
                                                                     "body": {"variable": "s"},
-                                                                    "domain": [{"literal": {"string": {}}}],
+                                                                    "domain": {"literal": {"string": {}}},
                                                                     "parameter": "s"}}}}}},
                                                         {
                                                           "name": "expected",
@@ -766,7 +762,7 @@
                                                                 "function": {
                                                                   "lambda": {
                                                                     "body": {"variable": "s"},
-                                                                    "domain": [{"literal": {"string": {}}}],
+                                                                    "domain": {"literal": {"string": {}}},
                                                                     "parameter": "s"}}}}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
@@ -819,7 +815,7 @@
                                                                 "function": {
                                                                   "lambda": {
                                                                     "body": {"variable": "s"},
-                                                                    "domain": [{"literal": {"string": {}}}],
+                                                                    "domain": {"literal": {"string": {}}},
                                                                     "parameter": "s"}}}}}},
                                                         {
                                                           "name": "expected",
@@ -830,7 +826,7 @@
                                                                 "function": {
                                                                   "lambda": {
                                                                     "body": {"variable": "s"},
-                                                                    "domain": [{"literal": {"string": {}}}],
+                                                                    "domain": {"literal": {"string": {}}},
                                                                     "parameter": "s"}}}}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
@@ -851,12 +847,8 @@
                         "body": {"list": []},
                         "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.testing.TestGroup"},
-            "variables": []}]}}],
-  "description": ["Test cases for hydra.lib.pairs primitives"],
+        "type": {"type": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+  "description": "Test cases for hydra.lib.pairs primitives",
   "namespace": "hydra.test.lib.pairs",
   "termDependencies": ["hydra.reduction", "hydra.show.core"],
   "typeDependencies": [

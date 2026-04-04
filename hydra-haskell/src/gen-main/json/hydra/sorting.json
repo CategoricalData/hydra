@@ -53,7 +53,7 @@
                                                                       "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
                                                                       "type": {"variable": "t0"}}},
                                                                   "type": {"list": {"variable": "t1"}}}}}},
-                                                          "type": [{"constraints": null, "type": {"variable": "t0"}, "variables": []}]}],
+                                                          "type": {"type": {"variable": "t0"}, "variables": []}}],
                                                       "body": {
                                                         "let": {
                                                           "bindings": [
@@ -69,11 +69,7 @@
                                                                           "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                           "type": {"variable": "t0"}}},
                                                                       "type": {"list": {"variable": "t1"}}}}}},
-                                                              "type": [
-                                                                {
-                                                                  "constraints": null,
-                                                                  "type": {"list": {"variable": "t1"}},
-                                                                  "variables": []}]}],
+                                                              "type": {"type": {"list": {"variable": "t1"}}, "variables": []}}],
                                                           "body": {
                                                             "let": {
                                                               "bindings": [
@@ -111,11 +107,7 @@
                                                                                       "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
                                                                                       "type": {"list": {"variable": "t1"}}}},
                                                                                   "type": {"list": {"variable": "t1"}}}}}}}}}},
-                                                                  "type": [
-                                                                    {
-                                                                      "constraints": null,
-                                                                      "type": {"list": {"variable": "t1"}},
-                                                                      "variables": []}]}],
+                                                                  "type": {"type": {"list": {"variable": "t1"}}, "variables": []}}],
                                                               "body": {
                                                                 "application": {
                                                                   "argument": {"variable": "mp"},
@@ -141,13 +133,11 @@
                                                                                   "body": {"function": {"primitive": "hydra.lib.maps.insert"}},
                                                                                   "type": {"variable": "t0"}}},
                                                                               "type": {"list": {"variable": "t1"}}}}}}}}}}}}}}}},
-                                                  "domain": [
-                                                    {
-                                                      "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t1"}}}}],
+                                                  "domain": {
+                                                    "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t1"}}}},
                                                   "parameter": "p"}}},
-                                            "domain": [
-                                              {
-                                                "map": {"keys": {"variable": "t0"}, "values": {"list": {"variable": "t1"}}}}],
+                                            "domain": {
+                                              "map": {"keys": {"variable": "t0"}, "values": {"list": {"variable": "t1"}}}},
                                             "parameter": "mp"}}},
                                       "function": {
                                         "typeApplication": {
@@ -158,24 +148,22 @@
                                                 "map": {"keys": {"variable": "t0"}, "values": {"list": {"variable": "t1"}}}}}},
                                           "type": {
                                             "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t1"}}}}}}}}}}}},
-                          "domain": [
-                            {
-                              "list": {
-                                "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t1"}}}}}],
+                          "domain": {
+                            "list": {
+                              "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t1"}}}}},
                           "parameter": "pairs"}}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": [[{"@key": "t0", "@value": {"classes": ["ordering"]}}]],
-            "type": {
-              "function": {
-                "codomain": {
-                  "map": {"keys": {"variable": "t0"}, "values": {"list": {"variable": "t1"}}}},
-                "domain": {
-                  "list": {
-                    "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t1"}}}}}}},
-            "variables": ["t0", "t1"]}]}},
+        "type": {
+          "constraints": [{"@key": "t0", "@value": {"classes": ["ordering"]}}],
+          "type": {
+            "function": {
+              "codomain": {
+                "map": {"keys": {"variable": "t0"}, "values": {"list": {"variable": "t1"}}}},
+              "domain": {
+                "list": {
+                  "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t1"}}}}}}},
+          "variables": ["t0", "t1"]}}},
     {
       "term": {
         "name": "hydra.sorting.adjacencyListsToGraph",
@@ -217,13 +205,11 @@
                                               "type": {
                                                 "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}},
                                           "type": {"variable": "t0"}}}}}}},
-                              "type": [
-                                {
-                                  "constraints": null,
-                                  "type": {
-                                    "list": {
-                                      "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}},
-                                  "variables": []}]}],
+                              "type": {
+                                "type": {
+                                  "list": {
+                                    "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}},
+                                "variables": []}}],
                           "body": {
                             "let": {
                               "bindings": [
@@ -256,16 +242,14 @@
                                                   "type": {"literal": {"integer": {"int32": {}}}}}},
                                               "type": {
                                                 "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}}}}},
-                                  "type": [
-                                    {
-                                      "constraints": null,
-                                      "type": {
-                                        "list": {
-                                          "pair": {
-                                            "first": {"literal": {"integer": {"int32": {}}}},
-                                            "second": {
-                                              "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}},
-                                      "variables": []}]}],
+                                  "type": {
+                                    "type": {
+                                      "list": {
+                                        "pair": {
+                                          "first": {"literal": {"integer": {"int32": {}}}},
+                                          "second": {
+                                            "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}},
+                                    "variables": []}}],
                               "body": {
                                 "let": {
                                   "bindings": [
@@ -297,11 +281,7 @@
                                                                             "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                         "type": {
                                                                           "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}}},
-                                                                "type": [
-                                                                  {
-                                                                    "constraints": null,
-                                                                    "type": {"literal": {"integer": {"int32": {}}}},
-                                                                    "variables": []}]}],
+                                                                "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                                                             "body": {
                                                               "let": {
                                                                 "bindings": [
@@ -318,12 +298,10 @@
                                                                                 "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                             "type": {
                                                                               "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}}},
-                                                                    "type": [
-                                                                      {
-                                                                        "constraints": null,
-                                                                        "type": {
-                                                                          "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}},
-                                                                        "variables": []}]}],
+                                                                    "type": {
+                                                                      "type": {
+                                                                        "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}},
+                                                                      "variables": []}}],
                                                                 "body": {
                                                                   "let": {
                                                                     "bindings": [
@@ -339,7 +317,7 @@
                                                                                     "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
                                                                                     "type": {"variable": "t0"}}},
                                                                                 "type": {"list": {"variable": "t0"}}}}}},
-                                                                        "type": [{"constraints": null, "type": {"variable": "t0"}, "variables": []}]}],
+                                                                        "type": {"type": {"variable": "t0"}, "variables": []}}],
                                                                     "body": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -347,12 +325,11 @@
                                                                             "body": {"pair": {"@first": {"variable": "k"}, "@second": {"variable": "v"}}},
                                                                             "type": {"variable": "t0"}}},
                                                                         "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
-                                                        "domain": [
-                                                          {
-                                                            "pair": {
-                                                              "first": {"literal": {"integer": {"int32": {}}}},
-                                                              "second": {
-                                                                "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}],
+                                                        "domain": {
+                                                          "pair": {
+                                                            "first": {"literal": {"integer": {"int32": {}}}},
+                                                            "second": {
+                                                              "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}},
                                                         "parameter": "vkNeighbors"}}},
                                                   "function": {
                                                     "typeApplication": {
@@ -375,14 +352,12 @@
                                                   "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
                                                   "type": {"variable": "t0"}}},
                                               "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                      "type": [
-                                        {
-                                          "constraints": null,
-                                          "type": {
-                                            "map": {
-                                              "keys": {"variable": "t0"},
-                                              "values": {"literal": {"integer": {"int32": {}}}}}},
-                                          "variables": []}]}],
+                                      "type": {
+                                        "type": {
+                                          "map": {
+                                            "keys": {"variable": "t0"},
+                                            "values": {"literal": {"integer": {"int32": {}}}}}},
+                                        "variables": []}}],
                                   "body": {
                                     "let": {
                                       "bindings": [
@@ -414,11 +389,7 @@
                                                                                 "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                             "type": {
                                                                               "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}}},
-                                                                    "type": [
-                                                                      {
-                                                                        "constraints": null,
-                                                                        "type": {"literal": {"integer": {"int32": {}}}},
-                                                                        "variables": []}]}],
+                                                                    "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                                                                 "body": {
                                                                   "let": {
                                                                     "bindings": [
@@ -435,12 +406,10 @@
                                                                                     "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                 "type": {
                                                                                   "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}}},
-                                                                        "type": [
-                                                                          {
-                                                                            "constraints": null,
-                                                                            "type": {
-                                                                              "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}},
-                                                                            "variables": []}]}],
+                                                                        "type": {
+                                                                          "type": {
+                                                                            "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}},
+                                                                          "variables": []}}],
                                                                     "body": {
                                                                       "let": {
                                                                         "bindings": [
@@ -456,7 +425,7 @@
                                                                                         "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
                                                                                         "type": {"variable": "t0"}}},
                                                                                     "type": {"list": {"variable": "t0"}}}}}},
-                                                                            "type": [{"constraints": null, "type": {"variable": "t0"}, "variables": []}]}],
+                                                                            "type": {"type": {"variable": "t0"}, "variables": []}}],
                                                                         "body": {
                                                                           "typeApplication": {
                                                                             "body": {
@@ -464,12 +433,11 @@
                                                                                 "body": {"pair": {"@first": {"variable": "v"}, "@second": {"variable": "k"}}},
                                                                                 "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                             "type": {"variable": "t0"}}}}}}}}},
-                                                            "domain": [
-                                                              {
-                                                                "pair": {
-                                                                  "first": {"literal": {"integer": {"int32": {}}}},
-                                                                  "second": {
-                                                                    "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}],
+                                                            "domain": {
+                                                              "pair": {
+                                                                "first": {"literal": {"integer": {"int32": {}}}},
+                                                                "second": {
+                                                                  "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}},
                                                             "parameter": "vkNeighbors"}}},
                                                       "function": {
                                                         "typeApplication": {
@@ -492,14 +460,12 @@
                                                       "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                   "type": {"variable": "t0"}}}}},
-                                          "type": [
-                                            {
-                                              "constraints": null,
-                                              "type": {
-                                                "map": {
-                                                  "keys": {"literal": {"integer": {"int32": {}}}},
-                                                  "values": {"variable": "t0"}}},
-                                              "variables": []}]}],
+                                          "type": {
+                                            "type": {
+                                              "map": {
+                                                "keys": {"literal": {"integer": {"int32": {}}}},
+                                                "values": {"variable": "t0"}}},
+                                            "variables": []}}],
                                       "body": {
                                         "let": {
                                           "bindings": [
@@ -531,11 +497,7 @@
                                                                                     "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                 "type": {
                                                                                   "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}}},
-                                                                        "type": [
-                                                                          {
-                                                                            "constraints": null,
-                                                                            "type": {"literal": {"integer": {"int32": {}}}},
-                                                                            "variables": []}]}],
+                                                                        "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                                                                     "body": {
                                                                       "let": {
                                                                         "bindings": [
@@ -552,12 +514,10 @@
                                                                                         "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                     "type": {
                                                                                       "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}}},
-                                                                            "type": [
-                                                                              {
-                                                                                "constraints": null,
-                                                                                "type": {
-                                                                                  "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}},
-                                                                                "variables": []}]}],
+                                                                            "type": {
+                                                                              "type": {
+                                                                                "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}},
+                                                                              "variables": []}}],
                                                                         "body": {
                                                                           "let": {
                                                                             "bindings": [
@@ -573,11 +533,7 @@
                                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                                             "type": {"variable": "t0"}}},
                                                                                         "type": {"list": {"variable": "t0"}}}}}},
-                                                                                "type": [
-                                                                                  {
-                                                                                    "constraints": null,
-                                                                                    "type": {"list": {"variable": "t0"}},
-                                                                                    "variables": []}]}],
+                                                                                "type": {"type": {"list": {"variable": "t0"}}, "variables": []}}],
                                                                             "body": {
                                                                               "typeApplication": {
                                                                                 "body": {
@@ -606,7 +562,7 @@
                                                                                                                       "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
                                                                                                                       "type": {"variable": "t0"}}},
                                                                                                                   "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                                                                      "domain": [{"variable": "t0"}],
+                                                                                                      "domain": {"variable": "t0"},
                                                                                                       "parameter": "k"}}},
                                                                                                 "function": {
                                                                                                   "typeApplication": {
@@ -617,12 +573,11 @@
                                                                                                     "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
                                                                                     "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                 "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}}}}}},
-                                                                "domain": [
-                                                                  {
-                                                                    "pair": {
-                                                                      "first": {"literal": {"integer": {"int32": {}}}},
-                                                                      "second": {
-                                                                        "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}],
+                                                                "domain": {
+                                                                  "pair": {
+                                                                    "first": {"literal": {"integer": {"int32": {}}}},
+                                                                    "second": {
+                                                                      "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}},
                                                                 "parameter": "vkNeighbors"}}},
                                                           "function": {
                                                             "typeApplication": {
@@ -645,14 +600,12 @@
                                                           "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                       "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}},
-                                              "type": [
-                                                {
-                                                  "constraints": null,
-                                                  "type": {
-                                                    "map": {
-                                                      "keys": {"literal": {"integer": {"int32": {}}}},
-                                                      "values": {"list": {"literal": {"integer": {"int32": {}}}}}}},
-                                                  "variables": []}]}],
+                                              "type": {
+                                                "type": {
+                                                  "map": {
+                                                    "keys": {"literal": {"integer": {"int32": {}}}},
+                                                    "values": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                "variables": []}}],
                                           "body": {
                                             "let": {
                                               "bindings": [
@@ -680,16 +633,14 @@
                                                               "typeApplication": {
                                                                 "body": {"function": {"primitive": "hydra.lib.maybes.fromJust"}},
                                                                 "type": {"variable": "t0"}}}}},
-                                                        "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                        "domain": {"literal": {"integer": {"int32": {}}}},
                                                         "parameter": "v"}}},
-                                                  "type": [
-                                                    {
-                                                      "constraints": null,
-                                                      "type": {
-                                                        "function": {
-                                                          "codomain": {"variable": "t0"},
-                                                          "domain": {"literal": {"integer": {"int32": {}}}}}},
-                                                      "variables": []}]}],
+                                                  "type": {
+                                                    "type": {
+                                                      "function": {
+                                                        "codomain": {"variable": "t0"},
+                                                        "domain": {"literal": {"integer": {"int32": {}}}}}},
+                                                    "variables": []}}],
                                               "body": {
                                                 "typeApplication": {
                                                   "body": {
@@ -706,31 +657,29 @@
                                                     "function": {
                                                       "codomain": {"variable": "t0"},
                                                       "domain": {"literal": {"integer": {"int32": {}}}}}}}}}}}}}}}}}}}},
-                      "domain": [
-                        {
-                          "list": {
-                            "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}],
+                      "domain": {
+                        "list": {
+                          "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}},
                       "parameter": "edges0"}}}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": [[{"@key": "t0", "@value": {"classes": ["ordering"]}}]],
-            "type": {
-              "function": {
-                "codomain": {
-                  "pair": {
-                    "first": {
-                      "map": {
-                        "keys": {"literal": {"integer": {"int32": {}}}},
-                        "values": {"list": {"literal": {"integer": {"int32": {}}}}}}},
-                    "second": {
-                      "function": {
-                        "codomain": {"variable": "t0"},
-                        "domain": {"literal": {"integer": {"int32": {}}}}}}}},
-                "domain": {
-                  "list": {
-                    "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "constraints": [{"@key": "t0", "@value": {"classes": ["ordering"]}}],
+          "type": {
+            "function": {
+              "codomain": {
+                "pair": {
+                  "first": {
+                    "map": {
+                      "keys": {"literal": {"integer": {"int32": {}}}},
+                      "values": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                  "second": {
+                    "function": {
+                      "codomain": {"variable": "t0"},
+                      "domain": {"literal": {"integer": {"int32": {}}}}}}}},
+              "domain": {
+                "list": {
+                  "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.sorting.createOrderingIsomorphism",
@@ -781,11 +730,9 @@
                                                                   "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
                                                                   "type": {"variable": "t0"}}},
                                                               "type": {"variable": "t2"}}}}},
-                                                      "type": [
-                                                        {
-                                                          "constraints": null,
-                                                          "type": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "t2"}}},
-                                                          "variables": []}]}],
+                                                      "type": {
+                                                        "type": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "t2"}}},
+                                                        "variables": []}}],
                                                   "body": {
                                                     "application": {
                                                       "argument": {
@@ -809,7 +756,7 @@
                                                                                     "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
                                                                                     "type": {"variable": "t0"}}},
                                                                                 "type": {"variable": "t2"}}}}}}},
-                                                                    "domain": [{"variable": "t0"}],
+                                                                    "domain": {"variable": "t0"},
                                                                     "parameter": "n"}}},
                                                               "function": {
                                                                 "typeApplication": {
@@ -822,17 +769,15 @@
                                                         "typeApplication": {
                                                           "body": {"function": {"primitive": "hydra.lib.maybes.cat"}},
                                                           "type": {"variable": "t2"}}}}}}},
-                                              "domain": [{"list": {"variable": "t2"}}],
+                                              "domain": {"list": {"variable": "t2"}},
                                               "parameter": "els"}}},
                                         "parameter": "t2"}},
-                                    "type": [
-                                      {
-                                        "constraints": null,
-                                        "type": {
-                                          "function": {
-                                            "codomain": {"list": {"variable": "t2"}},
-                                            "domain": {"list": {"variable": "t2"}}}},
-                                        "variables": ["t2"]}]}],
+                                    "type": {
+                                      "type": {
+                                        "function": {
+                                          "codomain": {"list": {"variable": "t2"}},
+                                          "domain": {"list": {"variable": "t2"}}}},
+                                      "variables": ["t2"]}}],
                                 "body": {
                                   "let": {
                                     "bindings": [
@@ -870,11 +815,9 @@
                                                                       "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
                                                                       "type": {"variable": "t0"}}},
                                                                   "type": {"variable": "t2"}}}}},
-                                                          "type": [
-                                                            {
-                                                              "constraints": null,
-                                                              "type": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "t2"}}},
-                                                              "variables": []}]}],
+                                                          "type": {
+                                                            "type": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "t2"}}},
+                                                            "variables": []}}],
                                                       "body": {
                                                         "application": {
                                                           "argument": {
@@ -898,7 +841,7 @@
                                                                                         "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
                                                                                         "type": {"variable": "t0"}}},
                                                                                     "type": {"variable": "t2"}}}}}}},
-                                                                        "domain": [{"variable": "t0"}],
+                                                                        "domain": {"variable": "t0"},
                                                                         "parameter": "n"}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -911,17 +854,15 @@
                                                             "typeApplication": {
                                                               "body": {"function": {"primitive": "hydra.lib.maybes.cat"}},
                                                               "type": {"variable": "t2"}}}}}}},
-                                                  "domain": [{"list": {"variable": "t2"}}],
+                                                  "domain": {"list": {"variable": "t2"}},
                                                   "parameter": "els"}}},
                                             "parameter": "t2"}},
-                                        "type": [
-                                          {
-                                            "constraints": null,
-                                            "type": {
-                                              "function": {
-                                                "codomain": {"list": {"variable": "t2"}},
-                                                "domain": {"list": {"variable": "t2"}}}},
-                                            "variables": ["t2"]}]}],
+                                        "type": {
+                                          "type": {
+                                            "function": {
+                                              "codomain": {"list": {"variable": "t2"}},
+                                              "domain": {"list": {"variable": "t2"}}}},
+                                          "variables": ["t2"]}}],
                                     "body": {
                                       "typeApplication": {
                                         "body": {
@@ -941,26 +882,25 @@
                                                     "type": {"variable": "t1"}}}}],
                                             "typeName": "hydra.topology.OrderingIsomorphism"}},
                                         "type": {"variable": "t1"}}}}}}},
-                            "domain": [{"list": {"variable": "t0"}}],
+                            "domain": {"list": {"variable": "t0"}},
                             "parameter": "targetOrd"}}},
-                      "domain": [{"list": {"variable": "t0"}}],
+                      "domain": {"list": {"variable": "t0"}},
                       "parameter": "sourceOrd"}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": [[{"@key": "t0", "@value": {"classes": ["ordering"]}}]],
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "t1"},
-                        "function": {"variable": "hydra.topology.OrderingIsomorphism"}}},
-                    "domain": {"list": {"variable": "t0"}}}},
-                "domain": {"list": {"variable": "t0"}}}},
-            "variables": ["t0", "t1"]}]}},
+        "type": {
+          "constraints": [{"@key": "t0", "@value": {"classes": ["ordering"]}}],
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "t1"},
+                      "function": {"variable": "hydra.topology.OrderingIsomorphism"}}},
+                  "domain": {"list": {"variable": "t0"}}}},
+              "domain": {"list": {"variable": "t0"}}}},
+          "variables": ["t0", "t1"]}}},
     {
       "term": {
         "name": "hydra.sorting.findReachableNodes",
@@ -1007,11 +947,7 @@
                                                                   "typeApplication": {
                                                                     "body": {"function": {"primitive": "hydra.lib.sets.difference"}},
                                                                     "type": {"variable": "t0"}}}}}}},
-                                                        "type": [
-                                                          {
-                                                            "constraints": null,
-                                                            "type": {"set": {"variable": "t0"}},
-                                                            "variables": []}]}],
+                                                        "type": {"type": {"set": {"variable": "t0"}}, "variables": []}}],
                                                     "body": {
                                                       "application": {
                                                         "argument": {
@@ -1050,9 +986,9 @@
                                                                                                     "body": {"function": {"primitive": "hydra.lib.sets.insert"}},
                                                                                                     "type": {"variable": "t0"}}}}}}},
                                                                                         "function": {"variable": "visit"}}}}},
-                                                                                "domain": [{"variable": "t0"}],
+                                                                                "domain": {"variable": "t0"},
                                                                                 "parameter": "n"}}},
-                                                                          "domain": [{"set": {"variable": "t0"}}],
+                                                                          "domain": {"set": {"variable": "t0"}},
                                                                           "parameter": "v"}}},
                                                                     "function": {
                                                                       "typeApplication": {
@@ -1077,21 +1013,19 @@
                                                                   "typeApplication": {
                                                                     "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
                                                                     "type": {"set": {"variable": "t0"}}}}}}}}}}}},
-                                                "domain": [{"variable": "t0"}],
+                                                "domain": {"variable": "t0"},
                                                 "parameter": "node"}}},
-                                          "domain": [{"set": {"variable": "t0"}}],
+                                          "domain": {"set": {"variable": "t0"}},
                                           "parameter": "visited"}}},
-                                    "type": [
-                                      {
-                                        "constraints": null,
-                                        "type": {
-                                          "function": {
-                                            "codomain": {
-                                              "function": {
-                                                "codomain": {"set": {"variable": "t0"}},
-                                                "domain": {"variable": "t0"}}},
-                                            "domain": {"set": {"variable": "t0"}}}},
-                                        "variables": []}]}],
+                                    "type": {
+                                      "type": {
+                                        "function": {
+                                          "codomain": {
+                                            "function": {
+                                              "codomain": {"set": {"variable": "t0"}},
+                                              "domain": {"variable": "t0"}}},
+                                          "domain": {"set": {"variable": "t0"}}}},
+                                      "variables": []}}],
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "root"},
@@ -1105,29 +1039,27 @@
                                                 "body": {"function": {"primitive": "hydra.lib.sets.singleton"}},
                                                 "type": {"variable": "t0"}}}}},
                                         "function": {"variable": "visit"}}}}}}},
-                            "domain": [{"variable": "t0"}],
+                            "domain": {"variable": "t0"},
                             "parameter": "root"}}},
-                      "domain": [
-                        {
-                          "function": {
-                            "codomain": {"set": {"variable": "t0"}},
-                            "domain": {"variable": "t0"}}}],
+                      "domain": {
+                        "function": {
+                          "codomain": {"set": {"variable": "t0"}},
+                          "domain": {"variable": "t0"}}},
                       "parameter": "adj"}}}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": [[{"@key": "t0", "@value": {"classes": ["ordering"]}}]],
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"set": {"variable": "t0"}},
-                    "domain": {"variable": "t0"}}},
-                "domain": {
-                  "function": {
-                    "codomain": {"set": {"variable": "t0"}},
-                    "domain": {"variable": "t0"}}}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "constraints": [{"@key": "t0", "@value": {"classes": ["ordering"]}}],
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"set": {"variable": "t0"}},
+                  "domain": {"variable": "t0"}}},
+              "domain": {
+                "function": {
+                  "codomain": {"set": {"variable": "t0"}},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.sorting.initialState",
@@ -1178,11 +1110,7 @@
                         "body": {"list": []},
                         "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}],
                 "typeName": "hydra.topology.TarjanState"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.topology.TarjanState"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.topology.TarjanState"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.sorting.popStackUntil",
@@ -1229,11 +1157,7 @@
                                                           "typeApplication": {
                                                             "body": {"function": {"primitive": "hydra.lib.lists.head"}},
                                                             "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                    "type": [
-                                                      {
-                                                        "constraints": null,
-                                                        "type": {"literal": {"integer": {"int32": {}}}},
-                                                        "variables": []}]}],
+                                                    "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                                                 "body": {
                                                   "let": {
                                                     "bindings": [
@@ -1252,11 +1176,9 @@
                                                               "typeApplication": {
                                                                 "body": {"function": {"primitive": "hydra.lib.lists.tail"}},
                                                                 "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                        "type": [
-                                                          {
-                                                            "constraints": null,
-                                                            "type": {"list": {"literal": {"integer": {"int32": {}}}}},
-                                                            "variables": []}]}],
+                                                        "type": {
+                                                          "type": {"list": {"literal": {"integer": {"int32": {}}}}},
+                                                          "variables": []}}],
                                                     "body": {
                                                       "let": {
                                                         "bindings": [
@@ -1312,11 +1234,7 @@
                                                                             "elimination": {
                                                                               "record": {"field": "sccs", "typeName": "hydra.topology.TarjanState"}}}}}}}],
                                                                 "typeName": "hydra.topology.TarjanState"}},
-                                                            "type": [
-                                                              {
-                                                                "constraints": null,
-                                                                "type": {"variable": "hydra.topology.TarjanState"},
-                                                                "variables": []}]}],
+                                                            "type": {"type": {"variable": "hydra.topology.TarjanState"}, "variables": []}}],
                                                         "body": {
                                                           "let": {
                                                             "bindings": [
@@ -1389,11 +1307,7 @@
                                                                                 "elimination": {
                                                                                   "record": {"field": "sccs", "typeName": "hydra.topology.TarjanState"}}}}}}}],
                                                                     "typeName": "hydra.topology.TarjanState"}},
-                                                                "type": [
-                                                                  {
-                                                                    "constraints": null,
-                                                                    "type": {"variable": "hydra.topology.TarjanState"},
-                                                                    "variables": []}]}],
+                                                                "type": {"type": {"variable": "hydra.topology.TarjanState"}, "variables": []}}],
                                                             "body": {
                                                               "let": {
                                                                 "bindings": [
@@ -1409,11 +1323,9 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
                                                                                 "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                                    "type": [
-                                                                      {
-                                                                        "constraints": null,
-                                                                        "type": {"list": {"literal": {"integer": {"int32": {}}}}},
-                                                                        "variables": []}]}],
+                                                                    "type": {
+                                                                      "type": {"list": {"literal": {"integer": {"int32": {}}}}},
+                                                                      "variables": []}}],
                                                                 "body": {
                                                                   "application": {
                                                                     "argument": {
@@ -1458,24 +1370,22 @@
                                                                                   "pair": {
                                                                                     "first": {"list": {"literal": {"integer": {"int32": {}}}}},
                                                                                     "second": {"variable": "hydra.topology.TarjanState"}}}}}}}}}}}}}}}}}}}}},
-                                            "domain": [{"variable": "hydra.topology.TarjanState"}],
+                                            "domain": {"variable": "hydra.topology.TarjanState"},
                                             "parameter": "st"}}},
-                                      "domain": [{"list": {"literal": {"integer": {"int32": {}}}}}],
+                                      "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
                                       "parameter": "acc"}}},
-                                "type": [
-                                  {
-                                    "constraints": null,
-                                    "type": {
-                                      "function": {
-                                        "codomain": {
-                                          "function": {
-                                            "codomain": {
-                                              "pair": {
-                                                "first": {"list": {"literal": {"integer": {"int32": {}}}}},
-                                                "second": {"variable": "hydra.topology.TarjanState"}}},
-                                            "domain": {"variable": "hydra.topology.TarjanState"}}},
-                                        "domain": {"list": {"literal": {"integer": {"int32": {}}}}}}},
-                                    "variables": []}]}],
+                                "type": {
+                                  "type": {
+                                    "function": {
+                                      "codomain": {
+                                        "function": {
+                                          "codomain": {
+                                            "pair": {
+                                              "first": {"list": {"literal": {"integer": {"int32": {}}}}},
+                                              "second": {"variable": "hydra.topology.TarjanState"}}},
+                                          "domain": {"variable": "hydra.topology.TarjanState"}}},
+                                      "domain": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                  "variables": []}}],
                             "body": {
                               "application": {
                                 "argument": {"variable": "st0"},
@@ -1486,24 +1396,22 @@
                                         "body": {"list": []},
                                         "type": {"literal": {"integer": {"int32": {}}}}}},
                                     "function": {"variable": "go"}}}}}}},
-                        "domain": [{"variable": "hydra.topology.TarjanState"}],
+                        "domain": {"variable": "hydra.topology.TarjanState"},
                         "parameter": "st0"}}},
-                  "domain": [{"literal": {"integer": {"int32": {}}}}],
+                  "domain": {"literal": {"integer": {"int32": {}}}},
                   "parameter": "v"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "pair": {
-                        "first": {"list": {"literal": {"integer": {"int32": {}}}}},
-                        "second": {"variable": "hydra.topology.TarjanState"}}},
-                    "domain": {"variable": "hydra.topology.TarjanState"}}},
-                "domain": {"literal": {"integer": {"int32": {}}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "pair": {
+                      "first": {"list": {"literal": {"integer": {"int32": {}}}}},
+                      "second": {"variable": "hydra.topology.TarjanState"}}},
+                  "domain": {"variable": "hydra.topology.TarjanState"}}},
+              "domain": {"literal": {"integer": {"int32": {}}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.sorting.propagateTags",
@@ -1540,12 +1448,10 @@
                                                     "body": {"variable": "hydra.sorting.adjacencyListToMap"},
                                                     "type": {"variable": "t0"}}},
                                                 "type": {"variable": "t0"}}}}},
-                                        "type": [
-                                          {
-                                            "constraints": null,
-                                            "type": {
-                                              "map": {"keys": {"variable": "t0"}, "values": {"list": {"variable": "t0"}}}},
-                                            "variables": []}]}],
+                                        "type": {
+                                          "type": {
+                                            "map": {"keys": {"variable": "t0"}, "values": {"list": {"variable": "t0"}}}},
+                                          "variables": []}}],
                                     "body": {
                                       "let": {
                                         "bindings": [
@@ -1579,12 +1485,10 @@
                                                                 "type": {"list": {"variable": "t1"}}}},
                                                             "type": {"set": {"variable": "t1"}}}},
                                                         "type": {"variable": "t0"}}}}}}},
-                                            "type": [
-                                              {
-                                                "constraints": null,
-                                                "type": {
-                                                  "map": {"keys": {"variable": "t0"}, "values": {"set": {"variable": "t1"}}}},
-                                                "variables": []}]}],
+                                            "type": {
+                                              "type": {
+                                                "map": {"keys": {"variable": "t0"}, "values": {"set": {"variable": "t1"}}}},
+                                              "variables": []}}],
                                         "body": {
                                           "let": {
                                             "bindings": [
@@ -1650,11 +1554,7 @@
                                                       "typeApplication": {
                                                         "body": {"function": {"primitive": "hydra.lib.sets.toList"}},
                                                         "type": {"variable": "t0"}}}}},
-                                                "type": [
-                                                  {
-                                                    "constraints": null,
-                                                    "type": {"list": {"variable": "t0"}},
-                                                    "variables": []}]}],
+                                                "type": {"type": {"list": {"variable": "t0"}}, "variables": []}}],
                                             "body": {
                                               "let": {
                                                 "bindings": [
@@ -1714,17 +1614,13 @@
                                                                                       "typeApplication": {
                                                                                         "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
                                                                                         "type": {"variable": "t0"}}}}},
-                                                                                "domain": [{"variable": "t0"}],
+                                                                                "domain": {"variable": "t0"},
                                                                                 "parameter": "n"}}},
                                                                           "function": {
                                                                             "typeApplication": {
                                                                               "body": {"variable": "hydra.sorting.findReachableNodes"},
                                                                               "type": {"variable": "t0"}}}}}}},
-                                                                  "type": [
-                                                                    {
-                                                                      "constraints": null,
-                                                                      "type": {"set": {"variable": "t0"}},
-                                                                      "variables": []}]}],
+                                                                  "type": {"type": {"set": {"variable": "t0"}}, "variables": []}}],
                                                               "body": {
                                                                 "application": {
                                                                   "argument": {
@@ -1775,7 +1671,7 @@
                                                                                                     "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
                                                                                                     "type": {"set": {"variable": "t1"}}}},
                                                                                                 "type": {"set": {"variable": "t1"}}}}}}}}}},
-                                                                                "domain": [{"variable": "t0"}],
+                                                                                "domain": {"variable": "t0"},
                                                                                 "parameter": "n"}}},
                                                                           "function": {
                                                                             "typeApplication": {
@@ -1788,16 +1684,14 @@
                                                                     "typeApplication": {
                                                                       "body": {"function": {"primitive": "hydra.lib.sets.unions"}},
                                                                       "type": {"variable": "t1"}}}}}}},
-                                                          "domain": [{"variable": "t0"}],
+                                                          "domain": {"variable": "t0"},
                                                           "parameter": "node"}}},
-                                                    "type": [
-                                                      {
-                                                        "constraints": null,
-                                                        "type": {
-                                                          "function": {
-                                                            "codomain": {"set": {"variable": "t1"}},
-                                                            "domain": {"variable": "t0"}}},
-                                                        "variables": []}]}],
+                                                    "type": {
+                                                      "type": {
+                                                        "function": {
+                                                          "codomain": {"set": {"variable": "t1"}},
+                                                          "domain": {"variable": "t0"}}},
+                                                      "variables": []}}],
                                                 "body": {
                                                   "application": {
                                                     "argument": {"variable": "allNodes"},
@@ -1819,7 +1713,7 @@
                                                                               "function": {"variable": "getTagsForNode"}}}}},
                                                                       "type": {"variable": "t0"}}},
                                                                   "type": {"set": {"variable": "t1"}}}},
-                                                              "domain": [{"variable": "t0"}],
+                                                              "domain": {"variable": "t0"},
                                                               "parameter": "n"}}},
                                                         "function": {
                                                           "typeApplication": {
@@ -1829,38 +1723,34 @@
                                                                 "type": {"variable": "t0"}}},
                                                             "type": {
                                                               "pair": {"first": {"variable": "t0"}, "second": {"set": {"variable": "t1"}}}}}}}}}}}}}}}}}},
-                                "domain": [
-                                  {
-                                    "list": {
-                                      "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t1"}}}}}],
+                                "domain": {
+                                  "list": {
+                                    "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t1"}}}}},
                                 "parameter": "nodeTags"}}},
-                          "domain": [
-                            {
-                              "list": {
-                                "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}],
+                          "domain": {
+                            "list": {
+                              "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}},
                           "parameter": "edges"}}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": [
-              [
-                {"@key": "t0", "@value": {"classes": ["ordering"]}},
-                {"@key": "t1", "@value": {"classes": ["ordering"]}}]],
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "list": {
-                        "pair": {"first": {"variable": "t0"}, "second": {"set": {"variable": "t1"}}}}},
-                    "domain": {
-                      "list": {
-                        "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t1"}}}}}}},
-                "domain": {
-                  "list": {
-                    "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}},
-            "variables": ["t0", "t1"]}]}},
+        "type": {
+          "constraints": [
+            {"@key": "t0", "@value": {"classes": ["ordering"]}},
+            {"@key": "t1", "@value": {"classes": ["ordering"]}}],
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "list": {
+                      "pair": {"first": {"variable": "t0"}, "second": {"set": {"variable": "t1"}}}}},
+                  "domain": {
+                    "list": {
+                      "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t1"}}}}}}},
+              "domain": {
+                "list": {
+                  "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}},
+          "variables": ["t0", "t1"]}}},
     {
       "term": {
         "name": "hydra.sorting.strongConnect",
@@ -1892,11 +1782,7 @@
                                             "function": {
                                               "elimination": {
                                                 "record": {"field": "counter", "typeName": "hydra.topology.TarjanState"}}}}}},
-                                      "type": [
-                                        {
-                                          "constraints": null,
-                                          "type": {"literal": {"integer": {"int32": {}}}},
-                                          "variables": []}]}],
+                                      "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                                   "body": {
                                     "let": {
                                       "bindings": [
@@ -2008,11 +1894,7 @@
                                                           "elimination": {
                                                             "record": {"field": "sccs", "typeName": "hydra.topology.TarjanState"}}}}}}}],
                                               "typeName": "hydra.topology.TarjanState"}},
-                                          "type": [
-                                            {
-                                              "constraints": null,
-                                              "type": {"variable": "hydra.topology.TarjanState"},
-                                              "variables": []}]}],
+                                          "type": {"type": {"variable": "hydra.topology.TarjanState"}, "variables": []}}],
                                       "body": {
                                         "let": {
                                           "bindings": [
@@ -2037,11 +1919,9 @@
                                                                   "body": {"function": {"primitive": "hydra.lib.maps.findWithDefault"}},
                                                                   "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
                                                               "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
-                                              "type": [
-                                                {
-                                                  "constraints": null,
-                                                  "type": {"list": {"literal": {"integer": {"int32": {}}}}},
-                                                  "variables": []}]}],
+                                              "type": {
+                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}},
+                                                "variables": []}}],
                                           "body": {
                                             "let": {
                                               "bindings": [
@@ -2088,11 +1968,7 @@
                                                                                                         "body": {"function": {"primitive": "hydra.lib.maps.findWithDefault"}},
                                                                                                         "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                     "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
-                                                                                    "type": [
-                                                                                      {
-                                                                                        "constraints": null,
-                                                                                        "type": {"literal": {"integer": {"int32": {}}}},
-                                                                                        "variables": []}]}],
+                                                                                    "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                                                                                 "body": {
                                                                                   "let": {
                                                                                     "bindings": [
@@ -2120,11 +1996,7 @@
                                                                                                             "body": {"function": {"primitive": "hydra.lib.maps.findWithDefault"}},
                                                                                                             "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                         "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
-                                                                                        "type": [
-                                                                                          {
-                                                                                            "constraints": null,
-                                                                                            "type": {"literal": {"integer": {"int32": {}}}},
-                                                                                            "variables": []}]}],
+                                                                                        "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                                                                                     "body": {
                                                                                       "record": {
                                                                                         "fields": [
@@ -2207,16 +2079,14 @@
                                                                                                     "elimination": {
                                                                                                       "record": {"field": "sccs", "typeName": "hydra.topology.TarjanState"}}}}}}}],
                                                                                         "typeName": "hydra.topology.TarjanState"}}}}}},
-                                                                            "domain": [{"variable": "hydra.topology.TarjanState"}],
+                                                                            "domain": {"variable": "hydra.topology.TarjanState"},
                                                                             "parameter": "s"}}},
-                                                                      "type": [
-                                                                        {
-                                                                          "constraints": null,
-                                                                          "type": {
-                                                                            "function": {
-                                                                              "codomain": {"variable": "hydra.topology.TarjanState"},
-                                                                              "domain": {"variable": "hydra.topology.TarjanState"}}},
-                                                                          "variables": []}]}],
+                                                                      "type": {
+                                                                        "type": {
+                                                                          "function": {
+                                                                            "codomain": {"variable": "hydra.topology.TarjanState"},
+                                                                            "domain": {"variable": "hydra.topology.TarjanState"}}},
+                                                                        "variables": []}}],
                                                                   "body": {
                                                                     "application": {
                                                                       "argument": {
@@ -2265,11 +2135,7 @@
                                                                                             "application": {
                                                                                               "argument": {"variable": "graph"},
                                                                                               "function": {"variable": "hydra.sorting.strongConnect"}}}}}}},
-                                                                                  "type": [
-                                                                                    {
-                                                                                      "constraints": null,
-                                                                                      "type": {"variable": "hydra.topology.TarjanState"},
-                                                                                      "variables": []}]}],
+                                                                                  "type": {"type": {"variable": "hydra.topology.TarjanState"}, "variables": []}}],
                                                                               "body": {
                                                                                 "let": {
                                                                                   "bindings": [
@@ -2297,11 +2163,7 @@
                                                                                                           "body": {"function": {"primitive": "hydra.lib.maps.findWithDefault"}},
                                                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                       "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
-                                                                                      "type": [
-                                                                                        {
-                                                                                          "constraints": null,
-                                                                                          "type": {"literal": {"integer": {"int32": {}}}},
-                                                                                          "variables": []}]}],
+                                                                                      "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                                                                                   "body": {
                                                                                     "let": {
                                                                                       "bindings": [
@@ -2329,11 +2191,7 @@
                                                                                                               "body": {"function": {"primitive": "hydra.lib.maps.findWithDefault"}},
                                                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                           "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
-                                                                                          "type": [
-                                                                                            {
-                                                                                              "constraints": null,
-                                                                                              "type": {"literal": {"integer": {"int32": {}}}},
-                                                                                              "variables": []}]}],
+                                                                                          "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                                                                                       "body": {
                                                                                         "record": {
                                                                                           "fields": [
@@ -2444,21 +2302,19 @@
                                                                                 "typeApplication": {
                                                                                   "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
                                                                                   "type": {"variable": "hydra.topology.TarjanState"}}}}}}}}}}},
-                                                              "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                              "domain": {"literal": {"integer": {"int32": {}}}},
                                                               "parameter": "w"}}},
-                                                        "domain": [{"variable": "hydra.topology.TarjanState"}],
+                                                        "domain": {"variable": "hydra.topology.TarjanState"},
                                                         "parameter": "st_"}}},
-                                                  "type": [
-                                                    {
-                                                      "constraints": null,
-                                                      "type": {
-                                                        "function": {
-                                                          "codomain": {
-                                                            "function": {
-                                                              "codomain": {"variable": "hydra.topology.TarjanState"},
-                                                              "domain": {"literal": {"integer": {"int32": {}}}}}},
-                                                          "domain": {"variable": "hydra.topology.TarjanState"}}},
-                                                      "variables": []}]}],
+                                                  "type": {
+                                                    "type": {
+                                                      "function": {
+                                                        "codomain": {
+                                                          "function": {
+                                                            "codomain": {"variable": "hydra.topology.TarjanState"},
+                                                            "domain": {"literal": {"integer": {"int32": {}}}}}},
+                                                        "domain": {"variable": "hydra.topology.TarjanState"}}},
+                                                    "variables": []}}],
                                               "body": {
                                                 "let": {
                                                   "bindings": [
@@ -2480,11 +2336,7 @@
                                                                           "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
                                                                           "type": {"variable": "hydra.topology.TarjanState"}}},
                                                                       "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
-                                                      "type": [
-                                                        {
-                                                          "constraints": null,
-                                                          "type": {"variable": "hydra.topology.TarjanState"},
-                                                          "variables": []}]}],
+                                                      "type": {"type": {"variable": "hydra.topology.TarjanState"}, "variables": []}}],
                                                   "body": {
                                                     "let": {
                                                       "bindings": [
@@ -2512,11 +2364,7 @@
                                                                               "body": {"function": {"primitive": "hydra.lib.maps.findWithDefault"}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                           "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
-                                                          "type": [
-                                                            {
-                                                              "constraints": null,
-                                                              "type": {"literal": {"integer": {"int32": {}}}},
-                                                              "variables": []}]}],
+                                                          "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                                                       "body": {
                                                         "let": {
                                                           "bindings": [
@@ -2544,11 +2392,7 @@
                                                                                   "body": {"function": {"primitive": "hydra.lib.maps.findWithDefault"}},
                                                                                   "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                               "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
-                                                              "type": [
-                                                                {
-                                                                  "constraints": null,
-                                                                  "type": {"literal": {"integer": {"int32": {}}}},
-                                                                  "variables": []}]}],
+                                                              "type": {"type": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                                                           "body": {
                                                             "application": {
                                                               "argument": {"variable": "stAfterNeighbors"},
@@ -2566,14 +2410,12 @@
                                                                                 "application": {
                                                                                   "argument": {"variable": "v"},
                                                                                   "function": {"variable": "hydra.sorting.popStackUntil"}}}}},
-                                                                          "type": [
-                                                                            {
-                                                                              "constraints": null,
-                                                                              "type": {
-                                                                                "pair": {
-                                                                                  "first": {"list": {"literal": {"integer": {"int32": {}}}}},
-                                                                                  "second": {"variable": "hydra.topology.TarjanState"}}},
-                                                                              "variables": []}]}],
+                                                                          "type": {
+                                                                            "type": {
+                                                                              "pair": {
+                                                                                "first": {"list": {"literal": {"integer": {"int32": {}}}}},
+                                                                                "second": {"variable": "hydra.topology.TarjanState"}}},
+                                                                            "variables": []}}],
                                                                       "body": {
                                                                         "let": {
                                                                           "bindings": [
@@ -2589,11 +2431,9 @@
                                                                                           "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
                                                                                           "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
                                                                                       "type": {"variable": "hydra.topology.TarjanState"}}}}},
-                                                                              "type": [
-                                                                                {
-                                                                                  "constraints": null,
-                                                                                  "type": {"list": {"literal": {"integer": {"int32": {}}}}},
-                                                                                  "variables": []}]}],
+                                                                              "type": {
+                                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}},
+                                                                                "variables": []}}],
                                                                           "body": {
                                                                             "let": {
                                                                               "bindings": [
@@ -2609,11 +2449,7 @@
                                                                                               "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                                               "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
                                                                                           "type": {"variable": "hydra.topology.TarjanState"}}}}},
-                                                                                  "type": [
-                                                                                    {
-                                                                                      "constraints": null,
-                                                                                      "type": {"variable": "hydra.topology.TarjanState"},
-                                                                                      "variables": []}]}],
+                                                                                  "type": {"type": {"variable": "hydra.topology.TarjanState"}, "variables": []}}],
                                                                               "body": {
                                                                                 "record": {
                                                                                   "fields": [
@@ -2697,33 +2533,30 @@
                                                                         "typeApplication": {
                                                                           "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
                                                                           "type": {"variable": "hydra.topology.TarjanState"}}}}}}}}}}}}}}}}}}}}}}},
-                              "domain": [{"variable": "hydra.topology.TarjanState"}],
+                              "domain": {"variable": "hydra.topology.TarjanState"},
                               "parameter": "st"}}},
-                        "domain": [{"literal": {"integer": {"int32": {}}}}],
+                        "domain": {"literal": {"integer": {"int32": {}}}},
                         "parameter": "v"}}},
-                  "domain": [
-                    {
-                      "map": {
-                        "keys": {"literal": {"integer": {"int32": {}}}},
-                        "values": {"list": {"literal": {"integer": {"int32": {}}}}}}}],
+                  "domain": {
+                    "map": {
+                      "keys": {"literal": {"integer": {"int32": {}}}},
+                      "values": {"list": {"literal": {"integer": {"int32": {}}}}}}},
                   "parameter": "graph"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "function": {
-                        "codomain": {"variable": "hydra.topology.TarjanState"},
-                        "domain": {"variable": "hydra.topology.TarjanState"}}},
-                    "domain": {"literal": {"integer": {"int32": {}}}}}},
-                "domain": {
-                  "map": {
-                    "keys": {"literal": {"integer": {"int32": {}}}},
-                    "values": {"list": {"literal": {"integer": {"int32": {}}}}}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {"variable": "hydra.topology.TarjanState"},
+                      "domain": {"variable": "hydra.topology.TarjanState"}}},
+                  "domain": {"literal": {"integer": {"int32": {}}}}}},
+              "domain": {
+                "map": {
+                  "keys": {"literal": {"integer": {"int32": {}}}},
+                  "values": {"list": {"literal": {"integer": {"int32": {}}}}}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.sorting.stronglyConnectedComponents",
@@ -2753,11 +2586,9 @@
                                       "body": {"function": {"primitive": "hydra.lib.maps.keys"}},
                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                   "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}},
-                          "type": [
-                            {
-                              "constraints": null,
-                              "type": {"list": {"literal": {"integer": {"int32": {}}}}},
-                              "variables": []}]}],
+                          "type": {
+                            "type": {"list": {"literal": {"integer": {"int32": {}}}}},
+                            "variables": []}}],
                       "body": {
                         "let": {
                           "bindings": [
@@ -2817,9 +2648,9 @@
                                                                     "typeApplication": {
                                                                       "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
                                                                       "type": {"variable": "hydra.topology.TarjanState"}}}}}}}}},
-                                                      "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                      "domain": {"literal": {"integer": {"int32": {}}}},
                                                       "parameter": "v"}}},
-                                                "domain": [{"variable": "hydra.topology.TarjanState"}],
+                                                "domain": {"variable": "hydra.topology.TarjanState"},
                                                 "parameter": "st"}}},
                                           "function": {
                                             "typeApplication": {
@@ -2828,11 +2659,7 @@
                                                   "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
                                                   "type": {"variable": "hydra.topology.TarjanState"}}},
                                               "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
-                              "type": [
-                                {
-                                  "constraints": null,
-                                  "type": {"variable": "hydra.topology.TarjanState"},
-                                  "variables": []}]}],
+                              "type": {"type": {"variable": "hydra.topology.TarjanState"}, "variables": []}}],
                           "body": {
                             "application": {
                               "argument": {
@@ -2861,23 +2688,20 @@
                                 "typeApplication": {
                                   "body": {"function": {"primitive": "hydra.lib.lists.reverse"}},
                                   "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}}}}}},
-                  "domain": [
-                    {
-                      "map": {
-                        "keys": {"literal": {"integer": {"int32": {}}}},
-                        "values": {"list": {"literal": {"integer": {"int32": {}}}}}}}],
+                  "domain": {
+                    "map": {
+                      "keys": {"literal": {"integer": {"int32": {}}}},
+                      "values": {"list": {"literal": {"integer": {"int32": {}}}}}}},
                   "parameter": "graph"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}},
-                "domain": {
-                  "map": {
-                    "keys": {"literal": {"integer": {"int32": {}}}},
-                    "values": {"list": {"literal": {"integer": {"int32": {}}}}}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}},
+              "domain": {
+                "map": {
+                  "keys": {"literal": {"integer": {"int32": {}}}},
+                  "values": {"list": {"literal": {"integer": {"int32": {}}}}}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.sorting.topologicalSort",
@@ -2906,11 +2730,7 @@
                                     "typeApplication": {
                                       "body": {"variable": "hydra.sorting.topologicalSortComponents"},
                                       "type": {"variable": "t0"}}}}},
-                              "type": [
-                                {
-                                  "constraints": null,
-                                  "type": {"list": {"list": {"variable": "t0"}}},
-                                  "variables": []}]}],
+                              "type": {"type": {"list": {"list": {"variable": "t0"}}}, "variables": []}}],
                           "body": {
                             "let": {
                               "bindings": [
@@ -2937,17 +2757,15 @@
                                                         "body": {"function": {"primitive": "hydra.lib.lists.null"}},
                                                         "type": {"variable": "t1"}}}}},
                                                 "function": {"function": {"primitive": "hydra.lib.logic.not"}}}},
-                                            "domain": [{"list": {"variable": "t1"}}],
+                                            "domain": {"list": {"variable": "t1"}},
                                             "parameter": "scc"}}},
                                       "parameter": "t1"}},
-                                  "type": [
-                                    {
-                                      "constraints": null,
-                                      "type": {
-                                        "function": {
-                                          "codomain": {"literal": {"boolean": {}}},
-                                          "domain": {"list": {"variable": "t1"}}}},
-                                      "variables": ["t1"]}]}],
+                                  "type": {
+                                    "type": {
+                                      "function": {
+                                        "codomain": {"literal": {"boolean": {}}},
+                                        "domain": {"list": {"variable": "t1"}}}},
+                                    "variables": ["t1"]}}],
                               "body": {
                                 "let": {
                                   "bindings": [
@@ -2964,11 +2782,7 @@
                                                 "typeApplication": {
                                                   "body": {"function": {"primitive": "hydra.lib.lists.filter"}},
                                                   "type": {"list": {"variable": "t0"}}}}}}}},
-                                      "type": [
-                                        {
-                                          "constraints": null,
-                                          "type": {"list": {"list": {"variable": "t0"}}},
-                                          "variables": []}]}],
+                                      "type": {"type": {"list": {"list": {"variable": "t0"}}}, "variables": []}}],
                                   "body": {
                                     "application": {
                                       "argument": {
@@ -3011,25 +2825,23 @@
                                                     "either": {
                                                       "left": {"list": {"list": {"variable": "t0"}}},
                                                       "right": {"list": {"variable": "t0"}}}}}}}}}}}}}}}}}},
-                      "domain": [
-                        {
-                          "list": {
-                            "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}],
+                      "domain": {
+                        "list": {
+                          "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}},
                       "parameter": "pairs"}}}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": [[{"@key": "t0", "@value": {"classes": ["ordering"]}}]],
-            "type": {
-              "function": {
-                "codomain": {
-                  "either": {
-                    "left": {"list": {"list": {"variable": "t0"}}},
-                    "right": {"list": {"variable": "t0"}}}},
-                "domain": {
-                  "list": {
-                    "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "constraints": [{"@key": "t0", "@value": {"classes": ["ordering"]}}],
+          "type": {
+            "function": {
+              "codomain": {
+                "either": {
+                  "left": {"list": {"list": {"variable": "t0"}}},
+                  "right": {"list": {"variable": "t0"}}}},
+              "domain": {
+                "list": {
+                  "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.sorting.topologicalSortComponents",
@@ -3058,20 +2870,18 @@
                                     "typeApplication": {
                                       "body": {"variable": "hydra.sorting.adjacencyListsToGraph"},
                                       "type": {"variable": "t0"}}}}},
-                              "type": [
-                                {
-                                  "constraints": null,
-                                  "type": {
-                                    "pair": {
-                                      "first": {
-                                        "map": {
-                                          "keys": {"literal": {"integer": {"int32": {}}}},
-                                          "values": {"list": {"literal": {"integer": {"int32": {}}}}}}},
-                                      "second": {
-                                        "function": {
-                                          "codomain": {"variable": "t0"},
-                                          "domain": {"literal": {"integer": {"int32": {}}}}}}}},
-                                  "variables": []}]}],
+                              "type": {
+                                "type": {
+                                  "pair": {
+                                    "first": {
+                                      "map": {
+                                        "keys": {"literal": {"integer": {"int32": {}}}},
+                                        "values": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                    "second": {
+                                      "function": {
+                                        "codomain": {"variable": "t0"},
+                                        "domain": {"literal": {"integer": {"int32": {}}}}}}}},
+                                "variables": []}}],
                           "body": {
                             "let": {
                               "bindings": [
@@ -3093,14 +2903,12 @@
                                             "function": {
                                               "codomain": {"variable": "t0"},
                                               "domain": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                  "type": [
-                                    {
-                                      "constraints": null,
-                                      "type": {
-                                        "map": {
-                                          "keys": {"literal": {"integer": {"int32": {}}}},
-                                          "values": {"list": {"literal": {"integer": {"int32": {}}}}}}},
-                                      "variables": []}]}],
+                                  "type": {
+                                    "type": {
+                                      "map": {
+                                        "keys": {"literal": {"integer": {"int32": {}}}},
+                                        "values": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                    "variables": []}}],
                               "body": {
                                 "application": {
                                   "argument": {
@@ -3140,7 +2948,7 @@
                                                             "body": {"function": {"primitive": "hydra.lib.lists.map"}},
                                                             "type": {"literal": {"integer": {"int32": {}}}}}},
                                                         "type": {"variable": "t0"}}}}}}},
-                                            "domain": [{"list": {"literal": {"integer": {"int32": {}}}}}],
+                                            "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
                                             "parameter": "comp"}}},
                                       "function": {
                                         "typeApplication": {
@@ -3149,22 +2957,20 @@
                                               "body": {"function": {"primitive": "hydra.lib.lists.map"}},
                                               "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
                                           "type": {"list": {"variable": "t0"}}}}}}}}}}}},
-                      "domain": [
-                        {
-                          "list": {
-                            "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}],
+                      "domain": {
+                        "list": {
+                          "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}},
                       "parameter": "pairs"}}}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": [[{"@key": "t0", "@value": {"classes": ["ordering"]}}]],
-            "type": {
-              "function": {
-                "codomain": {"list": {"list": {"variable": "t0"}}},
-                "domain": {
-                  "list": {
-                    "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "constraints": [{"@key": "t0", "@value": {"classes": ["ordering"]}}],
+          "type": {
+            "function": {
+              "codomain": {"list": {"list": {"variable": "t0"}}},
+              "domain": {
+                "list": {
+                  "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.sorting.topologicalSortNodes",
@@ -3215,7 +3021,7 @@
                                                                             "@second": {"variable": "n"}}},
                                                                         "type": {"variable": "t1"}}},
                                                                     "type": {"variable": "t0"}}},
-                                                                "domain": [{"variable": "t0"}],
+                                                                "domain": {"variable": "t0"},
                                                                 "parameter": "n"}}},
                                                           "function": {
                                                             "typeApplication": {
@@ -3231,11 +3037,9 @@
                                                           "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
                                                           "type": {"variable": "t1"}}},
                                                       "type": {"variable": "t0"}}}}},
-                                              "type": [
-                                                {
-                                                  "constraints": null,
-                                                  "type": {"map": {"keys": {"variable": "t1"}, "values": {"variable": "t0"}}},
-                                                  "variables": []}]}],
+                                              "type": {
+                                                "type": {"map": {"keys": {"variable": "t1"}, "values": {"variable": "t0"}}},
+                                                "variables": []}}],
                                           "body": {
                                             "let": {
                                               "bindings": [
@@ -3261,7 +3065,7 @@
                                                                               "application": {"argument": {"variable": "n"}, "function": {"variable": "getAdj"}}}}},
                                                                         "type": {"variable": "t1"}}},
                                                                     "type": {"list": {"variable": "t1"}}}},
-                                                                "domain": [{"variable": "t0"}],
+                                                                "domain": {"variable": "t0"},
                                                                 "parameter": "n"}}},
                                                           "function": {
                                                             "typeApplication": {
@@ -3271,13 +3075,11 @@
                                                                   "type": {"variable": "t0"}}},
                                                               "type": {
                                                                 "pair": {"first": {"variable": "t1"}, "second": {"list": {"variable": "t1"}}}}}}}}}},
-                                                  "type": [
-                                                    {
-                                                      "constraints": null,
-                                                      "type": {
-                                                        "list": {
-                                                          "pair": {"first": {"variable": "t1"}, "second": {"list": {"variable": "t1"}}}}},
-                                                      "variables": []}]}],
+                                                  "type": {
+                                                    "type": {
+                                                      "list": {
+                                                        "pair": {"first": {"variable": "t1"}, "second": {"list": {"variable": "t1"}}}}},
+                                                    "variables": []}}],
                                               "body": {
                                                 "let": {
                                                   "bindings": [
@@ -3290,11 +3092,7 @@
                                                             "typeApplication": {
                                                               "body": {"variable": "hydra.sorting.topologicalSortComponents"},
                                                               "type": {"variable": "t1"}}}}},
-                                                      "type": [
-                                                        {
-                                                          "constraints": null,
-                                                          "type": {"list": {"list": {"variable": "t1"}}},
-                                                          "variables": []}]}],
+                                                      "type": {"type": {"list": {"list": {"variable": "t1"}}}, "variables": []}}],
                                                   "body": {
                                                     "application": {
                                                       "argument": {"variable": "comps"},
@@ -3326,7 +3124,7 @@
                                                                                                   "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
                                                                                                   "type": {"variable": "t1"}}},
                                                                                               "type": {"variable": "t0"}}}}}}},
-                                                                                  "domain": [{"variable": "t1"}],
+                                                                                  "domain": {"variable": "t1"},
                                                                                   "parameter": "k"}}},
                                                                             "function": {
                                                                               "typeApplication": {
@@ -3339,7 +3137,7 @@
                                                                       "typeApplication": {
                                                                         "body": {"function": {"primitive": "hydra.lib.maybes.cat"}},
                                                                         "type": {"variable": "t0"}}}}},
-                                                                "domain": [{"list": {"variable": "t1"}}],
+                                                                "domain": {"list": {"variable": "t1"}},
                                                                 "parameter": "c"}}},
                                                           "function": {
                                                             "typeApplication": {
@@ -3348,40 +3146,36 @@
                                                                   "body": {"function": {"primitive": "hydra.lib.lists.map"}},
                                                                   "type": {"list": {"variable": "t1"}}}},
                                                               "type": {"list": {"variable": "t0"}}}}}}}}}}}}}},
-                                      "domain": [{"list": {"variable": "t0"}}],
+                                      "domain": {"list": {"variable": "t0"}},
                                       "parameter": "nodes"}}},
-                                "domain": [
-                                  {
-                                    "function": {
-                                      "codomain": {"list": {"variable": "t1"}},
-                                      "domain": {"variable": "t0"}}}],
+                                "domain": {
+                                  "function": {
+                                    "codomain": {"list": {"variable": "t1"}},
+                                    "domain": {"variable": "t0"}}},
                                 "parameter": "getAdj"}}},
-                          "domain": [
-                            {
-                              "function": {"codomain": {"variable": "t1"}, "domain": {"variable": "t0"}}}],
+                          "domain": {
+                            "function": {"codomain": {"variable": "t1"}, "domain": {"variable": "t0"}}},
                           "parameter": "getKey"}}}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": [[{"@key": "t1", "@value": {"classes": ["ordering"]}}]],
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "function": {
-                        "codomain": {"list": {"list": {"variable": "t0"}}},
-                        "domain": {"list": {"variable": "t0"}}}},
-                    "domain": {
-                      "function": {
-                        "codomain": {"list": {"variable": "t1"}},
-                        "domain": {"variable": "t0"}}}}},
-                "domain": {
-                  "function": {"codomain": {"variable": "t1"}, "domain": {"variable": "t0"}}}}},
-            "variables": ["t0", "t1"]}]}}],
-  "description": [
-    "Utilities for sorting. This module includes an implementation of Tarjan's algorithm, originally based on GraphSCC by Iavor S. Diatchki: https://hackage.haskell.org/package/GraphSCC."],
+        "type": {
+          "constraints": [{"@key": "t1", "@value": {"classes": ["ordering"]}}],
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {"list": {"list": {"variable": "t0"}}},
+                      "domain": {"list": {"variable": "t0"}}}},
+                  "domain": {
+                    "function": {
+                      "codomain": {"list": {"variable": "t1"}},
+                      "domain": {"variable": "t0"}}}}},
+              "domain": {
+                "function": {"codomain": {"variable": "t1"}, "domain": {"variable": "t0"}}}}},
+          "variables": ["t0", "t1"]}}}],
+  "description": "Utilities for sorting. This module includes an implementation of Tarjan's algorithm, originally based on GraphSCC by Iavor S. Diatchki: https://hackage.haskell.org/package/GraphSCC.",
   "namespace": "hydra.sorting",
   "termDependencies": ["hydra.constants"],
   "typeDependencies": [

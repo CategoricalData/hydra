@@ -27,14 +27,12 @@
                     "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
                     "type": {"variable": "hydra.core.Name"}}},
                 "type": {"variable": "hydra.core.Term"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "map": {
-                "keys": {"variable": "hydra.core.Name"},
-                "values": {"variable": "hydra.core.Term"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "map": {
+              "keys": {"variable": "hydra.core.Name"},
+              "values": {"variable": "hydra.core.Term"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testGraph.testTypes",
@@ -270,14 +268,12 @@
                     "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
                     "type": {"variable": "hydra.core.Name"}}},
                 "type": {"variable": "hydra.core.Type"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "map": {
-                "keys": {"variable": "hydra.core.Name"},
-                "values": {"variable": "hydra.core.Type"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "map": {
+              "keys": {"variable": "hydra.core.Name"},
+              "values": {"variable": "hydra.core.Type"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testGraph.testNamespace",
@@ -285,11 +281,7 @@
           "wrap": {
             "body": {"literal": {"string": "testGraph"}},
             "typeName": "hydra.packaging.Namespace"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.packaging.Namespace"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testGraph.testSchemaNamespace",
@@ -297,30 +289,18 @@
           "wrap": {
             "body": {"literal": {"string": "testSchemaGraph"}},
             "typeName": "hydra.packaging.Namespace"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.packaging.Namespace"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testGraph.testGraph",
         "term": {"variable": "hydra.lexical.emptyGraph"},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.graph.Graph"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.graph.Graph"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testGraph.testContext",
         "term": {"variable": "hydra.lexical.emptyContext"},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.context.Context"},
-            "variables": []}]}}],
-  "description": ["A module defining the graph used in the test suite."],
+        "type": {"type": {"variable": "hydra.context.Context"}, "variables": []}}}],
+  "description": "A module defining the graph used in the test suite.",
   "namespace": "hydra.test.testGraph",
   "termDependencies": ["hydra.test.testTerms", "hydra.test.testTypes", "hydra.lexical"],
   "typeDependencies": [

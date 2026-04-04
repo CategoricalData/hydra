@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.error.packaging.ConflictingModuleNamespaceError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -40,7 +39,6 @@
       "type": {
         "name": "hydra.error.packaging.ConflictingVariantNameError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -96,7 +94,6 @@
       "type": {
         "name": "hydra.error.packaging.DefinitionNotInModuleNamespaceError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -132,7 +129,6 @@
       "type": {
         "name": "hydra.error.packaging.DuplicateDefinitionNameError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -167,7 +163,6 @@
       "type": {
         "name": "hydra.error.packaging.DuplicateModuleNamespaceError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -192,7 +187,6 @@
       "type": {
         "name": "hydra.error.packaging.InvalidModuleError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -241,7 +235,6 @@
       "type": {
         "name": "hydra.error.packaging.InvalidPackageError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -283,7 +276,7 @@
                             "@value": {"literal": {"string": "A module within the package is invalid"}}}],
                         "body": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}]}}},
           "variables": []}}}],
-  "description": ["Error types for module and package validation"],
+  "description": "Error types for module and package validation",
   "namespace": "hydra.error.packaging",
   "termDependencies": ["hydra.core", "hydra.packaging"],
   "typeDependencies": ["hydra.core", "hydra.packaging"]}

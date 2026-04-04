@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.errors.DecodingError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -18,7 +17,6 @@
       "type": {
         "name": "hydra.errors.Error",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -134,7 +132,6 @@
       "type": {
         "name": "hydra.errors.OtherError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -147,7 +144,6 @@
       "type": {
         "name": "hydra.errors.UnificationError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -185,7 +181,7 @@
                             "@value": {"literal": {"string": "A human-readable error message"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}}],
-  "description": ["Top-level error types for the Hydra kernel"],
+  "description": "Top-level error types for the Hydra kernel",
   "namespace": "hydra.errors",
   "termDependencies": [
     "hydra.context",
