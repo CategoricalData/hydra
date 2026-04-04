@@ -19,7 +19,7 @@ public interface Utils {
   static <T0, T1> hydra.util.Either<T1, hydra.testing.TestCaseWithMetadata> inferTestCase(T0 g, hydra.testing.TestCaseWithMetadata tcm) {
     hydra.util.Maybe<String> desc = (tcm).description;
     String name_ = (tcm).name;
-    hydra.util.ConsList<hydra.testing.Tag> tags_ = (tcm).tags;
+    java.util.List<hydra.testing.Tag> tags_ = (tcm).tags;
     hydra.testing.TestCase tcase = (tcm).case_;
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<hydra.testing.TestCase, hydra.testing.TestCaseWithMetadata>) (inferredCase -> new hydra.testing.TestCaseWithMetadata(name_, inferredCase, desc, tags_)),
@@ -27,18 +27,18 @@ public interface Utils {
   }
 
   static <T0, T1> hydra.util.Either<T1, hydra.testing.TestGroup> inferTestGroupTerms(T0 g, hydra.testing.TestGroup tg) {
-    hydra.util.ConsList<hydra.testing.TestCaseWithMetadata> cases_ = (tg).cases;
+    java.util.List<hydra.testing.TestCaseWithMetadata> cases_ = (tg).cases;
     hydra.util.Maybe<String> desc = (tg).description;
     String name_ = (tg).name;
-    hydra.util.ConsList<hydra.testing.TestGroup> subgroups = (tg).subgroups;
+    java.util.List<hydra.testing.TestGroup> subgroups = (tg).subgroups;
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.MapList.apply(
         (java.util.function.Function<hydra.testing.TestGroup, hydra.util.Either<T1, hydra.testing.TestGroup>>) (sg -> hydra.test.Utils.<T0, T1>inferTestGroupTerms(
           g,
           sg)),
         subgroups),
-      (java.util.function.Function<hydra.util.ConsList<hydra.testing.TestGroup>, hydra.util.Either<T1, hydra.testing.TestGroup>>) (inferredSubgroups -> hydra.lib.eithers.Map.apply(
-        (java.util.function.Function<hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>, hydra.testing.TestGroup>) (inferredCases -> new hydra.testing.TestGroup(name_, desc, inferredSubgroups, inferredCases)),
+      (java.util.function.Function<java.util.List<hydra.testing.TestGroup>, hydra.util.Either<T1, hydra.testing.TestGroup>>) (inferredSubgroups -> hydra.lib.eithers.Map.apply(
+        (java.util.function.Function<java.util.List<hydra.testing.TestCaseWithMetadata>, hydra.testing.TestGroup>) (inferredCases -> new hydra.testing.TestGroup(name_, desc, inferredSubgroups, inferredCases)),
         hydra.lib.eithers.MapList.apply(
           (java.util.function.Function<hydra.testing.TestCaseWithMetadata, hydra.util.Either<T1, hydra.testing.TestCaseWithMetadata>>) (tc -> hydra.test.Utils.<T0, T1>inferTestCase(
             g,

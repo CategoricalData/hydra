@@ -24,14 +24,14 @@ public class LetExpression implements Serializable, Comparable<LetExpression> {
   /**
    * The variable bindings
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.LetBinding> bindings;
+  public final java.util.List<hydra.ext.lisp.syntax.LetBinding> bindings;
 
   /**
    * The body expressions
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> body;
+  public final java.util.List<hydra.ext.lisp.syntax.Expression> body;
 
-  public LetExpression (hydra.ext.lisp.syntax.LetKind kind, hydra.util.ConsList<hydra.ext.lisp.syntax.LetBinding> bindings, hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> body) {
+  public LetExpression (hydra.ext.lisp.syntax.LetKind kind, java.util.List<hydra.ext.lisp.syntax.LetBinding> bindings, java.util.List<hydra.ext.lisp.syntax.Expression> body) {
     this.kind = kind;
     this.bindings = bindings;
     this.body = body;
@@ -61,26 +61,32 @@ public class LetExpression implements Serializable, Comparable<LetExpression> {
   @SuppressWarnings("unchecked")
   public int compareTo(LetExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) kind).compareTo(other.kind);
+    cmp = hydra.util.Comparing.compare(
+      kind,
+      other.kind);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) bindings).compareTo(other.bindings);
+    cmp = hydra.util.Comparing.compare(
+      bindings,
+      other.bindings);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
   public LetExpression withKind(hydra.ext.lisp.syntax.LetKind kind) {
     return new LetExpression(kind, bindings, body);
   }
 
-  public LetExpression withBindings(hydra.util.ConsList<hydra.ext.lisp.syntax.LetBinding> bindings) {
+  public LetExpression withBindings(java.util.List<hydra.ext.lisp.syntax.LetBinding> bindings) {
     return new LetExpression(kind, bindings, body);
   }
 
-  public LetExpression withBody(hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> body) {
+  public LetExpression withBody(java.util.List<hydra.ext.lisp.syntax.Expression> body) {
     return new LetExpression(kind, bindings, body);
   }
 }

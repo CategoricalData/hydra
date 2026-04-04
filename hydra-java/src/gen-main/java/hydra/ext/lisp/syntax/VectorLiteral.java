@@ -15,9 +15,9 @@ public class VectorLiteral implements Serializable, Comparable<VectorLiteral> {
   /**
    * The vector elements
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> elements;
+  public final java.util.List<hydra.ext.lisp.syntax.Expression> elements;
 
-  public VectorLiteral (hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> elements) {
+  public VectorLiteral (java.util.List<hydra.ext.lisp.syntax.Expression> elements) {
     this.elements = elements;
   }
 
@@ -40,6 +40,8 @@ public class VectorLiteral implements Serializable, Comparable<VectorLiteral> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(VectorLiteral other) {
-    return ((Comparable) elements).compareTo(other.elements);
+    return hydra.util.Comparing.compare(
+      elements,
+      other.elements);
   }
 }

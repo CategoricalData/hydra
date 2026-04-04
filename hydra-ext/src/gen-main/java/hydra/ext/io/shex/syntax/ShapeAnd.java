@@ -13,9 +13,9 @@ public class ShapeAnd implements Serializable, Comparable<ShapeAnd> {
 
   public final hydra.ext.io.shex.syntax.ShapeNot ShapeNot;
 
-  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.ShapeNot> listOfSequence;
+  public final java.util.List<hydra.ext.io.shex.syntax.ShapeNot> listOfSequence;
 
-  public ShapeAnd (hydra.ext.io.shex.syntax.ShapeNot ShapeNot, hydra.util.ConsList<hydra.ext.io.shex.syntax.ShapeNot> listOfSequence) {
+  public ShapeAnd (hydra.ext.io.shex.syntax.ShapeNot ShapeNot, java.util.List<hydra.ext.io.shex.syntax.ShapeNot> listOfSequence) {
     this.ShapeNot = ShapeNot;
     this.listOfSequence = listOfSequence;
   }
@@ -42,18 +42,22 @@ public class ShapeAnd implements Serializable, Comparable<ShapeAnd> {
   @SuppressWarnings("unchecked")
   public int compareTo(ShapeAnd other) {
     int cmp = 0;
-    cmp = ((Comparable) ShapeNot).compareTo(other.ShapeNot);
+    cmp = hydra.util.Comparing.compare(
+      ShapeNot,
+      other.ShapeNot);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) listOfSequence).compareTo(other.listOfSequence);
+    return hydra.util.Comparing.compare(
+      listOfSequence,
+      other.listOfSequence);
   }
 
   public ShapeAnd withShapeNot(hydra.ext.io.shex.syntax.ShapeNot ShapeNot) {
     return new ShapeAnd(ShapeNot, listOfSequence);
   }
 
-  public ShapeAnd withListOfSequence(hydra.util.ConsList<hydra.ext.io.shex.syntax.ShapeNot> listOfSequence) {
+  public ShapeAnd withListOfSequence(java.util.List<hydra.ext.io.shex.syntax.ShapeNot> listOfSequence) {
     return new ShapeAnd(ShapeNot, listOfSequence);
   }
 }

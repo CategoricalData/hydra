@@ -133,9 +133,9 @@ public interface Errors {
   }
 
   static String notAForallTypeError(hydra.error.checking.NotAForallTypeError e) {
-    hydra.util.ConsList<hydra.core.Type> args = (e).typeArguments;
+    java.util.List<hydra.core.Type> args = (e).typeArguments;
     hydra.core.Type typ = (e).type;
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "not a forall type: ",
       hydra.show.Core.type(typ),
       ". Trying to apply ",
@@ -159,10 +159,10 @@ public interface Errors {
 
   static String typeArityMismatchError(hydra.error.checking.TypeArityMismatchError e) {
     Integer actual = (e).actualArity;
-    hydra.util.ConsList<hydra.core.Type> args = (e).typeArguments;
+    java.util.List<hydra.core.Type> args = (e).typeArguments;
     Integer expected = (e).expectedArity;
     hydra.core.Type typ = (e).type;
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "type ",
       hydra.show.Core.type(typ),
       " applied to the wrong number of type arguments (expected ",
@@ -178,7 +178,7 @@ public interface Errors {
   static String typeMismatchError(hydra.error.checking.TypeMismatchError e) {
     hydra.core.Type actual = (e).actualType;
     hydra.core.Type expected = (e).expectedType;
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "type mismatch: expected ",
       hydra.show.Core.type(expected),
       " but found ",
@@ -187,8 +187,8 @@ public interface Errors {
 
   static String unboundTypeVariablesError(hydra.error.checking.UnboundTypeVariablesError e) {
     hydra.core.Type typ = (e).type;
-    hydra.util.PersistentSet<hydra.core.Name> vars = (e).variables;
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    java.util.Set<hydra.core.Name> vars = (e).variables;
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "unbound type variables: {",
       hydra.lib.strings.Intercalate.apply(
         ", ",
@@ -201,8 +201,8 @@ public interface Errors {
 
   static String unequalTypesError(hydra.error.checking.UnequalTypesError e) {
     String desc = (e).description;
-    hydra.util.ConsList<hydra.core.Type> types = (e).types;
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    java.util.List<hydra.core.Type> types = (e).types;
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "unequal types ",
       hydra.Formatting.showList(
         hydra.show.Core::type,
@@ -215,7 +215,7 @@ public interface Errors {
     hydra.core.Type lt = (e).leftType;
     String msg = (e).message;
     hydra.core.Type rt = (e).rightType;
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "unification error: cannot unify ",
       hydra.show.Core.type(lt),
       " with ",

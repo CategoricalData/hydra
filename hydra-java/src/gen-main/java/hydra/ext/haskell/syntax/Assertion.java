@@ -74,7 +74,9 @@ public abstract class Assertion implements Serializable, Comparable<Assertion> {
         return tagCmp;
       }
       Class_ o = (Class_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -87,9 +89,9 @@ public abstract class Assertion implements Serializable, Comparable<Assertion> {
    * A tuple of assertions
    */
   public static final class Tuple extends hydra.ext.haskell.syntax.Assertion implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.haskell.syntax.Assertion> value;
+    public final java.util.List<hydra.ext.haskell.syntax.Assertion> value;
 
-    public Tuple (hydra.util.ConsList<hydra.ext.haskell.syntax.Assertion> value) {
+    public Tuple (java.util.List<hydra.ext.haskell.syntax.Assertion> value) {
       this.value = value;
     }
 
@@ -117,7 +119,9 @@ public abstract class Assertion implements Serializable, Comparable<Assertion> {
         return tagCmp;
       }
       Tuple o = (Tuple) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

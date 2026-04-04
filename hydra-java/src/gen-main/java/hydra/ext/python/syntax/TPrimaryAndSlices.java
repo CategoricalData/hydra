@@ -42,11 +42,15 @@ public class TPrimaryAndSlices implements Serializable, Comparable<TPrimaryAndSl
   @SuppressWarnings("unchecked")
   public int compareTo(TPrimaryAndSlices other) {
     int cmp = 0;
-    cmp = ((Comparable) primary).compareTo(other.primary);
+    cmp = hydra.util.Comparing.compare(
+      primary,
+      other.primary);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) slices).compareTo(other.slices);
+    return hydra.util.Comparing.compare(
+      slices,
+      other.slices);
   }
 
   public TPrimaryAndSlices withPrimary(hydra.ext.python.syntax.TPrimary primary) {

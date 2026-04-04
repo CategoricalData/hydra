@@ -92,7 +92,9 @@ public abstract class TPrimary implements Serializable, Comparable<TPrimary> {
         return tagCmp;
       }
       PrimaryAndName o = (PrimaryAndName) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -132,7 +134,9 @@ public abstract class TPrimary implements Serializable, Comparable<TPrimary> {
         return tagCmp;
       }
       PrimaryAndSlices o = (PrimaryAndSlices) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -172,7 +176,9 @@ public abstract class TPrimary implements Serializable, Comparable<TPrimary> {
         return tagCmp;
       }
       PrimaryAndGenexp o = (PrimaryAndGenexp) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -212,7 +218,9 @@ public abstract class TPrimary implements Serializable, Comparable<TPrimary> {
         return tagCmp;
       }
       PrimaryAndArguments o = (PrimaryAndArguments) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -252,7 +260,9 @@ public abstract class TPrimary implements Serializable, Comparable<TPrimary> {
         return tagCmp;
       }
       Atom o = (Atom) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

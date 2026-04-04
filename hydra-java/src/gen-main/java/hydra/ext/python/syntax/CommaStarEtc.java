@@ -11,11 +11,11 @@ public class CommaStarEtc implements Serializable, Comparable<CommaStarEtc> {
 
   public static final hydra.core.Name KEYWORDS = new hydra.core.Name("keywords");
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.ParamMaybeDefault> paramMaybeDefault;
+  public final java.util.List<hydra.ext.python.syntax.ParamMaybeDefault> paramMaybeDefault;
 
   public final hydra.util.Maybe<hydra.ext.python.syntax.Keywords> keywords;
 
-  public CommaStarEtc (hydra.util.ConsList<hydra.ext.python.syntax.ParamMaybeDefault> paramMaybeDefault, hydra.util.Maybe<hydra.ext.python.syntax.Keywords> keywords) {
+  public CommaStarEtc (java.util.List<hydra.ext.python.syntax.ParamMaybeDefault> paramMaybeDefault, hydra.util.Maybe<hydra.ext.python.syntax.Keywords> keywords) {
     this.paramMaybeDefault = paramMaybeDefault;
     this.keywords = keywords;
   }
@@ -42,14 +42,18 @@ public class CommaStarEtc implements Serializable, Comparable<CommaStarEtc> {
   @SuppressWarnings("unchecked")
   public int compareTo(CommaStarEtc other) {
     int cmp = 0;
-    cmp = ((Comparable) paramMaybeDefault).compareTo(other.paramMaybeDefault);
+    cmp = hydra.util.Comparing.compare(
+      paramMaybeDefault,
+      other.paramMaybeDefault);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) keywords).compareTo(other.keywords);
+    return hydra.util.Comparing.compare(
+      keywords,
+      other.keywords);
   }
 
-  public CommaStarEtc withParamMaybeDefault(hydra.util.ConsList<hydra.ext.python.syntax.ParamMaybeDefault> paramMaybeDefault) {
+  public CommaStarEtc withParamMaybeDefault(java.util.List<hydra.ext.python.syntax.ParamMaybeDefault> paramMaybeDefault) {
     return new CommaStarEtc(paramMaybeDefault, keywords);
   }
 

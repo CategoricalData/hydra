@@ -108,7 +108,9 @@ public abstract class TraversalSourceSelfMethod implements Serializable, Compara
         return tagCmp;
       }
       WithBulk o = (WithBulk) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -183,7 +185,9 @@ public abstract class TraversalSourceSelfMethod implements Serializable, Compara
         return tagCmp;
       }
       WithSack o = (WithSack) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -223,7 +227,9 @@ public abstract class TraversalSourceSelfMethod implements Serializable, Compara
         return tagCmp;
       }
       WithSideEffect o = (WithSideEffect) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -233,9 +239,9 @@ public abstract class TraversalSourceSelfMethod implements Serializable, Compara
   }
 
   public static final class WithStrategies extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceSelfMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.TraversalStrategy> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.TraversalStrategy> value;
 
-    public WithStrategies (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.TraversalStrategy> value) {
+    public WithStrategies (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.TraversalStrategy> value) {
       this.value = value;
     }
 
@@ -263,7 +269,9 @@ public abstract class TraversalSourceSelfMethod implements Serializable, Compara
         return tagCmp;
       }
       WithStrategies o = (WithStrategies) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -273,9 +281,9 @@ public abstract class TraversalSourceSelfMethod implements Serializable, Compara
   }
 
   public static final class WithoutStrategies extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceSelfMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.Identifier> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.Identifier> value;
 
-    public WithoutStrategies (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.Identifier> value) {
+    public WithoutStrategies (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.Identifier> value) {
       this.value = value;
     }
 
@@ -303,7 +311,9 @@ public abstract class TraversalSourceSelfMethod implements Serializable, Compara
         return tagCmp;
       }
       WithoutStrategies o = (WithoutStrategies) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -343,7 +353,9 @@ public abstract class TraversalSourceSelfMethod implements Serializable, Compara
         return tagCmp;
       }
       With o = (With) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

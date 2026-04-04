@@ -68,7 +68,9 @@ public abstract class Iri implements Serializable, Comparable<Iri> {
         return tagCmp;
       }
       IriRef o = (IriRef) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class Iri implements Serializable, Comparable<Iri> {
         return tagCmp;
       }
       PrefixedName o = (PrefixedName) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

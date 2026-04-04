@@ -11,11 +11,11 @@ public class PackageDeclaration implements Serializable, Comparable<PackageDecla
 
   public static final hydra.core.Name IDENTIFIERS = new hydra.core.Name("identifiers");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.PackageModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.PackageModifier> modifiers;
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.Identifier> identifiers;
+  public final java.util.List<hydra.ext.java.syntax.Identifier> identifiers;
 
-  public PackageDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.PackageModifier> modifiers, hydra.util.ConsList<hydra.ext.java.syntax.Identifier> identifiers) {
+  public PackageDeclaration (java.util.List<hydra.ext.java.syntax.PackageModifier> modifiers, java.util.List<hydra.ext.java.syntax.Identifier> identifiers) {
     this.modifiers = modifiers;
     this.identifiers = identifiers;
   }
@@ -42,18 +42,22 @@ public class PackageDeclaration implements Serializable, Comparable<PackageDecla
   @SuppressWarnings("unchecked")
   public int compareTo(PackageDeclaration other) {
     int cmp = 0;
-    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
+    cmp = hydra.util.Comparing.compare(
+      modifiers,
+      other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) identifiers).compareTo(other.identifiers);
+    return hydra.util.Comparing.compare(
+      identifiers,
+      other.identifiers);
   }
 
-  public PackageDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.PackageModifier> modifiers) {
+  public PackageDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.PackageModifier> modifiers) {
     return new PackageDeclaration(modifiers, identifiers);
   }
 
-  public PackageDeclaration withIdentifiers(hydra.util.ConsList<hydra.ext.java.syntax.Identifier> identifiers) {
+  public PackageDeclaration withIdentifiers(java.util.List<hydra.ext.java.syntax.Identifier> identifiers) {
     return new PackageDeclaration(modifiers, identifiers);
   }
 }

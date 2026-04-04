@@ -11,11 +11,11 @@ public class SlashWithDefault implements Serializable, Comparable<SlashWithDefau
 
   public static final hydra.core.Name PARAM_WITH_DEFAULT = new hydra.core.Name("paramWithDefault");
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault;
+  public final java.util.List<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault;
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault;
+  public final java.util.List<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault;
 
-  public SlashWithDefault (hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault, hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault) {
+  public SlashWithDefault (java.util.List<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault, java.util.List<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault) {
     this.paramNoDefault = paramNoDefault;
     this.paramWithDefault = paramWithDefault;
   }
@@ -42,18 +42,22 @@ public class SlashWithDefault implements Serializable, Comparable<SlashWithDefau
   @SuppressWarnings("unchecked")
   public int compareTo(SlashWithDefault other) {
     int cmp = 0;
-    cmp = ((Comparable) paramNoDefault).compareTo(other.paramNoDefault);
+    cmp = hydra.util.Comparing.compare(
+      paramNoDefault,
+      other.paramNoDefault);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) paramWithDefault).compareTo(other.paramWithDefault);
+    return hydra.util.Comparing.compare(
+      paramWithDefault,
+      other.paramWithDefault);
   }
 
-  public SlashWithDefault withParamNoDefault(hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault) {
+  public SlashWithDefault withParamNoDefault(java.util.List<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault) {
     return new SlashWithDefault(paramNoDefault, paramWithDefault);
   }
 
-  public SlashWithDefault withParamWithDefault(hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault) {
+  public SlashWithDefault withParamWithDefault(java.util.List<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault) {
     return new SlashWithDefault(paramNoDefault, paramWithDefault);
   }
 }

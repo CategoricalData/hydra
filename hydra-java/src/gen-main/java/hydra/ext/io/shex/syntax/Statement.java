@@ -68,7 +68,9 @@ public abstract class Statement implements Serializable, Comparable<Statement> {
         return tagCmp;
       }
       Directive o = (Directive) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class Statement implements Serializable, Comparable<Statement> {
         return tagCmp;
       }
       NotStartAction o = (NotStartAction) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

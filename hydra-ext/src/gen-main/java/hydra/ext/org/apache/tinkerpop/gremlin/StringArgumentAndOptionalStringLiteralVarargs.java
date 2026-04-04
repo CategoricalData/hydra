@@ -13,9 +13,9 @@ public class StringArgumentAndOptionalStringLiteralVarargs implements Serializab
 
   public final hydra.ext.org.apache.tinkerpop.gremlin.StringArgument first;
 
-  public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> rest;
+  public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> rest;
 
-  public StringArgumentAndOptionalStringLiteralVarargs (hydra.ext.org.apache.tinkerpop.gremlin.StringArgument first, hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> rest) {
+  public StringArgumentAndOptionalStringLiteralVarargs (hydra.ext.org.apache.tinkerpop.gremlin.StringArgument first, java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> rest) {
     this.first = first;
     this.rest = rest;
   }
@@ -42,18 +42,22 @@ public class StringArgumentAndOptionalStringLiteralVarargs implements Serializab
   @SuppressWarnings("unchecked")
   public int compareTo(StringArgumentAndOptionalStringLiteralVarargs other) {
     int cmp = 0;
-    cmp = ((Comparable) first).compareTo(other.first);
+    cmp = hydra.util.Comparing.compare(
+      first,
+      other.first);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) rest).compareTo(other.rest);
+    return hydra.util.Comparing.compare(
+      rest,
+      other.rest);
   }
 
   public StringArgumentAndOptionalStringLiteralVarargs withFirst(hydra.ext.org.apache.tinkerpop.gremlin.StringArgument first) {
     return new StringArgumentAndOptionalStringLiteralVarargs(first, rest);
   }
 
-  public StringArgumentAndOptionalStringLiteralVarargs withRest(hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> rest) {
+  public StringArgumentAndOptionalStringLiteralVarargs withRest(java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> rest) {
     return new StringArgumentAndOptionalStringLiteralVarargs(first, rest);
   }
 }

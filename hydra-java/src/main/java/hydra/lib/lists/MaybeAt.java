@@ -8,8 +8,6 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Maybe;
 
-import hydra.util.ConsList;
-
 import java.util.List;
 import java.util.function.Function;
 
@@ -39,7 +37,7 @@ public class MaybeAt extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.int32(cx, graph, args.get(0)), i -> hydra.lib.eithers.Map.apply((Function<ConsList<Term>, Term>) l -> Terms.optional(MaybeAt.apply(i, l)), hydra.extract.Core.list(cx, graph, args.get(1))));
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.int32(cx, graph, args.get(0)), i -> hydra.lib.eithers.Map.apply((Function<List<Term>, Term>) l -> Terms.optional(MaybeAt.apply(i, l)), hydra.extract.Core.list(cx, graph, args.get(1))));
     }
 
     /**
@@ -49,7 +47,7 @@ public class MaybeAt extends PrimitiveFunction {
      * @param list the list to get the element from
      * @return a Maybe containing the element at the index, or empty if out of bounds
      */
-    public static <X> Maybe<X> apply(int index, ConsList<X> list) {
+    public static <X> Maybe<X> apply(int index, List<X> list) {
         if (index < 0 || index >= list.size()) {
             return Maybe.nothing();
         } else {

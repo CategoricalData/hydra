@@ -49,15 +49,21 @@ public class ConditionalExpression_TernaryCond implements Serializable, Comparab
   @SuppressWarnings("unchecked")
   public int compareTo(ConditionalExpression_TernaryCond other) {
     int cmp = 0;
-    cmp = ((Comparable) cond).compareTo(other.cond);
+    cmp = hydra.util.Comparing.compare(
+      cond,
+      other.cond);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) ifTrue).compareTo(other.ifTrue);
+    cmp = hydra.util.Comparing.compare(
+      ifTrue,
+      other.ifTrue);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) ifFalse).compareTo(other.ifFalse);
+    return hydra.util.Comparing.compare(
+      ifFalse,
+      other.ifFalse);
   }
 
   public ConditionalExpression_TernaryCond withCond(hydra.ext.java.syntax.ConditionalOrExpression cond) {

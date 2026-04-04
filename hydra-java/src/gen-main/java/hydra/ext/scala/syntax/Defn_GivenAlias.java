@@ -19,19 +19,19 @@ public class Defn_GivenAlias implements Serializable, Comparable<Defn_GivenAlias
 
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods;
+  public final java.util.List<hydra.ext.scala.syntax.Mod> mods;
 
   public final hydra.ext.scala.syntax.Name name;
 
-  public final hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param>> tparams;
+  public final java.util.List<java.util.List<hydra.ext.scala.syntax.Type_Param>> tparams;
 
-  public final hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> sparams;
+  public final java.util.List<java.util.List<hydra.ext.scala.syntax.Data_Param>> sparams;
 
   public final hydra.ext.scala.syntax.Type decltpe;
 
   public final hydra.ext.scala.syntax.Data body;
 
-  public Defn_GivenAlias (hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods, hydra.ext.scala.syntax.Name name, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param>> tparams, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> sparams, hydra.ext.scala.syntax.Type decltpe, hydra.ext.scala.syntax.Data body) {
+  public Defn_GivenAlias (java.util.List<hydra.ext.scala.syntax.Mod> mods, hydra.ext.scala.syntax.Name name, java.util.List<java.util.List<hydra.ext.scala.syntax.Type_Param>> tparams, java.util.List<java.util.List<hydra.ext.scala.syntax.Data_Param>> sparams, hydra.ext.scala.syntax.Type decltpe, hydra.ext.scala.syntax.Data body) {
     this.mods = mods;
     this.name = name;
     this.tparams = tparams;
@@ -70,30 +70,42 @@ public class Defn_GivenAlias implements Serializable, Comparable<Defn_GivenAlias
   @SuppressWarnings("unchecked")
   public int compareTo(Defn_GivenAlias other) {
     int cmp = 0;
-    cmp = ((Comparable) mods).compareTo(other.mods);
+    cmp = hydra.util.Comparing.compare(
+      mods,
+      other.mods);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) tparams).compareTo(other.tparams);
+    cmp = hydra.util.Comparing.compare(
+      tparams,
+      other.tparams);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) sparams).compareTo(other.sparams);
+    cmp = hydra.util.Comparing.compare(
+      sparams,
+      other.sparams);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) decltpe).compareTo(other.decltpe);
+    cmp = hydra.util.Comparing.compare(
+      decltpe,
+      other.decltpe);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
-  public Defn_GivenAlias withMods(hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods) {
+  public Defn_GivenAlias withMods(java.util.List<hydra.ext.scala.syntax.Mod> mods) {
     return new Defn_GivenAlias(mods, name, tparams, sparams, decltpe, body);
   }
 
@@ -101,11 +113,11 @@ public class Defn_GivenAlias implements Serializable, Comparable<Defn_GivenAlias
     return new Defn_GivenAlias(mods, name, tparams, sparams, decltpe, body);
   }
 
-  public Defn_GivenAlias withTparams(hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param>> tparams) {
+  public Defn_GivenAlias withTparams(java.util.List<java.util.List<hydra.ext.scala.syntax.Type_Param>> tparams) {
     return new Defn_GivenAlias(mods, name, tparams, sparams, decltpe, body);
   }
 
-  public Defn_GivenAlias withSparams(hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> sparams) {
+  public Defn_GivenAlias withSparams(java.util.List<java.util.List<hydra.ext.scala.syntax.Data_Param>> sparams) {
     return new Defn_GivenAlias(mods, name, tparams, sparams, decltpe, body);
   }
 

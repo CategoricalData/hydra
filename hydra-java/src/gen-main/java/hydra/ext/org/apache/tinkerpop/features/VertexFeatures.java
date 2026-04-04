@@ -105,35 +105,51 @@ public class VertexFeatures implements Serializable, Comparable<VertexFeatures> 
   @SuppressWarnings("unchecked")
   public int compareTo(VertexFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) elementFeatures).compareTo(other.elementFeatures);
+    cmp = hydra.util.Comparing.compare(
+      elementFeatures,
+      other.elementFeatures);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) properties).compareTo(other.properties);
+    cmp = hydra.util.Comparing.compare(
+      properties,
+      other.properties);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsAddVertices).compareTo(other.supportsAddVertices);
+    cmp = hydra.util.Comparing.compare(
+      supportsAddVertices,
+      other.supportsAddVertices);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsDuplicateMultiProperties).compareTo(other.supportsDuplicateMultiProperties);
+    cmp = hydra.util.Comparing.compare(
+      supportsDuplicateMultiProperties,
+      other.supportsDuplicateMultiProperties);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsMetaProperties).compareTo(other.supportsMetaProperties);
+    cmp = hydra.util.Comparing.compare(
+      supportsMetaProperties,
+      other.supportsMetaProperties);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsMultiProperties).compareTo(other.supportsMultiProperties);
+    cmp = hydra.util.Comparing.compare(
+      supportsMultiProperties,
+      other.supportsMultiProperties);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsRemoveVertices).compareTo(other.supportsRemoveVertices);
+    cmp = hydra.util.Comparing.compare(
+      supportsRemoveVertices,
+      other.supportsRemoveVertices);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) supportsUpsert).compareTo(other.supportsUpsert);
+    return hydra.util.Comparing.compare(
+      supportsUpsert,
+      other.supportsUpsert);
   }
 
   public VertexFeatures withElementFeatures(hydra.ext.org.apache.tinkerpop.features.ElementFeatures elementFeatures) {

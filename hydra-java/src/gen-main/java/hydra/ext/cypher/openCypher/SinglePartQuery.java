@@ -13,13 +13,13 @@ public class SinglePartQuery implements Serializable, Comparable<SinglePartQuery
 
   public static final hydra.core.Name RETURN = new hydra.core.Name("return");
 
-  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.ReadingClause> reading;
+  public final java.util.List<hydra.ext.cypher.openCypher.ReadingClause> reading;
 
-  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.UpdatingClause> updating;
+  public final java.util.List<hydra.ext.cypher.openCypher.UpdatingClause> updating;
 
   public final hydra.util.Maybe<hydra.ext.cypher.openCypher.Return> return_;
 
-  public SinglePartQuery (hydra.util.ConsList<hydra.ext.cypher.openCypher.ReadingClause> reading, hydra.util.ConsList<hydra.ext.cypher.openCypher.UpdatingClause> updating, hydra.util.Maybe<hydra.ext.cypher.openCypher.Return> return_) {
+  public SinglePartQuery (java.util.List<hydra.ext.cypher.openCypher.ReadingClause> reading, java.util.List<hydra.ext.cypher.openCypher.UpdatingClause> updating, hydra.util.Maybe<hydra.ext.cypher.openCypher.Return> return_) {
     this.reading = reading;
     this.updating = updating;
     this.return_ = return_;
@@ -49,22 +49,28 @@ public class SinglePartQuery implements Serializable, Comparable<SinglePartQuery
   @SuppressWarnings("unchecked")
   public int compareTo(SinglePartQuery other) {
     int cmp = 0;
-    cmp = ((Comparable) reading).compareTo(other.reading);
+    cmp = hydra.util.Comparing.compare(
+      reading,
+      other.reading);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) updating).compareTo(other.updating);
+    cmp = hydra.util.Comparing.compare(
+      updating,
+      other.updating);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) return_).compareTo(other.return_);
+    return hydra.util.Comparing.compare(
+      return_,
+      other.return_);
   }
 
-  public SinglePartQuery withReading(hydra.util.ConsList<hydra.ext.cypher.openCypher.ReadingClause> reading) {
+  public SinglePartQuery withReading(java.util.List<hydra.ext.cypher.openCypher.ReadingClause> reading) {
     return new SinglePartQuery(reading, updating, return_);
   }
 
-  public SinglePartQuery withUpdating(hydra.util.ConsList<hydra.ext.cypher.openCypher.UpdatingClause> updating) {
+  public SinglePartQuery withUpdating(java.util.List<hydra.ext.cypher.openCypher.UpdatingClause> updating) {
     return new SinglePartQuery(reading, updating, return_);
   }
 

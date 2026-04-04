@@ -11,11 +11,11 @@ public class YieldItems implements Serializable, Comparable<YieldItems> {
 
   public static final hydra.core.Name WHERE = new hydra.core.Name("where");
 
-  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.YieldItem> items;
+  public final java.util.List<hydra.ext.cypher.openCypher.YieldItem> items;
 
   public final hydra.util.Maybe<hydra.ext.cypher.openCypher.Where> where;
 
-  public YieldItems (hydra.util.ConsList<hydra.ext.cypher.openCypher.YieldItem> items, hydra.util.Maybe<hydra.ext.cypher.openCypher.Where> where) {
+  public YieldItems (java.util.List<hydra.ext.cypher.openCypher.YieldItem> items, hydra.util.Maybe<hydra.ext.cypher.openCypher.Where> where) {
     this.items = items;
     this.where = where;
   }
@@ -42,14 +42,18 @@ public class YieldItems implements Serializable, Comparable<YieldItems> {
   @SuppressWarnings("unchecked")
   public int compareTo(YieldItems other) {
     int cmp = 0;
-    cmp = ((Comparable) items).compareTo(other.items);
+    cmp = hydra.util.Comparing.compare(
+      items,
+      other.items);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) where).compareTo(other.where);
+    return hydra.util.Comparing.compare(
+      where,
+      other.where);
   }
 
-  public YieldItems withItems(hydra.util.ConsList<hydra.ext.cypher.openCypher.YieldItem> items) {
+  public YieldItems withItems(java.util.List<hydra.ext.cypher.openCypher.YieldItem> items) {
     return new YieldItems(items, where);
   }
 

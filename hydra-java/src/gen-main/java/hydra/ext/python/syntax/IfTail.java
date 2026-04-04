@@ -68,7 +68,9 @@ public abstract class IfTail implements Serializable, Comparable<IfTail> {
         return tagCmp;
       }
       Elif o = (Elif) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class IfTail implements Serializable, Comparable<IfTail> {
         return tagCmp;
       }
       Else o = (Else) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

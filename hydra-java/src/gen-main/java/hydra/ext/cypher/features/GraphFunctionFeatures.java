@@ -71,19 +71,27 @@ public class GraphFunctionFeatures implements Serializable, Comparable<GraphFunc
   @SuppressWarnings("unchecked")
   public int compareTo(GraphFunctionFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) graphByElementId).compareTo(other.graphByElementId);
+    cmp = hydra.util.Comparing.compare(
+      graphByElementId,
+      other.graphByElementId);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) graphByName).compareTo(other.graphByName);
+    cmp = hydra.util.Comparing.compare(
+      graphByName,
+      other.graphByName);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) graphNames).compareTo(other.graphNames);
+    cmp = hydra.util.Comparing.compare(
+      graphNames,
+      other.graphNames);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) graphPropertiesByName).compareTo(other.graphPropertiesByName);
+    return hydra.util.Comparing.compare(
+      graphPropertiesByName,
+      other.graphPropertiesByName);
   }
 
   public GraphFunctionFeatures withGraphByElementId(Boolean graphByElementId) {

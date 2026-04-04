@@ -11,11 +11,11 @@ public class LambdaSlashWithDefault implements Serializable, Comparable<LambdaSl
 
   public static final hydra.core.Name PARAM_WITH_DEFAULT = new hydra.core.Name("paramWithDefault");
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamNoDefault> paramNoDefault;
+  public final java.util.List<hydra.ext.python.syntax.LambdaParamNoDefault> paramNoDefault;
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamWithDefault> paramWithDefault;
+  public final java.util.List<hydra.ext.python.syntax.LambdaParamWithDefault> paramWithDefault;
 
-  public LambdaSlashWithDefault (hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamNoDefault> paramNoDefault, hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamWithDefault> paramWithDefault) {
+  public LambdaSlashWithDefault (java.util.List<hydra.ext.python.syntax.LambdaParamNoDefault> paramNoDefault, java.util.List<hydra.ext.python.syntax.LambdaParamWithDefault> paramWithDefault) {
     this.paramNoDefault = paramNoDefault;
     this.paramWithDefault = paramWithDefault;
   }
@@ -42,18 +42,22 @@ public class LambdaSlashWithDefault implements Serializable, Comparable<LambdaSl
   @SuppressWarnings("unchecked")
   public int compareTo(LambdaSlashWithDefault other) {
     int cmp = 0;
-    cmp = ((Comparable) paramNoDefault).compareTo(other.paramNoDefault);
+    cmp = hydra.util.Comparing.compare(
+      paramNoDefault,
+      other.paramNoDefault);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) paramWithDefault).compareTo(other.paramWithDefault);
+    return hydra.util.Comparing.compare(
+      paramWithDefault,
+      other.paramWithDefault);
   }
 
-  public LambdaSlashWithDefault withParamNoDefault(hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamNoDefault> paramNoDefault) {
+  public LambdaSlashWithDefault withParamNoDefault(java.util.List<hydra.ext.python.syntax.LambdaParamNoDefault> paramNoDefault) {
     return new LambdaSlashWithDefault(paramNoDefault, paramWithDefault);
   }
 
-  public LambdaSlashWithDefault withParamWithDefault(hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamWithDefault> paramWithDefault) {
+  public LambdaSlashWithDefault withParamWithDefault(java.util.List<hydra.ext.python.syntax.LambdaParamWithDefault> paramWithDefault) {
     return new LambdaSlashWithDefault(paramNoDefault, paramWithDefault);
   }
 }

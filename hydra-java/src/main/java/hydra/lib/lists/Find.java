@@ -8,8 +8,6 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Maybe;
 
-import hydra.util.ConsList;
-
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -63,7 +61,7 @@ public class Find extends PrimitiveFunction {
      * @param pred the predicate to test elements
      * @return a function that finds the first matching element
      */
-    public static <X> Function<ConsList<X>, Maybe<X>> apply(Predicate<X> pred) {
+    public static <X> Function<List<X>, Maybe<X>> apply(Predicate<X> pred) {
         return lst -> apply(pred, lst);
     }
 
@@ -74,7 +72,7 @@ public class Find extends PrimitiveFunction {
      * @param lst the list to search
      * @return an optional containing the first matching element, or empty if none found
      */
-    public static <X> Maybe<X> apply(Function<X, Boolean> pred, ConsList<X> lst) {
+    public static <X> Maybe<X> apply(Function<X, Boolean> pred, List<X> lst) {
         return apply((Predicate<X>) x -> pred.apply(x), lst);
     }
 
@@ -85,7 +83,7 @@ public class Find extends PrimitiveFunction {
      * @param lst the list to search
      * @return an optional containing the first matching element, or empty if none found
      */
-    public static <X> Maybe<X> apply(Predicate<X> pred, ConsList<X> lst) {
+    public static <X> Maybe<X> apply(Predicate<X> pred, List<X> lst) {
         for (X x : lst) {
             if (pred.test(x)) {
                 return Maybe.just(x);

@@ -13,9 +13,9 @@ public class Importer implements Serializable, Comparable<Importer> {
 
   public final hydra.ext.scala.syntax.Data_Ref ref;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Importee> importees;
+  public final java.util.List<hydra.ext.scala.syntax.Importee> importees;
 
-  public Importer (hydra.ext.scala.syntax.Data_Ref ref, hydra.util.ConsList<hydra.ext.scala.syntax.Importee> importees) {
+  public Importer (hydra.ext.scala.syntax.Data_Ref ref, java.util.List<hydra.ext.scala.syntax.Importee> importees) {
     this.ref = ref;
     this.importees = importees;
   }
@@ -42,18 +42,22 @@ public class Importer implements Serializable, Comparable<Importer> {
   @SuppressWarnings("unchecked")
   public int compareTo(Importer other) {
     int cmp = 0;
-    cmp = ((Comparable) ref).compareTo(other.ref);
+    cmp = hydra.util.Comparing.compare(
+      ref,
+      other.ref);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) importees).compareTo(other.importees);
+    return hydra.util.Comparing.compare(
+      importees,
+      other.importees);
   }
 
   public Importer withRef(hydra.ext.scala.syntax.Data_Ref ref) {
     return new Importer(ref, importees);
   }
 
-  public Importer withImportees(hydra.util.ConsList<hydra.ext.scala.syntax.Importee> importees) {
+  public Importer withImportees(java.util.List<hydra.ext.scala.syntax.Importee> importees) {
     return new Importer(ref, importees);
   }
 }

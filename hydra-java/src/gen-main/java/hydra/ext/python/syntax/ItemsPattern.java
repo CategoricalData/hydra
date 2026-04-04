@@ -9,9 +9,9 @@ public class ItemsPattern implements Serializable, Comparable<ItemsPattern> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.KeyValuePattern> value;
+  public final java.util.List<hydra.ext.python.syntax.KeyValuePattern> value;
 
-  public ItemsPattern (hydra.util.ConsList<hydra.ext.python.syntax.KeyValuePattern> value) {
+  public ItemsPattern (java.util.List<hydra.ext.python.syntax.KeyValuePattern> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class ItemsPattern implements Serializable, Comparable<ItemsPattern> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ItemsPattern other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

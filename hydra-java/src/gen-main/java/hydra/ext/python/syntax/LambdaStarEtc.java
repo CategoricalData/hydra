@@ -84,7 +84,9 @@ public abstract class LambdaStarEtc implements Serializable, Comparable<LambdaSt
         return tagCmp;
       }
       Star o = (Star) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -124,7 +126,9 @@ public abstract class LambdaStarEtc implements Serializable, Comparable<LambdaSt
         return tagCmp;
       }
       ParamNoDefault o = (ParamNoDefault) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -134,9 +138,9 @@ public abstract class LambdaStarEtc implements Serializable, Comparable<LambdaSt
   }
 
   public static final class ParamMaybeDefault extends hydra.ext.python.syntax.LambdaStarEtc implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamMaybeDefault> value;
+    public final java.util.List<hydra.ext.python.syntax.LambdaParamMaybeDefault> value;
 
-    public ParamMaybeDefault (hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamMaybeDefault> value) {
+    public ParamMaybeDefault (java.util.List<hydra.ext.python.syntax.LambdaParamMaybeDefault> value) {
       this.value = value;
     }
 
@@ -164,7 +168,9 @@ public abstract class LambdaStarEtc implements Serializable, Comparable<LambdaSt
         return tagCmp;
       }
       ParamMaybeDefault o = (ParamMaybeDefault) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +210,9 @@ public abstract class LambdaStarEtc implements Serializable, Comparable<LambdaSt
         return tagCmp;
       }
       Kwds o = (Kwds) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

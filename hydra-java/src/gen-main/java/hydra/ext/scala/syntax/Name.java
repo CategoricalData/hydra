@@ -76,7 +76,9 @@ public abstract class Name implements Serializable, Comparable<Name> {
         return tagCmp;
       }
       Value o = (Value) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -151,7 +153,9 @@ public abstract class Name implements Serializable, Comparable<Name> {
         return tagCmp;
       }
       Indeterminate o = (Indeterminate) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

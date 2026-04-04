@@ -71,19 +71,27 @@ public class Import implements Serializable, Comparable<Import> {
   @SuppressWarnings("unchecked")
   public int compareTo(Import other) {
     int cmp = 0;
-    cmp = ((Comparable) qualified).compareTo(other.qualified);
+    cmp = hydra.util.Comparing.compare(
+      qualified,
+      other.qualified);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) module).compareTo(other.module);
+    cmp = hydra.util.Comparing.compare(
+      module,
+      other.module);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) as).compareTo(other.as);
+    cmp = hydra.util.Comparing.compare(
+      as,
+      other.as);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) spec).compareTo(other.spec);
+    return hydra.util.Comparing.compare(
+      spec,
+      other.spec);
   }
 
   public Import withQualified(Boolean qualified) {

@@ -15,15 +15,15 @@ public class ConstructorDeclarator implements Serializable, Comparable<Construct
 
   public static final hydra.core.Name FORMAL_PARAMETERS = new hydra.core.Name("formalParameters");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters;
+  public final java.util.List<hydra.ext.java.syntax.TypeParameter> parameters;
 
   public final hydra.ext.java.syntax.SimpleTypeName name;
 
   public final hydra.util.Maybe<hydra.ext.java.syntax.ReceiverParameter> receiverParameter;
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.FormalParameter> formalParameters;
+  public final java.util.List<hydra.ext.java.syntax.FormalParameter> formalParameters;
 
-  public ConstructorDeclarator (hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters, hydra.ext.java.syntax.SimpleTypeName name, hydra.util.Maybe<hydra.ext.java.syntax.ReceiverParameter> receiverParameter, hydra.util.ConsList<hydra.ext.java.syntax.FormalParameter> formalParameters) {
+  public ConstructorDeclarator (java.util.List<hydra.ext.java.syntax.TypeParameter> parameters, hydra.ext.java.syntax.SimpleTypeName name, hydra.util.Maybe<hydra.ext.java.syntax.ReceiverParameter> receiverParameter, java.util.List<hydra.ext.java.syntax.FormalParameter> formalParameters) {
     this.parameters = parameters;
     this.name = name;
     this.receiverParameter = receiverParameter;
@@ -56,22 +56,30 @@ public class ConstructorDeclarator implements Serializable, Comparable<Construct
   @SuppressWarnings("unchecked")
   public int compareTo(ConstructorDeclarator other) {
     int cmp = 0;
-    cmp = ((Comparable) parameters).compareTo(other.parameters);
+    cmp = hydra.util.Comparing.compare(
+      parameters,
+      other.parameters);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) receiverParameter).compareTo(other.receiverParameter);
+    cmp = hydra.util.Comparing.compare(
+      receiverParameter,
+      other.receiverParameter);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) formalParameters).compareTo(other.formalParameters);
+    return hydra.util.Comparing.compare(
+      formalParameters,
+      other.formalParameters);
   }
 
-  public ConstructorDeclarator withParameters(hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters) {
+  public ConstructorDeclarator withParameters(java.util.List<hydra.ext.java.syntax.TypeParameter> parameters) {
     return new ConstructorDeclarator(parameters, name, receiverParameter, formalParameters);
   }
 
@@ -83,7 +91,7 @@ public class ConstructorDeclarator implements Serializable, Comparable<Construct
     return new ConstructorDeclarator(parameters, name, receiverParameter, formalParameters);
   }
 
-  public ConstructorDeclarator withFormalParameters(hydra.util.ConsList<hydra.ext.java.syntax.FormalParameter> formalParameters) {
+  public ConstructorDeclarator withFormalParameters(java.util.List<hydra.ext.java.syntax.FormalParameter> formalParameters) {
     return new ConstructorDeclarator(parameters, name, receiverParameter, formalParameters);
   }
 }

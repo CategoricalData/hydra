@@ -100,7 +100,9 @@ public abstract class RelationalExpression implements Serializable, Comparable<R
         return tagCmp;
       }
       Simple o = (Simple) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -140,7 +142,9 @@ public abstract class RelationalExpression implements Serializable, Comparable<R
         return tagCmp;
       }
       LessThan o = (LessThan) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -180,7 +184,9 @@ public abstract class RelationalExpression implements Serializable, Comparable<R
         return tagCmp;
       }
       GreaterThan o = (GreaterThan) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -220,7 +226,9 @@ public abstract class RelationalExpression implements Serializable, Comparable<R
         return tagCmp;
       }
       LessThanEqual o = (LessThanEqual) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -260,7 +268,9 @@ public abstract class RelationalExpression implements Serializable, Comparable<R
         return tagCmp;
       }
       GreaterThanEqual o = (GreaterThanEqual) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -300,7 +310,9 @@ public abstract class RelationalExpression implements Serializable, Comparable<R
         return tagCmp;
       }
       Instanceof o = (Instanceof) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

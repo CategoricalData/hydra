@@ -37,6 +37,8 @@ public class ColumnName implements Serializable, Comparable<ColumnName> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ColumnName other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

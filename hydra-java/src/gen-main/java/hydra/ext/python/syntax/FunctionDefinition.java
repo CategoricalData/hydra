@@ -42,11 +42,15 @@ public class FunctionDefinition implements Serializable, Comparable<FunctionDefi
   @SuppressWarnings("unchecked")
   public int compareTo(FunctionDefinition other) {
     int cmp = 0;
-    cmp = ((Comparable) decorators).compareTo(other.decorators);
+    cmp = hydra.util.Comparing.compare(
+      decorators,
+      other.decorators);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) raw).compareTo(other.raw);
+    return hydra.util.Comparing.compare(
+      raw,
+      other.raw);
   }
 
   public FunctionDefinition withDecorators(hydra.util.Maybe<hydra.ext.python.syntax.Decorators> decorators) {

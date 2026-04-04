@@ -42,11 +42,15 @@ public class ValuePair implements Serializable, Comparable<ValuePair> {
   @SuppressWarnings("unchecked")
   public int compareTo(ValuePair other) {
     int cmp = 0;
-    cmp = ((Comparable) first).compareTo(other.first);
+    cmp = hydra.util.Comparing.compare(
+      first,
+      other.first);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) second).compareTo(other.second);
+    return hydra.util.Comparing.compare(
+      second,
+      other.second);
   }
 
   public ValuePair withFirst(hydra.pg.graphson.syntax.Value first) {

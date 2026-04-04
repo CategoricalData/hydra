@@ -34,6 +34,8 @@ public class Skip implements Serializable, Comparable<Skip> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Skip other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

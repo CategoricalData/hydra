@@ -48,11 +48,15 @@ public class VariableFeatures implements Serializable, Comparable<VariableFeatur
   @SuppressWarnings("unchecked")
   public int compareTo(VariableFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) dataTypeFeatures).compareTo(other.dataTypeFeatures);
+    cmp = hydra.util.Comparing.compare(
+      dataTypeFeatures,
+      other.dataTypeFeatures);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) supportsVariables).compareTo(other.supportsVariables);
+    return hydra.util.Comparing.compare(
+      supportsVariables,
+      other.supportsVariables);
   }
 
   public VariableFeatures withDataTypeFeatures(hydra.ext.org.apache.tinkerpop.features.DataTypeFeatures dataTypeFeatures) {

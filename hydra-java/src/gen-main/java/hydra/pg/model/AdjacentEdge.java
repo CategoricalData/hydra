@@ -36,9 +36,9 @@ public class AdjacentEdge<V> implements Serializable, Comparable<AdjacentEdge<V>
   /**
    * A key/value map of edge properties
    */
-  public final hydra.util.PersistentMap<hydra.pg.model.PropertyKey, V> properties;
+  public final java.util.Map<hydra.pg.model.PropertyKey, V> properties;
 
-  public AdjacentEdge (hydra.pg.model.EdgeLabel label, V id, V vertex, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, V> properties) {
+  public AdjacentEdge (hydra.pg.model.EdgeLabel label, V id, V vertex, java.util.Map<hydra.pg.model.PropertyKey, V> properties) {
     this.label = label;
     this.id = id;
     this.vertex = vertex;
@@ -71,19 +71,27 @@ public class AdjacentEdge<V> implements Serializable, Comparable<AdjacentEdge<V>
   @SuppressWarnings("unchecked")
   public int compareTo(AdjacentEdge other) {
     int cmp = 0;
-    cmp = ((Comparable) label).compareTo(other.label);
+    cmp = hydra.util.Comparing.compare(
+      label,
+      other.label);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) id).compareTo(other.id);
+    cmp = hydra.util.Comparing.compare(
+      id,
+      other.id);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) vertex).compareTo(other.vertex);
+    cmp = hydra.util.Comparing.compare(
+      vertex,
+      other.vertex);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) properties).compareTo(other.properties);
+    return hydra.util.Comparing.compare(
+      properties,
+      other.properties);
   }
 
   public AdjacentEdge withLabel(hydra.pg.model.EdgeLabel label) {
@@ -98,7 +106,7 @@ public class AdjacentEdge<V> implements Serializable, Comparable<AdjacentEdge<V>
     return new AdjacentEdge(label, id, vertex, properties);
   }
 
-  public AdjacentEdge withProperties(hydra.util.PersistentMap<hydra.pg.model.PropertyKey, V> properties) {
+  public AdjacentEdge withProperties(java.util.Map<hydra.pg.model.PropertyKey, V> properties) {
     return new AdjacentEdge(label, id, vertex, properties);
   }
 }

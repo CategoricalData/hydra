@@ -111,7 +111,9 @@ public abstract class ExplicitConstructorInvocation_Variant implements Serializa
         return tagCmp;
       }
       Super o = (Super) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -151,7 +153,9 @@ public abstract class ExplicitConstructorInvocation_Variant implements Serializa
         return tagCmp;
       }
       Primary o = (Primary) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -71,7 +71,9 @@ public abstract class DatatypeRestriction_ConstrainingFacet implements Serializa
         return tagCmp;
       }
       XmlSchema o = (XmlSchema) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -111,7 +113,9 @@ public abstract class DatatypeRestriction_ConstrainingFacet implements Serializa
         return tagCmp;
       }
       Other o = (Other) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

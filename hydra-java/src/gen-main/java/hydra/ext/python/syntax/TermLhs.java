@@ -42,11 +42,15 @@ public class TermLhs implements Serializable, Comparable<TermLhs> {
   @SuppressWarnings("unchecked")
   public int compareTo(TermLhs other) {
     int cmp = 0;
-    cmp = ((Comparable) operand).compareTo(other.operand);
+    cmp = hydra.util.Comparing.compare(
+      operand,
+      other.operand);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) operator).compareTo(other.operator);
+    return hydra.util.Comparing.compare(
+      operator,
+      other.operator);
   }
 
   public TermLhs withOperand(hydra.ext.python.syntax.Term operand) {

@@ -15,7 +15,7 @@ public class Resource_Local implements Serializable, Comparable<Resource_Local> 
 
   public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers;
 
   public final hydra.ext.java.syntax.LocalVariableType type;
 
@@ -23,7 +23,7 @@ public class Resource_Local implements Serializable, Comparable<Resource_Local> 
 
   public final hydra.ext.java.syntax.Expression expression;
 
-  public Resource_Local (hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.LocalVariableType type, hydra.ext.java.syntax.Identifier identifier, hydra.ext.java.syntax.Expression expression) {
+  public Resource_Local (java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.LocalVariableType type, hydra.ext.java.syntax.Identifier identifier, hydra.ext.java.syntax.Expression expression) {
     this.modifiers = modifiers;
     this.type = type;
     this.identifier = identifier;
@@ -56,22 +56,30 @@ public class Resource_Local implements Serializable, Comparable<Resource_Local> 
   @SuppressWarnings("unchecked")
   public int compareTo(Resource_Local other) {
     int cmp = 0;
-    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
+    cmp = hydra.util.Comparing.compare(
+      modifiers,
+      other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) type).compareTo(other.type);
+    cmp = hydra.util.Comparing.compare(
+      type,
+      other.type);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) identifier).compareTo(other.identifier);
+    cmp = hydra.util.Comparing.compare(
+      identifier,
+      other.identifier);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) expression).compareTo(other.expression);
+    return hydra.util.Comparing.compare(
+      expression,
+      other.expression);
   }
 
-  public Resource_Local withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers) {
+  public Resource_Local withModifiers(java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers) {
     return new Resource_Local(modifiers, type, identifier, expression);
   }
 

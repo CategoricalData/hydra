@@ -42,11 +42,15 @@ public class ServiceCall implements Serializable, Comparable<ServiceCall> {
   @SuppressWarnings("unchecked")
   public int compareTo(ServiceCall other) {
     int cmp = 0;
-    cmp = ((Comparable) service).compareTo(other.service);
+    cmp = hydra.util.Comparing.compare(
+      service,
+      other.service);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) arguments).compareTo(other.arguments);
+    return hydra.util.Comparing.compare(
+      arguments,
+      other.arguments);
   }
 
   public ServiceCall withService(hydra.ext.org.apache.tinkerpop.gremlin.StringArgument service) {

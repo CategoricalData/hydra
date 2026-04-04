@@ -19,11 +19,11 @@ public class BracketedTripleExpr implements Serializable, Comparable<BracketedTr
 
   public final hydra.util.Maybe<hydra.ext.io.shex.syntax.Cardinality> Cardinality;
 
-  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation;
+  public final java.util.List<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation;
 
   public final hydra.ext.io.shex.syntax.SemanticActions SemanticActions;
 
-  public BracketedTripleExpr (hydra.ext.io.shex.syntax.InnerTripleExpr InnerTripleExpr, hydra.util.Maybe<hydra.ext.io.shex.syntax.Cardinality> Cardinality, hydra.util.ConsList<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation, hydra.ext.io.shex.syntax.SemanticActions SemanticActions) {
+  public BracketedTripleExpr (hydra.ext.io.shex.syntax.InnerTripleExpr InnerTripleExpr, hydra.util.Maybe<hydra.ext.io.shex.syntax.Cardinality> Cardinality, java.util.List<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation, hydra.ext.io.shex.syntax.SemanticActions SemanticActions) {
     this.InnerTripleExpr = InnerTripleExpr;
     this.Cardinality = Cardinality;
     this.listOfAnnotation = listOfAnnotation;
@@ -56,19 +56,27 @@ public class BracketedTripleExpr implements Serializable, Comparable<BracketedTr
   @SuppressWarnings("unchecked")
   public int compareTo(BracketedTripleExpr other) {
     int cmp = 0;
-    cmp = ((Comparable) InnerTripleExpr).compareTo(other.InnerTripleExpr);
+    cmp = hydra.util.Comparing.compare(
+      InnerTripleExpr,
+      other.InnerTripleExpr);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) Cardinality).compareTo(other.Cardinality);
+    cmp = hydra.util.Comparing.compare(
+      Cardinality,
+      other.Cardinality);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) listOfAnnotation).compareTo(other.listOfAnnotation);
+    cmp = hydra.util.Comparing.compare(
+      listOfAnnotation,
+      other.listOfAnnotation);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) SemanticActions).compareTo(other.SemanticActions);
+    return hydra.util.Comparing.compare(
+      SemanticActions,
+      other.SemanticActions);
   }
 
   public BracketedTripleExpr withInnerTripleExpr(hydra.ext.io.shex.syntax.InnerTripleExpr InnerTripleExpr) {
@@ -79,7 +87,7 @@ public class BracketedTripleExpr implements Serializable, Comparable<BracketedTr
     return new BracketedTripleExpr(InnerTripleExpr, Cardinality, listOfAnnotation, SemanticActions);
   }
 
-  public BracketedTripleExpr withListOfAnnotation(hydra.util.ConsList<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation) {
+  public BracketedTripleExpr withListOfAnnotation(java.util.List<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation) {
     return new BracketedTripleExpr(InnerTripleExpr, Cardinality, listOfAnnotation, SemanticActions);
   }
 

@@ -68,7 +68,9 @@ public abstract class PnPrefix_Sequence_Option_Alts implements Serializable, Com
         return tagCmp;
       }
       PnChars o = (PnChars) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -148,7 +148,9 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
         return tagCmp;
       }
       Block o = (Block) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -223,7 +225,9 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
         return tagCmp;
       }
       Expression o = (Expression) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -263,7 +267,9 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
         return tagCmp;
       }
       Assert o = (Assert) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -303,7 +309,9 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
         return tagCmp;
       }
       Switch o = (Switch) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -343,7 +351,9 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
         return tagCmp;
       }
       Do o = (Do) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -383,7 +393,9 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
         return tagCmp;
       }
       Break o = (Break) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -423,7 +435,9 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
         return tagCmp;
       }
       Continue o = (Continue) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -463,7 +477,9 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
         return tagCmp;
       }
       Return o = (Return) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -503,7 +519,9 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
         return tagCmp;
       }
       Synchronized o = (Synchronized) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -543,7 +561,9 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
         return tagCmp;
       }
       Throw o = (Throw) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -583,7 +603,9 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
         return tagCmp;
       }
       Try o = (Try) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

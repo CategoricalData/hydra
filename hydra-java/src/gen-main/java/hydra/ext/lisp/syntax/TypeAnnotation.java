@@ -51,11 +51,15 @@ public class TypeAnnotation implements Serializable, Comparable<TypeAnnotation> 
   @SuppressWarnings("unchecked")
   public int compareTo(TypeAnnotation other) {
     int cmp = 0;
-    cmp = ((Comparable) expression).compareTo(other.expression);
+    cmp = hydra.util.Comparing.compare(
+      expression,
+      other.expression);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) type).compareTo(other.type);
+    return hydra.util.Comparing.compare(
+      type,
+      other.type);
   }
 
   public TypeAnnotation withExpression(hydra.ext.lisp.syntax.Expression expression) {

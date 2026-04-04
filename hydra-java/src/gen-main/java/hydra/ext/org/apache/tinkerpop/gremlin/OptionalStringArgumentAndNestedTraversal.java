@@ -42,11 +42,15 @@ public class OptionalStringArgumentAndNestedTraversal implements Serializable, C
   @SuppressWarnings("unchecked")
   public int compareTo(OptionalStringArgumentAndNestedTraversal other) {
     int cmp = 0;
-    cmp = ((Comparable) string).compareTo(other.string);
+    cmp = hydra.util.Comparing.compare(
+      string,
+      other.string);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) traversal).compareTo(other.traversal);
+    return hydra.util.Comparing.compare(
+      traversal,
+      other.traversal);
   }
 
   public OptionalStringArgumentAndNestedTraversal withString(hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.StringArgument> string) {

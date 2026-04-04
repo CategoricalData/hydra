@@ -42,11 +42,15 @@ public class ShiftExpression_Binary implements Serializable, Comparable<ShiftExp
   @SuppressWarnings("unchecked")
   public int compareTo(ShiftExpression_Binary other) {
     int cmp = 0;
-    cmp = ((Comparable) lhs).compareTo(other.lhs);
+    cmp = hydra.util.Comparing.compare(
+      lhs,
+      other.lhs);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) rhs).compareTo(other.rhs);
+    return hydra.util.Comparing.compare(
+      rhs,
+      other.rhs);
   }
 
   public ShiftExpression_Binary withLhs(hydra.ext.java.syntax.ShiftExpression lhs) {

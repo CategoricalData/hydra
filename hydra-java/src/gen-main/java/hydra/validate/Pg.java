@@ -6,11 +6,11 @@ package hydra.validate;
  * Validation functions for property graphs
  */
 public interface Pg {
-  static <T0> hydra.util.Maybe<T0> checkAll(hydra.util.ConsList<hydra.util.Maybe<T0>> checks) {
+  static <T0> hydra.util.Maybe<T0> checkAll(java.util.List<hydra.util.Maybe<T0>> checks) {
     return hydra.lib.lists.SafeHead.apply(hydra.validate.Pg.<T0>checkAll_errors(checks));
   }
 
-  static <T0> hydra.util.ConsList<T0> checkAll_errors(hydra.util.ConsList<hydra.util.Maybe<T0>> checks) {
+  static <T0> java.util.List<T0> checkAll_errors(java.util.List<hydra.util.Maybe<T0>> checks) {
     return hydra.lib.maybes.Cat.apply(checks);
   }
 
@@ -54,9 +54,9 @@ public interface Pg {
       (java.util.function.Function<hydra.error.pg.InvalidElementPropertyError, hydra.error.pg.InvalidEdgeError>) (err -> new hydra.error.pg.InvalidEdgeError.Property(err)),
       hydra.validate.Pg.<T0, T1>validateProperties(
         checkValue,
-        ((java.util.function.Function<hydra.pg.model.EdgeType<T0>, hydra.util.ConsList<hydra.pg.model.PropertyType<T0>>>) (projected -> projected.properties)).apply(typ),
-        ((java.util.function.Function<hydra.pg.model.Edge<T1>, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T1>>) (projected -> projected.properties)).apply(el))));
-    return hydra.validate.Pg.checkAll(hydra.util.ConsList.of(
+        ((java.util.function.Function<hydra.pg.model.EdgeType<T0>, java.util.List<hydra.pg.model.PropertyType<T0>>>) (projected -> projected.properties)).apply(typ),
+        ((java.util.function.Function<hydra.pg.model.Edge<T1>, java.util.Map<hydra.pg.model.PropertyKey, T1>>) (projected -> projected.properties)).apply(el))));
+    return hydra.validate.Pg.checkAll(java.util.Arrays.asList(
       checkLabel.get(),
       checkId.get(),
       checkProperties.get(),
@@ -65,7 +65,7 @@ public interface Pg {
   }
 
   static <T0, T1> hydra.util.Maybe<hydra.error.pg.InvalidGraphError<T1>> validateGraph(java.util.function.Function<T0, java.util.function.Function<T1, hydra.util.Maybe<hydra.error.pg.InvalidValueError>>> checkValue, hydra.pg.model.GraphSchema<T0> schema, hydra.pg.model.Graph<T1> graph) {
-    return hydra.validate.Pg.checkAll(hydra.util.ConsList.of(
+    return hydra.validate.Pg.checkAll(java.util.Arrays.asList(
       hydra.validate.Pg.<T0, T1>validateGraph_checkVertices(
         checkValue,
         graph,
@@ -88,7 +88,7 @@ public interface Pg {
           el))),
       hydra.lib.maps.Lookup.apply(
         ((java.util.function.Function<hydra.pg.model.Edge<T1>, hydra.pg.model.EdgeLabel>) (projected -> projected.label)).apply(el),
-        ((java.util.function.Function<hydra.pg.model.GraphSchema<T0>, hydra.util.PersistentMap<hydra.pg.model.EdgeLabel, hydra.pg.model.EdgeType<T0>>>) (projected -> projected.edges)).apply(schema)));
+        ((java.util.function.Function<hydra.pg.model.GraphSchema<T0>, java.util.Map<hydra.pg.model.EdgeLabel, hydra.pg.model.EdgeType<T0>>>) (projected -> projected.edges)).apply(schema)));
   }
 
   static <T0, T1> hydra.util.Maybe<hydra.error.pg.InvalidGraphError<T1>> validateGraph_checkEdges(java.util.function.Function<T0, java.util.function.Function<T1, hydra.util.Maybe<hydra.error.pg.InvalidValueError>>> checkValue, hydra.pg.model.Graph<T1> graph, hydra.pg.model.GraphSchema<T0> schema) {
@@ -98,7 +98,7 @@ public interface Pg {
         graph,
         schema,
         v1)),
-      hydra.lib.maps.Elems.apply(((java.util.function.Function<hydra.pg.model.Graph<T1>, hydra.util.PersistentMap<T1, hydra.pg.model.Edge<T1>>>) (projected -> projected.edges)).apply(graph))));
+      hydra.lib.maps.Elems.apply(((java.util.function.Function<hydra.pg.model.Graph<T1>, java.util.Map<T1, hydra.pg.model.Edge<T1>>>) (projected -> projected.edges)).apply(graph))));
   }
 
   static <T0, T1> hydra.util.Maybe<hydra.error.pg.InvalidGraphError<T1>> validateGraph_checkVertex(java.util.function.Function<T0, java.util.function.Function<T1, hydra.util.Maybe<hydra.error.pg.InvalidValueError>>> checkValue, hydra.pg.model.GraphSchema<T0> schema, hydra.pg.model.Vertex<T1> el) {
@@ -112,7 +112,7 @@ public interface Pg {
           el))),
       hydra.lib.maps.Lookup.apply(
         ((java.util.function.Function<hydra.pg.model.Vertex<T1>, hydra.pg.model.VertexLabel>) (projected -> projected.label)).apply(el),
-        ((java.util.function.Function<hydra.pg.model.GraphSchema<T0>, hydra.util.PersistentMap<hydra.pg.model.VertexLabel, hydra.pg.model.VertexType<T0>>>) (projected -> projected.vertices)).apply(schema)));
+        ((java.util.function.Function<hydra.pg.model.GraphSchema<T0>, java.util.Map<hydra.pg.model.VertexLabel, hydra.pg.model.VertexType<T0>>>) (projected -> projected.vertices)).apply(schema)));
   }
 
   static <T0, T1> hydra.util.Maybe<hydra.error.pg.InvalidGraphError<T1>> validateGraph_checkVertices(java.util.function.Function<T0, java.util.function.Function<T1, hydra.util.Maybe<hydra.error.pg.InvalidValueError>>> checkValue, hydra.pg.model.Graph<T1> graph, hydra.pg.model.GraphSchema<T0> schema) {
@@ -121,7 +121,7 @@ public interface Pg {
         checkValue,
         schema,
         v1)),
-      hydra.lib.maps.Elems.apply(((java.util.function.Function<hydra.pg.model.Graph<T1>, hydra.util.PersistentMap<T1, hydra.pg.model.Vertex<T1>>>) (projected -> projected.vertices)).apply(graph))));
+      hydra.lib.maps.Elems.apply(((java.util.function.Function<hydra.pg.model.Graph<T1>, java.util.Map<T1, hydra.pg.model.Vertex<T1>>>) (projected -> projected.vertices)).apply(graph))));
   }
 
   static <T1> hydra.util.Maybe<java.util.function.Function<T1, hydra.util.Maybe<hydra.pg.model.VertexLabel>>> validateGraph_labelForVertexId(hydra.pg.model.Graph<T1> graph) {
@@ -129,10 +129,10 @@ public interface Pg {
       (java.util.function.Function<hydra.pg.model.Vertex<T1>, hydra.pg.model.VertexLabel>) (projected -> projected.label),
       hydra.lib.maps.Lookup.apply(
         i,
-        ((java.util.function.Function<hydra.pg.model.Graph<T1>, hydra.util.PersistentMap<T1, hydra.pg.model.Vertex<T1>>>) (projected -> projected.vertices)).apply(graph)))));
+        ((java.util.function.Function<hydra.pg.model.Graph<T1>, java.util.Map<T1, hydra.pg.model.Vertex<T1>>>) (projected -> projected.vertices)).apply(graph)))));
   }
 
-  static <T0, T1> hydra.util.Maybe<hydra.error.pg.InvalidElementPropertyError> validateProperties(java.util.function.Function<T0, java.util.function.Function<T1, hydra.util.Maybe<hydra.error.pg.InvalidValueError>>> checkValue, hydra.util.ConsList<hydra.pg.model.PropertyType<T0>> types, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T1> props) {
+  static <T0, T1> hydra.util.Maybe<hydra.error.pg.InvalidElementPropertyError> validateProperties(java.util.function.Function<T0, java.util.function.Function<T1, hydra.util.Maybe<hydra.error.pg.InvalidValueError>>> checkValue, java.util.List<hydra.pg.model.PropertyType<T0>> types, java.util.Map<hydra.pg.model.PropertyKey, T1> props) {
     hydra.util.Lazy<hydra.util.Maybe<hydra.error.pg.InvalidElementPropertyError>> checkTypes = new hydra.util.Lazy<>(() -> hydra.validate.Pg.checkAll(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.pg.model.PropertyType<T0>, hydra.util.Maybe<hydra.error.pg.InvalidElementPropertyError>>) (v1 -> hydra.validate.Pg.<T1, T0>validateProperties_checkType(
         props,
@@ -144,12 +144,12 @@ public interface Pg {
         types,
         v1)),
       hydra.lib.maps.ToList.apply(props))));
-    return hydra.validate.Pg.checkAll(hydra.util.ConsList.of(
+    return hydra.validate.Pg.checkAll(java.util.Arrays.asList(
       checkTypes.get(),
       checkValues.get()));
   }
 
-  static <T0, T1> hydra.util.Maybe<hydra.error.pg.InvalidElementPropertyError> validateProperties_checkPair(java.util.function.Function<T0, java.util.function.Function<T1, hydra.util.Maybe<hydra.error.pg.InvalidValueError>>> checkValue, hydra.util.ConsList<hydra.pg.model.PropertyType<T0>> types, hydra.util.Pair<hydra.pg.model.PropertyKey, T1> pair) {
+  static <T0, T1> hydra.util.Maybe<hydra.error.pg.InvalidElementPropertyError> validateProperties_checkPair(java.util.function.Function<T0, java.util.function.Function<T1, hydra.util.Maybe<hydra.error.pg.InvalidValueError>>> checkValue, java.util.List<hydra.pg.model.PropertyType<T0>> types, hydra.util.Pair<hydra.pg.model.PropertyKey, T1> pair) {
     hydra.util.Lazy<hydra.pg.model.PropertyKey> key = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pair));
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> hydra.util.Maybe.just(new hydra.error.pg.InvalidElementPropertyError(key.get(), new hydra.error.pg.InvalidPropertyError.UnexpectedKey(key.get()))),
@@ -161,7 +161,7 @@ public interface Pg {
         hydra.validate.Pg.<T0>validateProperties_m(types)));
   }
 
-  static <T1, T2> hydra.util.Maybe<hydra.error.pg.InvalidElementPropertyError> validateProperties_checkType(hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T1> props, hydra.pg.model.PropertyType<T2> t) {
+  static <T1, T2> hydra.util.Maybe<hydra.error.pg.InvalidElementPropertyError> validateProperties_checkType(java.util.Map<hydra.pg.model.PropertyKey, T1> props, hydra.pg.model.PropertyType<T2> t) {
     return hydra.lib.logic.IfElse.lazy(
       ((java.util.function.Function<hydra.pg.model.PropertyType<T2>, Boolean>) (projected -> projected.required)).apply(t),
       () -> hydra.lib.maybes.Maybe.applyLazy(
@@ -173,7 +173,7 @@ public interface Pg {
       () -> (hydra.util.Maybe<hydra.error.pg.InvalidElementPropertyError>) (hydra.util.Maybe.<hydra.error.pg.InvalidElementPropertyError>nothing()));
   }
 
-  static <T0> hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T0> validateProperties_m(hydra.util.ConsList<hydra.pg.model.PropertyType<T0>> types) {
+  static <T0> java.util.Map<hydra.pg.model.PropertyKey, T0> validateProperties_m(java.util.List<hydra.pg.model.PropertyType<T0>> types) {
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.pg.model.PropertyType<T0>, hydra.util.Pair<hydra.pg.model.PropertyKey, T0>>) (p -> (hydra.util.Pair<hydra.pg.model.PropertyKey, T0>) ((hydra.util.Pair<hydra.pg.model.PropertyKey, T0>) (new hydra.util.Pair<hydra.pg.model.PropertyKey, T0>(((java.util.function.Function<hydra.pg.model.PropertyType<T0>, hydra.pg.model.PropertyKey>) (projected -> projected.key)).apply(p), ((java.util.function.Function<hydra.pg.model.PropertyType<T0>, T0>) (projected -> projected.value)).apply(p))))),
       types));
@@ -199,9 +199,9 @@ public interface Pg {
       (java.util.function.Function<hydra.error.pg.InvalidElementPropertyError, hydra.error.pg.InvalidVertexError>) (err -> new hydra.error.pg.InvalidVertexError.Property(err)),
       hydra.validate.Pg.<T0, T1>validateProperties(
         checkValue,
-        ((java.util.function.Function<hydra.pg.model.VertexType<T0>, hydra.util.ConsList<hydra.pg.model.PropertyType<T0>>>) (projected -> projected.properties)).apply(typ),
-        ((java.util.function.Function<hydra.pg.model.Vertex<T1>, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T1>>) (projected -> projected.properties)).apply(el))));
-    return hydra.validate.Pg.checkAll(hydra.util.ConsList.of(
+        ((java.util.function.Function<hydra.pg.model.VertexType<T0>, java.util.List<hydra.pg.model.PropertyType<T0>>>) (projected -> projected.properties)).apply(typ),
+        ((java.util.function.Function<hydra.pg.model.Vertex<T1>, java.util.Map<hydra.pg.model.PropertyKey, T1>>) (projected -> projected.properties)).apply(el))));
+    return hydra.validate.Pg.checkAll(java.util.Arrays.asList(
       checkLabel.get(),
       checkId.get(),
       checkProperties.get()));

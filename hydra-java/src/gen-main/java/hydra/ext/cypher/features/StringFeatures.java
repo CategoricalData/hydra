@@ -71,19 +71,27 @@ public class StringFeatures implements Serializable, Comparable<StringFeatures> 
   @SuppressWarnings("unchecked")
   public int compareTo(StringFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) contains).compareTo(other.contains);
+    cmp = hydra.util.Comparing.compare(
+      contains,
+      other.contains);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) endsWith).compareTo(other.endsWith);
+    cmp = hydra.util.Comparing.compare(
+      endsWith,
+      other.endsWith);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) in).compareTo(other.in);
+    cmp = hydra.util.Comparing.compare(
+      in,
+      other.in);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) startsWith).compareTo(other.startsWith);
+    return hydra.util.Comparing.compare(
+      startsWith,
+      other.startsWith);
   }
 
   public StringFeatures withContains(Boolean contains) {

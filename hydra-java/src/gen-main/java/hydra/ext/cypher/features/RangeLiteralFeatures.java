@@ -81,23 +81,33 @@ public class RangeLiteralFeatures implements Serializable, Comparable<RangeLiter
   @SuppressWarnings("unchecked")
   public int compareTo(RangeLiteralFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) bounds).compareTo(other.bounds);
+    cmp = hydra.util.Comparing.compare(
+      bounds,
+      other.bounds);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) exactRange).compareTo(other.exactRange);
+    cmp = hydra.util.Comparing.compare(
+      exactRange,
+      other.exactRange);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) lowerBound).compareTo(other.lowerBound);
+    cmp = hydra.util.Comparing.compare(
+      lowerBound,
+      other.lowerBound);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) starRange).compareTo(other.starRange);
+    cmp = hydra.util.Comparing.compare(
+      starRange,
+      other.starRange);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) upperBound).compareTo(other.upperBound);
+    return hydra.util.Comparing.compare(
+      upperBound,
+      other.upperBound);
   }
 
   public RangeLiteralFeatures withBounds(Boolean bounds) {

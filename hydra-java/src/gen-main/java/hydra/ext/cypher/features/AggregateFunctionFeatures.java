@@ -131,43 +131,63 @@ public class AggregateFunctionFeatures implements Serializable, Comparable<Aggre
   @SuppressWarnings("unchecked")
   public int compareTo(AggregateFunctionFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) avg).compareTo(other.avg);
+    cmp = hydra.util.Comparing.compare(
+      avg,
+      other.avg);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) collect).compareTo(other.collect);
+    cmp = hydra.util.Comparing.compare(
+      collect,
+      other.collect);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) count).compareTo(other.count);
+    cmp = hydra.util.Comparing.compare(
+      count,
+      other.count);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) max).compareTo(other.max);
+    cmp = hydra.util.Comparing.compare(
+      max,
+      other.max);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) min).compareTo(other.min);
+    cmp = hydra.util.Comparing.compare(
+      min,
+      other.min);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) percentileCont).compareTo(other.percentileCont);
+    cmp = hydra.util.Comparing.compare(
+      percentileCont,
+      other.percentileCont);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) percentileDisc).compareTo(other.percentileDisc);
+    cmp = hydra.util.Comparing.compare(
+      percentileDisc,
+      other.percentileDisc);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) stdev).compareTo(other.stdev);
+    cmp = hydra.util.Comparing.compare(
+      stdev,
+      other.stdev);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) stdevp).compareTo(other.stdevp);
+    cmp = hydra.util.Comparing.compare(
+      stdevp,
+      other.stdevp);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) sum).compareTo(other.sum);
+    return hydra.util.Comparing.compare(
+      sum,
+      other.sum);
   }
 
   public AggregateFunctionFeatures withAvg(Boolean avg) {

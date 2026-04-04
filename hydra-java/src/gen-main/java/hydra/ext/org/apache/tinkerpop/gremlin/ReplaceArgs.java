@@ -49,15 +49,21 @@ public class ReplaceArgs implements Serializable, Comparable<ReplaceArgs> {
   @SuppressWarnings("unchecked")
   public int compareTo(ReplaceArgs other) {
     int cmp = 0;
-    cmp = ((Comparable) scope).compareTo(other.scope);
+    cmp = hydra.util.Comparing.compare(
+      scope,
+      other.scope);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) from).compareTo(other.from);
+    cmp = hydra.util.Comparing.compare(
+      from,
+      other.from);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) to).compareTo(other.to);
+    return hydra.util.Comparing.compare(
+      to,
+      other.to);
   }
 
   public ReplaceArgs withScope(hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.TraversalScopeArgument> scope) {

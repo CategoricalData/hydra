@@ -11,11 +11,11 @@ public class EquivalentObjectProperties implements Serializable, Comparable<Equi
 
   public static final hydra.core.Name PROPERTIES = new hydra.core.Name("properties");
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> properties;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> properties;
 
-  public EquivalentObjectProperties (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> properties) {
+  public EquivalentObjectProperties (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, java.util.List<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> properties) {
     this.annotations = annotations;
     this.properties = properties;
   }
@@ -42,18 +42,22 @@ public class EquivalentObjectProperties implements Serializable, Comparable<Equi
   @SuppressWarnings("unchecked")
   public int compareTo(EquivalentObjectProperties other) {
     int cmp = 0;
-    cmp = ((Comparable) annotations).compareTo(other.annotations);
+    cmp = hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) properties).compareTo(other.properties);
+    return hydra.util.Comparing.compare(
+      properties,
+      other.properties);
   }
 
-  public EquivalentObjectProperties withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public EquivalentObjectProperties withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new EquivalentObjectProperties(annotations, properties);
   }
 
-  public EquivalentObjectProperties withProperties(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> properties) {
+  public EquivalentObjectProperties withProperties(java.util.List<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> properties) {
     return new EquivalentObjectProperties(annotations, properties);
   }
 }

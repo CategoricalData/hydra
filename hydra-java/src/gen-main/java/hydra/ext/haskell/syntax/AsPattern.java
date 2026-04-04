@@ -51,11 +51,15 @@ public class AsPattern implements Serializable, Comparable<AsPattern> {
   @SuppressWarnings("unchecked")
   public int compareTo(AsPattern other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) inner).compareTo(other.inner);
+    return hydra.util.Comparing.compare(
+      inner,
+      other.inner);
   }
 
   public AsPattern withName(hydra.ext.haskell.syntax.Name name) {

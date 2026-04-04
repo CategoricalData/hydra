@@ -42,11 +42,15 @@ public class GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument implem
   @SuppressWarnings("unchecked")
   public int compareTo(GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument other) {
     int cmp = 0;
-    cmp = ((Comparable) literal).compareTo(other.literal);
+    cmp = hydra.util.Comparing.compare(
+      literal,
+      other.literal);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) biFunction).compareTo(other.biFunction);
+    return hydra.util.Comparing.compare(
+      biFunction,
+      other.biFunction);
   }
 
   public GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument withLiteral(hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument literal) {

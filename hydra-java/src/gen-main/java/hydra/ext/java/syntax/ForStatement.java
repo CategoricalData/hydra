@@ -68,7 +68,9 @@ public abstract class ForStatement implements Serializable, Comparable<ForStatem
         return tagCmp;
       }
       Basic o = (Basic) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class ForStatement implements Serializable, Comparable<ForStatem
         return tagCmp;
       }
       Enhanced o = (Enhanced) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -135,7 +135,7 @@ public interface Predicates {
     });
   }
 
-  static Boolean isEnumRowType(hydra.util.ConsList<hydra.core.FieldType> rt) {
+  static Boolean isEnumRowType(java.util.List<hydra.core.FieldType> rt) {
     return hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<Boolean, java.util.function.Function<Boolean, Boolean>>) (p0 -> p1 -> hydra.lib.logic.And.apply(
         p0,
@@ -190,18 +190,18 @@ public interface Predicates {
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, Boolean> isSerializable(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Binding el) {
-    java.util.function.Function<hydra.core.Type, hydra.util.ConsList<hydra.variants.TypeVariant>> variants = (java.util.function.Function<hydra.core.Type, hydra.util.ConsList<hydra.variants.TypeVariant>>) (typ -> hydra.lib.lists.Map.apply(
+    java.util.function.Function<hydra.core.Type, java.util.List<hydra.variants.TypeVariant>> variants = (java.util.function.Function<hydra.core.Type, java.util.List<hydra.variants.TypeVariant>>) (typ -> hydra.lib.lists.Map.apply(
       hydra.Reflect::typeVariant,
       hydra.Rewriting.foldOverType(
         new hydra.coders.TraversalOrder.Pre(),
-        (java.util.function.Function<hydra.util.ConsList<hydra.core.Type>, java.util.function.Function<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>>) (m -> (java.util.function.Function<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) (t -> hydra.lib.lists.Cons.apply(
+        (java.util.function.Function<java.util.List<hydra.core.Type>, java.util.function.Function<hydra.core.Type, java.util.List<hydra.core.Type>>>) (m -> (java.util.function.Function<hydra.core.Type, java.util.List<hydra.core.Type>>) (t -> hydra.lib.lists.Cons.apply(
           t,
           m))),
-        (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
+        (java.util.List<hydra.core.Type>) (java.util.Collections.<hydra.core.Type>emptyList()),
         typ)));
     return hydra.lib.eithers.Map.apply(
-      (java.util.function.Function<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>, Boolean>) (deps -> {
-        hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.TypeVariant>> allVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Type>, Boolean>) (deps -> {
+        hydra.util.Lazy<java.util.Set<hydra.variants.TypeVariant>> allVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
           variants,
           hydra.lib.maps.Elems.apply(deps)))));
         return hydra.lib.logic.Not.apply(hydra.lib.sets.Member.apply(
@@ -217,18 +217,18 @@ public interface Predicates {
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, Boolean> isSerializableByName(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Name name) {
-    java.util.function.Function<hydra.core.Type, hydra.util.ConsList<hydra.variants.TypeVariant>> variants = (java.util.function.Function<hydra.core.Type, hydra.util.ConsList<hydra.variants.TypeVariant>>) (typ -> hydra.lib.lists.Map.apply(
+    java.util.function.Function<hydra.core.Type, java.util.List<hydra.variants.TypeVariant>> variants = (java.util.function.Function<hydra.core.Type, java.util.List<hydra.variants.TypeVariant>>) (typ -> hydra.lib.lists.Map.apply(
       hydra.Reflect::typeVariant,
       hydra.Rewriting.foldOverType(
         new hydra.coders.TraversalOrder.Pre(),
-        (java.util.function.Function<hydra.util.ConsList<hydra.core.Type>, java.util.function.Function<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>>) (m -> (java.util.function.Function<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) (t -> hydra.lib.lists.Cons.apply(
+        (java.util.function.Function<java.util.List<hydra.core.Type>, java.util.function.Function<hydra.core.Type, java.util.List<hydra.core.Type>>>) (m -> (java.util.function.Function<hydra.core.Type, java.util.List<hydra.core.Type>>) (t -> hydra.lib.lists.Cons.apply(
           t,
           m))),
-        (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
+        (java.util.List<hydra.core.Type>) (java.util.Collections.<hydra.core.Type>emptyList()),
         typ)));
     return hydra.lib.eithers.Map.apply(
-      (java.util.function.Function<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>, Boolean>) (deps -> {
-        hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.TypeVariant>> allVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Type>, Boolean>) (deps -> {
+        hydra.util.Lazy<java.util.Set<hydra.variants.TypeVariant>> allVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
           variants,
           hydra.lib.maps.Elems.apply(deps)))));
         return hydra.lib.logic.Not.apply(hydra.lib.sets.Member.apply(
@@ -244,14 +244,14 @@ public interface Predicates {
   }
 
   static Boolean isSerializableType(hydra.core.Type typ) {
-    hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.TypeVariant>> allVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
+    hydra.util.Lazy<java.util.Set<hydra.variants.TypeVariant>> allVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
       hydra.Reflect::typeVariant,
       hydra.Rewriting.foldOverType(
         new hydra.coders.TraversalOrder.Pre(),
-        (java.util.function.Function<hydra.util.ConsList<hydra.core.Type>, java.util.function.Function<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>>) (m -> (java.util.function.Function<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) (t -> hydra.lib.lists.Cons.apply(
+        (java.util.function.Function<java.util.List<hydra.core.Type>, java.util.function.Function<hydra.core.Type, java.util.List<hydra.core.Type>>>) (m -> (java.util.function.Function<hydra.core.Type, java.util.List<hydra.core.Type>>) (t -> hydra.lib.lists.Cons.apply(
           t,
           m))),
-        (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
+        (java.util.List<hydra.core.Type>) (java.util.Collections.<hydra.core.Type>emptyList()),
         typ))));
     return hydra.lib.logic.Not.apply(hydra.lib.sets.Member.apply(
       new hydra.variants.TypeVariant.Function(),
@@ -416,7 +416,7 @@ public interface Predicates {
     });
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>> typeDependencies(hydra.context.Context cx, hydra.graph.Graph graph, Boolean withSchema, java.util.function.Function<hydra.core.Type, hydra.core.Type> transform, hydra.core.Name name) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.Map<hydra.core.Name, hydra.core.Type>> typeDependencies(hydra.context.Context cx, hydra.graph.Graph graph, Boolean withSchema, java.util.function.Function<hydra.core.Type, hydra.core.Type> transform, hydra.core.Name name) {
     java.util.function.Function<hydra.core.Name, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Type>> requireType = (java.util.function.Function<hydra.core.Name, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Type>>) (name2 -> {
       hydra.util.Lazy<hydra.context.Context> cx1 = new hydra.util.Lazy<>(() -> new hydra.context.Context(hydra.lib.lists.Cons.apply(
         hydra.lib.strings.Cat2.apply(
@@ -441,34 +441,34 @@ public interface Predicates {
     java.util.function.Function<hydra.core.Name, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Name, hydra.core.Type>>> toPair = (java.util.function.Function<hydra.core.Name, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Name, hydra.core.Type>>>) (name2 -> hydra.lib.eithers.Map.apply(
       (java.util.function.Function<hydra.core.Type, hydra.util.Pair<hydra.core.Name, hydra.core.Type>>) (typ -> (hydra.util.Pair<hydra.core.Name, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Type>(name2, (transform).apply(typ))))),
       (requireType).apply(name2)));
-    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, java.util.function.Function<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>>>>> deps = new java.util.concurrent.atomic.AtomicReference<>();
-    deps.set((java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, java.util.function.Function<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>>>>) (seeds -> (java.util.function.Function<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>>>) (names -> hydra.lib.logic.IfElse.lazy(
+    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Type>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.Map<hydra.core.Name, hydra.core.Type>>>>> deps = new java.util.concurrent.atomic.AtomicReference<>();
+    deps.set((java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Type>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.Map<hydra.core.Name, hydra.core.Type>>>>) (seeds -> (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Type>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.Map<hydra.core.Name, hydra.core.Type>>>) (names -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.sets.Null.apply(seeds),
-      () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>>right(names),
+      () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.util.Map<hydra.core.Name, hydra.core.Type>>right(names),
       () -> hydra.lib.eithers.Bind.apply(
         hydra.lib.eithers.MapList.apply(
           toPair,
           hydra.lib.sets.ToList.apply(seeds)),
-        (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Type>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>>>) (pairs -> {
-          hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>> newNames = new hydra.util.Lazy<>(() -> hydra.lib.maps.Union.apply(
+        (java.util.function.Function<java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Type>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.Map<hydra.core.Name, hydra.core.Type>>>) (pairs -> {
+          hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Type>> newNames = new hydra.util.Lazy<>(() -> hydra.lib.maps.Union.apply(
             names,
             hydra.lib.maps.FromList.apply(pairs)));
-          hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> refs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-            (java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>>) ((java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>>) (p0 -> p1 -> hydra.lib.sets.Union.apply(
+          hydra.util.Lazy<java.util.Set<hydra.core.Name>> refs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+            (java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.Set<hydra.core.Name>>>) ((java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.Set<hydra.core.Name>>>) (p0 -> p1 -> hydra.lib.sets.Union.apply(
               p0,
               p1))),
-            (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
+            (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
             hydra.lib.lists.Map.apply(
-              (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Type>, hydra.util.PersistentSet<hydra.core.Name>>) (pair -> hydra.Dependencies.typeDependencyNames(
+              (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Type>, java.util.Set<hydra.core.Name>>) (pair -> hydra.Dependencies.typeDependencyNames(
                 withSchema,
                 hydra.lib.pairs.Second.apply(pair))),
               pairs)));
-          hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> visited = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.maps.Keys.apply(names)));
-          hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> newSeeds = new hydra.util.Lazy<>(() -> hydra.lib.sets.Difference.apply(
+          hydra.util.Lazy<java.util.Set<hydra.core.Name>> visited = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.maps.Keys.apply(names)));
+          hydra.util.Lazy<java.util.Set<hydra.core.Name>> newSeeds = new hydra.util.Lazy<>(() -> hydra.lib.sets.Difference.apply(
             refs.get(),
             visited.get()));
           return deps.get().apply(newSeeds.get()).apply(newNames.get());
         }))))));
-    return deps.get().apply(hydra.lib.sets.Singleton.apply(name)).apply((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply())));
+    return deps.get().apply(hydra.lib.sets.Singleton.apply(name)).apply((java.util.Map<hydra.core.Name, hydra.core.Type>) ((java.util.Map<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply())));
   }
 }

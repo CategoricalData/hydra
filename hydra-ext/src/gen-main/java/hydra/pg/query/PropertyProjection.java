@@ -42,11 +42,15 @@ public class PropertyProjection implements Serializable, Comparable<PropertyProj
   @SuppressWarnings("unchecked")
   public int compareTo(PropertyProjection other) {
     int cmp = 0;
-    cmp = ((Comparable) base).compareTo(other.base);
+    cmp = hydra.util.Comparing.compare(
+      base,
+      other.base);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) key).compareTo(other.key);
+    return hydra.util.Comparing.compare(
+      key,
+      other.key);
   }
 
   public PropertyProjection withBase(hydra.pg.query.Expression base) {

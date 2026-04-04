@@ -15,11 +15,11 @@ public class Data_Interpolate implements Serializable, Comparable<Data_Interpola
 
   public final hydra.ext.scala.syntax.Data_Name prefix;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Lit> parts;
+  public final java.util.List<hydra.ext.scala.syntax.Lit> parts;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Data> args;
+  public final java.util.List<hydra.ext.scala.syntax.Data> args;
 
-  public Data_Interpolate (hydra.ext.scala.syntax.Data_Name prefix, hydra.util.ConsList<hydra.ext.scala.syntax.Lit> parts, hydra.util.ConsList<hydra.ext.scala.syntax.Data> args) {
+  public Data_Interpolate (hydra.ext.scala.syntax.Data_Name prefix, java.util.List<hydra.ext.scala.syntax.Lit> parts, java.util.List<hydra.ext.scala.syntax.Data> args) {
     this.prefix = prefix;
     this.parts = parts;
     this.args = args;
@@ -49,26 +49,32 @@ public class Data_Interpolate implements Serializable, Comparable<Data_Interpola
   @SuppressWarnings("unchecked")
   public int compareTo(Data_Interpolate other) {
     int cmp = 0;
-    cmp = ((Comparable) prefix).compareTo(other.prefix);
+    cmp = hydra.util.Comparing.compare(
+      prefix,
+      other.prefix);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) parts).compareTo(other.parts);
+    cmp = hydra.util.Comparing.compare(
+      parts,
+      other.parts);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) args).compareTo(other.args);
+    return hydra.util.Comparing.compare(
+      args,
+      other.args);
   }
 
   public Data_Interpolate withPrefix(hydra.ext.scala.syntax.Data_Name prefix) {
     return new Data_Interpolate(prefix, parts, args);
   }
 
-  public Data_Interpolate withParts(hydra.util.ConsList<hydra.ext.scala.syntax.Lit> parts) {
+  public Data_Interpolate withParts(java.util.List<hydra.ext.scala.syntax.Lit> parts) {
     return new Data_Interpolate(prefix, parts, args);
   }
 
-  public Data_Interpolate withArgs(hydra.util.ConsList<hydra.ext.scala.syntax.Data> args) {
+  public Data_Interpolate withArgs(java.util.List<hydra.ext.scala.syntax.Data> args) {
     return new Data_Interpolate(prefix, parts, args);
   }
 }

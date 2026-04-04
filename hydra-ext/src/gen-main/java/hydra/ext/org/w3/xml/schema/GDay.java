@@ -34,6 +34,8 @@ public class GDay implements Serializable, Comparable<GDay> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(GDay other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

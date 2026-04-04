@@ -14,14 +14,14 @@ public class OrderingIsomorphism<A> implements Serializable, Comparable<Ordering
   /**
    * Mapping from source ordering to target ordering
    */
-  public final java.util.function.Function<hydra.util.ConsList<A>, hydra.util.ConsList<A>> encode;
+  public final java.util.function.Function<java.util.List<A>, java.util.List<A>> encode;
 
   /**
    * Mapping from target ordering to source ordering
    */
-  public final java.util.function.Function<hydra.util.ConsList<A>, hydra.util.ConsList<A>> decode;
+  public final java.util.function.Function<java.util.List<A>, java.util.List<A>> decode;
 
-  public OrderingIsomorphism (java.util.function.Function<hydra.util.ConsList<A>, hydra.util.ConsList<A>> encode, java.util.function.Function<hydra.util.ConsList<A>, hydra.util.ConsList<A>> decode) {
+  public OrderingIsomorphism (java.util.function.Function<java.util.List<A>, java.util.List<A>> encode, java.util.function.Function<java.util.List<A>, java.util.List<A>> decode) {
     this.encode = encode;
     this.decode = decode;
   }
@@ -59,11 +59,11 @@ public class OrderingIsomorphism<A> implements Serializable, Comparable<Ordering
       other.decode.hashCode());
   }
 
-  public OrderingIsomorphism withEncode(java.util.function.Function<hydra.util.ConsList<A>, hydra.util.ConsList<A>> encode) {
+  public OrderingIsomorphism withEncode(java.util.function.Function<java.util.List<A>, java.util.List<A>> encode) {
     return new OrderingIsomorphism(encode, decode);
   }
 
-  public OrderingIsomorphism withDecode(java.util.function.Function<hydra.util.ConsList<A>, hydra.util.ConsList<A>> decode) {
+  public OrderingIsomorphism withDecode(java.util.function.Function<java.util.List<A>, java.util.List<A>> decode) {
     return new OrderingIsomorphism(encode, decode);
   }
 }

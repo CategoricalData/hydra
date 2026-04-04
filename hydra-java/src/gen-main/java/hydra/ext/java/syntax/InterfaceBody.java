@@ -9,9 +9,9 @@ public class InterfaceBody implements Serializable, Comparable<InterfaceBody> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.InterfaceMemberDeclaration> value;
+  public final java.util.List<hydra.ext.java.syntax.InterfaceMemberDeclaration> value;
 
-  public InterfaceBody (hydra.util.ConsList<hydra.ext.java.syntax.InterfaceMemberDeclaration> value) {
+  public InterfaceBody (java.util.List<hydra.ext.java.syntax.InterfaceMemberDeclaration> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class InterfaceBody implements Serializable, Comparable<InterfaceBody> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(InterfaceBody other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

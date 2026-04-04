@@ -9,9 +9,9 @@ public class PackageOrTypeName implements Serializable, Comparable<PackageOrType
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.Identifier> value;
+  public final java.util.List<hydra.ext.java.syntax.Identifier> value;
 
-  public PackageOrTypeName (hydra.util.ConsList<hydra.ext.java.syntax.Identifier> value) {
+  public PackageOrTypeName (java.util.List<hydra.ext.java.syntax.Identifier> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class PackageOrTypeName implements Serializable, Comparable<PackageOrType
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PackageOrTypeName other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

@@ -34,6 +34,8 @@ public class Time implements Serializable, Comparable<Time> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Time other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

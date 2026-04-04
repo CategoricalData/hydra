@@ -17,14 +17,14 @@ public class LetExpression implements Serializable, Comparable<LetExpression> {
   /**
    * The local bindings
    */
-  public final hydra.util.ConsList<hydra.ext.haskell.syntax.LocalBinding> bindings;
+  public final java.util.List<hydra.ext.haskell.syntax.LocalBinding> bindings;
 
   /**
    * The body of the let expression
    */
   public final hydra.ext.haskell.syntax.Expression inner;
 
-  public LetExpression (hydra.util.ConsList<hydra.ext.haskell.syntax.LocalBinding> bindings, hydra.ext.haskell.syntax.Expression inner) {
+  public LetExpression (java.util.List<hydra.ext.haskell.syntax.LocalBinding> bindings, hydra.ext.haskell.syntax.Expression inner) {
     this.bindings = bindings;
     this.inner = inner;
   }
@@ -51,14 +51,18 @@ public class LetExpression implements Serializable, Comparable<LetExpression> {
   @SuppressWarnings("unchecked")
   public int compareTo(LetExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) bindings).compareTo(other.bindings);
+    cmp = hydra.util.Comparing.compare(
+      bindings,
+      other.bindings);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) inner).compareTo(other.inner);
+    return hydra.util.Comparing.compare(
+      inner,
+      other.inner);
   }
 
-  public LetExpression withBindings(hydra.util.ConsList<hydra.ext.haskell.syntax.LocalBinding> bindings) {
+  public LetExpression withBindings(java.util.List<hydra.ext.haskell.syntax.LocalBinding> bindings) {
     return new LetExpression(bindings, inner);
   }
 

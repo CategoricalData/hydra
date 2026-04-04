@@ -52,9 +52,9 @@ public abstract class DestructuringPattern implements Serializable, Comparable<D
    * Sequential destructuring: [a b c] in Clojure, (a b c) in others
    */
   public static final class Sequential extends hydra.ext.lisp.syntax.DestructuringPattern implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol> value;
+    public final java.util.List<hydra.ext.lisp.syntax.Symbol> value;
 
-    public Sequential (hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol> value) {
+    public Sequential (java.util.List<hydra.ext.lisp.syntax.Symbol> value) {
       this.value = value;
     }
 
@@ -82,7 +82,9 @@ public abstract class DestructuringPattern implements Serializable, Comparable<D
         return tagCmp;
       }
       Sequential o = (Sequential) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -95,9 +97,9 @@ public abstract class DestructuringPattern implements Serializable, Comparable<D
    * Associative/map destructuring: {:keys [a b]} in Clojure
    */
   public static final class Associative extends hydra.ext.lisp.syntax.DestructuringPattern implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol> value;
+    public final java.util.List<hydra.ext.lisp.syntax.Symbol> value;
 
-    public Associative (hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol> value) {
+    public Associative (java.util.List<hydra.ext.lisp.syntax.Symbol> value) {
       this.value = value;
     }
 
@@ -125,7 +127,9 @@ public abstract class DestructuringPattern implements Serializable, Comparable<D
         return tagCmp;
       }
       Associative o = (Associative) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -138,9 +142,9 @@ public abstract class DestructuringPattern implements Serializable, Comparable<D
    * Destructuring with a rest element: [a b & rest] (leading symbols + rest symbol)
    */
   public static final class Rest extends hydra.ext.lisp.syntax.DestructuringPattern implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol> value;
+    public final java.util.List<hydra.ext.lisp.syntax.Symbol> value;
 
-    public Rest (hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol> value) {
+    public Rest (java.util.List<hydra.ext.lisp.syntax.Symbol> value) {
       this.value = value;
     }
 
@@ -168,7 +172,9 @@ public abstract class DestructuringPattern implements Serializable, Comparable<D
         return tagCmp;
       }
       Rest o = (Rest) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

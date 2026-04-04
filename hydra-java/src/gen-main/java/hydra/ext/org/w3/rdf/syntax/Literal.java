@@ -61,15 +61,21 @@ public class Literal implements Serializable, Comparable<Literal> {
   @SuppressWarnings("unchecked")
   public int compareTo(Literal other) {
     int cmp = 0;
-    cmp = ((Comparable) lexicalForm).compareTo(other.lexicalForm);
+    cmp = hydra.util.Comparing.compare(
+      lexicalForm,
+      other.lexicalForm);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) datatypeIri).compareTo(other.datatypeIri);
+    cmp = hydra.util.Comparing.compare(
+      datatypeIri,
+      other.datatypeIri);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) languageTag).compareTo(other.languageTag);
+    return hydra.util.Comparing.compare(
+      languageTag,
+      other.languageTag);
   }
 
   public Literal withLexicalForm(String lexicalForm) {

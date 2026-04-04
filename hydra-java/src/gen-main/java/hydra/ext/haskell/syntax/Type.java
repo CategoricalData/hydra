@@ -122,7 +122,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Application o = (Application) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -165,7 +167,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Ctx o = (Ctx) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -208,7 +212,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Function o = (Function) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -251,7 +257,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Infix o = (Infix) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -294,7 +302,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       List o = (List) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -337,7 +347,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Parens o = (Parens) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -350,9 +362,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
    * A tuple type
    */
   public static final class Tuple extends hydra.ext.haskell.syntax.Type implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.haskell.syntax.Type> value;
+    public final java.util.List<hydra.ext.haskell.syntax.Type> value;
 
-    public Tuple (hydra.util.ConsList<hydra.ext.haskell.syntax.Type> value) {
+    public Tuple (java.util.List<hydra.ext.haskell.syntax.Type> value) {
       this.value = value;
     }
 
@@ -380,7 +392,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Tuple o = (Tuple) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -423,7 +437,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Variable o = (Variable) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

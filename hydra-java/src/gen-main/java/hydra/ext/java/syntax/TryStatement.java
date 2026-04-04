@@ -76,7 +76,9 @@ public abstract class TryStatement implements Serializable, Comparable<TryStatem
         return tagCmp;
       }
       Simple o = (Simple) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class TryStatement implements Serializable, Comparable<TryStatem
         return tagCmp;
       }
       WithFinally o = (WithFinally) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class TryStatement implements Serializable, Comparable<TryStatem
         return tagCmp;
       }
       WithResources o = (WithResources) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

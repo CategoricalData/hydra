@@ -42,11 +42,15 @@ public class ArrayAccess implements Serializable, Comparable<ArrayAccess> {
   @SuppressWarnings("unchecked")
   public int compareTo(ArrayAccess other) {
     int cmp = 0;
-    cmp = ((Comparable) expression).compareTo(other.expression);
+    cmp = hydra.util.Comparing.compare(
+      expression,
+      other.expression);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) variant).compareTo(other.variant);
+    return hydra.util.Comparing.compare(
+      variant,
+      other.variant);
   }
 
   public ArrayAccess withExpression(hydra.util.Maybe<hydra.ext.java.syntax.Expression> expression) {

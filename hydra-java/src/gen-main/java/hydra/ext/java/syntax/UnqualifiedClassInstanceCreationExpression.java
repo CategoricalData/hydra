@@ -15,15 +15,15 @@ public class UnqualifiedClassInstanceCreationExpression implements Serializable,
 
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments;
+  public final java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments;
 
   public final hydra.ext.java.syntax.ClassOrInterfaceTypeToInstantiate classOrInterface;
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.Expression> arguments;
+  public final java.util.List<hydra.ext.java.syntax.Expression> arguments;
 
   public final hydra.util.Maybe<hydra.ext.java.syntax.ClassBody> body;
 
-  public UnqualifiedClassInstanceCreationExpression (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.ClassOrInterfaceTypeToInstantiate classOrInterface, hydra.util.ConsList<hydra.ext.java.syntax.Expression> arguments, hydra.util.Maybe<hydra.ext.java.syntax.ClassBody> body) {
+  public UnqualifiedClassInstanceCreationExpression (java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.ClassOrInterfaceTypeToInstantiate classOrInterface, java.util.List<hydra.ext.java.syntax.Expression> arguments, hydra.util.Maybe<hydra.ext.java.syntax.ClassBody> body) {
     this.typeArguments = typeArguments;
     this.classOrInterface = classOrInterface;
     this.arguments = arguments;
@@ -56,22 +56,30 @@ public class UnqualifiedClassInstanceCreationExpression implements Serializable,
   @SuppressWarnings("unchecked")
   public int compareTo(UnqualifiedClassInstanceCreationExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) typeArguments).compareTo(other.typeArguments);
+    cmp = hydra.util.Comparing.compare(
+      typeArguments,
+      other.typeArguments);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) classOrInterface).compareTo(other.classOrInterface);
+    cmp = hydra.util.Comparing.compare(
+      classOrInterface,
+      other.classOrInterface);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) arguments).compareTo(other.arguments);
+    cmp = hydra.util.Comparing.compare(
+      arguments,
+      other.arguments);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
-  public UnqualifiedClassInstanceCreationExpression withTypeArguments(hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments) {
+  public UnqualifiedClassInstanceCreationExpression withTypeArguments(java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     return new UnqualifiedClassInstanceCreationExpression(typeArguments, classOrInterface, arguments, body);
   }
 
@@ -79,7 +87,7 @@ public class UnqualifiedClassInstanceCreationExpression implements Serializable,
     return new UnqualifiedClassInstanceCreationExpression(typeArguments, classOrInterface, arguments, body);
   }
 
-  public UnqualifiedClassInstanceCreationExpression withArguments(hydra.util.ConsList<hydra.ext.java.syntax.Expression> arguments) {
+  public UnqualifiedClassInstanceCreationExpression withArguments(java.util.List<hydra.ext.java.syntax.Expression> arguments) {
     return new UnqualifiedClassInstanceCreationExpression(typeArguments, classOrInterface, arguments, body);
   }
 

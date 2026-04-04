@@ -42,11 +42,15 @@ public class StringNullableArgumentAndTraversalPredicate implements Serializable
   @SuppressWarnings("unchecked")
   public int compareTo(StringNullableArgumentAndTraversalPredicate other) {
     int cmp = 0;
-    cmp = ((Comparable) string).compareTo(other.string);
+    cmp = hydra.util.Comparing.compare(
+      string,
+      other.string);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) predicate).compareTo(other.predicate);
+    return hydra.util.Comparing.compare(
+      predicate,
+      other.predicate);
   }
 
   public StringNullableArgumentAndTraversalPredicate withString(hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument string) {

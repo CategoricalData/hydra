@@ -17,9 +17,9 @@ public class FunctionInvocation implements Serializable, Comparable<FunctionInvo
 
   public final Boolean distinct;
 
-  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.Expression> arguments;
+  public final java.util.List<hydra.ext.cypher.openCypher.Expression> arguments;
 
-  public FunctionInvocation (hydra.ext.cypher.openCypher.QualifiedName name, Boolean distinct, hydra.util.ConsList<hydra.ext.cypher.openCypher.Expression> arguments) {
+  public FunctionInvocation (hydra.ext.cypher.openCypher.QualifiedName name, Boolean distinct, java.util.List<hydra.ext.cypher.openCypher.Expression> arguments) {
     this.name = name;
     this.distinct = distinct;
     this.arguments = arguments;
@@ -49,15 +49,21 @@ public class FunctionInvocation implements Serializable, Comparable<FunctionInvo
   @SuppressWarnings("unchecked")
   public int compareTo(FunctionInvocation other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) distinct).compareTo(other.distinct);
+    cmp = hydra.util.Comparing.compare(
+      distinct,
+      other.distinct);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) arguments).compareTo(other.arguments);
+    return hydra.util.Comparing.compare(
+      arguments,
+      other.arguments);
   }
 
   public FunctionInvocation withName(hydra.ext.cypher.openCypher.QualifiedName name) {
@@ -68,7 +74,7 @@ public class FunctionInvocation implements Serializable, Comparable<FunctionInvo
     return new FunctionInvocation(name, distinct, arguments);
   }
 
-  public FunctionInvocation withArguments(hydra.util.ConsList<hydra.ext.cypher.openCypher.Expression> arguments) {
+  public FunctionInvocation withArguments(java.util.List<hydra.ext.cypher.openCypher.Expression> arguments) {
     return new FunctionInvocation(name, distinct, arguments);
   }
 }

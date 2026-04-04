@@ -191,7 +191,9 @@ public abstract class Lit implements Serializable, Comparable<Lit> {
         return tagCmp;
       }
       Int o = (Int) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -231,7 +233,9 @@ public abstract class Lit implements Serializable, Comparable<Lit> {
         return tagCmp;
       }
       Double_ o = (Double_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -271,7 +275,9 @@ public abstract class Lit implements Serializable, Comparable<Lit> {
         return tagCmp;
       }
       Float_ o = (Float_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -311,7 +317,9 @@ public abstract class Lit implements Serializable, Comparable<Lit> {
         return tagCmp;
       }
       Byte_ o = (Byte_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -351,7 +359,9 @@ public abstract class Lit implements Serializable, Comparable<Lit> {
         return tagCmp;
       }
       Short_ o = (Short_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -391,7 +401,9 @@ public abstract class Lit implements Serializable, Comparable<Lit> {
         return tagCmp;
       }
       Char o = (Char) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -431,7 +443,9 @@ public abstract class Lit implements Serializable, Comparable<Lit> {
         return tagCmp;
       }
       Long_ o = (Long_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -471,7 +485,9 @@ public abstract class Lit implements Serializable, Comparable<Lit> {
         return tagCmp;
       }
       Boolean_ o = (Boolean_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -546,7 +562,9 @@ public abstract class Lit implements Serializable, Comparable<Lit> {
         return tagCmp;
       }
       String_ o = (String_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -556,9 +574,9 @@ public abstract class Lit implements Serializable, Comparable<Lit> {
   }
 
   public static final class Bytes extends hydra.ext.scala.syntax.Lit implements Serializable {
-    public final hydra.util.ConsList<Integer> value;
+    public final java.util.List<Integer> value;
 
-    public Bytes (hydra.util.ConsList<Integer> value) {
+    public Bytes (java.util.List<Integer> value) {
       this.value = value;
     }
 
@@ -586,7 +604,9 @@ public abstract class Lit implements Serializable, Comparable<Lit> {
         return tagCmp;
       }
       Bytes o = (Bytes) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -626,7 +646,9 @@ public abstract class Lit implements Serializable, Comparable<Lit> {
         return tagCmp;
       }
       Symbol o = (Symbol) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -37,6 +37,8 @@ public class DecodingError implements Serializable, Comparable<DecodingError> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DecodingError other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

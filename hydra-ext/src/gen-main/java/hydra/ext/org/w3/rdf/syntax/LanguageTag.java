@@ -37,6 +37,8 @@ public class LanguageTag implements Serializable, Comparable<LanguageTag> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(LanguageTag other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

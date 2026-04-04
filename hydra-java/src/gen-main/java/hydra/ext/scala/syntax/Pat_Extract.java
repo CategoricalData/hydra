@@ -13,9 +13,9 @@ public class Pat_Extract implements Serializable, Comparable<Pat_Extract> {
 
   public final hydra.ext.scala.syntax.Data fun;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Pat> args;
+  public final java.util.List<hydra.ext.scala.syntax.Pat> args;
 
-  public Pat_Extract (hydra.ext.scala.syntax.Data fun, hydra.util.ConsList<hydra.ext.scala.syntax.Pat> args) {
+  public Pat_Extract (hydra.ext.scala.syntax.Data fun, java.util.List<hydra.ext.scala.syntax.Pat> args) {
     this.fun = fun;
     this.args = args;
   }
@@ -42,18 +42,22 @@ public class Pat_Extract implements Serializable, Comparable<Pat_Extract> {
   @SuppressWarnings("unchecked")
   public int compareTo(Pat_Extract other) {
     int cmp = 0;
-    cmp = ((Comparable) fun).compareTo(other.fun);
+    cmp = hydra.util.Comparing.compare(
+      fun,
+      other.fun);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) args).compareTo(other.args);
+    return hydra.util.Comparing.compare(
+      args,
+      other.args);
   }
 
   public Pat_Extract withFun(hydra.ext.scala.syntax.Data fun) {
     return new Pat_Extract(fun, args);
   }
 
-  public Pat_Extract withArgs(hydra.util.ConsList<hydra.ext.scala.syntax.Pat> args) {
+  public Pat_Extract withArgs(java.util.List<hydra.ext.scala.syntax.Pat> args) {
     return new Pat_Extract(fun, args);
   }
 }

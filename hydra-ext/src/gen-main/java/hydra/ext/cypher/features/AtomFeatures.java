@@ -111,35 +111,51 @@ public class AtomFeatures implements Serializable, Comparable<AtomFeatures> {
   @SuppressWarnings("unchecked")
   public int compareTo(AtomFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) caseExpression).compareTo(other.caseExpression);
+    cmp = hydra.util.Comparing.compare(
+      caseExpression,
+      other.caseExpression);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) count).compareTo(other.count);
+    cmp = hydra.util.Comparing.compare(
+      count,
+      other.count);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) existentialSubquery).compareTo(other.existentialSubquery);
+    cmp = hydra.util.Comparing.compare(
+      existentialSubquery,
+      other.existentialSubquery);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) functionInvocation).compareTo(other.functionInvocation);
+    cmp = hydra.util.Comparing.compare(
+      functionInvocation,
+      other.functionInvocation);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) parameter).compareTo(other.parameter);
+    cmp = hydra.util.Comparing.compare(
+      parameter,
+      other.parameter);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) patternComprehension).compareTo(other.patternComprehension);
+    cmp = hydra.util.Comparing.compare(
+      patternComprehension,
+      other.patternComprehension);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) patternPredicate).compareTo(other.patternPredicate);
+    cmp = hydra.util.Comparing.compare(
+      patternPredicate,
+      other.patternPredicate);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) variable).compareTo(other.variable);
+    return hydra.util.Comparing.compare(
+      variable,
+      other.variable);
   }
 
   public AtomFeatures withCaseExpression(Boolean caseExpression) {

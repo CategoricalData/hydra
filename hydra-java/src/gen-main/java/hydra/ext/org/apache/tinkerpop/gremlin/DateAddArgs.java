@@ -42,11 +42,15 @@ public class DateAddArgs implements Serializable, Comparable<DateAddArgs> {
   @SuppressWarnings("unchecked")
   public int compareTo(DateAddArgs other) {
     int cmp = 0;
-    cmp = ((Comparable) unit).compareTo(other.unit);
+    cmp = hydra.util.Comparing.compare(
+      unit,
+      other.unit);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) duration).compareTo(other.duration);
+    return hydra.util.Comparing.compare(
+      duration,
+      other.duration);
   }
 
   public DateAddArgs withUnit(hydra.ext.org.apache.tinkerpop.gremlin.TraversalDTArgument unit) {

@@ -51,11 +51,15 @@ public class CondClause implements Serializable, Comparable<CondClause> {
   @SuppressWarnings("unchecked")
   public int compareTo(CondClause other) {
     int cmp = 0;
-    cmp = ((Comparable) condition).compareTo(other.condition);
+    cmp = hydra.util.Comparing.compare(
+      condition,
+      other.condition);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
   public CondClause withCondition(hydra.ext.lisp.syntax.Expression condition) {

@@ -51,11 +51,15 @@ public class ContextType implements Serializable, Comparable<ContextType> {
   @SuppressWarnings("unchecked")
   public int compareTo(ContextType other) {
     int cmp = 0;
-    cmp = ((Comparable) ctx).compareTo(other.ctx);
+    cmp = hydra.util.Comparing.compare(
+      ctx,
+      other.ctx);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) type).compareTo(other.type);
+    return hydra.util.Comparing.compare(
+      type,
+      other.type);
   }
 
   public ContextType withCtx(hydra.ext.haskell.syntax.Assertion ctx) {

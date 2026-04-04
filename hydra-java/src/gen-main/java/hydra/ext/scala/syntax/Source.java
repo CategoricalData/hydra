@@ -9,9 +9,9 @@ public class Source implements Serializable, Comparable<Source> {
 
   public static final hydra.core.Name STATS = new hydra.core.Name("stats");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Stat> stats;
+  public final java.util.List<hydra.ext.scala.syntax.Stat> stats;
 
-  public Source (hydra.util.ConsList<hydra.ext.scala.syntax.Stat> stats) {
+  public Source (java.util.List<hydra.ext.scala.syntax.Stat> stats) {
     this.stats = stats;
   }
 
@@ -34,6 +34,8 @@ public class Source implements Serializable, Comparable<Source> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Source other) {
-    return ((Comparable) stats).compareTo(other.stats);
+    return hydra.util.Comparing.compare(
+      stats,
+      other.stats);
   }
 }

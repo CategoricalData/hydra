@@ -34,6 +34,8 @@ public class ThrowStatement implements Serializable, Comparable<ThrowStatement> 
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ThrowStatement other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

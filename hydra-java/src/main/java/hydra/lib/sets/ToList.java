@@ -8,14 +8,10 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.ConsList;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
-
-import hydra.util.PersistentSet;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
@@ -68,7 +64,7 @@ public class ToList extends PrimitiveFunction {
      * @param arg the set to convert
      * @return a list containing all elements from the set
      */
-    public static <X> ConsList<X> apply(PersistentSet<X> arg) {
-        return ConsList.fromList(arg.toList());
+    public static <X> List<X> apply(Set<X> arg) {
+        return new ArrayList<>(arg);
     }
 }

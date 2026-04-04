@@ -49,15 +49,21 @@ public class NestedTraversalArgument implements Serializable, Comparable<NestedT
   @SuppressWarnings("unchecked")
   public int compareTo(NestedTraversalArgument other) {
     int cmp = 0;
-    cmp = ((Comparable) traversal1).compareTo(other.traversal1);
+    cmp = hydra.util.Comparing.compare(
+      traversal1,
+      other.traversal1);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) traversal2).compareTo(other.traversal2);
+    cmp = hydra.util.Comparing.compare(
+      traversal2,
+      other.traversal2);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) traversal3).compareTo(other.traversal3);
+    return hydra.util.Comparing.compare(
+      traversal3,
+      other.traversal3);
   }
 
   public NestedTraversalArgument withTraversal1(hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal traversal1) {

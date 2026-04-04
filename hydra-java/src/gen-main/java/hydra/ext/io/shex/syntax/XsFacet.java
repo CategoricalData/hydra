@@ -68,7 +68,9 @@ public abstract class XsFacet implements Serializable, Comparable<XsFacet> {
         return tagCmp;
       }
       StringFacet o = (StringFacet) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class XsFacet implements Serializable, Comparable<XsFacet> {
         return tagCmp;
       }
       NumericFacet o = (NumericFacet) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

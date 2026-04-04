@@ -91,27 +91,39 @@ public class PredicateFunctionFeatures implements Serializable, Comparable<Predi
   @SuppressWarnings("unchecked")
   public int compareTo(PredicateFunctionFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) all).compareTo(other.all);
+    cmp = hydra.util.Comparing.compare(
+      all,
+      other.all);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) any).compareTo(other.any);
+    cmp = hydra.util.Comparing.compare(
+      any,
+      other.any);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) exists).compareTo(other.exists);
+    cmp = hydra.util.Comparing.compare(
+      exists,
+      other.exists);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) isEmpty).compareTo(other.isEmpty);
+    cmp = hydra.util.Comparing.compare(
+      isEmpty,
+      other.isEmpty);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) none).compareTo(other.none);
+    cmp = hydra.util.Comparing.compare(
+      none,
+      other.none);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) single).compareTo(other.single);
+    return hydra.util.Comparing.compare(
+      single,
+      other.single);
   }
 
   public PredicateFunctionFeatures withAll(Boolean all) {

@@ -112,7 +112,9 @@ public abstract class ValueSpec implements Serializable, Comparable<ValueSpec> {
         return tagCmp;
       }
       Pattern o = (Pattern) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

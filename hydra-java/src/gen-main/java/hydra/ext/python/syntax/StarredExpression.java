@@ -34,6 +34,8 @@ public class StarredExpression implements Serializable, Comparable<StarredExpres
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(StarredExpression other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

@@ -11,11 +11,11 @@ public class MultiPartQuery implements Serializable, Comparable<MultiPartQuery> 
 
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
 
-  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.WithClause> with;
+  public final java.util.List<hydra.ext.cypher.openCypher.WithClause> with;
 
   public final hydra.ext.cypher.openCypher.SinglePartQuery body;
 
-  public MultiPartQuery (hydra.util.ConsList<hydra.ext.cypher.openCypher.WithClause> with, hydra.ext.cypher.openCypher.SinglePartQuery body) {
+  public MultiPartQuery (java.util.List<hydra.ext.cypher.openCypher.WithClause> with, hydra.ext.cypher.openCypher.SinglePartQuery body) {
     this.with = with;
     this.body = body;
   }
@@ -42,14 +42,18 @@ public class MultiPartQuery implements Serializable, Comparable<MultiPartQuery> 
   @SuppressWarnings("unchecked")
   public int compareTo(MultiPartQuery other) {
     int cmp = 0;
-    cmp = ((Comparable) with).compareTo(other.with);
+    cmp = hydra.util.Comparing.compare(
+      with,
+      other.with);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
-  public MultiPartQuery withWith(hydra.util.ConsList<hydra.ext.cypher.openCypher.WithClause> with) {
+  public MultiPartQuery withWith(java.util.List<hydra.ext.cypher.openCypher.WithClause> with) {
     return new MultiPartQuery(with, body);
   }
 

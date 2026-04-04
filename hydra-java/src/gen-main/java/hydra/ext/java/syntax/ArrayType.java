@@ -42,11 +42,15 @@ public class ArrayType implements Serializable, Comparable<ArrayType> {
   @SuppressWarnings("unchecked")
   public int compareTo(ArrayType other) {
     int cmp = 0;
-    cmp = ((Comparable) dims).compareTo(other.dims);
+    cmp = hydra.util.Comparing.compare(
+      dims,
+      other.dims);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) variant).compareTo(other.variant);
+    return hydra.util.Comparing.compare(
+      variant,
+      other.variant);
   }
 
   public ArrayType withDims(hydra.ext.java.syntax.Dims dims) {

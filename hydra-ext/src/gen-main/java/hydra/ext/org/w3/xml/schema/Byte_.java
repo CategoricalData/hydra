@@ -34,6 +34,8 @@ public class Byte_ implements Serializable, Comparable<Byte_> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Byte_ other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

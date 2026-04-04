@@ -29,9 +29,9 @@ public class VertexSpec implements Serializable, Comparable<VertexSpec> {
   /**
    * Zero or more property specifications for each target vertex
    */
-  public final hydra.util.ConsList<hydra.pg.mapping.PropertySpec> properties;
+  public final java.util.List<hydra.pg.mapping.PropertySpec> properties;
 
-  public VertexSpec (hydra.pg.model.VertexLabel label, hydra.pg.mapping.ValueSpec id, hydra.util.ConsList<hydra.pg.mapping.PropertySpec> properties) {
+  public VertexSpec (hydra.pg.model.VertexLabel label, hydra.pg.mapping.ValueSpec id, java.util.List<hydra.pg.mapping.PropertySpec> properties) {
     this.label = label;
     this.id = id;
     this.properties = properties;
@@ -61,15 +61,21 @@ public class VertexSpec implements Serializable, Comparable<VertexSpec> {
   @SuppressWarnings("unchecked")
   public int compareTo(VertexSpec other) {
     int cmp = 0;
-    cmp = ((Comparable) label).compareTo(other.label);
+    cmp = hydra.util.Comparing.compare(
+      label,
+      other.label);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) id).compareTo(other.id);
+    cmp = hydra.util.Comparing.compare(
+      id,
+      other.id);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) properties).compareTo(other.properties);
+    return hydra.util.Comparing.compare(
+      properties,
+      other.properties);
   }
 
   public VertexSpec withLabel(hydra.pg.model.VertexLabel label) {
@@ -80,7 +86,7 @@ public class VertexSpec implements Serializable, Comparable<VertexSpec> {
     return new VertexSpec(label, id, properties);
   }
 
-  public VertexSpec withProperties(hydra.util.ConsList<hydra.pg.mapping.PropertySpec> properties) {
+  public VertexSpec withProperties(java.util.List<hydra.pg.mapping.PropertySpec> properties) {
     return new VertexSpec(label, id, properties);
   }
 }

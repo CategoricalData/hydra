@@ -34,6 +34,8 @@ public class AtpNameNs implements Serializable, Comparable<AtpNameNs> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(AtpNameNs other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

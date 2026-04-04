@@ -34,6 +34,8 @@ public class Echar implements Serializable, Comparable<Echar> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Echar other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

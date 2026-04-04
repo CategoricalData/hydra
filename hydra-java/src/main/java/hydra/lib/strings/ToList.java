@@ -7,8 +7,6 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.ConsList;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -65,9 +63,9 @@ public class ToList extends PrimitiveFunction {
      * @param s the string to convert
      * @return the list of character code points
      */
-    public static ConsList<Integer> apply(String s) {
+    public static List<Integer> apply(String s) {
         ArrayList<Integer> list = new ArrayList<>(s.codePointCount(0, s.length()));
         s.codePoints().forEach(list::add);
-        return ConsList.fromList(list);
+        return list;
     }
 }

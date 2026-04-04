@@ -34,6 +34,8 @@ public class BlankNode implements Serializable, Comparable<BlankNode> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(BlankNode other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

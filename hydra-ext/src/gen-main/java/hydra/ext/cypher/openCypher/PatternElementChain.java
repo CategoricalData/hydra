@@ -42,11 +42,15 @@ public class PatternElementChain implements Serializable, Comparable<PatternElem
   @SuppressWarnings("unchecked")
   public int compareTo(PatternElementChain other) {
     int cmp = 0;
-    cmp = ((Comparable) relationship).compareTo(other.relationship);
+    cmp = hydra.util.Comparing.compare(
+      relationship,
+      other.relationship);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) node).compareTo(other.node);
+    return hydra.util.Comparing.compare(
+      node,
+      other.node);
   }
 
   public PatternElementChain withRelationship(hydra.ext.cypher.openCypher.RelationshipPattern relationship) {

@@ -24,14 +24,14 @@ public class Module implements Serializable, Comparable<Module> {
   /**
    * Import statements
    */
-  public final hydra.util.ConsList<hydra.ext.haskell.syntax.Import> imports;
+  public final java.util.List<hydra.ext.haskell.syntax.Import> imports;
 
   /**
    * Module declarations
    */
-  public final hydra.util.ConsList<hydra.ext.haskell.syntax.DeclarationWithComments> declarations;
+  public final java.util.List<hydra.ext.haskell.syntax.DeclarationWithComments> declarations;
 
-  public Module (hydra.util.Maybe<hydra.ext.haskell.syntax.ModuleHead> head, hydra.util.ConsList<hydra.ext.haskell.syntax.Import> imports, hydra.util.ConsList<hydra.ext.haskell.syntax.DeclarationWithComments> declarations) {
+  public Module (hydra.util.Maybe<hydra.ext.haskell.syntax.ModuleHead> head, java.util.List<hydra.ext.haskell.syntax.Import> imports, java.util.List<hydra.ext.haskell.syntax.DeclarationWithComments> declarations) {
     this.head = head;
     this.imports = imports;
     this.declarations = declarations;
@@ -61,26 +61,32 @@ public class Module implements Serializable, Comparable<Module> {
   @SuppressWarnings("unchecked")
   public int compareTo(Module other) {
     int cmp = 0;
-    cmp = ((Comparable) head).compareTo(other.head);
+    cmp = hydra.util.Comparing.compare(
+      head,
+      other.head);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) imports).compareTo(other.imports);
+    cmp = hydra.util.Comparing.compare(
+      imports,
+      other.imports);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) declarations).compareTo(other.declarations);
+    return hydra.util.Comparing.compare(
+      declarations,
+      other.declarations);
   }
 
   public Module withHead(hydra.util.Maybe<hydra.ext.haskell.syntax.ModuleHead> head) {
     return new Module(head, imports, declarations);
   }
 
-  public Module withImports(hydra.util.ConsList<hydra.ext.haskell.syntax.Import> imports) {
+  public Module withImports(java.util.List<hydra.ext.haskell.syntax.Import> imports) {
     return new Module(head, imports, declarations);
   }
 
-  public Module withDeclarations(hydra.util.ConsList<hydra.ext.haskell.syntax.DeclarationWithComments> declarations) {
+  public Module withDeclarations(java.util.List<hydra.ext.haskell.syntax.DeclarationWithComments> declarations) {
     return new Module(head, imports, declarations);
   }
 }

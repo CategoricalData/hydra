@@ -42,11 +42,15 @@ public class ClassBodyDeclarationWithComments implements Serializable, Comparabl
   @SuppressWarnings("unchecked")
   public int compareTo(ClassBodyDeclarationWithComments other) {
     int cmp = 0;
-    cmp = ((Comparable) value).compareTo(other.value);
+    cmp = hydra.util.Comparing.compare(
+      value,
+      other.value);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) comments).compareTo(other.comments);
+    return hydra.util.Comparing.compare(
+      comments,
+      other.comments);
   }
 
   public ClassBodyDeclarationWithComments withValue(hydra.ext.java.syntax.ClassBodyDeclaration value) {

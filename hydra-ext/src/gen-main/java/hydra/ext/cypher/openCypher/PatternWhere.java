@@ -42,11 +42,15 @@ public class PatternWhere implements Serializable, Comparable<PatternWhere> {
   @SuppressWarnings("unchecked")
   public int compareTo(PatternWhere other) {
     int cmp = 0;
-    cmp = ((Comparable) pattern).compareTo(other.pattern);
+    cmp = hydra.util.Comparing.compare(
+      pattern,
+      other.pattern);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) where).compareTo(other.where);
+    return hydra.util.Comparing.compare(
+      where,
+      other.where);
   }
 
   public PatternWhere withPattern(hydra.ext.cypher.openCypher.Pattern pattern) {

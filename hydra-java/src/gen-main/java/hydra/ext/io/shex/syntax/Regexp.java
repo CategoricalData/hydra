@@ -11,11 +11,11 @@ public class Regexp implements Serializable, Comparable<Regexp> {
 
   public static final hydra.core.Name LIST_OF_REGEX = new hydra.core.Name("listOfRegex");
 
-  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.Regexp_ListOfAlts_Elmt> listOfAlts;
+  public final java.util.List<hydra.ext.io.shex.syntax.Regexp_ListOfAlts_Elmt> listOfAlts;
 
-  public final hydra.util.ConsList<String> listOfRegex;
+  public final java.util.List<String> listOfRegex;
 
-  public Regexp (hydra.util.ConsList<hydra.ext.io.shex.syntax.Regexp_ListOfAlts_Elmt> listOfAlts, hydra.util.ConsList<String> listOfRegex) {
+  public Regexp (java.util.List<hydra.ext.io.shex.syntax.Regexp_ListOfAlts_Elmt> listOfAlts, java.util.List<String> listOfRegex) {
     this.listOfAlts = listOfAlts;
     this.listOfRegex = listOfRegex;
   }
@@ -42,18 +42,22 @@ public class Regexp implements Serializable, Comparable<Regexp> {
   @SuppressWarnings("unchecked")
   public int compareTo(Regexp other) {
     int cmp = 0;
-    cmp = ((Comparable) listOfAlts).compareTo(other.listOfAlts);
+    cmp = hydra.util.Comparing.compare(
+      listOfAlts,
+      other.listOfAlts);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) listOfRegex).compareTo(other.listOfRegex);
+    return hydra.util.Comparing.compare(
+      listOfRegex,
+      other.listOfRegex);
   }
 
-  public Regexp withListOfAlts(hydra.util.ConsList<hydra.ext.io.shex.syntax.Regexp_ListOfAlts_Elmt> listOfAlts) {
+  public Regexp withListOfAlts(java.util.List<hydra.ext.io.shex.syntax.Regexp_ListOfAlts_Elmt> listOfAlts) {
     return new Regexp(listOfAlts, listOfRegex);
   }
 
-  public Regexp withListOfRegex(hydra.util.ConsList<String> listOfRegex) {
+  public Regexp withListOfRegex(java.util.List<String> listOfRegex) {
     return new Regexp(listOfAlts, listOfRegex);
   }
 }

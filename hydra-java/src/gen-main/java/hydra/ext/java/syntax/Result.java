@@ -68,7 +68,9 @@ public abstract class Result implements Serializable, Comparable<Result> {
         return tagCmp;
       }
       Type o = (Type) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

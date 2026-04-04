@@ -37,6 +37,8 @@ public class NodeShape implements Serializable, Comparable<NodeShape> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(NodeShape other) {
-    return ((Comparable) common).compareTo(other.common);
+    return hydra.util.Comparing.compare(
+      common,
+      other.common);
   }
 }

@@ -8,12 +8,10 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.LinkedHashSet;
+import java.util.TreeSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
-
-import hydra.util.PersistentSet;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
@@ -62,37 +60,14 @@ public class FromList extends PrimitiveFunction {
      * @param arg the list of elements
      * @return a set containing all unique elements from the list
      */
-    @SuppressWarnings("unchecked")
-    public static <X> PersistentSet<X> apply(List<X> arg) {
-        return (PersistentSet<X>) PersistentSet.fromList((List<Comparable>) (List<?>) arg);
+    public static <X> Set<X> apply(List<X> arg) {
+        return new TreeSet<>(arg);
     }
 
     /**
-     * Creates an ordered set from elements. Uses PersistentSet when elements are Comparable
-     * (matching Haskell's Data.Set behavior), otherwise LinkedHashSet for insertion order.
+     * Creates a set from elements, preserving a consistent iteration order where possible.
      */
-    @SuppressWarnings("unchecked")
     static <X> Set<X> orderedSet(java.util.Collection<X> elements) {
-        if (elements instanceof PersistentSet) {
-            return (Set<X>) elements;
-        }
-        if (elements.isEmpty()) {
-            return PersistentSet.empty();
-        }
-        // Check if elements are Comparable; if so, use PersistentSet
-        for (X elem : elements) {
-            if (elem != null) {
-                if (elem instanceof Comparable) {
-                    try {
-                        return (Set<X>) PersistentSet.fromList(new java.util.ArrayList<>((java.util.Collection<Comparable>) (java.util.Collection<?>) elements));
-                    } catch (ClassCastException e) {
-                        return new LinkedHashSet<>(elements);
-                    }
-                } else {
-                    return new LinkedHashSet<>(elements);
-                }
-            }
-        }
-        return new LinkedHashSet<>(elements);
+        return new TreeSet<>(elements);
     }
 }

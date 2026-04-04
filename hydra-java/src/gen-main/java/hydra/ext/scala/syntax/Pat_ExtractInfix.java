@@ -17,9 +17,9 @@ public class Pat_ExtractInfix implements Serializable, Comparable<Pat_ExtractInf
 
   public final hydra.ext.scala.syntax.Data_Name op;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Pat> rhs;
+  public final java.util.List<hydra.ext.scala.syntax.Pat> rhs;
 
-  public Pat_ExtractInfix (hydra.ext.scala.syntax.Pat lhs, hydra.ext.scala.syntax.Data_Name op, hydra.util.ConsList<hydra.ext.scala.syntax.Pat> rhs) {
+  public Pat_ExtractInfix (hydra.ext.scala.syntax.Pat lhs, hydra.ext.scala.syntax.Data_Name op, java.util.List<hydra.ext.scala.syntax.Pat> rhs) {
     this.lhs = lhs;
     this.op = op;
     this.rhs = rhs;
@@ -49,15 +49,21 @@ public class Pat_ExtractInfix implements Serializable, Comparable<Pat_ExtractInf
   @SuppressWarnings("unchecked")
   public int compareTo(Pat_ExtractInfix other) {
     int cmp = 0;
-    cmp = ((Comparable) lhs).compareTo(other.lhs);
+    cmp = hydra.util.Comparing.compare(
+      lhs,
+      other.lhs);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) op).compareTo(other.op);
+    cmp = hydra.util.Comparing.compare(
+      op,
+      other.op);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) rhs).compareTo(other.rhs);
+    return hydra.util.Comparing.compare(
+      rhs,
+      other.rhs);
   }
 
   public Pat_ExtractInfix withLhs(hydra.ext.scala.syntax.Pat lhs) {
@@ -68,7 +74,7 @@ public class Pat_ExtractInfix implements Serializable, Comparable<Pat_ExtractInf
     return new Pat_ExtractInfix(lhs, op, rhs);
   }
 
-  public Pat_ExtractInfix withRhs(hydra.util.ConsList<hydra.ext.scala.syntax.Pat> rhs) {
+  public Pat_ExtractInfix withRhs(java.util.List<hydra.ext.scala.syntax.Pat> rhs) {
     return new Pat_ExtractInfix(lhs, op, rhs);
   }
 }

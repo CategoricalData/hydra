@@ -76,7 +76,9 @@ public abstract class TryStatement implements Serializable, Comparable<TryStatem
         return tagCmp;
       }
       Finally o = (Finally) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class TryStatement implements Serializable, Comparable<TryStatem
         return tagCmp;
       }
       Except o = (Except) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class TryStatement implements Serializable, Comparable<TryStatem
         return tagCmp;
       }
       ExceptStar o = (ExceptStar) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

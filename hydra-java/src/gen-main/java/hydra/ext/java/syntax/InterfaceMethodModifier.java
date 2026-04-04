@@ -108,7 +108,9 @@ public abstract class InterfaceMethodModifier implements Serializable, Comparabl
         return tagCmp;
       }
       Annotation o = (Annotation) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

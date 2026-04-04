@@ -49,15 +49,21 @@ public class Case implements Serializable, Comparable<Case> {
   @SuppressWarnings("unchecked")
   public int compareTo(Case other) {
     int cmp = 0;
-    cmp = ((Comparable) pat).compareTo(other.pat);
+    cmp = hydra.util.Comparing.compare(
+      pat,
+      other.pat);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) cond).compareTo(other.cond);
+    cmp = hydra.util.Comparing.compare(
+      cond,
+      other.cond);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
   public Case withPat(hydra.ext.scala.syntax.Pat pat) {

@@ -42,11 +42,15 @@ public class ParamNoDefault implements Serializable, Comparable<ParamNoDefault> 
   @SuppressWarnings("unchecked")
   public int compareTo(ParamNoDefault other) {
     int cmp = 0;
-    cmp = ((Comparable) param).compareTo(other.param);
+    cmp = hydra.util.Comparing.compare(
+      param,
+      other.param);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) typeComment).compareTo(other.typeComment);
+    return hydra.util.Comparing.compare(
+      typeComment,
+      other.typeComment);
   }
 
   public ParamNoDefault withParam(hydra.ext.python.syntax.Param param) {

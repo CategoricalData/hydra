@@ -6,7 +6,9 @@ import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.function.Function;
 
 
@@ -78,9 +80,9 @@ public class Coders {
      */
     public static <V1, V2> Either<String, V1> roundTrip(Coder<V1, V2> coder, V1 initialValue) {
         Context cx = new Context(
-            hydra.util.ConsList.empty(),
-            hydra.util.ConsList.empty(),
-            hydra.util.PersistentMap.empty());
+            new ArrayList<>(),
+            new ArrayList<>(),
+            new HashMap<>());
         Either<InContext<Error_>, V2> encResult = coder.encode.apply(cx).apply(initialValue);
         if (encResult.isLeft()) {
             return Either.left(hydra.show.Errors.error(((Either.Left<InContext<Error_>, V2>) encResult).value.object));

@@ -51,11 +51,15 @@ public class VariableReference implements Serializable, Comparable<VariableRefer
   @SuppressWarnings("unchecked")
   public int compareTo(VariableReference other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) functionNamespace).compareTo(other.functionNamespace);
+    return hydra.util.Comparing.compare(
+      functionNamespace,
+      other.functionNamespace);
   }
 
   public VariableReference withName(hydra.ext.lisp.syntax.Symbol name) {

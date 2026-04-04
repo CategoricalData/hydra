@@ -15,15 +15,15 @@ public class Defn_Type implements Serializable, Comparable<Defn_Type> {
 
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods;
+  public final java.util.List<hydra.ext.scala.syntax.Mod> mods;
 
   public final hydra.ext.scala.syntax.Type_Name name;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams;
+  public final java.util.List<hydra.ext.scala.syntax.Type_Param> tparams;
 
   public final hydra.ext.scala.syntax.Type body;
 
-  public Defn_Type (hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods, hydra.ext.scala.syntax.Type_Name name, hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams, hydra.ext.scala.syntax.Type body) {
+  public Defn_Type (java.util.List<hydra.ext.scala.syntax.Mod> mods, hydra.ext.scala.syntax.Type_Name name, java.util.List<hydra.ext.scala.syntax.Type_Param> tparams, hydra.ext.scala.syntax.Type body) {
     this.mods = mods;
     this.name = name;
     this.tparams = tparams;
@@ -56,22 +56,30 @@ public class Defn_Type implements Serializable, Comparable<Defn_Type> {
   @SuppressWarnings("unchecked")
   public int compareTo(Defn_Type other) {
     int cmp = 0;
-    cmp = ((Comparable) mods).compareTo(other.mods);
+    cmp = hydra.util.Comparing.compare(
+      mods,
+      other.mods);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) tparams).compareTo(other.tparams);
+    cmp = hydra.util.Comparing.compare(
+      tparams,
+      other.tparams);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
-  public Defn_Type withMods(hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods) {
+  public Defn_Type withMods(java.util.List<hydra.ext.scala.syntax.Mod> mods) {
     return new Defn_Type(mods, name, tparams, body);
   }
 
@@ -79,7 +87,7 @@ public class Defn_Type implements Serializable, Comparable<Defn_Type> {
     return new Defn_Type(mods, name, tparams, body);
   }
 
-  public Defn_Type withTparams(hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams) {
+  public Defn_Type withTparams(java.util.List<hydra.ext.scala.syntax.Type_Param> tparams) {
     return new Defn_Type(mods, name, tparams, body);
   }
 

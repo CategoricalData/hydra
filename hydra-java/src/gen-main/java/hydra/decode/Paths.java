@@ -17,7 +17,7 @@ public interface Paths {
 
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtermEdge> visit(hydra.core.Term.Record record) {
-          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Core.toFieldMap((record).value);
+          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Core.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.Core.requireField(
               "source",
@@ -61,11 +61,11 @@ public interface Paths {
 
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtermGraph> visit(hydra.core.Term.Record record) {
-          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Core.toFieldMap((record).value);
+          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Core.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.Core.requireField(
               "nodes",
-              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<hydra.paths.SubtermNode>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<hydra.paths.SubtermNode>>>) (v2 -> hydra.extract.Core.decodeList(
+              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, java.util.List<hydra.paths.SubtermNode>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, java.util.List<hydra.paths.SubtermNode>>>) (v2 -> hydra.extract.Core.decodeList(
                 (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtermNode>>>) (p0 -> p1 -> hydra.decode.Paths.subtermNode(
                   p0,
                   p1)),
@@ -73,10 +73,10 @@ public interface Paths {
                 v2))),
               fieldMap,
               cx),
-            (java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermNode>, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtermGraph>>) (field_nodes -> hydra.lib.eithers.Bind.apply(
+            (java.util.function.Function<java.util.List<hydra.paths.SubtermNode>, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtermGraph>>) (field_nodes -> hydra.lib.eithers.Bind.apply(
               hydra.extract.Core.requireField(
                 "edges",
-                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<hydra.paths.SubtermEdge>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<hydra.paths.SubtermEdge>>>) (v2 -> hydra.extract.Core.decodeList(
+                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, java.util.List<hydra.paths.SubtermEdge>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, java.util.List<hydra.paths.SubtermEdge>>>) (v2 -> hydra.extract.Core.decodeList(
                   (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtermEdge>>>) (p0 -> p1 -> hydra.decode.Paths.subtermEdge(
                     p0,
                     p1)),
@@ -84,7 +84,7 @@ public interface Paths {
                   v2))),
                 fieldMap,
                 cx),
-              (java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermEdge>, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtermGraph>>) (field_edges -> hydra.util.Either.<hydra.errors.DecodingError, hydra.paths.SubtermGraph>right(new hydra.paths.SubtermGraph(field_nodes, field_edges))))));
+              (java.util.function.Function<java.util.List<hydra.paths.SubtermEdge>, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtermGraph>>) (field_edges -> hydra.util.Either.<hydra.errors.DecodingError, hydra.paths.SubtermGraph>right(new hydra.paths.SubtermGraph(field_nodes, field_edges))))));
         }
       })),
       hydra.Lexical.stripAndDereferenceTermEither(
@@ -103,7 +103,7 @@ public interface Paths {
 
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtermNode> visit(hydra.core.Term.Record record) {
-          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Core.toFieldMap((record).value);
+          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Core.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.Core.requireField(
               "name",
@@ -194,7 +194,7 @@ public interface Paths {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtermPath> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(
-            (java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, hydra.paths.SubtermPath>) (b -> new hydra.paths.SubtermPath(b)),
+            (java.util.function.Function<java.util.List<hydra.paths.SubtermStep>, hydra.paths.SubtermPath>) (b -> new hydra.paths.SubtermPath(b)),
             hydra.extract.Core.decodeList(
               (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtermStep>>>) (p0 -> p1 -> hydra.decode.Paths.subtermStep(
                 p0,
@@ -222,7 +222,7 @@ public interface Paths {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
-          hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtermStep>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
+          hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtermStep>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.Arrays.asList(
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtermStep>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtermStep>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtermStep>>>(new hydra.core.Name("annotatedBody"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtermStep>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<java.lang.Void, hydra.paths.SubtermStep>) (t -> new hydra.paths.SubtermStep.AnnotatedBody()),
               hydra.extract.Core.decodeUnit(
@@ -489,7 +489,7 @@ public interface Paths {
                 cx,
                 input)))))))));
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> hydra.util.Either.<hydra.errors.DecodingError, hydra.paths.SubtermStep>left(new hydra.errors.DecodingError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+            () -> hydra.util.Either.<hydra.errors.DecodingError, hydra.paths.SubtermStep>left(new hydra.errors.DecodingError(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
               "no such field ",
               (fname).value,
               " in union")))),
@@ -515,7 +515,7 @@ public interface Paths {
 
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtypeEdge> visit(hydra.core.Term.Record record) {
-          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Core.toFieldMap((record).value);
+          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Core.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.Core.requireField(
               "source",
@@ -559,11 +559,11 @@ public interface Paths {
 
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtypeGraph> visit(hydra.core.Term.Record record) {
-          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Core.toFieldMap((record).value);
+          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Core.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.Core.requireField(
               "nodes",
-              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<hydra.paths.SubtypeNode>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<hydra.paths.SubtypeNode>>>) (v2 -> hydra.extract.Core.decodeList(
+              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, java.util.List<hydra.paths.SubtypeNode>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, java.util.List<hydra.paths.SubtypeNode>>>) (v2 -> hydra.extract.Core.decodeList(
                 (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtypeNode>>>) (p0 -> p1 -> hydra.decode.Paths.subtypeNode(
                   p0,
                   p1)),
@@ -571,10 +571,10 @@ public interface Paths {
                 v2))),
               fieldMap,
               cx),
-            (java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtypeNode>, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtypeGraph>>) (field_nodes -> hydra.lib.eithers.Bind.apply(
+            (java.util.function.Function<java.util.List<hydra.paths.SubtypeNode>, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtypeGraph>>) (field_nodes -> hydra.lib.eithers.Bind.apply(
               hydra.extract.Core.requireField(
                 "edges",
-                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<hydra.paths.SubtypeEdge>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<hydra.paths.SubtypeEdge>>>) (v2 -> hydra.extract.Core.decodeList(
+                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, java.util.List<hydra.paths.SubtypeEdge>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, java.util.List<hydra.paths.SubtypeEdge>>>) (v2 -> hydra.extract.Core.decodeList(
                   (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtypeEdge>>>) (p0 -> p1 -> hydra.decode.Paths.subtypeEdge(
                     p0,
                     p1)),
@@ -582,7 +582,7 @@ public interface Paths {
                   v2))),
                 fieldMap,
                 cx),
-              (java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtypeEdge>, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtypeGraph>>) (field_edges -> hydra.util.Either.<hydra.errors.DecodingError, hydra.paths.SubtypeGraph>right(new hydra.paths.SubtypeGraph(field_nodes, field_edges))))));
+              (java.util.function.Function<java.util.List<hydra.paths.SubtypeEdge>, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtypeGraph>>) (field_edges -> hydra.util.Either.<hydra.errors.DecodingError, hydra.paths.SubtypeGraph>right(new hydra.paths.SubtypeGraph(field_nodes, field_edges))))));
         }
       })),
       hydra.Lexical.stripAndDereferenceTermEither(
@@ -601,7 +601,7 @@ public interface Paths {
 
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtypeNode> visit(hydra.core.Term.Record record) {
-          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Core.toFieldMap((record).value);
+          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Core.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.Core.requireField(
               "name",
@@ -692,7 +692,7 @@ public interface Paths {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtypePath> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(
-            (java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtypeStep>, hydra.paths.SubtypePath>) (b -> new hydra.paths.SubtypePath(b)),
+            (java.util.function.Function<java.util.List<hydra.paths.SubtypeStep>, hydra.paths.SubtypePath>) (b -> new hydra.paths.SubtypePath(b)),
             hydra.extract.Core.decodeList(
               (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtypeStep>>>) (p0 -> p1 -> hydra.decode.Paths.subtypeStep(
                 p0,
@@ -720,7 +720,7 @@ public interface Paths {
           hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
-          hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtypeStep>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
+          hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtypeStep>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.Arrays.asList(
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtypeStep>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtypeStep>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtypeStep>>>(new hydra.core.Name("annotatedBody"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.paths.SubtypeStep>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<java.lang.Void, hydra.paths.SubtypeStep>) (t -> new hydra.paths.SubtypeStep.AnnotatedBody()),
               hydra.extract.Core.decodeUnit(
@@ -812,7 +812,7 @@ public interface Paths {
                 cx,
                 input)))))))));
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> hydra.util.Either.<hydra.errors.DecodingError, hydra.paths.SubtypeStep>left(new hydra.errors.DecodingError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+            () -> hydra.util.Either.<hydra.errors.DecodingError, hydra.paths.SubtypeStep>left(new hydra.errors.DecodingError(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
               "no such field ",
               (fname).value,
               " in union")))),

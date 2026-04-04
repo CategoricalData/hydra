@@ -84,7 +84,9 @@ public abstract class Stat implements Serializable, Comparable<Stat> {
         return tagCmp;
       }
       Term o = (Term) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -124,7 +126,9 @@ public abstract class Stat implements Serializable, Comparable<Stat> {
         return tagCmp;
       }
       Decl o = (Decl) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -164,7 +168,9 @@ public abstract class Stat implements Serializable, Comparable<Stat> {
         return tagCmp;
       }
       Defn o = (Defn) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +210,9 @@ public abstract class Stat implements Serializable, Comparable<Stat> {
         return tagCmp;
       }
       ImportExport o = (ImportExport) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -62,19 +62,27 @@ public class VertexPropertyFeatures implements Serializable, Comparable<VertexPr
   @SuppressWarnings("unchecked")
   public int compareTo(VertexPropertyFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) dataTypeFeatures).compareTo(other.dataTypeFeatures);
+    cmp = hydra.util.Comparing.compare(
+      dataTypeFeatures,
+      other.dataTypeFeatures);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) propertyFeatures).compareTo(other.propertyFeatures);
+    cmp = hydra.util.Comparing.compare(
+      propertyFeatures,
+      other.propertyFeatures);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) elementFeatures).compareTo(other.elementFeatures);
+    cmp = hydra.util.Comparing.compare(
+      elementFeatures,
+      other.elementFeatures);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) supportsRemove).compareTo(other.supportsRemove);
+    return hydra.util.Comparing.compare(
+      supportsRemove,
+      other.supportsRemove);
   }
 
   public VertexPropertyFeatures withDataTypeFeatures(hydra.ext.org.apache.tinkerpop.features.DataTypeFeatures dataTypeFeatures) {

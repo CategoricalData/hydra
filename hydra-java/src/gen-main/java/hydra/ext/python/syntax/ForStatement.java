@@ -21,9 +21,9 @@ public class ForStatement implements Serializable, Comparable<ForStatement> {
 
   public final Boolean async;
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.StarTarget> targets;
+  public final java.util.List<hydra.ext.python.syntax.StarTarget> targets;
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.StarExpression> expressions;
+  public final java.util.List<hydra.ext.python.syntax.StarExpression> expressions;
 
   public final hydra.util.Maybe<hydra.ext.python.syntax.TypeComment> typeComment;
 
@@ -31,7 +31,7 @@ public class ForStatement implements Serializable, Comparable<ForStatement> {
 
   public final hydra.util.Maybe<hydra.ext.python.syntax.Block> else_;
 
-  public ForStatement (Boolean async, hydra.util.ConsList<hydra.ext.python.syntax.StarTarget> targets, hydra.util.ConsList<hydra.ext.python.syntax.StarExpression> expressions, hydra.util.Maybe<hydra.ext.python.syntax.TypeComment> typeComment, hydra.ext.python.syntax.Block body, hydra.util.Maybe<hydra.ext.python.syntax.Block> else_) {
+  public ForStatement (Boolean async, java.util.List<hydra.ext.python.syntax.StarTarget> targets, java.util.List<hydra.ext.python.syntax.StarExpression> expressions, hydra.util.Maybe<hydra.ext.python.syntax.TypeComment> typeComment, hydra.ext.python.syntax.Block body, hydra.util.Maybe<hydra.ext.python.syntax.Block> else_) {
     this.async = async;
     this.targets = targets;
     this.expressions = expressions;
@@ -70,38 +70,50 @@ public class ForStatement implements Serializable, Comparable<ForStatement> {
   @SuppressWarnings("unchecked")
   public int compareTo(ForStatement other) {
     int cmp = 0;
-    cmp = ((Comparable) async).compareTo(other.async);
+    cmp = hydra.util.Comparing.compare(
+      async,
+      other.async);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) targets).compareTo(other.targets);
+    cmp = hydra.util.Comparing.compare(
+      targets,
+      other.targets);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) expressions).compareTo(other.expressions);
+    cmp = hydra.util.Comparing.compare(
+      expressions,
+      other.expressions);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) typeComment).compareTo(other.typeComment);
+    cmp = hydra.util.Comparing.compare(
+      typeComment,
+      other.typeComment);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) body).compareTo(other.body);
+    cmp = hydra.util.Comparing.compare(
+      body,
+      other.body);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) else_).compareTo(other.else_);
+    return hydra.util.Comparing.compare(
+      else_,
+      other.else_);
   }
 
   public ForStatement withAsync(Boolean async) {
     return new ForStatement(async, targets, expressions, typeComment, body, else_);
   }
 
-  public ForStatement withTargets(hydra.util.ConsList<hydra.ext.python.syntax.StarTarget> targets) {
+  public ForStatement withTargets(java.util.List<hydra.ext.python.syntax.StarTarget> targets) {
     return new ForStatement(async, targets, expressions, typeComment, body, else_);
   }
 
-  public ForStatement withExpressions(hydra.util.ConsList<hydra.ext.python.syntax.StarExpression> expressions) {
+  public ForStatement withExpressions(java.util.List<hydra.ext.python.syntax.StarExpression> expressions) {
     return new ForStatement(async, targets, expressions, typeComment, body, else_);
   }
 

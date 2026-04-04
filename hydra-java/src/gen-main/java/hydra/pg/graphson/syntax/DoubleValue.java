@@ -84,7 +84,9 @@ public abstract class DoubleValue implements Serializable, Comparable<DoubleValu
         return tagCmp;
       }
       Finite o = (Finite) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

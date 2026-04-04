@@ -82,7 +82,9 @@ public abstract class Function implements Serializable, Comparable<Function> {
         return tagCmp;
       }
       Elimination o = (Elimination) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -125,7 +127,9 @@ public abstract class Function implements Serializable, Comparable<Function> {
         return tagCmp;
       }
       Lambda o = (Lambda) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -168,7 +172,9 @@ public abstract class Function implements Serializable, Comparable<Function> {
         return tagCmp;
       }
       Primitive o = (Primitive) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

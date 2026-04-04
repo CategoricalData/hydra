@@ -16,9 +16,9 @@ public class Closed implements Serializable, Comparable<Closed> {
 
   public final Boolean isClosed;
 
-  public final hydra.util.Maybe<hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property>> ignoredProperties;
+  public final hydra.util.Maybe<java.util.Set<hydra.ext.org.w3.rdf.syntax.Property>> ignoredProperties;
 
-  public Closed (Boolean isClosed, hydra.util.Maybe<hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property>> ignoredProperties) {
+  public Closed (Boolean isClosed, hydra.util.Maybe<java.util.Set<hydra.ext.org.w3.rdf.syntax.Property>> ignoredProperties) {
     this.isClosed = isClosed;
     this.ignoredProperties = ignoredProperties;
   }
@@ -45,18 +45,22 @@ public class Closed implements Serializable, Comparable<Closed> {
   @SuppressWarnings("unchecked")
   public int compareTo(Closed other) {
     int cmp = 0;
-    cmp = ((Comparable) isClosed).compareTo(other.isClosed);
+    cmp = hydra.util.Comparing.compare(
+      isClosed,
+      other.isClosed);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) ignoredProperties).compareTo(other.ignoredProperties);
+    return hydra.util.Comparing.compare(
+      ignoredProperties,
+      other.ignoredProperties);
   }
 
   public Closed withIsClosed(Boolean isClosed) {
     return new Closed(isClosed, ignoredProperties);
   }
 
-  public Closed withIgnoredProperties(hydra.util.Maybe<hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property>> ignoredProperties) {
+  public Closed withIgnoredProperties(hydra.util.Maybe<java.util.Set<hydra.ext.org.w3.rdf.syntax.Property>> ignoredProperties) {
     return new Closed(isClosed, ignoredProperties);
   }
 }

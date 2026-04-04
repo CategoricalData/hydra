@@ -25,7 +25,7 @@ public interface Packaging {
   }
 
   static hydra.core.Term module(hydra.packaging.Module x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.packaging.Module"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.packaging.Module"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("namespace"), hydra.encode.Packaging.namespace((x).namespace)),
       new hydra.core.Field(new hydra.core.Name("definitions"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
         hydra.encode.Packaging::definition,
@@ -46,7 +46,7 @@ public interface Packaging {
   }
 
   static <T0> hydra.core.Term namespaces(java.util.function.Function<T0, hydra.core.Term> n, hydra.packaging.Namespaces<T0> x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.packaging.Namespaces"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.packaging.Namespaces"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("focus"), new hydra.core.Term.Pair(hydra.lib.pairs.Bimap.apply(
         hydra.encode.Packaging::namespace,
         n,
@@ -54,11 +54,11 @@ public interface Packaging {
       new hydra.core.Field(new hydra.core.Name("mapping"), new hydra.core.Term.Map(hydra.lib.maps.Bimap.apply(
         hydra.encode.Packaging::namespace,
         n,
-        ((java.util.function.Function<hydra.packaging.Namespaces<T0>, hydra.util.PersistentMap<hydra.packaging.Namespace, T0>>) (projected -> projected.mapping)).apply(x)))))));
+        ((java.util.function.Function<hydra.packaging.Namespaces<T0>, java.util.Map<hydra.packaging.Namespace, T0>>) (projected -> projected.mapping)).apply(x)))))));
   }
 
   static hydra.core.Term package_(hydra.packaging.Package_ x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.packaging.Package"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.packaging.Package"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Packaging.packageName((x).name)),
       new hydra.core.Field(new hydra.core.Name("modules"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
         hydra.encode.Packaging::module,
@@ -76,7 +76,7 @@ public interface Packaging {
   }
 
   static hydra.core.Term qualifiedName(hydra.packaging.QualifiedName x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.packaging.QualifiedName"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.packaging.QualifiedName"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("namespace"), new hydra.core.Term.Maybe(hydra.lib.maybes.Map.apply(
         hydra.encode.Packaging::namespace,
         (x).namespace))),
@@ -84,7 +84,7 @@ public interface Packaging {
   }
 
   static hydra.core.Term termDefinition(hydra.packaging.TermDefinition x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.packaging.TermDefinition"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.packaging.TermDefinition"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)),
       new hydra.core.Field(new hydra.core.Name("term"), hydra.encode.Core.term((x).term)),
       new hydra.core.Field(new hydra.core.Name("type"), new hydra.core.Term.Maybe(hydra.lib.maybes.Map.apply(
@@ -93,7 +93,7 @@ public interface Packaging {
   }
 
   static hydra.core.Term typeDefinition(hydra.packaging.TypeDefinition x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.packaging.TypeDefinition"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.packaging.TypeDefinition"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)),
       new hydra.core.Field(new hydra.core.Name("type"), hydra.encode.Core.typeScheme((x).type)))));
   }

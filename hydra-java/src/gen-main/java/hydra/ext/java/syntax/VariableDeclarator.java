@@ -42,11 +42,15 @@ public class VariableDeclarator implements Serializable, Comparable<VariableDecl
   @SuppressWarnings("unchecked")
   public int compareTo(VariableDeclarator other) {
     int cmp = 0;
-    cmp = ((Comparable) id).compareTo(other.id);
+    cmp = hydra.util.Comparing.compare(
+      id,
+      other.id);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) initializer).compareTo(other.initializer);
+    return hydra.util.Comparing.compare(
+      initializer,
+      other.initializer);
   }
 
   public VariableDeclarator withId(hydra.ext.java.syntax.VariableDeclaratorId id) {

@@ -172,7 +172,9 @@ public abstract class Tree implements Serializable, Comparable<Tree> {
         return tagCmp;
       }
       Ref o = (Ref) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -212,7 +214,9 @@ public abstract class Tree implements Serializable, Comparable<Tree> {
         return tagCmp;
       }
       Stat o = (Stat) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -252,7 +256,9 @@ public abstract class Tree implements Serializable, Comparable<Tree> {
         return tagCmp;
       }
       Type o = (Type) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -292,7 +298,9 @@ public abstract class Tree implements Serializable, Comparable<Tree> {
         return tagCmp;
       }
       Bounds o = (Bounds) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -332,7 +340,9 @@ public abstract class Tree implements Serializable, Comparable<Tree> {
         return tagCmp;
       }
       Pat o = (Pat) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -372,7 +382,9 @@ public abstract class Tree implements Serializable, Comparable<Tree> {
         return tagCmp;
       }
       Member o = (Member) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -412,7 +424,9 @@ public abstract class Tree implements Serializable, Comparable<Tree> {
         return tagCmp;
       }
       Ctor o = (Ctor) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -452,7 +466,9 @@ public abstract class Tree implements Serializable, Comparable<Tree> {
         return tagCmp;
       }
       Template o = (Template) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -492,7 +508,9 @@ public abstract class Tree implements Serializable, Comparable<Tree> {
         return tagCmp;
       }
       Mod o = (Mod) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -532,7 +550,9 @@ public abstract class Tree implements Serializable, Comparable<Tree> {
         return tagCmp;
       }
       Enumerator o = (Enumerator) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -572,7 +592,9 @@ public abstract class Tree implements Serializable, Comparable<Tree> {
         return tagCmp;
       }
       Importer o = (Importer) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -612,7 +634,9 @@ public abstract class Tree implements Serializable, Comparable<Tree> {
         return tagCmp;
       }
       Importee o = (Importee) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -652,7 +676,9 @@ public abstract class Tree implements Serializable, Comparable<Tree> {
         return tagCmp;
       }
       CaseTree o = (CaseTree) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -692,7 +718,9 @@ public abstract class Tree implements Serializable, Comparable<Tree> {
         return tagCmp;
       }
       Source o = (Source) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -732,7 +760,9 @@ public abstract class Tree implements Serializable, Comparable<Tree> {
         return tagCmp;
       }
       Quasi o = (Quasi) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

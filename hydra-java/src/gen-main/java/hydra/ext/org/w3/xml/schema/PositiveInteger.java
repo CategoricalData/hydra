@@ -32,6 +32,8 @@ public class PositiveInteger implements Serializable, Comparable<PositiveInteger
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PositiveInteger other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

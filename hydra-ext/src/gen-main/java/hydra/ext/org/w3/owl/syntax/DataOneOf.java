@@ -12,9 +12,9 @@ public class DataOneOf implements Serializable, Comparable<DataOneOf> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Literal> value;
+  public final java.util.List<hydra.ext.org.w3.rdf.syntax.Literal> value;
 
-  public DataOneOf (hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Literal> value) {
+  public DataOneOf (java.util.List<hydra.ext.org.w3.rdf.syntax.Literal> value) {
     this.value = value;
   }
 
@@ -37,6 +37,8 @@ public class DataOneOf implements Serializable, Comparable<DataOneOf> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DataOneOf other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

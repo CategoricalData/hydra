@@ -68,7 +68,9 @@ public abstract class TypeBound implements Serializable, Comparable<TypeBound> {
         return tagCmp;
       }
       Variable o = (Variable) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class TypeBound implements Serializable, Comparable<TypeBound> {
         return tagCmp;
       }
       ClassOrInterface o = (ClassOrInterface) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

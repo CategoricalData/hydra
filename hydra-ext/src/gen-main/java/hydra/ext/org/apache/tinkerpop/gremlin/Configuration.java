@@ -42,11 +42,15 @@ public class Configuration implements Serializable, Comparable<Configuration> {
   @SuppressWarnings("unchecked")
   public int compareTo(Configuration other) {
     int cmp = 0;
-    cmp = ((Comparable) key).compareTo(other.key);
+    cmp = hydra.util.Comparing.compare(
+      key,
+      other.key);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 
   public Configuration withKey(hydra.ext.org.apache.tinkerpop.gremlin.KeywordOrIdentifier key) {

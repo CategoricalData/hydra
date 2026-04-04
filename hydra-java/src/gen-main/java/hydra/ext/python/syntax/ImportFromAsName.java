@@ -42,11 +42,15 @@ public class ImportFromAsName implements Serializable, Comparable<ImportFromAsNa
   @SuppressWarnings("unchecked")
   public int compareTo(ImportFromAsName other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) as).compareTo(other.as);
+    return hydra.util.Comparing.compare(
+      as,
+      other.as);
   }
 
   public ImportFromAsName withName(hydra.ext.python.syntax.Name name) {

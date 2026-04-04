@@ -51,11 +51,15 @@ public class InvalidElementPropertyError implements Serializable, Comparable<Inv
   @SuppressWarnings("unchecked")
   public int compareTo(InvalidElementPropertyError other) {
     int cmp = 0;
-    cmp = ((Comparable) key).compareTo(other.key);
+    cmp = hydra.util.Comparing.compare(
+      key,
+      other.key);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) error).compareTo(other.error);
+    return hydra.util.Comparing.compare(
+      error,
+      other.error);
   }
 
   public InvalidElementPropertyError withKey(hydra.pg.model.PropertyKey key) {

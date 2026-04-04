@@ -12,9 +12,9 @@ public class HeaderRow implements Serializable, Comparable<HeaderRow> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<String> value;
+  public final java.util.List<String> value;
 
-  public HeaderRow (hydra.util.ConsList<String> value) {
+  public HeaderRow (java.util.List<String> value) {
     this.value = value;
   }
 
@@ -37,6 +37,8 @@ public class HeaderRow implements Serializable, Comparable<HeaderRow> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(HeaderRow other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

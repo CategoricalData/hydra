@@ -9,9 +9,9 @@ public class ObjectUnionOf implements Serializable, Comparable<ObjectUnionOf> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> value;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> value;
 
-  public ObjectUnionOf (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> value) {
+  public ObjectUnionOf (java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class ObjectUnionOf implements Serializable, Comparable<ObjectUnionOf> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ObjectUnionOf other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

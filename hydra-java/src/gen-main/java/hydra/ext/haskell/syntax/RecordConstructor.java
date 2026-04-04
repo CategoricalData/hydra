@@ -22,9 +22,9 @@ public class RecordConstructor implements Serializable, Comparable<RecordConstru
   /**
    * The named fields of the record
    */
-  public final hydra.util.ConsList<hydra.ext.haskell.syntax.FieldWithComments> fields;
+  public final java.util.List<hydra.ext.haskell.syntax.FieldWithComments> fields;
 
-  public RecordConstructor (hydra.ext.haskell.syntax.Name name, hydra.util.ConsList<hydra.ext.haskell.syntax.FieldWithComments> fields) {
+  public RecordConstructor (hydra.ext.haskell.syntax.Name name, java.util.List<hydra.ext.haskell.syntax.FieldWithComments> fields) {
     this.name = name;
     this.fields = fields;
   }
@@ -51,18 +51,22 @@ public class RecordConstructor implements Serializable, Comparable<RecordConstru
   @SuppressWarnings("unchecked")
   public int compareTo(RecordConstructor other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) fields).compareTo(other.fields);
+    return hydra.util.Comparing.compare(
+      fields,
+      other.fields);
   }
 
   public RecordConstructor withName(hydra.ext.haskell.syntax.Name name) {
     return new RecordConstructor(name, fields);
   }
 
-  public RecordConstructor withFields(hydra.util.ConsList<hydra.ext.haskell.syntax.FieldWithComments> fields) {
+  public RecordConstructor withFields(java.util.List<hydra.ext.haskell.syntax.FieldWithComments> fields) {
     return new RecordConstructor(name, fields);
   }
 }

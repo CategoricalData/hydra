@@ -61,15 +61,21 @@ public class IfExpression implements Serializable, Comparable<IfExpression> {
   @SuppressWarnings("unchecked")
   public int compareTo(IfExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) condition).compareTo(other.condition);
+    cmp = hydra.util.Comparing.compare(
+      condition,
+      other.condition);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) then).compareTo(other.then);
+    cmp = hydra.util.Comparing.compare(
+      then,
+      other.then);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) else_).compareTo(other.else_);
+    return hydra.util.Comparing.compare(
+      else_,
+      other.else_);
   }
 
   public IfExpression withCondition(hydra.ext.haskell.syntax.Expression condition) {

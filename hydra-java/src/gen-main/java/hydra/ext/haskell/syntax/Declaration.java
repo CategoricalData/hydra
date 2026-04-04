@@ -90,7 +90,9 @@ public abstract class Declaration implements Serializable, Comparable<Declaratio
         return tagCmp;
       }
       Data o = (Data) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -133,7 +135,9 @@ public abstract class Declaration implements Serializable, Comparable<Declaratio
         return tagCmp;
       }
       Type o = (Type) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -176,7 +180,9 @@ public abstract class Declaration implements Serializable, Comparable<Declaratio
         return tagCmp;
       }
       ValueBinding o = (ValueBinding) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -219,7 +225,9 @@ public abstract class Declaration implements Serializable, Comparable<Declaratio
         return tagCmp;
       }
       TypedBinding o = (TypedBinding) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

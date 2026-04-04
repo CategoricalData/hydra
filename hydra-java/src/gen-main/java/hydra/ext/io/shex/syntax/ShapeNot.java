@@ -42,11 +42,15 @@ public class ShapeNot implements Serializable, Comparable<ShapeNot> {
   @SuppressWarnings("unchecked")
   public int compareTo(ShapeNot other) {
     int cmp = 0;
-    cmp = ((Comparable) NOT).compareTo(other.NOT);
+    cmp = hydra.util.Comparing.compare(
+      NOT,
+      other.NOT);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) ShapeAtom).compareTo(other.ShapeAtom);
+    return hydra.util.Comparing.compare(
+      ShapeAtom,
+      other.ShapeAtom);
   }
 
   public ShapeNot withNOT(hydra.util.Maybe<java.lang.Void> NOT) {

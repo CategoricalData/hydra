@@ -74,7 +74,9 @@ public abstract class LocalBinding implements Serializable, Comparable<LocalBind
         return tagCmp;
       }
       Signature o = (Signature) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -117,7 +119,9 @@ public abstract class LocalBinding implements Serializable, Comparable<LocalBind
         return tagCmp;
       }
       Value o = (Value) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

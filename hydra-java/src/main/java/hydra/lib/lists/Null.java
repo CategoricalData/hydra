@@ -8,8 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.ConsList;
-
 import java.util.List;
 import java.util.function.Function;
 
@@ -37,7 +35,7 @@ public class Null extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<ConsList<Term>, Term>) l -> Terms.boolean_(apply(l)), hydra.extract.Core.list(cx, graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<List<Term>, Term>) l -> Terms.boolean_(apply(l)), hydra.extract.Core.list(cx, graph, args.get(0)));
     }
 
     /**
@@ -46,7 +44,7 @@ public class Null extends PrimitiveFunction {
      * @param list the list to check
      * @return true if empty, false otherwise
      */
-    public static <X> boolean apply(ConsList<X> list) {
+    public static <X> boolean apply(List<X> list) {
         return list.isEmpty();
     }
 }

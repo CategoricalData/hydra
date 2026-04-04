@@ -11,11 +11,11 @@ public class Data_PolyFunction implements Serializable, Comparable<Data_PolyFunc
 
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams;
+  public final java.util.List<hydra.ext.scala.syntax.Type_Param> tparams;
 
   public final hydra.ext.scala.syntax.Data body;
 
-  public Data_PolyFunction (hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams, hydra.ext.scala.syntax.Data body) {
+  public Data_PolyFunction (java.util.List<hydra.ext.scala.syntax.Type_Param> tparams, hydra.ext.scala.syntax.Data body) {
     this.tparams = tparams;
     this.body = body;
   }
@@ -42,14 +42,18 @@ public class Data_PolyFunction implements Serializable, Comparable<Data_PolyFunc
   @SuppressWarnings("unchecked")
   public int compareTo(Data_PolyFunction other) {
     int cmp = 0;
-    cmp = ((Comparable) tparams).compareTo(other.tparams);
+    cmp = hydra.util.Comparing.compare(
+      tparams,
+      other.tparams);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
-  public Data_PolyFunction withTparams(hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams) {
+  public Data_PolyFunction withTparams(java.util.List<hydra.ext.scala.syntax.Type_Param> tparams) {
     return new Data_PolyFunction(tparams, body);
   }
 

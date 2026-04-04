@@ -11,8 +11,6 @@ import hydra.graph.Graph;
 import hydra.graph.Primitive;
 import hydra.util.Either;
 
-import hydra.util.ConsList;
-
 import java.util.List;
 import java.util.function.Function;
 
@@ -54,9 +52,9 @@ public abstract class PrimitiveFunction {
      */
     public Primitive toNative() {
         Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> impl = implementation();
-        Function<Context, Function<Graph, Function<ConsList<Term>, Either<InContext<Error_>, Term>>>> nativeImpl =
+        Function<Context, Function<Graph, Function<List<Term>, Either<InContext<Error_>, Term>>>> nativeImpl =
             cx -> graph -> args -> {
-                Either<InContext<Error_>, Term> result = impl.apply(args.toArrayList()).apply(cx).apply(graph);
+                Either<InContext<Error_>, Term> result = impl.apply(args).apply(cx).apply(graph);
                 if (result.isRight()) {
                     return Either.right(((Either.Right<InContext<Error_>, Term>) result).value);
                 } else {

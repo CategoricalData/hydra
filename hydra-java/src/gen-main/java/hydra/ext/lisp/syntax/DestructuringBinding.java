@@ -51,11 +51,15 @@ public class DestructuringBinding implements Serializable, Comparable<Destructur
   @SuppressWarnings("unchecked")
   public int compareTo(DestructuringBinding other) {
     int cmp = 0;
-    cmp = ((Comparable) pattern).compareTo(other.pattern);
+    cmp = hydra.util.Comparing.compare(
+      pattern,
+      other.pattern);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 
   public DestructuringBinding withPattern(hydra.ext.lisp.syntax.DestructuringPattern pattern) {

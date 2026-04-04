@@ -37,6 +37,8 @@ public class EdgePropertyFeatures implements Serializable, Comparable<EdgeProper
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(EdgePropertyFeatures other) {
-    return ((Comparable) propertyFeatures).compareTo(other.propertyFeatures);
+    return hydra.util.Comparing.compare(
+      propertyFeatures,
+      other.propertyFeatures);
   }
 }

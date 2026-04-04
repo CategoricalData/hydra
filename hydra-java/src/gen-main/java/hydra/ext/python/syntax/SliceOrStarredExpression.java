@@ -68,7 +68,9 @@ public abstract class SliceOrStarredExpression implements Serializable, Comparab
         return tagCmp;
       }
       Slice o = (Slice) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class SliceOrStarredExpression implements Serializable, Comparab
         return tagCmp;
       }
       Starred o = (Starred) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

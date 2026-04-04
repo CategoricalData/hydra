@@ -37,6 +37,8 @@ public class OtherError implements Serializable, Comparable<OtherError> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(OtherError other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

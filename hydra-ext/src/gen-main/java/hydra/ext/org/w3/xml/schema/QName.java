@@ -34,6 +34,8 @@ public class QName implements Serializable, Comparable<QName> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(QName other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

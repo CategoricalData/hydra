@@ -76,7 +76,9 @@ public abstract class CastExpression implements Serializable, Comparable<CastExp
         return tagCmp;
       }
       Primitive o = (Primitive) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class CastExpression implements Serializable, Comparable<CastExp
         return tagCmp;
       }
       NotPlusMinus o = (NotPlusMinus) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class CastExpression implements Serializable, Comparable<CastExp
         return tagCmp;
       }
       Lambda o = (Lambda) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

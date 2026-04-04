@@ -42,11 +42,15 @@ public class Importee_Rename implements Serializable, Comparable<Importee_Rename
   @SuppressWarnings("unchecked")
   public int compareTo(Importee_Rename other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) rename).compareTo(other.rename);
+    return hydra.util.Comparing.compare(
+      rename,
+      other.rename);
   }
 
   public Importee_Rename withName(hydra.ext.scala.syntax.Name name) {

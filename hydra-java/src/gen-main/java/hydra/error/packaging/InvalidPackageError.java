@@ -82,7 +82,9 @@ public abstract class InvalidPackageError implements Serializable, Comparable<In
         return tagCmp;
       }
       ConflictingModuleNamespace o = (ConflictingModuleNamespace) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -125,7 +127,9 @@ public abstract class InvalidPackageError implements Serializable, Comparable<In
         return tagCmp;
       }
       DuplicateModuleNamespace o = (DuplicateModuleNamespace) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -168,7 +172,9 @@ public abstract class InvalidPackageError implements Serializable, Comparable<In
         return tagCmp;
       }
       InvalidModule o = (InvalidModule) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

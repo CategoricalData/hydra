@@ -82,7 +82,9 @@ public abstract class Name implements Serializable, Comparable<Name> {
         return tagCmp;
       }
       Implicit o = (Implicit) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -125,7 +127,9 @@ public abstract class Name implements Serializable, Comparable<Name> {
         return tagCmp;
       }
       Normal o = (Normal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -168,7 +172,9 @@ public abstract class Name implements Serializable, Comparable<Name> {
         return tagCmp;
       }
       Parens o = (Parens) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

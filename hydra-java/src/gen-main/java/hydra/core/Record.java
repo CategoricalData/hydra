@@ -22,9 +22,9 @@ public class Record implements Serializable, Comparable<Record> {
   /**
    * The fields of the record, as a list of name/term pairs
    */
-  public final hydra.util.ConsList<hydra.core.Field> fields;
+  public final java.util.List<hydra.core.Field> fields;
 
-  public Record (hydra.core.Name typeName, hydra.util.ConsList<hydra.core.Field> fields) {
+  public Record (hydra.core.Name typeName, java.util.List<hydra.core.Field> fields) {
     this.typeName = typeName;
     this.fields = fields;
   }
@@ -51,18 +51,22 @@ public class Record implements Serializable, Comparable<Record> {
   @SuppressWarnings("unchecked")
   public int compareTo(Record other) {
     int cmp = 0;
-    cmp = ((Comparable) typeName).compareTo(other.typeName);
+    cmp = hydra.util.Comparing.compare(
+      typeName,
+      other.typeName);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) fields).compareTo(other.fields);
+    return hydra.util.Comparing.compare(
+      fields,
+      other.fields);
   }
 
   public Record withTypeName(hydra.core.Name typeName) {
     return new Record(typeName, fields);
   }
 
-  public Record withFields(hydra.util.ConsList<hydra.core.Field> fields) {
+  public Record withFields(java.util.List<hydra.core.Field> fields) {
     return new Record(typeName, fields);
   }
 }

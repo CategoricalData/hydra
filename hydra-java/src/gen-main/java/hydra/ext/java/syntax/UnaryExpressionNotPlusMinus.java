@@ -84,7 +84,9 @@ public abstract class UnaryExpressionNotPlusMinus implements Serializable, Compa
         return tagCmp;
       }
       Postfix o = (Postfix) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -124,7 +126,9 @@ public abstract class UnaryExpressionNotPlusMinus implements Serializable, Compa
         return tagCmp;
       }
       Tilde o = (Tilde) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -164,7 +168,9 @@ public abstract class UnaryExpressionNotPlusMinus implements Serializable, Compa
         return tagCmp;
       }
       Not o = (Not) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +210,9 @@ public abstract class UnaryExpressionNotPlusMinus implements Serializable, Compa
         return tagCmp;
       }
       Cast o = (Cast) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

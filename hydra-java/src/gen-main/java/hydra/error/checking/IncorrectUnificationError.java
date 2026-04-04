@@ -40,6 +40,8 @@ public class IncorrectUnificationError implements Serializable, Comparable<Incor
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(IncorrectUnificationError other) {
-    return ((Comparable) substitution).compareTo(other.substitution);
+    return hydra.util.Comparing.compare(
+      substitution,
+      other.substitution);
   }
 }

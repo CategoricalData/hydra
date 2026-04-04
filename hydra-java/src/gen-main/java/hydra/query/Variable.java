@@ -37,6 +37,8 @@ public class Variable implements Serializable, Comparable<Variable> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Variable other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

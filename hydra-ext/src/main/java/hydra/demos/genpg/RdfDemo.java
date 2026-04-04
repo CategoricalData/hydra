@@ -16,13 +16,9 @@ import hydra.pg.rdf.environment.PgRdfEnvironment;
 import hydra.relational.RelationName;
 import hydra.tabular.Table;
 import hydra.tabular.TableType;
-import hydra.util.ConsList;
 import hydra.util.Either;
-import hydra.util.Pair;
-import hydra.util.PersistentMap;
-
 import hydra.util.Maybe;
-import hydra.util.PersistentSet;
+import hydra.util.Pair;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -89,41 +85,41 @@ public class RdfDemo {
 
     private static ShapesGraph graphSchemaToShapesGraph(GraphSchema<Type> schema) {
         List<EdgeType<Type>> allEdgeTypes = new ArrayList<>(schema.edges.values());
-        PersistentSet<Definition<Shape>> defs = PersistentSet.empty();
+        Set<Definition<Shape>> defs = new LinkedHashSet<>();
         for (VertexType<Type> vt : schema.vertices.values()) {
-            defs = defs.insert(vertexTypeToNodeShape(vt, allEdgeTypes));
+            defs.add(vertexTypeToNodeShape(vt, allEdgeTypes));
         }
         return new ShapesGraph(defs);
     }
 
     private static Definition<Shape> vertexTypeToNodeShape(VertexType<Type> vt, List<EdgeType<Type>> allEdgeTypes) {
         VertexLabel vlabel = vt.label;
-        PersistentSet<CommonConstraint> constraints = PersistentSet.empty();
+        Set<CommonConstraint> constraints = new LinkedHashSet<>();
 
         for (PropertyType<Type> pt : vt.properties) {
             PropertyShape ps = propertyTypeToShape(pt);
             Iri scopedIri = new Iri(DEMO_NS + vlabel.value + "#" + pt.key.value);
-            constraints = constraints.insert(new CommonConstraint.Property(
-                PersistentSet.singleton(new Reference.Definition<>(new Definition<>(scopedIri, ps)))));
+            constraints.add(new CommonConstraint.Property(
+                Collections.singleton(new Reference.Definition<>(new Definition<>(scopedIri, ps)))));
         }
 
         for (EdgeType<Type> et : allEdgeTypes) {
             if (et.out.equals(vlabel)) {
                 Iri edgeIri = new Iri(DEMO_NS + et.label.value);
                 Iri inIri = new Iri(DEMO_NS + et.in.value);
-                PersistentSet<CommonConstraint> edgeConstraints = PersistentSet.of(
-                    new CommonConstraint.Class_(PersistentSet.singleton(new RdfsClass(null))),
-                    new CommonConstraint.Node(PersistentSet.singleton(new Reference.Named<>(inIri))));
+                Set<CommonConstraint> edgeConstraints = new LinkedHashSet<>(Arrays.asList(
+                    new CommonConstraint.Class_(Collections.singleton(new RdfsClass(null))),
+                    new CommonConstraint.Node(Collections.singleton(new Reference.Named<>(inIri)))));
                 PropertyShape ps = new PropertyShape(
-                    emptyCommon(edgeConstraints, PersistentSet.empty()),
-                    PersistentSet.empty(), Maybe.nothing(), emptyLangStrings(), emptyLangStrings(), Maybe.nothing(), edgeIri);
+                    emptyCommon(edgeConstraints, Collections.emptySet()),
+                    Collections.emptySet(), Maybe.nothing(), emptyLangStrings(), emptyLangStrings(), Maybe.nothing(), edgeIri);
                 Iri scopedIri = new Iri(DEMO_NS + vlabel.value + "#" + et.label.value);
-                constraints = constraints.insert(new CommonConstraint.Property(
-                    PersistentSet.singleton(new Reference.Definition<>(new Definition<>(scopedIri, ps)))));
+                constraints.add(new CommonConstraint.Property(
+                    Collections.singleton(new Reference.Definition<>(new Definition<>(scopedIri, ps)))));
             }
         }
 
-        CommonProperties common = emptyCommon(constraints, PersistentSet.singleton(new RdfsClass(null)));
+        CommonProperties common = emptyCommon(constraints, Collections.singleton(new RdfsClass(null)));
         return new Definition<>(
             new Iri(DEMO_NS + vlabel.value),
             new Shape.Node(new NodeShape(common)));
@@ -131,24 +127,24 @@ public class RdfDemo {
 
     private static PropertyShape propertyTypeToShape(PropertyType<Type> pt) {
         Iri dtIri = typeToXsdIri(pt.value);
-        PersistentSet<CommonConstraint> constraints = PersistentSet.singleton(new CommonConstraint.Datatype(dtIri));
-        PersistentSet<PropertyShapeConstraint> propConstraints = pt.required
-            ? PersistentSet.singleton(new PropertyShapeConstraint.MinCount(BigInteger.ONE))
-            : PersistentSet.empty();
+        Set<CommonConstraint> constraints = Collections.singleton(new CommonConstraint.Datatype(dtIri));
+        Set<PropertyShapeConstraint> propConstraints = pt.required
+            ? Collections.singleton(new PropertyShapeConstraint.MinCount(BigInteger.ONE))
+            : Collections.emptySet();
         return new PropertyShape(
-            emptyCommon(constraints, PersistentSet.empty()),
+            emptyCommon(constraints, Collections.emptySet()),
             propConstraints, Maybe.nothing(), emptyLangStrings(), emptyLangStrings(), Maybe.nothing(),
             new Iri(DEMO_NS + pt.key.value));
     }
 
-    private static CommonProperties emptyCommon(PersistentSet<CommonConstraint> constraints, PersistentSet<RdfsClass> targetClass) {
+    private static CommonProperties emptyCommon(Set<CommonConstraint> constraints, Set<RdfsClass> targetClass) {
         return new CommonProperties(constraints, Maybe.nothing(), emptyLangStrings(),
             new Severity.Violation(), targetClass,
-            PersistentSet.empty(), PersistentSet.empty(), PersistentSet.empty());
+            Collections.emptySet(), Collections.emptySet(), Collections.emptySet());
     }
 
     private static LangStrings emptyLangStrings() {
-        return new LangStrings(PersistentMap.empty());
+        return new LangStrings(Collections.emptyMap());
     }
 
     private static Iri typeToXsdIri(Type typ) {
@@ -359,7 +355,7 @@ public class RdfDemo {
 
     private Table<Term> decodeTableIo(TableType tableType, Path path) throws IOException {
         List<String> rawLines = Files.readAllLines(path, StandardCharsets.UTF_8);
-        Either<String, Table<String>> parseResult = Transform.parseTableLines(true, ConsList.fromList(rawLines));
+        Either<String, Table<String>> parseResult = Transform.parseTableLines(true, rawLines);
         if (parseResult.isLeft()) {
             throw new RuntimeException("CSV read error in " + path + ": " + ((Either.Left<String, Table<String>>) parseResult).value);
         }
@@ -371,39 +367,39 @@ public class RdfDemo {
         return ((Either.Right<String, Table<Term>>) decodeResult).value;
     }
 
-    private LazyGraph<Term> transformTables(Path sourceRoot, ConsList<TableType> tableTypes, LazyGraph<Term> spec) throws IOException {
-        Either<String, PersistentMap<String, Pair<ConsList<Vertex<Term>>, ConsList<Edge<Term>>>>> specsResult =
+    private LazyGraph<Term> transformTables(Path sourceRoot, List<TableType> tableTypes, LazyGraph<Term> spec) throws IOException {
+        Either<String, Map<String, Pair<List<Vertex<Term>>, List<Edge<Term>>>>> specsResult =
             Transform.elementSpecsByTable(spec);
         if (specsResult.isLeft()) {
             throw new RuntimeException("Error in mapping specification: " + ((Either.Left<String, ?>) specsResult).value);
         }
-        PersistentMap<String, Pair<ConsList<Vertex<Term>>, ConsList<Edge<Term>>>> byTable =
-            ((Either.Right<String, PersistentMap<String, Pair<ConsList<Vertex<Term>>, ConsList<Edge<Term>>>>>) specsResult).value;
-        PersistentMap<RelationName, TableType> tblTypesByName = Transform.tableTypesByName(tableTypes);
+        Map<String, Pair<List<Vertex<Term>>, List<Edge<Term>>>> byTable =
+            ((Either.Right<String, Map<String, Pair<List<Vertex<Term>>, List<Edge<Term>>>>>) specsResult).value;
+        Map<RelationName, TableType> tblTypesByName = Transform.tableTypesByName(tableTypes);
 
         List<Vertex<Term>> allVertices = new ArrayList<>();
         List<Edge<Term>> allEdges = new ArrayList<>();
 
-        for (Map.Entry<String, Pair<ConsList<Vertex<Term>>, ConsList<Edge<Term>>>> entry : byTable.entrySet()) {
+        for (Map.Entry<String, Pair<List<Vertex<Term>>, List<Edge<Term>>>> entry : byTable.entrySet()) {
             String tname = entry.getKey();
             TableType tableType = tblTypesByName.get(new RelationName(tname));
             if (tableType == null) throw new RuntimeException("Table not found: " + tname);
             Table<Term> table = decodeTableIo(tableType, sourceRoot.resolve(tname));
-            Context cx = new Context(ConsList.empty(), ConsList.empty(), PersistentMap.empty());
-            Either<InContext<Error_>, Pair<ConsList<Vertex<Term>>, ConsList<Edge<Term>>>> result =
+            Context cx = new Context(Collections.emptyList(), Collections.emptyList(), Collections.emptyMap());
+            Either<InContext<Error_>, Pair<List<Vertex<Term>>, List<Edge<Term>>>> result =
                 Transform.transformTableRows(cx, graphContext, entry.getValue().first, entry.getValue().second, tableType, table.data);
             if (result.isLeft()) throw new RuntimeException("Transform error");
-            Pair<ConsList<Vertex<Term>>, ConsList<Edge<Term>>> pair = ((Either.Right<InContext<Error_>, Pair<ConsList<Vertex<Term>>, ConsList<Edge<Term>>>>) result).value;
+            Pair<List<Vertex<Term>>, List<Edge<Term>>> pair = ((Either.Right<InContext<Error_>, Pair<List<Vertex<Term>>, List<Edge<Term>>>>) result).value;
             allVertices.addAll(pair.first);
             allEdges.addAll(pair.second);
         }
-        return Transform.makeLazyGraph(ConsList.fromList(allVertices), ConsList.fromList(allEdges));
+        return Transform.makeLazyGraph(allVertices, allEdges);
     }
 
     // -----------------------------------------------------------------------
     // Entry points
 
-    public void generateRdf(Path sourceRoot, ConsList<TableType> tableSchemas,
+    public void generateRdf(Path sourceRoot, List<TableType> tableSchemas,
             LazyGraph<Term> graphMapping, GraphSchema<Type> graphSchema, Path outputDir) throws IOException {
         System.out.println("Reading CSV files from " + sourceRoot + "/");
         long startTime = System.nanoTime();
@@ -432,7 +428,7 @@ public class RdfDemo {
         }
         List<Description> allDescs = new ArrayList<>(vertexDescs);
         allDescs.addAll(edgeDescs);
-        hydra.ext.org.w3.rdf.syntax.Graph dataGraph = Utils.descriptionsToGraph(ConsList.fromList(allDescs));
+        hydra.ext.org.w3.rdf.syntax.Graph dataGraph = Utils.descriptionsToGraph(allDescs);
         String dataNt = graphToNtriples(dataGraph);
         Path dataFile = Paths.get(outputDir + "-data.nt");
         Files.write(dataFile, dataNt.getBytes(StandardCharsets.UTF_8));

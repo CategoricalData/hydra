@@ -13,13 +13,13 @@ public class SubObjectPropertyOf implements Serializable, Comparable<SubObjectPr
 
   public static final hydra.core.Name SUPER_PROPERTY = new hydra.core.Name("superProperty");
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> subProperty;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> subProperty;
 
   public final hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression superProperty;
 
-  public SubObjectPropertyOf (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> subProperty, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression superProperty) {
+  public SubObjectPropertyOf (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, java.util.List<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> subProperty, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression superProperty) {
     this.annotations = annotations;
     this.subProperty = subProperty;
     this.superProperty = superProperty;
@@ -49,22 +49,28 @@ public class SubObjectPropertyOf implements Serializable, Comparable<SubObjectPr
   @SuppressWarnings("unchecked")
   public int compareTo(SubObjectPropertyOf other) {
     int cmp = 0;
-    cmp = ((Comparable) annotations).compareTo(other.annotations);
+    cmp = hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) subProperty).compareTo(other.subProperty);
+    cmp = hydra.util.Comparing.compare(
+      subProperty,
+      other.subProperty);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) superProperty).compareTo(other.superProperty);
+    return hydra.util.Comparing.compare(
+      superProperty,
+      other.superProperty);
   }
 
-  public SubObjectPropertyOf withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public SubObjectPropertyOf withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new SubObjectPropertyOf(annotations, subProperty, superProperty);
   }
 
-  public SubObjectPropertyOf withSubProperty(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> subProperty) {
+  public SubObjectPropertyOf withSubProperty(java.util.List<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> subProperty) {
     return new SubObjectPropertyOf(annotations, subProperty, superProperty);
   }
 

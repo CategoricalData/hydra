@@ -51,11 +51,15 @@ public class PatternImplication implements Serializable, Comparable<PatternImpli
   @SuppressWarnings("unchecked")
   public int compareTo(PatternImplication other) {
     int cmp = 0;
-    cmp = ((Comparable) antecedent).compareTo(other.antecedent);
+    cmp = hydra.util.Comparing.compare(
+      antecedent,
+      other.antecedent);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) consequent).compareTo(other.consequent);
+    return hydra.util.Comparing.compare(
+      consequent,
+      other.consequent);
   }
 
   public PatternImplication withAntecedent(hydra.query.Pattern antecedent) {

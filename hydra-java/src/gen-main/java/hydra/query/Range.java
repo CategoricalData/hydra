@@ -51,11 +51,15 @@ public class Range implements Serializable, Comparable<Range> {
   @SuppressWarnings("unchecked")
   public int compareTo(Range other) {
     int cmp = 0;
-    cmp = ((Comparable) min).compareTo(other.min);
+    cmp = hydra.util.Comparing.compare(
+      min,
+      other.min);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) max).compareTo(other.max);
+    return hydra.util.Comparing.compare(
+      max,
+      other.max);
   }
 
   public Range withMin(Integer min) {

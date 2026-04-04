@@ -6,7 +6,7 @@ package hydra.ext.rdf;
  * Utility functions for working with RDF graphs and descriptions
  */
 public interface Utils {
-  static hydra.ext.org.w3.rdf.syntax.Graph descriptionsToGraph(hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description> ds) {
+  static hydra.ext.org.w3.rdf.syntax.Graph descriptionsToGraph(java.util.List<hydra.ext.org.w3.rdf.syntax.Description> ds) {
     return new hydra.ext.org.w3.rdf.syntax.Graph(hydra.lib.sets.FromList.apply(hydra.ext.rdf.Utils.triplesOf(ds)));
   }
 
@@ -15,11 +15,11 @@ public interface Utils {
   }
 
   static hydra.ext.org.w3.rdf.syntax.LangStrings emptyLangStrings() {
-    return new hydra.ext.org.w3.rdf.syntax.LangStrings((hydra.util.PersistentMap<hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag>, String>) ((hydra.util.PersistentMap<hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag>, String>) (hydra.lib.maps.Empty.<hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag>, String>apply())));
+    return new hydra.ext.org.w3.rdf.syntax.LangStrings((java.util.Map<hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag>, String>) ((java.util.Map<hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag>, String>) (hydra.lib.maps.Empty.<hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag>, String>apply())));
   }
 
   static hydra.ext.org.w3.rdf.syntax.Graph emptyRdfGraph() {
-    return new hydra.ext.org.w3.rdf.syntax.Graph((hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Triple>) (hydra.lib.sets.Empty.<hydra.ext.org.w3.rdf.syntax.Triple>apply()));
+    return new hydra.ext.org.w3.rdf.syntax.Graph((java.util.Set<hydra.ext.org.w3.rdf.syntax.Triple>) (hydra.lib.sets.Empty.<hydra.ext.org.w3.rdf.syntax.Triple>apply()));
   }
 
   static hydra.ext.org.w3.rdf.syntax.Literal encodeLiteral(hydra.core.Literal lit) {
@@ -114,7 +114,7 @@ public interface Utils {
     });
   }
 
-  static hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple> forObjects(hydra.ext.org.w3.rdf.syntax.Resource subj, hydra.ext.org.w3.rdf.syntax.Iri pred, hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Node> objs) {
+  static java.util.List<hydra.ext.org.w3.rdf.syntax.Triple> forObjects(hydra.ext.org.w3.rdf.syntax.Resource subj, hydra.ext.org.w3.rdf.syntax.Iri pred, java.util.List<hydra.ext.org.w3.rdf.syntax.Node> objs) {
     return hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.ext.org.w3.rdf.syntax.Node, hydra.ext.org.w3.rdf.syntax.Triple>) (obj -> new hydra.ext.org.w3.rdf.syntax.Triple(subj, pred, obj)),
       objs);
@@ -136,7 +136,7 @@ public interface Utils {
     return new hydra.core.Name("rdfBlankNodeCounter");
   }
 
-  static hydra.ext.org.w3.rdf.syntax.Graph mergeGraphs(hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Graph> graphs) {
+  static hydra.ext.org.w3.rdf.syntax.Graph mergeGraphs(java.util.List<hydra.ext.org.w3.rdf.syntax.Graph> graphs) {
     return new hydra.ext.org.w3.rdf.syntax.Graph(hydra.lib.sets.Unions.apply(hydra.lib.lists.Map.apply(
       wrapped -> (wrapped).value,
       graphs)));
@@ -163,7 +163,7 @@ public interface Utils {
     hydra.packaging.QualifiedName qualName = hydra.Names.qualifyName(rname);
     hydra.util.Maybe<hydra.packaging.Namespace> gname = (qualName).namespace;
     String local_ = (qualName).local;
-    return new hydra.ext.org.w3.rdf.syntax.Iri(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return new hydra.ext.org.w3.rdf.syntax.Iri(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "urn:",
       hydra.lib.maybes.Maybe.applyLazy(
         () -> "",
@@ -194,15 +194,15 @@ public interface Utils {
     });
   }
 
-  static hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Node> subjectsOf(hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description> descs) {
+  static java.util.List<hydra.ext.org.w3.rdf.syntax.Node> subjectsOf(java.util.List<hydra.ext.org.w3.rdf.syntax.Description> descs) {
     return hydra.lib.lists.Map.apply(
       projected -> projected.subject,
       descs);
   }
 
-  static hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple> triplesOf(hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description> descs) {
+  static java.util.List<hydra.ext.org.w3.rdf.syntax.Triple> triplesOf(java.util.List<hydra.ext.org.w3.rdf.syntax.Description> descs) {
     return hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.ext.org.w3.rdf.syntax.Description, hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>>) (d -> hydra.lib.sets.ToList.apply((d).graph.value)),
+      (java.util.function.Function<hydra.ext.org.w3.rdf.syntax.Description, java.util.List<hydra.ext.org.w3.rdf.syntax.Triple>>) (d -> hydra.lib.sets.ToList.apply((d).graph.value)),
       descs));
   }
 

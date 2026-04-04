@@ -42,11 +42,15 @@ public class TPrimaryAndArguments implements Serializable, Comparable<TPrimaryAn
   @SuppressWarnings("unchecked")
   public int compareTo(TPrimaryAndArguments other) {
     int cmp = 0;
-    cmp = ((Comparable) primary).compareTo(other.primary);
+    cmp = hydra.util.Comparing.compare(
+      primary,
+      other.primary);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) arguments).compareTo(other.arguments);
+    return hydra.util.Comparing.compare(
+      arguments,
+      other.arguments);
   }
 
   public TPrimaryAndArguments withPrimary(hydra.ext.python.syntax.TPrimary primary) {

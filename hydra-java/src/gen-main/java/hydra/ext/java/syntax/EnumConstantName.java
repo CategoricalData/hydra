@@ -34,6 +34,8 @@ public class EnumConstantName implements Serializable, Comparable<EnumConstantNa
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(EnumConstantName other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

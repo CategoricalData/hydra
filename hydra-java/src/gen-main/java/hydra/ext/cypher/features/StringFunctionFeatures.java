@@ -201,71 +201,105 @@ public class StringFunctionFeatures implements Serializable, Comparable<StringFu
   @SuppressWarnings("unchecked")
   public int compareTo(StringFunctionFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) btrim).compareTo(other.btrim);
+    cmp = hydra.util.Comparing.compare(
+      btrim,
+      other.btrim);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) left).compareTo(other.left);
+    cmp = hydra.util.Comparing.compare(
+      left,
+      other.left);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) lower).compareTo(other.lower);
+    cmp = hydra.util.Comparing.compare(
+      lower,
+      other.lower);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) ltrim).compareTo(other.ltrim);
+    cmp = hydra.util.Comparing.compare(
+      ltrim,
+      other.ltrim);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) normalize).compareTo(other.normalize);
+    cmp = hydra.util.Comparing.compare(
+      normalize,
+      other.normalize);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) replace).compareTo(other.replace);
+    cmp = hydra.util.Comparing.compare(
+      replace,
+      other.replace);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) reverse).compareTo(other.reverse);
+    cmp = hydra.util.Comparing.compare(
+      reverse,
+      other.reverse);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) right).compareTo(other.right);
+    cmp = hydra.util.Comparing.compare(
+      right,
+      other.right);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) rtrim).compareTo(other.rtrim);
+    cmp = hydra.util.Comparing.compare(
+      rtrim,
+      other.rtrim);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) split).compareTo(other.split);
+    cmp = hydra.util.Comparing.compare(
+      split,
+      other.split);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) substring).compareTo(other.substring);
+    cmp = hydra.util.Comparing.compare(
+      substring,
+      other.substring);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) toLower).compareTo(other.toLower);
+    cmp = hydra.util.Comparing.compare(
+      toLower,
+      other.toLower);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) toString).compareTo(other.toString);
+    cmp = hydra.util.Comparing.compare(
+      toString,
+      other.toString);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) toStringOrNull).compareTo(other.toStringOrNull);
+    cmp = hydra.util.Comparing.compare(
+      toStringOrNull,
+      other.toStringOrNull);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) toUpper).compareTo(other.toUpper);
+    cmp = hydra.util.Comparing.compare(
+      toUpper,
+      other.toUpper);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) trim).compareTo(other.trim);
+    cmp = hydra.util.Comparing.compare(
+      trim,
+      other.trim);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) upper).compareTo(other.upper);
+    return hydra.util.Comparing.compare(
+      upper,
+      other.upper);
   }
 
   public StringFunctionFeatures withBtrim(Boolean btrim) {
