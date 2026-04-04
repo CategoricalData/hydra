@@ -22,23 +22,21 @@
                         "body": {"variable": "hydra.extract.core.decodeMap"},
                         "type": {"literal": {"integer": {"int32": {}}}}}},
                     "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "either": {
-                        "left": {"variable": "hydra.errors.DecodingError"},
-                        "right": {
-                          "map": {
-                            "keys": {"literal": {"integer": {"int32": {}}}},
-                            "values": {"list": {"literal": {"integer": {"int32": {}}}}}}}}},
-                    "domain": {"variable": "hydra.core.Term"}}},
-                "domain": {"variable": "hydra.graph.Graph"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "either": {
+                      "left": {"variable": "hydra.errors.DecodingError"},
+                      "right": {
+                        "map": {
+                          "keys": {"literal": {"integer": {"int32": {}}}},
+                          "values": {"list": {"literal": {"integer": {"int32": {}}}}}}}}},
+                  "domain": {"variable": "hydra.core.Term"}}},
+              "domain": {"variable": "hydra.graph.Graph"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.decode.topology.tarjanState",
@@ -84,14 +82,12 @@
                                                                   "application": {
                                                                     "argument": {"variable": "record"},
                                                                     "function": {"variable": "hydra.extract.core.toFieldMap"}}},
-                                                                "type": [
-                                                                  {
-                                                                    "constraints": null,
-                                                                    "type": {
-                                                                      "map": {
-                                                                        "keys": {"variable": "hydra.core.Name"},
-                                                                        "values": {"variable": "hydra.core.Term"}}},
-                                                                    "variables": []}]}],
+                                                                "type": {
+                                                                  "type": {
+                                                                    "map": {
+                                                                      "keys": {"variable": "hydra.core.Name"},
+                                                                      "values": {"variable": "hydra.core.Term"}}},
+                                                                  "variables": []}}],
                                                             "body": {
                                                               "application": {
                                                                 "argument": {
@@ -140,7 +136,7 @@
                                                                                                                                         "typeName": "hydra.topology.TarjanState"}}}},
                                                                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                                             "type": {"variable": "hydra.topology.TarjanState"}}},
-                                                                                                                        "domain": [{"list": {"list": {"literal": {"integer": {"int32": {}}}}}}],
+                                                                                                                        "domain": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                                         "parameter": "field_sccs"}}},
                                                                                                                   "function": {
                                                                                                                     "application": {
@@ -188,7 +184,7 @@
                                                                                                                                   "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                                               "type": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
                                                                                                                           "type": {"variable": "hydra.topology.TarjanState"}}}}}}},
-                                                                                                              "domain": [{"set": {"literal": {"integer": {"int32": {}}}}}],
+                                                                                                              "domain": {"set": {"literal": {"integer": {"int32": {}}}}},
                                                                                                               "parameter": "field_onStack"}}},
                                                                                                         "function": {
                                                                                                           "application": {
@@ -230,7 +226,7 @@
                                                                                                                         "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                                     "type": {"set": {"literal": {"integer": {"int32": {}}}}}}},
                                                                                                                 "type": {"variable": "hydra.topology.TarjanState"}}}}}}},
-                                                                                                    "domain": [{"list": {"literal": {"integer": {"int32": {}}}}}],
+                                                                                                    "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
                                                                                                     "parameter": "field_stack"}}},
                                                                                               "function": {
                                                                                                 "application": {
@@ -272,11 +268,10 @@
                                                                                                               "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                           "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
                                                                                                       "type": {"variable": "hydra.topology.TarjanState"}}}}}}},
-                                                                                          "domain": [
-                                                                                            {
-                                                                                              "map": {
-                                                                                                "keys": {"literal": {"integer": {"int32": {}}}},
-                                                                                                "values": {"literal": {"integer": {"int32": {}}}}}}],
+                                                                                          "domain": {
+                                                                                            "map": {
+                                                                                              "keys": {"literal": {"integer": {"int32": {}}}},
+                                                                                              "values": {"literal": {"integer": {"int32": {}}}}}},
                                                                                           "parameter": "field_lowLinks"}}},
                                                                                     "function": {
                                                                                       "application": {
@@ -350,53 +345,50 @@
                                                                                                                                                                                                   "body": {"either": {"@right": {"variable": "i"}}},
                                                                                                                                                                                                   "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                                                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                                                                                                                          "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                                                                                                                                                          "domain": {"literal": {"integer": {"int32": {}}}},
                                                                                                                                                                                           "parameter": "i"}}}}],
-                                                                                                                                                                                "default": [
-                                                                                                                                                                                  {
-                                                                                                                                                                                    "typeApplication": {
-                                                                                                                                                                                      "body": {
-                                                                                                                                                                                        "typeApplication": {
-                                                                                                                                                                                          "body": {
-                                                                                                                                                                                            "either": {
-                                                                                                                                                                                              "@left": {
-                                                                                                                                                                                                "wrap": {
-                                                                                                                                                                                                  "body": {"literal": {"string": "expected int32 value"}},
-                                                                                                                                                                                                  "typeName": "hydra.errors.DecodingError"}}}},
-                                                                                                                                                                                          "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                                                                                                                      "type": {"literal": {"integer": {"int32": {}}}}}}],
+                                                                                                                                                                                "default": {
+                                                                                                                                                                                  "typeApplication": {
+                                                                                                                                                                                    "body": {
+                                                                                                                                                                                      "typeApplication": {
+                                                                                                                                                                                        "body": {
+                                                                                                                                                                                          "either": {
+                                                                                                                                                                                            "@left": {
+                                                                                                                                                                                              "wrap": {
+                                                                                                                                                                                                "body": {"literal": {"string": "expected int32 value"}},
+                                                                                                                                                                                                "typeName": "hydra.errors.DecodingError"}}}},
+                                                                                                                                                                                        "type": {"variable": "hydra.errors.DecodingError"}}},
+                                                                                                                                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                                                                                                 "typeName": "hydra.core.IntegerValue"}}}}}],
-                                                                                                                                                                    "default": [
-                                                                                                                                                                      {
-                                                                                                                                                                        "typeApplication": {
-                                                                                                                                                                          "body": {
-                                                                                                                                                                            "typeApplication": {
-                                                                                                                                                                              "body": {
-                                                                                                                                                                                "either": {
-                                                                                                                                                                                  "@left": {
-                                                                                                                                                                                    "wrap": {
-                                                                                                                                                                                      "body": {"literal": {"string": "expected int32 literal"}},
-                                                                                                                                                                                      "typeName": "hydra.errors.DecodingError"}}}},
-                                                                                                                                                                              "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                                                                                                          "type": {"literal": {"integer": {"int32": {}}}}}}],
+                                                                                                                                                                    "default": {
+                                                                                                                                                                      "typeApplication": {
+                                                                                                                                                                        "body": {
+                                                                                                                                                                          "typeApplication": {
+                                                                                                                                                                            "body": {
+                                                                                                                                                                              "either": {
+                                                                                                                                                                                "@left": {
+                                                                                                                                                                                  "wrap": {
+                                                                                                                                                                                    "body": {"literal": {"string": "expected int32 literal"}},
+                                                                                                                                                                                    "typeName": "hydra.errors.DecodingError"}}}},
+                                                                                                                                                                            "type": {"variable": "hydra.errors.DecodingError"}}},
+                                                                                                                                                                        "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                                                                                     "typeName": "hydra.core.Literal"}}}}}},
-                                                                                                                                                        "domain": [{"variable": "hydra.core.Literal"}],
+                                                                                                                                                        "domain": {"variable": "hydra.core.Literal"},
                                                                                                                                                         "parameter": "v"}}}}],
-                                                                                                                                              "default": [
-                                                                                                                                                {
-                                                                                                                                                  "typeApplication": {
-                                                                                                                                                    "body": {
-                                                                                                                                                      "typeApplication": {
-                                                                                                                                                        "body": {
-                                                                                                                                                          "either": {
-                                                                                                                                                            "@left": {
-                                                                                                                                                              "wrap": {
-                                                                                                                                                                "body": {"literal": {"string": "expected literal"}},
-                                                                                                                                                                "typeName": "hydra.errors.DecodingError"}}}},
-                                                                                                                                                        "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                                                                                    "type": {"literal": {"integer": {"int32": {}}}}}}],
+                                                                                                                                              "default": {
+                                                                                                                                                "typeApplication": {
+                                                                                                                                                  "body": {
+                                                                                                                                                    "typeApplication": {
+                                                                                                                                                      "body": {
+                                                                                                                                                        "either": {
+                                                                                                                                                          "@left": {
+                                                                                                                                                            "wrap": {
+                                                                                                                                                              "body": {"literal": {"string": "expected literal"}},
+                                                                                                                                                              "typeName": "hydra.errors.DecodingError"}}}},
+                                                                                                                                                      "type": {"variable": "hydra.errors.DecodingError"}}},
+                                                                                                                                                  "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                                                               "typeName": "hydra.core.Term"}}}}}},
-                                                                                                                                  "domain": [{"variable": "hydra.core.Term"}],
+                                                                                                                                  "domain": {"variable": "hydra.core.Term"},
                                                                                                                                   "parameter": "stripped"}}},
                                                                                                                             "function": {
                                                                                                                               "application": {
@@ -415,7 +407,7 @@
                                                                                                                                                       "typeName": "hydra.errors.DecodingError"}}}},
                                                                                                                                               "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                                                                      "domain": [{"literal": {"string": {}}}],
+                                                                                                                                      "domain": {"literal": {"string": {}}},
                                                                                                                                       "parameter": "err"}}},
                                                                                                                                 "function": {
                                                                                                                                   "typeApplication": {
@@ -430,9 +422,9 @@
                                                                                                                                       "either": {
                                                                                                                                         "left": {"variable": "hydra.errors.DecodingError"},
                                                                                                                                         "right": {"literal": {"integer": {"int32": {}}}}}}}}}}}}}},
-                                                                                                                    "domain": [{"variable": "hydra.core.Term"}],
+                                                                                                                    "domain": {"variable": "hydra.core.Term"},
                                                                                                                     "parameter": "raw"}}},
-                                                                                                              "domain": [{"variable": "hydra.graph.Graph"}],
+                                                                                                              "domain": {"variable": "hydra.graph.Graph"},
                                                                                                               "parameter": "cx"}}},
                                                                                                         "function": {
                                                                                                           "application": {
@@ -473,11 +465,10 @@
                                                                                                     "keys": {"literal": {"integer": {"int32": {}}}},
                                                                                                     "values": {"literal": {"integer": {"int32": {}}}}}}}},
                                                                                             "type": {"variable": "hydra.topology.TarjanState"}}}}}}},
-                                                                                "domain": [
-                                                                                  {
-                                                                                    "map": {
-                                                                                      "keys": {"literal": {"integer": {"int32": {}}}},
-                                                                                      "values": {"literal": {"integer": {"int32": {}}}}}}],
+                                                                                "domain": {
+                                                                                  "map": {
+                                                                                    "keys": {"literal": {"integer": {"int32": {}}}},
+                                                                                    "values": {"literal": {"integer": {"int32": {}}}}}},
                                                                                 "parameter": "field_indices"}}},
                                                                           "function": {
                                                                             "application": {
@@ -551,53 +542,50 @@
                                                                                                                                                                                         "body": {"either": {"@right": {"variable": "i"}}},
                                                                                                                                                                                         "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                                                                                                     "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                                                                                                                "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                                                                                                                                                "domain": {"literal": {"integer": {"int32": {}}}},
                                                                                                                                                                                 "parameter": "i"}}}}],
-                                                                                                                                                                      "default": [
-                                                                                                                                                                        {
-                                                                                                                                                                          "typeApplication": {
-                                                                                                                                                                            "body": {
-                                                                                                                                                                              "typeApplication": {
-                                                                                                                                                                                "body": {
-                                                                                                                                                                                  "either": {
-                                                                                                                                                                                    "@left": {
-                                                                                                                                                                                      "wrap": {
-                                                                                                                                                                                        "body": {"literal": {"string": "expected int32 value"}},
-                                                                                                                                                                                        "typeName": "hydra.errors.DecodingError"}}}},
-                                                                                                                                                                                "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                                                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}],
+                                                                                                                                                                      "default": {
+                                                                                                                                                                        "typeApplication": {
+                                                                                                                                                                          "body": {
+                                                                                                                                                                            "typeApplication": {
+                                                                                                                                                                              "body": {
+                                                                                                                                                                                "either": {
+                                                                                                                                                                                  "@left": {
+                                                                                                                                                                                    "wrap": {
+                                                                                                                                                                                      "body": {"literal": {"string": "expected int32 value"}},
+                                                                                                                                                                                      "typeName": "hydra.errors.DecodingError"}}}},
+                                                                                                                                                                              "type": {"variable": "hydra.errors.DecodingError"}}},
+                                                                                                                                                                          "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                                                                                       "typeName": "hydra.core.IntegerValue"}}}}}],
-                                                                                                                                                          "default": [
-                                                                                                                                                            {
-                                                                                                                                                              "typeApplication": {
-                                                                                                                                                                "body": {
-                                                                                                                                                                  "typeApplication": {
-                                                                                                                                                                    "body": {
-                                                                                                                                                                      "either": {
-                                                                                                                                                                        "@left": {
-                                                                                                                                                                          "wrap": {
-                                                                                                                                                                            "body": {"literal": {"string": "expected int32 literal"}},
-                                                                                                                                                                            "typeName": "hydra.errors.DecodingError"}}}},
-                                                                                                                                                                    "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                                                                                                "type": {"literal": {"integer": {"int32": {}}}}}}],
+                                                                                                                                                          "default": {
+                                                                                                                                                            "typeApplication": {
+                                                                                                                                                              "body": {
+                                                                                                                                                                "typeApplication": {
+                                                                                                                                                                  "body": {
+                                                                                                                                                                    "either": {
+                                                                                                                                                                      "@left": {
+                                                                                                                                                                        "wrap": {
+                                                                                                                                                                          "body": {"literal": {"string": "expected int32 literal"}},
+                                                                                                                                                                          "typeName": "hydra.errors.DecodingError"}}}},
+                                                                                                                                                                  "type": {"variable": "hydra.errors.DecodingError"}}},
+                                                                                                                                                              "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                                                                           "typeName": "hydra.core.Literal"}}}}}},
-                                                                                                                                              "domain": [{"variable": "hydra.core.Literal"}],
+                                                                                                                                              "domain": {"variable": "hydra.core.Literal"},
                                                                                                                                               "parameter": "v"}}}}],
-                                                                                                                                    "default": [
-                                                                                                                                      {
-                                                                                                                                        "typeApplication": {
-                                                                                                                                          "body": {
-                                                                                                                                            "typeApplication": {
-                                                                                                                                              "body": {
-                                                                                                                                                "either": {
-                                                                                                                                                  "@left": {
-                                                                                                                                                    "wrap": {
-                                                                                                                                                      "body": {"literal": {"string": "expected literal"}},
-                                                                                                                                                      "typeName": "hydra.errors.DecodingError"}}}},
-                                                                                                                                              "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                                                                          "type": {"literal": {"integer": {"int32": {}}}}}}],
+                                                                                                                                    "default": {
+                                                                                                                                      "typeApplication": {
+                                                                                                                                        "body": {
+                                                                                                                                          "typeApplication": {
+                                                                                                                                            "body": {
+                                                                                                                                              "either": {
+                                                                                                                                                "@left": {
+                                                                                                                                                  "wrap": {
+                                                                                                                                                    "body": {"literal": {"string": "expected literal"}},
+                                                                                                                                                    "typeName": "hydra.errors.DecodingError"}}}},
+                                                                                                                                            "type": {"variable": "hydra.errors.DecodingError"}}},
+                                                                                                                                        "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                                                     "typeName": "hydra.core.Term"}}}}}},
-                                                                                                                        "domain": [{"variable": "hydra.core.Term"}],
+                                                                                                                        "domain": {"variable": "hydra.core.Term"},
                                                                                                                         "parameter": "stripped"}}},
                                                                                                                   "function": {
                                                                                                                     "application": {
@@ -616,7 +604,7 @@
                                                                                                                                             "typeName": "hydra.errors.DecodingError"}}}},
                                                                                                                                     "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                                                 "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                                                            "domain": [{"literal": {"string": {}}}],
+                                                                                                                            "domain": {"literal": {"string": {}}},
                                                                                                                             "parameter": "err"}}},
                                                                                                                       "function": {
                                                                                                                         "typeApplication": {
@@ -631,9 +619,9 @@
                                                                                                                             "either": {
                                                                                                                               "left": {"variable": "hydra.errors.DecodingError"},
                                                                                                                               "right": {"literal": {"integer": {"int32": {}}}}}}}}}}}}}},
-                                                                                                          "domain": [{"variable": "hydra.core.Term"}],
+                                                                                                          "domain": {"variable": "hydra.core.Term"},
                                                                                                           "parameter": "raw"}}},
-                                                                                                    "domain": [{"variable": "hydra.graph.Graph"}],
+                                                                                                    "domain": {"variable": "hydra.graph.Graph"},
                                                                                                     "parameter": "cx"}}},
                                                                                               "function": {
                                                                                                 "application": {
@@ -674,7 +662,7 @@
                                                                                           "keys": {"literal": {"integer": {"int32": {}}}},
                                                                                           "values": {"literal": {"integer": {"int32": {}}}}}}}},
                                                                                   "type": {"variable": "hydra.topology.TarjanState"}}}}}}},
-                                                                      "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                                      "domain": {"literal": {"integer": {"int32": {}}}},
                                                                       "parameter": "field_counter"}}},
                                                                 "function": {
                                                                   "application": {
@@ -746,53 +734,50 @@
                                                                                                                                                                           "body": {"either": {"@right": {"variable": "i"}}},
                                                                                                                                                                           "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                                                                                                  "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                                                                                                                                  "domain": {"literal": {"integer": {"int32": {}}}},
                                                                                                                                                                   "parameter": "i"}}}}],
-                                                                                                                                                        "default": [
-                                                                                                                                                          {
-                                                                                                                                                            "typeApplication": {
-                                                                                                                                                              "body": {
-                                                                                                                                                                "typeApplication": {
-                                                                                                                                                                  "body": {
-                                                                                                                                                                    "either": {
-                                                                                                                                                                      "@left": {
-                                                                                                                                                                        "wrap": {
-                                                                                                                                                                          "body": {"literal": {"string": "expected int32 value"}},
-                                                                                                                                                                          "typeName": "hydra.errors.DecodingError"}}}},
-                                                                                                                                                                  "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                                                                                              "type": {"literal": {"integer": {"int32": {}}}}}}],
+                                                                                                                                                        "default": {
+                                                                                                                                                          "typeApplication": {
+                                                                                                                                                            "body": {
+                                                                                                                                                              "typeApplication": {
+                                                                                                                                                                "body": {
+                                                                                                                                                                  "either": {
+                                                                                                                                                                    "@left": {
+                                                                                                                                                                      "wrap": {
+                                                                                                                                                                        "body": {"literal": {"string": "expected int32 value"}},
+                                                                                                                                                                        "typeName": "hydra.errors.DecodingError"}}}},
+                                                                                                                                                                "type": {"variable": "hydra.errors.DecodingError"}}},
+                                                                                                                                                            "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                                                                         "typeName": "hydra.core.IntegerValue"}}}}}],
-                                                                                                                                            "default": [
-                                                                                                                                              {
-                                                                                                                                                "typeApplication": {
-                                                                                                                                                  "body": {
-                                                                                                                                                    "typeApplication": {
-                                                                                                                                                      "body": {
-                                                                                                                                                        "either": {
-                                                                                                                                                          "@left": {
-                                                                                                                                                            "wrap": {
-                                                                                                                                                              "body": {"literal": {"string": "expected int32 literal"}},
-                                                                                                                                                              "typeName": "hydra.errors.DecodingError"}}}},
-                                                                                                                                                      "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                                                                                  "type": {"literal": {"integer": {"int32": {}}}}}}],
+                                                                                                                                            "default": {
+                                                                                                                                              "typeApplication": {
+                                                                                                                                                "body": {
+                                                                                                                                                  "typeApplication": {
+                                                                                                                                                    "body": {
+                                                                                                                                                      "either": {
+                                                                                                                                                        "@left": {
+                                                                                                                                                          "wrap": {
+                                                                                                                                                            "body": {"literal": {"string": "expected int32 literal"}},
+                                                                                                                                                            "typeName": "hydra.errors.DecodingError"}}}},
+                                                                                                                                                    "type": {"variable": "hydra.errors.DecodingError"}}},
+                                                                                                                                                "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                                                             "typeName": "hydra.core.Literal"}}}}}},
-                                                                                                                                "domain": [{"variable": "hydra.core.Literal"}],
+                                                                                                                                "domain": {"variable": "hydra.core.Literal"},
                                                                                                                                 "parameter": "v"}}}}],
-                                                                                                                      "default": [
-                                                                                                                        {
-                                                                                                                          "typeApplication": {
-                                                                                                                            "body": {
-                                                                                                                              "typeApplication": {
-                                                                                                                                "body": {
-                                                                                                                                  "either": {
-                                                                                                                                    "@left": {
-                                                                                                                                      "wrap": {
-                                                                                                                                        "body": {"literal": {"string": "expected literal"}},
-                                                                                                                                        "typeName": "hydra.errors.DecodingError"}}}},
-                                                                                                                                "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}],
+                                                                                                                      "default": {
+                                                                                                                        "typeApplication": {
+                                                                                                                          "body": {
+                                                                                                                            "typeApplication": {
+                                                                                                                              "body": {
+                                                                                                                                "either": {
+                                                                                                                                  "@left": {
+                                                                                                                                    "wrap": {
+                                                                                                                                      "body": {"literal": {"string": "expected literal"}},
+                                                                                                                                      "typeName": "hydra.errors.DecodingError"}}}},
+                                                                                                                              "type": {"variable": "hydra.errors.DecodingError"}}},
+                                                                                                                          "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                                       "typeName": "hydra.core.Term"}}}}}},
-                                                                                                          "domain": [{"variable": "hydra.core.Term"}],
+                                                                                                          "domain": {"variable": "hydra.core.Term"},
                                                                                                           "parameter": "stripped"}}},
                                                                                                     "function": {
                                                                                                       "application": {
@@ -811,7 +796,7 @@
                                                                                                                               "typeName": "hydra.errors.DecodingError"}}}},
                                                                                                                       "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                                   "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                                              "domain": [{"literal": {"string": {}}}],
+                                                                                                              "domain": {"literal": {"string": {}}},
                                                                                                               "parameter": "err"}}},
                                                                                                         "function": {
                                                                                                           "typeApplication": {
@@ -826,9 +811,9 @@
                                                                                                               "either": {
                                                                                                                 "left": {"variable": "hydra.errors.DecodingError"},
                                                                                                                 "right": {"literal": {"integer": {"int32": {}}}}}}}}}}}}}},
-                                                                                            "domain": [{"variable": "hydra.core.Term"}],
+                                                                                            "domain": {"variable": "hydra.core.Term"},
                                                                                             "parameter": "raw"}}},
-                                                                                      "domain": [{"variable": "hydra.graph.Graph"}],
+                                                                                      "domain": {"variable": "hydra.graph.Graph"},
                                                                                       "parameter": "cx"}}},
                                                                                 "function": {
                                                                                   "application": {
@@ -853,23 +838,22 @@
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                             "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                         "type": {"variable": "hydra.topology.TarjanState"}}}}}}}}},
-                                                        "domain": [{"variable": "hydra.core.Record"}],
+                                                        "domain": {"variable": "hydra.core.Record"},
                                                         "parameter": "record"}}}}],
-                                              "default": [
-                                                {
-                                                  "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "either": {
-                                                            "@left": {
-                                                              "wrap": {
-                                                                "body": {"literal": {"string": "expected record"}},
-                                                                "typeName": "hydra.errors.DecodingError"}}}},
-                                                        "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                    "type": {"variable": "hydra.topology.TarjanState"}}}],
+                                              "default": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "either": {
+                                                          "@left": {
+                                                            "wrap": {
+                                                              "body": {"literal": {"string": "expected record"}},
+                                                              "typeName": "hydra.errors.DecodingError"}}}},
+                                                      "type": {"variable": "hydra.errors.DecodingError"}}},
+                                                  "type": {"variable": "hydra.topology.TarjanState"}}},
                                               "typeName": "hydra.core.Term"}}}}}},
-                                  "domain": [{"variable": "hydra.core.Term"}],
+                                  "domain": {"variable": "hydra.core.Term"},
                                   "parameter": "stripped"}}},
                             "function": {
                               "application": {
@@ -888,7 +872,7 @@
                                                       "typeName": "hydra.errors.DecodingError"}}}},
                                               "type": {"variable": "hydra.errors.DecodingError"}}},
                                           "type": {"variable": "hydra.topology.TarjanState"}}},
-                                      "domain": [{"literal": {"string": {}}}],
+                                      "domain": {"literal": {"string": {}}},
                                       "parameter": "err"}}},
                                 "function": {
                                   "typeApplication": {
@@ -903,24 +887,22 @@
                                       "either": {
                                         "left": {"variable": "hydra.errors.DecodingError"},
                                         "right": {"variable": "hydra.topology.TarjanState"}}}}}}}}}}},
-                    "domain": [{"variable": "hydra.core.Term"}],
+                    "domain": {"variable": "hydra.core.Term"},
                     "parameter": "raw"}}},
-              "domain": [{"variable": "hydra.graph.Graph"}],
+              "domain": {"variable": "hydra.graph.Graph"},
               "parameter": "cx"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "either": {
-                        "left": {"variable": "hydra.errors.DecodingError"},
-                        "right": {"variable": "hydra.topology.TarjanState"}}},
-                    "domain": {"variable": "hydra.core.Term"}}},
-                "domain": {"variable": "hydra.graph.Graph"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "either": {
+                      "left": {"variable": "hydra.errors.DecodingError"},
+                      "right": {"variable": "hydra.topology.TarjanState"}}},
+                  "domain": {"variable": "hydra.core.Term"}}},
+              "domain": {"variable": "hydra.graph.Graph"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.decode.topology.vertex",
@@ -984,53 +966,50 @@
                                                                                                   "body": {"either": {"@right": {"variable": "i"}}},
                                                                                                   "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                               "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                          "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                                                          "domain": {"literal": {"integer": {"int32": {}}}},
                                                                                           "parameter": "i"}}}}],
-                                                                                "default": [
-                                                                                  {
-                                                                                    "typeApplication": {
-                                                                                      "body": {
-                                                                                        "typeApplication": {
-                                                                                          "body": {
-                                                                                            "either": {
-                                                                                              "@left": {
-                                                                                                "wrap": {
-                                                                                                  "body": {"literal": {"string": "expected int32 value"}},
-                                                                                                  "typeName": "hydra.errors.DecodingError"}}}},
-                                                                                          "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                      "type": {"literal": {"integer": {"int32": {}}}}}}],
+                                                                                "default": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "either": {
+                                                                                            "@left": {
+                                                                                              "wrap": {
+                                                                                                "body": {"literal": {"string": "expected int32 value"}},
+                                                                                                "typeName": "hydra.errors.DecodingError"}}}},
+                                                                                        "type": {"variable": "hydra.errors.DecodingError"}}},
+                                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                 "typeName": "hydra.core.IntegerValue"}}}}}],
-                                                                    "default": [
-                                                                      {
-                                                                        "typeApplication": {
-                                                                          "body": {
-                                                                            "typeApplication": {
-                                                                              "body": {
-                                                                                "either": {
-                                                                                  "@left": {
-                                                                                    "wrap": {
-                                                                                      "body": {"literal": {"string": "expected int32 literal"}},
-                                                                                      "typeName": "hydra.errors.DecodingError"}}}},
-                                                                              "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                          "type": {"literal": {"integer": {"int32": {}}}}}}],
+                                                                    "default": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "either": {
+                                                                                "@left": {
+                                                                                  "wrap": {
+                                                                                    "body": {"literal": {"string": "expected int32 literal"}},
+                                                                                    "typeName": "hydra.errors.DecodingError"}}}},
+                                                                            "type": {"variable": "hydra.errors.DecodingError"}}},
+                                                                        "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                     "typeName": "hydra.core.Literal"}}}}}},
-                                                        "domain": [{"variable": "hydra.core.Literal"}],
+                                                        "domain": {"variable": "hydra.core.Literal"},
                                                         "parameter": "v"}}}}],
-                                              "default": [
-                                                {
-                                                  "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "either": {
-                                                            "@left": {
-                                                              "wrap": {
-                                                                "body": {"literal": {"string": "expected literal"}},
-                                                                "typeName": "hydra.errors.DecodingError"}}}},
-                                                        "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                    "type": {"literal": {"integer": {"int32": {}}}}}}],
+                                              "default": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "either": {
+                                                          "@left": {
+                                                            "wrap": {
+                                                              "body": {"literal": {"string": "expected literal"}},
+                                                              "typeName": "hydra.errors.DecodingError"}}}},
+                                                      "type": {"variable": "hydra.errors.DecodingError"}}},
+                                                  "type": {"literal": {"integer": {"int32": {}}}}}},
                                               "typeName": "hydra.core.Term"}}}}}},
-                                  "domain": [{"variable": "hydra.core.Term"}],
+                                  "domain": {"variable": "hydra.core.Term"},
                                   "parameter": "stripped"}}},
                             "function": {
                               "application": {
@@ -1049,7 +1028,7 @@
                                                       "typeName": "hydra.errors.DecodingError"}}}},
                                               "type": {"variable": "hydra.errors.DecodingError"}}},
                                           "type": {"literal": {"integer": {"int32": {}}}}}},
-                                      "domain": [{"literal": {"string": {}}}],
+                                      "domain": {"literal": {"string": {}}},
                                       "parameter": "err"}}},
                                 "function": {
                                   "typeApplication": {
@@ -1064,25 +1043,23 @@
                                       "either": {
                                         "left": {"variable": "hydra.errors.DecodingError"},
                                         "right": {"literal": {"integer": {"int32": {}}}}}}}}}}}}}},
-                    "domain": [{"variable": "hydra.core.Term"}],
+                    "domain": {"variable": "hydra.core.Term"},
                     "parameter": "raw"}}},
-              "domain": [{"variable": "hydra.graph.Graph"}],
+              "domain": {"variable": "hydra.graph.Graph"},
               "parameter": "cx"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "either": {
-                        "left": {"variable": "hydra.errors.DecodingError"},
-                        "right": {"literal": {"integer": {"int32": {}}}}}},
-                    "domain": {"variable": "hydra.core.Term"}}},
-                "domain": {"variable": "hydra.graph.Graph"}}},
-            "variables": []}]}}],
-  "description": ["Term decoders for hydra.topology"],
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "either": {
+                      "left": {"variable": "hydra.errors.DecodingError"},
+                      "right": {"literal": {"integer": {"int32": {}}}}}},
+                  "domain": {"variable": "hydra.core.Term"}}},
+              "domain": {"variable": "hydra.graph.Graph"}}},
+          "variables": []}}}],
+  "description": "Term decoders for hydra.topology",
   "namespace": "hydra.decode.topology",
   "termDependencies": [
     "hydra.extract.core",

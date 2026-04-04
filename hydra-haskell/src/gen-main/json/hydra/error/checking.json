@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.error.checking.CheckingError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -118,7 +117,6 @@
       "type": {
         "name": "hydra.error.checking.IncorrectUnificationError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -143,7 +141,6 @@
       "type": {
         "name": "hydra.error.checking.NotAForallTypeError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -177,7 +174,6 @@
       "type": {
         "name": "hydra.error.checking.NotAFunctionTypeError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -202,7 +198,6 @@
       "type": {
         "name": "hydra.error.checking.TypeArityMismatchError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -255,7 +250,6 @@
       "type": {
         "name": "hydra.error.checking.TypeMismatchError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -288,7 +282,6 @@
       "type": {
         "name": "hydra.error.checking.UnboundTypeVariablesError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -322,7 +315,6 @@
       "type": {
         "name": "hydra.error.checking.UnequalTypesError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -357,7 +349,6 @@
       "type": {
         "name": "hydra.error.checking.UnsupportedTermVariantError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -381,7 +372,6 @@
       "type": {
         "name": "hydra.error.checking.UntypedLambdaError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -396,7 +386,6 @@
       "type": {
         "name": "hydra.error.checking.UntypedLetBindingError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -415,7 +404,7 @@
                             "@value": {"literal": {"string": "The untyped binding"}}}],
                         "body": {"variable": "hydra.core.Binding"}}}}]}}},
           "variables": []}}}],
-  "description": ["Error types for type checking"],
+  "description": "Error types for type checking",
   "namespace": "hydra.error.checking",
   "termDependencies": ["hydra.core", "hydra.typing", "hydra.variants"],
   "typeDependencies": ["hydra.core", "hydra.typing", "hydra.variants"]}

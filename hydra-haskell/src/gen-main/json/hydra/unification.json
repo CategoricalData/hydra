@@ -32,11 +32,7 @@
                                               "application": {
                                                 "argument": {"variable": "left"},
                                                 "function": {"variable": "hydra.strip.deannotateType"}}},
-                                            "type": [
-                                              {
-                                                "constraints": null,
-                                                "type": {"variable": "hydra.core.Type"},
-                                                "variables": []}]}],
+                                            "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
                                         "body": {
                                           "let": {
                                             "bindings": [
@@ -46,11 +42,7 @@
                                                   "application": {
                                                     "argument": {"variable": "right"},
                                                     "function": {"variable": "hydra.strip.deannotateType"}}},
-                                                "type": [
-                                                  {
-                                                    "constraints": null,
-                                                    "type": {"variable": "hydra.core.Type"},
-                                                    "variables": []}]}],
+                                                "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
                                             "body": {
                                               "let": {
                                                 "bindings": [
@@ -77,21 +69,19 @@
                                                                                 "argument": {"literal": {"string": "join types; "}},
                                                                                 "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}}}],
                                                                     "typeName": "hydra.typing.TypeConstraint"}},
-                                                                "domain": [{"variable": "hydra.core.Type"}],
+                                                                "domain": {"variable": "hydra.core.Type"},
                                                                 "parameter": "r"}}},
-                                                          "domain": [{"variable": "hydra.core.Type"}],
+                                                          "domain": {"variable": "hydra.core.Type"},
                                                           "parameter": "l"}}},
-                                                    "type": [
-                                                      {
-                                                        "constraints": null,
-                                                        "type": {
-                                                          "function": {
-                                                            "codomain": {
-                                                              "function": {
-                                                                "codomain": {"variable": "hydra.typing.TypeConstraint"},
-                                                                "domain": {"variable": "hydra.core.Type"}}},
-                                                            "domain": {"variable": "hydra.core.Type"}}},
-                                                        "variables": []}]}],
+                                                    "type": {
+                                                      "type": {
+                                                        "function": {
+                                                          "codomain": {
+                                                            "function": {
+                                                              "codomain": {"variable": "hydra.typing.TypeConstraint"},
+                                                              "domain": {"variable": "hydra.core.Type"}}},
+                                                          "domain": {"variable": "hydra.core.Type"}}},
+                                                      "variables": []}}],
                                                 "body": {
                                                   "let": {
                                                     "bindings": [
@@ -154,17 +144,15 @@
                                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                                 "type": {"variable": "t0"}}},
                                                             "parameter": "t0"}},
-                                                        "type": [
-                                                          {
-                                                            "constraints": null,
-                                                            "type": {
-                                                              "either": {
-                                                                "left": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                    "function": {"variable": "hydra.context.InContext"}}},
-                                                                "right": {"variable": "t0"}}},
-                                                            "variables": ["t0"]}]}],
+                                                        "type": {
+                                                          "type": {
+                                                            "either": {
+                                                              "left": {
+                                                                "application": {
+                                                                  "argument": {"variable": "hydra.errors.UnificationError"},
+                                                                  "function": {"variable": "hydra.context.InContext"}}},
+                                                              "right": {"variable": "t0"}}},
+                                                          "variables": ["t0"]}}],
                                                     "body": {
                                                       "let": {
                                                         "bindings": [
@@ -216,17 +204,15 @@
                                                                                         "function": {"variable": "hydra.context.InContext"}}},
                                                                                     "right": {"list": {"variable": "t0"}}}}}}}}}}}},
                                                                 "parameter": "t0"}},
-                                                            "type": [
-                                                              {
-                                                                "constraints": null,
-                                                                "type": {
-                                                                  "either": {
-                                                                    "left": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                        "function": {"variable": "hydra.context.InContext"}}},
-                                                                    "right": {"list": {"variable": "t0"}}}},
-                                                                "variables": ["t0"]}]}],
+                                                            "type": {
+                                                              "type": {
+                                                                "either": {
+                                                                  "left": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
+                                                                      "function": {"variable": "hydra.context.InContext"}}},
+                                                                  "right": {"list": {"variable": "t0"}}}},
+                                                              "variables": ["t0"]}}],
                                                         "body": {
                                                           "let": {
                                                             "bindings": [
@@ -310,27 +296,25 @@
                                                                                                     "argument": {"variable": "hydra.errors.UnificationError"},
                                                                                                     "function": {"variable": "hydra.context.InContext"}}},
                                                                                                 "right": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}}}}}}}}},
-                                                                            "domain": [{"list": {"variable": "hydra.core.Type"}}],
+                                                                            "domain": {"list": {"variable": "hydra.core.Type"}},
                                                                             "parameter": "rights"}}},
-                                                                      "domain": [{"list": {"variable": "hydra.core.Type"}}],
+                                                                      "domain": {"list": {"variable": "hydra.core.Type"}},
                                                                       "parameter": "lefts"}}},
-                                                                "type": [
-                                                                  {
-                                                                    "constraints": null,
-                                                                    "type": {
-                                                                      "function": {
-                                                                        "codomain": {
-                                                                          "function": {
-                                                                            "codomain": {
-                                                                              "either": {
-                                                                                "left": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                    "function": {"variable": "hydra.context.InContext"}}},
-                                                                                "right": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
-                                                                            "domain": {"list": {"variable": "hydra.core.Type"}}}},
-                                                                        "domain": {"list": {"variable": "hydra.core.Type"}}}},
-                                                                    "variables": []}]}],
+                                                                "type": {
+                                                                  "type": {
+                                                                    "function": {
+                                                                      "codomain": {
+                                                                        "function": {
+                                                                          "codomain": {
+                                                                            "either": {
+                                                                              "left": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "hydra.errors.UnificationError"},
+                                                                                  "function": {"variable": "hydra.context.InContext"}}},
+                                                                              "right": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
+                                                                          "domain": {"list": {"variable": "hydra.core.Type"}}}},
+                                                                      "domain": {"list": {"variable": "hydra.core.Type"}}}},
+                                                                  "variables": []}}],
                                                             "body": {
                                                               "let": {
                                                                 "bindings": [
@@ -449,9 +433,9 @@
                                                                                                                                       "typeApplication": {
                                                                                                                                         "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
                                                                                                                                         "type": {"literal": {"string": {}}}}}}}}},
-                                                                                                                            "domain": [{"variable": "hydra.core.Name"}],
+                                                                                                                            "domain": {"variable": "hydra.core.Name"},
                                                                                                                             "parameter": "right"}}},
-                                                                                                                      "domain": [{"variable": "hydra.core.Name"}],
+                                                                                                                      "domain": {"variable": "hydra.core.Name"},
                                                                                                                       "parameter": "left"}}},
                                                                                                                 "function": {
                                                                                                                   "typeApplication": {
@@ -539,27 +523,25 @@
                                                                                                         "argument": {"variable": "hydra.errors.UnificationError"},
                                                                                                         "function": {"variable": "hydra.context.InContext"}}},
                                                                                                     "right": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}}}}}}}}},
-                                                                                "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                                                "domain": {"list": {"variable": "hydra.core.FieldType"}},
                                                                                 "parameter": "right"}}},
-                                                                          "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                                          "domain": {"list": {"variable": "hydra.core.FieldType"}},
                                                                           "parameter": "left"}}},
-                                                                    "type": [
-                                                                      {
-                                                                        "constraints": null,
-                                                                        "type": {
-                                                                          "function": {
-                                                                            "codomain": {
-                                                                              "function": {
-                                                                                "codomain": {
-                                                                                  "either": {
-                                                                                    "left": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                        "function": {"variable": "hydra.context.InContext"}}},
-                                                                                    "right": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
-                                                                                "domain": {"list": {"variable": "hydra.core.FieldType"}}}},
-                                                                            "domain": {"list": {"variable": "hydra.core.FieldType"}}}},
-                                                                        "variables": []}]}],
+                                                                    "type": {
+                                                                      "type": {
+                                                                        "function": {
+                                                                          "codomain": {
+                                                                            "function": {
+                                                                              "codomain": {
+                                                                                "either": {
+                                                                                  "left": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
+                                                                                      "function": {"variable": "hydra.context.InContext"}}},
+                                                                                  "right": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
+                                                                              "domain": {"list": {"variable": "hydra.core.FieldType"}}}},
+                                                                          "domain": {"list": {"variable": "hydra.core.FieldType"}}}},
+                                                                      "variables": []}}],
                                                                 "body": {
                                                                   "application": {
                                                                     "argument": {"variable": "sleft"},
@@ -637,15 +619,14 @@
                                                                                                                         "argument": {"variable": "hydra.errors.UnificationError"},
                                                                                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                                 "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
-                                                                                                            "domain": [{"variable": "hydra.core.ApplicationType"}],
+                                                                                                            "domain": {"variable": "hydra.core.ApplicationType"},
                                                                                                             "parameter": "r"}}}}],
-                                                                                                  "default": [
-                                                                                                    {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {"variable": "cannotUnify"},
-                                                                                                        "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}],
+                                                                                                  "default": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"variable": "cannotUnify"},
+                                                                                                      "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "typeName": "hydra.core.Type"}}}}}},
-                                                                                      "domain": [{"variable": "hydra.core.ApplicationType"}],
+                                                                                      "domain": {"variable": "hydra.core.ApplicationType"},
                                                                                       "parameter": "l"}}}},
                                                                               {
                                                                                 "name": "either",
@@ -712,15 +693,14 @@
                                                                                                                         "argument": {"variable": "hydra.errors.UnificationError"},
                                                                                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                                 "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
-                                                                                                            "domain": [{"variable": "hydra.core.EitherType"}],
+                                                                                                            "domain": {"variable": "hydra.core.EitherType"},
                                                                                                             "parameter": "r"}}}}],
-                                                                                                  "default": [
-                                                                                                    {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {"variable": "cannotUnify"},
-                                                                                                        "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}],
+                                                                                                  "default": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"variable": "cannotUnify"},
+                                                                                                      "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "typeName": "hydra.core.Type"}}}}}},
-                                                                                      "domain": [{"variable": "hydra.core.EitherType"}],
+                                                                                      "domain": {"variable": "hydra.core.EitherType"},
                                                                                       "parameter": "l"}}}},
                                                                               {
                                                                                 "name": "function",
@@ -789,15 +769,14 @@
                                                                                                                         "argument": {"variable": "hydra.errors.UnificationError"},
                                                                                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                                 "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
-                                                                                                            "domain": [{"variable": "hydra.core.FunctionType"}],
+                                                                                                            "domain": {"variable": "hydra.core.FunctionType"},
                                                                                                             "parameter": "r"}}}}],
-                                                                                                  "default": [
-                                                                                                    {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {"variable": "cannotUnify"},
-                                                                                                        "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}],
+                                                                                                  "default": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"variable": "cannotUnify"},
+                                                                                                      "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "typeName": "hydra.core.Type"}}}}}},
-                                                                                      "domain": [{"variable": "hydra.core.FunctionType"}],
+                                                                                      "domain": {"variable": "hydra.core.FunctionType"},
                                                                                       "parameter": "l"}}}},
                                                                               {
                                                                                 "name": "list",
@@ -835,15 +814,14 @@
                                                                                                                         "argument": {"variable": "hydra.errors.UnificationError"},
                                                                                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                                 "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
-                                                                                                            "domain": [{"variable": "hydra.core.Type"}],
+                                                                                                            "domain": {"variable": "hydra.core.Type"},
                                                                                                             "parameter": "r"}}}}],
-                                                                                                  "default": [
-                                                                                                    {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {"variable": "cannotUnify"},
-                                                                                                        "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}],
+                                                                                                  "default": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"variable": "cannotUnify"},
+                                                                                                      "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "typeName": "hydra.core.Type"}}}}}},
-                                                                                      "domain": [{"variable": "hydra.core.Type"}],
+                                                                                      "domain": {"variable": "hydra.core.Type"},
                                                                                       "parameter": "l"}}}},
                                                                               {
                                                                                 "name": "literal",
@@ -854,7 +832,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {"variable": "assertEqual"},
                                                                                           "type": {"variable": "hydra.typing.TypeConstraint"}}},
-                                                                                      "domain": [{"variable": "hydra.core.LiteralType"}],
+                                                                                      "domain": {"variable": "hydra.core.LiteralType"},
                                                                                       "parameter": "_"}}}},
                                                                               {
                                                                                 "name": "map",
@@ -921,15 +899,14 @@
                                                                                                                         "argument": {"variable": "hydra.errors.UnificationError"},
                                                                                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                                 "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
-                                                                                                            "domain": [{"variable": "hydra.core.MapType"}],
+                                                                                                            "domain": {"variable": "hydra.core.MapType"},
                                                                                                             "parameter": "r"}}}}],
-                                                                                                  "default": [
-                                                                                                    {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {"variable": "cannotUnify"},
-                                                                                                        "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}],
+                                                                                                  "default": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"variable": "cannotUnify"},
+                                                                                                      "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "typeName": "hydra.core.Type"}}}}}},
-                                                                                      "domain": [{"variable": "hydra.core.MapType"}],
+                                                                                      "domain": {"variable": "hydra.core.MapType"},
                                                                                       "parameter": "l"}}}},
                                                                               {
                                                                                 "name": "maybe",
@@ -967,15 +944,14 @@
                                                                                                                         "argument": {"variable": "hydra.errors.UnificationError"},
                                                                                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                                 "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
-                                                                                                            "domain": [{"variable": "hydra.core.Type"}],
+                                                                                                            "domain": {"variable": "hydra.core.Type"},
                                                                                                             "parameter": "r"}}}}],
-                                                                                                  "default": [
-                                                                                                    {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {"variable": "cannotUnify"},
-                                                                                                        "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}],
+                                                                                                  "default": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"variable": "cannotUnify"},
+                                                                                                      "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "typeName": "hydra.core.Type"}}}}}},
-                                                                                      "domain": [{"variable": "hydra.core.Type"}],
+                                                                                      "domain": {"variable": "hydra.core.Type"},
                                                                                       "parameter": "l"}}}},
                                                                               {
                                                                                 "name": "pair",
@@ -1042,15 +1018,14 @@
                                                                                                                         "argument": {"variable": "hydra.errors.UnificationError"},
                                                                                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                                 "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
-                                                                                                            "domain": [{"variable": "hydra.core.PairType"}],
+                                                                                                            "domain": {"variable": "hydra.core.PairType"},
                                                                                                             "parameter": "r"}}}}],
-                                                                                                  "default": [
-                                                                                                    {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {"variable": "cannotUnify"},
-                                                                                                        "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}],
+                                                                                                  "default": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"variable": "cannotUnify"},
+                                                                                                      "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "typeName": "hydra.core.Type"}}}}}},
-                                                                                      "domain": [{"variable": "hydra.core.PairType"}],
+                                                                                      "domain": {"variable": "hydra.core.PairType"},
                                                                                       "parameter": "l"}}}},
                                                                               {
                                                                                 "name": "record",
@@ -1077,15 +1052,14 @@
                                                                                                                   "application": {
                                                                                                                     "argument": {"variable": "l"},
                                                                                                                     "function": {"variable": "joinRowTypes"}}}}},
-                                                                                                            "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                                                                            "domain": {"list": {"variable": "hydra.core.FieldType"}},
                                                                                                             "parameter": "r"}}}}],
-                                                                                                  "default": [
-                                                                                                    {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {"variable": "cannotUnify"},
-                                                                                                        "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}],
+                                                                                                  "default": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"variable": "cannotUnify"},
+                                                                                                      "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "typeName": "hydra.core.Type"}}}}}},
-                                                                                      "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                                                      "domain": {"list": {"variable": "hydra.core.FieldType"}},
                                                                                       "parameter": "l"}}}},
                                                                               {
                                                                                 "name": "set",
@@ -1123,15 +1097,14 @@
                                                                                                                         "argument": {"variable": "hydra.errors.UnificationError"},
                                                                                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                                 "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
-                                                                                                            "domain": [{"variable": "hydra.core.Type"}],
+                                                                                                            "domain": {"variable": "hydra.core.Type"},
                                                                                                             "parameter": "r"}}}}],
-                                                                                                  "default": [
-                                                                                                    {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {"variable": "cannotUnify"},
-                                                                                                        "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}],
+                                                                                                  "default": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"variable": "cannotUnify"},
+                                                                                                      "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "typeName": "hydra.core.Type"}}}}}},
-                                                                                      "domain": [{"variable": "hydra.core.Type"}],
+                                                                                      "domain": {"variable": "hydra.core.Type"},
                                                                                       "parameter": "l"}}}},
                                                                               {
                                                                                 "name": "union",
@@ -1158,15 +1131,14 @@
                                                                                                                   "application": {
                                                                                                                     "argument": {"variable": "l"},
                                                                                                                     "function": {"variable": "joinRowTypes"}}}}},
-                                                                                                            "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                                                                            "domain": {"list": {"variable": "hydra.core.FieldType"}},
                                                                                                             "parameter": "r"}}}}],
-                                                                                                  "default": [
-                                                                                                    {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {"variable": "cannotUnify"},
-                                                                                                        "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}],
+                                                                                                  "default": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"variable": "cannotUnify"},
+                                                                                                      "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "typeName": "hydra.core.Type"}}}}}},
-                                                                                      "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                                                      "domain": {"list": {"variable": "hydra.core.FieldType"}},
                                                                                       "parameter": "l"}}}},
                                                                               {
                                                                                 "name": "unit",
@@ -1201,15 +1173,14 @@
                                                                                                                         "argument": {"variable": "hydra.errors.UnificationError"},
                                                                                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                                 "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
-                                                                                                            "domain": [{"unit": {}}],
+                                                                                                            "domain": {"unit": {}},
                                                                                                             "parameter": "_"}}}}],
-                                                                                                  "default": [
-                                                                                                    {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {"variable": "cannotUnify"},
-                                                                                                        "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}],
+                                                                                                  "default": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"variable": "cannotUnify"},
+                                                                                                      "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "typeName": "hydra.core.Type"}}}}}},
-                                                                                      "domain": [{"unit": {}}],
+                                                                                      "domain": {"unit": {}},
                                                                                       "parameter": "_"}}}},
                                                                               {
                                                                                 "name": "void",
@@ -1244,15 +1215,14 @@
                                                                                                                         "argument": {"variable": "hydra.errors.UnificationError"},
                                                                                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                                 "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
-                                                                                                            "domain": [{"unit": {}}],
+                                                                                                            "domain": {"unit": {}},
                                                                                                             "parameter": "_"}}}}],
-                                                                                                  "default": [
-                                                                                                    {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {"variable": "cannotUnify"},
-                                                                                                        "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}],
+                                                                                                  "default": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"variable": "cannotUnify"},
+                                                                                                      "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "typeName": "hydra.core.Type"}}}}}},
-                                                                                      "domain": [{"unit": {}}],
+                                                                                      "domain": {"unit": {}},
                                                                                       "parameter": "_"}}}},
                                                                               {
                                                                                 "name": "wrap",
@@ -1290,53 +1260,49 @@
                                                                                                                         "argument": {"variable": "hydra.errors.UnificationError"},
                                                                                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                                 "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
-                                                                                                            "domain": [{"variable": "hydra.core.Type"}],
+                                                                                                            "domain": {"variable": "hydra.core.Type"},
                                                                                                             "parameter": "r"}}}}],
-                                                                                                  "default": [
-                                                                                                    {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {"variable": "cannotUnify"},
-                                                                                                        "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}],
+                                                                                                  "default": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"variable": "cannotUnify"},
+                                                                                                      "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "typeName": "hydra.core.Type"}}}}}},
-                                                                                      "domain": [{"variable": "hydra.core.Type"}],
+                                                                                      "domain": {"variable": "hydra.core.Type"},
                                                                                       "parameter": "l"}}}}],
-                                                                            "default": [
-                                                                              {
-                                                                                "typeApplication": {
-                                                                                  "body": {"variable": "cannotUnify"},
-                                                                                  "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}],
+                                                                            "default": {
+                                                                              "typeApplication": {
+                                                                                "body": {"variable": "cannotUnify"},
+                                                                                "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                             "typeName": "hydra.core.Type"}}}}}}}}}}}}}}}}}}}},
-                                    "domain": [{"literal": {"string": {}}}],
+                                    "domain": {"literal": {"string": {}}},
                                     "parameter": "comment"}}},
-                              "domain": [{"variable": "hydra.core.Type"}],
+                              "domain": {"variable": "hydra.core.Type"},
                               "parameter": "right"}}},
-                        "domain": [{"variable": "hydra.core.Type"}],
+                        "domain": {"variable": "hydra.core.Type"},
                         "parameter": "left"}}},
-                  "domain": [{"variable": "hydra.context.Context"}],
+                  "domain": {"variable": "hydra.context.Context"},
                   "parameter": "cx"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "function": {
-                        "codomain": {
-                          "function": {
-                            "codomain": {
-                              "either": {
-                                "left": {
-                                  "application": {
-                                    "argument": {"variable": "hydra.errors.UnificationError"},
-                                    "function": {"variable": "hydra.context.InContext"}}},
-                                "right": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
-                            "domain": {"literal": {"string": {}}}}},
-                        "domain": {"variable": "hydra.core.Type"}}},
-                    "domain": {"variable": "hydra.core.Type"}}},
-                "domain": {"variable": "hydra.context.Context"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {
+                        "function": {
+                          "codomain": {
+                            "either": {
+                              "left": {
+                                "application": {
+                                  "argument": {"variable": "hydra.errors.UnificationError"},
+                                  "function": {"variable": "hydra.context.InContext"}}},
+                              "right": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
+                          "domain": {"literal": {"string": {}}}}},
+                      "domain": {"variable": "hydra.core.Type"}}},
+                  "domain": {"variable": "hydra.core.Type"}}},
+              "domain": {"variable": "hydra.context.Context"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.unification.unifyTypeConstraints",
@@ -1385,11 +1351,7 @@
                                                                           "elimination": {
                                                                             "record": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}}}},
                                                                   "function": {"variable": "hydra.strip.deannotateType"}}},
-                                                              "type": [
-                                                                {
-                                                                  "constraints": null,
-                                                                  "type": {"variable": "hydra.core.Type"},
-                                                                  "variables": []}]}],
+                                                              "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
                                                           "body": {
                                                             "let": {
                                                               "bindings": [
@@ -1405,11 +1367,7 @@
                                                                               "elimination": {
                                                                                 "record": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}}}},
                                                                       "function": {"variable": "hydra.strip.deannotateType"}}},
-                                                                  "type": [
-                                                                    {
-                                                                      "constraints": null,
-                                                                      "type": {"variable": "hydra.core.Type"},
-                                                                      "variables": []}]}],
+                                                                  "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}],
                                                               "body": {
                                                                 "let": {
                                                                   "bindings": [
@@ -1422,11 +1380,7 @@
                                                                             "function": {
                                                                               "elimination": {
                                                                                 "record": {"field": "comment", "typeName": "hydra.typing.TypeConstraint"}}}}}},
-                                                                      "type": [
-                                                                        {
-                                                                          "constraints": null,
-                                                                          "type": {"literal": {"string": {}}},
-                                                                          "variables": []}]}],
+                                                                      "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
                                                                   "body": {
                                                                     "let": {
                                                                       "bindings": [
@@ -1450,11 +1404,7 @@
                                                                                                     "application": {
                                                                                                       "argument": {"variable": "v"},
                                                                                                       "function": {"variable": "hydra.substitution.singletonTypeSubst"}}}}},
-                                                                                              "type": [
-                                                                                                {
-                                                                                                  "constraints": null,
-                                                                                                  "type": {"variable": "hydra.typing.TypeSubst"},
-                                                                                                  "variables": []}]}],
+                                                                                              "type": {"type": {"variable": "hydra.typing.TypeSubst"}, "variables": []}}],
                                                                                           "body": {
                                                                                             "let": {
                                                                                               "bindings": [
@@ -1470,16 +1420,14 @@
                                                                                                               "application": {
                                                                                                                 "argument": {"variable": "subst"},
                                                                                                                 "function": {"variable": "hydra.substitution.composeTypeSubst"}}}}},
-                                                                                                        "domain": [{"variable": "hydra.typing.TypeSubst"}],
+                                                                                                        "domain": {"variable": "hydra.typing.TypeSubst"},
                                                                                                         "parameter": "s"}}},
-                                                                                                  "type": [
-                                                                                                    {
-                                                                                                      "constraints": null,
-                                                                                                      "type": {
-                                                                                                        "function": {
-                                                                                                          "codomain": {"variable": "hydra.typing.TypeSubst"},
-                                                                                                          "domain": {"variable": "hydra.typing.TypeSubst"}}},
-                                                                                                      "variables": []}]}],
+                                                                                                  "type": {
+                                                                                                    "type": {
+                                                                                                      "function": {
+                                                                                                        "codomain": {"variable": "hydra.typing.TypeSubst"},
+                                                                                                        "domain": {"variable": "hydra.typing.TypeSubst"}}},
+                                                                                                    "variables": []}}],
                                                                                               "body": {
                                                                                                 "application": {
                                                                                                   "argument": {
@@ -1517,27 +1465,25 @@
                                                                                                             "application": {
                                                                                                               "argument": {"variable": "hydra.errors.UnificationError"},
                                                                                                               "function": {"variable": "hydra.context.InContext"}}}}}}}}}}}}},
-                                                                                      "domain": [{"variable": "hydra.core.Type"}],
+                                                                                      "domain": {"variable": "hydra.core.Type"},
                                                                                       "parameter": "t"}}},
-                                                                                "domain": [{"variable": "hydra.core.Name"}],
+                                                                                "domain": {"variable": "hydra.core.Name"},
                                                                                 "parameter": "v"}}},
-                                                                          "type": [
-                                                                            {
-                                                                              "constraints": null,
-                                                                              "type": {
-                                                                                "function": {
-                                                                                  "codomain": {
-                                                                                    "function": {
-                                                                                      "codomain": {
-                                                                                        "either": {
-                                                                                          "left": {
-                                                                                            "application": {
-                                                                                              "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                              "function": {"variable": "hydra.context.InContext"}}},
-                                                                                          "right": {"variable": "hydra.typing.TypeSubst"}}},
-                                                                                      "domain": {"variable": "hydra.core.Type"}}},
-                                                                                  "domain": {"variable": "hydra.core.Name"}}},
-                                                                              "variables": []}]}],
+                                                                          "type": {
+                                                                            "type": {
+                                                                              "function": {
+                                                                                "codomain": {
+                                                                                  "function": {
+                                                                                    "codomain": {
+                                                                                      "either": {
+                                                                                        "left": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "hydra.errors.UnificationError"},
+                                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                                        "right": {"variable": "hydra.typing.TypeSubst"}}},
+                                                                                    "domain": {"variable": "hydra.core.Type"}}},
+                                                                                "domain": {"variable": "hydra.core.Name"}}},
+                                                                            "variables": []}}],
                                                                       "body": {
                                                                         "let": {
                                                                           "bindings": [
@@ -1649,27 +1595,25 @@
                                                                                                                   "argument": {"variable": "hydra.errors.UnificationError"},
                                                                                                                   "function": {"variable": "hydra.context.InContext"}}},
                                                                                                               "right": {"variable": "hydra.typing.TypeSubst"}}}}}}}}}}},
-                                                                                          "domain": [{"variable": "hydra.core.Type"}],
+                                                                                          "domain": {"variable": "hydra.core.Type"},
                                                                                           "parameter": "t"}}},
-                                                                                    "domain": [{"variable": "hydra.core.Name"}],
+                                                                                    "domain": {"variable": "hydra.core.Name"},
                                                                                     "parameter": "v"}}},
-                                                                              "type": [
-                                                                                {
-                                                                                  "constraints": null,
-                                                                                  "type": {
-                                                                                    "function": {
-                                                                                      "codomain": {
-                                                                                        "function": {
-                                                                                          "codomain": {
-                                                                                            "either": {
-                                                                                              "left": {
-                                                                                                "application": {
-                                                                                                  "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                                  "function": {"variable": "hydra.context.InContext"}}},
-                                                                                              "right": {"variable": "hydra.typing.TypeSubst"}}},
-                                                                                          "domain": {"variable": "hydra.core.Type"}}},
-                                                                                      "domain": {"variable": "hydra.core.Name"}}},
-                                                                                  "variables": []}]}],
+                                                                              "type": {
+                                                                                "type": {
+                                                                                  "function": {
+                                                                                    "codomain": {
+                                                                                      "function": {
+                                                                                        "codomain": {
+                                                                                          "either": {
+                                                                                            "left": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
+                                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                                            "right": {"variable": "hydra.typing.TypeSubst"}}},
+                                                                                        "domain": {"variable": "hydra.core.Type"}}},
+                                                                                    "domain": {"variable": "hydra.core.Name"}}},
+                                                                                "variables": []}}],
                                                                           "body": {
                                                                             "let": {
                                                                               "bindings": [
@@ -1705,22 +1649,20 @@
                                                                                                               "typeApplication": {
                                                                                                                 "body": {"variable": "hydra.unification.unifyTypeConstraints"},
                                                                                                                 "type": {"variable": "t0"}}}}}}}}},
-                                                                                                "domain": [{"list": {"variable": "hydra.typing.TypeConstraint"}}],
+                                                                                                "domain": {"list": {"variable": "hydra.typing.TypeConstraint"}},
                                                                                                 "parameter": "constraints2"}}},
-                                                                                          "type": [
-                                                                                            {
-                                                                                              "constraints": null,
-                                                                                              "type": {
-                                                                                                "function": {
-                                                                                                  "codomain": {
-                                                                                                    "either": {
-                                                                                                      "left": {
-                                                                                                        "application": {
-                                                                                                          "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                                          "function": {"variable": "hydra.context.InContext"}}},
-                                                                                                      "right": {"variable": "hydra.typing.TypeSubst"}}},
-                                                                                                  "domain": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
-                                                                                              "variables": []}]}],
+                                                                                          "type": {
+                                                                                            "type": {
+                                                                                              "function": {
+                                                                                                "codomain": {
+                                                                                                  "either": {
+                                                                                                    "left": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "hydra.errors.UnificationError"},
+                                                                                                        "function": {"variable": "hydra.context.InContext"}}},
+                                                                                                    "right": {"variable": "hydra.typing.TypeSubst"}}},
+                                                                                                "domain": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
+                                                                                            "variables": []}}],
                                                                                       "body": {
                                                                                         "application": {
                                                                                           "argument": {"variable": "withConstraints"},
@@ -1752,17 +1694,15 @@
                                                                                                               "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                       "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "type": {"variable": "hydra.typing.TypeSubst"}}}}}}}}},
-                                                                                  "type": [
-                                                                                    {
-                                                                                      "constraints": null,
-                                                                                      "type": {
-                                                                                        "either": {
-                                                                                          "left": {
-                                                                                            "application": {
-                                                                                              "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                              "function": {"variable": "hydra.context.InContext"}}},
-                                                                                          "right": {"variable": "hydra.typing.TypeSubst"}}},
-                                                                                      "variables": []}]}],
+                                                                                  "type": {
+                                                                                    "type": {
+                                                                                      "either": {
+                                                                                        "left": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "hydra.errors.UnificationError"},
+                                                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                                                        "right": {"variable": "hydra.typing.TypeSubst"}}},
+                                                                                    "variables": []}}],
                                                                               "body": {
                                                                                 "let": {
                                                                                   "bindings": [
@@ -1788,21 +1728,19 @@
                                                                                                                   "application": {
                                                                                                                     "argument": {"variable": "name"},
                                                                                                                     "function": {"variable": "tryBinding"}}}}},
-                                                                                                            "domain": [{"variable": "hydra.core.Name"}],
+                                                                                                            "domain": {"variable": "hydra.core.Name"},
                                                                                                             "parameter": "name"}}}}],
-                                                                                                  "default": [{"variable": "noVars"}],
+                                                                                                  "default": {"variable": "noVars"},
                                                                                                   "typeName": "hydra.core.Type"}}}}}},
-                                                                                      "type": [
-                                                                                        {
-                                                                                          "constraints": null,
-                                                                                          "type": {
-                                                                                            "either": {
-                                                                                              "left": {
-                                                                                                "application": {
-                                                                                                  "argument": {"variable": "hydra.errors.UnificationError"},
-                                                                                                  "function": {"variable": "hydra.context.InContext"}}},
-                                                                                              "right": {"variable": "hydra.typing.TypeSubst"}}},
-                                                                                          "variables": []}]}],
+                                                                                      "type": {
+                                                                                        "type": {
+                                                                                          "either": {
+                                                                                            "left": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "hydra.errors.UnificationError"},
+                                                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                                            "right": {"variable": "hydra.typing.TypeSubst"}}},
+                                                                                        "variables": []}}],
                                                                                   "body": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "sleft"},
@@ -2026,42 +1964,39 @@
                                                                                                                                                       "argument": {"variable": "hydra.errors.UnificationError"},
                                                                                                                                                       "function": {"variable": "hydra.context.InContext"}}},
                                                                                                                                                   "right": {"variable": "hydra.typing.TypeSubst"}}}}}}}}}}},
-                                                                                                                              "domain": [{"variable": "hydra.core.Name"}],
+                                                                                                                              "domain": {"variable": "hydra.core.Name"},
                                                                                                                               "parameter": "name2"}}}}],
-                                                                                                                    "default": [
-                                                                                                                      {
-                                                                                                                        "application": {
-                                                                                                                          "argument": {"variable": "sright"},
-                                                                                                                          "function": {
-                                                                                                                            "application": {
-                                                                                                                              "argument": {"variable": "name"},
-                                                                                                                              "function": {"variable": "tryBinding"}}}}}],
+                                                                                                                    "default": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {"variable": "sright"},
+                                                                                                                        "function": {
+                                                                                                                          "application": {
+                                                                                                                            "argument": {"variable": "name"},
+                                                                                                                            "function": {"variable": "tryBinding"}}}}},
                                                                                                                     "typeName": "hydra.core.Type"}}}}}},
-                                                                                                        "domain": [{"variable": "hydra.core.Name"}],
+                                                                                                        "domain": {"variable": "hydra.core.Name"},
                                                                                                         "parameter": "name"}}}}],
-                                                                                              "default": [{"variable": "dflt"}],
+                                                                                              "default": {"variable": "dflt"},
                                                                                               "typeName": "hydra.core.Type"}}}}}}}}}}}}}}}}}}}},
-                                                      "domain": [{"list": {"variable": "hydra.typing.TypeConstraint"}}],
+                                                      "domain": {"list": {"variable": "hydra.typing.TypeConstraint"}},
                                                       "parameter": "rest"}}},
-                                                "domain": [{"variable": "hydra.typing.TypeConstraint"}],
+                                                "domain": {"variable": "hydra.typing.TypeConstraint"},
                                                 "parameter": "c"}}},
-                                          "type": [
-                                            {
-                                              "constraints": null,
-                                              "type": {
-                                                "function": {
-                                                  "codomain": {
-                                                    "function": {
-                                                      "codomain": {
-                                                        "either": {
-                                                          "left": {
-                                                            "application": {
-                                                              "argument": {"variable": "hydra.errors.UnificationError"},
-                                                              "function": {"variable": "hydra.context.InContext"}}},
-                                                          "right": {"variable": "hydra.typing.TypeSubst"}}},
-                                                      "domain": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
-                                                  "domain": {"variable": "hydra.typing.TypeConstraint"}}},
-                                              "variables": []}]}],
+                                          "type": {
+                                            "type": {
+                                              "function": {
+                                                "codomain": {
+                                                  "function": {
+                                                    "codomain": {
+                                                      "either": {
+                                                        "left": {
+                                                          "application": {
+                                                            "argument": {"variable": "hydra.errors.UnificationError"},
+                                                            "function": {"variable": "hydra.context.InContext"}}},
+                                                        "right": {"variable": "hydra.typing.TypeSubst"}}},
+                                                    "domain": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
+                                                "domain": {"variable": "hydra.typing.TypeConstraint"}}},
+                                            "variables": []}}],
                                       "body": {
                                         "application": {
                                           "argument": {
@@ -2114,40 +2049,37 @@
                                                               "argument": {"variable": "hydra.errors.UnificationError"},
                                                               "function": {"variable": "hydra.context.InContext"}}},
                                                           "right": {"variable": "hydra.typing.TypeSubst"}}}}}}}}}}}}},
-                                  "domain": [{"list": {"variable": "hydra.typing.TypeConstraint"}}],
+                                  "domain": {"list": {"variable": "hydra.typing.TypeConstraint"}},
                                   "parameter": "constraints"}}},
-                            "domain": [
-                              {
-                                "map": {
-                                  "keys": {"variable": "hydra.core.Name"},
-                                  "values": {"variable": "t0"}}}],
+                            "domain": {
+                              "map": {
+                                "keys": {"variable": "hydra.core.Name"},
+                                "values": {"variable": "t0"}}},
                             "parameter": "schemaTypes"}}},
-                      "domain": [{"variable": "hydra.context.Context"}],
+                      "domain": {"variable": "hydra.context.Context"},
                       "parameter": "cx"}}}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "function": {
-                        "codomain": {
-                          "either": {
-                            "left": {
-                              "application": {
-                                "argument": {"variable": "hydra.errors.UnificationError"},
-                                "function": {"variable": "hydra.context.InContext"}}},
-                            "right": {"variable": "hydra.typing.TypeSubst"}}},
-                        "domain": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
-                    "domain": {
-                      "map": {
-                        "keys": {"variable": "hydra.core.Name"},
-                        "values": {"variable": "t0"}}}}},
-                "domain": {"variable": "hydra.context.Context"}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {
+                        "either": {
+                          "left": {
+                            "application": {
+                              "argument": {"variable": "hydra.errors.UnificationError"},
+                              "function": {"variable": "hydra.context.InContext"}}},
+                          "right": {"variable": "hydra.typing.TypeSubst"}}},
+                      "domain": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
+                  "domain": {
+                    "map": {
+                      "keys": {"variable": "hydra.core.Name"},
+                      "values": {"variable": "t0"}}}}},
+              "domain": {"variable": "hydra.context.Context"}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.unification.unifyTypeLists",
@@ -2186,21 +2118,19 @@
                                                                     {"name": "right", "term": {"variable": "r"}},
                                                                     {"name": "comment", "term": {"variable": "comment"}}],
                                                                   "typeName": "hydra.typing.TypeConstraint"}},
-                                                              "domain": [{"variable": "hydra.core.Type"}],
+                                                              "domain": {"variable": "hydra.core.Type"},
                                                               "parameter": "r"}}},
-                                                        "domain": [{"variable": "hydra.core.Type"}],
+                                                        "domain": {"variable": "hydra.core.Type"},
                                                         "parameter": "l"}}},
-                                                  "type": [
-                                                    {
-                                                      "constraints": null,
-                                                      "type": {
-                                                        "function": {
-                                                          "codomain": {
-                                                            "function": {
-                                                              "codomain": {"variable": "hydra.typing.TypeConstraint"},
-                                                              "domain": {"variable": "hydra.core.Type"}}},
-                                                          "domain": {"variable": "hydra.core.Type"}}},
-                                                      "variables": []}]}],
+                                                  "type": {
+                                                    "type": {
+                                                      "function": {
+                                                        "codomain": {
+                                                          "function": {
+                                                            "codomain": {"variable": "hydra.typing.TypeConstraint"},
+                                                            "domain": {"variable": "hydra.core.Type"}}},
+                                                        "domain": {"variable": "hydra.core.Type"}}},
+                                                    "variables": []}}],
                                               "body": {
                                                 "application": {
                                                   "argument": {
@@ -2232,50 +2162,47 @@
                                                             "typeApplication": {
                                                               "body": {"variable": "hydra.unification.unifyTypeConstraints"},
                                                               "type": {"variable": "t0"}}}}}}}}}}},
-                                          "domain": [{"literal": {"string": {}}}],
+                                          "domain": {"literal": {"string": {}}},
                                           "parameter": "comment"}}},
-                                    "domain": [{"list": {"variable": "hydra.core.Type"}}],
+                                    "domain": {"list": {"variable": "hydra.core.Type"}},
                                     "parameter": "r"}}},
-                              "domain": [{"list": {"variable": "hydra.core.Type"}}],
+                              "domain": {"list": {"variable": "hydra.core.Type"}},
                               "parameter": "l"}}},
-                        "domain": [
-                          {
-                            "map": {
-                              "keys": {"variable": "hydra.core.Name"},
-                              "values": {"variable": "t0"}}}],
+                        "domain": {
+                          "map": {
+                            "keys": {"variable": "hydra.core.Name"},
+                            "values": {"variable": "t0"}}},
                         "parameter": "schemaTypes"}}},
-                  "domain": [{"variable": "hydra.context.Context"}],
+                  "domain": {"variable": "hydra.context.Context"},
                   "parameter": "cx"}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "function": {
-                        "codomain": {
-                          "function": {
-                            "codomain": {
-                              "function": {
-                                "codomain": {
-                                  "either": {
-                                    "left": {
-                                      "application": {
-                                        "argument": {"variable": "hydra.errors.UnificationError"},
-                                        "function": {"variable": "hydra.context.InContext"}}},
-                                    "right": {"variable": "hydra.typing.TypeSubst"}}},
-                                "domain": {"literal": {"string": {}}}}},
-                            "domain": {"list": {"variable": "hydra.core.Type"}}}},
-                        "domain": {"list": {"variable": "hydra.core.Type"}}}},
-                    "domain": {
-                      "map": {
-                        "keys": {"variable": "hydra.core.Name"},
-                        "values": {"variable": "t0"}}}}},
-                "domain": {"variable": "hydra.context.Context"}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {
+                        "function": {
+                          "codomain": {
+                            "function": {
+                              "codomain": {
+                                "either": {
+                                  "left": {
+                                    "application": {
+                                      "argument": {"variable": "hydra.errors.UnificationError"},
+                                      "function": {"variable": "hydra.context.InContext"}}},
+                                  "right": {"variable": "hydra.typing.TypeSubst"}}},
+                              "domain": {"literal": {"string": {}}}}},
+                          "domain": {"list": {"variable": "hydra.core.Type"}}}},
+                      "domain": {"list": {"variable": "hydra.core.Type"}}}},
+                  "domain": {
+                    "map": {
+                      "keys": {"variable": "hydra.core.Name"},
+                      "values": {"variable": "t0"}}}}},
+              "domain": {"variable": "hydra.context.Context"}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.unification.unifyTypes",
@@ -2317,50 +2244,47 @@
                                                         "typeApplication": {
                                                           "body": {"variable": "hydra.unification.unifyTypeConstraints"},
                                                           "type": {"variable": "t0"}}}}}}}}},
-                                          "domain": [{"literal": {"string": {}}}],
+                                          "domain": {"literal": {"string": {}}},
                                           "parameter": "comment"}}},
-                                    "domain": [{"variable": "hydra.core.Type"}],
+                                    "domain": {"variable": "hydra.core.Type"},
                                     "parameter": "r"}}},
-                              "domain": [{"variable": "hydra.core.Type"}],
+                              "domain": {"variable": "hydra.core.Type"},
                               "parameter": "l"}}},
-                        "domain": [
-                          {
-                            "map": {
-                              "keys": {"variable": "hydra.core.Name"},
-                              "values": {"variable": "t0"}}}],
+                        "domain": {
+                          "map": {
+                            "keys": {"variable": "hydra.core.Name"},
+                            "values": {"variable": "t0"}}},
                         "parameter": "schemaTypes"}}},
-                  "domain": [{"variable": "hydra.context.Context"}],
+                  "domain": {"variable": "hydra.context.Context"},
                   "parameter": "cx"}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "function": {
-                        "codomain": {
-                          "function": {
-                            "codomain": {
-                              "function": {
-                                "codomain": {
-                                  "either": {
-                                    "left": {
-                                      "application": {
-                                        "argument": {"variable": "hydra.errors.UnificationError"},
-                                        "function": {"variable": "hydra.context.InContext"}}},
-                                    "right": {"variable": "hydra.typing.TypeSubst"}}},
-                                "domain": {"literal": {"string": {}}}}},
-                            "domain": {"variable": "hydra.core.Type"}}},
-                        "domain": {"variable": "hydra.core.Type"}}},
-                    "domain": {
-                      "map": {
-                        "keys": {"variable": "hydra.core.Name"},
-                        "values": {"variable": "t0"}}}}},
-                "domain": {"variable": "hydra.context.Context"}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {
+                        "function": {
+                          "codomain": {
+                            "function": {
+                              "codomain": {
+                                "either": {
+                                  "left": {
+                                    "application": {
+                                      "argument": {"variable": "hydra.errors.UnificationError"},
+                                      "function": {"variable": "hydra.context.InContext"}}},
+                                  "right": {"variable": "hydra.typing.TypeSubst"}}},
+                              "domain": {"literal": {"string": {}}}}},
+                          "domain": {"variable": "hydra.core.Type"}}},
+                      "domain": {"variable": "hydra.core.Type"}}},
+                  "domain": {
+                    "map": {
+                      "keys": {"variable": "hydra.core.Name"},
+                      "values": {"variable": "t0"}}}}},
+              "domain": {"variable": "hydra.context.Context"}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.unification.variableOccursInType",
@@ -2424,25 +2348,23 @@
                                                                         "application": {
                                                                           "argument": {"variable": "b"},
                                                                           "function": {"function": {"primitive": "hydra.lib.logic.or"}}}}}},
-                                                                  "domain": [{"variable": "hydra.core.Name"}],
+                                                                  "domain": {"variable": "hydra.core.Name"},
                                                                   "parameter": "v"}}}}],
-                                                        "default": [{"variable": "b"}],
+                                                        "default": {"variable": "b"},
                                                         "typeName": "hydra.core.Type"}}}}}},
-                                            "domain": [{"variable": "hydra.core.Type"}],
+                                            "domain": {"variable": "hydra.core.Type"},
                                             "parameter": "typ"}}},
-                                      "domain": [{"literal": {"boolean": {}}}],
+                                      "domain": {"literal": {"boolean": {}}},
                                       "parameter": "b"}}},
-                                "type": [
-                                  {
-                                    "constraints": null,
-                                    "type": {
-                                      "function": {
-                                        "codomain": {
-                                          "function": {
-                                            "codomain": {"literal": {"boolean": {}}},
-                                            "domain": {"variable": "hydra.core.Type"}}},
-                                        "domain": {"literal": {"boolean": {}}}}},
-                                    "variables": []}]}],
+                                "type": {
+                                  "type": {
+                                    "function": {
+                                      "codomain": {
+                                        "function": {
+                                          "codomain": {"literal": {"boolean": {}}},
+                                          "domain": {"variable": "hydra.core.Type"}}},
+                                      "domain": {"literal": {"boolean": {}}}}},
+                                  "variables": []}}],
                             "body": {
                               "application": {
                                 "argument": {"variable": "typ0"},
@@ -2462,22 +2384,20 @@
                                               "typeApplication": {
                                                 "body": {"variable": "hydra.rewriting.foldOverType"},
                                                 "type": {"literal": {"boolean": {}}}}}}}}}}}}}}},
-                        "domain": [{"variable": "hydra.core.Type"}],
+                        "domain": {"variable": "hydra.core.Type"},
                         "parameter": "typ0"}}},
-                  "domain": [{"variable": "hydra.core.Name"}],
+                  "domain": {"variable": "hydra.core.Name"},
                   "parameter": "var"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"literal": {"boolean": {}}},
-                    "domain": {"variable": "hydra.core.Type"}}},
-                "domain": {"variable": "hydra.core.Name"}}},
-            "variables": []}]}}],
-  "description": ["Utilities for type unification."],
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"literal": {"boolean": {}}},
+                  "domain": {"variable": "hydra.core.Type"}}},
+              "domain": {"variable": "hydra.core.Name"}}},
+          "variables": []}}}],
+  "description": "Utilities for type unification.",
   "namespace": "hydra.unification",
   "termDependencies": [
     "hydra.rewriting",
@@ -2493,7 +2413,6 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
-    "hydra.error.module",
     "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",

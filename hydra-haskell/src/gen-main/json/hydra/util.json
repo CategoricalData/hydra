@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.util.CaseConvention",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -24,7 +23,6 @@
       "type": {
         "name": "hydra.util.Comparison",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -43,7 +41,6 @@
       "type": {
         "name": "hydra.util.Precision",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -73,7 +70,7 @@
                             "@value": {"literal": {"string": "Precision to a specified number of bits"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}}}]}}},
           "variables": []}}}],
-  "description": ["General-purpose utility types used across Hydra."],
+  "description": "General-purpose utility types used across Hydra.",
   "namespace": "hydra.util",
   "termDependencies": ["hydra.core"],
   "typeDependencies": ["hydra.core"]}

@@ -26,7 +26,7 @@
                                     "function": {
                                       "lambda": {
                                         "body": {"literal": {"string": "lower_snake_case"}},
-                                        "domain": [{"unit": {}}],
+                                        "domain": {"unit": {}},
                                         "parameter": "_"}}}},
                                 {
                                   "name": "upperSnake",
@@ -34,7 +34,7 @@
                                     "function": {
                                       "lambda": {
                                         "body": {"literal": {"string": "UPPER_SNAKE_CASE"}},
-                                        "domain": [{"unit": {}}],
+                                        "domain": {"unit": {}},
                                         "parameter": "_"}}}},
                                 {
                                   "name": "camel",
@@ -42,7 +42,7 @@
                                     "function": {
                                       "lambda": {
                                         "body": {"literal": {"string": "camelCase"}},
-                                        "domain": [{"unit": {}}],
+                                        "domain": {"unit": {}},
                                         "parameter": "_"}}}},
                                 {
                                   "name": "pascal",
@@ -50,20 +50,17 @@
                                     "function": {
                                       "lambda": {
                                         "body": {"literal": {"string": "PascalCase"}},
-                                        "domain": [{"unit": {}}],
+                                        "domain": {"unit": {}},
                                         "parameter": "_"}}}}],
-                              "default": null,
                               "typeName": "hydra.util.CaseConvention"}}}}}},
-                  "domain": [{"variable": "hydra.util.CaseConvention"}],
+                  "domain": {"variable": "hydra.util.CaseConvention"},
                   "parameter": "c"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"literal": {"string": {}}},
-                "domain": {"variable": "hydra.util.CaseConvention"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"literal": {"string": {}}},
+              "domain": {"variable": "hydra.util.CaseConvention"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.show.util.comparison",
@@ -90,7 +87,7 @@
                                     "function": {
                                       "lambda": {
                                         "body": {"literal": {"string": "lessThan"}},
-                                        "domain": [{"unit": {}}],
+                                        "domain": {"unit": {}},
                                         "parameter": "_"}}}},
                                 {
                                   "name": "equalTo",
@@ -98,7 +95,7 @@
                                     "function": {
                                       "lambda": {
                                         "body": {"literal": {"string": "equalTo"}},
-                                        "domain": [{"unit": {}}],
+                                        "domain": {"unit": {}},
                                         "parameter": "_"}}}},
                                 {
                                   "name": "greaterThan",
@@ -106,21 +103,18 @@
                                     "function": {
                                       "lambda": {
                                         "body": {"literal": {"string": "greaterThan"}},
-                                        "domain": [{"unit": {}}],
+                                        "domain": {"unit": {}},
                                         "parameter": "_"}}}}],
-                              "default": null,
                               "typeName": "hydra.util.Comparison"}}}}}},
-                  "domain": [{"variable": "hydra.util.Comparison"}],
+                  "domain": {"variable": "hydra.util.Comparison"},
                   "parameter": "c"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"literal": {"string": {}}},
-                "domain": {"variable": "hydra.util.Comparison"}}},
-            "variables": []}]}}],
-  "description": ["String representations of hydra.util types"],
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"literal": {"string": {}}},
+              "domain": {"variable": "hydra.util.Comparison"}}},
+          "variables": []}}}],
+  "description": "String representations of hydra.util types",
   "namespace": "hydra.show.util",
   "termDependencies": [],
   "typeDependencies": [
@@ -132,7 +126,6 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
-    "hydra.error.module",
     "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",

@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.relational.ColumnName",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -19,7 +18,6 @@
       "type": {
         "name": "hydra.relational.ColumnSchema",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -56,7 +54,6 @@
       "type": {
         "name": "hydra.relational.ForeignKey",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -95,7 +92,6 @@
       "type": {
         "name": "hydra.relational.PrimaryKey",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -110,7 +106,6 @@
       "type": {
         "name": "hydra.relational.Relation",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -131,7 +126,6 @@
       "type": {
         "name": "hydra.relational.RelationName",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -144,7 +138,6 @@
       "type": {
         "name": "hydra.relational.RelationSchema",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -207,7 +200,6 @@
       "type": {
         "name": "hydra.relational.Relationship",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -230,7 +222,6 @@
       "type": {
         "name": "hydra.relational.Row",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -241,8 +232,7 @@
               "body": {
                 "forall": {"body": {"wrap": {"list": {"variable": "v"}}}, "parameter": "v"}}}},
           "variables": []}}}],
-  "description": [
-    "An interpretation of Codd's Relational Model, as described in 'A Relational Model of Data for Large Shared Data Banks' (1970). Types ('domains') and values are parameterized so as to allow for application-specific implementations. No special support is provided for 'nonsimple' domains; i.e. relations are assumed to be normalized."],
+  "description": "An interpretation of Codd's Relational Model, as described in 'A Relational Model of Data for Large Shared Data Banks' (1970). Types ('domains') and values are parameterized so as to allow for application-specific implementations. No special support is provided for 'nonsimple' domains; i.e. relations are assumed to be normalized.",
   "namespace": "hydra.relational",
   "termDependencies": [],
   "typeDependencies": ["hydra.core"]}

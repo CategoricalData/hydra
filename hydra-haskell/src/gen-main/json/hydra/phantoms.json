@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.phantoms.TBinding",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -44,7 +43,6 @@
       "type": {
         "name": "hydra.phantoms.TTerm",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -59,7 +57,6 @@
       "type": {
         "name": "hydra.phantoms.TTermDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -94,7 +91,7 @@
                                 "function": {"variable": "hydra.phantoms.TTerm"}}}}}}]},
                   "parameter": "a"}}}},
           "variables": []}}}],
-  "description": ["Phantom types for use with Hydra DSLs"],
+  "description": "Phantom types for use with Hydra DSLs",
   "namespace": "hydra.phantoms",
   "termDependencies": ["hydra.core"],
   "typeDependencies": ["hydra.core"]}

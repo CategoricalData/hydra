@@ -179,9 +179,75 @@ toJson types tname typ term =
             _ -> Left "expected either term"
         Core.TypeVariable v0 ->
           let lookedUp = Maps.lookup v0 types
-          in (Maybes.maybe (Left (Strings.cat [
-            "unknown type variable: ",
-            (Core.unName v0)])) (\resolvedType -> toJson types v0 resolvedType term) lookedUp)
+          in (Maybes.maybe (toJsonUntyped term) (\resolvedType -> toJson types v0 resolvedType term) lookedUp)
         _ -> Left (Strings.cat [
           "unsupported type for JSON encoding: ",
           (Core_.type_ typ)])
+
+-- | Encode a Hydra term to a JSON value without type information. Falls back to array-wrapped Maybe encoding.
+toJsonUntyped :: Core.Term -> Either String Model.Value
+toJsonUntyped term =
+
+      let stripped = Strip.deannotateTerm term
+      in case stripped of
+        Core.TermLiteral v0 -> encodeLiteral v0
+        Core.TermList v0 ->
+          let results = Eithers.mapList (\t -> toJsonUntyped t) v0
+          in (Eithers.map (\vs -> Model.ValueArray vs) results)
+        Core.TermSet v0 ->
+          let terms = Sets.toList v0
+              results = Eithers.mapList (\t -> toJsonUntyped t) terms
+          in (Eithers.map (\vs -> Model.ValueArray vs) results)
+        Core.TermMaybe v0 -> Maybes.maybe (Right Model.ValueNull) (\v ->
+          let encodedMaybe = toJsonUntyped v
+          in (Eithers.map (\encoded -> Model.ValueArray [
+            encoded]) encodedMaybe)) v0
+        Core.TermRecord v0 ->
+          let encodeField =
+                  \f ->
+                    let fname = Core.unName (Core.fieldName f)
+                        fterm = Core.fieldTerm f
+                        encodedField = toJsonUntyped fterm
+                    in (Eithers.map (\v -> (fname, v)) encodedField)
+              fields = Core.recordFields v0
+              encodedFields = Eithers.mapList encodeField fields
+          in (Eithers.map (\fs -> Model.ValueObject (Maps.fromList fs)) encodedFields)
+        Core.TermUnion v0 ->
+          let field = Core.injectionField v0
+              fname = Core.unName (Core.fieldName field)
+              fterm = Core.fieldTerm field
+              encodedUnion = toJsonUntyped fterm
+          in (Eithers.map (\v -> Model.ValueObject (Maps.fromList [
+            (fname, v)])) encodedUnion)
+        Core.TermUnit -> Right (Model.ValueObject Maps.empty)
+        Core.TermWrap v0 -> toJsonUntyped (Core.wrappedTermBody v0)
+        Core.TermMap v0 ->
+          let encodeEntry =
+                  \kv ->
+                    let k = Pairs.first kv
+                        v = Pairs.second kv
+                        encodedK = toJsonUntyped k
+                        encodedV = toJsonUntyped v
+                    in (Eithers.either (\err -> Left err) (\ek -> Eithers.map (\ev -> Model.ValueObject (Maps.fromList [
+                      ("@key", ek),
+                      ("@value", ev)])) encodedV) encodedK)
+              entries = Eithers.mapList encodeEntry (Maps.toList v0)
+          in (Eithers.map (\es -> Model.ValueArray es) entries)
+        Core.TermPair v0 ->
+          let first = Pairs.first v0
+              second = Pairs.second v0
+              encodedFirst = toJsonUntyped first
+              encodedSecond = toJsonUntyped second
+          in (Eithers.either (\err -> Left err) (\ef -> Eithers.map (\es -> Model.ValueObject (Maps.fromList [
+            ("@first", ef),
+            ("@second", es)])) encodedSecond) encodedFirst)
+        Core.TermEither v0 -> Eithers.either (\l ->
+          let encodedL = toJsonUntyped l
+          in (Eithers.map (\v -> Model.ValueObject (Maps.fromList [
+            ("@left", v)])) encodedL)) (\r ->
+          let encodedR = toJsonUntyped r
+          in (Eithers.map (\v -> Model.ValueObject (Maps.fromList [
+            ("@right", v)])) encodedR)) v0
+        _ -> Left (Strings.cat [
+          "unsupported term variant for JSON encoding: ",
+          (Core_.term term)])

@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.classes.TypeClass",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -17,7 +16,7 @@
                   {"name": "equality", "type": {"unit": {}}},
                   {"name": "ordering", "type": {"unit": {}}}]}}},
           "variables": []}}}],
-  "description": ["Type classes"],
+  "description": "Type classes",
   "namespace": "hydra.classes",
   "termDependencies": ["hydra.core"],
   "typeDependencies": ["hydra.core"]}

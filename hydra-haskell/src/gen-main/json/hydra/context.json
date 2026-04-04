@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.context.Context",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -54,7 +53,6 @@
       "type": {
         "name": "hydra.context.InContext",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -88,7 +86,7 @@
                             "body": {"variable": "hydra.context.Context"}}}}]},
                   "parameter": "e"}}}},
           "variables": []}}}],
-  "description": ["Execution context for tracing and diagnostics"],
+  "description": "Execution context for tracing and diagnostics",
   "namespace": "hydra.context",
   "termDependencies": ["hydra.core"],
   "typeDependencies": ["hydra.core"]}

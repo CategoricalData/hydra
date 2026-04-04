@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.core.AnnotatedTerm",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -39,7 +38,6 @@
       "type": {
         "name": "hydra.core.AnnotatedType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -74,7 +72,6 @@
       "type": {
         "name": "hydra.core.Application",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -107,7 +104,6 @@
       "type": {
         "name": "hydra.core.ApplicationType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -140,7 +136,6 @@
       "type": {
         "name": "hydra.core.Binding",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -183,7 +178,6 @@
       "type": {
         "name": "hydra.core.CaseStatement",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -227,7 +221,6 @@
       "type": {
         "name": "hydra.core.EitherType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -261,7 +254,6 @@
       "type": {
         "name": "hydra.core.PairType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -294,7 +286,6 @@
       "type": {
         "name": "hydra.core.Elimination",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -339,7 +330,6 @@
       "type": {
         "name": "hydra.core.Field",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -371,7 +361,6 @@
       "type": {
         "name": "hydra.core.FieldType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -403,7 +392,6 @@
       "type": {
         "name": "hydra.core.FloatType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -444,7 +432,6 @@
       "type": {
         "name": "hydra.core.FloatValue",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -485,7 +472,6 @@
       "type": {
         "name": "hydra.core.ForallType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -519,7 +505,6 @@
       "type": {
         "name": "hydra.core.Function",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -562,7 +547,6 @@
       "type": {
         "name": "hydra.core.FunctionType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -595,7 +579,6 @@
       "type": {
         "name": "hydra.core.Injection",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -630,7 +613,6 @@
       "type": {
         "name": "hydra.core.IntegerType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -725,7 +707,6 @@
       "type": {
         "name": "hydra.core.IntegerValue",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -822,7 +803,6 @@
       "type": {
         "name": "hydra.core.Lambda",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -863,7 +843,6 @@
       "type": {
         "name": "hydra.core.Let",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -898,7 +877,6 @@
       "type": {
         "name": "hydra.core.Literal",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -958,7 +936,6 @@
       "type": {
         "name": "hydra.core.LiteralType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1019,7 +996,6 @@
       "type": {
         "name": "hydra.core.MapType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1051,7 +1027,6 @@
       "type": {
         "name": "hydra.core.Name",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1065,7 +1040,6 @@
       "type": {
         "name": "hydra.core.Projection",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1097,7 +1071,6 @@
       "type": {
         "name": "hydra.core.Record",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1132,7 +1105,6 @@
       "type": {
         "name": "hydra.core.Term",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1316,7 +1288,6 @@
       "type": {
         "name": "hydra.core.Type",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1483,7 +1454,6 @@
       "type": {
         "name": "hydra.core.TypeApplicationTerm",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1516,7 +1486,6 @@
       "type": {
         "name": "hydra.core.TypeLambda",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1549,7 +1518,6 @@
       "type": {
         "name": "hydra.core.TypeScheme",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1598,7 +1566,6 @@
       "type": {
         "name": "hydra.core.TypeVariableMetadata",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1624,7 +1591,6 @@
       "type": {
         "name": "hydra.core.WrappedTerm",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1652,8 +1618,7 @@
                             "@value": {"literal": {"string": "The wrapped term"}}}],
                         "body": {"variable": "hydra.core.Term"}}}}]}}},
           "variables": []}}}],
-  "description": [
-    "Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies."],
+  "description": "Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies.",
   "namespace": "hydra.core",
   "termDependencies": [],
   "typeDependencies": ["hydra.core"]}
