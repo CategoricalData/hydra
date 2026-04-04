@@ -42,11 +42,15 @@ public class TypeName implements Serializable, Comparable<TypeName> {
   @SuppressWarnings("unchecked")
   public int compareTo(TypeName other) {
     int cmp = 0;
-    cmp = ((Comparable) identifier).compareTo(other.identifier);
+    cmp = hydra.util.Comparing.compare(
+      identifier,
+      other.identifier);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) qualifier).compareTo(other.qualifier);
+    return hydra.util.Comparing.compare(
+      qualifier,
+      other.qualifier);
   }
 
   public TypeName withIdentifier(hydra.ext.java.syntax.TypeIdentifier identifier) {

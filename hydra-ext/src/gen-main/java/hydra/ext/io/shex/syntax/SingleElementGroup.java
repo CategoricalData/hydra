@@ -42,11 +42,15 @@ public class SingleElementGroup implements Serializable, Comparable<SingleElemen
   @SuppressWarnings("unchecked")
   public int compareTo(SingleElementGroup other) {
     int cmp = 0;
-    cmp = ((Comparable) UnaryTripleExpr).compareTo(other.UnaryTripleExpr);
+    cmp = hydra.util.Comparing.compare(
+      UnaryTripleExpr,
+      other.UnaryTripleExpr);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) Semi).compareTo(other.Semi);
+    return hydra.util.Comparing.compare(
+      Semi,
+      other.Semi);
   }
 
   public SingleElementGroup withUnaryTripleExpr(hydra.ext.io.shex.syntax.UnaryTripleExpr UnaryTripleExpr) {

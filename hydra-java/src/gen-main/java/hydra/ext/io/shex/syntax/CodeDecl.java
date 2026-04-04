@@ -42,11 +42,15 @@ public class CodeDecl implements Serializable, Comparable<CodeDecl> {
   @SuppressWarnings("unchecked")
   public int compareTo(CodeDecl other) {
     int cmp = 0;
-    cmp = ((Comparable) Iri).compareTo(other.Iri);
+    cmp = hydra.util.Comparing.compare(
+      Iri,
+      other.Iri);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) alts).compareTo(other.alts);
+    return hydra.util.Comparing.compare(
+      alts,
+      other.alts);
   }
 
   public CodeDecl withIri(hydra.ext.io.shex.syntax.Iri Iri) {

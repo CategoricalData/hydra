@@ -42,11 +42,15 @@ public class Param implements Serializable, Comparable<Param> {
   @SuppressWarnings("unchecked")
   public int compareTo(Param other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) annotation).compareTo(other.annotation);
+    return hydra.util.Comparing.compare(
+      annotation,
+      other.annotation);
   }
 
   public Param withName(hydra.ext.python.syntax.Name name) {

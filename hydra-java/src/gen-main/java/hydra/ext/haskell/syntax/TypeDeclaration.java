@@ -51,11 +51,15 @@ public class TypeDeclaration implements Serializable, Comparable<TypeDeclaration
   @SuppressWarnings("unchecked")
   public int compareTo(TypeDeclaration other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) type).compareTo(other.type);
+    return hydra.util.Comparing.compare(
+      type,
+      other.type);
   }
 
   public TypeDeclaration withName(hydra.ext.haskell.syntax.DeclarationHead name) {

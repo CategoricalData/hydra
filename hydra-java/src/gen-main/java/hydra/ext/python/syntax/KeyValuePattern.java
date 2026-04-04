@@ -42,11 +42,15 @@ public class KeyValuePattern implements Serializable, Comparable<KeyValuePattern
   @SuppressWarnings("unchecked")
   public int compareTo(KeyValuePattern other) {
     int cmp = 0;
-    cmp = ((Comparable) key).compareTo(other.key);
+    cmp = hydra.util.Comparing.compare(
+      key,
+      other.key);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 
   public KeyValuePattern withKey(hydra.ext.python.syntax.LiteralExpressionOrAttribute key) {

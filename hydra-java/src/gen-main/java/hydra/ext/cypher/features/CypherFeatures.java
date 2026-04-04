@@ -271,99 +271,147 @@ public class CypherFeatures implements Serializable, Comparable<CypherFeatures> 
   @SuppressWarnings("unchecked")
   public int compareTo(CypherFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) arithmetic).compareTo(other.arithmetic);
+    cmp = hydra.util.Comparing.compare(
+      arithmetic,
+      other.arithmetic);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) atom).compareTo(other.atom);
+    cmp = hydra.util.Comparing.compare(
+      atom,
+      other.atom);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) comparison).compareTo(other.comparison);
+    cmp = hydra.util.Comparing.compare(
+      comparison,
+      other.comparison);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) delete).compareTo(other.delete);
+    cmp = hydra.util.Comparing.compare(
+      delete,
+      other.delete);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) function).compareTo(other.function);
+    cmp = hydra.util.Comparing.compare(
+      function,
+      other.function);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) list).compareTo(other.list);
+    cmp = hydra.util.Comparing.compare(
+      list,
+      other.list);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) literal).compareTo(other.literal);
+    cmp = hydra.util.Comparing.compare(
+      literal,
+      other.literal);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) logical).compareTo(other.logical);
+    cmp = hydra.util.Comparing.compare(
+      logical,
+      other.logical);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) match).compareTo(other.match);
+    cmp = hydra.util.Comparing.compare(
+      match,
+      other.match);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) merge).compareTo(other.merge);
+    cmp = hydra.util.Comparing.compare(
+      merge,
+      other.merge);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) nodePattern).compareTo(other.nodePattern);
+    cmp = hydra.util.Comparing.compare(
+      nodePattern,
+      other.nodePattern);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) null_).compareTo(other.null_);
+    cmp = hydra.util.Comparing.compare(
+      null_,
+      other.null_);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) path).compareTo(other.path);
+    cmp = hydra.util.Comparing.compare(
+      path,
+      other.path);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) procedureCall).compareTo(other.procedureCall);
+    cmp = hydra.util.Comparing.compare(
+      procedureCall,
+      other.procedureCall);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) projection).compareTo(other.projection);
+    cmp = hydra.util.Comparing.compare(
+      projection,
+      other.projection);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) quantifier).compareTo(other.quantifier);
+    cmp = hydra.util.Comparing.compare(
+      quantifier,
+      other.quantifier);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) rangeLiteral).compareTo(other.rangeLiteral);
+    cmp = hydra.util.Comparing.compare(
+      rangeLiteral,
+      other.rangeLiteral);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) reading).compareTo(other.reading);
+    cmp = hydra.util.Comparing.compare(
+      reading,
+      other.reading);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) relationshipDirection).compareTo(other.relationshipDirection);
+    cmp = hydra.util.Comparing.compare(
+      relationshipDirection,
+      other.relationshipDirection);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) relationshipPattern).compareTo(other.relationshipPattern);
+    cmp = hydra.util.Comparing.compare(
+      relationshipPattern,
+      other.relationshipPattern);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) remove).compareTo(other.remove);
+    cmp = hydra.util.Comparing.compare(
+      remove,
+      other.remove);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) set).compareTo(other.set);
+    cmp = hydra.util.Comparing.compare(
+      set,
+      other.set);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) string).compareTo(other.string);
+    cmp = hydra.util.Comparing.compare(
+      string,
+      other.string);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) updating).compareTo(other.updating);
+    return hydra.util.Comparing.compare(
+      updating,
+      other.updating);
   }
 
   public CypherFeatures withArithmetic(hydra.ext.cypher.features.ArithmeticFeatures arithmetic) {

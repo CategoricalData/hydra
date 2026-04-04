@@ -71,7 +71,9 @@ public abstract class IriOrLiteral implements Serializable, Comparable<IriOrLite
         return tagCmp;
       }
       Iri o = (Iri) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -111,7 +113,9 @@ public abstract class IriOrLiteral implements Serializable, Comparable<IriOrLite
         return tagCmp;
       }
       Literal o = (Literal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

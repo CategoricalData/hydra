@@ -68,7 +68,9 @@ public abstract class WithArgsKeys implements Serializable, Comparable<WithArgsK
         return tagCmp;
       }
       WithOption o = (WithOption) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class WithArgsKeys implements Serializable, Comparable<WithArgsK
         return tagCmp;
       }
       String_ o = (String_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

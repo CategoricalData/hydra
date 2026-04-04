@@ -42,11 +42,15 @@ public class RaiseExpression implements Serializable, Comparable<RaiseExpression
   @SuppressWarnings("unchecked")
   public int compareTo(RaiseExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) expression).compareTo(other.expression);
+    cmp = hydra.util.Comparing.compare(
+      expression,
+      other.expression);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) from).compareTo(other.from);
+    return hydra.util.Comparing.compare(
+      from,
+      other.from);
   }
 
   public RaiseExpression withExpression(hydra.ext.python.syntax.Expression expression) {

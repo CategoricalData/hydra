@@ -51,11 +51,15 @@ public class UniversalTestCase implements Serializable, Comparable<UniversalTest
   @SuppressWarnings("unchecked")
   public int compareTo(UniversalTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) actual).compareTo(other.actual);
+    cmp = hydra.util.Comparing.compare(
+      actual,
+      other.actual);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) expected).compareTo(other.expected);
+    return hydra.util.Comparing.compare(
+      expected,
+      other.expected);
   }
 
   public UniversalTestCase withActual(String actual) {

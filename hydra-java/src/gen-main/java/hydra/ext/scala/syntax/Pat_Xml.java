@@ -11,11 +11,11 @@ public class Pat_Xml implements Serializable, Comparable<Pat_Xml> {
 
   public static final hydra.core.Name ARGS = new hydra.core.Name("args");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Lit> parts;
+  public final java.util.List<hydra.ext.scala.syntax.Lit> parts;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Pat> args;
+  public final java.util.List<hydra.ext.scala.syntax.Pat> args;
 
-  public Pat_Xml (hydra.util.ConsList<hydra.ext.scala.syntax.Lit> parts, hydra.util.ConsList<hydra.ext.scala.syntax.Pat> args) {
+  public Pat_Xml (java.util.List<hydra.ext.scala.syntax.Lit> parts, java.util.List<hydra.ext.scala.syntax.Pat> args) {
     this.parts = parts;
     this.args = args;
   }
@@ -42,18 +42,22 @@ public class Pat_Xml implements Serializable, Comparable<Pat_Xml> {
   @SuppressWarnings("unchecked")
   public int compareTo(Pat_Xml other) {
     int cmp = 0;
-    cmp = ((Comparable) parts).compareTo(other.parts);
+    cmp = hydra.util.Comparing.compare(
+      parts,
+      other.parts);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) args).compareTo(other.args);
+    return hydra.util.Comparing.compare(
+      args,
+      other.args);
   }
 
-  public Pat_Xml withParts(hydra.util.ConsList<hydra.ext.scala.syntax.Lit> parts) {
+  public Pat_Xml withParts(java.util.List<hydra.ext.scala.syntax.Lit> parts) {
     return new Pat_Xml(parts, args);
   }
 
-  public Pat_Xml withArgs(hydra.util.ConsList<hydra.ext.scala.syntax.Pat> args) {
+  public Pat_Xml withArgs(java.util.List<hydra.ext.scala.syntax.Pat> args) {
     return new Pat_Xml(parts, args);
   }
 }

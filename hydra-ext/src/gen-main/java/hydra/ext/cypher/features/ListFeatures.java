@@ -51,11 +51,15 @@ public class ListFeatures implements Serializable, Comparable<ListFeatures> {
   @SuppressWarnings("unchecked")
   public int compareTo(ListFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) listComprehension).compareTo(other.listComprehension);
+    cmp = hydra.util.Comparing.compare(
+      listComprehension,
+      other.listComprehension);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) listRange).compareTo(other.listRange);
+    return hydra.util.Comparing.compare(
+      listRange,
+      other.listRange);
   }
 
   public ListFeatures withListComprehension(Boolean listComprehension) {

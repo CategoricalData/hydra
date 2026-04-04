@@ -68,7 +68,9 @@ public abstract class NotStartAction_ShapeExprDecl_Alts implements Serializable,
         return tagCmp;
       }
       ShapeExpression o = (ShapeExpression) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -42,11 +42,15 @@ public class NotExpression implements Serializable, Comparable<NotExpression> {
   @SuppressWarnings("unchecked")
   public int compareTo(NotExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) not).compareTo(other.not);
+    cmp = hydra.util.Comparing.compare(
+      not,
+      other.not);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) expression).compareTo(other.expression);
+    return hydra.util.Comparing.compare(
+      expression,
+      other.expression);
   }
 
   public NotExpression withNot(Boolean not) {

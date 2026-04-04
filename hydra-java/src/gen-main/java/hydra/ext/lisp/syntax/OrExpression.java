@@ -15,9 +15,9 @@ public class OrExpression implements Serializable, Comparable<OrExpression> {
   /**
    * The operand expressions
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> expressions;
+  public final java.util.List<hydra.ext.lisp.syntax.Expression> expressions;
 
-  public OrExpression (hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> expressions) {
+  public OrExpression (java.util.List<hydra.ext.lisp.syntax.Expression> expressions) {
     this.expressions = expressions;
   }
 
@@ -40,6 +40,8 @@ public class OrExpression implements Serializable, Comparable<OrExpression> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(OrExpression other) {
-    return ((Comparable) expressions).compareTo(other.expressions);
+    return hydra.util.Comparing.compare(
+      expressions,
+      other.expressions);
   }
 }

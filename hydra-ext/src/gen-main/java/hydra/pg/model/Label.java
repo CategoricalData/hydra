@@ -71,7 +71,9 @@ public abstract class Label implements Serializable, Comparable<Label> {
         return tagCmp;
       }
       Vertex o = (Vertex) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -111,7 +113,9 @@ public abstract class Label implements Serializable, Comparable<Label> {
         return tagCmp;
       }
       Edge o = (Edge) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

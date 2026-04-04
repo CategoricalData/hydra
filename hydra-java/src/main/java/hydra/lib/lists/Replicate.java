@@ -8,8 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.ConsList;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -52,7 +50,7 @@ public class Replicate extends PrimitiveFunction {
      * @param n the number of copies to create
      * @return a function that replicates an element n times
      */
-    public static <X> Function<X, ConsList<X>> apply(Integer n) {
+    public static <X> Function<X, List<X>> apply(Integer n) {
         return elem -> apply(n, elem);
     }
 
@@ -63,7 +61,7 @@ public class Replicate extends PrimitiveFunction {
      * @param elem the element to replicate
      * @return a list containing n copies of the element
      */
-    public static <X> ConsList<X> apply(Integer n, X elem) {
-        return ConsList.fromList(new ArrayList<>(Collections.nCopies(n, elem)));
+    public static <X> List<X> apply(Integer n, X elem) {
+        return new ArrayList<>(Collections.nCopies(n, elem));
     }
 }

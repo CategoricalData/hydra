@@ -19,11 +19,11 @@ public class Data_ApplyType implements Serializable, Comparable<Data_ApplyType> 
 
   public final hydra.ext.scala.syntax.Data_Name op;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Type> targs;
+  public final java.util.List<hydra.ext.scala.syntax.Type> targs;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Data> args;
+  public final java.util.List<hydra.ext.scala.syntax.Data> args;
 
-  public Data_ApplyType (hydra.ext.scala.syntax.Data lhs, hydra.ext.scala.syntax.Data_Name op, hydra.util.ConsList<hydra.ext.scala.syntax.Type> targs, hydra.util.ConsList<hydra.ext.scala.syntax.Data> args) {
+  public Data_ApplyType (hydra.ext.scala.syntax.Data lhs, hydra.ext.scala.syntax.Data_Name op, java.util.List<hydra.ext.scala.syntax.Type> targs, java.util.List<hydra.ext.scala.syntax.Data> args) {
     this.lhs = lhs;
     this.op = op;
     this.targs = targs;
@@ -56,19 +56,27 @@ public class Data_ApplyType implements Serializable, Comparable<Data_ApplyType> 
   @SuppressWarnings("unchecked")
   public int compareTo(Data_ApplyType other) {
     int cmp = 0;
-    cmp = ((Comparable) lhs).compareTo(other.lhs);
+    cmp = hydra.util.Comparing.compare(
+      lhs,
+      other.lhs);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) op).compareTo(other.op);
+    cmp = hydra.util.Comparing.compare(
+      op,
+      other.op);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) targs).compareTo(other.targs);
+    cmp = hydra.util.Comparing.compare(
+      targs,
+      other.targs);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) args).compareTo(other.args);
+    return hydra.util.Comparing.compare(
+      args,
+      other.args);
   }
 
   public Data_ApplyType withLhs(hydra.ext.scala.syntax.Data lhs) {
@@ -79,11 +87,11 @@ public class Data_ApplyType implements Serializable, Comparable<Data_ApplyType> 
     return new Data_ApplyType(lhs, op, targs, args);
   }
 
-  public Data_ApplyType withTargs(hydra.util.ConsList<hydra.ext.scala.syntax.Type> targs) {
+  public Data_ApplyType withTargs(java.util.List<hydra.ext.scala.syntax.Type> targs) {
     return new Data_ApplyType(lhs, op, targs, args);
   }
 
-  public Data_ApplyType withArgs(hydra.util.ConsList<hydra.ext.scala.syntax.Data> args) {
+  public Data_ApplyType withArgs(java.util.List<hydra.ext.scala.syntax.Data> args) {
     return new Data_ApplyType(lhs, op, targs, args);
   }
 }

@@ -34,6 +34,8 @@ public class YieldStatement implements Serializable, Comparable<YieldStatement> 
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(YieldStatement other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

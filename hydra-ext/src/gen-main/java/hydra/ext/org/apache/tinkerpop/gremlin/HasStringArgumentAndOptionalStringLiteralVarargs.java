@@ -42,11 +42,15 @@ public class HasStringArgumentAndOptionalStringLiteralVarargs implements Seriali
   @SuppressWarnings("unchecked")
   public int compareTo(HasStringArgumentAndOptionalStringLiteralVarargs other) {
     int cmp = 0;
-    cmp = ((Comparable) string).compareTo(other.string);
+    cmp = hydra.util.Comparing.compare(
+      string,
+      other.string);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) rest).compareTo(other.rest);
+    return hydra.util.Comparing.compare(
+      rest,
+      other.rest);
   }
 
   public HasStringArgumentAndOptionalStringLiteralVarargs withString(hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument string) {

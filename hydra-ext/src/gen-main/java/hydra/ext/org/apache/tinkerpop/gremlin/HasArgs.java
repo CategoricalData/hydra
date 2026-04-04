@@ -68,7 +68,9 @@ public abstract class HasArgs implements Serializable, Comparable<HasArgs> {
         return tagCmp;
       }
       String_ o = (String_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class HasArgs implements Serializable, Comparable<HasArgs> {
         return tagCmp;
       }
       TraversalToken o = (TraversalToken) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

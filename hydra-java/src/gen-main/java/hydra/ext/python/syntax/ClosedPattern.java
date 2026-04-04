@@ -116,7 +116,9 @@ public abstract class ClosedPattern implements Serializable, Comparable<ClosedPa
         return tagCmp;
       }
       Literal o = (Literal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +158,9 @@ public abstract class ClosedPattern implements Serializable, Comparable<ClosedPa
         return tagCmp;
       }
       Capture o = (Capture) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -231,7 +235,9 @@ public abstract class ClosedPattern implements Serializable, Comparable<ClosedPa
         return tagCmp;
       }
       Value o = (Value) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -271,7 +277,9 @@ public abstract class ClosedPattern implements Serializable, Comparable<ClosedPa
         return tagCmp;
       }
       Group o = (Group) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -311,7 +319,9 @@ public abstract class ClosedPattern implements Serializable, Comparable<ClosedPa
         return tagCmp;
       }
       Sequence o = (Sequence) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -351,7 +361,9 @@ public abstract class ClosedPattern implements Serializable, Comparable<ClosedPa
         return tagCmp;
       }
       Mapping o = (Mapping) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -391,7 +403,9 @@ public abstract class ClosedPattern implements Serializable, Comparable<ClosedPa
         return tagCmp;
       }
       Class_ o = (Class_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

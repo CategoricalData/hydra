@@ -9,9 +9,9 @@ public class Data_Block implements Serializable, Comparable<Data_Block> {
 
   public static final hydra.core.Name STATS = new hydra.core.Name("stats");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Stat> stats;
+  public final java.util.List<hydra.ext.scala.syntax.Stat> stats;
 
-  public Data_Block (hydra.util.ConsList<hydra.ext.scala.syntax.Stat> stats) {
+  public Data_Block (java.util.List<hydra.ext.scala.syntax.Stat> stats) {
     this.stats = stats;
   }
 
@@ -34,6 +34,8 @@ public class Data_Block implements Serializable, Comparable<Data_Block> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Data_Block other) {
-    return ((Comparable) stats).compareTo(other.stats);
+    return hydra.util.Comparing.compare(
+      stats,
+      other.stats);
   }
 }

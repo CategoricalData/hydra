@@ -68,7 +68,9 @@ public abstract class StarTarget implements Serializable, Comparable<StarTarget>
         return tagCmp;
       }
       Starred o = (Starred) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class StarTarget implements Serializable, Comparable<StarTarget>
         return tagCmp;
       }
       Unstarred o = (Unstarred) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

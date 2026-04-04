@@ -42,11 +42,15 @@ public class DataHasValue implements Serializable, Comparable<DataHasValue> {
   @SuppressWarnings("unchecked")
   public int compareTo(DataHasValue other) {
     int cmp = 0;
-    cmp = ((Comparable) property).compareTo(other.property);
+    cmp = hydra.util.Comparing.compare(
+      property,
+      other.property);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 
   public DataHasValue withProperty(hydra.ext.org.w3.owl.syntax.DataPropertyExpression property) {

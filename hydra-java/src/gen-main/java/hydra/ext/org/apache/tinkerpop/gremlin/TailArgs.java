@@ -42,11 +42,15 @@ public class TailArgs implements Serializable, Comparable<TailArgs> {
   @SuppressWarnings("unchecked")
   public int compareTo(TailArgs other) {
     int cmp = 0;
-    cmp = ((Comparable) scope).compareTo(other.scope);
+    cmp = hydra.util.Comparing.compare(
+      scope,
+      other.scope);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) integer).compareTo(other.integer);
+    return hydra.util.Comparing.compare(
+      integer,
+      other.integer);
   }
 
   public TailArgs withScope(hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.TraversalScopeArgument> scope) {

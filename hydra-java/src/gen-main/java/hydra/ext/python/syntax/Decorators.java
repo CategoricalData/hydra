@@ -9,9 +9,9 @@ public class Decorators implements Serializable, Comparable<Decorators> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.NamedExpression> value;
+  public final java.util.List<hydra.ext.python.syntax.NamedExpression> value;
 
-  public Decorators (hydra.util.ConsList<hydra.ext.python.syntax.NamedExpression> value) {
+  public Decorators (java.util.List<hydra.ext.python.syntax.NamedExpression> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class Decorators implements Serializable, Comparable<Decorators> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Decorators other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

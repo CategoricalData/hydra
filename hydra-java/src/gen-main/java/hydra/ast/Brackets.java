@@ -51,11 +51,15 @@ public class Brackets implements Serializable, Comparable<Brackets> {
   @SuppressWarnings("unchecked")
   public int compareTo(Brackets other) {
     int cmp = 0;
-    cmp = ((Comparable) open).compareTo(other.open);
+    cmp = hydra.util.Comparing.compare(
+      open,
+      other.open);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) close).compareTo(other.close);
+    return hydra.util.Comparing.compare(
+      close,
+      other.close);
   }
 
   public Brackets withOpen(hydra.ast.Symbol open) {

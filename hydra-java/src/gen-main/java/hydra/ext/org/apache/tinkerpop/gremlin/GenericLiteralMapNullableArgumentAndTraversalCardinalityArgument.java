@@ -42,11 +42,15 @@ public class GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument im
   @SuppressWarnings("unchecked")
   public int compareTo(GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument other) {
     int cmp = 0;
-    cmp = ((Comparable) cardinality).compareTo(other.cardinality);
+    cmp = hydra.util.Comparing.compare(
+      cardinality,
+      other.cardinality);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) object).compareTo(other.object);
+    return hydra.util.Comparing.compare(
+      object,
+      other.object);
   }
 
   public GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument withCardinality(hydra.ext.org.apache.tinkerpop.gremlin.TraversalCardinalityArgument cardinality) {

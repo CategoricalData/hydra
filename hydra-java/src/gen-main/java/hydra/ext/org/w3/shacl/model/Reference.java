@@ -79,7 +79,9 @@ public abstract class Reference<A> implements Serializable, Comparable<Reference
         return tagCmp;
       }
       Named o = (Named) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -122,7 +124,9 @@ public abstract class Reference<A> implements Serializable, Comparable<Reference
         return tagCmp;
       }
       Anonymous o = (Anonymous) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -165,7 +169,9 @@ public abstract class Reference<A> implements Serializable, Comparable<Reference
         return tagCmp;
       }
       Definition o = (Definition) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

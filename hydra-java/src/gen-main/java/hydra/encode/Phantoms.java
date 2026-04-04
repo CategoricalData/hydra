@@ -7,7 +7,7 @@ package hydra.encode;
  */
 public interface Phantoms {
   static <T0, T1> hydra.core.Term tBinding(T0 a, hydra.phantoms.TBinding<T1> x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.phantoms.TBinding"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.phantoms.TBinding"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name(((java.util.function.Function<hydra.phantoms.TBinding<T1>, hydra.core.Name>) (projected -> projected.name)).apply(x))),
       new hydra.core.Field(new hydra.core.Name("term"), hydra.encode.Phantoms.<T0, T1>tTerm(
         a,
@@ -19,7 +19,7 @@ public interface Phantoms {
   }
 
   static <T0, T1> hydra.core.Term tTermDefinition(T0 a, hydra.phantoms.TTermDefinition<T1> x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.phantoms.TTermDefinition"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.phantoms.TTermDefinition"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name(((java.util.function.Function<hydra.phantoms.TTermDefinition<T1>, hydra.core.Name>) (projected -> projected.name)).apply(x))),
       new hydra.core.Field(new hydra.core.Name("term"), hydra.encode.Phantoms.<T0, T1>tTerm(
         a,

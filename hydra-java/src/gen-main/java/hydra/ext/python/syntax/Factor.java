@@ -84,7 +84,9 @@ public abstract class Factor implements Serializable, Comparable<Factor> {
         return tagCmp;
       }
       Positive o = (Positive) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -124,7 +126,9 @@ public abstract class Factor implements Serializable, Comparable<Factor> {
         return tagCmp;
       }
       Negative o = (Negative) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -164,7 +168,9 @@ public abstract class Factor implements Serializable, Comparable<Factor> {
         return tagCmp;
       }
       Complement o = (Complement) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +210,9 @@ public abstract class Factor implements Serializable, Comparable<Factor> {
         return tagCmp;
       }
       Simple o = (Simple) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -49,15 +49,21 @@ public class IfThenElseStatement implements Serializable, Comparable<IfThenElseS
   @SuppressWarnings("unchecked")
   public int compareTo(IfThenElseStatement other) {
     int cmp = 0;
-    cmp = ((Comparable) cond).compareTo(other.cond);
+    cmp = hydra.util.Comparing.compare(
+      cond,
+      other.cond);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) then).compareTo(other.then);
+    cmp = hydra.util.Comparing.compare(
+      then,
+      other.then);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) else_).compareTo(other.else_);
+    return hydra.util.Comparing.compare(
+      else_,
+      other.else_);
   }
 
   public IfThenElseStatement withCond(hydra.util.Maybe<hydra.ext.java.syntax.Expression> cond) {

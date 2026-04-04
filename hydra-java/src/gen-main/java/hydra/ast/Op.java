@@ -71,19 +71,27 @@ public class Op implements Serializable, Comparable<Op> {
   @SuppressWarnings("unchecked")
   public int compareTo(Op other) {
     int cmp = 0;
-    cmp = ((Comparable) symbol).compareTo(other.symbol);
+    cmp = hydra.util.Comparing.compare(
+      symbol,
+      other.symbol);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) padding).compareTo(other.padding);
+    cmp = hydra.util.Comparing.compare(
+      padding,
+      other.padding);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) precedence).compareTo(other.precedence);
+    cmp = hydra.util.Comparing.compare(
+      precedence,
+      other.precedence);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) associativity).compareTo(other.associativity);
+    return hydra.util.Comparing.compare(
+      associativity,
+      other.associativity);
   }
 
   public Op withSymbol(hydra.ast.Symbol symbol) {

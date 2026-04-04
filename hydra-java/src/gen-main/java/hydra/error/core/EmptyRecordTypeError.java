@@ -40,6 +40,8 @@ public class EmptyRecordTypeError implements Serializable, Comparable<EmptyRecor
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(EmptyRecordTypeError other) {
-    return ((Comparable) location).compareTo(other.location);
+    return hydra.util.Comparing.compare(
+      location,
+      other.location);
   }
 }

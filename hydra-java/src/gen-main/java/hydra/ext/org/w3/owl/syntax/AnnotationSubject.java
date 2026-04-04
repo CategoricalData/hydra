@@ -68,7 +68,9 @@ public abstract class AnnotationSubject implements Serializable, Comparable<Anno
         return tagCmp;
       }
       Iri o = (Iri) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class AnnotationSubject implements Serializable, Comparable<Anno
         return tagCmp;
       }
       AnonymousIndividual o = (AnonymousIndividual) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

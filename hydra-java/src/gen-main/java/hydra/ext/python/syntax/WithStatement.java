@@ -17,13 +17,13 @@ public class WithStatement implements Serializable, Comparable<WithStatement> {
 
   public final Boolean async;
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.WithItem> items;
+  public final java.util.List<hydra.ext.python.syntax.WithItem> items;
 
   public final hydra.util.Maybe<hydra.ext.python.syntax.TypeComment> typeComment;
 
   public final hydra.ext.python.syntax.Block body;
 
-  public WithStatement (Boolean async, hydra.util.ConsList<hydra.ext.python.syntax.WithItem> items, hydra.util.Maybe<hydra.ext.python.syntax.TypeComment> typeComment, hydra.ext.python.syntax.Block body) {
+  public WithStatement (Boolean async, java.util.List<hydra.ext.python.syntax.WithItem> items, hydra.util.Maybe<hydra.ext.python.syntax.TypeComment> typeComment, hydra.ext.python.syntax.Block body) {
     this.async = async;
     this.items = items;
     this.typeComment = typeComment;
@@ -56,26 +56,34 @@ public class WithStatement implements Serializable, Comparable<WithStatement> {
   @SuppressWarnings("unchecked")
   public int compareTo(WithStatement other) {
     int cmp = 0;
-    cmp = ((Comparable) async).compareTo(other.async);
+    cmp = hydra.util.Comparing.compare(
+      async,
+      other.async);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) items).compareTo(other.items);
+    cmp = hydra.util.Comparing.compare(
+      items,
+      other.items);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) typeComment).compareTo(other.typeComment);
+    cmp = hydra.util.Comparing.compare(
+      typeComment,
+      other.typeComment);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
   public WithStatement withAsync(Boolean async) {
     return new WithStatement(async, items, typeComment, body);
   }
 
-  public WithStatement withItems(hydra.util.ConsList<hydra.ext.python.syntax.WithItem> items) {
+  public WithStatement withItems(java.util.List<hydra.ext.python.syntax.WithItem> items) {
     return new WithStatement(async, items, typeComment, body);
   }
 

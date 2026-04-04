@@ -9,9 +9,9 @@ public class SemanticActions implements Serializable, Comparable<SemanticActions
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.CodeDecl> value;
+  public final java.util.List<hydra.ext.io.shex.syntax.CodeDecl> value;
 
-  public SemanticActions (hydra.util.ConsList<hydra.ext.io.shex.syntax.CodeDecl> value) {
+  public SemanticActions (java.util.List<hydra.ext.io.shex.syntax.CodeDecl> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class SemanticActions implements Serializable, Comparable<SemanticActions
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(SemanticActions other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

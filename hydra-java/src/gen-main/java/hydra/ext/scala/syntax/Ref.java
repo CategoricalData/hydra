@@ -68,7 +68,9 @@ public abstract class Ref implements Serializable, Comparable<Ref> {
         return tagCmp;
       }
       Name o = (Name) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class Ref implements Serializable, Comparable<Ref> {
         return tagCmp;
       }
       Init o = (Init) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

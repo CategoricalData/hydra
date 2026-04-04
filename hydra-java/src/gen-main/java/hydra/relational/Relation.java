@@ -12,9 +12,9 @@ public class Relation<V> implements Serializable, Comparable<Relation<V>> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.relational.Row<V>> value;
+  public final java.util.List<hydra.relational.Row<V>> value;
 
-  public Relation (hydra.util.ConsList<hydra.relational.Row<V>> value) {
+  public Relation (java.util.List<hydra.relational.Row<V>> value) {
     this.value = value;
   }
 
@@ -37,6 +37,8 @@ public class Relation<V> implements Serializable, Comparable<Relation<V>> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Relation other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

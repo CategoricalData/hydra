@@ -76,7 +76,9 @@ public abstract class PnChars implements Serializable, Comparable<PnChars> {
         return tagCmp;
       }
       PnCharsU o = (PnCharsU) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -151,7 +153,9 @@ public abstract class PnChars implements Serializable, Comparable<PnChars> {
         return tagCmp;
       }
       Regex o = (Regex) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

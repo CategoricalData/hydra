@@ -76,7 +76,9 @@ public abstract class DelTAtom implements Serializable, Comparable<DelTAtom> {
         return tagCmp;
       }
       Name o = (Name) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class DelTAtom implements Serializable, Comparable<DelTAtom> {
         return tagCmp;
       }
       Target o = (Target) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class DelTAtom implements Serializable, Comparable<DelTAtom> {
         return tagCmp;
       }
       Targets o = (Targets) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

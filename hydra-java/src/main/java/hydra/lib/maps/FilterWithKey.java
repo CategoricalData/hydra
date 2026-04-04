@@ -8,8 +8,7 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.PersistentMap;
-
+import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -77,7 +76,7 @@ public class FilterWithKey extends PrimitiveFunction {
      * @param pred the curried predicate: {@code key -> value -> Boolean}
      * @return a function that takes a map and returns the filtered map
      */
-    public static <K, V> Function<PersistentMap<K, V>, PersistentMap<K, V>> apply(Function<K, Function<V, Boolean>> pred) {
+    public static <K, V> Function<Map<K, V>, Map<K, V>> apply(Function<K, Function<V, Boolean>> pred) {
         return mp -> apply(pred, mp);
     }
 
@@ -89,7 +88,13 @@ public class FilterWithKey extends PrimitiveFunction {
      * @param mp the map to filter
      * @return the filtered map
      */
-    public static <K, V> PersistentMap<K, V> apply(Function<K, Function<V, Boolean>> pred, PersistentMap<K, V> mp) {
-        return mp.filterWithKey((k, v) -> pred.apply(k).apply(v));
+    public static <K, V> Map<K, V> apply(Function<K, Function<V, Boolean>> pred, Map<K, V> mp) {
+        Map<K, V> result = new TreeMap<>();
+        for (Map.Entry<K, V> e : mp.entrySet()) {
+            if (pred.apply(e.getKey()).apply(e.getValue())) {
+                result.put(e.getKey(), e.getValue());
+            }
+        }
+        return result;
     }
 }

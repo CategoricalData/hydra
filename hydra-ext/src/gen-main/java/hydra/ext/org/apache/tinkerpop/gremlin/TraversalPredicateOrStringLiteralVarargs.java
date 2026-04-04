@@ -68,7 +68,9 @@ public abstract class TraversalPredicateOrStringLiteralVarargs implements Serial
         return tagCmp;
       }
       Predicate o = (Predicate) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -78,9 +80,9 @@ public abstract class TraversalPredicateOrStringLiteralVarargs implements Serial
   }
 
   public static final class String_ extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicateOrStringLiteralVarargs implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
 
-    public String_ (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public String_ (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
 
@@ -108,7 +110,9 @@ public abstract class TraversalPredicateOrStringLiteralVarargs implements Serial
         return tagCmp;
       }
       String_ o = (String_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

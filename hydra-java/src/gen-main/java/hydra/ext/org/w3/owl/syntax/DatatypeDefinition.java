@@ -13,13 +13,13 @@ public class DatatypeDefinition implements Serializable, Comparable<DatatypeDefi
 
   public static final hydra.core.Name RANGE = new hydra.core.Name("range");
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
 
   public final hydra.ext.org.w3.owl.syntax.Datatype datatype;
 
   public final hydra.ext.org.w3.owl.syntax.DataRange range;
 
-  public DatatypeDefinition (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.Datatype datatype, hydra.ext.org.w3.owl.syntax.DataRange range) {
+  public DatatypeDefinition (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.Datatype datatype, hydra.ext.org.w3.owl.syntax.DataRange range) {
     this.annotations = annotations;
     this.datatype = datatype;
     this.range = range;
@@ -49,18 +49,24 @@ public class DatatypeDefinition implements Serializable, Comparable<DatatypeDefi
   @SuppressWarnings("unchecked")
   public int compareTo(DatatypeDefinition other) {
     int cmp = 0;
-    cmp = ((Comparable) annotations).compareTo(other.annotations);
+    cmp = hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) datatype).compareTo(other.datatype);
+    cmp = hydra.util.Comparing.compare(
+      datatype,
+      other.datatype);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) range).compareTo(other.range);
+    return hydra.util.Comparing.compare(
+      range,
+      other.range);
   }
 
-  public DatatypeDefinition withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public DatatypeDefinition withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new DatatypeDefinition(annotations, datatype, range);
   }
 

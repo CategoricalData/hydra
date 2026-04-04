@@ -42,11 +42,15 @@ public class IfThenStatement implements Serializable, Comparable<IfThenStatement
   @SuppressWarnings("unchecked")
   public int compareTo(IfThenStatement other) {
     int cmp = 0;
-    cmp = ((Comparable) expression).compareTo(other.expression);
+    cmp = hydra.util.Comparing.compare(
+      expression,
+      other.expression);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) statement).compareTo(other.statement);
+    return hydra.util.Comparing.compare(
+      statement,
+      other.statement);
   }
 
   public IfThenStatement withExpression(hydra.ext.java.syntax.Expression expression) {

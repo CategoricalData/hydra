@@ -132,7 +132,9 @@ public abstract class TraversalSourceSpawnMethod implements Serializable, Compar
         return tagCmp;
       }
       AddE o = (AddE) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -172,7 +174,9 @@ public abstract class TraversalSourceSpawnMethod implements Serializable, Compar
         return tagCmp;
       }
       AddV o = (AddV) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -182,9 +186,9 @@ public abstract class TraversalSourceSpawnMethod implements Serializable, Compar
   }
 
   public static final class E extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceSpawnMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
 
-    public E (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
+    public E (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
       this.value = value;
     }
 
@@ -212,7 +216,9 @@ public abstract class TraversalSourceSpawnMethod implements Serializable, Compar
         return tagCmp;
       }
       E o = (E) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -222,9 +228,9 @@ public abstract class TraversalSourceSpawnMethod implements Serializable, Compar
   }
 
   public static final class V extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceSpawnMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
 
-    public V (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
+    public V (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
       this.value = value;
     }
 
@@ -252,7 +258,9 @@ public abstract class TraversalSourceSpawnMethod implements Serializable, Compar
         return tagCmp;
       }
       V o = (V) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -292,7 +300,9 @@ public abstract class TraversalSourceSpawnMethod implements Serializable, Compar
         return tagCmp;
       }
       MergeV o = (MergeV) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -332,7 +342,9 @@ public abstract class TraversalSourceSpawnMethod implements Serializable, Compar
         return tagCmp;
       }
       MergeE o = (MergeE) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -342,9 +354,9 @@ public abstract class TraversalSourceSpawnMethod implements Serializable, Compar
   }
 
   public static final class Inject extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceSpawnMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
 
-    public Inject (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
+    public Inject (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
       this.value = value;
     }
 
@@ -372,7 +384,9 @@ public abstract class TraversalSourceSpawnMethod implements Serializable, Compar
         return tagCmp;
       }
       Inject o = (Inject) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -412,7 +426,9 @@ public abstract class TraversalSourceSpawnMethod implements Serializable, Compar
         return tagCmp;
       }
       Io o = (Io) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -452,7 +468,9 @@ public abstract class TraversalSourceSpawnMethod implements Serializable, Compar
         return tagCmp;
       }
       Call o = (Call) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -462,9 +480,9 @@ public abstract class TraversalSourceSpawnMethod implements Serializable, Compar
   }
 
   public static final class Union extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceSpawnMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
 
-    public Union (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
+    public Union (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
       this.value = value;
     }
 
@@ -492,7 +510,9 @@ public abstract class TraversalSourceSpawnMethod implements Serializable, Compar
         return tagCmp;
       }
       Union o = (Union) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

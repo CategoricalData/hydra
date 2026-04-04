@@ -36,9 +36,9 @@ public class TestCaseWithMetadata implements Serializable, Comparable<TestCaseWi
   /**
    * Zero or more tags for the test case
    */
-  public final hydra.util.ConsList<hydra.testing.Tag> tags;
+  public final java.util.List<hydra.testing.Tag> tags;
 
-  public TestCaseWithMetadata (String name, hydra.testing.TestCase case_, hydra.util.Maybe<String> description, hydra.util.ConsList<hydra.testing.Tag> tags) {
+  public TestCaseWithMetadata (String name, hydra.testing.TestCase case_, hydra.util.Maybe<String> description, java.util.List<hydra.testing.Tag> tags) {
     this.name = name;
     this.case_ = case_;
     this.description = description;
@@ -71,19 +71,27 @@ public class TestCaseWithMetadata implements Serializable, Comparable<TestCaseWi
   @SuppressWarnings("unchecked")
   public int compareTo(TestCaseWithMetadata other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) case_).compareTo(other.case_);
+    cmp = hydra.util.Comparing.compare(
+      case_,
+      other.case_);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) description).compareTo(other.description);
+    cmp = hydra.util.Comparing.compare(
+      description,
+      other.description);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) tags).compareTo(other.tags);
+    return hydra.util.Comparing.compare(
+      tags,
+      other.tags);
   }
 
   public TestCaseWithMetadata withName(String name) {
@@ -98,7 +106,7 @@ public class TestCaseWithMetadata implements Serializable, Comparable<TestCaseWi
     return new TestCaseWithMetadata(name, case_, description, tags);
   }
 
-  public TestCaseWithMetadata withTags(hydra.util.ConsList<hydra.testing.Tag> tags) {
+  public TestCaseWithMetadata withTags(java.util.List<hydra.testing.Tag> tags) {
     return new TestCaseWithMetadata(name, case_, description, tags);
   }
 }

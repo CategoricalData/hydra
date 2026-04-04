@@ -37,6 +37,8 @@ public class Tag implements Serializable, Comparable<Tag> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Tag other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

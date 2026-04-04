@@ -100,7 +100,9 @@ public abstract class Data_Ref implements Serializable, Comparable<Data_Ref> {
         return tagCmp;
       }
       This o = (This) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -140,7 +142,9 @@ public abstract class Data_Ref implements Serializable, Comparable<Data_Ref> {
         return tagCmp;
       }
       Super o = (Super) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -180,7 +184,9 @@ public abstract class Data_Ref implements Serializable, Comparable<Data_Ref> {
         return tagCmp;
       }
       Name o = (Name) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -220,7 +226,9 @@ public abstract class Data_Ref implements Serializable, Comparable<Data_Ref> {
         return tagCmp;
       }
       Anonymous o = (Anonymous) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -260,7 +268,9 @@ public abstract class Data_Ref implements Serializable, Comparable<Data_Ref> {
         return tagCmp;
       }
       Select o = (Select) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -300,7 +310,9 @@ public abstract class Data_Ref implements Serializable, Comparable<Data_Ref> {
         return tagCmp;
       }
       ApplyUnary o = (ApplyUnary) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

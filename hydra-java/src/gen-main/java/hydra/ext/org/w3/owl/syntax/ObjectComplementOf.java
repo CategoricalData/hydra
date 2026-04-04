@@ -34,6 +34,8 @@ public class ObjectComplementOf implements Serializable, Comparable<ObjectComple
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ObjectComplementOf other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

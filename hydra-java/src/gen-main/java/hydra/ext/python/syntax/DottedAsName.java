@@ -42,11 +42,15 @@ public class DottedAsName implements Serializable, Comparable<DottedAsName> {
   @SuppressWarnings("unchecked")
   public int compareTo(DottedAsName other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) as).compareTo(other.as);
+    return hydra.util.Comparing.compare(
+      as,
+      other.as);
   }
 
   public DottedAsName withName(hydra.ext.python.syntax.DottedName name) {

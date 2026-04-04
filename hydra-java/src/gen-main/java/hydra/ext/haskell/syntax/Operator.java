@@ -74,7 +74,9 @@ public abstract class Operator implements Serializable, Comparable<Operator> {
         return tagCmp;
       }
       Backtick o = (Backtick) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -117,7 +119,9 @@ public abstract class Operator implements Serializable, Comparable<Operator> {
         return tagCmp;
       }
       Normal o = (Normal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

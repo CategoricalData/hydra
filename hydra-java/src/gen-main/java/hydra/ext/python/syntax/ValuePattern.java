@@ -34,6 +34,8 @@ public class ValuePattern implements Serializable, Comparable<ValuePattern> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ValuePattern other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

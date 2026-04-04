@@ -34,6 +34,8 @@ public class Data_New implements Serializable, Comparable<Data_New> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Data_New other) {
-    return ((Comparable) init).compareTo(other.init);
+    return hydra.util.Comparing.compare(
+      init,
+      other.init);
   }
 }

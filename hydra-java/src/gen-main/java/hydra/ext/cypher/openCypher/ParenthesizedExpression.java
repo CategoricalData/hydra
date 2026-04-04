@@ -34,6 +34,8 @@ public class ParenthesizedExpression implements Serializable, Comparable<Parenth
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ParenthesizedExpression other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

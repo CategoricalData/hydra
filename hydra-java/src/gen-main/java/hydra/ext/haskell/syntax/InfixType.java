@@ -61,15 +61,21 @@ public class InfixType implements Serializable, Comparable<InfixType> {
   @SuppressWarnings("unchecked")
   public int compareTo(InfixType other) {
     int cmp = 0;
-    cmp = ((Comparable) lhs).compareTo(other.lhs);
+    cmp = hydra.util.Comparing.compare(
+      lhs,
+      other.lhs);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) operator).compareTo(other.operator);
+    cmp = hydra.util.Comparing.compare(
+      operator,
+      other.operator);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) rhs).compareTo(other.rhs);
+    return hydra.util.Comparing.compare(
+      rhs,
+      other.rhs);
   }
 
   public InfixType withLhs(hydra.ext.haskell.syntax.Type lhs) {

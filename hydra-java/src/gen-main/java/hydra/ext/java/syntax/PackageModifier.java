@@ -34,6 +34,8 @@ public class PackageModifier implements Serializable, Comparable<PackageModifier
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PackageModifier other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

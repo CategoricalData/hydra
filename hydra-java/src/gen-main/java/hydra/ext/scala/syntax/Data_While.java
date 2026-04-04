@@ -42,11 +42,15 @@ public class Data_While implements Serializable, Comparable<Data_While> {
   @SuppressWarnings("unchecked")
   public int compareTo(Data_While other) {
     int cmp = 0;
-    cmp = ((Comparable) expr).compareTo(other.expr);
+    cmp = hydra.util.Comparing.compare(
+      expr,
+      other.expr);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
   public Data_While withExpr(hydra.ext.scala.syntax.Data expr) {

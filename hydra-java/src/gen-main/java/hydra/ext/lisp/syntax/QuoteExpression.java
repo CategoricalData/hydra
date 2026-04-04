@@ -40,6 +40,8 @@ public class QuoteExpression implements Serializable, Comparable<QuoteExpression
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(QuoteExpression other) {
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 }

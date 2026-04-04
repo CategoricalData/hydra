@@ -9,9 +9,9 @@ public class MaybeSequencePattern implements Serializable, Comparable<MaybeSeque
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.MaybeStarPattern> value;
+  public final java.util.List<hydra.ext.python.syntax.MaybeStarPattern> value;
 
-  public MaybeSequencePattern (hydra.util.ConsList<hydra.ext.python.syntax.MaybeStarPattern> value) {
+  public MaybeSequencePattern (java.util.List<hydra.ext.python.syntax.MaybeStarPattern> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class MaybeSequencePattern implements Serializable, Comparable<MaybeSeque
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(MaybeSequencePattern other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

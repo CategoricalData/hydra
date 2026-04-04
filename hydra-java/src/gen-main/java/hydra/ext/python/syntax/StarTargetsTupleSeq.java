@@ -9,9 +9,9 @@ public class StarTargetsTupleSeq implements Serializable, Comparable<StarTargets
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.StarTarget> value;
+  public final java.util.List<hydra.ext.python.syntax.StarTarget> value;
 
-  public StarTargetsTupleSeq (hydra.util.ConsList<hydra.ext.python.syntax.StarTarget> value) {
+  public StarTargetsTupleSeq (java.util.List<hydra.ext.python.syntax.StarTarget> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class StarTargetsTupleSeq implements Serializable, Comparable<StarTargets
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(StarTargetsTupleSeq other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

@@ -17,14 +17,14 @@ public class UnboundTypeVariablesError implements Serializable, Comparable<Unbou
   /**
    * The set of unbound type variable names
    */
-  public final hydra.util.PersistentSet<hydra.core.Name> variables;
+  public final java.util.Set<hydra.core.Name> variables;
 
   /**
    * The type containing the unbound variables
    */
   public final hydra.core.Type type;
 
-  public UnboundTypeVariablesError (hydra.util.PersistentSet<hydra.core.Name> variables, hydra.core.Type type) {
+  public UnboundTypeVariablesError (java.util.Set<hydra.core.Name> variables, hydra.core.Type type) {
     this.variables = variables;
     this.type = type;
   }
@@ -51,14 +51,18 @@ public class UnboundTypeVariablesError implements Serializable, Comparable<Unbou
   @SuppressWarnings("unchecked")
   public int compareTo(UnboundTypeVariablesError other) {
     int cmp = 0;
-    cmp = ((Comparable) variables).compareTo(other.variables);
+    cmp = hydra.util.Comparing.compare(
+      variables,
+      other.variables);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) type).compareTo(other.type);
+    return hydra.util.Comparing.compare(
+      type,
+      other.type);
   }
 
-  public UnboundTypeVariablesError withVariables(hydra.util.PersistentSet<hydra.core.Name> variables) {
+  public UnboundTypeVariablesError withVariables(java.util.Set<hydra.core.Name> variables) {
     return new UnboundTypeVariablesError(variables, type);
   }
 

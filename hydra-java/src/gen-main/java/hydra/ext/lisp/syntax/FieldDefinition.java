@@ -51,11 +51,15 @@ public class FieldDefinition implements Serializable, Comparable<FieldDefinition
   @SuppressWarnings("unchecked")
   public int compareTo(FieldDefinition other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) defaultValue).compareTo(other.defaultValue);
+    return hydra.util.Comparing.compare(
+      defaultValue,
+      other.defaultValue);
   }
 
   public FieldDefinition withName(hydra.ext.lisp.syntax.Symbol name) {

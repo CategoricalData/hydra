@@ -12,9 +12,9 @@ public class DataIntersectionOf implements Serializable, Comparable<DataIntersec
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DataRange> value;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.DataRange> value;
 
-  public DataIntersectionOf (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DataRange> value) {
+  public DataIntersectionOf (java.util.List<hydra.ext.org.w3.owl.syntax.DataRange> value) {
     this.value = value;
   }
 
@@ -37,6 +37,8 @@ public class DataIntersectionOf implements Serializable, Comparable<DataIntersec
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DataIntersectionOf other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

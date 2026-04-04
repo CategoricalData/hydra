@@ -76,7 +76,9 @@ public abstract class Statement implements Serializable, Comparable<Statement> {
         return tagCmp;
       }
       Compound o = (Compound) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -86,9 +88,9 @@ public abstract class Statement implements Serializable, Comparable<Statement> {
   }
 
   public static final class Simple extends hydra.ext.python.syntax.Statement implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.python.syntax.SimpleStatement> value;
+    public final java.util.List<hydra.ext.python.syntax.SimpleStatement> value;
 
-    public Simple (hydra.util.ConsList<hydra.ext.python.syntax.SimpleStatement> value) {
+    public Simple (java.util.List<hydra.ext.python.syntax.SimpleStatement> value) {
       this.value = value;
     }
 
@@ -116,7 +118,9 @@ public abstract class Statement implements Serializable, Comparable<Statement> {
         return tagCmp;
       }
       Simple o = (Simple) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class Statement implements Serializable, Comparable<Statement> {
         return tagCmp;
       }
       Annotated o = (Annotated) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

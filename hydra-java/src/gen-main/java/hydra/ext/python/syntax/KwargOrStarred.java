@@ -68,7 +68,9 @@ public abstract class KwargOrStarred implements Serializable, Comparable<KwargOr
         return tagCmp;
       }
       Kwarg o = (Kwarg) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class KwargOrStarred implements Serializable, Comparable<KwargOr
         return tagCmp;
       }
       Starred o = (Starred) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

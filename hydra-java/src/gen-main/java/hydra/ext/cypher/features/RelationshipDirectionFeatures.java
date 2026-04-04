@@ -71,19 +71,27 @@ public class RelationshipDirectionFeatures implements Serializable, Comparable<R
   @SuppressWarnings("unchecked")
   public int compareTo(RelationshipDirectionFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) both).compareTo(other.both);
+    cmp = hydra.util.Comparing.compare(
+      both,
+      other.both);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) left).compareTo(other.left);
+    cmp = hydra.util.Comparing.compare(
+      left,
+      other.left);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) neither).compareTo(other.neither);
+    cmp = hydra.util.Comparing.compare(
+      neither,
+      other.neither);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) right).compareTo(other.right);
+    return hydra.util.Comparing.compare(
+      right,
+      other.right);
   }
 
   public RelationshipDirectionFeatures withBoth(Boolean both) {

@@ -25,7 +25,7 @@ public class FunctionDefRaw implements Serializable, Comparable<FunctionDefRaw> 
 
   public final hydra.ext.python.syntax.Name name;
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> typeParams;
+  public final java.util.List<hydra.ext.python.syntax.TypeParameter> typeParams;
 
   public final hydra.util.Maybe<hydra.ext.python.syntax.Parameters> params;
 
@@ -35,7 +35,7 @@ public class FunctionDefRaw implements Serializable, Comparable<FunctionDefRaw> 
 
   public final hydra.ext.python.syntax.Block block;
 
-  public FunctionDefRaw (Boolean async, hydra.ext.python.syntax.Name name, hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> typeParams, hydra.util.Maybe<hydra.ext.python.syntax.Parameters> params, hydra.util.Maybe<hydra.ext.python.syntax.Expression> returnType, hydra.util.Maybe<hydra.ext.python.syntax.FuncTypeComment> funcTypeComment, hydra.ext.python.syntax.Block block) {
+  public FunctionDefRaw (Boolean async, hydra.ext.python.syntax.Name name, java.util.List<hydra.ext.python.syntax.TypeParameter> typeParams, hydra.util.Maybe<hydra.ext.python.syntax.Parameters> params, hydra.util.Maybe<hydra.ext.python.syntax.Expression> returnType, hydra.util.Maybe<hydra.ext.python.syntax.FuncTypeComment> funcTypeComment, hydra.ext.python.syntax.Block block) {
     this.async = async;
     this.name = name;
     this.typeParams = typeParams;
@@ -77,31 +77,45 @@ public class FunctionDefRaw implements Serializable, Comparable<FunctionDefRaw> 
   @SuppressWarnings("unchecked")
   public int compareTo(FunctionDefRaw other) {
     int cmp = 0;
-    cmp = ((Comparable) async).compareTo(other.async);
+    cmp = hydra.util.Comparing.compare(
+      async,
+      other.async);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) typeParams).compareTo(other.typeParams);
+    cmp = hydra.util.Comparing.compare(
+      typeParams,
+      other.typeParams);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) params).compareTo(other.params);
+    cmp = hydra.util.Comparing.compare(
+      params,
+      other.params);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) returnType).compareTo(other.returnType);
+    cmp = hydra.util.Comparing.compare(
+      returnType,
+      other.returnType);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) funcTypeComment).compareTo(other.funcTypeComment);
+    cmp = hydra.util.Comparing.compare(
+      funcTypeComment,
+      other.funcTypeComment);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) block).compareTo(other.block);
+    return hydra.util.Comparing.compare(
+      block,
+      other.block);
   }
 
   public FunctionDefRaw withAsync(Boolean async) {
@@ -112,7 +126,7 @@ public class FunctionDefRaw implements Serializable, Comparable<FunctionDefRaw> 
     return new FunctionDefRaw(async, name, typeParams, params, returnType, funcTypeComment, block);
   }
 
-  public FunctionDefRaw withTypeParams(hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> typeParams) {
+  public FunctionDefRaw withTypeParams(java.util.List<hydra.ext.python.syntax.TypeParameter> typeParams) {
     return new FunctionDefRaw(async, name, typeParams, params, returnType, funcTypeComment, block);
   }
 

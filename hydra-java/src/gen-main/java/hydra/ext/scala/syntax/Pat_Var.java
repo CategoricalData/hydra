@@ -34,6 +34,8 @@ public class Pat_Var implements Serializable, Comparable<Pat_Var> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Pat_Var other) {
-    return ((Comparable) name).compareTo(other.name);
+    return hydra.util.Comparing.compare(
+      name,
+      other.name);
   }
 }

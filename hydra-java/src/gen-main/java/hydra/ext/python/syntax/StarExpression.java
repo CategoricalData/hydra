@@ -68,7 +68,9 @@ public abstract class StarExpression implements Serializable, Comparable<StarExp
         return tagCmp;
       }
       Star o = (Star) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class StarExpression implements Serializable, Comparable<StarExp
         return tagCmp;
       }
       Simple o = (Simple) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

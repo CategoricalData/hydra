@@ -9,9 +9,9 @@ public class ListLiteral implements Serializable, Comparable<ListLiteral> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.Expression> value;
+  public final java.util.List<hydra.ext.cypher.openCypher.Expression> value;
 
-  public ListLiteral (hydra.util.ConsList<hydra.ext.cypher.openCypher.Expression> value) {
+  public ListLiteral (java.util.List<hydra.ext.cypher.openCypher.Expression> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class ListLiteral implements Serializable, Comparable<ListLiteral> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ListLiteral other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

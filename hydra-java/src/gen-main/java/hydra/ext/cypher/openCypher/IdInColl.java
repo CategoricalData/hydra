@@ -42,11 +42,15 @@ public class IdInColl implements Serializable, Comparable<IdInColl> {
   @SuppressWarnings("unchecked")
   public int compareTo(IdInColl other) {
     int cmp = 0;
-    cmp = ((Comparable) variable).compareTo(other.variable);
+    cmp = hydra.util.Comparing.compare(
+      variable,
+      other.variable);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) expression).compareTo(other.expression);
+    return hydra.util.Comparing.compare(
+      expression,
+      other.expression);
   }
 
   public IdInColl withVariable(hydra.ext.cypher.openCypher.Variable variable) {

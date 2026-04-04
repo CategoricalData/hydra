@@ -9,9 +9,8 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Maybe;
 
-import hydra.util.ConsList;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -35,7 +34,7 @@ public class ZipWith extends PrimitiveFunction {
     @Override
     public TypeScheme type() {
         return new hydra.core.TypeScheme(
-                ConsList.of(new hydra.core.Name("a"), new hydra.core.Name("b"), new hydra.core.Name("c")),
+                Arrays.asList(new hydra.core.Name("a"), new hydra.core.Name("b"), new hydra.core.Name("c")),
                 function(function(Types.var("a"), Types.var("b"), Types.var("c")), list("a"), list("b"), list("c")),
                 Maybe.nothing());
     }
@@ -45,8 +44,8 @@ public class ZipWith extends PrimitiveFunction {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(cx, graph, args.get(1)), lst1 ->
                 hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(cx, graph, args.get(2)), lst2 -> {
                     Term f = args.get(0);
-                    ArrayList<Term> items1 = lst1.toArrayList();
-                    ArrayList<Term> items2 = lst2.toArrayList();
+                    ArrayList<Term> items1 = new ArrayList<>(lst1);
+                    ArrayList<Term> items2 = new ArrayList<>(lst2);
                     List<Term> results = new ArrayList<>();
                     int minSize = Math.min(items1.size(), items2.size());
                     for (int i = 0; i < minSize; i++) {
@@ -67,7 +66,7 @@ public class ZipWith extends PrimitiveFunction {
      * @param f the combining function
      * @return a curried function that takes two lists and combines them
      */
-    public static <X, Y, Z> Function<ConsList<X>, Function<ConsList<Y>, ConsList<Z>>> apply(BiFunction<X, Y, Z> f) {
+    public static <X, Y, Z> Function<List<X>, Function<List<Y>, List<Z>>> apply(BiFunction<X, Y, Z> f) {
         return lst1 -> lst2 -> apply(f, lst1, lst2);
     }
 
@@ -81,15 +80,13 @@ public class ZipWith extends PrimitiveFunction {
      * @param lst2 the second list
      * @return a list of elements created by applying the function to pairs
      */
-    public static <X, Y, Z> ConsList<Z> apply(BiFunction<X, Y, Z> f, ConsList<X> lst1, ConsList<Y> lst2) {
-        ArrayList<X> items1 = lst1.toArrayList();
-        ArrayList<Y> items2 = lst2.toArrayList();
+    public static <X, Y, Z> List<Z> apply(BiFunction<X, Y, Z> f, List<X> lst1, List<Y> lst2) {
         ArrayList<Z> result = new ArrayList<>();
-        int minSize = Math.min(items1.size(), items2.size());
+        int minSize = Math.min(lst1.size(), lst2.size());
         for (int i = 0; i < minSize; i++) {
-            result.add(f.apply(items1.get(i), items2.get(i)));
+            result.add(f.apply(lst1.get(i), lst2.get(i)));
         }
-        return ConsList.fromList(result);
+        return result;
     }
 
     /**
@@ -102,7 +99,7 @@ public class ZipWith extends PrimitiveFunction {
      * @param lst2 the second list
      * @return a list of elements created by applying the function to pairs
      */
-    public static <X, Y, Z> ConsList<Z> apply(Function<X, Function<Y, Z>> f, ConsList<X> lst1, ConsList<Y> lst2) {
+    public static <X, Y, Z> List<Z> apply(Function<X, Function<Y, Z>> f, List<X> lst1, List<Y> lst2) {
         return apply((x, y) -> f.apply(x).apply(y), lst1, lst2);
     }
 }

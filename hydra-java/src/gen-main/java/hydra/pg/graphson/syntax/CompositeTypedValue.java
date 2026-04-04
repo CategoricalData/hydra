@@ -42,11 +42,15 @@ public class CompositeTypedValue implements Serializable, Comparable<CompositeTy
   @SuppressWarnings("unchecked")
   public int compareTo(CompositeTypedValue other) {
     int cmp = 0;
-    cmp = ((Comparable) type).compareTo(other.type);
+    cmp = hydra.util.Comparing.compare(
+      type,
+      other.type);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) fields).compareTo(other.fields);
+    return hydra.util.Comparing.compare(
+      fields,
+      other.fields);
   }
 
   public CompositeTypedValue withType(hydra.pg.graphson.syntax.TypeName type) {

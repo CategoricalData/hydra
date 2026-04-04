@@ -15,11 +15,11 @@ public class NonArithmeticOperatorExpression implements Serializable, Comparable
 
   public final hydra.ext.cypher.openCypher.Atom atom;
 
-  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.ListOperatorExpressionOrPropertyLookup> listsAndLookups;
+  public final java.util.List<hydra.ext.cypher.openCypher.ListOperatorExpressionOrPropertyLookup> listsAndLookups;
 
   public final hydra.util.Maybe<hydra.ext.cypher.openCypher.NodeLabels> labels;
 
-  public NonArithmeticOperatorExpression (hydra.ext.cypher.openCypher.Atom atom, hydra.util.ConsList<hydra.ext.cypher.openCypher.ListOperatorExpressionOrPropertyLookup> listsAndLookups, hydra.util.Maybe<hydra.ext.cypher.openCypher.NodeLabels> labels) {
+  public NonArithmeticOperatorExpression (hydra.ext.cypher.openCypher.Atom atom, java.util.List<hydra.ext.cypher.openCypher.ListOperatorExpressionOrPropertyLookup> listsAndLookups, hydra.util.Maybe<hydra.ext.cypher.openCypher.NodeLabels> labels) {
     this.atom = atom;
     this.listsAndLookups = listsAndLookups;
     this.labels = labels;
@@ -49,22 +49,28 @@ public class NonArithmeticOperatorExpression implements Serializable, Comparable
   @SuppressWarnings("unchecked")
   public int compareTo(NonArithmeticOperatorExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) atom).compareTo(other.atom);
+    cmp = hydra.util.Comparing.compare(
+      atom,
+      other.atom);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) listsAndLookups).compareTo(other.listsAndLookups);
+    cmp = hydra.util.Comparing.compare(
+      listsAndLookups,
+      other.listsAndLookups);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) labels).compareTo(other.labels);
+    return hydra.util.Comparing.compare(
+      labels,
+      other.labels);
   }
 
   public NonArithmeticOperatorExpression withAtom(hydra.ext.cypher.openCypher.Atom atom) {
     return new NonArithmeticOperatorExpression(atom, listsAndLookups, labels);
   }
 
-  public NonArithmeticOperatorExpression withListsAndLookups(hydra.util.ConsList<hydra.ext.cypher.openCypher.ListOperatorExpressionOrPropertyLookup> listsAndLookups) {
+  public NonArithmeticOperatorExpression withListsAndLookups(java.util.List<hydra.ext.cypher.openCypher.ListOperatorExpressionOrPropertyLookup> listsAndLookups) {
     return new NonArithmeticOperatorExpression(atom, listsAndLookups, labels);
   }
 

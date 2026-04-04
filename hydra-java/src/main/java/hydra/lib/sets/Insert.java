@@ -8,10 +8,10 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import java.util.TreeSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
-
-import hydra.util.PersistentSet;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
@@ -59,7 +59,7 @@ public class Insert extends PrimitiveFunction {
      * @param elem the element to add
      * @return a function that takes a set and returns a new set with the element added
      */
-    public static <X> Function<PersistentSet<X>, PersistentSet<X>> apply(X elem) {
+    public static <X> Function<Set<X>, Set<X>> apply(X elem) {
         return (arg) -> apply(elem, arg);
     }
 
@@ -70,7 +70,9 @@ public class Insert extends PrimitiveFunction {
      * @param arg the set to add to
      * @return a new set with the element added
      */
-    public static <X> PersistentSet<X> apply(X elem, PersistentSet<X> arg) {
-        return arg.insert(elem);
+    public static <X> Set<X> apply(X elem, Set<X> arg) {
+        Set<X> result = new TreeSet<>(arg);
+        result.add(elem);
+        return result;
     }
 }

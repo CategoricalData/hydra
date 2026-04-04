@@ -68,7 +68,9 @@ public abstract class Data_FunctionData implements Serializable, Comparable<Data
         return tagCmp;
       }
       ContextFunction o = (ContextFunction) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class Data_FunctionData implements Serializable, Comparable<Data
         return tagCmp;
       }
       Function o = (Function) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

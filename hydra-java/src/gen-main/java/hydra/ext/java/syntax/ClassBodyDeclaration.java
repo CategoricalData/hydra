@@ -84,7 +84,9 @@ public abstract class ClassBodyDeclaration implements Serializable, Comparable<C
         return tagCmp;
       }
       ClassMember o = (ClassMember) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -124,7 +126,9 @@ public abstract class ClassBodyDeclaration implements Serializable, Comparable<C
         return tagCmp;
       }
       InstanceInitializer o = (InstanceInitializer) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -164,7 +168,9 @@ public abstract class ClassBodyDeclaration implements Serializable, Comparable<C
         return tagCmp;
       }
       StaticInitializer o = (StaticInitializer) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +210,9 @@ public abstract class ClassBodyDeclaration implements Serializable, Comparable<C
         return tagCmp;
       }
       ConstructorDeclaration o = (ConstructorDeclaration) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

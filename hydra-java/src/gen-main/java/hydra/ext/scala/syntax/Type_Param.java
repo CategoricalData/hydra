@@ -19,19 +19,19 @@ public class Type_Param implements Serializable, Comparable<Type_Param> {
 
   public static final hydra.core.Name CBOUNDS = new hydra.core.Name("cbounds");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods;
+  public final java.util.List<hydra.ext.scala.syntax.Mod> mods;
 
   public final hydra.ext.scala.syntax.Name name;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams;
+  public final java.util.List<hydra.ext.scala.syntax.Type_Param> tparams;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.TypeBounds> tbounds;
+  public final java.util.List<hydra.ext.scala.syntax.TypeBounds> tbounds;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Type> vbounds;
+  public final java.util.List<hydra.ext.scala.syntax.Type> vbounds;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Type> cbounds;
+  public final java.util.List<hydra.ext.scala.syntax.Type> cbounds;
 
-  public Type_Param (hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods, hydra.ext.scala.syntax.Name name, hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams, hydra.util.ConsList<hydra.ext.scala.syntax.TypeBounds> tbounds, hydra.util.ConsList<hydra.ext.scala.syntax.Type> vbounds, hydra.util.ConsList<hydra.ext.scala.syntax.Type> cbounds) {
+  public Type_Param (java.util.List<hydra.ext.scala.syntax.Mod> mods, hydra.ext.scala.syntax.Name name, java.util.List<hydra.ext.scala.syntax.Type_Param> tparams, java.util.List<hydra.ext.scala.syntax.TypeBounds> tbounds, java.util.List<hydra.ext.scala.syntax.Type> vbounds, java.util.List<hydra.ext.scala.syntax.Type> cbounds) {
     this.mods = mods;
     this.name = name;
     this.tparams = tparams;
@@ -70,30 +70,42 @@ public class Type_Param implements Serializable, Comparable<Type_Param> {
   @SuppressWarnings("unchecked")
   public int compareTo(Type_Param other) {
     int cmp = 0;
-    cmp = ((Comparable) mods).compareTo(other.mods);
+    cmp = hydra.util.Comparing.compare(
+      mods,
+      other.mods);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) tparams).compareTo(other.tparams);
+    cmp = hydra.util.Comparing.compare(
+      tparams,
+      other.tparams);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) tbounds).compareTo(other.tbounds);
+    cmp = hydra.util.Comparing.compare(
+      tbounds,
+      other.tbounds);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) vbounds).compareTo(other.vbounds);
+    cmp = hydra.util.Comparing.compare(
+      vbounds,
+      other.vbounds);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) cbounds).compareTo(other.cbounds);
+    return hydra.util.Comparing.compare(
+      cbounds,
+      other.cbounds);
   }
 
-  public Type_Param withMods(hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods) {
+  public Type_Param withMods(java.util.List<hydra.ext.scala.syntax.Mod> mods) {
     return new Type_Param(mods, name, tparams, tbounds, vbounds, cbounds);
   }
 
@@ -101,19 +113,19 @@ public class Type_Param implements Serializable, Comparable<Type_Param> {
     return new Type_Param(mods, name, tparams, tbounds, vbounds, cbounds);
   }
 
-  public Type_Param withTparams(hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams) {
+  public Type_Param withTparams(java.util.List<hydra.ext.scala.syntax.Type_Param> tparams) {
     return new Type_Param(mods, name, tparams, tbounds, vbounds, cbounds);
   }
 
-  public Type_Param withTbounds(hydra.util.ConsList<hydra.ext.scala.syntax.TypeBounds> tbounds) {
+  public Type_Param withTbounds(java.util.List<hydra.ext.scala.syntax.TypeBounds> tbounds) {
     return new Type_Param(mods, name, tparams, tbounds, vbounds, cbounds);
   }
 
-  public Type_Param withVbounds(hydra.util.ConsList<hydra.ext.scala.syntax.Type> vbounds) {
+  public Type_Param withVbounds(java.util.List<hydra.ext.scala.syntax.Type> vbounds) {
     return new Type_Param(mods, name, tparams, tbounds, vbounds, cbounds);
   }
 
-  public Type_Param withCbounds(hydra.util.ConsList<hydra.ext.scala.syntax.Type> cbounds) {
+  public Type_Param withCbounds(java.util.List<hydra.ext.scala.syntax.Type> cbounds) {
     return new Type_Param(mods, name, tparams, tbounds, vbounds, cbounds);
   }
 }

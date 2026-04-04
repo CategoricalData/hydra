@@ -42,11 +42,15 @@ public class ObjectAllValuesFrom implements Serializable, Comparable<ObjectAllVa
   @SuppressWarnings("unchecked")
   public int compareTo(ObjectAllValuesFrom other) {
     int cmp = 0;
-    cmp = ((Comparable) property).compareTo(other.property);
+    cmp = hydra.util.Comparing.compare(
+      property,
+      other.property);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) class_).compareTo(other.class_);
+    return hydra.util.Comparing.compare(
+      class_,
+      other.class_);
   }
 
   public ObjectAllValuesFrom withProperty(hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property) {

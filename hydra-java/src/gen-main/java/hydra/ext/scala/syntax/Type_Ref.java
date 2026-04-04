@@ -84,7 +84,9 @@ public abstract class Type_Ref implements Serializable, Comparable<Type_Ref> {
         return tagCmp;
       }
       Name o = (Name) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -124,7 +126,9 @@ public abstract class Type_Ref implements Serializable, Comparable<Type_Ref> {
         return tagCmp;
       }
       Select o = (Select) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -164,7 +168,9 @@ public abstract class Type_Ref implements Serializable, Comparable<Type_Ref> {
         return tagCmp;
       }
       Project o = (Project) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +210,9 @@ public abstract class Type_Ref implements Serializable, Comparable<Type_Ref> {
         return tagCmp;
       }
       Singleton o = (Singleton) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

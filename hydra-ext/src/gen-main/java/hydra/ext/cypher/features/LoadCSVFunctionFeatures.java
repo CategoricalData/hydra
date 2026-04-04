@@ -51,11 +51,15 @@ public class LoadCSVFunctionFeatures implements Serializable, Comparable<LoadCSV
   @SuppressWarnings("unchecked")
   public int compareTo(LoadCSVFunctionFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) file).compareTo(other.file);
+    cmp = hydra.util.Comparing.compare(
+      file,
+      other.file);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) linenumber).compareTo(other.linenumber);
+    return hydra.util.Comparing.compare(
+      linenumber,
+      other.linenumber);
   }
 
   public LoadCSVFunctionFeatures withFile(Boolean file) {

@@ -84,7 +84,9 @@ public abstract class ToArgs implements Serializable, Comparable<ToArgs> {
         return tagCmp;
       }
       Direction o = (Direction) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -124,7 +126,9 @@ public abstract class ToArgs implements Serializable, Comparable<ToArgs> {
         return tagCmp;
       }
       String_ o = (String_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -164,7 +168,9 @@ public abstract class ToArgs implements Serializable, Comparable<ToArgs> {
         return tagCmp;
       }
       Vertex o = (Vertex) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +210,9 @@ public abstract class ToArgs implements Serializable, Comparable<ToArgs> {
         return tagCmp;
       }
       Traversal o = (Traversal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

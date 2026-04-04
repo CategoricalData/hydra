@@ -51,11 +51,15 @@ public class TypedBinding implements Serializable, Comparable<TypedBinding> {
   @SuppressWarnings("unchecked")
   public int compareTo(TypedBinding other) {
     int cmp = 0;
-    cmp = ((Comparable) typeSignature).compareTo(other.typeSignature);
+    cmp = hydra.util.Comparing.compare(
+      typeSignature,
+      other.typeSignature);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) valueBinding).compareTo(other.valueBinding);
+    return hydra.util.Comparing.compare(
+      valueBinding,
+      other.valueBinding);
   }
 
   public TypedBinding withTypeSignature(hydra.ext.haskell.syntax.TypeSignature typeSignature) {

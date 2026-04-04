@@ -13,9 +13,9 @@ public class Type_Annotate implements Serializable, Comparable<Type_Annotate> {
 
   public final hydra.ext.scala.syntax.Type tpe;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Mod_Annot> annots;
+  public final java.util.List<hydra.ext.scala.syntax.Mod_Annot> annots;
 
-  public Type_Annotate (hydra.ext.scala.syntax.Type tpe, hydra.util.ConsList<hydra.ext.scala.syntax.Mod_Annot> annots) {
+  public Type_Annotate (hydra.ext.scala.syntax.Type tpe, java.util.List<hydra.ext.scala.syntax.Mod_Annot> annots) {
     this.tpe = tpe;
     this.annots = annots;
   }
@@ -42,18 +42,22 @@ public class Type_Annotate implements Serializable, Comparable<Type_Annotate> {
   @SuppressWarnings("unchecked")
   public int compareTo(Type_Annotate other) {
     int cmp = 0;
-    cmp = ((Comparable) tpe).compareTo(other.tpe);
+    cmp = hydra.util.Comparing.compare(
+      tpe,
+      other.tpe);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) annots).compareTo(other.annots);
+    return hydra.util.Comparing.compare(
+      annots,
+      other.annots);
   }
 
   public Type_Annotate withTpe(hydra.ext.scala.syntax.Type tpe) {
     return new Type_Annotate(tpe, annots);
   }
 
-  public Type_Annotate withAnnots(hydra.util.ConsList<hydra.ext.scala.syntax.Mod_Annot> annots) {
+  public Type_Annotate withAnnots(java.util.List<hydra.ext.scala.syntax.Mod_Annot> annots) {
     return new Type_Annotate(tpe, annots);
   }
 }

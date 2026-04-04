@@ -11,11 +11,11 @@ public class FunctionalObjectProperty implements Serializable, Comparable<Functi
 
   public static final hydra.core.Name PROPERTY = new hydra.core.Name("property");
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
 
   public final hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property;
 
-  public FunctionalObjectProperty (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property) {
+  public FunctionalObjectProperty (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property) {
     this.annotations = annotations;
     this.property = property;
   }
@@ -42,14 +42,18 @@ public class FunctionalObjectProperty implements Serializable, Comparable<Functi
   @SuppressWarnings("unchecked")
   public int compareTo(FunctionalObjectProperty other) {
     int cmp = 0;
-    cmp = ((Comparable) annotations).compareTo(other.annotations);
+    cmp = hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) property).compareTo(other.property);
+    return hydra.util.Comparing.compare(
+      property,
+      other.property);
   }
 
-  public FunctionalObjectProperty withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public FunctionalObjectProperty withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new FunctionalObjectProperty(annotations, property);
   }
 

@@ -76,7 +76,9 @@ public abstract class SwitchLabel implements Serializable, Comparable<SwitchLabe
         return tagCmp;
       }
       Constant o = (Constant) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class SwitchLabel implements Serializable, Comparable<SwitchLabe
         return tagCmp;
       }
       EnumConstant o = (EnumConstant) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

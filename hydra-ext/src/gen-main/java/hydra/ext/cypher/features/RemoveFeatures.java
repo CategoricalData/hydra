@@ -51,11 +51,15 @@ public class RemoveFeatures implements Serializable, Comparable<RemoveFeatures> 
   @SuppressWarnings("unchecked")
   public int compareTo(RemoveFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) byLabel).compareTo(other.byLabel);
+    cmp = hydra.util.Comparing.compare(
+      byLabel,
+      other.byLabel);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) byProperty).compareTo(other.byProperty);
+    return hydra.util.Comparing.compare(
+      byProperty,
+      other.byProperty);
   }
 
   public RemoveFeatures withByLabel(Boolean byLabel) {

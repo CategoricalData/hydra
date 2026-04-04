@@ -51,11 +51,15 @@ public class NullFeatures implements Serializable, Comparable<NullFeatures> {
   @SuppressWarnings("unchecked")
   public int compareTo(NullFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) isNull).compareTo(other.isNull);
+    cmp = hydra.util.Comparing.compare(
+      isNull,
+      other.isNull);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) isNotNull).compareTo(other.isNotNull);
+    return hydra.util.Comparing.compare(
+      isNotNull,
+      other.isNotNull);
   }
 
   public NullFeatures withIsNull(Boolean isNull) {

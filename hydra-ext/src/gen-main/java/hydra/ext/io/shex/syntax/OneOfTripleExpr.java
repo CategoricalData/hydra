@@ -68,7 +68,9 @@ public abstract class OneOfTripleExpr implements Serializable, Comparable<OneOfT
         return tagCmp;
       }
       GroupTripleExpr o = (GroupTripleExpr) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class OneOfTripleExpr implements Serializable, Comparable<OneOfT
         return tagCmp;
       }
       MultiElementOneOf o = (MultiElementOneOf) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -204,9 +204,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
    * See https://www.w3.org/TR/shacl/#AndConstraintComponent
    */
   public static final class And extends hydra.ext.org.w3.shacl.model.CommonConstraint implements Serializable {
-    public final hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.Shape>> value;
+    public final java.util.Set<hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.Shape>> value;
 
-    public And (hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.Shape>> value) {
+    public And (java.util.Set<hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.Shape>> value) {
       this.value = value;
     }
 
@@ -234,7 +234,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       And o = (And) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -277,7 +279,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       Closed o = (Closed) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -290,9 +294,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
    * See https://www.w3.org/TR/shacl/#ClassConstraintComponent
    */
   public static final class Class_ extends hydra.ext.org.w3.shacl.model.CommonConstraint implements Serializable {
-    public final hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.RdfsClass> value;
+    public final java.util.Set<hydra.ext.org.w3.rdf.syntax.RdfsClass> value;
 
-    public Class_ (hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.RdfsClass> value) {
+    public Class_ (java.util.Set<hydra.ext.org.w3.rdf.syntax.RdfsClass> value) {
       this.value = value;
     }
 
@@ -320,7 +324,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       Class_ o = (Class_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -363,7 +369,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       Datatype o = (Datatype) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -376,9 +384,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
    * See https://www.w3.org/TR/shacl/#DisjointConstraintComponent
    */
   public static final class Disjoint extends hydra.ext.org.w3.shacl.model.CommonConstraint implements Serializable {
-    public final hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property> value;
+    public final java.util.Set<hydra.ext.org.w3.rdf.syntax.Property> value;
 
-    public Disjoint (hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property> value) {
+    public Disjoint (java.util.Set<hydra.ext.org.w3.rdf.syntax.Property> value) {
       this.value = value;
     }
 
@@ -406,7 +414,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       Disjoint o = (Disjoint) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -419,9 +429,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
    * See https://www.w3.org/TR/shacl/#EqualsConstraintComponent
    */
   public static final class Equals extends hydra.ext.org.w3.shacl.model.CommonConstraint implements Serializable {
-    public final hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property> value;
+    public final java.util.Set<hydra.ext.org.w3.rdf.syntax.Property> value;
 
-    public Equals (hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property> value) {
+    public Equals (java.util.Set<hydra.ext.org.w3.rdf.syntax.Property> value) {
       this.value = value;
     }
 
@@ -449,7 +459,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       Equals o = (Equals) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -462,9 +474,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
    * Specifies the condition that at least one value node is equal to the given RDF term. See https://www.w3.org/TR/shacl/#HasValueConstraintComponent
    */
   public static final class HasValue extends hydra.ext.org.w3.shacl.model.CommonConstraint implements Serializable {
-    public final hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Node> value;
+    public final java.util.Set<hydra.ext.org.w3.rdf.syntax.Node> value;
 
-    public HasValue (hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Node> value) {
+    public HasValue (java.util.Set<hydra.ext.org.w3.rdf.syntax.Node> value) {
       this.value = value;
     }
 
@@ -492,7 +504,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       HasValue o = (HasValue) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -505,9 +519,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
    * Specifies the condition that each value node is a member of a provided SHACL list. See https://www.w3.org/TR/shacl/#InConstraintComponent
    */
   public static final class In extends hydra.ext.org.w3.shacl.model.CommonConstraint implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Node> value;
+    public final java.util.List<hydra.ext.org.w3.rdf.syntax.Node> value;
 
-    public In (hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Node> value) {
+    public In (java.util.List<hydra.ext.org.w3.rdf.syntax.Node> value) {
       this.value = value;
     }
 
@@ -535,7 +549,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       In o = (In) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -548,9 +564,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
    * See https://www.w3.org/TR/shacl/#LanguageInConstraintComponent
    */
   public static final class LanguageIn extends hydra.ext.org.w3.shacl.model.CommonConstraint implements Serializable {
-    public final hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.LanguageTag> value;
+    public final java.util.Set<hydra.ext.org.w3.rdf.syntax.LanguageTag> value;
 
-    public LanguageIn (hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.LanguageTag> value) {
+    public LanguageIn (java.util.Set<hydra.ext.org.w3.rdf.syntax.LanguageTag> value) {
       this.value = value;
     }
 
@@ -578,7 +594,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       LanguageIn o = (LanguageIn) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -621,7 +639,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       NodeKind o = (NodeKind) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -634,9 +654,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
    * See https://www.w3.org/TR/shacl/#NodeConstraintComponent
    */
   public static final class Node extends hydra.ext.org.w3.shacl.model.CommonConstraint implements Serializable {
-    public final hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.NodeShape>> value;
+    public final java.util.Set<hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.NodeShape>> value;
 
-    public Node (hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.NodeShape>> value) {
+    public Node (java.util.Set<hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.NodeShape>> value) {
       this.value = value;
     }
 
@@ -664,7 +684,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       Node o = (Node) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -677,9 +699,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
    * See https://www.w3.org/TR/shacl/#NotConstraintComponent
    */
   public static final class Not extends hydra.ext.org.w3.shacl.model.CommonConstraint implements Serializable {
-    public final hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.Shape>> value;
+    public final java.util.Set<hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.Shape>> value;
 
-    public Not (hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.Shape>> value) {
+    public Not (java.util.Set<hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.Shape>> value) {
       this.value = value;
     }
 
@@ -707,7 +729,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       Not o = (Not) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -750,7 +774,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       MaxExclusive o = (MaxExclusive) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -793,7 +819,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       MaxInclusive o = (MaxInclusive) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -834,7 +862,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       MaxLength o = (MaxLength) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -877,7 +907,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       MinExclusive o = (MinExclusive) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -920,7 +952,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       MinInclusive o = (MinInclusive) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -961,7 +995,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       MinLength o = (MinLength) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1004,7 +1040,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       Pattern o = (Pattern) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1017,9 +1055,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
    * See https://www.w3.org/TR/shacl/#PropertyConstraintComponent
    */
   public static final class Property extends hydra.ext.org.w3.shacl.model.CommonConstraint implements Serializable {
-    public final hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.PropertyShape>> value;
+    public final java.util.Set<hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.PropertyShape>> value;
 
-    public Property (hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.PropertyShape>> value) {
+    public Property (java.util.Set<hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.PropertyShape>> value) {
       this.value = value;
     }
 
@@ -1047,7 +1085,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       Property o = (Property) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1060,9 +1100,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
    * See https://www.w3.org/TR/shacl/#OrConstraintComponent
    */
   public static final class Or extends hydra.ext.org.w3.shacl.model.CommonConstraint implements Serializable {
-    public final hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.Shape>> value;
+    public final java.util.Set<hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.Shape>> value;
 
-    public Or (hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.Shape>> value) {
+    public Or (java.util.Set<hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.Shape>> value) {
       this.value = value;
     }
 
@@ -1090,7 +1130,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       Or o = (Or) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1103,9 +1145,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
    * See https://www.w3.org/TR/shacl/#XoneConstraintComponent
    */
   public static final class Xone extends hydra.ext.org.w3.shacl.model.CommonConstraint implements Serializable {
-    public final hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.Shape>> value;
+    public final java.util.Set<hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.Shape>> value;
 
-    public Xone (hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.Shape>> value) {
+    public Xone (java.util.Set<hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.Shape>> value) {
       this.value = value;
     }
 
@@ -1133,7 +1175,9 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       Xone o = (Xone) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

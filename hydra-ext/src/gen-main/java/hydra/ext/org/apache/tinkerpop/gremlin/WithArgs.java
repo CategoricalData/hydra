@@ -42,11 +42,15 @@ public class WithArgs implements Serializable, Comparable<WithArgs> {
   @SuppressWarnings("unchecked")
   public int compareTo(WithArgs other) {
     int cmp = 0;
-    cmp = ((Comparable) keys).compareTo(other.keys);
+    cmp = hydra.util.Comparing.compare(
+      keys,
+      other.keys);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) values).compareTo(other.values);
+    return hydra.util.Comparing.compare(
+      values,
+      other.values);
   }
 
   public WithArgs withKeys(hydra.ext.org.apache.tinkerpop.gremlin.WithArgsKeys keys) {

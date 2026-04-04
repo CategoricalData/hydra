@@ -37,6 +37,8 @@ public class VertexLabel implements Serializable, Comparable<VertexLabel> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(VertexLabel other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

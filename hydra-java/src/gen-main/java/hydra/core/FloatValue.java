@@ -80,7 +80,9 @@ public abstract class FloatValue implements Serializable, Comparable<FloatValue>
         return tagCmp;
       }
       Bigfloat o = (Bigfloat) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -123,7 +125,9 @@ public abstract class FloatValue implements Serializable, Comparable<FloatValue>
         return tagCmp;
       }
       Float32 o = (Float32) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -166,7 +170,9 @@ public abstract class FloatValue implements Serializable, Comparable<FloatValue>
         return tagCmp;
       }
       Float64 o = (Float64) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

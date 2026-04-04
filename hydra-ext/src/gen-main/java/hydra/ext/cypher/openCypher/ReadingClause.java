@@ -76,7 +76,9 @@ public abstract class ReadingClause implements Serializable, Comparable<ReadingC
         return tagCmp;
       }
       Match o = (Match) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class ReadingClause implements Serializable, Comparable<ReadingC
         return tagCmp;
       }
       Unwind o = (Unwind) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class ReadingClause implements Serializable, Comparable<ReadingC
         return tagCmp;
       }
       InQueryCall o = (InQueryCall) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

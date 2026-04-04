@@ -51,11 +51,15 @@ public class Keyword implements Serializable, Comparable<Keyword> {
   @SuppressWarnings("unchecked")
   public int compareTo(Keyword other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) namespace).compareTo(other.namespace);
+    return hydra.util.Comparing.compare(
+      namespace,
+      other.namespace);
   }
 
   public Keyword withName(String name) {

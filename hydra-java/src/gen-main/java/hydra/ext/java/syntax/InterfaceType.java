@@ -34,6 +34,8 @@ public class InterfaceType implements Serializable, Comparable<InterfaceType> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(InterfaceType other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

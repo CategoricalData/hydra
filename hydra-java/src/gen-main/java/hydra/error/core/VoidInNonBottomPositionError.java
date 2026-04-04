@@ -40,6 +40,8 @@ public class VoidInNonBottomPositionError implements Serializable, Comparable<Vo
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(VoidInNonBottomPositionError other) {
-    return ((Comparable) location).compareTo(other.location);
+    return hydra.util.Comparing.compare(
+      location,
+      other.location);
   }
 }

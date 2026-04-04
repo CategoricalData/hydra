@@ -42,11 +42,15 @@ public class Genexp implements Serializable, Comparable<Genexp> {
   @SuppressWarnings("unchecked")
   public int compareTo(Genexp other) {
     int cmp = 0;
-    cmp = ((Comparable) head).compareTo(other.head);
+    cmp = hydra.util.Comparing.compare(
+      head,
+      other.head);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) tail).compareTo(other.tail);
+    return hydra.util.Comparing.compare(
+      tail,
+      other.tail);
   }
 
   public Genexp withHead(hydra.ext.python.syntax.GenexpHead head) {

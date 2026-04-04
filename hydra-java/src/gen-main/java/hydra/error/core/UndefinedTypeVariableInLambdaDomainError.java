@@ -51,11 +51,15 @@ public class UndefinedTypeVariableInLambdaDomainError implements Serializable, C
   @SuppressWarnings("unchecked")
   public int compareTo(UndefinedTypeVariableInLambdaDomainError other) {
     int cmp = 0;
-    cmp = ((Comparable) location).compareTo(other.location);
+    cmp = hydra.util.Comparing.compare(
+      location,
+      other.location);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) name).compareTo(other.name);
+    return hydra.util.Comparing.compare(
+      name,
+      other.name);
   }
 
   public UndefinedTypeVariableInLambdaDomainError withLocation(hydra.paths.SubtermPath location) {

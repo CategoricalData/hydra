@@ -13,13 +13,13 @@ public class Ctor_Primary implements Serializable, Comparable<Ctor_Primary> {
 
   public static final hydra.core.Name PARAMSS = new hydra.core.Name("paramss");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods;
+  public final java.util.List<hydra.ext.scala.syntax.Mod> mods;
 
   public final hydra.ext.scala.syntax.Name name;
 
-  public final hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> paramss;
+  public final java.util.List<java.util.List<hydra.ext.scala.syntax.Data_Param>> paramss;
 
-  public Ctor_Primary (hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods, hydra.ext.scala.syntax.Name name, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> paramss) {
+  public Ctor_Primary (java.util.List<hydra.ext.scala.syntax.Mod> mods, hydra.ext.scala.syntax.Name name, java.util.List<java.util.List<hydra.ext.scala.syntax.Data_Param>> paramss) {
     this.mods = mods;
     this.name = name;
     this.paramss = paramss;
@@ -49,18 +49,24 @@ public class Ctor_Primary implements Serializable, Comparable<Ctor_Primary> {
   @SuppressWarnings("unchecked")
   public int compareTo(Ctor_Primary other) {
     int cmp = 0;
-    cmp = ((Comparable) mods).compareTo(other.mods);
+    cmp = hydra.util.Comparing.compare(
+      mods,
+      other.mods);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) paramss).compareTo(other.paramss);
+    return hydra.util.Comparing.compare(
+      paramss,
+      other.paramss);
   }
 
-  public Ctor_Primary withMods(hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods) {
+  public Ctor_Primary withMods(java.util.List<hydra.ext.scala.syntax.Mod> mods) {
     return new Ctor_Primary(mods, name, paramss);
   }
 
@@ -68,7 +74,7 @@ public class Ctor_Primary implements Serializable, Comparable<Ctor_Primary> {
     return new Ctor_Primary(mods, name, paramss);
   }
 
-  public Ctor_Primary withParamss(hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> paramss) {
+  public Ctor_Primary withParamss(java.util.List<java.util.List<hydra.ext.scala.syntax.Data_Param>> paramss) {
     return new Ctor_Primary(mods, name, paramss);
   }
 }

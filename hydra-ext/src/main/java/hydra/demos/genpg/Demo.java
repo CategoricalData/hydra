@@ -14,18 +14,13 @@ import hydra.pg.model.Vertex;
 import hydra.relational.RelationName;
 import hydra.tabular.Table;
 import hydra.tabular.TableType;
-import hydra.util.ConsList;
 import hydra.util.Either;
 import hydra.util.Pair;
-import hydra.util.PersistentMap;
 
 import hydra.demos.genpg.Transform;
 import hydra.demos.genpg.Sales;
 import hydra.demos.genpg.Health;
 import hydra.pg.graphson.Utils;
-
-import hydra.util.ConsList;
-import hydra.util.PersistentMap;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -33,6 +28,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -64,7 +60,7 @@ public class Demo {
     public Table<Term> decodeTableIo(TableType tableType, Path path) throws IOException {
         List<String> rawLines = Files.readAllLines(path, StandardCharsets.UTF_8);
 
-        Either<String, Table<String>> parseResult = Transform.parseTableLines(true, ConsList.fromList(rawLines));
+        Either<String, Table<String>> parseResult = Transform.parseTableLines(true, rawLines);
         if (parseResult.isLeft()) {
             throw new RuntimeException(
                 "CSV read error in " + path + ": " + ((Either.Left<String, Table<String>>) parseResult).value);
@@ -82,20 +78,20 @@ public class Demo {
     /**
      * Transform a table by reading from a file and applying vertex/edge specifications.
      */
-    public Pair<ConsList<Vertex<Term>>, ConsList<Edge<Term>>> transformTable(
+    public Pair<List<Vertex<Term>>, List<Edge<Term>>> transformTable(
             TableType tableType,
             Path path,
-            ConsList<Vertex<Term>> vspecs,
-            ConsList<Edge<Term>> especs) throws IOException {
+            List<Vertex<Term>> vspecs,
+            List<Edge<Term>> especs) throws IOException {
         Table<Term> table = decodeTableIo(tableType, path);
-        Context cx = new Context(ConsList.empty(), ConsList.empty(), PersistentMap.empty());
-        Either<InContext<Error_>, Pair<ConsList<Vertex<Term>>, ConsList<Edge<Term>>>> result =
+        Context cx = new Context(Collections.emptyList(), Collections.emptyList(), Collections.emptyMap());
+        Either<InContext<Error_>, Pair<List<Vertex<Term>>, List<Edge<Term>>>> result =
             Transform.transformTableRows(cx, graphContext, vspecs, especs, tableType, table.data);
         if (result.isLeft()) {
             throw new RuntimeException(
                 "Transform error: " + hydra.show.Errors.error(((Either.Left<InContext<Error_>, ?>) result).value.object));
         }
-        return ((Either.Right<InContext<Error_>, Pair<ConsList<Vertex<Term>>, ConsList<Edge<Term>>>>) result).value;
+        return ((Either.Right<InContext<Error_>, Pair<List<Vertex<Term>>, List<Edge<Term>>>>) result).value;
     }
 
     /**
@@ -103,26 +99,26 @@ public class Demo {
      */
     public LazyGraph<Term> transformTables(
             Path sourceRoot,
-            ConsList<TableType> tableTypes,
+            List<TableType> tableTypes,
             LazyGraph<Term> spec) throws IOException {
-        Either<String, PersistentMap<String, Pair<ConsList<Vertex<Term>>, ConsList<Edge<Term>>>>> specsResult =
+        Either<String, Map<String, Pair<List<Vertex<Term>>, List<Edge<Term>>>>> specsResult =
             Transform.elementSpecsByTable(spec);
         if (specsResult.isLeft()) {
             throw new RuntimeException(
                 "Error in mapping specification: " + ((Either.Left<String, ?>) specsResult).value);
         }
-        PersistentMap<String, Pair<ConsList<Vertex<Term>>, ConsList<Edge<Term>>>> byTable =
-            ((Either.Right<String, PersistentMap<String, Pair<ConsList<Vertex<Term>>, ConsList<Edge<Term>>>>>) specsResult).value;
+        Map<String, Pair<List<Vertex<Term>>, List<Edge<Term>>>> byTable =
+            ((Either.Right<String, Map<String, Pair<List<Vertex<Term>>, List<Edge<Term>>>>>) specsResult).value;
 
-        PersistentMap<RelationName, TableType> tblTypesByName = Transform.tableTypesByName(tableTypes);
+        Map<RelationName, TableType> tblTypesByName = Transform.tableTypesByName(tableTypes);
 
         List<Vertex<Term>> allVertices = new ArrayList<>();
         List<Edge<Term>> allEdges = new ArrayList<>();
 
-        for (Map.Entry<String, Pair<ConsList<Vertex<Term>>, ConsList<Edge<Term>>>> entry : byTable.entrySet()) {
+        for (Map.Entry<String, Pair<List<Vertex<Term>>, List<Edge<Term>>>> entry : byTable.entrySet()) {
             String tname = entry.getKey();
-            ConsList<Vertex<Term>> vspecs = entry.getValue().first;
-            ConsList<Edge<Term>> especs = entry.getValue().second;
+            List<Vertex<Term>> vspecs = entry.getValue().first;
+            List<Edge<Term>> especs = entry.getValue().second;
 
             RelationName relName = new RelationName(tname);
             TableType tableType = tblTypesByName.get(relName);
@@ -131,13 +127,13 @@ public class Demo {
             }
 
             Path path = sourceRoot.resolve(tname);
-            Pair<ConsList<Vertex<Term>>, ConsList<Edge<Term>>> result =
+            Pair<List<Vertex<Term>>, List<Edge<Term>>> result =
                 transformTable(tableType, path, vspecs, especs);
             allVertices.addAll(result.first);
             allEdges.addAll(result.second);
         }
 
-        return Transform.makeLazyGraph(ConsList.fromList(allVertices), ConsList.fromList(allEdges));
+        return Transform.makeLazyGraph(allVertices, allEdges);
     }
 
     /**
@@ -145,7 +141,7 @@ public class Demo {
      */
     public void generateGraphson(
             Path sourceRoot,
-            ConsList<TableType> tableSchemas,
+            List<TableType> tableSchemas,
             LazyGraph<Term> graphMapping,
             Path outputPath) throws IOException {
         System.out.println("Reading CSV files from " + sourceRoot + "/");
@@ -159,7 +155,7 @@ public class Demo {
         long startTime = System.nanoTime();
 
         LazyGraph<Term> g = transformTables(sourceRoot, tableSchemas, graphMapping);
-        ConsList<Element<Term>> els = lazyGraphToElements(g);
+        List<Element<Term>> els = lazyGraphToElements(g);
 
         long vertexCount = els.stream().filter(e -> e instanceof Element.Vertex).count();
         long edgeCount = els.stream().filter(e -> e instanceof Element.Edge).count();
@@ -168,13 +164,13 @@ public class Demo {
         System.out.println("  Vertices: " + vertexCount);
         System.out.println("  Edges: " + edgeCount);
 
-        Either<?, ConsList<hydra.json.model.Value>> jsonResult = Utils.pgElementsToGraphson(
+        Either<?, List<hydra.json.model.Value>> jsonResult = Utils.pgElementsToGraphson(
             v -> Utils.encodeTermValue(v), els);
         if (jsonResult.isLeft()) {
             throw new RuntimeException("GraphSON encoding error: " + jsonResult);
         }
-        ConsList<hydra.json.model.Value> jsonValues =
-            ((Either.Right<?, ConsList<hydra.json.model.Value>>) jsonResult).value;
+        List<hydra.json.model.Value> jsonValues =
+            ((Either.Right<?, List<hydra.json.model.Value>>) jsonResult).value;
 
         List<String> jsonStrings = jsonValues.stream()
             .map(Writer::printJson)
@@ -194,7 +190,7 @@ public class Demo {
     /**
      * Convert a lazy graph to a list of elements.
      */
-    private static ConsList<Element<Term>> lazyGraphToElements(LazyGraph<Term> graph) {
+    private static List<Element<Term>> lazyGraphToElements(LazyGraph<Term> graph) {
         List<Element<Term>> elements = new ArrayList<>();
         for (Vertex<Term> v : graph.vertices) {
             elements.add(new Element.Vertex<>(v));
@@ -202,7 +198,7 @@ public class Demo {
         for (Edge<Term> e : graph.edges) {
             elements.add(new Element.Edge<>(e));
         }
-        return ConsList.fromList(elements);
+        return elements;
     }
 
     /**
@@ -224,7 +220,7 @@ public class Demo {
 
     public void generateSalesGraphson() throws IOException {
         Path root = findHydraExtRoot();
-        ConsList<TableType> tableSchemas = Sales.salesDatabaseSchema();
+        List<TableType> tableSchemas = Sales.salesDatabaseSchema();
         LazyGraph<Term> graph = Sales.salesMapping();
 
         generateGraphson(
@@ -236,7 +232,7 @@ public class Demo {
 
     public void generateHealthGraphson() throws IOException {
         Path root = findHydraExtRoot();
-        ConsList<TableType> tableSchemas = Health.healthDatabaseSchema();
+        List<TableType> tableSchemas = Health.healthDatabaseSchema();
         LazyGraph<Term> graph = Health.healthMapping();
 
         generateGraphson(

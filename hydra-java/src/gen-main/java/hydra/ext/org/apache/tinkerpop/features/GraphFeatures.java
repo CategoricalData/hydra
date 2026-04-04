@@ -111,35 +111,51 @@ public class GraphFeatures implements Serializable, Comparable<GraphFeatures> {
   @SuppressWarnings("unchecked")
   public int compareTo(GraphFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) supportsComputer).compareTo(other.supportsComputer);
+    cmp = hydra.util.Comparing.compare(
+      supportsComputer,
+      other.supportsComputer);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsConcurrentAccess).compareTo(other.supportsConcurrentAccess);
+    cmp = hydra.util.Comparing.compare(
+      supportsConcurrentAccess,
+      other.supportsConcurrentAccess);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsIoRead).compareTo(other.supportsIoRead);
+    cmp = hydra.util.Comparing.compare(
+      supportsIoRead,
+      other.supportsIoRead);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsIoWrite).compareTo(other.supportsIoWrite);
+    cmp = hydra.util.Comparing.compare(
+      supportsIoWrite,
+      other.supportsIoWrite);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsPersistence).compareTo(other.supportsPersistence);
+    cmp = hydra.util.Comparing.compare(
+      supportsPersistence,
+      other.supportsPersistence);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsThreadedTransactions).compareTo(other.supportsThreadedTransactions);
+    cmp = hydra.util.Comparing.compare(
+      supportsThreadedTransactions,
+      other.supportsThreadedTransactions);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsTransactions).compareTo(other.supportsTransactions);
+    cmp = hydra.util.Comparing.compare(
+      supportsTransactions,
+      other.supportsTransactions);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) variables).compareTo(other.variables);
+    return hydra.util.Comparing.compare(
+      variables,
+      other.variables);
   }
 
   public GraphFeatures withSupportsComputer(Boolean supportsComputer) {

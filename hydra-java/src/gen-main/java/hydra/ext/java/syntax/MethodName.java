@@ -34,6 +34,8 @@ public class MethodName implements Serializable, Comparable<MethodName> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(MethodName other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

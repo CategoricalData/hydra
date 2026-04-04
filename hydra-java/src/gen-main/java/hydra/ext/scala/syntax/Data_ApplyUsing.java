@@ -13,9 +13,9 @@ public class Data_ApplyUsing implements Serializable, Comparable<Data_ApplyUsing
 
   public final hydra.ext.scala.syntax.Data fun;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Data> targs;
+  public final java.util.List<hydra.ext.scala.syntax.Data> targs;
 
-  public Data_ApplyUsing (hydra.ext.scala.syntax.Data fun, hydra.util.ConsList<hydra.ext.scala.syntax.Data> targs) {
+  public Data_ApplyUsing (hydra.ext.scala.syntax.Data fun, java.util.List<hydra.ext.scala.syntax.Data> targs) {
     this.fun = fun;
     this.targs = targs;
   }
@@ -42,18 +42,22 @@ public class Data_ApplyUsing implements Serializable, Comparable<Data_ApplyUsing
   @SuppressWarnings("unchecked")
   public int compareTo(Data_ApplyUsing other) {
     int cmp = 0;
-    cmp = ((Comparable) fun).compareTo(other.fun);
+    cmp = hydra.util.Comparing.compare(
+      fun,
+      other.fun);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) targs).compareTo(other.targs);
+    return hydra.util.Comparing.compare(
+      targs,
+      other.targs);
   }
 
   public Data_ApplyUsing withFun(hydra.ext.scala.syntax.Data fun) {
     return new Data_ApplyUsing(fun, targs);
   }
 
-  public Data_ApplyUsing withTargs(hydra.util.ConsList<hydra.ext.scala.syntax.Data> targs) {
+  public Data_ApplyUsing withTargs(java.util.List<hydra.ext.scala.syntax.Data> targs) {
     return new Data_ApplyUsing(fun, targs);
   }
 }

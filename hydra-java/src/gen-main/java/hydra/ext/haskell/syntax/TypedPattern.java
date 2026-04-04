@@ -51,11 +51,15 @@ public class TypedPattern implements Serializable, Comparable<TypedPattern> {
   @SuppressWarnings("unchecked")
   public int compareTo(TypedPattern other) {
     int cmp = 0;
-    cmp = ((Comparable) inner).compareTo(other.inner);
+    cmp = hydra.util.Comparing.compare(
+      inner,
+      other.inner);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) type).compareTo(other.type);
+    return hydra.util.Comparing.compare(
+      type,
+      other.type);
   }
 
   public TypedPattern withInner(hydra.ext.haskell.syntax.Pattern inner) {

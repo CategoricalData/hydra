@@ -68,7 +68,9 @@ public abstract class TraversalPopArgument implements Serializable, Comparable<T
         return tagCmp;
       }
       Value o = (Value) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class TraversalPopArgument implements Serializable, Comparable<T
         return tagCmp;
       }
       Variable o = (Variable) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

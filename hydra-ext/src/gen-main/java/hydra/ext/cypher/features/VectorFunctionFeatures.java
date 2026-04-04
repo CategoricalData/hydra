@@ -51,11 +51,15 @@ public class VectorFunctionFeatures implements Serializable, Comparable<VectorFu
   @SuppressWarnings("unchecked")
   public int compareTo(VectorFunctionFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) vectorSimilarityCosine).compareTo(other.vectorSimilarityCosine);
+    cmp = hydra.util.Comparing.compare(
+      vectorSimilarityCosine,
+      other.vectorSimilarityCosine);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) vectorSimilarityEuclidean).compareTo(other.vectorSimilarityEuclidean);
+    return hydra.util.Comparing.compare(
+      vectorSimilarityEuclidean,
+      other.vectorSimilarityEuclidean);
   }
 
   public VectorFunctionFeatures withVectorSimilarityCosine(Boolean vectorSimilarityCosine) {

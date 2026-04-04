@@ -42,11 +42,15 @@ public class Data_Select implements Serializable, Comparable<Data_Select> {
   @SuppressWarnings("unchecked")
   public int compareTo(Data_Select other) {
     int cmp = 0;
-    cmp = ((Comparable) qual).compareTo(other.qual);
+    cmp = hydra.util.Comparing.compare(
+      qual,
+      other.qual);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) name).compareTo(other.name);
+    return hydra.util.Comparing.compare(
+      name,
+      other.name);
   }
 
   public Data_Select withQual(hydra.ext.scala.syntax.Data qual) {

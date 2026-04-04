@@ -101,31 +101,45 @@ public class NumericFunctionFeatures implements Serializable, Comparable<Numeric
   @SuppressWarnings("unchecked")
   public int compareTo(NumericFunctionFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) abs).compareTo(other.abs);
+    cmp = hydra.util.Comparing.compare(
+      abs,
+      other.abs);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) ceil).compareTo(other.ceil);
+    cmp = hydra.util.Comparing.compare(
+      ceil,
+      other.ceil);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) floor).compareTo(other.floor);
+    cmp = hydra.util.Comparing.compare(
+      floor,
+      other.floor);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) isNaN).compareTo(other.isNaN);
+    cmp = hydra.util.Comparing.compare(
+      isNaN,
+      other.isNaN);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) rand).compareTo(other.rand);
+    cmp = hydra.util.Comparing.compare(
+      rand,
+      other.rand);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) round).compareTo(other.round);
+    cmp = hydra.util.Comparing.compare(
+      round,
+      other.round);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) sign).compareTo(other.sign);
+    return hydra.util.Comparing.compare(
+      sign,
+      other.sign);
   }
 
   public NumericFunctionFeatures withAbs(Boolean abs) {

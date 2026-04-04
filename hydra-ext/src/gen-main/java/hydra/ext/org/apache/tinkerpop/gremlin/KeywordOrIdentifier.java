@@ -68,7 +68,9 @@ public abstract class KeywordOrIdentifier implements Serializable, Comparable<Ke
         return tagCmp;
       }
       Keyword o = (Keyword) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class KeywordOrIdentifier implements Serializable, Comparable<Ke
         return tagCmp;
       }
       Identifier o = (Identifier) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

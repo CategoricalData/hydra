@@ -68,7 +68,9 @@ public abstract class CodeDecl_Alts implements Serializable, Comparable<CodeDecl
         return tagCmp;
       }
       Code o = (Code) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

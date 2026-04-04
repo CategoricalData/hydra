@@ -76,7 +76,9 @@ public abstract class AdditiveExpression implements Serializable, Comparable<Add
         return tagCmp;
       }
       Unary o = (Unary) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class AdditiveExpression implements Serializable, Comparable<Add
         return tagCmp;
       }
       Plus o = (Plus) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class AdditiveExpression implements Serializable, Comparable<Add
         return tagCmp;
       }
       Minus o = (Minus) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

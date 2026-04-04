@@ -138,7 +138,9 @@ public abstract class CheckingError implements Serializable, Comparable<Checking
         return tagCmp;
       }
       IncorrectUnification o = (IncorrectUnification) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -181,7 +183,9 @@ public abstract class CheckingError implements Serializable, Comparable<Checking
         return tagCmp;
       }
       NotAForallType o = (NotAForallType) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -224,7 +228,9 @@ public abstract class CheckingError implements Serializable, Comparable<Checking
         return tagCmp;
       }
       NotAFunctionType o = (NotAFunctionType) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -267,7 +273,9 @@ public abstract class CheckingError implements Serializable, Comparable<Checking
         return tagCmp;
       }
       TypeArityMismatch o = (TypeArityMismatch) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -310,7 +318,9 @@ public abstract class CheckingError implements Serializable, Comparable<Checking
         return tagCmp;
       }
       TypeMismatch o = (TypeMismatch) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -353,7 +363,9 @@ public abstract class CheckingError implements Serializable, Comparable<Checking
         return tagCmp;
       }
       UnboundTypeVariables o = (UnboundTypeVariables) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -396,7 +408,9 @@ public abstract class CheckingError implements Serializable, Comparable<Checking
         return tagCmp;
       }
       UnequalTypes o = (UnequalTypes) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -439,7 +453,9 @@ public abstract class CheckingError implements Serializable, Comparable<Checking
         return tagCmp;
       }
       UnsupportedTermVariant o = (UnsupportedTermVariant) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -482,7 +498,9 @@ public abstract class CheckingError implements Serializable, Comparable<Checking
         return tagCmp;
       }
       UntypedLambda o = (UntypedLambda) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -525,7 +543,9 @@ public abstract class CheckingError implements Serializable, Comparable<Checking
         return tagCmp;
       }
       UntypedLetBinding o = (UntypedLetBinding) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

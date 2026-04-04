@@ -15,11 +15,11 @@ public class CaseExpression implements Serializable, Comparable<CaseExpression> 
 
   public final hydra.util.Maybe<hydra.ext.cypher.openCypher.Expression> expression;
 
-  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.CaseAlternative> alternatives;
+  public final java.util.List<hydra.ext.cypher.openCypher.CaseAlternative> alternatives;
 
   public final hydra.util.Maybe<hydra.ext.cypher.openCypher.Expression> else_;
 
-  public CaseExpression (hydra.util.Maybe<hydra.ext.cypher.openCypher.Expression> expression, hydra.util.ConsList<hydra.ext.cypher.openCypher.CaseAlternative> alternatives, hydra.util.Maybe<hydra.ext.cypher.openCypher.Expression> else_) {
+  public CaseExpression (hydra.util.Maybe<hydra.ext.cypher.openCypher.Expression> expression, java.util.List<hydra.ext.cypher.openCypher.CaseAlternative> alternatives, hydra.util.Maybe<hydra.ext.cypher.openCypher.Expression> else_) {
     this.expression = expression;
     this.alternatives = alternatives;
     this.else_ = else_;
@@ -49,22 +49,28 @@ public class CaseExpression implements Serializable, Comparable<CaseExpression> 
   @SuppressWarnings("unchecked")
   public int compareTo(CaseExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) expression).compareTo(other.expression);
+    cmp = hydra.util.Comparing.compare(
+      expression,
+      other.expression);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) alternatives).compareTo(other.alternatives);
+    cmp = hydra.util.Comparing.compare(
+      alternatives,
+      other.alternatives);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) else_).compareTo(other.else_);
+    return hydra.util.Comparing.compare(
+      else_,
+      other.else_);
   }
 
   public CaseExpression withExpression(hydra.util.Maybe<hydra.ext.cypher.openCypher.Expression> expression) {
     return new CaseExpression(expression, alternatives, else_);
   }
 
-  public CaseExpression withAlternatives(hydra.util.ConsList<hydra.ext.cypher.openCypher.CaseAlternative> alternatives) {
+  public CaseExpression withAlternatives(java.util.List<hydra.ext.cypher.openCypher.CaseAlternative> alternatives) {
     return new CaseExpression(expression, alternatives, else_);
   }
 

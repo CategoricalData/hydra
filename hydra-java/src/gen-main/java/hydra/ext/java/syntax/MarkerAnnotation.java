@@ -34,6 +34,8 @@ public class MarkerAnnotation implements Serializable, Comparable<MarkerAnnotati
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(MarkerAnnotation other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

@@ -170,7 +170,9 @@ public abstract class InvalidTypeError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       DuplicateRecordTypeFieldNames o = (DuplicateRecordTypeFieldNames) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -213,7 +215,9 @@ public abstract class InvalidTypeError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       DuplicateUnionTypeFieldNames o = (DuplicateUnionTypeFieldNames) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -256,7 +260,9 @@ public abstract class InvalidTypeError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       EmptyRecordType o = (EmptyRecordType) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -299,7 +305,9 @@ public abstract class InvalidTypeError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       EmptyTypeAnnotation o = (EmptyTypeAnnotation) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -342,7 +350,9 @@ public abstract class InvalidTypeError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       EmptyUnionType o = (EmptyUnionType) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -385,7 +395,9 @@ public abstract class InvalidTypeError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       InvalidForallParameterName o = (InvalidForallParameterName) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -428,7 +440,9 @@ public abstract class InvalidTypeError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       InvalidTypeSchemeVariableName o = (InvalidTypeSchemeVariableName) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -471,7 +485,9 @@ public abstract class InvalidTypeError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       NestedTypeAnnotation o = (NestedTypeAnnotation) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -514,7 +530,9 @@ public abstract class InvalidTypeError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       NonComparableMapKeyType o = (NonComparableMapKeyType) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -557,7 +575,9 @@ public abstract class InvalidTypeError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       NonComparableSetElementType o = (NonComparableSetElementType) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -600,7 +620,9 @@ public abstract class InvalidTypeError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       SingleVariantUnion o = (SingleVariantUnion) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -643,7 +665,9 @@ public abstract class InvalidTypeError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       TypeVariableShadowingInForall o = (TypeVariableShadowingInForall) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -686,7 +710,9 @@ public abstract class InvalidTypeError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       UndefinedTypeVariable o = (UndefinedTypeVariable) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -729,7 +755,9 @@ public abstract class InvalidTypeError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       VoidInNonBottomPosition o = (VoidInNonBottomPosition) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

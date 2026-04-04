@@ -17,14 +17,14 @@ public class CondExpression implements Serializable, Comparable<CondExpression> 
   /**
    * The condition-expression pairs
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.CondClause> clauses;
+  public final java.util.List<hydra.ext.lisp.syntax.CondClause> clauses;
 
   /**
    * Optional default expression
    */
   public final hydra.util.Maybe<hydra.ext.lisp.syntax.Expression> default_;
 
-  public CondExpression (hydra.util.ConsList<hydra.ext.lisp.syntax.CondClause> clauses, hydra.util.Maybe<hydra.ext.lisp.syntax.Expression> default_) {
+  public CondExpression (java.util.List<hydra.ext.lisp.syntax.CondClause> clauses, hydra.util.Maybe<hydra.ext.lisp.syntax.Expression> default_) {
     this.clauses = clauses;
     this.default_ = default_;
   }
@@ -51,14 +51,18 @@ public class CondExpression implements Serializable, Comparable<CondExpression> 
   @SuppressWarnings("unchecked")
   public int compareTo(CondExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) clauses).compareTo(other.clauses);
+    cmp = hydra.util.Comparing.compare(
+      clauses,
+      other.clauses);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) default_).compareTo(other.default_);
+    return hydra.util.Comparing.compare(
+      default_,
+      other.default_);
   }
 
-  public CondExpression withClauses(hydra.util.ConsList<hydra.ext.lisp.syntax.CondClause> clauses) {
+  public CondExpression withClauses(java.util.List<hydra.ext.lisp.syntax.CondClause> clauses) {
     return new CondExpression(clauses, default_);
   }
 

@@ -15,15 +15,15 @@ public class Defn_Val implements Serializable, Comparable<Defn_Val> {
 
   public static final hydra.core.Name RHS = new hydra.core.Name("rhs");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods;
+  public final java.util.List<hydra.ext.scala.syntax.Mod> mods;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Pat> pats;
+  public final java.util.List<hydra.ext.scala.syntax.Pat> pats;
 
   public final hydra.util.Maybe<hydra.ext.scala.syntax.Type> decltpe;
 
   public final hydra.ext.scala.syntax.Data rhs;
 
-  public Defn_Val (hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods, hydra.util.ConsList<hydra.ext.scala.syntax.Pat> pats, hydra.util.Maybe<hydra.ext.scala.syntax.Type> decltpe, hydra.ext.scala.syntax.Data rhs) {
+  public Defn_Val (java.util.List<hydra.ext.scala.syntax.Mod> mods, java.util.List<hydra.ext.scala.syntax.Pat> pats, hydra.util.Maybe<hydra.ext.scala.syntax.Type> decltpe, hydra.ext.scala.syntax.Data rhs) {
     this.mods = mods;
     this.pats = pats;
     this.decltpe = decltpe;
@@ -56,26 +56,34 @@ public class Defn_Val implements Serializable, Comparable<Defn_Val> {
   @SuppressWarnings("unchecked")
   public int compareTo(Defn_Val other) {
     int cmp = 0;
-    cmp = ((Comparable) mods).compareTo(other.mods);
+    cmp = hydra.util.Comparing.compare(
+      mods,
+      other.mods);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) pats).compareTo(other.pats);
+    cmp = hydra.util.Comparing.compare(
+      pats,
+      other.pats);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) decltpe).compareTo(other.decltpe);
+    cmp = hydra.util.Comparing.compare(
+      decltpe,
+      other.decltpe);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) rhs).compareTo(other.rhs);
+    return hydra.util.Comparing.compare(
+      rhs,
+      other.rhs);
   }
 
-  public Defn_Val withMods(hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods) {
+  public Defn_Val withMods(java.util.List<hydra.ext.scala.syntax.Mod> mods) {
     return new Defn_Val(mods, pats, decltpe, rhs);
   }
 
-  public Defn_Val withPats(hydra.util.ConsList<hydra.ext.scala.syntax.Pat> pats) {
+  public Defn_Val withPats(java.util.List<hydra.ext.scala.syntax.Pat> pats) {
     return new Defn_Val(mods, pats, decltpe, rhs);
   }
 

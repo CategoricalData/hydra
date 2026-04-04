@@ -11,11 +11,11 @@ public class SwitchBlockStatementGroup implements Serializable, Comparable<Switc
 
   public static final hydra.core.Name STATEMENTS = new hydra.core.Name("statements");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.SwitchLabel> labels;
+  public final java.util.List<hydra.ext.java.syntax.SwitchLabel> labels;
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement> statements;
+  public final java.util.List<hydra.ext.java.syntax.BlockStatement> statements;
 
-  public SwitchBlockStatementGroup (hydra.util.ConsList<hydra.ext.java.syntax.SwitchLabel> labels, hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement> statements) {
+  public SwitchBlockStatementGroup (java.util.List<hydra.ext.java.syntax.SwitchLabel> labels, java.util.List<hydra.ext.java.syntax.BlockStatement> statements) {
     this.labels = labels;
     this.statements = statements;
   }
@@ -42,18 +42,22 @@ public class SwitchBlockStatementGroup implements Serializable, Comparable<Switc
   @SuppressWarnings("unchecked")
   public int compareTo(SwitchBlockStatementGroup other) {
     int cmp = 0;
-    cmp = ((Comparable) labels).compareTo(other.labels);
+    cmp = hydra.util.Comparing.compare(
+      labels,
+      other.labels);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) statements).compareTo(other.statements);
+    return hydra.util.Comparing.compare(
+      statements,
+      other.statements);
   }
 
-  public SwitchBlockStatementGroup withLabels(hydra.util.ConsList<hydra.ext.java.syntax.SwitchLabel> labels) {
+  public SwitchBlockStatementGroup withLabels(java.util.List<hydra.ext.java.syntax.SwitchLabel> labels) {
     return new SwitchBlockStatementGroup(labels, statements);
   }
 
-  public SwitchBlockStatementGroup withStatements(hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement> statements) {
+  public SwitchBlockStatementGroup withStatements(java.util.List<hydra.ext.java.syntax.BlockStatement> statements) {
     return new SwitchBlockStatementGroup(labels, statements);
   }
 }

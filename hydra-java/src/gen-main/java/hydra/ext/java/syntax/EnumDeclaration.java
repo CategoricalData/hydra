@@ -15,15 +15,15 @@ public class EnumDeclaration implements Serializable, Comparable<EnumDeclaration
 
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.ClassModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.ClassModifier> modifiers;
 
   public final hydra.ext.java.syntax.TypeIdentifier identifier;
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType> implements_;
+  public final java.util.List<hydra.ext.java.syntax.InterfaceType> implements_;
 
   public final hydra.ext.java.syntax.EnumBody body;
 
-  public EnumDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.ClassModifier> modifiers, hydra.ext.java.syntax.TypeIdentifier identifier, hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType> implements_, hydra.ext.java.syntax.EnumBody body) {
+  public EnumDeclaration (java.util.List<hydra.ext.java.syntax.ClassModifier> modifiers, hydra.ext.java.syntax.TypeIdentifier identifier, java.util.List<hydra.ext.java.syntax.InterfaceType> implements_, hydra.ext.java.syntax.EnumBody body) {
     this.modifiers = modifiers;
     this.identifier = identifier;
     this.implements_ = implements_;
@@ -56,22 +56,30 @@ public class EnumDeclaration implements Serializable, Comparable<EnumDeclaration
   @SuppressWarnings("unchecked")
   public int compareTo(EnumDeclaration other) {
     int cmp = 0;
-    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
+    cmp = hydra.util.Comparing.compare(
+      modifiers,
+      other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) identifier).compareTo(other.identifier);
+    cmp = hydra.util.Comparing.compare(
+      identifier,
+      other.identifier);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) implements_).compareTo(other.implements_);
+    cmp = hydra.util.Comparing.compare(
+      implements_,
+      other.implements_);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
-  public EnumDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.ClassModifier> modifiers) {
+  public EnumDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.ClassModifier> modifiers) {
     return new EnumDeclaration(modifiers, identifier, implements_, body);
   }
 
@@ -79,7 +87,7 @@ public class EnumDeclaration implements Serializable, Comparable<EnumDeclaration
     return new EnumDeclaration(modifiers, identifier, implements_, body);
   }
 
-  public EnumDeclaration withImplements(hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType> implements_) {
+  public EnumDeclaration withImplements(java.util.List<hydra.ext.java.syntax.InterfaceType> implements_) {
     return new EnumDeclaration(modifiers, identifier, implements_, body);
   }
 

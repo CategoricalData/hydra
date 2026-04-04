@@ -22,12 +22,12 @@ public interface TestGraph {
     return new hydra.module.Namespace("testSchemaGraph");
   }
 
-  static hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> testTerms() {
-    return hydra.lib.maps.FromList.apply(hydra.util.ConsList.of((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Term>(new hydra.core.Name("testDataArthur"), hydra.test.TestTerms.testDataArthur())))));
+  static java.util.Map<hydra.core.Name, hydra.core.Term> testTerms() {
+    return hydra.lib.maps.FromList.apply(java.util.Arrays.asList((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Term>(new hydra.core.Name("testDataArthur"), hydra.test.TestTerms.testDataArthur())))));
   }
 
-  static hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> testTypes() {
-    return hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
+  static java.util.Map<hydra.core.Name, hydra.core.Type> testTypes() {
+    return hydra.lib.maps.FromList.apply(java.util.Arrays.asList(
       (hydra.util.Pair<hydra.core.Name, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Type>(hydra.test.TestTypes.testTypeBuddyListAName(), hydra.test.TestTypes.testTypeBuddyListA()))),
       (hydra.util.Pair<hydra.core.Name, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Type>(hydra.test.TestTypes.testTypeBuddyListBName(), hydra.test.TestTypes.testTypeBuddyListB()))),
       (hydra.util.Pair<hydra.core.Name, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Type>(hydra.test.TestTypes.testTypeComparisonName(), hydra.test.TestTypes.testTypeComparison()))),

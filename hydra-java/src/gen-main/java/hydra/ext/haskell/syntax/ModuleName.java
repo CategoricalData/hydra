@@ -37,6 +37,8 @@ public class ModuleName implements Serializable, Comparable<ModuleName> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ModuleName other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

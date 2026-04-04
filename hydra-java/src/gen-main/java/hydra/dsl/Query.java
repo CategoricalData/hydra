@@ -31,7 +31,7 @@ public interface Query {
   }
 
   static hydra.phantoms.TTerm<hydra.query.Edge> edge(hydra.phantoms.TTerm<hydra.core.Name> type, hydra.phantoms.TTerm<hydra.util.Maybe<hydra.core.Name>> out, hydra.phantoms.TTerm<hydra.util.Maybe<hydra.core.Name>> in) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Edge"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Edge"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("type"), (type).value),
       new hydra.core.Field(new hydra.core.Name("out"), (out).value),
       new hydra.core.Field(new hydra.core.Name("in"), (in).value)))));
@@ -50,28 +50,28 @@ public interface Query {
   }
 
   static hydra.phantoms.TTerm<hydra.query.Edge> edgeWithIn(hydra.phantoms.TTerm<hydra.query.Edge> original, hydra.phantoms.TTerm<hydra.util.Maybe<hydra.core.Name>> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Edge"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Edge"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("type"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.Edge"), new hydra.core.Name("type"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("out"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.Edge"), new hydra.core.Name("out"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("in"), (newVal).value)))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.Edge> edgeWithOut(hydra.phantoms.TTerm<hydra.query.Edge> original, hydra.phantoms.TTerm<hydra.util.Maybe<hydra.core.Name>> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Edge"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Edge"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("type"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.Edge"), new hydra.core.Name("type"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("out"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("in"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.Edge"), new hydra.core.Name("in"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.Edge> edgeWithType(hydra.phantoms.TTerm<hydra.query.Edge> original, hydra.phantoms.TTerm<hydra.core.Name> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Edge"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Edge"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("type"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("out"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.Edge"), new hydra.core.Name("out"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("in"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.Edge"), new hydra.core.Name("in"))))), (original).value)))))));
   }
 
-  static hydra.phantoms.TTerm<hydra.query.GraphPattern> graphPattern(hydra.phantoms.TTerm<hydra.core.Name> graph, hydra.phantoms.TTerm<hydra.util.ConsList<hydra.query.Pattern>> patterns) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.GraphPattern"), hydra.util.ConsList.of(
+  static hydra.phantoms.TTerm<hydra.query.GraphPattern> graphPattern(hydra.phantoms.TTerm<hydra.core.Name> graph, hydra.phantoms.TTerm<java.util.List<hydra.query.Pattern>> patterns) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.GraphPattern"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("graph"), (graph).value),
       new hydra.core.Field(new hydra.core.Name("patterns"), (patterns).value)))));
   }
@@ -80,18 +80,18 @@ public interface Query {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.GraphPattern"), new hydra.core.Name("graph"))))), (x).value)));
   }
 
-  static hydra.phantoms.TTerm<hydra.util.ConsList<hydra.query.Pattern>> graphPatternPatterns(hydra.phantoms.TTerm<hydra.query.GraphPattern> x) {
+  static hydra.phantoms.TTerm<java.util.List<hydra.query.Pattern>> graphPatternPatterns(hydra.phantoms.TTerm<hydra.query.GraphPattern> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.GraphPattern"), new hydra.core.Name("patterns"))))), (x).value)));
   }
 
   static hydra.phantoms.TTerm<hydra.query.GraphPattern> graphPatternWithGraph(hydra.phantoms.TTerm<hydra.query.GraphPattern> original, hydra.phantoms.TTerm<hydra.core.Name> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.GraphPattern"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.GraphPattern"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("graph"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("patterns"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.GraphPattern"), new hydra.core.Name("patterns"))))), (original).value)))))));
   }
 
-  static hydra.phantoms.TTerm<hydra.query.GraphPattern> graphPatternWithPatterns(hydra.phantoms.TTerm<hydra.query.GraphPattern> original, hydra.phantoms.TTerm<hydra.util.ConsList<hydra.query.Pattern>> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.GraphPattern"), hydra.util.ConsList.of(
+  static hydra.phantoms.TTerm<hydra.query.GraphPattern> graphPatternWithPatterns(hydra.phantoms.TTerm<hydra.query.GraphPattern> original, hydra.phantoms.TTerm<java.util.List<hydra.query.Pattern>> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.GraphPattern"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("graph"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.GraphPattern"), new hydra.core.Name("graph"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("patterns"), (newVal).value)))));
   }
@@ -109,7 +109,7 @@ public interface Query {
   }
 
   static hydra.phantoms.TTerm<hydra.query.PathEquation> pathEquation(hydra.phantoms.TTerm<hydra.query.Path> left, hydra.phantoms.TTerm<hydra.query.Path> right) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.PathEquation"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.PathEquation"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("left"), (left).value),
       new hydra.core.Field(new hydra.core.Name("right"), (right).value)))));
   }
@@ -123,13 +123,13 @@ public interface Query {
   }
 
   static hydra.phantoms.TTerm<hydra.query.PathEquation> pathEquationWithLeft(hydra.phantoms.TTerm<hydra.query.PathEquation> original, hydra.phantoms.TTerm<hydra.query.Path> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.PathEquation"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.PathEquation"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("left"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("right"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.PathEquation"), new hydra.core.Name("right"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.PathEquation> pathEquationWithRight(hydra.phantoms.TTerm<hydra.query.PathEquation> original, hydra.phantoms.TTerm<hydra.query.Path> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.PathEquation"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.PathEquation"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("left"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.PathEquation"), new hydra.core.Name("left"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("right"), (newVal).value)))));
   }
@@ -146,11 +146,11 @@ public interface Query {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.Path"), new hydra.core.Field(new hydra.core.Name("step"), (x).value))));
   }
 
-  static hydra.phantoms.TTerm<hydra.query.Pattern> patternConjunction(hydra.phantoms.TTerm<hydra.util.ConsList<hydra.query.Pattern>> x) {
+  static hydra.phantoms.TTerm<hydra.query.Pattern> patternConjunction(hydra.phantoms.TTerm<java.util.List<hydra.query.Pattern>> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.Pattern"), new hydra.core.Field(new hydra.core.Name("conjunction"), (x).value))));
   }
 
-  static hydra.phantoms.TTerm<hydra.query.Pattern> patternDisjunction(hydra.phantoms.TTerm<hydra.util.ConsList<hydra.query.Pattern>> x) {
+  static hydra.phantoms.TTerm<hydra.query.Pattern> patternDisjunction(hydra.phantoms.TTerm<java.util.List<hydra.query.Pattern>> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.Pattern"), new hydra.core.Field(new hydra.core.Name("disjunction"), (x).value))));
   }
 
@@ -159,7 +159,7 @@ public interface Query {
   }
 
   static hydra.phantoms.TTerm<hydra.query.PatternImplication> patternImplication(hydra.phantoms.TTerm<hydra.query.Pattern> antecedent, hydra.phantoms.TTerm<hydra.query.Pattern> consequent) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.PatternImplication"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.PatternImplication"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("antecedent"), (antecedent).value),
       new hydra.core.Field(new hydra.core.Name("consequent"), (consequent).value)))));
   }
@@ -173,13 +173,13 @@ public interface Query {
   }
 
   static hydra.phantoms.TTerm<hydra.query.PatternImplication> patternImplicationWithAntecedent(hydra.phantoms.TTerm<hydra.query.PatternImplication> original, hydra.phantoms.TTerm<hydra.query.Pattern> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.PatternImplication"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.PatternImplication"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("antecedent"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("consequent"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.PatternImplication"), new hydra.core.Name("consequent"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.PatternImplication> patternImplicationWithConsequent(hydra.phantoms.TTerm<hydra.query.PatternImplication> original, hydra.phantoms.TTerm<hydra.query.Pattern> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.PatternImplication"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.PatternImplication"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("antecedent"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.PatternImplication"), new hydra.core.Name("antecedent"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("consequent"), (newVal).value)))));
   }
@@ -192,34 +192,34 @@ public interface Query {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.Pattern"), new hydra.core.Field(new hydra.core.Name("triple"), (x).value))));
   }
 
-  static hydra.phantoms.TTerm<hydra.query.Query> query(hydra.phantoms.TTerm<hydra.util.ConsList<hydra.query.Variable>> variables, hydra.phantoms.TTerm<hydra.util.ConsList<hydra.query.Pattern>> patterns) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Query"), hydra.util.ConsList.of(
+  static hydra.phantoms.TTerm<hydra.query.Query> query(hydra.phantoms.TTerm<java.util.List<hydra.query.Variable>> variables, hydra.phantoms.TTerm<java.util.List<hydra.query.Pattern>> patterns) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Query"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("variables"), (variables).value),
       new hydra.core.Field(new hydra.core.Name("patterns"), (patterns).value)))));
   }
 
-  static hydra.phantoms.TTerm<hydra.util.ConsList<hydra.query.Pattern>> queryPatterns(hydra.phantoms.TTerm<hydra.query.Query> x) {
+  static hydra.phantoms.TTerm<java.util.List<hydra.query.Pattern>> queryPatterns(hydra.phantoms.TTerm<hydra.query.Query> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.Query"), new hydra.core.Name("patterns"))))), (x).value)));
   }
 
-  static hydra.phantoms.TTerm<hydra.util.ConsList<hydra.query.Variable>> queryVariables(hydra.phantoms.TTerm<hydra.query.Query> x) {
+  static hydra.phantoms.TTerm<java.util.List<hydra.query.Variable>> queryVariables(hydra.phantoms.TTerm<hydra.query.Query> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.Query"), new hydra.core.Name("variables"))))), (x).value)));
   }
 
-  static hydra.phantoms.TTerm<hydra.query.Query> queryWithPatterns(hydra.phantoms.TTerm<hydra.query.Query> original, hydra.phantoms.TTerm<hydra.util.ConsList<hydra.query.Pattern>> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Query"), hydra.util.ConsList.of(
+  static hydra.phantoms.TTerm<hydra.query.Query> queryWithPatterns(hydra.phantoms.TTerm<hydra.query.Query> original, hydra.phantoms.TTerm<java.util.List<hydra.query.Pattern>> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Query"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("variables"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.Query"), new hydra.core.Name("variables"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("patterns"), (newVal).value)))));
   }
 
-  static hydra.phantoms.TTerm<hydra.query.Query> queryWithVariables(hydra.phantoms.TTerm<hydra.query.Query> original, hydra.phantoms.TTerm<hydra.util.ConsList<hydra.query.Variable>> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Query"), hydra.util.ConsList.of(
+  static hydra.phantoms.TTerm<hydra.query.Query> queryWithVariables(hydra.phantoms.TTerm<hydra.query.Query> original, hydra.phantoms.TTerm<java.util.List<hydra.query.Variable>> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Query"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("variables"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("patterns"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.Query"), new hydra.core.Name("patterns"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.Range> range(hydra.phantoms.TTerm<Integer> min, hydra.phantoms.TTerm<Integer> max) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Range"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Range"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("min"), (min).value),
       new hydra.core.Field(new hydra.core.Name("max"), (max).value)))));
   }
@@ -233,13 +233,13 @@ public interface Query {
   }
 
   static hydra.phantoms.TTerm<hydra.query.Range> rangeWithMax(hydra.phantoms.TTerm<hydra.query.Range> original, hydra.phantoms.TTerm<Integer> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Range"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Range"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("min"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.Range"), new hydra.core.Name("min"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("max"), (newVal).value)))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.Range> rangeWithMin(hydra.phantoms.TTerm<hydra.query.Range> original, hydra.phantoms.TTerm<Integer> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Range"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Range"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("min"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("max"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.Range"), new hydra.core.Name("max"))))), (original).value)))))));
   }
@@ -273,7 +273,7 @@ public interface Query {
   }
 
   static hydra.phantoms.TTerm<hydra.query.RegexSequence> regexSequence(hydra.phantoms.TTerm<hydra.query.Path> path, hydra.phantoms.TTerm<hydra.query.RegexQuantifier> quantifier) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.RegexSequence"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.RegexSequence"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("path"), (path).value),
       new hydra.core.Field(new hydra.core.Name("quantifier"), (quantifier).value)))));
   }
@@ -287,13 +287,13 @@ public interface Query {
   }
 
   static hydra.phantoms.TTerm<hydra.query.RegexSequence> regexSequenceWithPath(hydra.phantoms.TTerm<hydra.query.RegexSequence> original, hydra.phantoms.TTerm<hydra.query.Path> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.RegexSequence"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.RegexSequence"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("path"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("quantifier"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.RegexSequence"), new hydra.core.Name("quantifier"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.RegexSequence> regexSequenceWithQuantifier(hydra.phantoms.TTerm<hydra.query.RegexSequence> original, hydra.phantoms.TTerm<hydra.query.RegexQuantifier> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.RegexSequence"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.RegexSequence"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("path"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.RegexSequence"), new hydra.core.Name("path"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("quantifier"), (newVal).value)))));
   }
@@ -311,7 +311,7 @@ public interface Query {
   }
 
   static hydra.phantoms.TTerm<hydra.query.TriplePattern> triplePattern(hydra.phantoms.TTerm<hydra.query.Node> subject, hydra.phantoms.TTerm<hydra.query.Path> predicate, hydra.phantoms.TTerm<hydra.query.Node> object) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.TriplePattern"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.TriplePattern"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("subject"), (subject).value),
       new hydra.core.Field(new hydra.core.Name("predicate"), (predicate).value),
       new hydra.core.Field(new hydra.core.Name("object"), (object).value)))));
@@ -330,21 +330,21 @@ public interface Query {
   }
 
   static hydra.phantoms.TTerm<hydra.query.TriplePattern> triplePatternWithObject(hydra.phantoms.TTerm<hydra.query.TriplePattern> original, hydra.phantoms.TTerm<hydra.query.Node> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.TriplePattern"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.TriplePattern"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("subject"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.TriplePattern"), new hydra.core.Name("subject"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("predicate"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.TriplePattern"), new hydra.core.Name("predicate"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("object"), (newVal).value)))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.TriplePattern> triplePatternWithPredicate(hydra.phantoms.TTerm<hydra.query.TriplePattern> original, hydra.phantoms.TTerm<hydra.query.Path> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.TriplePattern"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.TriplePattern"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("subject"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.TriplePattern"), new hydra.core.Name("subject"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("predicate"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("object"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.TriplePattern"), new hydra.core.Name("object"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.query.TriplePattern> triplePatternWithSubject(hydra.phantoms.TTerm<hydra.query.TriplePattern> original, hydra.phantoms.TTerm<hydra.query.Node> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.TriplePattern"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.TriplePattern"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("subject"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("predicate"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.TriplePattern"), new hydra.core.Name("predicate"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("object"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.query.TriplePattern"), new hydra.core.Name("object"))))), (original).value)))))));

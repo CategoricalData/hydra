@@ -100,7 +100,9 @@ public abstract class Statement implements Serializable, Comparable<Statement> {
         return tagCmp;
       }
       WithoutTrailing o = (WithoutTrailing) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -140,7 +142,9 @@ public abstract class Statement implements Serializable, Comparable<Statement> {
         return tagCmp;
       }
       Labeled o = (Labeled) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -180,7 +184,9 @@ public abstract class Statement implements Serializable, Comparable<Statement> {
         return tagCmp;
       }
       IfThen o = (IfThen) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -220,7 +226,9 @@ public abstract class Statement implements Serializable, Comparable<Statement> {
         return tagCmp;
       }
       IfThenElse o = (IfThenElse) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -260,7 +268,9 @@ public abstract class Statement implements Serializable, Comparable<Statement> {
         return tagCmp;
       }
       While o = (While) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -300,7 +310,9 @@ public abstract class Statement implements Serializable, Comparable<Statement> {
         return tagCmp;
       }
       For o = (For) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

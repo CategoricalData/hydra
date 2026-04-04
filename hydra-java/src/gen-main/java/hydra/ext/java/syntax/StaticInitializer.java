@@ -34,6 +34,8 @@ public class StaticInitializer implements Serializable, Comparable<StaticInitial
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(StaticInitializer other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

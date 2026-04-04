@@ -68,7 +68,9 @@ public abstract class AssignmentExpression implements Serializable, Comparable<A
         return tagCmp;
       }
       Conditional o = (Conditional) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class AssignmentExpression implements Serializable, Comparable<A
         return tagCmp;
       }
       Assignment o = (Assignment) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

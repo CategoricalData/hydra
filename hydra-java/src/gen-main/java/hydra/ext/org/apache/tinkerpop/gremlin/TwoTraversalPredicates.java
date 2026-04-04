@@ -42,11 +42,15 @@ public class TwoTraversalPredicates implements Serializable, Comparable<TwoTrave
   @SuppressWarnings("unchecked")
   public int compareTo(TwoTraversalPredicates other) {
     int cmp = 0;
-    cmp = ((Comparable) left).compareTo(other.left);
+    cmp = hydra.util.Comparing.compare(
+      left,
+      other.left);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) right).compareTo(other.right);
+    return hydra.util.Comparing.compare(
+      right,
+      other.right);
   }
 
   public TwoTraversalPredicates withLeft(hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicate left) {

@@ -9,9 +9,9 @@ public class Module implements Serializable, Comparable<Module> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>> value;
+  public final java.util.List<java.util.List<hydra.ext.python.syntax.Statement>> value;
 
-  public Module (hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>> value) {
+  public Module (java.util.List<java.util.List<hydra.ext.python.syntax.Statement>> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class Module implements Serializable, Comparable<Module> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Module other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

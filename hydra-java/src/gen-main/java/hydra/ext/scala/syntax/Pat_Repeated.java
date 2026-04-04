@@ -34,6 +34,8 @@ public class Pat_Repeated implements Serializable, Comparable<Pat_Repeated> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Pat_Repeated other) {
-    return ((Comparable) name).compareTo(other.name);
+    return hydra.util.Comparing.compare(
+      name,
+      other.name);
   }
 }

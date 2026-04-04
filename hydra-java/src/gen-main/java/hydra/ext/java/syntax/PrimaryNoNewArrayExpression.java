@@ -132,7 +132,9 @@ public abstract class PrimaryNoNewArrayExpression implements Serializable, Compa
         return tagCmp;
       }
       Literal o = (Literal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -172,7 +174,9 @@ public abstract class PrimaryNoNewArrayExpression implements Serializable, Compa
         return tagCmp;
       }
       ClassLiteral o = (ClassLiteral) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -247,7 +251,9 @@ public abstract class PrimaryNoNewArrayExpression implements Serializable, Compa
         return tagCmp;
       }
       DotThis o = (DotThis) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -287,7 +293,9 @@ public abstract class PrimaryNoNewArrayExpression implements Serializable, Compa
         return tagCmp;
       }
       Parens o = (Parens) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -327,7 +335,9 @@ public abstract class PrimaryNoNewArrayExpression implements Serializable, Compa
         return tagCmp;
       }
       ClassInstance o = (ClassInstance) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -367,7 +377,9 @@ public abstract class PrimaryNoNewArrayExpression implements Serializable, Compa
         return tagCmp;
       }
       FieldAccess o = (FieldAccess) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -407,7 +419,9 @@ public abstract class PrimaryNoNewArrayExpression implements Serializable, Compa
         return tagCmp;
       }
       ArrayAccess o = (ArrayAccess) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -447,7 +461,9 @@ public abstract class PrimaryNoNewArrayExpression implements Serializable, Compa
         return tagCmp;
       }
       MethodInvocation o = (MethodInvocation) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -487,7 +503,9 @@ public abstract class PrimaryNoNewArrayExpression implements Serializable, Compa
         return tagCmp;
       }
       MethodReference o = (MethodReference) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

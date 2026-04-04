@@ -9,9 +9,9 @@ public class TraversalSource implements Serializable, Comparable<TraversalSource
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceSelfMethod> value;
+  public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceSelfMethod> value;
 
-  public TraversalSource (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceSelfMethod> value) {
+  public TraversalSource (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceSelfMethod> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class TraversalSource implements Serializable, Comparable<TraversalSource
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TraversalSource other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

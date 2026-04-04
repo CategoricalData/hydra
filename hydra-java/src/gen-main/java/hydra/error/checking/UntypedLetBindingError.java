@@ -40,6 +40,8 @@ public class UntypedLetBindingError implements Serializable, Comparable<UntypedL
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(UntypedLetBindingError other) {
-    return ((Comparable) binding).compareTo(other.binding);
+    return hydra.util.Comparing.compare(
+      binding,
+      other.binding);
   }
 }

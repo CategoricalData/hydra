@@ -8,8 +8,7 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.ConsList;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -37,7 +36,7 @@ public class Tail extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply(
-                (Function<ConsList<Term>, Term>) terms -> Terms.list(apply(terms)),
+                (Function<List<Term>, Term>) terms -> Terms.list(apply(terms)),
                 hydra.extract.Core.list(cx, graph, args.get(0)));
     }
 
@@ -47,7 +46,7 @@ public class Tail extends PrimitiveFunction {
      * @param list the list to get the tail from
      * @return the tail (all elements except the first)
      */
-    public static <X> ConsList<X> apply(ConsList<X> list) {
-        return list.tail();
+    public static <X> List<X> apply(List<X> list) {
+        return new ArrayList<>(list.subList(1, list.size()));
     }
 }

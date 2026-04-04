@@ -13,9 +13,9 @@ public class TypeBound_ClassOrInterface implements Serializable, Comparable<Type
 
   public final hydra.ext.java.syntax.ClassOrInterfaceType type;
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.AdditionalBound> additional;
+  public final java.util.List<hydra.ext.java.syntax.AdditionalBound> additional;
 
-  public TypeBound_ClassOrInterface (hydra.ext.java.syntax.ClassOrInterfaceType type, hydra.util.ConsList<hydra.ext.java.syntax.AdditionalBound> additional) {
+  public TypeBound_ClassOrInterface (hydra.ext.java.syntax.ClassOrInterfaceType type, java.util.List<hydra.ext.java.syntax.AdditionalBound> additional) {
     this.type = type;
     this.additional = additional;
   }
@@ -42,18 +42,22 @@ public class TypeBound_ClassOrInterface implements Serializable, Comparable<Type
   @SuppressWarnings("unchecked")
   public int compareTo(TypeBound_ClassOrInterface other) {
     int cmp = 0;
-    cmp = ((Comparable) type).compareTo(other.type);
+    cmp = hydra.util.Comparing.compare(
+      type,
+      other.type);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) additional).compareTo(other.additional);
+    return hydra.util.Comparing.compare(
+      additional,
+      other.additional);
   }
 
   public TypeBound_ClassOrInterface withType(hydra.ext.java.syntax.ClassOrInterfaceType type) {
     return new TypeBound_ClassOrInterface(type, additional);
   }
 
-  public TypeBound_ClassOrInterface withAdditional(hydra.util.ConsList<hydra.ext.java.syntax.AdditionalBound> additional) {
+  public TypeBound_ClassOrInterface withAdditional(java.util.List<hydra.ext.java.syntax.AdditionalBound> additional) {
     return new TypeBound_ClassOrInterface(type, additional);
   }
 }

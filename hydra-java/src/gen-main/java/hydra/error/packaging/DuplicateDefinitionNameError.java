@@ -51,11 +51,15 @@ public class DuplicateDefinitionNameError implements Serializable, Comparable<Du
   @SuppressWarnings("unchecked")
   public int compareTo(DuplicateDefinitionNameError other) {
     int cmp = 0;
-    cmp = ((Comparable) namespace).compareTo(other.namespace);
+    cmp = hydra.util.Comparing.compare(
+      namespace,
+      other.namespace);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) name).compareTo(other.name);
+    return hydra.util.Comparing.compare(
+      name,
+      other.name);
   }
 
   public DuplicateDefinitionNameError withNamespace(hydra.module.Namespace namespace) {

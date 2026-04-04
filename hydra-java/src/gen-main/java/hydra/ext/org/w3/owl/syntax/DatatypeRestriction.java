@@ -16,9 +16,9 @@ public class DatatypeRestriction implements Serializable, Comparable<DatatypeRes
 
   public final hydra.ext.org.w3.owl.syntax.Datatype datatype;
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DatatypeRestriction_Constraint> constraints;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.DatatypeRestriction_Constraint> constraints;
 
-  public DatatypeRestriction (hydra.ext.org.w3.owl.syntax.Datatype datatype, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DatatypeRestriction_Constraint> constraints) {
+  public DatatypeRestriction (hydra.ext.org.w3.owl.syntax.Datatype datatype, java.util.List<hydra.ext.org.w3.owl.syntax.DatatypeRestriction_Constraint> constraints) {
     this.datatype = datatype;
     this.constraints = constraints;
   }
@@ -45,18 +45,22 @@ public class DatatypeRestriction implements Serializable, Comparable<DatatypeRes
   @SuppressWarnings("unchecked")
   public int compareTo(DatatypeRestriction other) {
     int cmp = 0;
-    cmp = ((Comparable) datatype).compareTo(other.datatype);
+    cmp = hydra.util.Comparing.compare(
+      datatype,
+      other.datatype);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) constraints).compareTo(other.constraints);
+    return hydra.util.Comparing.compare(
+      constraints,
+      other.constraints);
   }
 
   public DatatypeRestriction withDatatype(hydra.ext.org.w3.owl.syntax.Datatype datatype) {
     return new DatatypeRestriction(datatype, constraints);
   }
 
-  public DatatypeRestriction withConstraints(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DatatypeRestriction_Constraint> constraints) {
+  public DatatypeRestriction withConstraints(java.util.List<hydra.ext.org.w3.owl.syntax.DatatypeRestriction_Constraint> constraints) {
     return new DatatypeRestriction(datatype, constraints);
   }
 }

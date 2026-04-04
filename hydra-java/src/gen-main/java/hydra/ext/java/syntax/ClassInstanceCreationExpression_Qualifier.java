@@ -68,7 +68,9 @@ public abstract class ClassInstanceCreationExpression_Qualifier implements Seria
         return tagCmp;
       }
       Expression o = (Expression) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class ClassInstanceCreationExpression_Qualifier implements Seria
         return tagCmp;
       }
       Primary o = (Primary) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -34,6 +34,8 @@ public class Short_ implements Serializable, Comparable<Short_> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Short_ other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

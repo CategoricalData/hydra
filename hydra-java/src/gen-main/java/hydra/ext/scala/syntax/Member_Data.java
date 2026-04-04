@@ -68,7 +68,9 @@ public abstract class Member_Data implements Serializable, Comparable<Member_Dat
         return tagCmp;
       }
       Pkg o = (Pkg) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class Member_Data implements Serializable, Comparable<Member_Dat
         return tagCmp;
       }
       Object_ o = (Object_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

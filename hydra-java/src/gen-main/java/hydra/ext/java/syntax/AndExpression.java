@@ -9,9 +9,9 @@ public class AndExpression implements Serializable, Comparable<AndExpression> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.EqualityExpression> value;
+  public final java.util.List<hydra.ext.java.syntax.EqualityExpression> value;
 
-  public AndExpression (hydra.util.ConsList<hydra.ext.java.syntax.EqualityExpression> value) {
+  public AndExpression (java.util.List<hydra.ext.java.syntax.EqualityExpression> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class AndExpression implements Serializable, Comparable<AndExpression> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(AndExpression other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

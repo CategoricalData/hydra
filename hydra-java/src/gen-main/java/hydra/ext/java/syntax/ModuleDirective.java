@@ -92,7 +92,9 @@ public abstract class ModuleDirective implements Serializable, Comparable<Module
         return tagCmp;
       }
       Requires o = (Requires) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -132,7 +134,9 @@ public abstract class ModuleDirective implements Serializable, Comparable<Module
         return tagCmp;
       }
       Exports o = (Exports) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -172,7 +176,9 @@ public abstract class ModuleDirective implements Serializable, Comparable<Module
         return tagCmp;
       }
       Opens o = (Opens) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -212,7 +218,9 @@ public abstract class ModuleDirective implements Serializable, Comparable<Module
         return tagCmp;
       }
       Uses o = (Uses) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -252,7 +260,9 @@ public abstract class ModuleDirective implements Serializable, Comparable<Module
         return tagCmp;
       }
       Provides o = (Provides) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -61,15 +61,21 @@ public class SubtypeNode implements Serializable, Comparable<SubtypeNode> {
   @SuppressWarnings("unchecked")
   public int compareTo(SubtypeNode other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) label).compareTo(other.label);
+    cmp = hydra.util.Comparing.compare(
+      label,
+      other.label);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) id).compareTo(other.id);
+    return hydra.util.Comparing.compare(
+      id,
+      other.id);
   }
 
   public SubtypeNode withName(hydra.core.Name name) {

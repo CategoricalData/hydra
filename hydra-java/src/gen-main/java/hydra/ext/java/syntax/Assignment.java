@@ -49,15 +49,21 @@ public class Assignment implements Serializable, Comparable<Assignment> {
   @SuppressWarnings("unchecked")
   public int compareTo(Assignment other) {
     int cmp = 0;
-    cmp = ((Comparable) lhs).compareTo(other.lhs);
+    cmp = hydra.util.Comparing.compare(
+      lhs,
+      other.lhs);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) op).compareTo(other.op);
+    cmp = hydra.util.Comparing.compare(
+      op,
+      other.op);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) expression).compareTo(other.expression);
+    return hydra.util.Comparing.compare(
+      expression,
+      other.expression);
   }
 
   public Assignment withLhs(hydra.ext.java.syntax.LeftHandSide lhs) {

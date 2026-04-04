@@ -34,6 +34,8 @@ public class Type_Placeholder implements Serializable, Comparable<Type_Placehold
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Type_Placeholder other) {
-    return ((Comparable) bounds).compareTo(other.bounds);
+    return hydra.util.Comparing.compare(
+      bounds,
+      other.bounds);
   }
 }

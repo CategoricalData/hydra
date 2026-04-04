@@ -13,9 +13,9 @@ public class Slices implements Serializable, Comparable<Slices> {
 
   public final hydra.ext.python.syntax.Slice head;
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.SliceOrStarredExpression> tail;
+  public final java.util.List<hydra.ext.python.syntax.SliceOrStarredExpression> tail;
 
-  public Slices (hydra.ext.python.syntax.Slice head, hydra.util.ConsList<hydra.ext.python.syntax.SliceOrStarredExpression> tail) {
+  public Slices (hydra.ext.python.syntax.Slice head, java.util.List<hydra.ext.python.syntax.SliceOrStarredExpression> tail) {
     this.head = head;
     this.tail = tail;
   }
@@ -42,18 +42,22 @@ public class Slices implements Serializable, Comparable<Slices> {
   @SuppressWarnings("unchecked")
   public int compareTo(Slices other) {
     int cmp = 0;
-    cmp = ((Comparable) head).compareTo(other.head);
+    cmp = hydra.util.Comparing.compare(
+      head,
+      other.head);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) tail).compareTo(other.tail);
+    return hydra.util.Comparing.compare(
+      tail,
+      other.tail);
   }
 
   public Slices withHead(hydra.ext.python.syntax.Slice head) {
     return new Slices(head, tail);
   }
 
-  public Slices withTail(hydra.util.ConsList<hydra.ext.python.syntax.SliceOrStarredExpression> tail) {
+  public Slices withTail(java.util.List<hydra.ext.python.syntax.SliceOrStarredExpression> tail) {
     return new Slices(head, tail);
   }
 }

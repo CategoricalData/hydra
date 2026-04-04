@@ -34,6 +34,8 @@ public class Double_ implements Serializable, Comparable<Double_> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Double_ other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

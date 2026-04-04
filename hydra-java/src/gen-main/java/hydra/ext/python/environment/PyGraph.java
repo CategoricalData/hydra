@@ -51,11 +51,15 @@ public class PyGraph implements Serializable, Comparable<PyGraph> {
   @SuppressWarnings("unchecked")
   public int compareTo(PyGraph other) {
     int cmp = 0;
-    cmp = ((Comparable) graph).compareTo(other.graph);
+    cmp = hydra.util.Comparing.compare(
+      graph,
+      other.graph);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) metadata).compareTo(other.metadata);
+    return hydra.util.Comparing.compare(
+      metadata,
+      other.metadata);
   }
 
   public PyGraph withGraph(hydra.graph.Graph graph) {

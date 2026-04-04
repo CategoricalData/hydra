@@ -19,19 +19,19 @@ public class Context implements Serializable, Comparable<Context> {
   /**
    * A stack of context labels describing the current execution path
    */
-  public final hydra.util.ConsList<String> trace;
+  public final java.util.List<String> trace;
 
   /**
    * A log of warnings and/or info messages
    */
-  public final hydra.util.ConsList<String> messages;
+  public final java.util.List<String> messages;
 
   /**
    * A map of string keys to arbitrary terms as values, for application-specific use
    */
-  public final hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> other;
+  public final java.util.Map<hydra.core.Name, hydra.core.Term> other;
 
-  public Context (hydra.util.ConsList<String> trace, hydra.util.ConsList<String> messages, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> other) {
+  public Context (java.util.List<String> trace, java.util.List<String> messages, java.util.Map<hydra.core.Name, hydra.core.Term> other) {
     this.trace = trace;
     this.messages = messages;
     this.other = other;
@@ -61,26 +61,32 @@ public class Context implements Serializable, Comparable<Context> {
   @SuppressWarnings("unchecked")
   public int compareTo(Context other) {
     int cmp = 0;
-    cmp = ((Comparable) trace).compareTo(other.trace);
+    cmp = hydra.util.Comparing.compare(
+      trace,
+      other.trace);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) messages).compareTo(other.messages);
+    cmp = hydra.util.Comparing.compare(
+      messages,
+      other.messages);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) other).compareTo(other.other);
+    return hydra.util.Comparing.compare(
+      other,
+      other.other);
   }
 
-  public Context withTrace(hydra.util.ConsList<String> trace) {
+  public Context withTrace(java.util.List<String> trace) {
     return new Context(trace, messages, other);
   }
 
-  public Context withMessages(hydra.util.ConsList<String> messages) {
+  public Context withMessages(java.util.List<String> messages) {
     return new Context(trace, messages, other);
   }
 
-  public Context withOther(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> other) {
+  public Context withOther(java.util.Map<hydra.core.Name, hydra.core.Term> other) {
     return new Context(trace, messages, other);
   }
 }

@@ -42,11 +42,15 @@ public class MappingPattern implements Serializable, Comparable<MappingPattern> 
   @SuppressWarnings("unchecked")
   public int compareTo(MappingPattern other) {
     int cmp = 0;
-    cmp = ((Comparable) items).compareTo(other.items);
+    cmp = hydra.util.Comparing.compare(
+      items,
+      other.items);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) doubleStar).compareTo(other.doubleStar);
+    return hydra.util.Comparing.compare(
+      doubleStar,
+      other.doubleStar);
   }
 
   public MappingPattern withItems(hydra.util.Maybe<hydra.ext.python.syntax.ItemsPattern> items) {

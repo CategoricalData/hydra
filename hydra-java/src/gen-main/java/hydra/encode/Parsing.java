@@ -7,7 +7,7 @@ package hydra.encode;
  */
 public interface Parsing {
   static hydra.core.Term parseError(hydra.parsing.ParseError x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.parsing.ParseError"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.parsing.ParseError"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("message"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).message))),
       new hydra.core.Field(new hydra.core.Name("remainder"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).remainder))))));
   }
@@ -29,7 +29,7 @@ public interface Parsing {
   }
 
   static <T0> hydra.core.Term parseSuccess(java.util.function.Function<T0, hydra.core.Term> a, hydra.parsing.ParseSuccess<T0> x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.parsing.ParseSuccess"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.parsing.ParseSuccess"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("value"), (a).apply(((java.util.function.Function<hydra.parsing.ParseSuccess<T0>, T0>) (projected -> projected.value)).apply(x))),
       new hydra.core.Field(new hydra.core.Name("remainder"), new hydra.core.Term.Literal(new hydra.core.Literal.String_(((java.util.function.Function<hydra.parsing.ParseSuccess<T0>, String>) (projected -> projected.remainder)).apply(x)))))));
   }

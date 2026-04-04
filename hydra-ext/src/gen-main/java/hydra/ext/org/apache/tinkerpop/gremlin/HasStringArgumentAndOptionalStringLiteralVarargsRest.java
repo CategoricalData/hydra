@@ -92,7 +92,9 @@ public abstract class HasStringArgumentAndOptionalStringLiteralVarargsRest imple
         return tagCmp;
       }
       Object_ o = (Object_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -132,7 +134,9 @@ public abstract class HasStringArgumentAndOptionalStringLiteralVarargsRest imple
         return tagCmp;
       }
       Predicate o = (Predicate) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -172,7 +176,9 @@ public abstract class HasStringArgumentAndOptionalStringLiteralVarargsRest imple
         return tagCmp;
       }
       StringObject o = (StringObject) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -212,7 +218,9 @@ public abstract class HasStringArgumentAndOptionalStringLiteralVarargsRest imple
         return tagCmp;
       }
       StringPredicate o = (StringPredicate) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -252,7 +260,9 @@ public abstract class HasStringArgumentAndOptionalStringLiteralVarargsRest imple
         return tagCmp;
       }
       Traversal o = (Traversal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

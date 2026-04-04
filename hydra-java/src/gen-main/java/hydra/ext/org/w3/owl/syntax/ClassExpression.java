@@ -188,7 +188,9 @@ public abstract class ClassExpression implements Serializable, Comparable<ClassE
         return tagCmp;
       }
       Class_ o = (Class_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -228,7 +230,9 @@ public abstract class ClassExpression implements Serializable, Comparable<ClassE
         return tagCmp;
       }
       DataSomeValuesFrom o = (DataSomeValuesFrom) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -268,7 +272,9 @@ public abstract class ClassExpression implements Serializable, Comparable<ClassE
         return tagCmp;
       }
       DataAllValuesFrom o = (DataAllValuesFrom) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -308,7 +314,9 @@ public abstract class ClassExpression implements Serializable, Comparable<ClassE
         return tagCmp;
       }
       DataHasValue o = (DataHasValue) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -348,7 +356,9 @@ public abstract class ClassExpression implements Serializable, Comparable<ClassE
         return tagCmp;
       }
       DataMinCardinality o = (DataMinCardinality) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -388,7 +398,9 @@ public abstract class ClassExpression implements Serializable, Comparable<ClassE
         return tagCmp;
       }
       DataMaxCardinality o = (DataMaxCardinality) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -428,7 +440,9 @@ public abstract class ClassExpression implements Serializable, Comparable<ClassE
         return tagCmp;
       }
       DataExactCardinality o = (DataExactCardinality) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -468,7 +482,9 @@ public abstract class ClassExpression implements Serializable, Comparable<ClassE
         return tagCmp;
       }
       ObjectAllValuesFrom o = (ObjectAllValuesFrom) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -508,7 +524,9 @@ public abstract class ClassExpression implements Serializable, Comparable<ClassE
         return tagCmp;
       }
       ObjectExactCardinality o = (ObjectExactCardinality) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -548,7 +566,9 @@ public abstract class ClassExpression implements Serializable, Comparable<ClassE
         return tagCmp;
       }
       ObjectHasSelf o = (ObjectHasSelf) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -588,7 +608,9 @@ public abstract class ClassExpression implements Serializable, Comparable<ClassE
         return tagCmp;
       }
       ObjectHasValue o = (ObjectHasValue) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -628,7 +650,9 @@ public abstract class ClassExpression implements Serializable, Comparable<ClassE
         return tagCmp;
       }
       ObjectIntersectionOf o = (ObjectIntersectionOf) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -668,7 +692,9 @@ public abstract class ClassExpression implements Serializable, Comparable<ClassE
         return tagCmp;
       }
       ObjectMaxCardinality o = (ObjectMaxCardinality) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -708,7 +734,9 @@ public abstract class ClassExpression implements Serializable, Comparable<ClassE
         return tagCmp;
       }
       ObjectMinCardinality o = (ObjectMinCardinality) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -748,7 +776,9 @@ public abstract class ClassExpression implements Serializable, Comparable<ClassE
         return tagCmp;
       }
       ObjectOneOf o = (ObjectOneOf) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -788,7 +818,9 @@ public abstract class ClassExpression implements Serializable, Comparable<ClassE
         return tagCmp;
       }
       ObjectSomeValuesFrom o = (ObjectSomeValuesFrom) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -828,7 +860,9 @@ public abstract class ClassExpression implements Serializable, Comparable<ClassE
         return tagCmp;
       }
       ObjectUnionOf o = (ObjectUnionOf) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

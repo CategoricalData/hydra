@@ -34,6 +34,8 @@ public class UnsignedShort implements Serializable, Comparable<UnsignedShort> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(UnsignedShort other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

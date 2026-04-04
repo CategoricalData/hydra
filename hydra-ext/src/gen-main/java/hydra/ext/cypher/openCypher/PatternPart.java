@@ -42,11 +42,15 @@ public class PatternPart implements Serializable, Comparable<PatternPart> {
   @SuppressWarnings("unchecked")
   public int compareTo(PatternPart other) {
     int cmp = 0;
-    cmp = ((Comparable) variable).compareTo(other.variable);
+    cmp = hydra.util.Comparing.compare(
+      variable,
+      other.variable);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) pattern).compareTo(other.pattern);
+    return hydra.util.Comparing.compare(
+      pattern,
+      other.pattern);
   }
 
   public PatternPart withVariable(hydra.util.Maybe<hydra.ext.cypher.openCypher.Variable> variable) {

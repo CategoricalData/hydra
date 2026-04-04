@@ -106,7 +106,9 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
         return tagCmp;
       }
       Char o = (Char) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -149,7 +151,9 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
         return tagCmp;
       }
       Double_ o = (Double_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -192,7 +196,9 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
         return tagCmp;
       }
       Float_ o = (Float_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -235,7 +241,9 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
         return tagCmp;
       }
       Int o = (Int) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -276,7 +284,9 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
         return tagCmp;
       }
       Integer_ o = (Integer_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -319,7 +329,9 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
         return tagCmp;
       }
       String_ o = (String_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

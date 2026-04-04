@@ -22,9 +22,9 @@ public class GraphPattern implements Serializable, Comparable<GraphPattern> {
   /**
    * The patterns to match within the subgraph
    */
-  public final hydra.util.ConsList<hydra.query.Pattern> patterns;
+  public final java.util.List<hydra.query.Pattern> patterns;
 
-  public GraphPattern (hydra.core.Name graph, hydra.util.ConsList<hydra.query.Pattern> patterns) {
+  public GraphPattern (hydra.core.Name graph, java.util.List<hydra.query.Pattern> patterns) {
     this.graph = graph;
     this.patterns = patterns;
   }
@@ -51,18 +51,22 @@ public class GraphPattern implements Serializable, Comparable<GraphPattern> {
   @SuppressWarnings("unchecked")
   public int compareTo(GraphPattern other) {
     int cmp = 0;
-    cmp = ((Comparable) graph).compareTo(other.graph);
+    cmp = hydra.util.Comparing.compare(
+      graph,
+      other.graph);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) patterns).compareTo(other.patterns);
+    return hydra.util.Comparing.compare(
+      patterns,
+      other.patterns);
   }
 
   public GraphPattern withGraph(hydra.core.Name graph) {
     return new GraphPattern(graph, patterns);
   }
 
-  public GraphPattern withPatterns(hydra.util.ConsList<hydra.query.Pattern> patterns) {
+  public GraphPattern withPatterns(java.util.List<hydra.query.Pattern> patterns) {
     return new GraphPattern(graph, patterns);
   }
 }

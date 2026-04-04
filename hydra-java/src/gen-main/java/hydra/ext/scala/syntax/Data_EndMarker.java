@@ -34,6 +34,8 @@ public class Data_EndMarker implements Serializable, Comparable<Data_EndMarker> 
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Data_EndMarker other) {
-    return ((Comparable) name).compareTo(other.name);
+    return hydra.util.Comparing.compare(
+      name,
+      other.name);
   }
 }

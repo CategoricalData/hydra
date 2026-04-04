@@ -8,8 +8,7 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.PersistentMap;
-
+import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -63,7 +62,7 @@ public class Delete extends PrimitiveFunction {
      * @param k the key to remove
      * @return a function that takes a map and returns the updated map
      */
-    public static <K, V> Function<PersistentMap<K, V>, PersistentMap<K, V>> apply(K k) {
+    public static <K, V> Function<Map<K, V>, Map<K, V>> apply(K k) {
         return before -> apply(k, before);
     }
 
@@ -75,7 +74,9 @@ public class Delete extends PrimitiveFunction {
      * @param before the map to remove from
      * @return the updated map
      */
-    public static <K, V> PersistentMap<K, V> apply(K k, PersistentMap<K, V> before) {
-        return before.delete(k);
+    public static <K, V> Map<K, V> apply(K k, Map<K, V> before) {
+        Map<K, V> result = new TreeMap<>(before);
+        result.remove(k);
+        return result;
     }
 }

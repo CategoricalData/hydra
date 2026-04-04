@@ -92,7 +92,9 @@ public abstract class Member implements Serializable, Comparable<Member> {
         return tagCmp;
       }
       Term o = (Term) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -132,7 +134,9 @@ public abstract class Member implements Serializable, Comparable<Member> {
         return tagCmp;
       }
       Type o = (Type) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -172,7 +176,9 @@ public abstract class Member implements Serializable, Comparable<Member> {
         return tagCmp;
       }
       TermParam o = (TermParam) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -212,7 +218,9 @@ public abstract class Member implements Serializable, Comparable<Member> {
         return tagCmp;
       }
       TypeParam o = (TypeParam) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -252,7 +260,9 @@ public abstract class Member implements Serializable, Comparable<Member> {
         return tagCmp;
       }
       Self o = (Self) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

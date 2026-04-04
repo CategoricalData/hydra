@@ -76,7 +76,9 @@ public abstract class FieldAccess_Qualifier implements Serializable, Comparable<
         return tagCmp;
       }
       Primary o = (Primary) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -151,7 +153,9 @@ public abstract class FieldAccess_Qualifier implements Serializable, Comparable<
         return tagCmp;
       }
       Typed o = (Typed) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

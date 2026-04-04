@@ -68,7 +68,9 @@ public abstract class Plx implements Serializable, Comparable<Plx> {
         return tagCmp;
       }
       Percent o = (Percent) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class Plx implements Serializable, Comparable<Plx> {
         return tagCmp;
       }
       PnLocalEsc o = (PnLocalEsc) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

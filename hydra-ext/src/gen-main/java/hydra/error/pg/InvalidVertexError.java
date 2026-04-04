@@ -82,7 +82,9 @@ public abstract class InvalidVertexError implements Serializable, Comparable<Inv
         return tagCmp;
       }
       Id o = (Id) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -125,7 +127,9 @@ public abstract class InvalidVertexError implements Serializable, Comparable<Inv
         return tagCmp;
       }
       Label o = (Label) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -168,7 +172,9 @@ public abstract class InvalidVertexError implements Serializable, Comparable<Inv
         return tagCmp;
       }
       Property o = (Property) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

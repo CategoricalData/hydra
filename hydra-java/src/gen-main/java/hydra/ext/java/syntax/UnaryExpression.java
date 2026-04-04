@@ -92,7 +92,9 @@ public abstract class UnaryExpression implements Serializable, Comparable<UnaryE
         return tagCmp;
       }
       PreIncrement o = (PreIncrement) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -132,7 +134,9 @@ public abstract class UnaryExpression implements Serializable, Comparable<UnaryE
         return tagCmp;
       }
       PreDecrement o = (PreDecrement) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -172,7 +176,9 @@ public abstract class UnaryExpression implements Serializable, Comparable<UnaryE
         return tagCmp;
       }
       Plus o = (Plus) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -212,7 +218,9 @@ public abstract class UnaryExpression implements Serializable, Comparable<UnaryE
         return tagCmp;
       }
       Minus o = (Minus) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -252,7 +260,9 @@ public abstract class UnaryExpression implements Serializable, Comparable<UnaryE
         return tagCmp;
       }
       Other o = (Other) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

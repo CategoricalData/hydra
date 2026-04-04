@@ -68,7 +68,9 @@ public abstract class ImportStatement implements Serializable, Comparable<Import
         return tagCmp;
       }
       Name o = (Name) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class ImportStatement implements Serializable, Comparable<Import
         return tagCmp;
       }
       From o = (From) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

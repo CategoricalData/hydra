@@ -24,14 +24,14 @@ public class VertexWithAdjacentEdges<V> implements Serializable, Comparable<Vert
   /**
    * An adjacency list of edges in which the focus vertex is the head (in-vertex) of the edge
    */
-  public final hydra.util.ConsList<hydra.pg.model.AdjacentEdge<V>> ins;
+  public final java.util.List<hydra.pg.model.AdjacentEdge<V>> ins;
 
   /**
    * An adjacency list of edges in which the focus vertex is the tail (out-vertex) of the edge
    */
-  public final hydra.util.ConsList<hydra.pg.model.AdjacentEdge<V>> outs;
+  public final java.util.List<hydra.pg.model.AdjacentEdge<V>> outs;
 
-  public VertexWithAdjacentEdges (hydra.pg.model.Vertex<V> vertex, hydra.util.ConsList<hydra.pg.model.AdjacentEdge<V>> ins, hydra.util.ConsList<hydra.pg.model.AdjacentEdge<V>> outs) {
+  public VertexWithAdjacentEdges (hydra.pg.model.Vertex<V> vertex, java.util.List<hydra.pg.model.AdjacentEdge<V>> ins, java.util.List<hydra.pg.model.AdjacentEdge<V>> outs) {
     this.vertex = vertex;
     this.ins = ins;
     this.outs = outs;
@@ -61,26 +61,32 @@ public class VertexWithAdjacentEdges<V> implements Serializable, Comparable<Vert
   @SuppressWarnings("unchecked")
   public int compareTo(VertexWithAdjacentEdges other) {
     int cmp = 0;
-    cmp = ((Comparable) vertex).compareTo(other.vertex);
+    cmp = hydra.util.Comparing.compare(
+      vertex,
+      other.vertex);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) ins).compareTo(other.ins);
+    cmp = hydra.util.Comparing.compare(
+      ins,
+      other.ins);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) outs).compareTo(other.outs);
+    return hydra.util.Comparing.compare(
+      outs,
+      other.outs);
   }
 
   public VertexWithAdjacentEdges withVertex(hydra.pg.model.Vertex<V> vertex) {
     return new VertexWithAdjacentEdges(vertex, ins, outs);
   }
 
-  public VertexWithAdjacentEdges withIns(hydra.util.ConsList<hydra.pg.model.AdjacentEdge<V>> ins) {
+  public VertexWithAdjacentEdges withIns(java.util.List<hydra.pg.model.AdjacentEdge<V>> ins) {
     return new VertexWithAdjacentEdges(vertex, ins, outs);
   }
 
-  public VertexWithAdjacentEdges withOuts(hydra.util.ConsList<hydra.pg.model.AdjacentEdge<V>> outs) {
+  public VertexWithAdjacentEdges withOuts(java.util.List<hydra.pg.model.AdjacentEdge<V>> outs) {
     return new VertexWithAdjacentEdges(vertex, ins, outs);
   }
 }

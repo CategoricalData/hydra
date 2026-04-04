@@ -14,11 +14,11 @@ public class LazyGraph<V> implements Serializable, Comparable<LazyGraph<V>> {
 
   public static final hydra.core.Name EDGES = new hydra.core.Name("edges");
 
-  public final hydra.util.ConsList<hydra.pg.model.Vertex<V>> vertices;
+  public final java.util.List<hydra.pg.model.Vertex<V>> vertices;
 
-  public final hydra.util.ConsList<hydra.pg.model.Edge<V>> edges;
+  public final java.util.List<hydra.pg.model.Edge<V>> edges;
 
-  public LazyGraph (hydra.util.ConsList<hydra.pg.model.Vertex<V>> vertices, hydra.util.ConsList<hydra.pg.model.Edge<V>> edges) {
+  public LazyGraph (java.util.List<hydra.pg.model.Vertex<V>> vertices, java.util.List<hydra.pg.model.Edge<V>> edges) {
     this.vertices = vertices;
     this.edges = edges;
   }
@@ -45,18 +45,22 @@ public class LazyGraph<V> implements Serializable, Comparable<LazyGraph<V>> {
   @SuppressWarnings("unchecked")
   public int compareTo(LazyGraph other) {
     int cmp = 0;
-    cmp = ((Comparable) vertices).compareTo(other.vertices);
+    cmp = hydra.util.Comparing.compare(
+      vertices,
+      other.vertices);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) edges).compareTo(other.edges);
+    return hydra.util.Comparing.compare(
+      edges,
+      other.edges);
   }
 
-  public LazyGraph withVertices(hydra.util.ConsList<hydra.pg.model.Vertex<V>> vertices) {
+  public LazyGraph withVertices(java.util.List<hydra.pg.model.Vertex<V>> vertices) {
     return new LazyGraph(vertices, edges);
   }
 
-  public LazyGraph withEdges(hydra.util.ConsList<hydra.pg.model.Edge<V>> edges) {
+  public LazyGraph withEdges(java.util.List<hydra.pg.model.Edge<V>> edges) {
     return new LazyGraph(vertices, edges);
   }
 }

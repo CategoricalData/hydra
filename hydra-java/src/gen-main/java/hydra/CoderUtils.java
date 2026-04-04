@@ -26,15 +26,15 @@ public interface CoderUtils {
       setTC,
       true,
       env,
-      (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()),
-      (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()),
-      (hydra.util.ConsList<hydra.core.Binding>) (hydra.util.ConsList.<hydra.core.Binding>empty()),
-      (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
-      (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
+      (java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()),
+      (java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()),
+      (java.util.List<hydra.core.Binding>) (java.util.Collections.<hydra.core.Binding>emptyList()),
+      (java.util.List<hydra.core.Type>) (java.util.Collections.<hydra.core.Type>emptyList()),
+      (java.util.List<hydra.core.Type>) (java.util.Collections.<hydra.core.Type>emptyList()),
       term);
   }
 
-  static <T0, T1> hydra.util.Either<T1, hydra.typing.FunctionStructure<T0>> analyzeFunctionTermWith_finish(hydra.context.Context cx, java.util.function.Function<T0, hydra.graph.Graph> getTC, T0 fEnv, hydra.util.ConsList<hydra.core.Name> tparams, hydra.util.ConsList<hydra.core.Name> args, hydra.util.ConsList<hydra.core.Binding> bindings, hydra.util.ConsList<hydra.core.Type> doms, hydra.util.ConsList<hydra.core.Type> tapps, hydra.core.Term body) {
+  static <T0, T1> hydra.util.Either<T1, hydra.typing.FunctionStructure<T0>> analyzeFunctionTermWith_finish(hydra.context.Context cx, java.util.function.Function<T0, hydra.graph.Graph> getTC, T0 fEnv, java.util.List<hydra.core.Name> tparams, java.util.List<hydra.core.Name> args, java.util.List<hydra.core.Binding> bindings, java.util.List<hydra.core.Type> doms, java.util.List<hydra.core.Type> tapps, hydra.core.Term body) {
     hydra.util.Lazy<hydra.core.Term> bodyWithTapps = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Type, hydra.core.Term>>) (trm -> (java.util.function.Function<hydra.core.Type, hydra.core.Term>) (typ -> new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(trm, typ)))),
       body,
@@ -49,7 +49,7 @@ public interface CoderUtils {
     return hydra.util.Either.<T1, hydra.typing.FunctionStructure<T0>>right((hydra.typing.FunctionStructure<T0>) (new hydra.typing.FunctionStructure<T0>(hydra.lib.lists.Reverse.apply(tparams), hydra.lib.lists.Reverse.apply(args), bindings, bodyWithTapps.get(), hydra.lib.lists.Reverse.apply(doms), mcod.get(), fEnv)));
   }
 
-  static <T0, T1> hydra.util.Either<T1, hydra.typing.FunctionStructure<T0>> analyzeFunctionTermWith_gather(hydra.context.Context cx, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>> forBinding, java.util.function.Function<T0, hydra.graph.Graph> getTC, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, T0>> setTC, Boolean argMode, T0 gEnv, hydra.util.ConsList<hydra.core.Name> tparams, hydra.util.ConsList<hydra.core.Name> args, hydra.util.ConsList<hydra.core.Binding> bindings, hydra.util.ConsList<hydra.core.Type> doms, hydra.util.ConsList<hydra.core.Type> tapps, hydra.core.Term t) {
+  static <T0, T1> hydra.util.Either<T1, hydra.typing.FunctionStructure<T0>> analyzeFunctionTermWith_gather(hydra.context.Context cx, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>> forBinding, java.util.function.Function<T0, hydra.graph.Graph> getTC, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, T0>> setTC, Boolean argMode, T0 gEnv, java.util.List<hydra.core.Name> tparams, java.util.List<hydra.core.Name> args, java.util.List<hydra.core.Binding> bindings, java.util.List<hydra.core.Type> doms, java.util.List<hydra.core.Type> tapps, hydra.core.Term t) {
     return hydra.Strip.deannotateTerm(t).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Either<T1, hydra.typing.FunctionStructure<T0>> otherwise(hydra.core.Term instance) {
@@ -139,7 +139,7 @@ public interface CoderUtils {
       @Override
       public hydra.util.Either<T1, hydra.typing.FunctionStructure<T0>> visit(hydra.core.Term.Let lt) {
         hydra.core.Term body = (lt).value.body;
-        hydra.util.ConsList<hydra.core.Binding> newBindings = (lt).value.bindings;
+        java.util.List<hydra.core.Binding> newBindings = (lt).value.bindings;
         return hydra.CoderUtils.<T0, T1>analyzeFunctionTermWith_gather(
           cx,
           forBinding,
@@ -252,16 +252,16 @@ public interface CoderUtils {
       (ft).type);
   }
 
-  static hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term> gatherApplications(hydra.core.Term term) {
-    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term>>>> go = new java.util.concurrent.atomic.AtomicReference<>();
-    go.set((java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term>>>) (args -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term>>) (t -> hydra.Strip.deannotateTerm(t).accept(new hydra.core.Term.PartialVisitor<>() {
+  static hydra.util.Pair<java.util.List<hydra.core.Term>, hydra.core.Term> gatherApplications(hydra.core.Term term) {
+    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<java.util.List<hydra.core.Term>, hydra.core.Term>>>> go = new java.util.concurrent.atomic.AtomicReference<>();
+    go.set((java.util.function.Function<java.util.List<hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<java.util.List<hydra.core.Term>, hydra.core.Term>>>) (args -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<java.util.List<hydra.core.Term>, hydra.core.Term>>) (t -> hydra.Strip.deannotateTerm(t).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term> otherwise(hydra.core.Term instance) {
-        return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term>(args, t)));
+      public hydra.util.Pair<java.util.List<hydra.core.Term>, hydra.core.Term> otherwise(hydra.core.Term instance) {
+        return (hydra.util.Pair<java.util.List<hydra.core.Term>, hydra.core.Term>) ((hydra.util.Pair<java.util.List<hydra.core.Term>, hydra.core.Term>) (new hydra.util.Pair<java.util.List<hydra.core.Term>, hydra.core.Term>(args, t)));
       }
 
       @Override
-      public hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term> visit(hydra.core.Term.Application app) {
+      public hydra.util.Pair<java.util.List<hydra.core.Term>, hydra.core.Term> visit(hydra.core.Term.Application app) {
         hydra.core.Term lhs = (app).value.function;
         hydra.core.Term rhs = (app).value.argument;
         return go.get().apply(hydra.lib.lists.Cons.apply(
@@ -269,18 +269,18 @@ public interface CoderUtils {
           args)).apply(lhs);
       }
     }))));
-    return go.get().apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty())).apply(term);
+    return go.get().apply((java.util.List<hydra.core.Term>) (java.util.Collections.<hydra.core.Term>emptyList())).apply(term);
   }
 
-  static hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>> gatherArgs(hydra.core.Term term, hydra.util.ConsList<hydra.core.Term> args) {
+  static hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Term>> gatherArgs(hydra.core.Term term, java.util.List<hydra.core.Term> args) {
     return hydra.Strip.deannotateTerm(term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>> otherwise(hydra.core.Term instance) {
-        return (hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>) ((hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>) (new hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>(term, args)));
+      public hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Term>> otherwise(hydra.core.Term instance) {
+        return (hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Term>>) ((hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Term>>) (new hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Term>>(term, args)));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>> visit(hydra.core.Term.Application app) {
+      public hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Term>> visit(hydra.core.Term.Application app) {
         hydra.core.Term lhs = (app).value.function;
         hydra.core.Term rhs = (app).value.argument;
         return hydra.CoderUtils.gatherArgs(
@@ -291,7 +291,7 @@ public interface CoderUtils {
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>> visit(hydra.core.Term.TypeLambda tl) {
+      public hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Term>> visit(hydra.core.Term.TypeLambda tl) {
         hydra.core.Term body = (tl).value.body;
         return hydra.CoderUtils.gatherArgs(
           body,
@@ -299,7 +299,7 @@ public interface CoderUtils {
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>> visit(hydra.core.Term.TypeApplication ta) {
+      public hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Term>> visit(hydra.core.Term.TypeApplication ta) {
         hydra.core.Term body = (ta).value.body;
         return hydra.CoderUtils.gatherArgs(
           body,
@@ -308,15 +308,15 @@ public interface CoderUtils {
     });
   }
 
-  static hydra.util.Pair<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Type>>> gatherArgsWithTypeApps(hydra.core.Term term, hydra.util.ConsList<hydra.core.Term> args, hydra.util.ConsList<hydra.core.Type> tyArgs) {
+  static hydra.util.Pair<hydra.core.Term, hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Type>>> gatherArgsWithTypeApps(hydra.core.Term term, java.util.List<hydra.core.Term> args, java.util.List<hydra.core.Type> tyArgs) {
     return hydra.Strip.deannotateTerm(term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.util.Pair<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Type>>> otherwise(hydra.core.Term instance) {
-        return (hydra.util.Pair<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Type>>>) ((hydra.util.Pair<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Type>>>) (new hydra.util.Pair<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Type>>>(term, (hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Type>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Type>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Type>>(args, tyArgs))))));
+      public hydra.util.Pair<hydra.core.Term, hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Type>>> otherwise(hydra.core.Term instance) {
+        return (hydra.util.Pair<hydra.core.Term, hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Type>>>) ((hydra.util.Pair<hydra.core.Term, hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Type>>>) (new hydra.util.Pair<hydra.core.Term, hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Type>>>(term, (hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Type>>) ((hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Type>>) (new hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Type>>(args, tyArgs))))));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Type>>> visit(hydra.core.Term.Application app) {
+      public hydra.util.Pair<hydra.core.Term, hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Type>>> visit(hydra.core.Term.Application app) {
         hydra.core.Term lhs = (app).value.function;
         hydra.core.Term rhs = (app).value.argument;
         return hydra.CoderUtils.gatherArgsWithTypeApps(
@@ -328,7 +328,7 @@ public interface CoderUtils {
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Type>>> visit(hydra.core.Term.TypeLambda tl) {
+      public hydra.util.Pair<hydra.core.Term, hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Type>>> visit(hydra.core.Term.TypeLambda tl) {
         hydra.core.Term body = (tl).value.body;
         return hydra.CoderUtils.gatherArgsWithTypeApps(
           body,
@@ -337,7 +337,7 @@ public interface CoderUtils {
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Type>>> visit(hydra.core.Term.TypeApplication ta) {
+      public hydra.util.Pair<hydra.core.Term, hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Type>>> visit(hydra.core.Term.TypeApplication ta) {
         hydra.core.Term body = (ta).value.body;
         hydra.core.Type typ = (ta).value.type;
         return hydra.CoderUtils.gatherArgsWithTypeApps(
@@ -455,7 +455,7 @@ public interface CoderUtils {
       public Boolean otherwise(hydra.core.Term instance) {
         hydra.util.Lazy<hydra.core.Term> baseTerm = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(hydra.CoderUtils.gatherArgs(
           term,
-          (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()))));
+          (java.util.List<hydra.core.Term>) (java.util.Collections.<hydra.core.Term>emptyList()))));
         return baseTerm.get().accept(new hydra.core.Term.PartialVisitor<>() {
           @Override
           public Boolean otherwise(hydra.core.Term instance) {
@@ -538,8 +538,8 @@ public interface CoderUtils {
 
       @Override
       public Boolean visit(hydra.core.Term.Application app) {
-        hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term> gathered = hydra.CoderUtils.gatherApplications(stripped);
-        hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> gatherArgs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered));
+        hydra.util.Pair<java.util.List<hydra.core.Term>, hydra.core.Term> gathered = hydra.CoderUtils.gatherApplications(stripped);
+        hydra.util.Lazy<java.util.List<hydra.core.Term>> gatherArgs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered));
         hydra.util.Lazy<hydra.core.Term> gatherFun = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(gathered));
         hydra.core.Term strippedFun = hydra.Strip.deannotateAndDetypeTerm(gatherFun.get());
         return (strippedFun).accept(new hydra.core.Term.PartialVisitor<>() {
@@ -639,7 +639,7 @@ public interface CoderUtils {
                           arg)))),
                       true,
                       gatherArgs.get()));
-                    hydra.util.ConsList<hydra.core.Field> cases_ = (cs).value.cases;
+                    java.util.List<hydra.core.Field> cases_ = (cs).value.cases;
                     hydra.util.Lazy<Boolean> branchesOk = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
                       (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Field, Boolean>>) (ok -> (java.util.function.Function<hydra.core.Field, Boolean>) (field -> hydra.lib.logic.And.apply(
                         ok,
@@ -829,7 +829,7 @@ public interface CoderUtils {
       new hydra.util.CaseConvention.Pascal(),
       localConv,
       local);
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       prefix.get(),
       suffix,
       ".",
@@ -861,49 +861,49 @@ public interface CoderUtils {
       })).get());
   }
 
-  static hydra.util.ConsList<hydra.module.Definition> reorderDefs(hydra.util.ConsList<hydra.module.Definition> defs) {
-    hydra.util.Pair<hydra.util.ConsList<hydra.module.TypeDefinition>, hydra.util.ConsList<hydra.module.TermDefinition>> partitioned = hydra.Environment.partitionDefinitions(defs);
-    hydra.util.Lazy<hydra.util.ConsList<hydra.module.TypeDefinition>> typeDefsRaw = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(partitioned));
-    hydra.util.Lazy<hydra.util.ConsList<hydra.module.TypeDefinition>> nameFirst = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+  static java.util.List<hydra.module.Definition> reorderDefs(java.util.List<hydra.module.Definition> defs) {
+    hydra.util.Pair<java.util.List<hydra.module.TypeDefinition>, java.util.List<hydra.module.TermDefinition>> partitioned = hydra.Environment.partitionDefinitions(defs);
+    hydra.util.Lazy<java.util.List<hydra.module.TypeDefinition>> typeDefsRaw = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(partitioned));
+    hydra.util.Lazy<java.util.List<hydra.module.TypeDefinition>> nameFirst = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
       (java.util.function.Function<hydra.module.TypeDefinition, Boolean>) (td -> hydra.lib.equality.Equal.apply(
         (td).name,
         new hydra.core.Name("hydra.core.Name"))),
       typeDefsRaw.get()));
-    hydra.util.Lazy<hydra.util.ConsList<hydra.module.TypeDefinition>> nameRest = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+    hydra.util.Lazy<java.util.List<hydra.module.TypeDefinition>> nameRest = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
       (java.util.function.Function<hydra.module.TypeDefinition, Boolean>) (td -> hydra.lib.logic.Not.apply(hydra.lib.equality.Equal.apply(
         (td).name,
         new hydra.core.Name("hydra.core.Name")))),
       typeDefsRaw.get()));
-    hydra.util.Lazy<hydra.util.ConsList<hydra.module.Definition>> termDefsWrapped = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+    hydra.util.Lazy<java.util.List<hydra.module.Definition>> termDefsWrapped = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.module.TermDefinition, hydra.module.Definition>) (td -> new hydra.module.Definition.Term(td)),
       hydra.lib.pairs.Second.apply(partitioned)));
-    hydra.util.Lazy<hydra.util.ConsList<hydra.module.Definition>> sortedTermDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.Sorting.topologicalSortNodes(
+    hydra.util.Lazy<java.util.List<hydra.module.Definition>> sortedTermDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.Sorting.topologicalSortNodes(
       (java.util.function.Function<hydra.module.Definition, hydra.core.Name>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
         @Override
         public hydra.core.Name visit(hydra.module.Definition.Term td) {
           return (td).value.name;
         }
       })),
-      (java.util.function.Function<hydra.module.Definition, hydra.util.ConsList<hydra.core.Name>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+      (java.util.function.Function<hydra.module.Definition, java.util.List<hydra.core.Name>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
         @Override
-        public hydra.util.ConsList<hydra.core.Name> otherwise(hydra.module.Definition instance) {
-          return (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty());
+        public java.util.List<hydra.core.Name> otherwise(hydra.module.Definition instance) {
+          return (java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList());
         }
 
         @Override
-        public hydra.util.ConsList<hydra.core.Name> visit(hydra.module.Definition.Term td) {
+        public java.util.List<hydra.core.Name> visit(hydra.module.Definition.Term td) {
           return hydra.lib.sets.ToList.apply(hydra.Variables.freeVariablesInTerm((td).value.term));
         }
       })),
       termDefsWrapped.get())));
-    hydra.util.Lazy<hydra.util.ConsList<hydra.module.Definition>> typeDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
+    hydra.util.Lazy<java.util.List<hydra.module.Definition>> typeDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(java.util.Arrays.asList(
       hydra.lib.lists.Map.apply(
         (java.util.function.Function<hydra.module.TypeDefinition, hydra.module.Definition>) (td -> new hydra.module.Definition.Type(td)),
         nameFirst.get()),
       hydra.lib.lists.Map.apply(
         (java.util.function.Function<hydra.module.TypeDefinition, hydra.module.Definition>) (td -> new hydra.module.Definition.Type(td)),
         nameRest.get()))));
-    return hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
+    return hydra.lib.lists.Concat.apply(java.util.Arrays.asList(
       typeDefs.get(),
       sortedTermDefs.get()));
   }
@@ -914,7 +914,7 @@ public interface CoderUtils {
       hydra.Checking.typeOf(
         cx,
         g,
-        (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
+        (java.util.List<hydra.core.Type>) (java.util.Collections.<hydra.core.Type>emptyList()),
         term));
   }
 }

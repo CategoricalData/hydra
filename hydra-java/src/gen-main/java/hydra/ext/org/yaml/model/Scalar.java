@@ -98,7 +98,9 @@ public abstract class Scalar implements Serializable, Comparable<Scalar> {
         return tagCmp;
       }
       Bool o = (Bool) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -139,7 +141,9 @@ public abstract class Scalar implements Serializable, Comparable<Scalar> {
         return tagCmp;
       }
       Float_ o = (Float_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -180,7 +184,9 @@ public abstract class Scalar implements Serializable, Comparable<Scalar> {
         return tagCmp;
       }
       Int o = (Int) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -261,7 +267,9 @@ public abstract class Scalar implements Serializable, Comparable<Scalar> {
         return tagCmp;
       }
       Str o = (Str) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

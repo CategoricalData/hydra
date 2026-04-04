@@ -51,11 +51,15 @@ public class TypeSignatureExpression implements Serializable, Comparable<TypeSig
   @SuppressWarnings("unchecked")
   public int compareTo(TypeSignatureExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) inner).compareTo(other.inner);
+    cmp = hydra.util.Comparing.compare(
+      inner,
+      other.inner);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) type).compareTo(other.type);
+    return hydra.util.Comparing.compare(
+      type,
+      other.type);
   }
 
   public TypeSignatureExpression withInner(hydra.ext.haskell.syntax.Expression inner) {

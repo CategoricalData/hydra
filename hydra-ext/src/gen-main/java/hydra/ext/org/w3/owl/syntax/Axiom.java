@@ -119,7 +119,9 @@ public abstract class Axiom implements Serializable, Comparable<Axiom> {
         return tagCmp;
       }
       AnnotationAxiom o = (AnnotationAxiom) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -159,7 +161,9 @@ public abstract class Axiom implements Serializable, Comparable<Axiom> {
         return tagCmp;
       }
       Assertion o = (Assertion) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -199,7 +203,9 @@ public abstract class Axiom implements Serializable, Comparable<Axiom> {
         return tagCmp;
       }
       ClassAxiom o = (ClassAxiom) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -239,7 +245,9 @@ public abstract class Axiom implements Serializable, Comparable<Axiom> {
         return tagCmp;
       }
       DataPropertyAxiom o = (DataPropertyAxiom) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -279,7 +287,9 @@ public abstract class Axiom implements Serializable, Comparable<Axiom> {
         return tagCmp;
       }
       DatatypeDefinition o = (DatatypeDefinition) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -319,7 +329,9 @@ public abstract class Axiom implements Serializable, Comparable<Axiom> {
         return tagCmp;
       }
       Declaration o = (Declaration) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -359,7 +371,9 @@ public abstract class Axiom implements Serializable, Comparable<Axiom> {
         return tagCmp;
       }
       HasKey o = (HasKey) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -399,7 +413,9 @@ public abstract class Axiom implements Serializable, Comparable<Axiom> {
         return tagCmp;
       }
       ObjectPropertyAxiom o = (ObjectPropertyAxiom) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

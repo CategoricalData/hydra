@@ -34,6 +34,8 @@ public class AdditionalBound implements Serializable, Comparable<AdditionalBound
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(AdditionalBound other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

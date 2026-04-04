@@ -40,6 +40,8 @@ public class NotExpression implements Serializable, Comparable<NotExpression> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(NotExpression other) {
-    return ((Comparable) expression).compareTo(other.expression);
+    return hydra.util.Comparing.compare(
+      expression,
+      other.expression);
   }
 }

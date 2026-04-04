@@ -22,9 +22,9 @@ public class RecordPattern implements Serializable, Comparable<RecordPattern> {
   /**
    * The field patterns
    */
-  public final hydra.util.ConsList<hydra.ext.haskell.syntax.PatternField> fields;
+  public final java.util.List<hydra.ext.haskell.syntax.PatternField> fields;
 
-  public RecordPattern (hydra.ext.haskell.syntax.Name name, hydra.util.ConsList<hydra.ext.haskell.syntax.PatternField> fields) {
+  public RecordPattern (hydra.ext.haskell.syntax.Name name, java.util.List<hydra.ext.haskell.syntax.PatternField> fields) {
     this.name = name;
     this.fields = fields;
   }
@@ -51,18 +51,22 @@ public class RecordPattern implements Serializable, Comparable<RecordPattern> {
   @SuppressWarnings("unchecked")
   public int compareTo(RecordPattern other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) fields).compareTo(other.fields);
+    return hydra.util.Comparing.compare(
+      fields,
+      other.fields);
   }
 
   public RecordPattern withName(hydra.ext.haskell.syntax.Name name) {
     return new RecordPattern(name, fields);
   }
 
-  public RecordPattern withFields(hydra.util.ConsList<hydra.ext.haskell.syntax.PatternField> fields) {
+  public RecordPattern withFields(java.util.List<hydra.ext.haskell.syntax.PatternField> fields) {
     return new RecordPattern(name, fields);
   }
 }

@@ -51,11 +51,15 @@ public class TTermDefinition<A> implements Serializable, Comparable<TTermDefinit
   @SuppressWarnings("unchecked")
   public int compareTo(TTermDefinition other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) term).compareTo(other.term);
+    return hydra.util.Comparing.compare(
+      term,
+      other.term);
   }
 
   public TTermDefinition withName(hydra.core.Name name) {

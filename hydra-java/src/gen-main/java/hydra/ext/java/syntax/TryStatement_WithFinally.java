@@ -49,15 +49,21 @@ public class TryStatement_WithFinally implements Serializable, Comparable<TrySta
   @SuppressWarnings("unchecked")
   public int compareTo(TryStatement_WithFinally other) {
     int cmp = 0;
-    cmp = ((Comparable) block).compareTo(other.block);
+    cmp = hydra.util.Comparing.compare(
+      block,
+      other.block);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) catches).compareTo(other.catches);
+    cmp = hydra.util.Comparing.compare(
+      catches,
+      other.catches);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) finally_).compareTo(other.finally_);
+    return hydra.util.Comparing.compare(
+      finally_,
+      other.finally_);
   }
 
   public TryStatement_WithFinally withBlock(hydra.ext.java.syntax.Block block) {

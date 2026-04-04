@@ -7,74 +7,74 @@ package hydra.test;
  */
 public interface Formatting {
   static hydra.testing.TestGroup allTests() {
-    return new hydra.testing.TestGroup("formatting", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), hydra.util.ConsList.of(hydra.test.Formatting.caseConversionTests()), (hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>) (hydra.util.ConsList.<hydra.testing.TestCaseWithMetadata>empty()));
+    return new hydra.testing.TestGroup("formatting", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(hydra.test.Formatting.caseConversionTests()), (java.util.List<hydra.testing.TestCaseWithMetadata>) (java.util.Collections.<hydra.testing.TestCaseWithMetadata>emptyList()));
   }
 
   static hydra.testing.TestGroup caseConversionTests() {
-    return new hydra.testing.TestGroup("case conversion", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.TestGroup>) (hydra.util.ConsList.<hydra.testing.TestGroup>empty()), hydra.util.ConsList.of(
+    return new hydra.testing.TestGroup("case conversion", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.TestGroup>) (java.util.Collections.<hydra.testing.TestGroup>emptyList()), java.util.Arrays.asList(
       new hydra.testing.TestCaseWithMetadata("#1 (lower_snake_case -> UPPER_SNAKE_CASE)", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.Formatting.convertCase(
         new hydra.util.CaseConvention.LowerSnake(),
         new hydra.util.CaseConvention.UpperSnake(),
-        "a_hello_world_42_a42_42a_b"), "A_HELLO_WORLD_42_A42_42A_B")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        "a_hello_world_42_a42_42a_b"), "A_HELLO_WORLD_42_A42_42A_B")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
       new hydra.testing.TestCaseWithMetadata("#2 (lower_snake_case -> camelCase)", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.Formatting.convertCase(
         new hydra.util.CaseConvention.LowerSnake(),
         new hydra.util.CaseConvention.Camel(),
-        "a_hello_world_42_a42_42a_b"), "aHelloWorld42A4242aB")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        "a_hello_world_42_a42_42a_b"), "aHelloWorld42A4242aB")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
       new hydra.testing.TestCaseWithMetadata("#3 (lower_snake_case -> PascalCase)", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.Formatting.convertCase(
         new hydra.util.CaseConvention.LowerSnake(),
         new hydra.util.CaseConvention.Pascal(),
-        "a_hello_world_42_a42_42a_b"), "AHelloWorld42A4242aB")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        "a_hello_world_42_a42_42a_b"), "AHelloWorld42A4242aB")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
       new hydra.testing.TestCaseWithMetadata("#4 (lower_snake_case -> lower_snake_case)", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.Formatting.convertCase(
         new hydra.util.CaseConvention.LowerSnake(),
         new hydra.util.CaseConvention.LowerSnake(),
-        "a_hello_world_42_a42_42a_b"), "a_hello_world_42_a42_42a_b")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        "a_hello_world_42_a42_42a_b"), "a_hello_world_42_a42_42a_b")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
       new hydra.testing.TestCaseWithMetadata("#5 (UPPER_SNAKE_CASE -> lower_snake_case)", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.Formatting.convertCase(
         new hydra.util.CaseConvention.UpperSnake(),
         new hydra.util.CaseConvention.LowerSnake(),
-        "A_HELLO_WORLD_42_A42_42A_B"), "a_hello_world_42_a42_42a_b")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        "A_HELLO_WORLD_42_A42_42A_B"), "a_hello_world_42_a42_42a_b")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
       new hydra.testing.TestCaseWithMetadata("#6 (UPPER_SNAKE_CASE -> camelCase)", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.Formatting.convertCase(
         new hydra.util.CaseConvention.UpperSnake(),
         new hydra.util.CaseConvention.Camel(),
-        "A_HELLO_WORLD_42_A42_42A_B"), "aHelloWorld42A4242aB")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        "A_HELLO_WORLD_42_A42_42A_B"), "aHelloWorld42A4242aB")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
       new hydra.testing.TestCaseWithMetadata("#7 (UPPER_SNAKE_CASE -> PascalCase)", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.Formatting.convertCase(
         new hydra.util.CaseConvention.UpperSnake(),
         new hydra.util.CaseConvention.Pascal(),
-        "A_HELLO_WORLD_42_A42_42A_B"), "AHelloWorld42A4242aB")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        "A_HELLO_WORLD_42_A42_42A_B"), "AHelloWorld42A4242aB")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
       new hydra.testing.TestCaseWithMetadata("#8 (UPPER_SNAKE_CASE -> UPPER_SNAKE_CASE)", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.Formatting.convertCase(
         new hydra.util.CaseConvention.UpperSnake(),
         new hydra.util.CaseConvention.UpperSnake(),
-        "A_HELLO_WORLD_42_A42_42A_B"), "A_HELLO_WORLD_42_A42_42A_B")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        "A_HELLO_WORLD_42_A42_42A_B"), "A_HELLO_WORLD_42_A42_42A_B")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
       new hydra.testing.TestCaseWithMetadata("#9 (camelCase -> lower_snake_case)", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.Formatting.convertCase(
         new hydra.util.CaseConvention.Camel(),
         new hydra.util.CaseConvention.LowerSnake(),
-        "aHelloWorld42A4242aB"), "a_hello_world42_a4242a_b")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        "aHelloWorld42A4242aB"), "a_hello_world42_a4242a_b")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
       new hydra.testing.TestCaseWithMetadata("#10 (camelCase -> UPPER_SNAKE_CASE)", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.Formatting.convertCase(
         new hydra.util.CaseConvention.Camel(),
         new hydra.util.CaseConvention.UpperSnake(),
-        "aHelloWorld42A4242aB"), "A_HELLO_WORLD42_A4242A_B")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        "aHelloWorld42A4242aB"), "A_HELLO_WORLD42_A4242A_B")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
       new hydra.testing.TestCaseWithMetadata("#11 (camelCase -> PascalCase)", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.Formatting.convertCase(
         new hydra.util.CaseConvention.Camel(),
         new hydra.util.CaseConvention.Pascal(),
-        "aHelloWorld42A4242aB"), "AHelloWorld42A4242aB")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        "aHelloWorld42A4242aB"), "AHelloWorld42A4242aB")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
       new hydra.testing.TestCaseWithMetadata("#12 (camelCase -> camelCase)", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.Formatting.convertCase(
         new hydra.util.CaseConvention.Camel(),
         new hydra.util.CaseConvention.Camel(),
-        "aHelloWorld42A4242aB"), "aHelloWorld42A4242aB")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        "aHelloWorld42A4242aB"), "aHelloWorld42A4242aB")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
       new hydra.testing.TestCaseWithMetadata("#13 (PascalCase -> lower_snake_case)", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.Formatting.convertCase(
         new hydra.util.CaseConvention.Pascal(),
         new hydra.util.CaseConvention.LowerSnake(),
-        "AHelloWorld42A4242aB"), "a_hello_world42_a4242a_b")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        "AHelloWorld42A4242aB"), "a_hello_world42_a4242a_b")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
       new hydra.testing.TestCaseWithMetadata("#14 (PascalCase -> UPPER_SNAKE_CASE)", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.Formatting.convertCase(
         new hydra.util.CaseConvention.Pascal(),
         new hydra.util.CaseConvention.UpperSnake(),
-        "AHelloWorld42A4242aB"), "A_HELLO_WORLD42_A4242A_B")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        "AHelloWorld42A4242aB"), "A_HELLO_WORLD42_A4242A_B")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
       new hydra.testing.TestCaseWithMetadata("#15 (PascalCase -> camelCase)", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.Formatting.convertCase(
         new hydra.util.CaseConvention.Pascal(),
         new hydra.util.CaseConvention.Camel(),
-        "AHelloWorld42A4242aB"), "aHelloWorld42A4242aB")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
+        "AHelloWorld42A4242aB"), "aHelloWorld42A4242aB")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList())),
       new hydra.testing.TestCaseWithMetadata("#16 (PascalCase -> PascalCase)", new hydra.testing.TestCase.Universal(new hydra.testing.UniversalTestCase(hydra.Formatting.convertCase(
         new hydra.util.CaseConvention.Pascal(),
         new hydra.util.CaseConvention.Pascal(),
-        "AHelloWorld42A4242aB"), "AHelloWorld42A4242aB")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty()))));
+        "AHelloWorld42A4242aB"), "AHelloWorld42A4242aB")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (java.util.List<hydra.testing.Tag>) (java.util.Collections.<hydra.testing.Tag>emptyList()))));
   }
 }

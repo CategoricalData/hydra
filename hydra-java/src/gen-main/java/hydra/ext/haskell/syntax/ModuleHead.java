@@ -29,9 +29,9 @@ public class ModuleHead implements Serializable, Comparable<ModuleHead> {
   /**
    * Export list
    */
-  public final hydra.util.ConsList<hydra.ext.haskell.syntax.Export> exports;
+  public final java.util.List<hydra.ext.haskell.syntax.Export> exports;
 
-  public ModuleHead (hydra.util.Maybe<String> comments, hydra.ext.haskell.syntax.ModuleName name, hydra.util.ConsList<hydra.ext.haskell.syntax.Export> exports) {
+  public ModuleHead (hydra.util.Maybe<String> comments, hydra.ext.haskell.syntax.ModuleName name, java.util.List<hydra.ext.haskell.syntax.Export> exports) {
     this.comments = comments;
     this.name = name;
     this.exports = exports;
@@ -61,15 +61,21 @@ public class ModuleHead implements Serializable, Comparable<ModuleHead> {
   @SuppressWarnings("unchecked")
   public int compareTo(ModuleHead other) {
     int cmp = 0;
-    cmp = ((Comparable) comments).compareTo(other.comments);
+    cmp = hydra.util.Comparing.compare(
+      comments,
+      other.comments);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) exports).compareTo(other.exports);
+    return hydra.util.Comparing.compare(
+      exports,
+      other.exports);
   }
 
   public ModuleHead withComments(hydra.util.Maybe<String> comments) {
@@ -80,7 +86,7 @@ public class ModuleHead implements Serializable, Comparable<ModuleHead> {
     return new ModuleHead(comments, name, exports);
   }
 
-  public ModuleHead withExports(hydra.util.ConsList<hydra.ext.haskell.syntax.Export> exports) {
+  public ModuleHead withExports(java.util.List<hydra.ext.haskell.syntax.Export> exports) {
     return new ModuleHead(comments, name, exports);
   }
 }

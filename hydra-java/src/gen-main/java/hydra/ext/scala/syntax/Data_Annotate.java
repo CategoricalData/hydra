@@ -13,9 +13,9 @@ public class Data_Annotate implements Serializable, Comparable<Data_Annotate> {
 
   public final hydra.ext.scala.syntax.Data expr;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Mod_Annot> annots;
+  public final java.util.List<hydra.ext.scala.syntax.Mod_Annot> annots;
 
-  public Data_Annotate (hydra.ext.scala.syntax.Data expr, hydra.util.ConsList<hydra.ext.scala.syntax.Mod_Annot> annots) {
+  public Data_Annotate (hydra.ext.scala.syntax.Data expr, java.util.List<hydra.ext.scala.syntax.Mod_Annot> annots) {
     this.expr = expr;
     this.annots = annots;
   }
@@ -42,18 +42,22 @@ public class Data_Annotate implements Serializable, Comparable<Data_Annotate> {
   @SuppressWarnings("unchecked")
   public int compareTo(Data_Annotate other) {
     int cmp = 0;
-    cmp = ((Comparable) expr).compareTo(other.expr);
+    cmp = hydra.util.Comparing.compare(
+      expr,
+      other.expr);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) annots).compareTo(other.annots);
+    return hydra.util.Comparing.compare(
+      annots,
+      other.annots);
   }
 
   public Data_Annotate withExpr(hydra.ext.scala.syntax.Data expr) {
     return new Data_Annotate(expr, annots);
   }
 
-  public Data_Annotate withAnnots(hydra.util.ConsList<hydra.ext.scala.syntax.Mod_Annot> annots) {
+  public Data_Annotate withAnnots(java.util.List<hydra.ext.scala.syntax.Mod_Annot> annots) {
     return new Data_Annotate(expr, annots);
   }
 }

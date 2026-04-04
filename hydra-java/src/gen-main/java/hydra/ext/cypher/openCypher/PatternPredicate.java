@@ -34,6 +34,8 @@ public class PatternPredicate implements Serializable, Comparable<PatternPredica
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PatternPredicate other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

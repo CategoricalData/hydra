@@ -81,23 +81,33 @@ public class TemporalDurationFunctionFeatures implements Serializable, Comparabl
   @SuppressWarnings("unchecked")
   public int compareTo(TemporalDurationFunctionFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) duration).compareTo(other.duration);
+    cmp = hydra.util.Comparing.compare(
+      duration,
+      other.duration);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) durationBetween).compareTo(other.durationBetween);
+    cmp = hydra.util.Comparing.compare(
+      durationBetween,
+      other.durationBetween);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) durationInDays).compareTo(other.durationInDays);
+    cmp = hydra.util.Comparing.compare(
+      durationInDays,
+      other.durationInDays);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) durationInMonths).compareTo(other.durationInMonths);
+    cmp = hydra.util.Comparing.compare(
+      durationInMonths,
+      other.durationInMonths);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) durationInSeconds).compareTo(other.durationInSeconds);
+    return hydra.util.Comparing.compare(
+      durationInSeconds,
+      other.durationInSeconds);
   }
 
   public TemporalDurationFunctionFeatures withDuration(Boolean duration) {

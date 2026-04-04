@@ -42,11 +42,15 @@ public class FieldAccess implements Serializable, Comparable<FieldAccess> {
   @SuppressWarnings("unchecked")
   public int compareTo(FieldAccess other) {
     int cmp = 0;
-    cmp = ((Comparable) qualifier).compareTo(other.qualifier);
+    cmp = hydra.util.Comparing.compare(
+      qualifier,
+      other.qualifier);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) identifier).compareTo(other.identifier);
+    return hydra.util.Comparing.compare(
+      identifier,
+      other.identifier);
   }
 
   public FieldAccess withQualifier(hydra.ext.java.syntax.FieldAccess_Qualifier qualifier) {

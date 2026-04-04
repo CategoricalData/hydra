@@ -51,11 +51,15 @@ public class ParseError implements Serializable, Comparable<ParseError> {
   @SuppressWarnings("unchecked")
   public int compareTo(ParseError other) {
     int cmp = 0;
-    cmp = ((Comparable) message).compareTo(other.message);
+    cmp = hydra.util.Comparing.compare(
+      message,
+      other.message);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) remainder).compareTo(other.remainder);
+    return hydra.util.Comparing.compare(
+      remainder,
+      other.remainder);
   }
 
   public ParseError withMessage(String message) {

@@ -37,6 +37,8 @@ public class CaseRhs implements Serializable, Comparable<CaseRhs> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(CaseRhs other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

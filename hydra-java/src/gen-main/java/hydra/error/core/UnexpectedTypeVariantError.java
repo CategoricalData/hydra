@@ -51,11 +51,15 @@ public class UnexpectedTypeVariantError implements Serializable, Comparable<Unex
   @SuppressWarnings("unchecked")
   public int compareTo(UnexpectedTypeVariantError other) {
     int cmp = 0;
-    cmp = ((Comparable) expectedVariant).compareTo(other.expectedVariant);
+    cmp = hydra.util.Comparing.compare(
+      expectedVariant,
+      other.expectedVariant);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) actualType).compareTo(other.actualType);
+    return hydra.util.Comparing.compare(
+      actualType,
+      other.actualType);
   }
 
   public UnexpectedTypeVariantError withExpectedVariant(hydra.variants.TypeVariant expectedVariant) {

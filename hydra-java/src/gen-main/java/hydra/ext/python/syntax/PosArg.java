@@ -76,7 +76,9 @@ public abstract class PosArg implements Serializable, Comparable<PosArg> {
         return tagCmp;
       }
       Starred o = (Starred) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class PosArg implements Serializable, Comparable<PosArg> {
         return tagCmp;
       }
       Assignment o = (Assignment) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class PosArg implements Serializable, Comparable<PosArg> {
         return tagCmp;
       }
       Expression o = (Expression) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

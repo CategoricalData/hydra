@@ -28,7 +28,7 @@ public class DataDeclaration implements Serializable, Comparable<DataDeclaration
   /**
    * Type class constraints
    */
-  public final hydra.util.ConsList<hydra.ext.haskell.syntax.Assertion> context;
+  public final java.util.List<hydra.ext.haskell.syntax.Assertion> context;
 
   /**
    * The declaration head
@@ -38,14 +38,14 @@ public class DataDeclaration implements Serializable, Comparable<DataDeclaration
   /**
    * The data constructors
    */
-  public final hydra.util.ConsList<hydra.ext.haskell.syntax.ConstructorWithComments> constructors;
+  public final java.util.List<hydra.ext.haskell.syntax.ConstructorWithComments> constructors;
 
   /**
    * Derived type class instances
    */
-  public final hydra.util.ConsList<hydra.ext.haskell.syntax.Deriving> deriving;
+  public final java.util.List<hydra.ext.haskell.syntax.Deriving> deriving;
 
-  public DataDeclaration (hydra.ext.haskell.syntax.DataOrNewtype keyword, hydra.util.ConsList<hydra.ext.haskell.syntax.Assertion> context, hydra.ext.haskell.syntax.DeclarationHead head, hydra.util.ConsList<hydra.ext.haskell.syntax.ConstructorWithComments> constructors, hydra.util.ConsList<hydra.ext.haskell.syntax.Deriving> deriving) {
+  public DataDeclaration (hydra.ext.haskell.syntax.DataOrNewtype keyword, java.util.List<hydra.ext.haskell.syntax.Assertion> context, hydra.ext.haskell.syntax.DeclarationHead head, java.util.List<hydra.ext.haskell.syntax.ConstructorWithComments> constructors, java.util.List<hydra.ext.haskell.syntax.Deriving> deriving) {
     this.keyword = keyword;
     this.context = context;
     this.head = head;
@@ -81,30 +81,40 @@ public class DataDeclaration implements Serializable, Comparable<DataDeclaration
   @SuppressWarnings("unchecked")
   public int compareTo(DataDeclaration other) {
     int cmp = 0;
-    cmp = ((Comparable) keyword).compareTo(other.keyword);
+    cmp = hydra.util.Comparing.compare(
+      keyword,
+      other.keyword);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) context).compareTo(other.context);
+    cmp = hydra.util.Comparing.compare(
+      context,
+      other.context);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) head).compareTo(other.head);
+    cmp = hydra.util.Comparing.compare(
+      head,
+      other.head);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) constructors).compareTo(other.constructors);
+    cmp = hydra.util.Comparing.compare(
+      constructors,
+      other.constructors);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) deriving).compareTo(other.deriving);
+    return hydra.util.Comparing.compare(
+      deriving,
+      other.deriving);
   }
 
   public DataDeclaration withKeyword(hydra.ext.haskell.syntax.DataOrNewtype keyword) {
     return new DataDeclaration(keyword, context, head, constructors, deriving);
   }
 
-  public DataDeclaration withContext(hydra.util.ConsList<hydra.ext.haskell.syntax.Assertion> context) {
+  public DataDeclaration withContext(java.util.List<hydra.ext.haskell.syntax.Assertion> context) {
     return new DataDeclaration(keyword, context, head, constructors, deriving);
   }
 
@@ -112,11 +122,11 @@ public class DataDeclaration implements Serializable, Comparable<DataDeclaration
     return new DataDeclaration(keyword, context, head, constructors, deriving);
   }
 
-  public DataDeclaration withConstructors(hydra.util.ConsList<hydra.ext.haskell.syntax.ConstructorWithComments> constructors) {
+  public DataDeclaration withConstructors(java.util.List<hydra.ext.haskell.syntax.ConstructorWithComments> constructors) {
     return new DataDeclaration(keyword, context, head, constructors, deriving);
   }
 
-  public DataDeclaration withDeriving(hydra.util.ConsList<hydra.ext.haskell.syntax.Deriving> deriving) {
+  public DataDeclaration withDeriving(java.util.List<hydra.ext.haskell.syntax.Deriving> deriving) {
     return new DataDeclaration(keyword, context, head, constructors, deriving);
   }
 }

@@ -42,11 +42,15 @@ public class Listcomp implements Serializable, Comparable<Listcomp> {
   @SuppressWarnings("unchecked")
   public int compareTo(Listcomp other) {
     int cmp = 0;
-    cmp = ((Comparable) expression).compareTo(other.expression);
+    cmp = hydra.util.Comparing.compare(
+      expression,
+      other.expression);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) forIfClauses).compareTo(other.forIfClauses);
+    return hydra.util.Comparing.compare(
+      forIfClauses,
+      other.forIfClauses);
   }
 
   public Listcomp withExpression(hydra.ext.python.syntax.NamedExpression expression) {

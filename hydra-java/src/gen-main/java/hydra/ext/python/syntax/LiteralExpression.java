@@ -100,7 +100,9 @@ public abstract class LiteralExpression implements Serializable, Comparable<Lite
         return tagCmp;
       }
       Number_ o = (Number_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -140,7 +142,9 @@ public abstract class LiteralExpression implements Serializable, Comparable<Lite
         return tagCmp;
       }
       Complex o = (Complex) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -180,7 +184,9 @@ public abstract class LiteralExpression implements Serializable, Comparable<Lite
         return tagCmp;
       }
       String_ o = (String_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

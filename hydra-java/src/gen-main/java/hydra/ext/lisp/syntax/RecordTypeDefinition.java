@@ -24,14 +24,14 @@ public class RecordTypeDefinition implements Serializable, Comparable<RecordType
   /**
    * The field definitions
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.FieldDefinition> fields;
+  public final java.util.List<hydra.ext.lisp.syntax.FieldDefinition> fields;
 
   /**
    * Optional docstring
    */
   public final hydra.util.Maybe<hydra.ext.lisp.syntax.Docstring> doc;
 
-  public RecordTypeDefinition (hydra.ext.lisp.syntax.Symbol name, hydra.util.ConsList<hydra.ext.lisp.syntax.FieldDefinition> fields, hydra.util.Maybe<hydra.ext.lisp.syntax.Docstring> doc) {
+  public RecordTypeDefinition (hydra.ext.lisp.syntax.Symbol name, java.util.List<hydra.ext.lisp.syntax.FieldDefinition> fields, hydra.util.Maybe<hydra.ext.lisp.syntax.Docstring> doc) {
     this.name = name;
     this.fields = fields;
     this.doc = doc;
@@ -61,22 +61,28 @@ public class RecordTypeDefinition implements Serializable, Comparable<RecordType
   @SuppressWarnings("unchecked")
   public int compareTo(RecordTypeDefinition other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) fields).compareTo(other.fields);
+    cmp = hydra.util.Comparing.compare(
+      fields,
+      other.fields);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) doc).compareTo(other.doc);
+    return hydra.util.Comparing.compare(
+      doc,
+      other.doc);
   }
 
   public RecordTypeDefinition withName(hydra.ext.lisp.syntax.Symbol name) {
     return new RecordTypeDefinition(name, fields, doc);
   }
 
-  public RecordTypeDefinition withFields(hydra.util.ConsList<hydra.ext.lisp.syntax.FieldDefinition> fields) {
+  public RecordTypeDefinition withFields(java.util.List<hydra.ext.lisp.syntax.FieldDefinition> fields) {
     return new RecordTypeDefinition(name, fields, doc);
   }
 

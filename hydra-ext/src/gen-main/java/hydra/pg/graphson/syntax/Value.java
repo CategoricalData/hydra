@@ -220,7 +220,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       BigDecimal o = (BigDecimal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -258,7 +260,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       BigInteger o = (BigInteger) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -298,7 +302,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       Binary o = (Binary) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -338,7 +344,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       Boolean_ o = (Boolean_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -378,7 +386,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       Byte_ o = (Byte_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -418,7 +428,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       Char o = (Char) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -458,7 +470,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       Composite o = (Composite) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -498,7 +512,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       DateTime o = (DateTime) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -538,7 +554,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       Double_ o = (Double_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -578,7 +596,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       Duration o = (Duration) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -618,7 +638,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       Float_ o = (Float_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -658,7 +680,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       Integer_ o = (Integer_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -668,9 +692,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
   }
 
   public static final class List extends hydra.pg.graphson.syntax.Value implements Serializable {
-    public final hydra.util.ConsList<hydra.pg.graphson.syntax.Value> value;
+    public final java.util.List<hydra.pg.graphson.syntax.Value> value;
 
-    public List (hydra.util.ConsList<hydra.pg.graphson.syntax.Value> value) {
+    public List (java.util.List<hydra.pg.graphson.syntax.Value> value) {
       this.value = value;
     }
 
@@ -698,7 +722,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       List o = (List) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -738,7 +764,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       Long_ o = (Long_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -778,7 +806,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       Map o = (Map) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -853,7 +883,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       Primitive o = (Primitive) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -863,9 +895,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
   }
 
   public static final class Set extends hydra.pg.graphson.syntax.Value implements Serializable {
-    public final hydra.util.ConsList<hydra.pg.graphson.syntax.Value> value;
+    public final java.util.List<hydra.pg.graphson.syntax.Value> value;
 
-    public Set (hydra.util.ConsList<hydra.pg.graphson.syntax.Value> value) {
+    public Set (java.util.List<hydra.pg.graphson.syntax.Value> value) {
       this.value = value;
     }
 
@@ -893,7 +925,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       Set o = (Set) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -933,7 +967,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       Short_ o = (Short_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -973,7 +1009,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       String_ o = (String_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1013,7 +1051,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       Uuid o = (Uuid) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

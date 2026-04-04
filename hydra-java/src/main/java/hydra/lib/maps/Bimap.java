@@ -9,8 +9,7 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Maybe;
 
-import hydra.util.PersistentMap;
-
+import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -53,7 +52,7 @@ public class Bimap extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph ->
             hydra.lib.eithers.Bind.apply(hydra.extract.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(2)), mp -> {
-                java.util.LinkedHashMap<Term, Term> result = new java.util.LinkedHashMap<>();
+                java.util.TreeMap<Term, Term> result = new java.util.TreeMap<>();
                 for (Map.Entry<Term, Term> entry : mp.entrySet()) {
                     Either<InContext<Error_>, Term> kr = hydra.Reduction.reduceTerm(
                         hydra.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), entry.getKey()));
@@ -77,7 +76,7 @@ public class Bimap extends PrimitiveFunction {
      * @param kf the key transformation function
      * @return a curried function that takes a value function, a map, and returns the transformed map
      */
-    public static <K1, K2, V1, V2> Function<Function<V1, V2>, Function<PersistentMap<K1, V1>, PersistentMap<K2, V2>>> apply(
+    public static <K1, K2, V1, V2> Function<Function<V1, V2>, Function<Map<K1, V1>, Map<K2, V2>>> apply(
             Function<K1, K2> kf) {
         return vf -> mp -> apply(kf, vf, mp);
     }
@@ -93,12 +92,11 @@ public class Bimap extends PrimitiveFunction {
      * @param mp the input map
      * @return the transformed map
      */
-    @SuppressWarnings("unchecked")
-    public static <K1, K2, V1, V2> PersistentMap<K2, V2> apply(
-            Function<K1, K2> kf, Function<V1, V2> vf, PersistentMap<K1, V1> mp) {
-        PersistentMap result = PersistentMap.empty();
-        for (java.util.Map.Entry<K1, V1> e : mp.entrySet()) {
-            result = result.insert((Comparable) kf.apply(e.getKey()), vf.apply(e.getValue()));
+    public static <K1, K2, V1, V2> Map<K2, V2> apply(
+            Function<K1, K2> kf, Function<V1, V2> vf, Map<K1, V1> mp) {
+        Map<K2, V2> result = new TreeMap<>();
+        for (Map.Entry<K1, V1> e : mp.entrySet()) {
+            result.put(kf.apply(e.getKey()), vf.apply(e.getValue()));
         }
         return result;
     }

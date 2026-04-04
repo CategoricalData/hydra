@@ -13,9 +13,9 @@ public class AssociativeExpression implements Serializable, Comparable<Associati
 
   public final hydra.pg.query.BinaryOperator operator;
 
-  public final hydra.util.ConsList<hydra.pg.query.Expression> operands;
+  public final java.util.List<hydra.pg.query.Expression> operands;
 
-  public AssociativeExpression (hydra.pg.query.BinaryOperator operator, hydra.util.ConsList<hydra.pg.query.Expression> operands) {
+  public AssociativeExpression (hydra.pg.query.BinaryOperator operator, java.util.List<hydra.pg.query.Expression> operands) {
     this.operator = operator;
     this.operands = operands;
   }
@@ -42,18 +42,22 @@ public class AssociativeExpression implements Serializable, Comparable<Associati
   @SuppressWarnings("unchecked")
   public int compareTo(AssociativeExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) operator).compareTo(other.operator);
+    cmp = hydra.util.Comparing.compare(
+      operator,
+      other.operator);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) operands).compareTo(other.operands);
+    return hydra.util.Comparing.compare(
+      operands,
+      other.operands);
   }
 
   public AssociativeExpression withOperator(hydra.pg.query.BinaryOperator operator) {
     return new AssociativeExpression(operator, operands);
   }
 
-  public AssociativeExpression withOperands(hydra.util.ConsList<hydra.pg.query.Expression> operands) {
+  public AssociativeExpression withOperands(java.util.List<hydra.pg.query.Expression> operands) {
     return new AssociativeExpression(operator, operands);
   }
 }

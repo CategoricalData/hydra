@@ -74,7 +74,7 @@ public interface Errors {
   }
 
   static hydra.core.Term unificationError(hydra.errors.UnificationError x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.errors.UnificationError"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.errors.UnificationError"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("leftType"), hydra.encode.Core.type((x).leftType)),
       new hydra.core.Field(new hydra.core.Name("rightType"), hydra.encode.Core.type((x).rightType)),
       new hydra.core.Field(new hydra.core.Name("message"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).message))))));

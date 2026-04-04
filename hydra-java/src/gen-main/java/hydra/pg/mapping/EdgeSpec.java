@@ -43,9 +43,9 @@ public class EdgeSpec implements Serializable, Comparable<EdgeSpec> {
   /**
    * Zero or more property specifications for each target edge
    */
-  public final hydra.util.ConsList<hydra.pg.mapping.PropertySpec> properties;
+  public final java.util.List<hydra.pg.mapping.PropertySpec> properties;
 
-  public EdgeSpec (hydra.pg.model.EdgeLabel label, hydra.pg.mapping.ValueSpec id, hydra.pg.mapping.ValueSpec out, hydra.pg.mapping.ValueSpec in, hydra.util.ConsList<hydra.pg.mapping.PropertySpec> properties) {
+  public EdgeSpec (hydra.pg.model.EdgeLabel label, hydra.pg.mapping.ValueSpec id, hydra.pg.mapping.ValueSpec out, hydra.pg.mapping.ValueSpec in, java.util.List<hydra.pg.mapping.PropertySpec> properties) {
     this.label = label;
     this.id = id;
     this.out = out;
@@ -81,23 +81,33 @@ public class EdgeSpec implements Serializable, Comparable<EdgeSpec> {
   @SuppressWarnings("unchecked")
   public int compareTo(EdgeSpec other) {
     int cmp = 0;
-    cmp = ((Comparable) label).compareTo(other.label);
+    cmp = hydra.util.Comparing.compare(
+      label,
+      other.label);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) id).compareTo(other.id);
+    cmp = hydra.util.Comparing.compare(
+      id,
+      other.id);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) out).compareTo(other.out);
+    cmp = hydra.util.Comparing.compare(
+      out,
+      other.out);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) in).compareTo(other.in);
+    cmp = hydra.util.Comparing.compare(
+      in,
+      other.in);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) properties).compareTo(other.properties);
+    return hydra.util.Comparing.compare(
+      properties,
+      other.properties);
   }
 
   public EdgeSpec withLabel(hydra.pg.model.EdgeLabel label) {
@@ -116,7 +126,7 @@ public class EdgeSpec implements Serializable, Comparable<EdgeSpec> {
     return new EdgeSpec(label, id, out, in, properties);
   }
 
-  public EdgeSpec withProperties(hydra.util.ConsList<hydra.pg.mapping.PropertySpec> properties) {
+  public EdgeSpec withProperties(java.util.List<hydra.pg.mapping.PropertySpec> properties) {
     return new EdgeSpec(label, id, out, in, properties);
   }
 }

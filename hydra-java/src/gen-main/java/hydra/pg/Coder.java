@@ -16,9 +16,13 @@ public interface Coder {
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.lang.Void> checkRecordName(hydra.context.Context cx, hydra.core.Name expected, hydra.core.Name actual) {
     return hydra.pg.Coder.check(
       cx,
-      hydra.lib.equality.Equal.apply(
-        (actual).value,
-        (expected).value),
+      hydra.lib.logic.Or.apply(
+        hydra.lib.equality.Equal.apply(
+          (expected).value,
+          "placeholder"),
+        hydra.lib.equality.Equal.apply(
+          (actual).value,
+          (expected).value)),
       hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.lang.Void>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
         hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
@@ -28,7 +32,7 @@ public interface Coder {
         (actual).value))), cx))));
   }
 
-  static <T0, T1, T2> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>> constructEdgeCoder(hydra.context.Context cx, hydra.graph.Graph g, hydra.pg.model.VertexLabel parentLabel, hydra.pg.mapping.Schema<T0, T1, T2> schema, hydra.core.Type source, T1 vidType, T1 eidType, hydra.pg.model.Direction dir, hydra.core.Name name, hydra.util.ConsList<hydra.core.FieldType> fields, hydra.util.ConsList<hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T1>, hydra.core.Field, hydra.pg.model.Property<T2>>> propAdapters, hydra.util.Maybe<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>> mOutSpec, hydra.util.Maybe<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>> mInSpec) {
+  static <T0, T1, T2> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>> constructEdgeCoder(hydra.context.Context cx, hydra.graph.Graph g, hydra.pg.model.VertexLabel parentLabel, hydra.pg.mapping.Schema<T0, T1, T2> schema, hydra.core.Type source, T1 vidType, T1 eidType, hydra.pg.model.Direction dir, hydra.core.Name name, java.util.List<hydra.core.FieldType> fields, java.util.List<hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T1>, hydra.core.Field, hydra.pg.model.Property<T2>>> propAdapters, hydra.util.Maybe<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>> mOutSpec, hydra.util.Maybe<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>> mInSpec) {
     return hydra.lib.eithers.Bind.apply(
       hydra.pg.Coder.findLabelString(
         cx,
@@ -136,17 +140,17 @@ public interface Coder {
       }));
   }
 
-  static <T0, T1, T2> hydra.coders.Coder<hydra.core.Term, T2> constructEdgeCoder_vertexIdsSchema(hydra.pg.mapping.Schema<T0, T1, T2> schema) {
-    return ((java.util.function.Function<hydra.pg.mapping.Schema<T0, T1, T2>, hydra.coders.Coder<hydra.core.Term, T2>>) ((java.util.function.Function<hydra.pg.mapping.Schema<T0, T1, T2>, hydra.coders.Coder<hydra.core.Term, T2>>) ((java.util.function.Function<hydra.pg.mapping.Schema<T0, T1, T2>, hydra.coders.Coder<hydra.core.Term, T2>>) (projected -> projected.vertexIds)))).apply(schema);
-  }
-
-  static <T1, T2> hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>> constructEdgeCoder_vertexAdapters(hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>> inVertexAdapter, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>> outVertexAdapter) {
-    return hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+  static <T1, T2> java.util.List<hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>> constructEdgeCoder_vertexAdapters(hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>> inVertexAdapter, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>> outVertexAdapter) {
+    return hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       outVertexAdapter,
       inVertexAdapter));
   }
 
-  static <T0, T1, T2> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>> constructVertexCoder(hydra.context.Context cx, hydra.graph.Graph g, hydra.pg.mapping.Schema<T0, T1, T2> schema, hydra.core.Type source, T1 vidType, T1 eidType, hydra.core.Name name, hydra.util.ConsList<hydra.core.FieldType> fields, hydra.util.ConsList<hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T1>, hydra.core.Field, hydra.pg.model.Property<T2>>> propAdapters) {
+  static <T0, T1, T2> hydra.coders.Coder<hydra.core.Term, T2> constructEdgeCoder_vertexIdsSchema(hydra.pg.mapping.Schema<T0, T1, T2> schema) {
+    return ((java.util.function.Function<hydra.pg.mapping.Schema<T0, T1, T2>, hydra.coders.Coder<hydra.core.Term, T2>>) ((java.util.function.Function<hydra.pg.mapping.Schema<T0, T1, T2>, hydra.coders.Coder<hydra.core.Term, T2>>) ((java.util.function.Function<hydra.pg.mapping.Schema<T0, T1, T2>, hydra.coders.Coder<hydra.core.Term, T2>>) (projected -> projected.vertexIds)))).apply(schema);
+  }
+
+  static <T0, T1, T2> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>> constructVertexCoder(hydra.context.Context cx, hydra.graph.Graph g, hydra.pg.mapping.Schema<T0, T1, T2> schema, hydra.core.Type source, T1 vidType, T1 eidType, hydra.core.Name name, java.util.List<hydra.core.FieldType> fields, java.util.List<hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T1>, hydra.core.Field, hydra.pg.model.Property<T2>>> propAdapters) {
     return hydra.lib.eithers.Bind.apply(
       hydra.pg.Coder.findLabelString(
         cx,
@@ -175,7 +179,7 @@ public interface Coder {
               label,
               new hydra.pg.model.Direction.Out(),
               fields),
-            (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<hydra.pg.model.Direction, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.model.EdgeLabel, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>>>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>>) (outEdgeAdapters -> hydra.lib.eithers.Bind.apply(
+            (java.util.function.Function<java.util.List<hydra.util.Pair<hydra.pg.model.Direction, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.model.EdgeLabel, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>>>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>>) (outEdgeAdapters -> hydra.lib.eithers.Bind.apply(
               hydra.pg.Coder.<T0, T1, T2>findAdjacenEdgeAdapters(
                 cx,
                 g,
@@ -185,7 +189,7 @@ public interface Coder {
                 label,
                 new hydra.pg.model.Direction.In(),
                 fields),
-              (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<hydra.pg.model.Direction, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.model.EdgeLabel, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>>>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>>) (inEdgeAdapters -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>right(hydra.pg.Coder.vertexCoder(
+              (java.util.function.Function<java.util.List<hydra.util.Pair<hydra.pg.model.Direction, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.model.EdgeLabel, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>>>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>>) (inEdgeAdapters -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>right(hydra.pg.Coder.vertexCoder(
                 g,
                 schema,
                 source,
@@ -200,7 +204,7 @@ public interface Coder {
       }));
   }
 
-  static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> hydra.coders.Adapter<T4, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>> edgeCoder(T0 g, hydra.pg.model.Direction dir, hydra.pg.mapping.Schema<T1, T2, T3> schema, T4 source, T5 eidType, hydra.core.Name tname, hydra.pg.model.EdgeLabel label, hydra.pg.model.VertexLabel outLabel, hydra.pg.model.VertexLabel inLabel, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<T6, T7, hydra.core.Term, T3>>> mIdAdapter, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<T8, T9, hydra.core.Term, T3>>> outAdapter, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<T10, T11, hydra.core.Term, T3>>> inAdapter, hydra.util.ConsList<hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T5>, hydra.core.Field, hydra.pg.model.Property<T3>>> propAdapters, hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<T12, T13, hydra.core.Term, hydra.pg.model.ElementTree<T3>>>> vertexAdapters) {
+  static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> hydra.coders.Adapter<T4, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>> edgeCoder(T0 g, hydra.pg.model.Direction dir, hydra.pg.mapping.Schema<T1, T2, T3> schema, T4 source, T5 eidType, hydra.core.Name tname, hydra.pg.model.EdgeLabel label, hydra.pg.model.VertexLabel outLabel, hydra.pg.model.VertexLabel inLabel, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<T6, T7, hydra.core.Term, T3>>> mIdAdapter, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<T8, T9, hydra.core.Term, T3>>> outAdapter, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<T10, T11, hydra.core.Term, T3>>> inAdapter, java.util.List<hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T5>, hydra.core.Field, hydra.pg.model.Property<T3>>> propAdapters, java.util.List<hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<T12, T13, hydra.core.Term, hydra.pg.model.ElementTree<T3>>>> vertexAdapters) {
     return (hydra.coders.Adapter<T4, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>) ((hydra.coders.Adapter<T4, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>) ((hydra.coders.Adapter<T4, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>) ((hydra.coders.Adapter<T4, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>) (new hydra.coders.Adapter<T4, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>(true, source, hydra.pg.Coder.<T5>elementTypeTreeEdge(
       hydra.pg.Coder.<T3, T5>edgeCoder_et(
         eidType,
@@ -208,7 +212,7 @@ public interface Coder {
         label,
         outLabel,
         propAdapters),
-      (hydra.util.ConsList<hydra.pg.model.ElementTypeTree<T5>>) (hydra.util.ConsList.<hydra.pg.model.ElementTypeTree<T5>>empty())), (hydra.coders.Coder<hydra.core.Term, hydra.pg.model.ElementTree<T3>>) ((hydra.coders.Coder<hydra.core.Term, hydra.pg.model.ElementTree<T3>>) (new hydra.coders.Coder<hydra.core.Term, hydra.pg.model.ElementTree<T3>>((java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.ElementTree<T3>>>>) (cx -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.ElementTree<T3>>>) (term -> {
+      (java.util.List<hydra.pg.model.ElementTypeTree<T5>>) (java.util.Collections.<hydra.pg.model.ElementTypeTree<T5>>emptyList())), (hydra.coders.Coder<hydra.core.Term, hydra.pg.model.ElementTree<T3>>) ((hydra.coders.Coder<hydra.core.Term, hydra.pg.model.ElementTree<T3>>) (new hydra.coders.Coder<hydra.core.Term, hydra.pg.model.ElementTree<T3>>((java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.ElementTree<T3>>>>) (cx -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.ElementTree<T3>>>) (term -> {
       hydra.core.Term deannot = hydra.Strip.deannotateTerm(term);
       hydra.util.Lazy<hydra.core.Term> unwrapped = new hydra.util.Lazy<>(() -> (deannot).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
@@ -235,7 +239,7 @@ public interface Coder {
           tname,
           (rec).typeName),
         (java.util.function.Function<java.lang.Void, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.ElementTree<T3>>>) (_chk -> {
-          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldsm = hydra.Resolution.fieldMap((rec).fields);
+          java.util.Map<hydra.core.Name, hydra.core.Term> fieldsm = hydra.Resolution.fieldMap((rec).fields);
           return hydra.lib.eithers.Bind.apply(
             hydra.lib.maybes.Maybe.applyLazy(
               () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, T3>right(((java.util.function.Function<hydra.pg.mapping.Schema<T1, T2, T3>, T3>) ((java.util.function.Function<hydra.pg.mapping.Schema<T1, T2, T3>, T3>) ((java.util.function.Function<hydra.pg.mapping.Schema<T1, T2, T3>, T3>) (projected -> projected.defaultEdgeId)))).apply(schema)),
@@ -249,7 +253,7 @@ public interface Coder {
                 cx,
                 fieldsm,
                 propAdapters),
-              (java.util.function.Function<hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T3>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.ElementTree<T3>>>) (props -> hydra.lib.eithers.Bind.apply(
+              (java.util.function.Function<java.util.Map<hydra.pg.model.PropertyKey, T3>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.ElementTree<T3>>>) (props -> hydra.lib.eithers.Bind.apply(
                 hydra.pg.Coder.<T1, T2, T3, T8, T9>edgeCoder_getVertexId(
                   cx,
                   dir,
@@ -267,7 +271,7 @@ public interface Coder {
                     inAdapter),
                   (java.util.function.Function<T3, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.ElementTree<T3>>>) (inId -> hydra.lib.eithers.Bind.apply(
                     hydra.lib.eithers.Map.apply(
-                      (java.util.function.Function<hydra.util.ConsList<hydra.util.Maybe<hydra.pg.model.ElementTree<T3>>>, hydra.util.ConsList<hydra.pg.model.ElementTree<T3>>>) (xs -> hydra.lib.maybes.Cat.apply(xs)),
+                      (java.util.function.Function<java.util.List<hydra.util.Maybe<hydra.pg.model.ElementTree<T3>>>, java.util.List<hydra.pg.model.ElementTree<T3>>>) (xs -> hydra.lib.maybes.Cat.apply(xs)),
                       hydra.lib.eithers.MapList.apply(
                         (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<T12, T13, hydra.core.Term, hydra.pg.model.ElementTree<T3>>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.pg.model.ElementTree<T3>>>>) (va -> {
                           hydra.util.Lazy<hydra.core.Name> fname = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(va));
@@ -281,18 +285,22 @@ public interface Coder {
                               fieldsm));
                         }),
                         vertexAdapters)),
-                    (java.util.function.Function<hydra.util.ConsList<hydra.pg.model.ElementTree<T3>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.ElementTree<T3>>>) (deps -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.ElementTree<T3>>right(hydra.pg.Coder.<T3>elementTreeEdge(
+                    (java.util.function.Function<java.util.List<hydra.pg.model.ElementTree<T3>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.ElementTree<T3>>>) (deps -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.ElementTree<T3>>right(hydra.pg.Coder.<T3>elementTreeEdge(
                       (hydra.pg.model.Edge<T3>) (new hydra.pg.model.Edge<T3>(label, edgeId, outId, inId, props)),
                       deps))))))))))));
         }));
     })), (java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.pg.model.ElementTree<T3>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>>) (cx -> (java.util.function.Function<hydra.pg.model.ElementTree<T3>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (ignored -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError("edge decoding is not yet supported")), cx)))))))))))));
   }
 
-  static <T3, T5> hydra.pg.model.EdgeType<T5> edgeCoder_et(T5 eidType, hydra.pg.model.VertexLabel inLabel, hydra.pg.model.EdgeLabel label, hydra.pg.model.VertexLabel outLabel, hydra.util.ConsList<hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T5>, hydra.core.Field, hydra.pg.model.Property<T3>>> propAdapters) {
+  static <T12, T13, T3> hydra.coders.Adapter<T12, T13, hydra.core.Term, hydra.pg.model.ElementTree<T3>> edgeCoder_ad(hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<T12, T13, hydra.core.Term, hydra.pg.model.ElementTree<T3>>> va) {
+    return hydra.lib.pairs.Second.apply(va);
+  }
+
+  static <T3, T5> hydra.pg.model.EdgeType<T5> edgeCoder_et(T5 eidType, hydra.pg.model.VertexLabel inLabel, hydra.pg.model.EdgeLabel label, hydra.pg.model.VertexLabel outLabel, java.util.List<hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T5>, hydra.core.Field, hydra.pg.model.Property<T3>>> propAdapters) {
     return (hydra.pg.model.EdgeType<T5>) (new hydra.pg.model.EdgeType<T5>(label, eidType, outLabel, inLabel, hydra.pg.Coder.propertyTypes(propAdapters)));
   }
 
-  static <T1, T2, T3, T14, T15> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T3> edgeCoder_getVertexId(hydra.context.Context cx, hydra.pg.model.Direction dir, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldsm, hydra.pg.mapping.Schema<T1, T2, T3> schema, hydra.pg.model.Direction dirCheck, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<T14, T15, hydra.core.Term, T3>>> adapter) {
+  static <T1, T2, T3, T14, T15> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T3> edgeCoder_getVertexId(hydra.context.Context cx, hydra.pg.model.Direction dir, java.util.Map<hydra.core.Name, hydra.core.Term> fieldsm, hydra.pg.mapping.Schema<T1, T2, T3> schema, hydra.pg.model.Direction dirCheck, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<T14, T15, hydra.core.Term, T3>>> adapter) {
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, T3>right(((java.util.function.Function<hydra.pg.mapping.Schema<T1, T2, T3>, T3>) ((java.util.function.Function<hydra.pg.mapping.Schema<T1, T2, T3>, T3>) ((java.util.function.Function<hydra.pg.mapping.Schema<T1, T2, T3>, T3>) (projected -> projected.defaultVertexId)))).apply(schema)),
       (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<T14, T15, hydra.core.Term, T3>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T3>>) (v1 -> hydra.pg.Coder.selectVertexId(
@@ -307,11 +315,7 @@ public interface Coder {
         () -> adapter));
   }
 
-  static <T12, T13, T3> hydra.coders.Adapter<T12, T13, hydra.core.Term, hydra.pg.model.ElementTree<T3>> edgeCoder_ad(hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<T12, T13, hydra.core.Term, hydra.pg.model.ElementTree<T3>>> va) {
-    return hydra.lib.pairs.Second.apply(va);
-  }
-
-  static <T0, T1, T2, T3, T4> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, T4, hydra.core.Term, T3>>>> edgeIdAdapter(hydra.context.Context cx, T0 g, hydra.pg.mapping.Schema<T1, T2, T3> schema, T4 eidType, hydra.core.Name name, hydra.core.Name idKey, hydra.util.ConsList<hydra.core.FieldType> fields) {
+  static <T0, T1, T2, T3, T4> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, T4, hydra.core.Term, T3>>>> edgeIdAdapter(hydra.context.Context cx, T0 g, hydra.pg.mapping.Schema<T1, T2, T3> schema, T4 eidType, hydra.core.Name name, hydra.core.Name idKey, java.util.List<hydra.core.FieldType> fields) {
     return hydra.lib.eithers.Bind.apply(
       hydra.pg.Coder.findIdProjectionSpec(
         cx,
@@ -404,7 +408,7 @@ public interface Coder {
                   schema,
                   kind.get(),
                   (fields).value),
-                (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>>) (propSpecs -> hydra.lib.eithers.Bind.apply(
+                (java.util.function.Function<java.util.List<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>>) (propSpecs -> hydra.lib.eithers.Bind.apply(
                   hydra.lib.eithers.MapList.apply(
                     (java.util.function.Function<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T1>, hydra.core.Field, hydra.pg.model.Property<T2>>>>) (v1 -> hydra.pg.Coder.propertyAdapter(
                       cx,
@@ -412,7 +416,7 @@ public interface Coder {
                       schema,
                       v1)),
                     propSpecs),
-                  (java.util.function.Function<hydra.util.ConsList<hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T1>, hydra.core.Field, hydra.pg.model.Property<T2>>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>>) (propAdapters -> kind.get().accept(new hydra.pg.model.ElementKind.PartialVisitor<>() {
+                  (java.util.function.Function<java.util.List<hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T1>, hydra.core.Field, hydra.pg.model.Property<T2>>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>>) (propAdapters -> kind.get().accept(new hydra.pg.model.ElementKind.PartialVisitor<>() {
                     @Override
                     public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>> visit(hydra.pg.model.ElementKind.Vertex ignored) {
                       return hydra.pg.Coder.<T0, T1, T2>constructVertexCoder(
@@ -450,29 +454,29 @@ public interface Coder {
     });
   }
 
-  static <T0> hydra.pg.model.ElementTree<T0> elementTreeEdge(hydra.pg.model.Edge<T0> edge, hydra.util.ConsList<hydra.pg.model.ElementTree<T0>> deps) {
+  static <T0> hydra.pg.model.ElementTree<T0> elementTreeEdge(hydra.pg.model.Edge<T0> edge, java.util.List<hydra.pg.model.ElementTree<T0>> deps) {
     return (hydra.pg.model.ElementTree<T0>) (new hydra.pg.model.ElementTree<T0>((hydra.pg.model.Element<T0>) (new hydra.pg.model.Element.Edge(edge)), deps));
   }
 
-  static <T0> hydra.pg.model.ElementTree<T0> elementTreeVertex(hydra.pg.model.Vertex<T0> vertex, hydra.util.ConsList<hydra.pg.model.ElementTree<T0>> deps) {
+  static <T0> hydra.pg.model.ElementTree<T0> elementTreeVertex(hydra.pg.model.Vertex<T0> vertex, java.util.List<hydra.pg.model.ElementTree<T0>> deps) {
     return (hydra.pg.model.ElementTree<T0>) (new hydra.pg.model.ElementTree<T0>((hydra.pg.model.Element<T0>) (new hydra.pg.model.Element.Vertex(vertex)), deps));
   }
 
-  static <T0> hydra.pg.model.ElementTypeTree<T0> elementTypeTreeEdge(hydra.pg.model.EdgeType<T0> etype, hydra.util.ConsList<hydra.pg.model.ElementTypeTree<T0>> deps) {
+  static <T0> hydra.pg.model.ElementTypeTree<T0> elementTypeTreeEdge(hydra.pg.model.EdgeType<T0> etype, java.util.List<hydra.pg.model.ElementTypeTree<T0>> deps) {
     return (hydra.pg.model.ElementTypeTree<T0>) (new hydra.pg.model.ElementTypeTree<T0>((hydra.pg.model.ElementType<T0>) (new hydra.pg.model.ElementType.Edge(etype)), deps));
   }
 
-  static <T0> hydra.pg.model.ElementTypeTree<T0> elementTypeTreeVertex(hydra.pg.model.VertexType<T0> vtype, hydra.util.ConsList<hydra.pg.model.ElementTypeTree<T0>> deps) {
+  static <T0> hydra.pg.model.ElementTypeTree<T0> elementTypeTreeVertex(hydra.pg.model.VertexType<T0> vtype, java.util.List<hydra.pg.model.ElementTypeTree<T0>> deps) {
     return (hydra.pg.model.ElementTypeTree<T0>) (new hydra.pg.model.ElementTypeTree<T0>((hydra.pg.model.ElementType<T0>) (new hydra.pg.model.ElementType.Vertex(vtype)), deps));
   }
 
-  static <T0, T1> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T1>> encodeProperties(hydra.context.Context cx, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fields, hydra.util.ConsList<hydra.coders.Adapter<hydra.core.FieldType, T0, hydra.core.Field, hydra.pg.model.Property<T1>>> adapters) {
+  static <T0, T1> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.Map<hydra.pg.model.PropertyKey, T1>> encodeProperties(hydra.context.Context cx, java.util.Map<hydra.core.Name, hydra.core.Term> fields, java.util.List<hydra.coders.Adapter<hydra.core.FieldType, T0, hydra.core.Field, hydra.pg.model.Property<T1>>> adapters) {
     return hydra.lib.eithers.Map.apply(
-      (java.util.function.Function<hydra.util.ConsList<hydra.pg.model.Property<T1>>, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T1>>) (props -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<java.util.List<hydra.pg.model.Property<T1>>, java.util.Map<hydra.pg.model.PropertyKey, T1>>) (props -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
         (java.util.function.Function<hydra.pg.model.Property<T1>, hydra.util.Pair<hydra.pg.model.PropertyKey, T1>>) (prop -> (hydra.util.Pair<hydra.pg.model.PropertyKey, T1>) ((hydra.util.Pair<hydra.pg.model.PropertyKey, T1>) (new hydra.util.Pair<hydra.pg.model.PropertyKey, T1>(((java.util.function.Function<hydra.pg.model.Property<T1>, hydra.pg.model.PropertyKey>) (projected -> projected.key)).apply(prop), ((java.util.function.Function<hydra.pg.model.Property<T1>, T1>) (projected -> projected.value)).apply(prop))))),
         props))),
       hydra.lib.eithers.Map.apply(
-        (java.util.function.Function<hydra.util.ConsList<hydra.util.Maybe<hydra.pg.model.Property<T1>>>, hydra.util.ConsList<hydra.pg.model.Property<T1>>>) (xs -> hydra.lib.maybes.Cat.apply(xs)),
+        (java.util.function.Function<java.util.List<hydra.util.Maybe<hydra.pg.model.Property<T1>>>, java.util.List<hydra.pg.model.Property<T1>>>) (xs -> hydra.lib.maybes.Cat.apply(xs)),
         hydra.lib.eithers.MapList.apply(
           (java.util.function.Function<hydra.coders.Adapter<hydra.core.FieldType, T0, hydra.core.Field, hydra.pg.model.Property<T1>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.pg.model.Property<T1>>>>) (v1 -> hydra.pg.Coder.encodeProperty(
             cx,
@@ -481,7 +485,7 @@ public interface Coder {
           adapters)));
   }
 
-  static <T0, T1> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<T1>> encodeProperty(hydra.context.Context cx, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fields, hydra.coders.Adapter<hydra.core.FieldType, T0, hydra.core.Field, T1> adapter) {
+  static <T0, T1> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<T1>> encodeProperty(hydra.context.Context cx, java.util.Map<hydra.core.Name, hydra.core.Term> fields, hydra.coders.Adapter<hydra.core.FieldType, T0, hydra.core.Field, T1> adapter) {
     hydra.util.Lazy<hydra.core.Name> fname = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.coders.Adapter<hydra.core.FieldType, T0, hydra.core.Field, T1>, hydra.core.FieldType>) ((java.util.function.Function<hydra.coders.Adapter<hydra.core.FieldType, T0, hydra.core.Field, T1>, hydra.core.FieldType>) ((java.util.function.Function<hydra.coders.Adapter<hydra.core.FieldType, T0, hydra.core.Field, T1>, hydra.core.FieldType>) ((java.util.function.Function<hydra.coders.Adapter<hydra.core.FieldType, T0, hydra.core.Field, T1>, hydra.core.FieldType>) (projected -> projected.source))))).apply(adapter).name);
     java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<T1>>> encodeValue = (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<T1>>>) (v1 -> hydra.pg.Coder.<T0, T1>encodeProperty_encodeValue(
       adapter,
@@ -542,9 +546,9 @@ public interface Coder {
       t);
   }
 
-  static <T0, T1, T2> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.Pair<hydra.pg.model.Direction, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.model.EdgeLabel, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>>>>> findAdjacenEdgeAdapters(hydra.context.Context cx, hydra.graph.Graph g, hydra.pg.mapping.Schema<T0, T1, T2> schema, T1 vidType, T1 eidType, hydra.pg.model.VertexLabel parentLabel, hydra.pg.model.Direction dir, hydra.util.ConsList<hydra.core.FieldType> fields) {
+  static <T0, T1, T2> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.util.Pair<hydra.pg.model.Direction, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.model.EdgeLabel, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>>>>> findAdjacenEdgeAdapters(hydra.context.Context cx, hydra.graph.Graph g, hydra.pg.mapping.Schema<T0, T1, T2> schema, T1 vidType, T1 eidType, hydra.pg.model.VertexLabel parentLabel, hydra.pg.model.Direction dir, java.util.List<hydra.core.FieldType> fields) {
     return hydra.lib.eithers.Map.apply(
-      (java.util.function.Function<hydra.util.ConsList<hydra.util.Maybe<hydra.util.Pair<hydra.pg.model.Direction, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.model.EdgeLabel, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>>>>>, hydra.util.ConsList<hydra.util.Pair<hydra.pg.model.Direction, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.model.EdgeLabel, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>>>>>) (xs -> hydra.lib.maybes.Cat.apply(xs)),
+      (java.util.function.Function<java.util.List<hydra.util.Maybe<hydra.util.Pair<hydra.pg.model.Direction, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.model.EdgeLabel, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>>>>>, java.util.List<hydra.util.Pair<hydra.pg.model.Direction, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.model.EdgeLabel, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>>>>>) (xs -> hydra.lib.maybes.Cat.apply(xs)),
       hydra.lib.eithers.MapList.apply(
         (java.util.function.Function<hydra.core.FieldType, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.util.Pair<hydra.pg.model.Direction, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.model.EdgeLabel, hydra.coders.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>>>>>>>) (field -> {
           hydra.util.Lazy<hydra.core.Name> key = new hydra.util.Lazy<>(() -> new hydra.core.Name((dir).accept(new hydra.pg.model.Direction.PartialVisitor<>() {
@@ -582,7 +586,7 @@ public interface Coder {
         fields));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>> findIdProjectionSpec(hydra.context.Context cx, Boolean required, hydra.core.Name tname, hydra.core.Name idKey, hydra.util.ConsList<hydra.core.FieldType> fields) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>> findIdProjectionSpec(hydra.context.Context cx, Boolean required, hydra.core.Name tname, hydra.core.Name idKey, java.util.List<hydra.core.FieldType> fields) {
     return hydra.lib.eithers.Bind.apply(
       hydra.pg.Coder.findSingleFieldWithAnnotationKey(
         cx,
@@ -606,7 +610,7 @@ public interface Coder {
             () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.mapping.ValueSpec>right(new hydra.pg.mapping.ValueSpec.Value()),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.mapping.ValueSpec>>) (v1 -> hydra.pg.TermsToElements.decodeValueSpec(
               cx,
-              new hydra.graph.Graph((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.graph.Primitive>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.graph.Primitive>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.graph.Primitive>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())),
+              new hydra.graph.Graph((java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (java.util.Map<hydra.core.Name, hydra.graph.Primitive>) ((java.util.Map<hydra.core.Name, hydra.graph.Primitive>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.graph.Primitive>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())),
               v1)),
             hydra.Annotations.getTypeAnnotation(
               idKey,
@@ -640,7 +644,7 @@ public interface Coder {
         source));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>> findProjectionSpec(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Name tname, hydra.core.Name key, hydra.core.Name aliasKey, hydra.util.ConsList<hydra.core.FieldType> fields) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>> findProjectionSpec(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Name tname, hydra.core.Name key, hydra.core.Name aliasKey, java.util.List<hydra.core.FieldType> fields) {
     return hydra.lib.eithers.Bind.apply(
       hydra.pg.Coder.findSingleFieldWithAnnotationKey(
         cx,
@@ -672,7 +676,7 @@ public interface Coder {
         mfield)));
   }
 
-  static <T0, T1, T2> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>> findPropertySpecs(hydra.context.Context cx, hydra.graph.Graph g, hydra.pg.mapping.Schema<T0, T1, T2> schema, hydra.pg.model.ElementKind kind, hydra.util.ConsList<hydra.core.FieldType> fields) {
+  static <T0, T1, T2> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>> findPropertySpecs(hydra.context.Context cx, hydra.graph.Graph g, hydra.pg.mapping.Schema<T0, T1, T2> schema, hydra.pg.model.ElementKind kind, java.util.List<hydra.core.FieldType> fields) {
     return hydra.lib.eithers.MapList.apply(
       (java.util.function.Function<hydra.core.FieldType, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.mapping.ValueSpec, hydra.util.Maybe<String>>>>>) (field -> {
         hydra.util.Lazy<hydra.core.Name> propKeyKey = new hydra.util.Lazy<>(() -> new hydra.core.Name(((java.util.function.Function<hydra.pg.mapping.Schema<T0, T1, T2>, hydra.pg.mapping.AnnotationSchema>) ((java.util.function.Function<hydra.pg.mapping.Schema<T0, T1, T2>, hydra.pg.mapping.AnnotationSchema>) ((java.util.function.Function<hydra.pg.mapping.Schema<T0, T1, T2>, hydra.pg.mapping.AnnotationSchema>) (projected -> projected.annotations)))).apply(schema).propertyKey));
@@ -705,25 +709,25 @@ public interface Coder {
         (java.util.function.Function<hydra.core.FieldType, Boolean>) (field -> {
           hydra.util.Lazy<hydra.pg.mapping.AnnotationSchema> annots = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.pg.mapping.Schema<T0, T1, T2>, hydra.pg.mapping.AnnotationSchema>) ((java.util.function.Function<hydra.pg.mapping.Schema<T0, T1, T2>, hydra.pg.mapping.AnnotationSchema>) ((java.util.function.Function<hydra.pg.mapping.Schema<T0, T1, T2>, hydra.pg.mapping.AnnotationSchema>) (projected -> projected.annotations)))).apply(schema));
           hydra.core.Name ignoreKey = new hydra.core.Name(annots.get().ignore);
-          hydra.util.ConsList<hydra.core.Name> specialKeys = (kind).accept(new hydra.pg.model.ElementKind.PartialVisitor<>() {
+          java.util.List<hydra.core.Name> specialKeys = (kind).accept(new hydra.pg.model.ElementKind.PartialVisitor<>() {
             @Override
-            public hydra.util.ConsList<hydra.core.Name> visit(hydra.pg.model.ElementKind.Vertex ignored) {
-              return hydra.util.ConsList.of(
+            public java.util.List<hydra.core.Name> visit(hydra.pg.model.ElementKind.Vertex ignored) {
+              return java.util.Arrays.asList(
                 new hydra.core.Name(annots.get().vertexId),
                 new hydra.core.Name(annots.get().outEdgeLabel),
                 new hydra.core.Name(annots.get().inEdgeLabel));
             }
 
             @Override
-            public hydra.util.ConsList<hydra.core.Name> visit(hydra.pg.model.ElementKind.Edge ignored) {
-              return hydra.util.ConsList.of(
+            public java.util.List<hydra.core.Name> visit(hydra.pg.model.ElementKind.Edge ignored) {
+              return java.util.Arrays.asList(
                 new hydra.core.Name(annots.get().edgeId),
                 new hydra.core.Name(annots.get().outVertex),
                 new hydra.core.Name(annots.get().inVertex));
             }
           });
-          hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> allKeys = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
-            hydra.util.ConsList.of(ignoreKey),
+          hydra.util.Lazy<java.util.List<hydra.core.Name>> allKeys = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(java.util.Arrays.asList(
+            java.util.Arrays.asList(ignoreKey),
             specialKeys)));
           hydra.util.Lazy<Boolean> hasSpecialAnnotation = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
             (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Name, Boolean>>) (b -> (java.util.function.Function<hydra.core.Name, Boolean>) (k -> hydra.lib.logic.Or.apply(
@@ -748,8 +752,8 @@ public interface Coder {
         fields));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.core.FieldType>> findSingleFieldWithAnnotationKey(hydra.context.Context cx, hydra.core.Name tname, hydra.core.Name key, hydra.util.ConsList<hydra.core.FieldType> fields) {
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.FieldType>> matches = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.core.FieldType>> findSingleFieldWithAnnotationKey(hydra.context.Context cx, hydra.core.Name tname, hydra.core.Name key, java.util.List<hydra.core.FieldType> fields) {
+    hydra.util.Lazy<java.util.List<hydra.core.FieldType>> matches = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
       (java.util.function.Function<hydra.core.FieldType, Boolean>) (f -> hydra.lib.maybes.IsJust.apply(hydra.Annotations.getTypeAnnotation(
         key,
         (f).type))),
@@ -797,13 +801,13 @@ public interface Coder {
         cx,
         g,
         values.get()),
-      (java.util.function.Function<java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.core.Term>>>>, hydra.util.Either<T5, hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, T2, hydra.core.Term, T3>>>>) (traversal -> hydra.util.Either.<T5, hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, T2, hydra.core.Term, T3>>>right((hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, T2, hydra.core.Term, T3>>) ((hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, T2, hydra.core.Term, T3>>) (new hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, T2, hydra.core.Term, T3>>(field.get().name, (hydra.coders.Adapter<hydra.core.Type, T2, hydra.core.Term, T3>) ((hydra.coders.Adapter<hydra.core.Type, T2, hydra.core.Term, T3>) ((hydra.coders.Adapter<hydra.core.Type, T2, hydra.core.Term, T3>) ((hydra.coders.Adapter<hydra.core.Type, T2, hydra.core.Term, T3>) (new hydra.coders.Adapter<hydra.core.Type, T2, hydra.core.Term, T3>(true, field.get().type, idtype, (hydra.coders.Coder<hydra.core.Term, T3>) ((hydra.coders.Coder<hydra.core.Term, T3>) (new hydra.coders.Coder<hydra.core.Term, T3>((java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T3>>>) (cx_ -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T3>>) (typ -> hydra.lib.eithers.Bind.apply(
+      (java.util.function.Function<java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.core.Term>>>>, hydra.util.Either<T5, hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, T2, hydra.core.Term, T3>>>>) (traversal -> hydra.util.Either.<T5, hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, T2, hydra.core.Term, T3>>>right((hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, T2, hydra.core.Term, T3>>) ((hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, T2, hydra.core.Term, T3>>) (new hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, T2, hydra.core.Term, T3>>(field.get().name, (hydra.coders.Adapter<hydra.core.Type, T2, hydra.core.Term, T3>) ((hydra.coders.Adapter<hydra.core.Type, T2, hydra.core.Term, T3>) ((hydra.coders.Adapter<hydra.core.Type, T2, hydra.core.Term, T3>) ((hydra.coders.Adapter<hydra.core.Type, T2, hydra.core.Term, T3>) (new hydra.coders.Adapter<hydra.core.Type, T2, hydra.core.Term, T3>(true, field.get().type, idtype, (hydra.coders.Coder<hydra.core.Term, T3>) ((hydra.coders.Coder<hydra.core.Term, T3>) (new hydra.coders.Coder<hydra.core.Term, T3>((java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T3>>>) (cx_ -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T3>>) (typ -> hydra.lib.eithers.Bind.apply(
         hydra.pg.Coder.traverseToSingleTerm(
           cx_,
           hydra.lib.strings.Cat2.apply(
             key,
             "-projection"),
-          (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.core.Term>>>) (v1 -> (traversal).apply(cx_).apply(v1)),
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.core.Term>>>) (v1 -> (traversal).apply(cx_).apply(v1)),
           typ),
         (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T3>>) (t -> ((java.util.function.Function<hydra.coders.Coder<hydra.core.Term, T3>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T3>>>>) ((java.util.function.Function<hydra.coders.Coder<hydra.core.Term, T3>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T3>>>>) (projected -> projected.encode))).apply(coder).apply(cx_).apply(t))))), (java.util.function.Function<hydra.context.Context, java.util.function.Function<T3, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>>) (cx_ -> (java.util.function.Function<T3, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (ignored -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
         hydra.lib.strings.Cat2.apply(
@@ -826,24 +830,24 @@ public interface Coder {
           cx,
           g,
           values.get()),
-        (java.util.function.Function<java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.core.Term>>>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T2>, hydra.core.Field, hydra.pg.model.Property<T3>>>>) (traversal -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T2>, hydra.core.Field, hydra.pg.model.Property<T3>>>right((hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T2>, hydra.core.Field, hydra.pg.model.Property<T3>>) ((hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T2>, hydra.core.Field, hydra.pg.model.Property<T3>>) ((hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T2>, hydra.core.Field, hydra.pg.model.Property<T3>>) ((hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T2>, hydra.core.Field, hydra.pg.model.Property<T3>>) (new hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T2>, hydra.core.Field, hydra.pg.model.Property<T3>>(true, tfield.get(), (hydra.pg.model.PropertyType<T2>) (new hydra.pg.model.PropertyType<T2>(key.get(), pt, true)), (hydra.coders.Coder<hydra.core.Field, hydra.pg.model.Property<T3>>) ((hydra.coders.Coder<hydra.core.Field, hydra.pg.model.Property<T3>>) (new hydra.coders.Coder<hydra.core.Field, hydra.pg.model.Property<T3>>((java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Field, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.Property<T3>>>>) (cx_ -> (java.util.function.Function<hydra.core.Field, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.Property<T3>>>) (dfield -> hydra.lib.eithers.Bind.apply(
+        (java.util.function.Function<java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.core.Term>>>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T2>, hydra.core.Field, hydra.pg.model.Property<T3>>>>) (traversal -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T2>, hydra.core.Field, hydra.pg.model.Property<T3>>>right((hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T2>, hydra.core.Field, hydra.pg.model.Property<T3>>) ((hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T2>, hydra.core.Field, hydra.pg.model.Property<T3>>) ((hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T2>, hydra.core.Field, hydra.pg.model.Property<T3>>) ((hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T2>, hydra.core.Field, hydra.pg.model.Property<T3>>) (new hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T2>, hydra.core.Field, hydra.pg.model.Property<T3>>(true, tfield.get(), (hydra.pg.model.PropertyType<T2>) (new hydra.pg.model.PropertyType<T2>(key.get(), pt, true)), (hydra.coders.Coder<hydra.core.Field, hydra.pg.model.Property<T3>>) ((hydra.coders.Coder<hydra.core.Field, hydra.pg.model.Property<T3>>) (new hydra.coders.Coder<hydra.core.Field, hydra.pg.model.Property<T3>>((java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Field, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.Property<T3>>>>) (cx_ -> (java.util.function.Function<hydra.core.Field, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.Property<T3>>>) (dfield -> hydra.lib.eithers.Bind.apply(
           hydra.pg.Coder.traverseToSingleTerm(
             cx_,
             "property traversal",
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.core.Term>>>) (v1 -> (traversal).apply(cx_).apply(v1)),
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.core.Term>>>) (v1 -> (traversal).apply(cx_).apply(v1)),
             (dfield).term),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.Property<T3>>>) (result -> hydra.lib.eithers.Bind.apply(
             ((java.util.function.Function<hydra.coders.Coder<hydra.core.Term, T3>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T3>>>>) ((java.util.function.Function<hydra.coders.Coder<hydra.core.Term, T3>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T3>>>>) (projected -> projected.encode))).apply(((java.util.function.Function<hydra.pg.mapping.Schema<T1, T2, T3>, hydra.coders.Coder<hydra.core.Term, T3>>) ((java.util.function.Function<hydra.pg.mapping.Schema<T1, T2, T3>, hydra.coders.Coder<hydra.core.Term, T3>>) ((java.util.function.Function<hydra.pg.mapping.Schema<T1, T2, T3>, hydra.coders.Coder<hydra.core.Term, T3>>) (projected -> projected.propertyValues)))).apply(schema)).apply(cx_).apply(result),
             (java.util.function.Function<T3, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.Property<T3>>>) (value -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.Property<T3>>right((hydra.pg.model.Property<T3>) (new hydra.pg.model.Property<T3>(key.get(), value))))))))), (java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.pg.model.Property<T3>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Field>>>) (cx_ -> (java.util.function.Function<hydra.pg.model.Property<T3>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Field>>) (ignored -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Field>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError("property decoding is not yet supported")), cx_))))))))))))))))));
   }
 
-  static <T0, T1, T2, T3> hydra.util.ConsList<hydra.pg.model.PropertyType<T1>> propertyTypes(hydra.util.ConsList<hydra.coders.Adapter<T0, hydra.pg.model.PropertyType<T1>, T2, T3>> propAdapters) {
+  static <T0, T1, T2, T3> java.util.List<hydra.pg.model.PropertyType<T1>> propertyTypes(java.util.List<hydra.coders.Adapter<T0, hydra.pg.model.PropertyType<T1>, T2, T3>> propAdapters) {
     return hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.coders.Adapter<T0, hydra.pg.model.PropertyType<T1>, T2, T3>, hydra.pg.model.PropertyType<T1>>) (a -> (hydra.pg.model.PropertyType<T1>) (new hydra.pg.model.PropertyType<T1>(((java.util.function.Function<hydra.pg.model.PropertyType<T1>, hydra.pg.model.PropertyKey>) (projected -> projected.key)).apply(((java.util.function.Function<hydra.coders.Adapter<T0, hydra.pg.model.PropertyType<T1>, T2, T3>, hydra.pg.model.PropertyType<T1>>) ((java.util.function.Function<hydra.coders.Adapter<T0, hydra.pg.model.PropertyType<T1>, T2, T3>, hydra.pg.model.PropertyType<T1>>) ((java.util.function.Function<hydra.coders.Adapter<T0, hydra.pg.model.PropertyType<T1>, T2, T3>, hydra.pg.model.PropertyType<T1>>) ((java.util.function.Function<hydra.coders.Adapter<T0, hydra.pg.model.PropertyType<T1>, T2, T3>, hydra.pg.model.PropertyType<T1>>) (projected -> projected.target))))).apply(a)), ((java.util.function.Function<hydra.pg.model.PropertyType<T1>, T1>) (projected -> projected.value)).apply(((java.util.function.Function<hydra.coders.Adapter<T0, hydra.pg.model.PropertyType<T1>, T2, T3>, hydra.pg.model.PropertyType<T1>>) ((java.util.function.Function<hydra.coders.Adapter<T0, hydra.pg.model.PropertyType<T1>, T2, T3>, hydra.pg.model.PropertyType<T1>>) ((java.util.function.Function<hydra.coders.Adapter<T0, hydra.pg.model.PropertyType<T1>, T2, T3>, hydra.pg.model.PropertyType<T1>>) ((java.util.function.Function<hydra.coders.Adapter<T0, hydra.pg.model.PropertyType<T1>, T2, T3>, hydra.pg.model.PropertyType<T1>>) (projected -> projected.target))))).apply(a)), true))),
       propAdapters);
   }
 
-  static <T0, T1, T2, T3> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T3> selectEdgeId(hydra.context.Context cx, hydra.util.PersistentMap<hydra.core.Name, T0> fields, hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<T1, T2, T0, T3>> ad) {
+  static <T0, T1, T2, T3> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T3> selectEdgeId(hydra.context.Context cx, java.util.Map<hydra.core.Name, T0> fields, hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<T1, T2, T0, T3>> ad) {
     hydra.util.Lazy<hydra.core.Name> fname = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(ad));
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, T3>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
@@ -861,7 +865,7 @@ public interface Coder {
     return hydra.lib.pairs.Second.apply(ad);
   }
 
-  static <T0, T1, T2, T3> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T3> selectVertexId(hydra.context.Context cx, hydra.util.PersistentMap<hydra.core.Name, T0> fields, hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<T1, T2, T0, T3>> ad) {
+  static <T0, T1, T2, T3> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T3> selectVertexId(hydra.context.Context cx, java.util.Map<hydra.core.Name, T0> fields, hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<T1, T2, T0, T3>> ad) {
     hydra.util.Lazy<hydra.core.Name> fname = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(ad));
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, T3>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
@@ -879,10 +883,10 @@ public interface Coder {
     return hydra.lib.pairs.Second.apply(ad);
   }
 
-  static <T0, T1> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T1> traverseToSingleTerm(hydra.context.Context cx, String desc, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<T1>>> traversal, T0 term) {
+  static <T0, T1> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T1> traverseToSingleTerm(hydra.context.Context cx, String desc, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<T1>>> traversal, T0 term) {
     return hydra.lib.eithers.Bind.apply(
       (traversal).apply(term),
-      (java.util.function.Function<hydra.util.ConsList<T1>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T1>>) (terms -> hydra.lib.logic.IfElse.lazy(
+      (java.util.function.Function<java.util.List<T1>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T1>>) (terms -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(terms),
         () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, T1>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
           desc,
@@ -897,7 +901,7 @@ public interface Coder {
             " resolved to multiple terms"))), cx)))))));
   }
 
-  static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> hydra.coders.Adapter<T4, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>> vertexCoder(T0 g, hydra.pg.mapping.Schema<T1, T2, T3> schema, T4 source, T5 vidType, T6 tname, hydra.pg.model.VertexLabel vlabel, hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<T7, T8, hydra.core.Term, T3>> idAdapter, hydra.util.ConsList<hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T5>, hydra.core.Field, hydra.pg.model.Property<T3>>> propAdapters, hydra.util.ConsList<hydra.util.Pair<hydra.pg.model.Direction, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.model.EdgeLabel, hydra.coders.Adapter<T9, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>>>>> edgeAdapters) {
+  static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> hydra.coders.Adapter<T4, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>> vertexCoder(T0 g, hydra.pg.mapping.Schema<T1, T2, T3> schema, T4 source, T5 vidType, T6 tname, hydra.pg.model.VertexLabel vlabel, hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<T7, T8, hydra.core.Term, T3>> idAdapter, java.util.List<hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T5>, hydra.core.Field, hydra.pg.model.Property<T3>>> propAdapters, java.util.List<hydra.util.Pair<hydra.pg.model.Direction, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.model.EdgeLabel, hydra.coders.Adapter<T9, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>>>>> edgeAdapters) {
     return (hydra.coders.Adapter<T4, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>) ((hydra.coders.Adapter<T4, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>) ((hydra.coders.Adapter<T4, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>) ((hydra.coders.Adapter<T4, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>) (new hydra.coders.Adapter<T4, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>(true, source, hydra.pg.Coder.<T3, T5, T9>vertexCoder_target(
       edgeAdapters,
       propAdapters,
@@ -923,7 +927,7 @@ public interface Coder {
           return (r).value;
         }
       });
-      hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fmap = hydra.Resolution.fieldMap((rec).fields);
+      java.util.Map<hydra.core.Name, hydra.core.Term> fmap = hydra.Resolution.fieldMap((rec).fields);
       return hydra.lib.eithers.Bind.apply(
         hydra.pg.Coder.selectVertexId(
           cx,
@@ -934,34 +938,34 @@ public interface Coder {
             cx,
             fmap,
             propAdapters),
-          (java.util.function.Function<hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T3>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.ElementTree<T3>>>) (props -> hydra.lib.eithers.Bind.apply(
+          (java.util.function.Function<java.util.Map<hydra.pg.model.PropertyKey, T3>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.ElementTree<T3>>>) (props -> hydra.lib.eithers.Bind.apply(
             hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<hydra.pg.model.ElementTree<T3>>>, hydra.util.ConsList<hydra.pg.model.ElementTree<T3>>>) (xs -> hydra.lib.lists.Concat.apply(xs)),
+              (java.util.function.Function<java.util.List<java.util.List<hydra.pg.model.ElementTree<T3>>>, java.util.List<hydra.pg.model.ElementTree<T3>>>) (xs -> hydra.lib.lists.Concat.apply(xs)),
               hydra.lib.eithers.MapList.apply(
-                (java.util.function.Function<hydra.util.Pair<hydra.pg.model.Direction, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.model.EdgeLabel, hydra.coders.Adapter<T9, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>>>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.pg.model.ElementTree<T3>>>>) (ea -> {
+                (java.util.function.Function<hydra.util.Pair<hydra.pg.model.Direction, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.model.EdgeLabel, hydra.coders.Adapter<T9, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>>>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.pg.model.ElementTree<T3>>>>) (ea -> {
                   hydra.util.Lazy<hydra.pg.model.Direction> eaDir = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(ea));
                   hydra.util.Lazy<hydra.core.FieldType> eaField = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(hydra.lib.pairs.Second.apply(ea)));
                   hydra.util.Lazy<hydra.pg.model.EdgeLabel> eaLabel = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(hydra.lib.pairs.Second.apply(hydra.lib.pairs.Second.apply(ea))));
                   return hydra.lib.maybes.Maybe.applyLazy(
-                    () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.pg.model.ElementTree<T3>>>right((hydra.util.ConsList<hydra.pg.model.ElementTree<T3>>) (hydra.util.ConsList.<hydra.pg.model.ElementTree<T3>>empty())),
-                    (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.pg.model.ElementTree<T3>>>>) (fterm -> hydra.lib.eithers.Map.apply(
-                      (java.util.function.Function<hydra.pg.model.ElementTree<T3>, hydra.util.ConsList<hydra.pg.model.ElementTree<T3>>>) (tree -> ((java.util.function.Function<hydra.pg.model.Element, hydra.util.ConsList<hydra.pg.model.ElementTree<T3>>>) (v1 -> ((java.util.function.Function<hydra.pg.model.Element<T3>, hydra.util.ConsList<hydra.pg.model.ElementTree<T3>>>) ((java.util.function.Function<hydra.pg.model.Element<T3>, hydra.util.ConsList<hydra.pg.model.ElementTree<T3>>>) (u -> (u).accept(new hydra.pg.model.Element.PartialVisitor<>() {
+                    () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.pg.model.ElementTree<T3>>>right((java.util.List<hydra.pg.model.ElementTree<T3>>) (java.util.Collections.<hydra.pg.model.ElementTree<T3>>emptyList())),
+                    (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.pg.model.ElementTree<T3>>>>) (fterm -> hydra.lib.eithers.Map.apply(
+                      (java.util.function.Function<hydra.pg.model.ElementTree<T3>, java.util.List<hydra.pg.model.ElementTree<T3>>>) (tree -> ((java.util.function.Function<hydra.pg.model.Element, java.util.List<hydra.pg.model.ElementTree<T3>>>) (v1 -> ((java.util.function.Function<hydra.pg.model.Element<T3>, java.util.List<hydra.pg.model.ElementTree<T3>>>) ((java.util.function.Function<hydra.pg.model.Element<T3>, java.util.List<hydra.pg.model.ElementTree<T3>>>) (u -> (u).accept(new hydra.pg.model.Element.PartialVisitor<>() {
                         @Override
-                        public hydra.util.ConsList<hydra.pg.model.ElementTree<T3>> visit(hydra.pg.model.Element.Vertex<T3> vtx) {
-                          return hydra.util.ConsList.of((hydra.pg.model.ElementTree<T3>) (new hydra.pg.model.ElementTree<T3>(hydra.pg.Coder.<T1, T2, T3>vertexCoder_edge(
+                        public java.util.List<hydra.pg.model.ElementTree<T3>> visit(hydra.pg.model.Element.Vertex<T3> vtx) {
+                          return java.util.Arrays.asList((hydra.pg.model.ElementTree<T3>) (new hydra.pg.model.ElementTree<T3>(hydra.pg.Coder.<T1, T2, T3>vertexCoder_edge(
                             eaDir.get(),
                             eaLabel.get(),
                             schema,
                             vid,
-                            (vtx).value), hydra.util.ConsList.of(tree))));
+                            (vtx).value), java.util.Arrays.asList(tree))));
                         }
 
                         @Override
-                        public hydra.util.ConsList<hydra.pg.model.ElementTree<T3>> visit(hydra.pg.model.Element.Edge<T3> edg) {
-                          return hydra.util.ConsList.of((hydra.pg.model.ElementTree<T3>) (new hydra.pg.model.ElementTree<T3>((hydra.pg.model.Element<T3>) (new hydra.pg.model.Element.Edge(hydra.pg.Coder.<T3>vertexCoder_fixedEdge(
+                        public java.util.List<hydra.pg.model.ElementTree<T3>> visit(hydra.pg.model.Element.Edge<T3> edg) {
+                          return java.util.Arrays.asList((hydra.pg.model.ElementTree<T3>) (new hydra.pg.model.ElementTree<T3>((hydra.pg.model.Element<T3>) (new hydra.pg.model.Element.Edge(hydra.pg.Coder.<T3>vertexCoder_fixedEdge(
                             eaDir.get(),
                             (edg).value,
-                            vid))), ((java.util.function.Function<hydra.pg.model.ElementTree<T3>, hydra.util.ConsList<hydra.pg.model.ElementTree<T3>>>) (projected -> projected.dependencies)).apply(tree))));
+                            vid))), ((java.util.function.Function<hydra.pg.model.ElementTree<T3>, java.util.List<hydra.pg.model.ElementTree<T3>>>) (projected -> projected.dependencies)).apply(tree))));
                         }
                       })))).apply(v1))).apply(((java.util.function.Function<hydra.pg.model.ElementTree<T3>, hydra.pg.model.Element<T3>>) (projected -> projected.self)).apply(tree))),
                       ((java.util.function.Function<hydra.coders.Coder<hydra.core.Term, hydra.pg.model.ElementTree<T3>>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.ElementTree<T3>>>>>) ((java.util.function.Function<hydra.coders.Coder<hydra.core.Term, hydra.pg.model.ElementTree<T3>>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.ElementTree<T3>>>>>) (projected -> projected.encode))).apply(((java.util.function.Function<hydra.coders.Adapter<T9, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>, hydra.coders.Coder<hydra.core.Term, hydra.pg.model.ElementTree<T3>>>) ((java.util.function.Function<hydra.coders.Adapter<T9, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>, hydra.coders.Coder<hydra.core.Term, hydra.pg.model.ElementTree<T3>>>) ((java.util.function.Function<hydra.coders.Adapter<T9, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>, hydra.coders.Coder<hydra.core.Term, hydra.pg.model.ElementTree<T3>>>) ((java.util.function.Function<hydra.coders.Adapter<T9, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>, hydra.coders.Coder<hydra.core.Term, hydra.pg.model.ElementTree<T3>>>) (projected -> projected.coder))))).apply(hydra.pg.Coder.<T3, T5, T9>vertexCoder_eaAdapter(ea))).apply(cx).apply(fterm))),
@@ -970,53 +974,46 @@ public interface Coder {
                       fmap));
                 }),
                 edgeAdapters)),
-            (java.util.function.Function<hydra.util.ConsList<hydra.pg.model.ElementTree<T3>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.ElementTree<T3>>>) (deps -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.ElementTree<T3>>right(hydra.pg.Coder.<T3>elementTreeVertex(
+            (java.util.function.Function<java.util.List<hydra.pg.model.ElementTree<T3>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.ElementTree<T3>>>) (deps -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.pg.model.ElementTree<T3>>right(hydra.pg.Coder.<T3>elementTreeVertex(
               (hydra.pg.model.Vertex<T3>) (new hydra.pg.model.Vertex<T3>(vlabel, vid, props)),
               deps))))))));
     })), (java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.pg.model.ElementTree<T3>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>>) (cx -> (java.util.function.Function<hydra.pg.model.ElementTree<T3>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (ignored -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError("vertex decoding is not yet supported")), cx)))))))))))));
   }
 
-  static <T3, T5> hydra.pg.model.VertexType<T5> vertexCoder_vtype(hydra.util.ConsList<hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T5>, hydra.core.Field, hydra.pg.model.Property<T3>>> propAdapters, T5 vidType, hydra.pg.model.VertexLabel vlabel) {
-    return (hydra.pg.model.VertexType<T5>) (new hydra.pg.model.VertexType<T5>(vlabel, vidType, hydra.pg.Coder.propertyTypes(propAdapters)));
-  }
-
-  static <T3, T5, T9> hydra.util.ConsList<hydra.pg.model.ElementTypeTree<T5>> vertexCoder_depTypes(hydra.util.ConsList<hydra.util.Pair<hydra.pg.model.Direction, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.model.EdgeLabel, hydra.coders.Adapter<T9, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>>>>> edgeAdapters) {
+  static <T3, T5, T9> java.util.List<hydra.pg.model.ElementTypeTree<T5>> vertexCoder_depTypes(java.util.List<hydra.util.Pair<hydra.pg.model.Direction, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.model.EdgeLabel, hydra.coders.Adapter<T9, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>>>>> edgeAdapters) {
     return hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.util.Pair<hydra.pg.model.Direction, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.model.EdgeLabel, hydra.coders.Adapter<T9, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>>>>, hydra.pg.model.ElementTypeTree<T5>>) (ea -> ((java.util.function.Function<hydra.coders.Adapter<T9, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>, hydra.pg.model.ElementTypeTree<T5>>) ((java.util.function.Function<hydra.coders.Adapter<T9, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>, hydra.pg.model.ElementTypeTree<T5>>) ((java.util.function.Function<hydra.coders.Adapter<T9, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>, hydra.pg.model.ElementTypeTree<T5>>) ((java.util.function.Function<hydra.coders.Adapter<T9, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>, hydra.pg.model.ElementTypeTree<T5>>) (projected -> projected.target))))).apply(hydra.lib.pairs.Second.apply(hydra.lib.pairs.Second.apply(hydra.lib.pairs.Second.apply(ea))))),
       edgeAdapters);
-  }
-
-  static <T3, T5, T9> hydra.pg.model.ElementTypeTree<T5> vertexCoder_target(hydra.util.ConsList<hydra.util.Pair<hydra.pg.model.Direction, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.model.EdgeLabel, hydra.coders.Adapter<T9, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>>>>> edgeAdapters, hydra.util.ConsList<hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T5>, hydra.core.Field, hydra.pg.model.Property<T3>>> propAdapters, T5 vidType, hydra.pg.model.VertexLabel vlabel) {
-    return hydra.pg.Coder.<T5>elementTypeTreeVertex(
-      hydra.pg.Coder.<T3, T5>vertexCoder_vtype(
-        propAdapters,
-        vidType,
-        vlabel),
-      hydra.pg.Coder.<T3, T5, T9>vertexCoder_depTypes(edgeAdapters));
   }
 
   static <T3, T5, T9> hydra.coders.Adapter<T9, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>> vertexCoder_eaAdapter(hydra.util.Pair<hydra.pg.model.Direction, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.model.EdgeLabel, hydra.coders.Adapter<T9, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>>>> ea) {
     return hydra.lib.pairs.Second.apply(hydra.lib.pairs.Second.apply(hydra.lib.pairs.Second.apply(ea)));
   }
 
-  static <T3> T3 vertexCoder_otherid(hydra.pg.model.Vertex<T3> vtx) {
-    return ((java.util.function.Function<hydra.pg.model.Vertex<T3>, T3>) (projected -> projected.id)).apply(vtx);
+  static <T1, T2, T3> hydra.pg.model.Element<T3> vertexCoder_edge(hydra.pg.model.Direction eaDir, hydra.pg.model.EdgeLabel eaLabel, hydra.pg.mapping.Schema<T1, T2, T3> schema, T3 vid, hydra.pg.model.Vertex<T3> vtx) {
+    return (hydra.pg.model.Element<T3>) (new hydra.pg.model.Element.Edge((hydra.pg.model.Edge<T3>) (new hydra.pg.model.Edge<T3>(eaLabel, hydra.pg.Coder.<T1, T2, T3>vertexCoder_edgeid(schema), hydra.pg.Coder.<T3>vertexCoder_outId(
+      eaDir,
+      vid,
+      vtx), hydra.pg.Coder.<T3>vertexCoder_inId(
+      eaDir,
+      vid,
+      vtx), (java.util.Map<hydra.pg.model.PropertyKey, T3>) ((java.util.Map<hydra.pg.model.PropertyKey, T3>) (hydra.lib.maps.Empty.<hydra.pg.model.PropertyKey, T3>apply()))))));
   }
 
   static <T1, T2, T3> T3 vertexCoder_edgeid(hydra.pg.mapping.Schema<T1, T2, T3> schema) {
     return ((java.util.function.Function<hydra.pg.mapping.Schema<T1, T2, T3>, T3>) ((java.util.function.Function<hydra.pg.mapping.Schema<T1, T2, T3>, T3>) ((java.util.function.Function<hydra.pg.mapping.Schema<T1, T2, T3>, T3>) (projected -> projected.defaultEdgeId)))).apply(schema);
   }
 
-  static <T3> T3 vertexCoder_outId(hydra.pg.model.Direction eaDir, T3 vid, hydra.pg.model.Vertex<T3> vtx) {
+  static <T3> hydra.pg.model.Edge<T3> vertexCoder_fixedEdge(hydra.pg.model.Direction eaDir, hydra.pg.model.Edge<T3> edg, T3 vid) {
     return (eaDir).accept(new hydra.pg.model.Direction.PartialVisitor<>() {
       @Override
-      public T3 visit(hydra.pg.model.Direction.Out ignored) {
-        return vid;
+      public hydra.pg.model.Edge<T3> visit(hydra.pg.model.Direction.Out ignored) {
+        return (hydra.pg.model.Edge<T3>) (new hydra.pg.model.Edge<T3>(((java.util.function.Function<hydra.pg.model.Edge<T3>, hydra.pg.model.EdgeLabel>) (projected -> projected.label)).apply(edg), ((java.util.function.Function<hydra.pg.model.Edge<T3>, T3>) (projected -> projected.id)).apply(edg), vid, ((java.util.function.Function<hydra.pg.model.Edge<T3>, T3>) (projected -> projected.in)).apply(edg), ((java.util.function.Function<hydra.pg.model.Edge<T3>, java.util.Map<hydra.pg.model.PropertyKey, T3>>) (projected -> projected.properties)).apply(edg)));
       }
 
       @Override
-      public T3 visit(hydra.pg.model.Direction.In ignored) {
-        return hydra.pg.Coder.<T3>vertexCoder_otherid(vtx);
+      public hydra.pg.model.Edge<T3> visit(hydra.pg.model.Direction.In ignored) {
+        return (hydra.pg.model.Edge<T3>) (new hydra.pg.model.Edge<T3>(((java.util.function.Function<hydra.pg.model.Edge<T3>, hydra.pg.model.EdgeLabel>) (projected -> projected.label)).apply(edg), ((java.util.function.Function<hydra.pg.model.Edge<T3>, T3>) (projected -> projected.id)).apply(edg), ((java.util.function.Function<hydra.pg.model.Edge<T3>, T3>) (projected -> projected.out)).apply(edg), vid, ((java.util.function.Function<hydra.pg.model.Edge<T3>, java.util.Map<hydra.pg.model.PropertyKey, T3>>) (projected -> projected.properties)).apply(edg)));
       }
     });
   }
@@ -1035,31 +1032,38 @@ public interface Coder {
     });
   }
 
-  static <T1, T2, T3> hydra.pg.model.Element<T3> vertexCoder_edge(hydra.pg.model.Direction eaDir, hydra.pg.model.EdgeLabel eaLabel, hydra.pg.mapping.Schema<T1, T2, T3> schema, T3 vid, hydra.pg.model.Vertex<T3> vtx) {
-    return (hydra.pg.model.Element<T3>) (new hydra.pg.model.Element.Edge((hydra.pg.model.Edge<T3>) (new hydra.pg.model.Edge<T3>(eaLabel, hydra.pg.Coder.<T1, T2, T3>vertexCoder_edgeid(schema), hydra.pg.Coder.<T3>vertexCoder_outId(
-      eaDir,
-      vid,
-      vtx), hydra.pg.Coder.<T3>vertexCoder_inId(
-      eaDir,
-      vid,
-      vtx), (hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T3>) ((hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T3>) (hydra.lib.maps.Empty.<hydra.pg.model.PropertyKey, T3>apply()))))));
+  static <T3> T3 vertexCoder_otherid(hydra.pg.model.Vertex<T3> vtx) {
+    return ((java.util.function.Function<hydra.pg.model.Vertex<T3>, T3>) (projected -> projected.id)).apply(vtx);
   }
 
-  static <T3> hydra.pg.model.Edge<T3> vertexCoder_fixedEdge(hydra.pg.model.Direction eaDir, hydra.pg.model.Edge<T3> edg, T3 vid) {
+  static <T3> T3 vertexCoder_outId(hydra.pg.model.Direction eaDir, T3 vid, hydra.pg.model.Vertex<T3> vtx) {
     return (eaDir).accept(new hydra.pg.model.Direction.PartialVisitor<>() {
       @Override
-      public hydra.pg.model.Edge<T3> visit(hydra.pg.model.Direction.Out ignored) {
-        return (hydra.pg.model.Edge<T3>) (new hydra.pg.model.Edge<T3>(((java.util.function.Function<hydra.pg.model.Edge<T3>, hydra.pg.model.EdgeLabel>) (projected -> projected.label)).apply(edg), ((java.util.function.Function<hydra.pg.model.Edge<T3>, T3>) (projected -> projected.id)).apply(edg), vid, ((java.util.function.Function<hydra.pg.model.Edge<T3>, T3>) (projected -> projected.in)).apply(edg), ((java.util.function.Function<hydra.pg.model.Edge<T3>, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T3>>) (projected -> projected.properties)).apply(edg)));
+      public T3 visit(hydra.pg.model.Direction.Out ignored) {
+        return vid;
       }
 
       @Override
-      public hydra.pg.model.Edge<T3> visit(hydra.pg.model.Direction.In ignored) {
-        return (hydra.pg.model.Edge<T3>) (new hydra.pg.model.Edge<T3>(((java.util.function.Function<hydra.pg.model.Edge<T3>, hydra.pg.model.EdgeLabel>) (projected -> projected.label)).apply(edg), ((java.util.function.Function<hydra.pg.model.Edge<T3>, T3>) (projected -> projected.id)).apply(edg), ((java.util.function.Function<hydra.pg.model.Edge<T3>, T3>) (projected -> projected.out)).apply(edg), vid, ((java.util.function.Function<hydra.pg.model.Edge<T3>, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T3>>) (projected -> projected.properties)).apply(edg)));
+      public T3 visit(hydra.pg.model.Direction.In ignored) {
+        return hydra.pg.Coder.<T3>vertexCoder_otherid(vtx);
       }
     });
   }
 
-  static <T0, T1, T2, T3, T4> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, T4, hydra.core.Term, T3>>> vertexIdAdapter(hydra.context.Context cx, T0 g, hydra.pg.mapping.Schema<T1, T2, T3> schema, T4 vidType, hydra.core.Name name, hydra.core.Name idKey, hydra.util.ConsList<hydra.core.FieldType> fields) {
+  static <T3, T5, T9> hydra.pg.model.ElementTypeTree<T5> vertexCoder_target(java.util.List<hydra.util.Pair<hydra.pg.model.Direction, hydra.util.Pair<hydra.core.FieldType, hydra.util.Pair<hydra.pg.model.EdgeLabel, hydra.coders.Adapter<T9, hydra.pg.model.ElementTypeTree<T5>, hydra.core.Term, hydra.pg.model.ElementTree<T3>>>>>> edgeAdapters, java.util.List<hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T5>, hydra.core.Field, hydra.pg.model.Property<T3>>> propAdapters, T5 vidType, hydra.pg.model.VertexLabel vlabel) {
+    return hydra.pg.Coder.<T5>elementTypeTreeVertex(
+      hydra.pg.Coder.<T3, T5>vertexCoder_vtype(
+        propAdapters,
+        vidType,
+        vlabel),
+      hydra.pg.Coder.<T3, T5, T9>vertexCoder_depTypes(edgeAdapters));
+  }
+
+  static <T3, T5> hydra.pg.model.VertexType<T5> vertexCoder_vtype(java.util.List<hydra.coders.Adapter<hydra.core.FieldType, hydra.pg.model.PropertyType<T5>, hydra.core.Field, hydra.pg.model.Property<T3>>> propAdapters, T5 vidType, hydra.pg.model.VertexLabel vlabel) {
+    return (hydra.pg.model.VertexType<T5>) (new hydra.pg.model.VertexType<T5>(vlabel, vidType, hydra.pg.Coder.propertyTypes(propAdapters)));
+  }
+
+  static <T0, T1, T2, T3, T4> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, T4, hydra.core.Term, T3>>> vertexIdAdapter(hydra.context.Context cx, T0 g, hydra.pg.mapping.Schema<T1, T2, T3> schema, T4 vidType, hydra.core.Name name, hydra.core.Name idKey, java.util.List<hydra.core.FieldType> fields) {
     return hydra.lib.eithers.Bind.apply(
       hydra.pg.Coder.findIdProjectionSpec(
         cx,

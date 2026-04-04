@@ -68,7 +68,9 @@ public abstract class ArrayAccess_Variant implements Serializable, Comparable<Ar
         return tagCmp;
       }
       Name o = (Name) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class ArrayAccess_Variant implements Serializable, Comparable<Ar
         return tagCmp;
       }
       Primary o = (Primary) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
