@@ -62,21 +62,19 @@
                                     "body": {"maybe": null},
                                     "type": {"variable": "hydra.ext.cpp.syntax.Expression"}}}}],
                             "typeName": "hydra.ext.cpp.syntax.Parameter"}},
-                        "domain": [{"variable": "hydra.ext.cpp.syntax.TypeExpression"}],
+                        "domain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"},
                         "parameter": "typ"}}},
-                  "domain": [{"literal": {"string": {}}}],
+                  "domain": {"literal": {"string": {}}},
                   "parameter": "name"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.ext.cpp.syntax.Parameter"},
-                    "domain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
-                "domain": {"literal": {"string": {}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.ext.cpp.syntax.Parameter"},
+                  "domain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
+              "domain": {"literal": {"string": {}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.cppClassDeclaration",
@@ -119,26 +117,24 @@
                                           {"name": "body", "term": {"variable": "mbody"}}],
                                         "typeName": "hydra.ext.cpp.syntax.ClassDeclaration"}}},
                                   "typeName": "hydra.ext.cpp.syntax.Declaration"}},
-                              "domain": [{"maybe": {"variable": "hydra.ext.cpp.syntax.ClassBody"}}],
+                              "domain": {"maybe": {"variable": "hydra.ext.cpp.syntax.ClassBody"}},
                               "parameter": "mbody"}}},
-                        "domain": [{"list": {"variable": "hydra.ext.cpp.syntax.BaseSpecifier"}}],
+                        "domain": {"list": {"variable": "hydra.ext.cpp.syntax.BaseSpecifier"}},
                         "parameter": "baseSpecs"}}},
-                  "domain": [{"literal": {"string": {}}}],
+                  "domain": {"literal": {"string": {}}},
                   "parameter": "name"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "function": {
-                        "codomain": {"variable": "hydra.ext.cpp.syntax.Declaration"},
-                        "domain": {"maybe": {"variable": "hydra.ext.cpp.syntax.ClassBody"}}}},
-                    "domain": {"list": {"variable": "hydra.ext.cpp.syntax.BaseSpecifier"}}}},
-                "domain": {"literal": {"string": {}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {"variable": "hydra.ext.cpp.syntax.Declaration"},
+                      "domain": {"maybe": {"variable": "hydra.ext.cpp.syntax.ClassBody"}}}},
+                  "domain": {"list": {"variable": "hydra.ext.cpp.syntax.BaseSpecifier"}}}},
+              "domain": {"literal": {"string": {}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.cppEnumDeclaration",
@@ -183,21 +179,19 @@
                                     {"name": "body", "term": {"variable": "mbody"}}],
                                   "typeName": "hydra.ext.cpp.syntax.ClassDeclaration"}}},
                             "typeName": "hydra.ext.cpp.syntax.Declaration"}},
-                        "domain": [{"maybe": {"variable": "hydra.ext.cpp.syntax.ClassBody"}}],
+                        "domain": {"maybe": {"variable": "hydra.ext.cpp.syntax.ClassBody"}},
                         "parameter": "mbody"}}},
-                  "domain": [{"literal": {"string": {}}}],
+                  "domain": {"literal": {"string": {}}},
                   "parameter": "name"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.ext.cpp.syntax.Declaration"},
-                    "domain": {"maybe": {"variable": "hydra.ext.cpp.syntax.ClassBody"}}}},
-                "domain": {"literal": {"string": {}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.ext.cpp.syntax.Declaration"},
+                  "domain": {"maybe": {"variable": "hydra.ext.cpp.syntax.ClassBody"}}}},
+              "domain": {"literal": {"string": {}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.cppEnumForwardDeclaration",
@@ -244,16 +238,14 @@
                                     "type": {"variable": "hydra.ext.cpp.syntax.ClassBody"}}}}],
                             "typeName": "hydra.ext.cpp.syntax.ClassDeclaration"}}},
                       "typeName": "hydra.ext.cpp.syntax.Declaration"}},
-                  "domain": [{"literal": {"string": {}}}],
+                  "domain": {"literal": {"string": {}}},
                   "parameter": "name"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ext.cpp.syntax.Declaration"},
-                "domain": {"literal": {"string": {}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ext.cpp.syntax.Declaration"},
+              "domain": {"literal": {"string": {}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.cppPostfixExpressionToCppExpression",
@@ -274,16 +266,14 @@
                           "field": {"name": "postfix", "term": {"variable": "pf"}},
                           "typeName": "hydra.ext.cpp.syntax.UnaryExpression"}},
                       "function": {"variable": "hydra.ext.cpp.utils.cppUnaryExpressionToCppExpression"}}},
-                  "domain": [{"variable": "hydra.ext.cpp.syntax.PostfixExpression"}],
+                  "domain": {"variable": "hydra.ext.cpp.syntax.PostfixExpression"},
                   "parameter": "pf"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
-                "domain": {"variable": "hydra.ext.cpp.syntax.PostfixExpression"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
+              "domain": {"variable": "hydra.ext.cpp.syntax.PostfixExpression"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.cppPrimaryExpressionToCppExpression",
@@ -305,16 +295,14 @@
                           "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}},
                       "function": {
                         "variable": "hydra.ext.cpp.utils.cppPostfixExpressionToCppExpression"}}},
-                  "domain": [{"variable": "hydra.ext.cpp.syntax.PrimaryExpression"}],
+                  "domain": {"variable": "hydra.ext.cpp.syntax.PrimaryExpression"},
                   "parameter": "prim"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
-                "domain": {"variable": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
+              "domain": {"variable": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.cppUnaryExpressionToCppExpression",
@@ -347,16 +335,14 @@
                                   "typeName": "hydra.ext.cpp.syntax.ConditionalExpression"}}},
                             "typeName": "hydra.ext.cpp.syntax.AssignmentExpression"}}},
                       "typeName": "hydra.ext.cpp.syntax.Expression"}},
-                  "domain": [{"variable": "hydra.ext.cpp.syntax.UnaryExpression"}],
+                  "domain": {"variable": "hydra.ext.cpp.syntax.UnaryExpression"},
                   "parameter": "ue"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
-                "domain": {"variable": "hydra.ext.cpp.syntax.UnaryExpression"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
+              "domain": {"variable": "hydra.ext.cpp.syntax.UnaryExpression"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.cppUnaryExpressionToCppLogicalOrExpression",
@@ -419,16 +405,14 @@
                                   "typeName": "hydra.ext.cpp.syntax.InclusiveOrExpression"}}},
                             "typeName": "hydra.ext.cpp.syntax.LogicalAndExpression"}}},
                       "typeName": "hydra.ext.cpp.syntax.LogicalOrExpression"}},
-                  "domain": [{"variable": "hydra.ext.cpp.syntax.UnaryExpression"}],
+                  "domain": {"variable": "hydra.ext.cpp.syntax.UnaryExpression"},
                   "parameter": "ue"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ext.cpp.syntax.LogicalOrExpression"},
-                "domain": {"variable": "hydra.ext.cpp.syntax.UnaryExpression"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ext.cpp.syntax.LogicalOrExpression"},
+              "domain": {"variable": "hydra.ext.cpp.syntax.UnaryExpression"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.createCastExpr",
@@ -463,22 +447,20 @@
                                     "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}},
                                 "function": {
                                   "variable": "hydra.ext.cpp.utils.cppPrimaryExpressionToCppExpression"}}},
-                            "domain": [{"variable": "hydra.ext.cpp.syntax.Expression"}],
+                            "domain": {"variable": "hydra.ext.cpp.syntax.Expression"},
                             "parameter": "expr"}}},
-                      "domain": [{"variable": "t0"}],
+                      "domain": {"variable": "t0"},
                       "parameter": "targetType"}}}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
-                    "domain": {"variable": "hydra.ext.cpp.syntax.Expression"}}},
-                "domain": {"variable": "t0"}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
+                  "domain": {"variable": "hydra.ext.cpp.syntax.Expression"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.createCompoundStmt",
@@ -495,16 +477,14 @@
                     "wrap": {
                       "body": {"variable": "stmts"},
                       "typeName": "hydra.ext.cpp.syntax.CompoundStatement"}},
-                  "domain": [{"list": {"variable": "hydra.ext.cpp.syntax.Statement"}}],
+                  "domain": {"list": {"variable": "hydra.ext.cpp.syntax.Statement"}},
                   "parameter": "stmts"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ext.cpp.syntax.CompoundStatement"},
-                "domain": {"list": {"variable": "hydra.ext.cpp.syntax.Statement"}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ext.cpp.syntax.CompoundStatement"},
+              "domain": {"list": {"variable": "hydra.ext.cpp.syntax.Statement"}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.createConstRefType",
@@ -524,16 +504,14 @@
                           "argument": {"variable": "baseType"},
                           "function": {"variable": "hydra.ext.cpp.utils.createConstType"}}},
                       "function": {"variable": "hydra.ext.cpp.utils.createReferenceType"}}},
-                  "domain": [{"variable": "hydra.ext.cpp.syntax.TypeExpression"}],
+                  "domain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"},
                   "parameter": "baseType"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"},
-                "domain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"},
+              "domain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.createConstType",
@@ -556,16 +534,14 @@
                         "application": {
                           "argument": {"variable": "baseType"},
                           "function": {"variable": "hydra.ext.cpp.utils.createQualifiedType"}}}}},
-                  "domain": [{"variable": "hydra.ext.cpp.syntax.TypeExpression"}],
+                  "domain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"},
                   "parameter": "baseType"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"},
-                "domain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"},
+              "domain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.createConstructorBody",
@@ -604,17 +580,15 @@
                                     "typeApplication": {
                                       "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
                                       "type": {"variable": "hydra.ext.cpp.syntax.FunctionBody"}}}}}}}}},
-                      "domain": [{"list": {"variable": "t0"}}],
+                      "domain": {"list": {"variable": "t0"}},
                       "parameter": "params"}}}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ext.cpp.syntax.FunctionBody"},
-                "domain": {"list": {"variable": "t0"}}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ext.cpp.syntax.FunctionBody"},
+              "domain": {"list": {"variable": "t0"}}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.createEnumAccessExpr",
@@ -655,21 +629,19 @@
                                 "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}},
                             "function": {
                               "variable": "hydra.ext.cpp.utils.cppPostfixExpressionToCppExpression"}}},
-                        "domain": [{"literal": {"string": {}}}],
+                        "domain": {"literal": {"string": {}}},
                         "parameter": "valueName"}}},
-                  "domain": [{"literal": {"string": {}}}],
+                  "domain": {"literal": {"string": {}}},
                   "parameter": "enumName"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
-                    "domain": {"literal": {"string": {}}}}},
-                "domain": {"literal": {"string": {}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
+                  "domain": {"literal": {"string": {}}}}},
+              "domain": {"literal": {"string": {}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.createFunctionCallExpr",
@@ -710,21 +682,19 @@
                                 "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}},
                             "function": {
                               "variable": "hydra.ext.cpp.utils.cppPostfixExpressionToCppExpression"}}},
-                        "domain": [{"list": {"variable": "hydra.ext.cpp.syntax.Expression"}}],
+                        "domain": {"list": {"variable": "hydra.ext.cpp.syntax.Expression"}},
                         "parameter": "args"}}},
-                  "domain": [{"literal": {"string": {}}}],
+                  "domain": {"literal": {"string": {}}},
                   "parameter": "funcName"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
-                    "domain": {"list": {"variable": "hydra.ext.cpp.syntax.Expression"}}}},
-                "domain": {"literal": {"string": {}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
+                  "domain": {"list": {"variable": "hydra.ext.cpp.syntax.Expression"}}}},
+              "domain": {"literal": {"string": {}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.createHeaderFile",
@@ -759,21 +729,19 @@
                               {"name": "includes", "term": {"variable": "includes"}},
                               {"name": "declarations", "term": {"variable": "decls"}}],
                             "typeName": "hydra.ext.cpp.syntax.Program"}},
-                        "domain": [{"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}],
+                        "domain": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}},
                         "parameter": "decls"}}},
-                  "domain": [{"list": {"variable": "hydra.ext.cpp.syntax.IncludeDirective"}}],
+                  "domain": {"list": {"variable": "hydra.ext.cpp.syntax.IncludeDirective"}},
                   "parameter": "includes"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.ext.cpp.syntax.Program"},
-                    "domain": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}},
-                "domain": {"list": {"variable": "hydra.ext.cpp.syntax.IncludeDirective"}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.ext.cpp.syntax.Program"},
+                  "domain": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}},
+              "domain": {"list": {"variable": "hydra.ext.cpp.syntax.IncludeDirective"}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.createIdentifierExpr",
@@ -794,16 +762,14 @@
                           "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}},
                       "function": {
                         "variable": "hydra.ext.cpp.utils.cppPrimaryExpressionToCppExpression"}}},
-                  "domain": [{"literal": {"string": {}}}],
+                  "domain": {"literal": {"string": {}}},
                   "parameter": "name"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
-                "domain": {"literal": {"string": {}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
+              "domain": {"literal": {"string": {}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.createLambdaExpr",
@@ -866,21 +832,19 @@
                                 "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}},
                             "function": {
                               "variable": "hydra.ext.cpp.utils.cppPostfixExpressionToCppExpression"}}},
-                        "domain": [{"variable": "hydra.ext.cpp.syntax.Expression"}],
+                        "domain": {"variable": "hydra.ext.cpp.syntax.Expression"},
                         "parameter": "body"}}},
-                  "domain": [{"list": {"variable": "hydra.ext.cpp.syntax.Parameter"}}],
+                  "domain": {"list": {"variable": "hydra.ext.cpp.syntax.Parameter"}},
                   "parameter": "params"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
-                    "domain": {"variable": "hydra.ext.cpp.syntax.Expression"}}},
-                "domain": {"list": {"variable": "hydra.ext.cpp.syntax.Parameter"}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
+                  "domain": {"variable": "hydra.ext.cpp.syntax.Expression"}}},
+              "domain": {"list": {"variable": "hydra.ext.cpp.syntax.Parameter"}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.createLiteralBoolExpr",
@@ -911,16 +875,14 @@
                           "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}},
                       "function": {
                         "variable": "hydra.ext.cpp.utils.cppPrimaryExpressionToCppExpression"}}},
-                  "domain": [{"literal": {"boolean": {}}}],
+                  "domain": {"literal": {"boolean": {}}},
                   "parameter": "val"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
-                "domain": {"literal": {"boolean": {}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
+              "domain": {"literal": {"boolean": {}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.createLiteralIntExpr",
@@ -951,16 +913,14 @@
                           "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}},
                       "function": {
                         "variable": "hydra.ext.cpp.utils.cppPrimaryExpressionToCppExpression"}}},
-                  "domain": [{"literal": {"integer": {"bigint": {}}}}],
+                  "domain": {"literal": {"integer": {"bigint": {}}}},
                   "parameter": "val"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
-                "domain": {"literal": {"integer": {"bigint": {}}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
+              "domain": {"literal": {"integer": {"bigint": {}}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.createLiteralStringExpr",
@@ -991,16 +951,14 @@
                           "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}},
                       "function": {
                         "variable": "hydra.ext.cpp.utils.cppPrimaryExpressionToCppExpression"}}},
-                  "domain": [{"literal": {"string": {}}}],
+                  "domain": {"literal": {"string": {}}},
                   "parameter": "val"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
-                "domain": {"literal": {"string": {}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
+              "domain": {"literal": {"string": {}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.createMemberAccessExpr",
@@ -1036,21 +994,19 @@
                                 "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}},
                             "function": {
                               "variable": "hydra.ext.cpp.utils.cppPostfixExpressionToCppExpression"}}},
-                        "domain": [{"literal": {"string": {}}}],
+                        "domain": {"literal": {"string": {}}},
                         "parameter": "member"}}},
-                  "domain": [{"variable": "hydra.ext.cpp.syntax.Expression"}],
+                  "domain": {"variable": "hydra.ext.cpp.syntax.Expression"},
                   "parameter": "objExpr"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
-                    "domain": {"literal": {"string": {}}}}},
-                "domain": {"variable": "hydra.ext.cpp.syntax.Expression"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
+                  "domain": {"literal": {"string": {}}}}},
+              "domain": {"variable": "hydra.ext.cpp.syntax.Expression"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.createQualifiedType",
@@ -1077,21 +1033,19 @@
                                     {"name": "qualifier", "term": {"variable": "qualifier"}}],
                                   "typeName": "hydra.ext.cpp.syntax.QualifiedType"}}},
                             "typeName": "hydra.ext.cpp.syntax.TypeExpression"}},
-                        "domain": [{"variable": "hydra.ext.cpp.syntax.TypeQualifier"}],
+                        "domain": {"variable": "hydra.ext.cpp.syntax.TypeQualifier"},
                         "parameter": "qualifier"}}},
-                  "domain": [{"variable": "hydra.ext.cpp.syntax.TypeExpression"}],
+                  "domain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"},
                   "parameter": "baseType"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"},
-                    "domain": {"variable": "hydra.ext.cpp.syntax.TypeQualifier"}}},
-                "domain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"},
+                  "domain": {"variable": "hydra.ext.cpp.syntax.TypeQualifier"}}},
+              "domain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.createReferenceType",
@@ -1114,16 +1068,14 @@
                         "application": {
                           "argument": {"variable": "baseType"},
                           "function": {"variable": "hydra.ext.cpp.utils.createQualifiedType"}}}}},
-                  "domain": [{"variable": "hydra.ext.cpp.syntax.TypeExpression"}],
+                  "domain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"},
                   "parameter": "baseType"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"},
-                "domain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"},
+              "domain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.createReturnStmt",
@@ -1145,16 +1097,14 @@
                             "field": {"name": "returnValue", "term": {"variable": "expr"}},
                             "typeName": "hydra.ext.cpp.syntax.JumpStatement"}}},
                       "typeName": "hydra.ext.cpp.syntax.Statement"}},
-                  "domain": [{"variable": "hydra.ext.cpp.syntax.Expression"}],
+                  "domain": {"variable": "hydra.ext.cpp.syntax.Expression"},
                   "parameter": "expr"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ext.cpp.syntax.Statement"},
-                "domain": {"variable": "hydra.ext.cpp.syntax.Expression"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ext.cpp.syntax.Statement"},
+              "domain": {"variable": "hydra.ext.cpp.syntax.Expression"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.createReturnVoidStmt",
@@ -1173,11 +1123,9 @@
                       "field": {"name": "returnVoid", "term": {"unit": {}}},
                       "typeName": "hydra.ext.cpp.syntax.JumpStatement"}}},
                 "typeName": "hydra.ext.cpp.syntax.Statement"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.ext.cpp.syntax.Statement"},
-            "variables": []}]}},
+        "type": {
+          "type": {"variable": "hydra.ext.cpp.syntax.Statement"},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.createTemplateType",
@@ -1215,7 +1163,7 @@
                                                       "union": {
                                                         "field": {"name": "type", "term": {"variable": "a"}},
                                                         "typeName": "hydra.ext.cpp.syntax.TemplateArgument"}},
-                                                    "domain": [{"variable": "hydra.ext.cpp.syntax.TypeExpression"}],
+                                                    "domain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"},
                                                     "parameter": "a"}}},
                                               "function": {
                                                 "typeApplication": {
@@ -1226,21 +1174,19 @@
                                                   "type": {"variable": "hydra.ext.cpp.syntax.TemplateArgument"}}}}}}}}],
                                   "typeName": "hydra.ext.cpp.syntax.TemplateType"}}},
                             "typeName": "hydra.ext.cpp.syntax.TypeExpression"}},
-                        "domain": [{"list": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}],
+                        "domain": {"list": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}},
                         "parameter": "args"}}},
-                  "domain": [{"literal": {"string": {}}}],
+                  "domain": {"literal": {"string": {}}},
                   "parameter": "name"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"},
-                    "domain": {"list": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}}},
-                "domain": {"literal": {"string": {}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"},
+                  "domain": {"list": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}}},
+              "domain": {"literal": {"string": {}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.createThisExpr",
@@ -1263,11 +1209,9 @@
                     "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}},
                 "function": {
                   "variable": "hydra.ext.cpp.utils.cppPostfixExpressionToCppExpression"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.ext.cpp.syntax.Expression"},
-            "variables": []}]}},
+        "type": {
+          "type": {"variable": "hydra.ext.cpp.syntax.Expression"},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.createThrowStmt",
@@ -1300,21 +1244,19 @@
                                             "function": {"variable": "hydra.ext.cpp.utils.createFunctionCallExpr"}}}}}},
                                   "typeName": "hydra.ext.cpp.syntax.JumpStatement"}}},
                             "typeName": "hydra.ext.cpp.syntax.Statement"}},
-                        "domain": [{"variable": "hydra.ext.cpp.syntax.Expression"}],
+                        "domain": {"variable": "hydra.ext.cpp.syntax.Expression"},
                         "parameter": "arg"}}},
-                  "domain": [{"literal": {"string": {}}}],
+                  "domain": {"literal": {"string": {}}},
                   "parameter": "exceptionType"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.ext.cpp.syntax.Statement"},
-                    "domain": {"variable": "hydra.ext.cpp.syntax.Expression"}}},
-                "domain": {"literal": {"string": {}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.ext.cpp.syntax.Statement"},
+                  "domain": {"variable": "hydra.ext.cpp.syntax.Expression"}}},
+              "domain": {"literal": {"string": {}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.createTypeIdNameCall",
@@ -1391,11 +1333,9 @@
                     "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}},
                 "function": {
                   "variable": "hydra.ext.cpp.utils.cppPostfixExpressionToCppExpression"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.ext.cpp.syntax.Expression"},
-            "variables": []}]}},
+        "type": {
+          "type": {"variable": "hydra.ext.cpp.syntax.Expression"},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.createTypeNameExpr",
@@ -1421,16 +1361,14 @@
                           "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}},
                       "function": {
                         "variable": "hydra.ext.cpp.utils.cppPostfixExpressionToCppExpression"}}},
-                  "domain": [{"literal": {"string": {}}}],
+                  "domain": {"literal": {"string": {}}},
                   "parameter": "typeName"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
-                "domain": {"literal": {"string": {}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
+              "domain": {"literal": {"string": {}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.createVariantExpr",
@@ -1453,11 +1391,9 @@
                     "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}},
                 "function": {
                   "variable": "hydra.ext.cpp.utils.cppPostfixExpressionToCppExpression"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.ext.cpp.syntax.Expression"},
-            "variables": []}]}},
+        "type": {
+          "type": {"variable": "hydra.ext.cpp.syntax.Expression"},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.emptyFunctionBody",
@@ -1479,11 +1415,9 @@
                           "type": {"variable": "hydra.ext.cpp.syntax.Statement"}}},
                       "typeName": "hydra.ext.cpp.syntax.CompoundStatement"}}},
                 "typeName": "hydra.ext.cpp.syntax.FunctionBody"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.ext.cpp.syntax.FunctionBody"},
-            "variables": []}]}},
+        "type": {
+          "type": {"variable": "hydra.ext.cpp.syntax.FunctionBody"},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.extractPostfixExpression",
@@ -1681,198 +1615,182 @@
                                                                                                                                                                                                                                                                                                                                   "function": {
                                                                                                                                                                                                                                                                                                                                     "lambda": {
                                                                                                                                                                                                                                                                                                                                       "body": {"variable": "pf"},
-                                                                                                                                                                                                                                                                                                                                      "domain": [{"variable": "hydra.ext.cpp.syntax.PostfixExpression"}],
+                                                                                                                                                                                                                                                                                                                                      "domain": {"variable": "hydra.ext.cpp.syntax.PostfixExpression"},
                                                                                                                                                                                                                                                                                                                                       "parameter": "pf"}}}}],
-                                                                                                                                                                                                                                                                                                                            "default": [
-                                                                                                                                                                                                                                                                                                                              {
-                                                                                                                                                                                                                                                                                                                                "union": {
-                                                                                                                                                                                                                                                                                                                                  "field": {
-                                                                                                                                                                                                                                                                                                                                    "name": "primary",
-                                                                                                                                                                                                                                                                                                                                    "term": {
-                                                                                                                                                                                                                                                                                                                                      "union": {
-                                                                                                                                                                                                                                                                                                                                        "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
-                                                                                                                                                                                                                                                                                                                                        "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
-                                                                                                                                                                                                                                                                                                                                  "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}}],
+                                                                                                                                                                                                                                                                                                                            "default": {
+                                                                                                                                                                                                                                                                                                                              "union": {
+                                                                                                                                                                                                                                                                                                                                "field": {
+                                                                                                                                                                                                                                                                                                                                  "name": "primary",
+                                                                                                                                                                                                                                                                                                                                  "term": {
+                                                                                                                                                                                                                                                                                                                                    "union": {
+                                                                                                                                                                                                                                                                                                                                      "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
+                                                                                                                                                                                                                                                                                                                                      "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
+                                                                                                                                                                                                                                                                                                                                "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}},
                                                                                                                                                                                                                                                                                                                             "typeName": "hydra.ext.cpp.syntax.UnaryExpression"}}}}}},
-                                                                                                                                                                                                                                                                                                                "domain": [{"variable": "hydra.ext.cpp.syntax.UnaryExpression"}],
+                                                                                                                                                                                                                                                                                                                "domain": {"variable": "hydra.ext.cpp.syntax.UnaryExpression"},
                                                                                                                                                                                                                                                                                                                 "parameter": "ue"}}}}],
-                                                                                                                                                                                                                                                                                                      "default": [
-                                                                                                                                                                                                                                                                                                        {
-                                                                                                                                                                                                                                                                                                          "union": {
-                                                                                                                                                                                                                                                                                                            "field": {
-                                                                                                                                                                                                                                                                                                              "name": "primary",
-                                                                                                                                                                                                                                                                                                              "term": {
-                                                                                                                                                                                                                                                                                                                "union": {
-                                                                                                                                                                                                                                                                                                                  "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
-                                                                                                                                                                                                                                                                                                                  "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
-                                                                                                                                                                                                                                                                                                            "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}}],
+                                                                                                                                                                                                                                                                                                      "default": {
+                                                                                                                                                                                                                                                                                                        "union": {
+                                                                                                                                                                                                                                                                                                          "field": {
+                                                                                                                                                                                                                                                                                                            "name": "primary",
+                                                                                                                                                                                                                                                                                                            "term": {
+                                                                                                                                                                                                                                                                                                              "union": {
+                                                                                                                                                                                                                                                                                                                "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
+                                                                                                                                                                                                                                                                                                                "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
+                                                                                                                                                                                                                                                                                                          "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}},
                                                                                                                                                                                                                                                                                                       "typeName": "hydra.ext.cpp.syntax.MultiplicativeExpression"}}}}}},
-                                                                                                                                                                                                                                                                                          "domain": [{"variable": "hydra.ext.cpp.syntax.MultiplicativeExpression"}],
+                                                                                                                                                                                                                                                                                          "domain": {"variable": "hydra.ext.cpp.syntax.MultiplicativeExpression"},
                                                                                                                                                                                                                                                                                           "parameter": "mu"}}}}],
-                                                                                                                                                                                                                                                                                "default": [
-                                                                                                                                                                                                                                                                                  {
-                                                                                                                                                                                                                                                                                    "union": {
-                                                                                                                                                                                                                                                                                      "field": {
-                                                                                                                                                                                                                                                                                        "name": "primary",
-                                                                                                                                                                                                                                                                                        "term": {
-                                                                                                                                                                                                                                                                                          "union": {
-                                                                                                                                                                                                                                                                                            "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
-                                                                                                                                                                                                                                                                                            "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
-                                                                                                                                                                                                                                                                                      "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}}],
+                                                                                                                                                                                                                                                                                "default": {
+                                                                                                                                                                                                                                                                                  "union": {
+                                                                                                                                                                                                                                                                                    "field": {
+                                                                                                                                                                                                                                                                                      "name": "primary",
+                                                                                                                                                                                                                                                                                      "term": {
+                                                                                                                                                                                                                                                                                        "union": {
+                                                                                                                                                                                                                                                                                          "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
+                                                                                                                                                                                                                                                                                          "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
+                                                                                                                                                                                                                                                                                    "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}},
                                                                                                                                                                                                                                                                                 "typeName": "hydra.ext.cpp.syntax.AdditiveExpression"}}}}}},
-                                                                                                                                                                                                                                                                    "domain": [{"variable": "hydra.ext.cpp.syntax.AdditiveExpression"}],
+                                                                                                                                                                                                                                                                    "domain": {"variable": "hydra.ext.cpp.syntax.AdditiveExpression"},
                                                                                                                                                                                                                                                                     "parameter": "ad"}}}}],
-                                                                                                                                                                                                                                                          "default": [
-                                                                                                                                                                                                                                                            {
-                                                                                                                                                                                                                                                              "union": {
-                                                                                                                                                                                                                                                                "field": {
-                                                                                                                                                                                                                                                                  "name": "primary",
-                                                                                                                                                                                                                                                                  "term": {
-                                                                                                                                                                                                                                                                    "union": {
-                                                                                                                                                                                                                                                                      "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
-                                                                                                                                                                                                                                                                      "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
-                                                                                                                                                                                                                                                                "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}}],
+                                                                                                                                                                                                                                                          "default": {
+                                                                                                                                                                                                                                                            "union": {
+                                                                                                                                                                                                                                                              "field": {
+                                                                                                                                                                                                                                                                "name": "primary",
+                                                                                                                                                                                                                                                                "term": {
+                                                                                                                                                                                                                                                                  "union": {
+                                                                                                                                                                                                                                                                    "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
+                                                                                                                                                                                                                                                                    "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
+                                                                                                                                                                                                                                                              "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}},
                                                                                                                                                                                                                                                           "typeName": "hydra.ext.cpp.syntax.ShiftExpression"}}}}}},
-                                                                                                                                                                                                                                              "domain": [{"variable": "hydra.ext.cpp.syntax.ShiftExpression"}],
+                                                                                                                                                                                                                                              "domain": {"variable": "hydra.ext.cpp.syntax.ShiftExpression"},
                                                                                                                                                                                                                                               "parameter": "sh"}}}}],
-                                                                                                                                                                                                                                    "default": [
-                                                                                                                                                                                                                                      {
-                                                                                                                                                                                                                                        "union": {
-                                                                                                                                                                                                                                          "field": {
-                                                                                                                                                                                                                                            "name": "primary",
-                                                                                                                                                                                                                                            "term": {
-                                                                                                                                                                                                                                              "union": {
-                                                                                                                                                                                                                                                "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
-                                                                                                                                                                                                                                                "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
-                                                                                                                                                                                                                                          "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}}],
+                                                                                                                                                                                                                                    "default": {
+                                                                                                                                                                                                                                      "union": {
+                                                                                                                                                                                                                                        "field": {
+                                                                                                                                                                                                                                          "name": "primary",
+                                                                                                                                                                                                                                          "term": {
+                                                                                                                                                                                                                                            "union": {
+                                                                                                                                                                                                                                              "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
+                                                                                                                                                                                                                                              "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
+                                                                                                                                                                                                                                        "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}},
                                                                                                                                                                                                                                     "typeName": "hydra.ext.cpp.syntax.RelationalExpression"}}}}}},
-                                                                                                                                                                                                                        "domain": [{"variable": "hydra.ext.cpp.syntax.RelationalExpression"}],
+                                                                                                                                                                                                                        "domain": {"variable": "hydra.ext.cpp.syntax.RelationalExpression"},
                                                                                                                                                                                                                         "parameter": "re"}}}}],
-                                                                                                                                                                                                              "default": [
-                                                                                                                                                                                                                {
-                                                                                                                                                                                                                  "union": {
-                                                                                                                                                                                                                    "field": {
-                                                                                                                                                                                                                      "name": "primary",
-                                                                                                                                                                                                                      "term": {
-                                                                                                                                                                                                                        "union": {
-                                                                                                                                                                                                                          "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
-                                                                                                                                                                                                                          "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
-                                                                                                                                                                                                                    "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}}],
+                                                                                                                                                                                                              "default": {
+                                                                                                                                                                                                                "union": {
+                                                                                                                                                                                                                  "field": {
+                                                                                                                                                                                                                    "name": "primary",
+                                                                                                                                                                                                                    "term": {
+                                                                                                                                                                                                                      "union": {
+                                                                                                                                                                                                                        "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
+                                                                                                                                                                                                                        "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
+                                                                                                                                                                                                                  "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}},
                                                                                                                                                                                                               "typeName": "hydra.ext.cpp.syntax.EqualityExpression"}}}}}},
-                                                                                                                                                                                                  "domain": [{"variable": "hydra.ext.cpp.syntax.EqualityExpression"}],
+                                                                                                                                                                                                  "domain": {"variable": "hydra.ext.cpp.syntax.EqualityExpression"},
                                                                                                                                                                                                   "parameter": "eq"}}}}],
-                                                                                                                                                                                        "default": [
-                                                                                                                                                                                          {
-                                                                                                                                                                                            "union": {
-                                                                                                                                                                                              "field": {
-                                                                                                                                                                                                "name": "primary",
-                                                                                                                                                                                                "term": {
-                                                                                                                                                                                                  "union": {
-                                                                                                                                                                                                    "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
-                                                                                                                                                                                                    "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
-                                                                                                                                                                                              "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}}],
+                                                                                                                                                                                        "default": {
+                                                                                                                                                                                          "union": {
+                                                                                                                                                                                            "field": {
+                                                                                                                                                                                              "name": "primary",
+                                                                                                                                                                                              "term": {
+                                                                                                                                                                                                "union": {
+                                                                                                                                                                                                  "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
+                                                                                                                                                                                                  "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
+                                                                                                                                                                                            "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}},
                                                                                                                                                                                         "typeName": "hydra.ext.cpp.syntax.AndExpression"}}}}}},
-                                                                                                                                                                            "domain": [{"variable": "hydra.ext.cpp.syntax.AndExpression"}],
+                                                                                                                                                                            "domain": {"variable": "hydra.ext.cpp.syntax.AndExpression"},
                                                                                                                                                                             "parameter": "ae"}}}}],
-                                                                                                                                                                  "default": [
-                                                                                                                                                                    {
-                                                                                                                                                                      "union": {
-                                                                                                                                                                        "field": {
-                                                                                                                                                                          "name": "primary",
-                                                                                                                                                                          "term": {
-                                                                                                                                                                            "union": {
-                                                                                                                                                                              "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
-                                                                                                                                                                              "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
-                                                                                                                                                                        "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}}],
+                                                                                                                                                                  "default": {
+                                                                                                                                                                    "union": {
+                                                                                                                                                                      "field": {
+                                                                                                                                                                        "name": "primary",
+                                                                                                                                                                        "term": {
+                                                                                                                                                                          "union": {
+                                                                                                                                                                            "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
+                                                                                                                                                                            "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
+                                                                                                                                                                      "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}},
                                                                                                                                                                   "typeName": "hydra.ext.cpp.syntax.ExclusiveOrExpression"}}}}}},
-                                                                                                                                                      "domain": [{"variable": "hydra.ext.cpp.syntax.ExclusiveOrExpression"}],
+                                                                                                                                                      "domain": {"variable": "hydra.ext.cpp.syntax.ExclusiveOrExpression"},
                                                                                                                                                       "parameter": "xo"}}}}],
-                                                                                                                                            "default": [
-                                                                                                                                              {
-                                                                                                                                                "union": {
-                                                                                                                                                  "field": {
-                                                                                                                                                    "name": "primary",
-                                                                                                                                                    "term": {
-                                                                                                                                                      "union": {
-                                                                                                                                                        "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
-                                                                                                                                                        "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
-                                                                                                                                                  "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}}],
+                                                                                                                                            "default": {
+                                                                                                                                              "union": {
+                                                                                                                                                "field": {
+                                                                                                                                                  "name": "primary",
+                                                                                                                                                  "term": {
+                                                                                                                                                    "union": {
+                                                                                                                                                      "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
+                                                                                                                                                      "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
+                                                                                                                                                "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}},
                                                                                                                                             "typeName": "hydra.ext.cpp.syntax.InclusiveOrExpression"}}}}}},
-                                                                                                                                "domain": [{"variable": "hydra.ext.cpp.syntax.InclusiveOrExpression"}],
+                                                                                                                                "domain": {"variable": "hydra.ext.cpp.syntax.InclusiveOrExpression"},
                                                                                                                                 "parameter": "io"}}}}],
-                                                                                                                      "default": [
-                                                                                                                        {
-                                                                                                                          "union": {
-                                                                                                                            "field": {
-                                                                                                                              "name": "primary",
-                                                                                                                              "term": {
-                                                                                                                                "union": {
-                                                                                                                                  "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
-                                                                                                                                  "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
-                                                                                                                            "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}}],
+                                                                                                                      "default": {
+                                                                                                                        "union": {
+                                                                                                                          "field": {
+                                                                                                                            "name": "primary",
+                                                                                                                            "term": {
+                                                                                                                              "union": {
+                                                                                                                                "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
+                                                                                                                                "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
+                                                                                                                          "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}},
                                                                                                                       "typeName": "hydra.ext.cpp.syntax.LogicalAndExpression"}}}}}},
-                                                                                                          "domain": [{"variable": "hydra.ext.cpp.syntax.LogicalAndExpression"}],
+                                                                                                          "domain": {"variable": "hydra.ext.cpp.syntax.LogicalAndExpression"},
                                                                                                           "parameter": "la"}}}}],
-                                                                                                "default": [
-                                                                                                  {
-                                                                                                    "union": {
-                                                                                                      "field": {
-                                                                                                        "name": "primary",
-                                                                                                        "term": {
-                                                                                                          "union": {
-                                                                                                            "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
-                                                                                                            "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
-                                                                                                      "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}}],
+                                                                                                "default": {
+                                                                                                  "union": {
+                                                                                                    "field": {
+                                                                                                      "name": "primary",
+                                                                                                      "term": {
+                                                                                                        "union": {
+                                                                                                          "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
+                                                                                                          "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
+                                                                                                    "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}},
                                                                                                 "typeName": "hydra.ext.cpp.syntax.LogicalOrExpression"}}}}}},
-                                                                                    "domain": [{"variable": "hydra.ext.cpp.syntax.LogicalOrExpression"}],
+                                                                                    "domain": {"variable": "hydra.ext.cpp.syntax.LogicalOrExpression"},
                                                                                     "parameter": "lo"}}}}],
-                                                                          "default": [
-                                                                            {
-                                                                              "union": {
-                                                                                "field": {
-                                                                                  "name": "primary",
-                                                                                  "term": {
-                                                                                    "union": {
-                                                                                      "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
-                                                                                      "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
-                                                                                "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}}],
+                                                                          "default": {
+                                                                            "union": {
+                                                                              "field": {
+                                                                                "name": "primary",
+                                                                                "term": {
+                                                                                  "union": {
+                                                                                    "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
+                                                                                    "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
+                                                                              "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}},
                                                                           "typeName": "hydra.ext.cpp.syntax.ConditionalExpression"}}}}}},
-                                                              "domain": [{"variable": "hydra.ext.cpp.syntax.ConditionalExpression"}],
+                                                              "domain": {"variable": "hydra.ext.cpp.syntax.ConditionalExpression"},
                                                               "parameter": "c"}}}}],
-                                                    "default": [
-                                                      {
-                                                        "union": {
-                                                          "field": {
-                                                            "name": "primary",
-                                                            "term": {
-                                                              "union": {
-                                                                "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
-                                                                "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
-                                                          "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}}],
+                                                    "default": {
+                                                      "union": {
+                                                        "field": {
+                                                          "name": "primary",
+                                                          "term": {
+                                                            "union": {
+                                                              "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
+                                                              "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
+                                                        "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}},
                                                     "typeName": "hydra.ext.cpp.syntax.AssignmentExpression"}}}}}},
-                                        "domain": [{"variable": "hydra.ext.cpp.syntax.AssignmentExpression"}],
+                                        "domain": {"variable": "hydra.ext.cpp.syntax.AssignmentExpression"},
                                         "parameter": "a"}}}}],
-                              "default": [
-                                {
-                                  "union": {
-                                    "field": {
-                                      "name": "primary",
-                                      "term": {
-                                        "union": {
-                                          "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
-                                          "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
-                                    "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}}],
+                              "default": {
+                                "union": {
+                                  "field": {
+                                    "name": "primary",
+                                    "term": {
+                                      "union": {
+                                        "field": {"name": "identifier", "term": {"literal": {"string": "error"}}},
+                                        "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}}},
+                                  "typeName": "hydra.ext.cpp.syntax.PostfixExpression"}},
                               "typeName": "hydra.ext.cpp.syntax.Expression"}}}}}},
-                  "domain": [{"variable": "hydra.ext.cpp.syntax.Expression"}],
+                  "domain": {"variable": "hydra.ext.cpp.syntax.Expression"},
                   "parameter": "expr"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ext.cpp.syntax.PostfixExpression"},
-                "domain": {"variable": "hydra.ext.cpp.syntax.Expression"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ext.cpp.syntax.PostfixExpression"},
+              "domain": {"variable": "hydra.ext.cpp.syntax.Expression"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.memberSpecificationProtected",
@@ -1892,11 +1810,9 @@
                       "field": {"name": "protected", "term": {"unit": {}}},
                       "typeName": "hydra.ext.cpp.syntax.AccessSpecifier"}}},
                 "typeName": "hydra.ext.cpp.syntax.MemberSpecification"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.ext.cpp.syntax.MemberSpecification"},
-            "variables": []}]}},
+        "type": {
+          "type": {"variable": "hydra.ext.cpp.syntax.MemberSpecification"},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.memberSpecificationPublic",
@@ -1916,11 +1832,9 @@
                       "field": {"name": "public", "term": {"unit": {}}},
                       "typeName": "hydra.ext.cpp.syntax.AccessSpecifier"}}},
                 "typeName": "hydra.ext.cpp.syntax.MemberSpecification"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.ext.cpp.syntax.MemberSpecification"},
-            "variables": []}]}},
+        "type": {
+          "type": {"variable": "hydra.ext.cpp.syntax.MemberSpecification"},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.stringExpression",
@@ -1951,16 +1865,14 @@
                           "typeName": "hydra.ext.cpp.syntax.PrimaryExpression"}},
                       "function": {
                         "variable": "hydra.ext.cpp.utils.cppPrimaryExpressionToCppExpression"}}},
-                  "domain": [{"literal": {"string": {}}}],
+                  "domain": {"literal": {"string": {}}},
                   "parameter": "s"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
-                "domain": {"literal": {"string": {}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ext.cpp.syntax.Expression"},
+              "domain": {"literal": {"string": {}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.toConstType",
@@ -1989,16 +1901,14 @@
                                     "typeName": "hydra.ext.cpp.syntax.TypeQualifier"}}}],
                             "typeName": "hydra.ext.cpp.syntax.QualifiedType"}}},
                       "typeName": "hydra.ext.cpp.syntax.TypeExpression"}},
-                  "domain": [{"variable": "hydra.ext.cpp.syntax.TypeExpression"}],
+                  "domain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"},
                   "parameter": "baseType"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"},
-                "domain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"},
+              "domain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.cpp.utils.unnamedParameter",
@@ -2027,22 +1937,20 @@
                                     "body": {"maybe": null},
                                     "type": {"variable": "hydra.ext.cpp.syntax.Expression"}}}}],
                             "typeName": "hydra.ext.cpp.syntax.Parameter"}},
-                        "domain": [{"variable": "hydra.ext.cpp.syntax.TypeExpression"}],
+                        "domain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"},
                         "parameter": "typ"}}},
-                  "domain": [{"literal": {"string": {}}}],
+                  "domain": {"literal": {"string": {}}},
                   "parameter": "name"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.ext.cpp.syntax.Parameter"},
-                    "domain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
-                "domain": {"literal": {"string": {}}}}},
-            "variables": []}]}}],
-  "description": ["C++ utilities for constructing C++ syntax trees"],
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.ext.cpp.syntax.Parameter"},
+                  "domain": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
+              "domain": {"literal": {"string": {}}}}},
+          "variables": []}}}],
+  "description": "C++ utilities for constructing C++ syntax trees",
   "namespace": "hydra.ext.cpp.utils",
   "termDependencies": [],
   "typeDependencies": [

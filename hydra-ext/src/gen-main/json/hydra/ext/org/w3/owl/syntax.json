@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.Ontology",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -21,7 +20,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.Declaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -35,7 +33,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.Entity",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -61,7 +58,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.AnnotationSubject",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -75,7 +71,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.AnnotationValue",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -92,7 +87,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.Annotation",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -109,7 +103,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.AnnotationAxiom",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -129,7 +122,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.AnnotationAssertion",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -149,7 +141,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.SubAnnotationPropertyOf",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -166,7 +157,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.AnnotationPropertyDomain",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -183,7 +173,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.AnnotationPropertyRange",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -200,7 +189,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.Class",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -214,7 +202,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.Datatype",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -243,7 +230,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.ObjectProperty",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -256,16 +242,15 @@
     {
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DataProperty",
-        "type": {"constraints": null, "type": {"wrap": {"unit": {}}}, "variables": []}}},
+        "type": {"type": {"wrap": {"unit": {}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.AnnotationProperty",
-        "type": {"constraints": null, "type": {"wrap": {"unit": {}}}, "variables": []}}},
+        "type": {"type": {"wrap": {"unit": {}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.Individual",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -278,16 +263,15 @@
     {
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.NamedIndividual",
-        "type": {"constraints": null, "type": {"wrap": {"unit": {}}}, "variables": []}}},
+        "type": {"type": {"wrap": {"unit": {}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.AnonymousIndividual",
-        "type": {"constraints": null, "type": {"wrap": {"unit": {}}}, "variables": []}}},
+        "type": {"type": {"wrap": {"unit": {}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -301,21 +285,18 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.InverseObjectProperty",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.org.w3.owl.syntax.ObjectProperty"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DataPropertyExpression",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.org.w3.owl.syntax.DataProperty"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DataRange",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -348,7 +329,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DataIntersectionOf",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -364,7 +344,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DataUnionOf",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -380,7 +359,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DataComplementOf",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -395,7 +373,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DataOneOf",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -411,7 +388,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DatatypeRestriction",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -435,7 +411,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DatatypeRestriction_Constraint",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -450,7 +425,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DatatypeRestriction_ConstrainingFacet",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -472,7 +446,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.ClassExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -531,7 +504,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.ObjectIntersectionOf",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.org.w3.owl.syntax.ClassExpression"}}},
           "variables": []}}},
@@ -539,7 +511,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.ObjectUnionOf",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.org.w3.owl.syntax.ClassExpression"}}},
           "variables": []}}},
@@ -547,14 +518,12 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.ObjectComplementOf",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.org.w3.owl.syntax.ClassExpression"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.ObjectOneOf",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.org.w3.owl.syntax.Individual"}}},
           "variables": []}}},
@@ -562,7 +531,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.ObjectSomeValuesFrom",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -576,7 +544,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.ObjectAllValuesFrom",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -590,7 +557,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.ObjectHasValue",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -604,7 +570,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.ObjectHasSelf",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"variable": "hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression"}},
           "variables": []}}},
@@ -612,7 +577,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.ObjectMinCardinality",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -635,7 +599,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.ObjectMaxCardinality",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -658,7 +621,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.ObjectExactCardinality",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -680,7 +642,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DataSomeValuesFrom",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -695,7 +656,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DataAllValuesFrom",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -710,7 +670,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DataHasValue",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -724,7 +683,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DataMinCardinality",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "bound", "type": {"literal": {"integer": {"bigint": {}}}}},
@@ -739,7 +697,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DataMaxCardinality",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "bound", "type": {"literal": {"integer": {"bigint": {}}}}},
@@ -754,7 +711,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DataExactCardinality",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "bound", "type": {"literal": {"integer": {"bigint": {}}}}},
@@ -769,7 +725,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.Axiom",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -808,7 +763,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.ClassAxiom",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -828,7 +782,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.SubClassOf",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -845,7 +798,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.EquivalentClasses",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -859,7 +811,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DisjointClasses",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -873,7 +824,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DisjointUnion",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -898,7 +848,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.ObjectPropertyAxiom",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -946,7 +895,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.SubObjectPropertyOf",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -964,7 +912,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.EquivalentObjectProperties",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -979,7 +926,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DisjointObjectProperties",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -994,7 +940,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.ObjectPropertyDomain",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1019,7 +964,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.ObjectPropertyRange",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1044,7 +988,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.InverseObjectProperties",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1061,7 +1004,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.FunctionalObjectProperty",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1075,7 +1017,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.InverseFunctionalObjectProperty",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1089,7 +1030,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.ReflexiveObjectProperty",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1103,7 +1043,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.IrreflexiveObjectProperty",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1117,7 +1056,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.SymmetricObjectProperty",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1131,7 +1069,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.AsymmetricObjectProperty",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1145,7 +1082,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.TransitiveObjectProperty",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1159,7 +1095,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DataPropertyAxiom",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1185,7 +1120,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.SubDataPropertyOf",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1202,7 +1136,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.EquivalentDataProperties",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1217,7 +1150,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DisjointDataProperties",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1232,7 +1164,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DataPropertyDomain",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1249,7 +1180,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DataPropertyRange",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1266,7 +1196,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.FunctionalDataProperty",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1280,7 +1209,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DatatypeDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1297,7 +1225,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.HasKey",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1325,7 +1252,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.Assertion",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1356,7 +1282,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.SameIndividual",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1370,7 +1295,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DifferentIndividuals",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1384,7 +1308,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.ClassAssertion",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1401,7 +1324,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.ObjectPropertyAssertion",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1421,7 +1343,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.NegativeObjectPropertyAssertion",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1441,7 +1362,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.DataPropertyAssertion",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1461,7 +1381,6 @@
       "type": {
         "name": "hydra.ext.org.w3.owl.syntax.NegativeDataPropertyAssertion",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1477,7 +1396,7 @@
                 "name": "target",
                 "type": {"variable": "hydra.ext.org.w3.owl.syntax.Individual"}}]},
           "variables": []}}}],
-  "description": ["An OWL 2 syntax model. See https://www.w3.org/TR/owl2-syntax"],
+  "description": "An OWL 2 syntax model. See https://www.w3.org/TR/owl2-syntax",
   "namespace": "hydra.ext.org.w3.owl.syntax",
   "termDependencies": [
     "hydra.core",

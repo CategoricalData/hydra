@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.org.geojson.model.BoundingBox",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -20,7 +19,6 @@
       "type": {
         "name": "hydra.ext.org.geojson.model.CoordinateRange",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "min", "type": {"literal": {"float": {"bigfloat": {}}}}},
@@ -30,7 +28,6 @@
       "type": {
         "name": "hydra.ext.org.geojson.model.Feature",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -86,7 +83,6 @@
       "type": {
         "name": "hydra.ext.org.geojson.model.FeatureCollection",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -108,7 +104,6 @@
       "type": {
         "name": "hydra.ext.org.geojson.model.GeometryCollection",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -130,7 +125,6 @@
       "type": {
         "name": "hydra.ext.org.geojson.model.Geometry",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -167,7 +161,6 @@
       "type": {
         "name": "hydra.ext.org.geojson.model.Id",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "number", "type": {"literal": {"float": {"bigfloat": {}}}}},
@@ -177,7 +170,6 @@
       "type": {
         "name": "hydra.ext.org.geojson.model.LineString",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -199,7 +191,6 @@
       "type": {
         "name": "hydra.ext.org.geojson.model.MultiLineString",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -221,7 +212,6 @@
       "type": {
         "name": "hydra.ext.org.geojson.model.MultiPoint",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -243,7 +233,6 @@
       "type": {
         "name": "hydra.ext.org.geojson.model.MultiPolygon",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -265,7 +254,6 @@
       "type": {
         "name": "hydra.ext.org.geojson.model.Object",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -290,7 +278,6 @@
       "type": {
         "name": "hydra.ext.org.geojson.model.Point",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -312,7 +299,6 @@
       "type": {
         "name": "hydra.ext.org.geojson.model.Polygon",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -334,7 +320,6 @@
       "type": {
         "name": "hydra.ext.org.geojson.model.Position",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -353,8 +338,7 @@
                     "name": "altitude",
                     "type": {"maybe": {"literal": {"float": {"bigfloat": {}}}}}}]}}},
           "variables": []}}}],
-  "description": [
-    "A GeoJSON model based on the specification at https://www.rfc-editor.org/rfc/rfc7946. This model provides some additional structure beyond the JSON encoding described in the specification; For example, it provides MultiPoint not as an object with an array of coordinates which encode points, but as an array of Points. A BoundingBox is not simply an list of numbers, but a list of CoordinateRanges."],
+  "description": "A GeoJSON model based on the specification at https://www.rfc-editor.org/rfc/rfc7946. This model provides some additional structure beyond the JSON encoding described in the specification; For example, it provides MultiPoint not as an object with an array of coordinates which encode points, but as an array of Points. A BoundingBox is not simply an list of numbers, but a list of CoordinateRanges.",
   "namespace": "hydra.ext.org.geojson.model",
   "termDependencies": ["hydra.json.model"],
   "typeDependencies": []}

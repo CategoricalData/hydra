@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.features.DataTypeFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -190,7 +189,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.features.EdgeFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -244,7 +242,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.features.EdgePropertyFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -263,7 +260,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.features.ElementFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -365,7 +361,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.features.ExtraFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -390,7 +385,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.features.Features",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -436,7 +430,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.features.GraphFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -540,7 +533,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.features.PropertyFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -570,7 +562,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.features.VariableFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -599,7 +590,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.features.VertexFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -686,7 +676,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.features.VertexPropertyFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -720,8 +709,7 @@
                                 "string": "Determines if a VertexProperty allows properties to be removed."}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}}],
-  "description": [
-    "A model derived from TinkerPop's Graph.Features. See\n  https://tinkerpop.apache.org/javadocs/current/core/org/apache/tinkerpop/gremlin/structure/Graph.Features.html\n\nAn interface that represents the capabilities of a Graph implementation.\nBy default all methods of features return true and it is up to implementers to disable feature they don't support.\nUsers should check features prior to using various functions of TinkerPop to help ensure code portability across implementations.\nFor example, a common usage would be to check if a graph supports transactions prior to calling the commit method on Graph.tx()."],
+  "description": "A model derived from TinkerPop's Graph.Features. See\n  https://tinkerpop.apache.org/javadocs/current/core/org/apache/tinkerpop/gremlin/structure/Graph.Features.html\n\nAn interface that represents the capabilities of a Graph implementation.\nBy default all methods of features return true and it is up to implementers to disable feature they don't support.\nUsers should check features prior to using various functions of TinkerPop to help ensure code portability across implementations.\nFor example, a common usage would be to check if a graph supports transactions prior to calling the commit method on Graph.tx().",
   "namespace": "hydra.ext.org.apache.tinkerpop.features",
   "termDependencies": ["hydra.core"],
   "typeDependencies": ["hydra.core"]}

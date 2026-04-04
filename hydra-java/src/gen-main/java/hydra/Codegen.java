@@ -634,11 +634,16 @@ public interface Codegen {
       hydra.lib.sets.ToList.apply(closure.get())));
   }
 
-  static hydra.util.Either<String, String> moduleToJson(hydra.packaging.Module m) {
+  static hydra.util.Either<String, String> moduleToJson(java.util.Map<hydra.core.Name, hydra.core.Type> schemaMap, hydra.packaging.Module m) {
+    hydra.core.Type modType = new hydra.core.Type.Variable(new hydra.core.Name("hydra.packaging.Module"));
     hydra.core.Term term = hydra.encode.Packaging.module(m);
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<hydra.json.model.Value, String>) (json -> hydra.json.Writer.printJson(json)),
-      hydra.json.Encode.toJson(term));
+      hydra.json.Encode.toJson(
+        schemaMap,
+        new hydra.core.Name("hydra.packaging.Module"),
+        modType,
+        term));
   }
 
   static hydra.packaging.Module moduleToSourceModule(hydra.packaging.Module m) {

@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.protobuf.sourceContext.SourceContext",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -27,8 +26,7 @@
                                 "string": "The path-qualified name of the .proto file that contained the associated protobuf element.  For example: `\"google/protobuf/source_context.proto\"`."}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}}],
-  "description": [
-    "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/source_context.proto"],
+  "description": "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/source_context.proto",
   "namespace": "hydra.ext.protobuf.sourceContext",
   "termDependencies": ["hydra.core"],
   "typeDependencies": ["hydra.core"]}

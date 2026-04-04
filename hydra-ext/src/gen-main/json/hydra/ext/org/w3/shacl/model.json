@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.Closed",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -25,7 +24,6 @@
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.CommonConstraint",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -302,7 +300,6 @@
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.CommonProperties",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -395,7 +392,6 @@
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.Definition",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -418,7 +414,6 @@
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.NodeKind",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -477,7 +472,6 @@
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.NodeShape",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -496,7 +490,6 @@
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.Pattern",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -514,7 +507,6 @@
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.PropertyShape",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -584,7 +576,6 @@
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.PropertyShapeConstraint",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -666,7 +657,6 @@
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.QualifiedValueShape",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -697,7 +687,6 @@
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.Reference",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -740,7 +729,6 @@
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.Severity",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -778,7 +766,6 @@
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.Shape",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -800,7 +787,6 @@
       "type": {
         "name": "hydra.ext.org.w3.shacl.model.ShapesGraph",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -816,7 +802,7 @@
                       "argument": {"variable": "hydra.ext.org.w3.shacl.model.Shape"},
                       "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}}}}},
           "variables": []}}}],
-  "description": ["A SHACL syntax model. See https://www.w3.org/TR/shacl"],
+  "description": "A SHACL syntax model. See https://www.w3.org/TR/shacl",
   "namespace": "hydra.ext.org.w3.shacl.model",
   "termDependencies": ["hydra.ext.org.w3.rdf.syntax"],
   "typeDependencies": ["hydra.core"]}

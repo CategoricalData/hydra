@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.typeScript.model.FunctionType",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -18,7 +17,6 @@
       "type": {
         "name": "hydra.ext.typeScript.model.Parameter",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "name", "type": {"literal": {"string": {}}}},
@@ -30,7 +28,6 @@
       "type": {
         "name": "hydra.ext.typeScript.model.PrimitiveType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -110,7 +107,6 @@
       "type": {
         "name": "hydra.ext.typeScript.model.Type",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -187,8 +183,7 @@
                           "literal": {"string": "for functions with no documented return value"}}}],
                     "body": {"unit": {}}}}}]},
           "variables": []}}}],
-  "description": [
-    "A basic TypeScript model, constructed on the basis of the typescriptlang.org documentation"],
+  "description": "A basic TypeScript model, constructed on the basis of the typescriptlang.org documentation",
   "namespace": "hydra.ext.typeScript.model",
   "termDependencies": ["hydra.core"],
   "typeDependencies": ["hydra.core"]}

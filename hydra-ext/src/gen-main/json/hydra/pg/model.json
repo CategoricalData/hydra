@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.pg.model.AdjacentEdge",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -63,7 +62,6 @@
       "type": {
         "name": "hydra.pg.model.Direction",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -81,7 +79,6 @@
       "type": {
         "name": "hydra.pg.model.Edge",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -144,7 +141,6 @@
       "type": {
         "name": "hydra.pg.model.EdgeLabel",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -157,7 +153,6 @@
       "type": {
         "name": "hydra.pg.model.EdgeType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -230,7 +225,6 @@
       "type": {
         "name": "hydra.pg.model.Element",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -259,7 +253,6 @@
       "type": {
         "name": "hydra.pg.model.ElementKind",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -275,7 +268,6 @@
       "type": {
         "name": "hydra.pg.model.ElementTree",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -307,7 +299,6 @@
       "type": {
         "name": "hydra.pg.model.ElementType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -336,7 +327,6 @@
       "type": {
         "name": "hydra.pg.model.ElementTypeTree",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -368,7 +358,6 @@
       "type": {
         "name": "hydra.pg.model.Graph",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -405,7 +394,6 @@
       "type": {
         "name": "hydra.pg.model.GraphSchema",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -458,7 +446,6 @@
       "type": {
         "name": "hydra.pg.model.Label",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -474,7 +461,6 @@
       "type": {
         "name": "hydra.pg.model.LazyGraph",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -507,7 +493,6 @@
       "type": {
         "name": "hydra.pg.model.Property",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -542,7 +527,6 @@
       "type": {
         "name": "hydra.pg.model.PropertyKey",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -555,7 +539,6 @@
       "type": {
         "name": "hydra.pg.model.PropertyType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -601,7 +584,6 @@
       "type": {
         "name": "hydra.pg.model.Vertex",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -646,7 +628,6 @@
       "type": {
         "name": "hydra.pg.model.VertexLabel",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -661,7 +642,6 @@
       "type": {
         "name": "hydra.pg.model.VertexType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -712,7 +692,6 @@
       "type": {
         "name": "hydra.pg.model.VertexWithAdjacentEdges",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -769,8 +748,7 @@
                                   "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}}}}}]},
                   "parameter": "v"}}}},
           "variables": []}}}],
-  "description": [
-    "A typed property graph data model. Property graphs are parameterized a type for property and id values, while property graph schemas are parameterized by a type for property and id types"],
+  "description": "A typed property graph data model. Property graphs are parameterized a type for property and id values, while property graph schemas are parameterized by a type for property and id types",
   "namespace": "hydra.pg.model",
   "termDependencies": [],
   "typeDependencies": ["hydra.core"]}

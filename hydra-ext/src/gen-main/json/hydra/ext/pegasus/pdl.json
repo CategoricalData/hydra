@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.pegasus.pdl.Annotations",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -22,7 +21,6 @@
       "type": {
         "name": "hydra.ext.pegasus.pdl.EnumField",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -35,15 +33,11 @@
     {
       "type": {
         "name": "hydra.ext.pegasus.pdl.EnumFieldName",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.pegasus.pdl.EnumSchema",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -53,15 +47,11 @@
     {
       "type": {
         "name": "hydra.ext.pegasus.pdl.FieldName",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.pegasus.pdl.NamedSchema",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -78,7 +68,6 @@
       "type": {
         "name": "hydra.ext.pegasus.pdl.NamedSchemaType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -94,29 +83,19 @@
     {
       "type": {
         "name": "hydra.ext.pegasus.pdl.Name",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.pegasus.pdl.Namespace",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.pegasus.pdl.Package",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.pegasus.pdl.PrimitiveType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "boolean", "type": {"unit": {}}},
@@ -130,15 +109,11 @@
     {
       "type": {
         "name": "hydra.ext.pegasus.pdl.PropertyKey",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.pegasus.pdl.Property",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -152,7 +127,6 @@
       "type": {
         "name": "hydra.ext.pegasus.pdl.QualifiedName",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.ext.pegasus.pdl.Name"}},
@@ -164,7 +138,6 @@
       "type": {
         "name": "hydra.ext.pegasus.pdl.RecordField",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -193,7 +166,6 @@
       "type": {
         "name": "hydra.ext.pegasus.pdl.RecordSchema",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -214,7 +186,6 @@
       "type": {
         "name": "hydra.ext.pegasus.pdl.Schema",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -240,7 +211,6 @@
       "type": {
         "name": "hydra.ext.pegasus.pdl.SchemaFile",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -260,7 +230,6 @@
       "type": {
         "name": "hydra.ext.pegasus.pdl.UnionMember",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -284,7 +253,6 @@
       "type": {
         "name": "hydra.ext.pegasus.pdl.UnionSchema",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -295,8 +263,7 @@
                       "string": "Note: unions are not allowed as member types of other unions"}}}],
               "body": {"wrap": {"list": {"variable": "hydra.ext.pegasus.pdl.UnionMember"}}}}},
           "variables": []}}}],
-  "description": [
-    "A model for PDL (Pegasus Data Language) schemas. Based on the specification at:\n  https://linkedin.github.io/rest.li/pdl_schema"],
+  "description": "A model for PDL (Pegasus Data Language) schemas. Based on the specification at:\n  https://linkedin.github.io/rest.li/pdl_schema",
   "namespace": "hydra.ext.pegasus.pdl",
   "termDependencies": ["hydra.json.model"],
   "typeDependencies": ["hydra.core"]}

@@ -179,19 +179,29 @@ def fromJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Nam
       }
     }
     case hydra.core.Type.maybe(v_Type_maybe_innerType) => {
-      def decodeJust(arr: Seq[hydra.json.model.Value]): Either[scala.Predef.String, hydra.core.Term] =
-        hydra.lib.eithers.map[hydra.core.Term, hydra.core.Term, scala.Predef.String]((v: hydra.core.Term) => hydra.core.Term.maybe(Some(v)))(hydra.json.decode.fromJson(types)(tname)(v_Type_maybe_innerType)(hydra.lib.lists.head[hydra.json.model.Value](arr)))
+      lazy val innerStripped: hydra.core.Type = hydra.strip.deannotateType(v_Type_maybe_innerType)
       {
-        def decodeMaybeArray(arr: Seq[hydra.json.model.Value]): Either[scala.Predef.String, hydra.core.Term] =
+        lazy val isNestedMaybe: Boolean = innerStripped match
+          case hydra.core.Type.maybe(v_Type_maybe__) => true
+          case _ => false
+        hydra.lib.logic.ifElse[Either[scala.Predef.String, hydra.core.Term]](isNestedMaybe)({
+          def decodeJust(arr: Seq[hydra.json.model.Value]): Either[scala.Predef.String, hydra.core.Term] =
+            hydra.lib.eithers.map[hydra.core.Term, hydra.core.Term, scala.Predef.String]((v: hydra.core.Term) => hydra.core.Term.maybe(Some(v)))(hydra.json.decode.fromJson(types)(tname)(v_Type_maybe_innerType)(hydra.lib.lists.head[hydra.json.model.Value](arr)))
           {
-          lazy val len: Int = hydra.lib.lists.length[hydra.json.model.Value](arr)
-          hydra.lib.logic.ifElse[Either[scala.Predef.String, hydra.core.Term]](hydra.lib.equality.equal[Int](len)(0))(Right(hydra.core.Term.maybe(None)))(hydra.lib.logic.ifElse[Either[scala.Predef.String,
-             hydra.core.Term]](hydra.lib.equality.equal[Int](len)(1))(decodeJust(arr))(Left("expected single-element array for Just")))
-        }
-        value match
+            def decodeMaybeArray(arr: Seq[hydra.json.model.Value]): Either[scala.Predef.String, hydra.core.Term] =
+              {
+              lazy val len: Int = hydra.lib.lists.length[hydra.json.model.Value](arr)
+              hydra.lib.logic.ifElse[Either[scala.Predef.String, hydra.core.Term]](hydra.lib.equality.equal[Int](len)(0))(Right(hydra.core.Term.maybe(None)))(hydra.lib.logic.ifElse[Either[scala.Predef.String,
+                 hydra.core.Term]](hydra.lib.equality.equal[Int](len)(1))(decodeJust(arr))(Left("expected single-element array for Just")))
+            }
+            value match
+              case hydra.json.model.Value.`null` => Right(hydra.core.Term.maybe(None))
+              case hydra.json.model.Value.array(v_Value_array_arr) => decodeMaybeArray(v_Value_array_arr)
+              case _ => Left("expected null or single-element array for nested Maybe")
+          }
+        })(value match
           case hydra.json.model.Value.`null` => Right(hydra.core.Term.maybe(None))
-          case hydra.json.model.Value.array(v_Value_array_arr) => decodeMaybeArray(v_Value_array_arr)
-          case _ => Left("expected null or single-element array for Maybe")
+          case _ => hydra.lib.eithers.map[hydra.core.Term, hydra.core.Term, scala.Predef.String]((v: hydra.core.Term) => hydra.core.Term.maybe(Some(v)))(hydra.json.decode.fromJson(types)(tname)(v_Type_maybe_innerType)(value)))
       }
     }
     case hydra.core.Type.record(v_Type_record_rt) => {

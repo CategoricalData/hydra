@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.io.delta.parquet.ArrayType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -22,7 +21,6 @@
       "type": {
         "name": "hydra.ext.io.delta.parquet.BasePrimitiveType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -147,7 +145,6 @@
       "type": {
         "name": "hydra.ext.io.delta.parquet.DataType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -202,7 +199,6 @@
       "type": {
         "name": "hydra.ext.io.delta.parquet.DecimalType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -220,7 +216,6 @@
       "type": {
         "name": "hydra.ext.io.delta.parquet.MapType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -241,7 +236,6 @@
       "type": {
         "name": "hydra.ext.io.delta.parquet.StructField",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -262,7 +256,6 @@
       "type": {
         "name": "hydra.ext.io.delta.parquet.StructType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -276,8 +269,7 @@
                     "name": "fields",
                     "type": {"list": {"variable": "hydra.ext.io.delta.parquet.StructField"}}}]}}},
           "variables": []}}}],
-  "description": [
-    "A partial Delta Parquet model, based on DataType and its subclasses as specified in the 3.0.0 Java API: https://docs.delta.io/3.0.0/api/java/kernel/io/delta/kernel/types/DataType.html"],
+  "description": "A partial Delta Parquet model, based on DataType and its subclasses as specified in the 3.0.0 Java API: https://docs.delta.io/3.0.0/api/java/kernel/io/delta/kernel/types/DataType.html",
   "namespace": "hydra.ext.io.delta.parquet",
   "termDependencies": ["hydra.core"],
   "typeDependencies": ["hydra.core"]}

@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.cpp.environment.CppEnvironment",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -42,7 +41,7 @@
                                 "keys": {"variable": "hydra.core.Name"},
                                 "values": {"literal": {"string": {}}}}}}}}}}]}}},
           "variables": []}}}],
-  "description": ["Type definitions for C++ code generation environment"],
+  "description": "Type definitions for C++ code generation environment",
   "namespace": "hydra.ext.cpp.environment",
   "termDependencies": [],
   "typeDependencies": ["hydra.core", "hydra.packaging"]}

@@ -321,43 +321,78 @@ public interface Decode {
 
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.Type.Maybe innerType) {
-        java.util.function.Function<java.util.List<hydra.json.model.Value>, hydra.util.Either<String, hydra.core.Term>> decodeJust = (java.util.function.Function<java.util.List<hydra.json.model.Value>, hydra.util.Either<String, hydra.core.Term>>) (arr -> hydra.lib.eithers.Map.apply(
-          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (v -> new hydra.core.Term.Maybe(hydra.util.Maybe.just(v))),
-          hydra.json.Decode.fromJson(
-            types,
-            tname,
-            (innerType).value,
-            hydra.lib.lists.Head.apply(arr))));
-        java.util.function.Function<java.util.List<hydra.json.model.Value>, hydra.util.Either<String, hydra.core.Term>> decodeMaybeArray = (java.util.function.Function<java.util.List<hydra.json.model.Value>, hydra.util.Either<String, hydra.core.Term>>) (arr -> {
-          hydra.util.Lazy<Integer> len = new hydra.util.Lazy<>(() -> hydra.lib.lists.Length.apply(arr));
-          return hydra.lib.logic.IfElse.lazy(
-            hydra.lib.equality.Equal.apply(
-              len.get(),
-              0),
-            () -> hydra.util.Either.<String, hydra.core.Term>right(new hydra.core.Term.Maybe((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))),
-            () -> hydra.lib.logic.IfElse.lazy(
-              hydra.lib.equality.Equal.apply(
-                len.get(),
-                1),
-              () -> (decodeJust).apply(arr),
-              () -> hydra.util.Either.<String, hydra.core.Term>left("expected single-element array for Just")));
-        });
-        return (value).accept(new hydra.json.model.Value.PartialVisitor<>() {
+        hydra.core.Type innerStripped = hydra.Strip.deannotateType((innerType).value);
+        Boolean isNestedMaybe = (innerStripped).accept(new hydra.core.Type.PartialVisitor<>() {
           @Override
-          public hydra.util.Either<String, hydra.core.Term> otherwise(hydra.json.model.Value instance) {
-            return hydra.util.Either.<String, hydra.core.Term>left("expected null or single-element array for Maybe");
+          public Boolean otherwise(hydra.core.Type instance) {
+            return false;
           }
 
           @Override
-          public hydra.util.Either<String, hydra.core.Term> visit(hydra.json.model.Value.Null ignored) {
-            return hydra.util.Either.<String, hydra.core.Term>right(new hydra.core.Term.Maybe((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())));
-          }
-
-          @Override
-          public hydra.util.Either<String, hydra.core.Term> visit(hydra.json.model.Value.Array arr) {
-            return (decodeMaybeArray).apply((arr).value);
+          public Boolean visit(hydra.core.Type.Maybe ignored) {
+            return true;
           }
         });
+        return hydra.lib.logic.IfElse.lazy(
+          isNestedMaybe,
+          () -> ((java.util.function.Supplier<hydra.util.Either<String, hydra.core.Term>>) (() -> {
+            java.util.function.Function<java.util.List<hydra.json.model.Value>, hydra.util.Either<String, hydra.core.Term>> decodeJust = (java.util.function.Function<java.util.List<hydra.json.model.Value>, hydra.util.Either<String, hydra.core.Term>>) (arr -> hydra.lib.eithers.Map.apply(
+              (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (v -> new hydra.core.Term.Maybe(hydra.util.Maybe.just(v))),
+              hydra.json.Decode.fromJson(
+                types,
+                tname,
+                (innerType).value,
+                hydra.lib.lists.Head.apply(arr))));
+            return ((java.util.function.Supplier<hydra.util.Either<String, hydra.core.Term>>) (() -> {
+              java.util.function.Function<java.util.List<hydra.json.model.Value>, hydra.util.Either<String, hydra.core.Term>> decodeMaybeArray = (java.util.function.Function<java.util.List<hydra.json.model.Value>, hydra.util.Either<String, hydra.core.Term>>) (arr -> {
+                hydra.util.Lazy<Integer> len = new hydra.util.Lazy<>(() -> hydra.lib.lists.Length.apply(arr));
+                return hydra.lib.logic.IfElse.lazy(
+                  hydra.lib.equality.Equal.apply(
+                    len.get(),
+                    0),
+                  () -> hydra.util.Either.<String, hydra.core.Term>right(new hydra.core.Term.Maybe((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))),
+                  () -> hydra.lib.logic.IfElse.lazy(
+                    hydra.lib.equality.Equal.apply(
+                      len.get(),
+                      1),
+                    () -> (decodeJust).apply(arr),
+                    () -> hydra.util.Either.<String, hydra.core.Term>left("expected single-element array for Just")));
+              });
+              return (value).accept(new hydra.json.model.Value.PartialVisitor<>() {
+                @Override
+                public hydra.util.Either<String, hydra.core.Term> otherwise(hydra.json.model.Value instance) {
+                  return hydra.util.Either.<String, hydra.core.Term>left("expected null or single-element array for nested Maybe");
+                }
+
+                @Override
+                public hydra.util.Either<String, hydra.core.Term> visit(hydra.json.model.Value.Null ignored) {
+                  return hydra.util.Either.<String, hydra.core.Term>right(new hydra.core.Term.Maybe((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())));
+                }
+
+                @Override
+                public hydra.util.Either<String, hydra.core.Term> visit(hydra.json.model.Value.Array arr) {
+                  return (decodeMaybeArray).apply((arr).value);
+                }
+              });
+            })).get();
+          })).get(),
+          () -> (value).accept(new hydra.json.model.Value.PartialVisitor<>() {
+            @Override
+            public hydra.util.Either<String, hydra.core.Term> otherwise(hydra.json.model.Value instance) {
+              return hydra.lib.eithers.Map.apply(
+                (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (v -> new hydra.core.Term.Maybe(hydra.util.Maybe.just(v))),
+                hydra.json.Decode.fromJson(
+                  types,
+                  tname,
+                  (innerType).value,
+                  value));
+            }
+
+            @Override
+            public hydra.util.Either<String, hydra.core.Term> visit(hydra.json.model.Value.Null ignored) {
+              return hydra.util.Either.<String, hydra.core.Term>right(new hydra.core.Term.Maybe((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())));
+            }
+          }));
       }
 
       @Override

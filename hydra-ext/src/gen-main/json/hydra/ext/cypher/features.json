@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.CypherFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -240,7 +239,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.ArithmeticFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -308,7 +306,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.AtomFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -396,7 +393,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.ComparisonFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -464,7 +460,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.DeleteFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -496,7 +491,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.FunctionFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -657,7 +651,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.AggregateFunctionFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -781,7 +774,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.DatabaseFunctionFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -806,7 +798,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.GenAIFunctionFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -831,7 +822,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.GraphFunctionFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -889,7 +879,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.ListFunctionFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1035,7 +1024,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.LoadCSVFunctionFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1071,7 +1059,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.LogarithmicFunctionFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1139,7 +1126,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.NumericFunctionFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1230,7 +1216,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.PredicateFunctionFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1310,7 +1295,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.ScalarFunctionFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1564,7 +1548,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.SpatialFunctionFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1611,7 +1594,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.StringFunctionFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1812,7 +1794,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.TemporalDurationFunctionFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1880,7 +1861,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.TemporalInstantFunctionFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2188,7 +2168,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.TrigonometricFunctionFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2327,7 +2306,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.VectorFunctionFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2363,7 +2341,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.ListFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2395,7 +2372,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.LiteralFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2476,7 +2452,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.LogicalFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2526,7 +2501,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.MatchFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2558,7 +2532,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.MergeFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2599,7 +2572,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.NodePatternFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2664,7 +2636,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.NullFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2696,7 +2667,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.PathFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2719,7 +2689,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.ProcedureCallFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2760,7 +2729,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.ProjectionFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2838,7 +2806,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.QuantifierFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2888,7 +2855,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.RangeLiteralFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2949,7 +2915,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.ReadingFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -2991,7 +2956,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.RelationshipDirectionFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -3045,7 +3009,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.RelationshipPatternFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -3090,7 +3053,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.RemoveFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -3122,7 +3084,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.SetFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -3173,7 +3134,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.StringFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -3224,7 +3184,6 @@
       "type": {
         "name": "hydra.ext.cypher.features.UpdatingFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -3262,8 +3221,7 @@
                             "@value": {"literal": {"string": "Multi-part queries using WITH"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}}],
-  "description": [
-    "A model for characterizing OpenCypher queries and implementations in terms of included features.Based on the OpenCypher grammar and the list of standard Cypher functions at https://neo4j.com/docs/cypher-manual/current/functions. Current as of August 2024."],
+  "description": "A model for characterizing OpenCypher queries and implementations in terms of included features.Based on the OpenCypher grammar and the list of standard Cypher functions at https://neo4j.com/docs/cypher-manual/current/functions. Current as of August 2024.",
   "namespace": "hydra.ext.cypher.features",
   "termDependencies": ["hydra.core"],
   "typeDependencies": ["hydra.core"]}

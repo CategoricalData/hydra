@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.pg.mapping.AnnotationSchema",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -35,7 +34,6 @@
       "type": {
         "name": "hydra.pg.mapping.EdgeSpec",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -105,7 +103,6 @@
       "type": {
         "name": "hydra.pg.mapping.ElementSpec",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -124,7 +121,6 @@
       "type": {
         "name": "hydra.pg.mapping.PropertySpec",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -160,7 +156,6 @@
       "type": {
         "name": "hydra.pg.mapping.Schema",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -244,7 +239,6 @@
       "type": {
         "name": "hydra.pg.mapping.ValueSpec",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -282,7 +276,6 @@
       "type": {
         "name": "hydra.pg.mapping.VertexSpec",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -326,8 +319,7 @@
                                 "string": "Zero or more property specifications for each target vertex"}}}],
                         "body": {"list": {"variable": "hydra.pg.mapping.PropertySpec"}}}}}]}}},
           "variables": []}}}],
-  "description": [
-    "A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs"],
+  "description": "A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs",
   "namespace": "hydra.pg.mapping",
   "termDependencies": ["hydra.pg.model", "hydra.coders", "hydra.core"],
   "typeDependencies": ["hydra.core"]}
