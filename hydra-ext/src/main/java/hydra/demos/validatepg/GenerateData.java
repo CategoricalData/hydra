@@ -249,7 +249,7 @@ public class GenerateData {
 
     private static String encodeSchemaToJson(GraphSchema<LiteralType> schema) {
         Term term = Model.graphSchema(hydra.encode.Core::literalType, schema);
-        Either<String, Value> result = Encode.toJson(term);
+        Either<String, Value> result = Encode.toJsonUntyped(term);
         return result.accept(new Either.Visitor<String, Value, String>() {
             @Override
             public String visit(Either.Left<String, Value> instance) {
@@ -265,7 +265,7 @@ public class GenerateData {
 
     private static String encodeGraphToJson(Graph<Literal> graph) {
         Term term = Model.graph(hydra.encode.Core::literal, graph);
-        Either<String, Value> result = Encode.toJson(term);
+        Either<String, Value> result = Encode.toJsonUntyped(term);
         return result.accept(new Either.Visitor<String, Value, String>() {
             @Override
             public String visit(Either.Left<String, Value> instance) {
