@@ -56,12 +56,12 @@ ns :: Namespace
 ns = Namespace "hydra.show.variants"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     []
     kernelTypesNamespaces $
     Just "String representations of hydra.variants types"
   where
-   elements = [
+   definitions = [
      toDefinition termVariant,
      toDefinition typeVariant]
 

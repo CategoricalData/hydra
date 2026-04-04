@@ -93,14 +93,14 @@ ns :: Namespace
 ns = Namespace "hydra.inference"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Annotations.ns, Checking.ns, ExtractCore.ns, Lexical.ns, Reflect.ns,
       Rewriting.ns, Names.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowTyping.ns, Sorting.ns, Substitution.ns, Variables.ns,
       Unification.ns]
     kernelTypesNamespaces $
     Just "Type inference following Algorithm W, extended for nominal terms and types"
   where
-    elements = [
+    definitions = [
       toDefinition bindConstraints,
       toDefinition bindUnboundTypeVariables,
       toDefinition buildTypeApplicationTerm,

@@ -16,10 +16,10 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [] [Core.ns] $
+module_ = Module ns (map toTypeDef definitions) [] [Core.ns] $
     Just "A model for simple graphs as adjacency lists"
   where
-    elements = [
+    definitions = [
       graph,
       orderingIsomorphism,
       tarjanState,

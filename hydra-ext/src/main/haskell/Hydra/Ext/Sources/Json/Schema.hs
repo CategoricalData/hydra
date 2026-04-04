@@ -17,7 +17,7 @@ import qualified Hydra.Sources.Json.Model        as JsonModel
 
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [JsonModel.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef definitions) [JsonModel.ns] [Core.ns] $
     Just ("A model for JSON Schema. Based on https://cswr.github.io/JsonSchema/spec/grammar")
   where
     ns = Namespace "hydra.ext.org.json.schema"
@@ -29,7 +29,7 @@ module_ = Module ns (map toTypeDef elements) [JsonModel.ns] [Core.ns] $
     keywordSchemaOrArrayMap = T.map (js "Keyword") (js "SchemaOrArray")
     regexSchemaMap = T.map (js "RegularExpression") (js "Schema")
 
-    elements = [
+    definitions = [
 -- Json Documents and Schemas
 -- Let JDOC be an arbitrary JSON Schema Document. We can define its syntax using the following grammar:
 --

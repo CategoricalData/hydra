@@ -93,7 +93,7 @@ ns :: Namespace
 ns = Namespace "hydra.ext.haskell.serde"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Constants.ns, Serialization.ns, HaskellOperators.ns]
     (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just ("Haskell operator precendence and associativity are drawn from:\n"
@@ -102,7 +102,7 @@ module_ = Module ns elements
       <> "Operator names are drawn (loosely) from:\n"
       <> "https://stackoverflow.com/questions/7746894/are-there-pronounceable-names-for-common-haskell-operators")
   where
-    elements = [
+    definitions = [
       toDefinition alternativeToExpr,
       toDefinition applicationExpressionToExpr,
       toDefinition applicationPatternToExpr,

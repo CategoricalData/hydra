@@ -21,12 +21,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.checking.advanced"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [TestGraph.ns, Namespace "hydra.rewriting"]
     kernelTypesNamespaces
     (Just "Advanced type checking test cases: annotated terms and flows")
   where
-    elements = [
+    definitions = [
       Phantoms.toDefinition allTests,
       Phantoms.toDefinition annotatedTermsTests,
       Phantoms.toDefinition topLevelAnnotationsTests,

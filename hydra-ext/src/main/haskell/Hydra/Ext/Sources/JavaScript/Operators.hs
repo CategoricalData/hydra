@@ -93,12 +93,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.javaScript.operators"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Serialization.ns]
     KernelTypes.kernelTypesNamespaces $
     Just "AST operators for JavaScript with precedence and associativity"
   where
-    elements = [
+    definitions = [
       -- Function application
       toDefinition appOp,
 

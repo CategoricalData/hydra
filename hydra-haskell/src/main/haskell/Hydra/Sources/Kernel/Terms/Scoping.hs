@@ -67,12 +67,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     []
     kernelTypesNamespaces $
     Just ("Graph context extension and type scheme conversion")
   where
-   elements = [
+   definitions = [
      toDefinition extendGraphForLambda,
      toDefinition extendGraphForLet,
      toDefinition extendGraphForTypeLambda,

@@ -75,12 +75,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Lexical.ns, Rewriting.ns, Environment.ns, Resolution.ns, Scoping.ns, Sorting.ns, Strip.ns, Substitution.ns, Variables.ns]
     kernelTypesNamespaces $
     Just "Functions for deep term rewriting operations involving hoisting subterms or bindings into enclosing let terms."
   where
-   elements = [
+   definitions = [
      toDefinition augmentBindingsWithNewFreeVars,
      toDefinition bindingIsPolymorphic,
      toDefinition bindingUsesContextTypeVars,

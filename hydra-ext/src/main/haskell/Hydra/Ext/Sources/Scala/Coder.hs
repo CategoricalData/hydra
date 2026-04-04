@@ -73,13 +73,13 @@ ns :: Namespace
 ns = Namespace "hydra.ext.scala.coder"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [ScalaUtilsSource.ns, ScalaSerdeSource.ns, Formatting.ns, Names.ns, Scoping.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Resolution.ns, ShowCore.ns, Annotations.ns, Constants.ns,
       Inference.ns, Sorting.ns, Arity.ns, SerializationSource.ns, Reduction.ns]
     (ScalaSyntax.ns:moduleNamespace ScalaLanguageSource.module_:KernelTypes.kernelTypesNamespaces) $
     Just "Scala code generator: converts Hydra modules to Scala source code"
   where
-    elements = [
+    definitions = [
       toDefinition applyVar,
       toDefinition constructModule,
       toDefinition dropDomains,

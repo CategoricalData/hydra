@@ -95,12 +95,12 @@ scalaLanguageNs :: Namespace
 scalaLanguageNs = moduleNamespace ScalaLanguageSource.module_
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [scalaLanguageNs, Names.ns, Formatting.ns]
     (ScalaSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Utility functions for constructing Scala AST nodes"
   where
-    elements = [
+    definitions = [
       toDefinition nameOfType,
       toDefinition qualifyUnionFieldName,
       toDefinition sapply,

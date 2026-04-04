@@ -29,12 +29,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.lib.pairs"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Namespace "hydra.reduction", Namespace "hydra.show.core"]
     kernelTypesNamespaces $
     Just "Test cases for hydra.lib.pairs primitives"
   where
-    elements = [Phantoms.toDefinition allTests]
+    definitions = [Phantoms.toDefinition allTests]
 
 showInt32 :: TTerm (Int -> String)
 showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")

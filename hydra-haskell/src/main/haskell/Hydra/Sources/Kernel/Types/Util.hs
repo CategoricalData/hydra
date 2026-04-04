@@ -16,14 +16,14 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [Core.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
     Just "General-purpose utility types used across Hydra."
   where
     -- Note: either_ and pair are NOT included here because they correspond to built-in
     -- type constructors (TypeEither, TypePair) which are handled natively by all target languages.
     -- Including them would cause conflicts with Haskell's Prelude.Either.
     -- Note: adapter, bicoder, and coder have been moved to hydra.coders.
-    elements = [
+    definitions = [
       caseConvention,
       comparison,
       precision]

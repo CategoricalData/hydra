@@ -61,12 +61,12 @@ ns :: Namespace
 ns = Namespace "hydra.show.error.core"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [ShowCore.ns, ShowVariants.ns]
     kernelTypesNamespaces $
     Just "String representations of hydra.error.core types"
   where
-   elements = [
+   definitions = [
      toDefinition constantConditionError,
      toDefinition duplicateBindingError,
      toDefinition duplicateFieldError,

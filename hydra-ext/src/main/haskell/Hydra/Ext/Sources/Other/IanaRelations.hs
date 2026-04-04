@@ -20,11 +20,11 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [] [] $
+module_ = Module ns (map toTypeDef definitions) [] [] $
     Just ("All IANA Link Relation Types, as of 2022-10-11. " ++
           "See https://www.iana.org/assignments/link-relations/link-relations.xhtml")
   where
-    elements = [
+    definitions = [
       linkRelationType]
 
 linkRelationType :: Binding

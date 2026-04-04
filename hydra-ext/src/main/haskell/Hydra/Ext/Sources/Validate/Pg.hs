@@ -27,12 +27,12 @@ validationDefinition :: String -> TTerm a -> TTermDefinition a
 validationDefinition = definitionInModule module_
 
 module_ :: Module
-module_ = Module (Namespace "hydra.validate.pg") elements
+module_ = Module (Namespace "hydra.validate.pg") definitions
     []
     [PgModel.ns, ErrorPg.ns] $
     Just "Validation functions for property graphs"
   where
-   elements = [
+   definitions = [
      toDefinition checkAll,
      toDefinition validateEdge,
      toDefinition validateGraph,
