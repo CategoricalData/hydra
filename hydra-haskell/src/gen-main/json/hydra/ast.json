@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ast.Associativity",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -22,7 +21,6 @@
       "type": {
         "name": "hydra.ast.BlockStyle",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -65,7 +63,6 @@
       "type": {
         "name": "hydra.ast.BracketExpr",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -107,7 +104,6 @@
       "type": {
         "name": "hydra.ast.Brackets",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -139,7 +135,6 @@
       "type": {
         "name": "hydra.ast.Expr",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -200,7 +195,6 @@
       "type": {
         "name": "hydra.ast.IndentedExpression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -232,7 +226,6 @@
       "type": {
         "name": "hydra.ast.IndentStyle",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -265,7 +258,6 @@
       "type": {
         "name": "hydra.ast.Op",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -315,7 +307,6 @@
       "type": {
         "name": "hydra.ast.OpExpr",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -356,7 +347,6 @@
       "type": {
         "name": "hydra.ast.Padding",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -388,7 +378,6 @@
       "type": {
         "name": "hydra.ast.Precedence",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -401,7 +390,6 @@
       "type": {
         "name": "hydra.ast.SeqExpr",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -435,7 +423,6 @@
       "type": {
         "name": "hydra.ast.Symbol",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -448,7 +435,6 @@
       "type": {
         "name": "hydra.ast.Ws",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -503,7 +489,7 @@
                             "@value": {"literal": {"string": "Two line breaks"}}}],
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}}],
-  "description": ["A model which provides a common syntax tree for Hydra serializers"],
+  "description": "A model which provides a common syntax tree for Hydra serializers",
   "namespace": "hydra.ast",
   "termDependencies": [],
   "typeDependencies": ["hydra.core"]}

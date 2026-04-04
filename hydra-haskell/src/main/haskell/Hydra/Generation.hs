@@ -244,11 +244,20 @@ inferModulesIO universeMods targetMods = do
 -- JSON Module Export
 ----------------------------------------
 
+-- | Build a schema map (Name -> Type) from a graph's schema types.
+-- Used by the JSON encoder/decoder to resolve type variables.
+buildSchemaMap :: Graph -> M.Map Name Type
+buildSchemaMap g = M.map extractType (graphSchemaTypes g)
+  where
+    extractType (TypeScheme _ t _) = stripTop t
+    stripTop (TypeAnnotated (AnnotatedType t _)) = stripTop t
+    stripTop t = t
+
 -- | Write a single module to a JSON file.
 -- The file path is derived from the module namespace.
-writeModuleJson :: FilePath -> Module -> IO ()
-writeModuleJson basePath mod = do
-    case CodeGeneration.moduleToJson mod of
+writeModuleJson :: M.Map Name Type -> FilePath -> Module -> IO ()
+writeModuleJson schemaMap basePath mod = do
+    case CodeGeneration.moduleToJson schemaMap mod of
       Left err -> fail $ "Failed to convert module to JSON: " ++ unNamespace (moduleNamespace mod) ++ ": " ++ err
       Right jsonStr -> do
         let filePath = basePath FP.</> CodeGeneration.namespaceToPath (moduleNamespace mod) ++ ".json"
@@ -264,7 +273,9 @@ writeModuleJson basePath mod = do
 writeModulesJson :: Bool -> FilePath -> [Module] -> [Module] -> IO ()
 writeModulesJson doInfer basePath universeMods mods = do
   mods' <- if doInfer then inferModulesIO universeMods mods else return mods
-  mapM_ (writeModuleJson basePath) mods'
+  let graph = modulesToGraph universeMods universeMods
+      schemaMap = buildSchemaMap graph
+  mapM_ (writeModuleJson schemaMap basePath) mods'
 
 -- | Write DSL modules to JSON files.
 writeDslJson :: FilePath -> [Module] -> [Module] -> IO ()

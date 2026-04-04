@@ -63,38 +63,34 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {"variable": "hydra.core.Type"},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "type"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.relational.ColumnName"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "name"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.tabular.ColumnType"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {"variable": "hydra.core.Type"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.relational.ColumnName"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "type"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.relational.ColumnName"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "name"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.tabular.ColumnType"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {"variable": "hydra.core.Type"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.relational.ColumnName"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.tabular.columnTypeName",
@@ -152,26 +148,23 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.tabular.ColumnType"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.tabular.ColumnType"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {"variable": "hydra.relational.ColumnName"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.tabular.ColumnType"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.relational.ColumnName"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.tabular.ColumnType"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.tabular.columnTypeType",
@@ -229,26 +222,23 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.tabular.ColumnType"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.tabular.ColumnType"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {"variable": "hydra.core.Type"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.tabular.ColumnType"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.core.Type"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.tabular.ColumnType"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.tabular.columnTypeWithName",
@@ -356,38 +346,34 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {"variable": "hydra.relational.ColumnName"},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.tabular.ColumnType"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.tabular.ColumnType"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {"variable": "hydra.relational.ColumnName"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.tabular.ColumnType"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.tabular.ColumnType"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.tabular.ColumnType"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {"variable": "hydra.relational.ColumnName"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.tabular.ColumnType"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.tabular.columnTypeWithType",
@@ -495,38 +481,34 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {"variable": "hydra.core.Type"},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.tabular.ColumnType"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.tabular.ColumnType"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {"variable": "hydra.core.Type"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.tabular.ColumnType"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.tabular.ColumnType"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.tabular.ColumnType"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {"variable": "hydra.core.Type"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.tabular.ColumnType"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.tabular.dataRow",
@@ -557,29 +539,26 @@
                             "typeName": "hydra.core.WrappedTerm"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"list": {"maybe": {"variable": "v"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"list": {"maybe": {"variable": "v"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "v"},
-                        "function": {"variable": "hydra.tabular.DataRow"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"list": {"maybe": {"variable": "v"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": ["v"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "v"},
+                      "function": {"variable": "hydra.tabular.DataRow"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"list": {"maybe": {"variable": "v"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": ["v"]}}},
     {
       "term": {
         "name": "hydra.dsl.tabular.unDataRow",
@@ -625,32 +604,29 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "v"},
-                        "function": {"variable": "hydra.tabular.DataRow"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "v"},
+                      "function": {"variable": "hydra.tabular.DataRow"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {"list": {"maybe": {"variable": "v"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "v"},
-                        "function": {"variable": "hydra.tabular.DataRow"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": ["v"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"list": {"maybe": {"variable": "v"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "v"},
+                      "function": {"variable": "hydra.tabular.DataRow"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": ["v"]}}},
     {
       "term": {
         "name": "hydra.dsl.tabular.headerRow",
@@ -681,26 +657,23 @@
                             "typeName": "hydra.core.WrappedTerm"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"list": {"literal": {"string": {}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"list": {"literal": {"string": {}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {"variable": "hydra.tabular.HeaderRow"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"list": {"literal": {"string": {}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.tabular.HeaderRow"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"list": {"literal": {"string": {}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.tabular.unHeaderRow",
@@ -746,26 +719,23 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.tabular.HeaderRow"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.tabular.HeaderRow"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {"list": {"literal": {"string": {}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.tabular.HeaderRow"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"list": {"literal": {"string": {}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.tabular.HeaderRow"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.tabular.table",
@@ -829,52 +799,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {
-                                    "literal": {
-                                      "string": "The data rows of the table. Each row must have the same number of cells."}}}],
-                              "body": {
-                                "list": {
-                                  "application": {
-                                    "argument": {"variable": "v"},
-                                    "function": {"variable": "hydra.tabular.DataRow"}}}}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "data"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {
-                                "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
-                        "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "header"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {
-                          "application": {
-                            "argument": {"variable": "v"},
-                            "function": {"variable": "hydra.tabular.Table"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -890,20 +814,62 @@
                                 "application": {
                                   "argument": {"variable": "v"},
                                   "function": {"variable": "hydra.tabular.DataRow"}}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {
-                                "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
-                        "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": ["v"]}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "data"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
+                      "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "header"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {
+                        "application": {
+                          "argument": {"variable": "v"},
+                          "function": {"variable": "hydra.tabular.Table"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {
+                                "literal": {
+                                  "string": "The data rows of the table. Each row must have the same number of cells."}}}],
+                          "body": {
+                            "list": {
+                              "application": {
+                                "argument": {"variable": "v"},
+                                "function": {"variable": "hydra.tabular.DataRow"}}}}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
+                      "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": ["v"]}}},
     {
       "term": {
         "name": "hydra.dsl.tabular.tableHeader",
@@ -961,40 +927,37 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "v"},
-                        "function": {"variable": "hydra.tabular.Table"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "v"},
+                      "function": {"variable": "hydra.tabular.Table"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {
-                                "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
-                        "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "v"},
-                        "function": {"variable": "hydra.tabular.Table"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": ["v"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
+                      "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "v"},
+                      "function": {"variable": "hydra.tabular.Table"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": ["v"]}}},
     {
       "term": {
         "name": "hydra.dsl.tabular.tableData",
@@ -1052,44 +1015,41 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "v"},
-                        "function": {"variable": "hydra.tabular.Table"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "v"},
+                      "function": {"variable": "hydra.tabular.Table"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {
-                                "string": "The data rows of the table. Each row must have the same number of cells."}}}],
-                        "body": {
-                          "list": {
-                            "application": {
-                              "argument": {"variable": "v"},
-                              "function": {"variable": "hydra.tabular.DataRow"}}}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "v"},
-                        "function": {"variable": "hydra.tabular.Table"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": ["v"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "The data rows of the table. Each row must have the same number of cells."}}}],
+                      "body": {
+                        "list": {
+                          "application": {
+                            "argument": {"variable": "v"},
+                            "function": {"variable": "hydra.tabular.DataRow"}}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "v"},
+                      "function": {"variable": "hydra.tabular.Table"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": ["v"]}}},
     {
       "term": {
         "name": "hydra.dsl.tabular.tableWithHeader",
@@ -1197,43 +1157,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {
-                                    "literal": {
-                                      "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
-                              "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "v"},
-                        "function": {"variable": "hydra.tabular.Table"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {
-                          "application": {
-                            "argument": {"variable": "v"},
-                            "function": {"variable": "hydra.tabular.Table"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -1245,15 +1168,48 @@
                                   "literal": {
                                     "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
                             "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "v"},
-                        "function": {"variable": "hydra.tabular.Table"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": ["v"]}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "v"},
+                      "function": {"variable": "hydra.tabular.Table"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {
+                        "application": {
+                          "argument": {"variable": "v"},
+                          "function": {"variable": "hydra.tabular.Table"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {
+                                "literal": {
+                                  "string": "The optional header row of the table. If present, the header must have the same number of cells as each data row."}}}],
+                          "body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "v"},
+                      "function": {"variable": "hydra.tabular.Table"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": ["v"]}}},
     {
       "term": {
         "name": "hydra.dsl.tabular.tableWithData",
@@ -1361,47 +1317,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {
-                                    "literal": {
-                                      "string": "The data rows of the table. Each row must have the same number of cells."}}}],
-                              "body": {
-                                "list": {
-                                  "application": {
-                                    "argument": {"variable": "v"},
-                                    "function": {"variable": "hydra.tabular.DataRow"}}}}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "v"},
-                        "function": {"variable": "hydra.tabular.Table"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {
-                          "application": {
-                            "argument": {"variable": "v"},
-                            "function": {"variable": "hydra.tabular.Table"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -1417,15 +1332,52 @@
                                 "application": {
                                   "argument": {"variable": "v"},
                                   "function": {"variable": "hydra.tabular.DataRow"}}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "v"},
-                        "function": {"variable": "hydra.tabular.Table"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": ["v"]}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "v"},
+                      "function": {"variable": "hydra.tabular.Table"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {
+                        "application": {
+                          "argument": {"variable": "v"},
+                          "function": {"variable": "hydra.tabular.Table"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {
+                                "literal": {
+                                  "string": "The data rows of the table. Each row must have the same number of cells."}}}],
+                          "body": {
+                            "list": {
+                              "application": {
+                                "argument": {"variable": "v"},
+                                "function": {"variable": "hydra.tabular.DataRow"}}}}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "v"},
+                      "function": {"variable": "hydra.tabular.Table"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": ["v"]}}},
     {
       "term": {
         "name": "hydra.dsl.tabular.tableType",
@@ -1489,38 +1441,34 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {"list": {"variable": "hydra.tabular.ColumnType"}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "columns"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.relational.RelationName"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "name"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.tabular.TableType"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {"list": {"variable": "hydra.tabular.ColumnType"}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.relational.RelationName"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "columns"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.relational.RelationName"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "name"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.tabular.TableType"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {"list": {"variable": "hydra.tabular.ColumnType"}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.relational.RelationName"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.tabular.tableTypeName",
@@ -1578,26 +1526,23 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.tabular.TableType"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.tabular.TableType"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {"variable": "hydra.relational.RelationName"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.tabular.TableType"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.relational.RelationName"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.tabular.TableType"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.tabular.tableTypeColumns",
@@ -1655,26 +1600,23 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.tabular.TableType"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.tabular.TableType"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {"list": {"variable": "hydra.tabular.ColumnType"}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.tabular.TableType"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"list": {"variable": "hydra.tabular.ColumnType"}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.tabular.TableType"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.tabular.tableTypeWithName",
@@ -1782,38 +1724,34 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {"variable": "hydra.relational.RelationName"},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.tabular.TableType"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.tabular.TableType"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {"variable": "hydra.relational.RelationName"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.tabular.TableType"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.tabular.TableType"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.tabular.TableType"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {"variable": "hydra.relational.RelationName"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.tabular.TableType"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.tabular.tableTypeWithColumns",
@@ -1921,39 +1859,35 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {"list": {"variable": "hydra.tabular.ColumnType"}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.tabular.TableType"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.tabular.TableType"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {"list": {"variable": "hydra.tabular.ColumnType"}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.tabular.TableType"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}}],
-  "description": ["DSL functions for hydra.tabular"],
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.tabular.TableType"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.tabular.TableType"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {"list": {"variable": "hydra.tabular.ColumnType"}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.tabular.TableType"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}}],
+  "description": "DSL functions for hydra.tabular",
   "namespace": "hydra.dsl.tabular",
   "termDependencies": ["hydra.dsl.core"],
   "typeDependencies": ["hydra.tabular", "hydra.phantoms", "hydra.core"]}

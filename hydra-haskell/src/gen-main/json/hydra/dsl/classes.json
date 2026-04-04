@@ -39,14 +39,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.classes.TypeClass"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.classes.TypeClass"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.classes.typeClassOrdering",
@@ -86,15 +84,13 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.classes.TypeClass"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}}],
-  "description": ["DSL functions for hydra.classes"],
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.classes.TypeClass"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}}],
+  "description": "DSL functions for hydra.classes",
   "namespace": "hydra.dsl.classes",
   "termDependencies": ["hydra.dsl.core"],
   "typeDependencies": ["hydra.classes", "hydra.phantoms", "hydra.core"]}

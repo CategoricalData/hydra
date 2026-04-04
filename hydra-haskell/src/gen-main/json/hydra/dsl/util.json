@@ -39,14 +39,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.util.CaseConvention"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.util.CaseConvention"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.util.caseConventionPascal",
@@ -86,14 +84,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.util.CaseConvention"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.util.CaseConvention"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.util.caseConventionLowerSnake",
@@ -133,14 +129,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.util.CaseConvention"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.util.CaseConvention"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.util.caseConventionUpperSnake",
@@ -180,14 +174,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.util.CaseConvention"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.util.CaseConvention"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.util.comparisonLessThan",
@@ -227,14 +219,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.util.Comparison"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.util.Comparison"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.util.comparisonEqualTo",
@@ -274,14 +264,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.util.Comparison"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.util.Comparison"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.util.comparisonGreaterThan",
@@ -321,14 +309,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.util.Comparison"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.util.Comparison"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.util.precisionArbitrary",
@@ -368,14 +354,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.util.Precision"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.util.Precision"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.util.precisionBits",
@@ -418,39 +402,36 @@
                             "typeName": "hydra.core.Injection"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Precision to a specified number of bits"}}}],
-                        "body": {"literal": {"integer": {"int32": {}}}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Precision to a specified number of bits"}}}],
+                      "body": {"literal": {"integer": {"int32": {}}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {"variable": "hydra.util.Precision"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Precision to a specified number of bits"}}}],
-                        "body": {"literal": {"integer": {"int32": {}}}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}}],
-  "description": ["DSL functions for hydra.util"],
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.util.Precision"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Precision to a specified number of bits"}}}],
+                      "body": {"literal": {"integer": {"int32": {}}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}}],
+  "description": "DSL functions for hydra.util",
   "namespace": "hydra.dsl.util",
   "termDependencies": ["hydra.dsl.core"],
   "typeDependencies": ["hydra.util", "hydra.phantoms", "hydra.core"]}

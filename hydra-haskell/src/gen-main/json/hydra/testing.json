@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.testing.Tag",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -17,7 +16,6 @@
       "type": {
         "name": "hydra.testing.TestCase",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -42,7 +40,6 @@
       "type": {
         "name": "hydra.testing.TestCaseWithMetadata",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -93,7 +90,6 @@
       "type": {
         "name": "hydra.testing.TestGroup",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -146,7 +142,6 @@
       "type": {
         "name": "hydra.testing.UniversalTestCase",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -180,7 +175,7 @@
                                 "string": "The expected result (a string produced by showing the expected value)"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}}],
-  "description": ["A model for unit testing"],
+  "description": "A model for unit testing",
   "namespace": "hydra.testing",
   "termDependencies": [],
   "typeDependencies": ["hydra.core"]}

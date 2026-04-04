@@ -90,11 +90,7 @@
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.ForallType"}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeBuddyListAName",
@@ -102,11 +98,7 @@
           "wrap": {
             "body": {"literal": {"string": "BuddyListA"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeBuddyListB",
@@ -197,11 +189,7 @@
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.ForallType"}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeBuddyListBName",
@@ -209,11 +197,7 @@
           "wrap": {
             "body": {"literal": {"string": "BuddyListB"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeComparison",
@@ -275,11 +259,7 @@
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeComparisonName",
@@ -287,11 +267,7 @@
           "wrap": {
             "body": {"literal": {"string": "Comparison"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeEither",
@@ -373,11 +349,7 @@
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.ForallType"}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeEitherName",
@@ -385,11 +357,7 @@
           "wrap": {
             "body": {"literal": {"string": "Either"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeHydraLiteralType",
@@ -445,11 +413,7 @@
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeHydraLiteralTypeName",
@@ -457,11 +421,7 @@
           "wrap": {
             "body": {"literal": {"string": "HydraLiteralType"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeHydraType",
@@ -511,11 +471,7 @@
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeHydraTypeName",
@@ -523,11 +479,7 @@
           "wrap": {
             "body": {"literal": {"string": "HydraType"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeIntList",
@@ -590,11 +542,7 @@
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeIntListName",
@@ -602,11 +550,7 @@
           "wrap": {
             "body": {"literal": {"string": "IntList"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeLatLon",
@@ -672,11 +616,7 @@
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeLatLonName",
@@ -684,11 +624,7 @@
           "wrap": {
             "body": {"literal": {"string": "LatLon"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeLatLonPoly",
@@ -755,11 +691,7 @@
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.ForallType"}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeLatLonPolyName",
@@ -767,11 +699,7 @@
           "wrap": {
             "body": {"literal": {"string": "LatLonPoly"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeList",
@@ -862,11 +790,7 @@
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.ForallType"}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeListName",
@@ -874,11 +798,7 @@
           "wrap": {
             "body": {"literal": {"string": "List"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeNumber",
@@ -944,11 +864,7 @@
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeNumberName",
@@ -956,11 +872,7 @@
           "wrap": {
             "body": {"literal": {"string": "Number"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypePerson",
@@ -1042,11 +954,7 @@
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypePersonName",
@@ -1054,11 +962,7 @@
           "wrap": {
             "body": {"literal": {"string": "Person"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypePersonOrSomething",
@@ -1124,11 +1028,7 @@
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.ForallType"}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypePersonOrSomethingName",
@@ -1136,11 +1036,7 @@
           "wrap": {
             "body": {"literal": {"string": "PersonOrSomething"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypePolymorphicWrapper",
@@ -1179,11 +1075,7 @@
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.ForallType"}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypePolymorphicWrapperName",
@@ -1191,11 +1083,7 @@
           "wrap": {
             "body": {"literal": {"string": "PolymorphicWrapper"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeSimpleNumber",
@@ -1261,11 +1149,7 @@
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeSimpleNumberName",
@@ -1273,11 +1157,7 @@
           "wrap": {
             "body": {"literal": {"string": "SimpleNumber"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeStringAlias",
@@ -1298,11 +1178,7 @@
                             "typeName": "hydra.core.LiteralType"}}},
                       "typeName": "hydra.core.Type"}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeStringAliasName",
@@ -1310,11 +1186,7 @@
           "wrap": {
             "body": {"literal": {"string": "StringAlias"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeSymmetricTriple",
@@ -1422,11 +1294,7 @@
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.ForallType"}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeSymmetricTripleName",
@@ -1434,11 +1302,7 @@
           "wrap": {
             "body": {"literal": {"string": "SymmetricTriple"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeTimestamp",
@@ -1499,11 +1363,7 @@
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeTimestampName",
@@ -1511,11 +1371,7 @@
           "wrap": {
             "body": {"literal": {"string": "Timestamp"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeTriple",
@@ -1631,11 +1487,7 @@
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.ForallType"}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeTripleName",
@@ -1643,11 +1495,7 @@
           "wrap": {
             "body": {"literal": {"string": "Triple"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeUnionMonomorphic",
@@ -1719,11 +1567,7 @@
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeUnionMonomorphicName",
@@ -1731,11 +1575,7 @@
           "wrap": {
             "body": {"literal": {"string": "UnionMonomorphic"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeUnionPolymorphicRecursive",
@@ -1843,11 +1683,7 @@
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.ForallType"}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeUnionPolymorphicRecursiveName",
@@ -1855,11 +1691,7 @@
           "wrap": {
             "body": {"literal": {"string": "UnionPolymorphicRecursive"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeUnit",
@@ -1873,11 +1705,7 @@
                   "term": {
                     "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.FieldType"}}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeUnitName",
@@ -1885,11 +1713,7 @@
           "wrap": {
             "body": {"literal": {"string": "Unit"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.concatType",
@@ -1949,11 +1773,7 @@
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.FunctionType"}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.compareStringsType",
@@ -1991,11 +1811,7 @@
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.FunctionType"}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.eitherStringOrInt8TypeName",
@@ -2003,11 +1819,7 @@
           "wrap": {
             "body": {"literal": {"string": "EitherStringOrInt8"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.eitherStringOrInt8Type",
@@ -2068,11 +1880,7 @@
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.exampleProjectionType",
@@ -2107,11 +1915,7 @@
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.FunctionType"}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.listOfInt8sType",
@@ -2137,11 +1941,7 @@
                             "typeName": "hydra.core.LiteralType"}}},
                       "typeName": "hydra.core.Type"}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.listOfInt16sType",
@@ -2167,11 +1967,7 @@
                             "typeName": "hydra.core.LiteralType"}}},
                       "typeName": "hydra.core.Type"}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.listOfListsOfStringsType",
@@ -2197,11 +1993,7 @@
                             "typeName": "hydra.core.Type"}}},
                       "typeName": "hydra.core.Type"}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.listOfSetOfStringsType",
@@ -2227,11 +2019,7 @@
                             "typeName": "hydra.core.Type"}}},
                       "typeName": "hydra.core.Type"}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.listOfStringsType",
@@ -2252,11 +2040,7 @@
                             "typeName": "hydra.core.LiteralType"}}},
                       "typeName": "hydra.core.Type"}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.mapOfStringsToIntsType",
@@ -2299,11 +2083,7 @@
                               "typeName": "hydra.core.Type"}}}],
                       "typeName": "hydra.core.MapType"}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.optionalInt8Type",
@@ -2329,11 +2109,7 @@
                             "typeName": "hydra.core.LiteralType"}}},
                       "typeName": "hydra.core.Type"}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.optionalInt16Type",
@@ -2359,11 +2135,7 @@
                             "typeName": "hydra.core.LiteralType"}}},
                       "typeName": "hydra.core.Type"}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.optionalStringType",
@@ -2384,11 +2156,7 @@
                             "typeName": "hydra.core.LiteralType"}}},
                       "typeName": "hydra.core.Type"}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.setOfStringsType",
@@ -2409,11 +2177,7 @@
                             "typeName": "hydra.core.LiteralType"}}},
                       "typeName": "hydra.core.Type"}}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.stringOrIntName",
@@ -2421,11 +2185,7 @@
           "wrap": {
             "body": {"literal": {"string": "StringOrInt"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.stringOrIntType",
@@ -2486,11 +2246,7 @@
                                   "typeName": "hydra.core.Type"}}}],
                           "typeName": "hydra.core.FieldType"}}]}},
                 "typeName": "hydra.core.Type"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Type"},
-            "variables": []}]}},
+        "type": {"type": {"variable": "hydra.core.Type"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testTypes.testTypeName",
@@ -2498,12 +2254,8 @@
           "wrap": {
             "body": {"literal": {"string": "Test"}},
             "typeName": "hydra.core.Name"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {"variable": "hydra.core.Name"},
-            "variables": []}]}}],
-  "description": ["Type definitions for the test suite"],
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}}],
+  "description": "Type definitions for the test suite",
   "namespace": "hydra.test.testTypes",
   "termDependencies": [],
   "typeDependencies": [

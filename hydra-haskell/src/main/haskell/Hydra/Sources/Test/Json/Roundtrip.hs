@@ -56,7 +56,8 @@ allTests = define "allTests" $
     supergroup "JSON round-trip" [
       literalRoundtripGroup,
       collectionRoundtripGroup,
-      optionalRoundtripGroup]
+      optionalRoundtripGroup,
+      recordRoundtripGroup]
 
 -- Helper for creating JSON round-trip test cases (universal)
 -- Encodes term to JSON, decodes back, shows both and compares.
@@ -69,7 +70,7 @@ roundtripTest testName typ term = universalCase testName
         (Phantoms.lambda "e" $ Phantoms.var "e")
         (Phantoms.lambda "decoded" $ ShowCore.term # Phantoms.var "decoded")
         (DecodeModule.fromJson # Maps.empty # Core.name (Phantoms.string "test") # typ # Phantoms.var "json"))
-    (EncodeModule.toJson # term))
+    (EncodeModule.toJson # Maps.empty # Core.name (Phantoms.string "test") # typ # term))
   (ShowCore.term # term)
 
 ----------------------------------------
@@ -137,6 +138,7 @@ collectionRoundtripGroup = subgroup "collection types" [
 
 optionalRoundtripGroup :: TTerm TestGroup
 optionalRoundtripGroup = subgroup "optional types" [
+    -- Simple Maybe (idiomatic encoding: null for Nothing, plain value for Just)
     roundtripTest "optional string with value"
       (T.optional T.string)
       (optional $ just $ string "hello"),
@@ -145,4 +147,56 @@ optionalRoundtripGroup = subgroup "optional types" [
       (optional nothing),
     roundtripTest "optional int with value"
       (T.optional T.int32)
-      (optional $ just $ int32 42)]
+      (optional $ just $ int32 42),
+
+    -- Nested Maybe (array-wrapped encoding for round-trip fidelity)
+    roundtripTest "nested optional: nothing"
+      (T.optional $ T.optional T.string)
+      (optional nothing),
+    roundtripTest "nested optional: just nothing"
+      (T.optional $ T.optional T.string)
+      (optional $ just $ optional nothing),
+    roundtripTest "nested optional: just just value"
+      (T.optional $ T.optional T.string)
+      (optional $ just $ optional $ just $ string "hello")]
+
+----------------------------------------
+-- Record types with optional fields
+----------------------------------------
+
+recordRoundtripGroup :: TTerm TestGroup
+recordRoundtripGroup = subgroup "record types" [
+    -- Record with all required fields
+    roundtripTest "record with required fields"
+      (T.record (name "test") ["name">: T.string, "age">: T.int32])
+      (record (name "test") ["name">: string "Alice", "age">: int32 30]),
+
+    -- Record with optional field present
+    roundtripTest "record with optional field present"
+      (T.record (name "test") ["name">: T.string, "email">: T.optional T.string])
+      (record (name "test") ["name">: string "Alice", "email">: optional (just $ string "alice@example.com")]),
+
+    -- Record with optional field absent (Nothing -> field omitted in JSON)
+    roundtripTest "record with optional field absent"
+      (T.record (name "test") ["name">: T.string, "email">: T.optional T.string])
+      (record (name "test") ["name">: string "Alice", "email">: optional nothing]),
+
+    -- Record with multiple optional fields, some present some absent
+    roundtripTest "record with mixed optional fields"
+      (T.record (name "test") [
+        "name">: T.string,
+        "email">: T.optional T.string,
+        "age">: T.optional T.int32])
+      (record (name "test") [
+        "name">: string "Bob",
+        "email">: optional nothing,
+        "age">: optional (just $ int32 25)]),
+
+    -- Record with nested Maybe field (uses array-wrapped encoding, field not omitted)
+    roundtripTest "record with nested optional field"
+      (T.record (name "test") [
+        "name">: T.string,
+        "value">: T.optional (T.optional T.int32)])
+      (record (name "test") [
+        "name">: string "test",
+        "value">: optional (just $ optional (just $ int32 42))])]

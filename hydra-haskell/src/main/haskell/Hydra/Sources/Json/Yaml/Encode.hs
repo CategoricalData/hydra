@@ -134,8 +134,8 @@ jsonToYaml = define "jsonToYaml" $
       Yaml.nodeScalar $ Yaml.scalarStr $ var "s"]
 
 -- | Encode a Hydra Term to a YAML Node via JSON.
-toYaml :: TTermDefinition (Term -> Either String YM.Node)
+toYaml :: TTermDefinition (M.Map Name Type -> Name -> Type -> Term -> Either String YM.Node)
 toYaml = define "toYaml" $
   doc "Encode a Hydra term to a YAML node via JSON encoding." $
-  "term" ~>
-  Eithers.map ("v" ~> jsonToYaml @@ var "v") (JsonEncode.toJson @@ var "term")
+  "types" ~> "tname" ~> "typ" ~> "term" ~>
+  Eithers.map ("v" ~> jsonToYaml @@ var "v") (JsonEncode.toJson @@ var "types" @@ var "tname" @@ var "typ" @@ var "term")

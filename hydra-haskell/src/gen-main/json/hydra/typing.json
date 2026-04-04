@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.typing.FunctionStructure",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -90,7 +89,6 @@
       "type": {
         "name": "hydra.typing.InferenceResult",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -158,7 +156,6 @@
       "type": {
         "name": "hydra.typing.TermSubst",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -175,7 +172,6 @@
       "type": {
         "name": "hydra.typing.TypeConstraint",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -220,7 +216,6 @@
       "type": {
         "name": "hydra.typing.TypeSubst",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -233,7 +228,7 @@
                     "keys": {"variable": "hydra.core.Name"},
                     "values": {"variable": "hydra.core.Type"}}}}}},
           "variables": []}}}],
-  "description": ["Types supporting type inference and type reconstruction."],
+  "description": "Types supporting type inference and type reconstruction.",
   "namespace": "hydra.typing",
   "termDependencies": ["hydra.core", "hydra.context"],
   "typeDependencies": ["hydra.core", "hydra.context"]}

@@ -332,11 +332,12 @@ moduleTermDepsTransitive nsMap modules =
       in (Maybes.cat (Lists.map (\n -> Maps.lookup n nsMap) (Sets.toList closure)))
 
 -- | Convert a Module to a JSON string
-moduleToJson :: Packaging__.Module -> Either String String
-moduleToJson m =
+moduleToJson :: M.Map Core.Name Core.Type -> Packaging__.Module -> Either String String
+moduleToJson schemaMap m =
 
       let term = Packaging_.module_ m
-      in (Eithers.map (\json -> Writer.printJson json) (Encode.toJson term))
+          modType = Core.TypeVariable (Core.Name "hydra.packaging.Module")
+      in (Eithers.map (\json -> Writer.printJson json) (Encode.toJson schemaMap (Core.Name "hydra.packaging.Module") modType term))
 
 -- | Convert a generated Module into a Source module
 moduleToSourceModule :: Packaging__.Module -> Packaging__.Module

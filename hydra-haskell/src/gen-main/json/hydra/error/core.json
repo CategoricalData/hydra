@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.error.core.DuplicateBindingError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -38,7 +37,6 @@
       "type": {
         "name": "hydra.error.core.DuplicateFieldError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -72,7 +70,6 @@
       "type": {
         "name": "hydra.error.core.UndefinedFieldError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -107,7 +104,6 @@
       "type": {
         "name": "hydra.error.core.UnexpectedTermVariantError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -139,7 +135,6 @@
       "type": {
         "name": "hydra.error.core.UnexpectedTypeVariantError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -171,7 +166,6 @@
       "type": {
         "name": "hydra.error.core.ConstantConditionError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -206,7 +200,6 @@
       "type": {
         "name": "hydra.error.core.EmptyCaseStatementError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -240,7 +233,6 @@
       "type": {
         "name": "hydra.error.core.EmptyLetBindingsError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -266,7 +258,6 @@
       "type": {
         "name": "hydra.error.core.EmptyTermAnnotationError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -292,7 +283,6 @@
       "type": {
         "name": "hydra.error.core.EmptyTypeNameInTermError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -318,7 +308,6 @@
       "type": {
         "name": "hydra.error.core.InvalidLambdaParameterNameError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -352,7 +341,6 @@
       "type": {
         "name": "hydra.error.core.InvalidLetBindingNameError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -386,7 +374,6 @@
       "type": {
         "name": "hydra.error.core.InvalidTypeLambdaParameterNameError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -420,7 +407,6 @@
       "type": {
         "name": "hydra.error.core.NestedTermAnnotationError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -446,7 +432,6 @@
       "type": {
         "name": "hydra.error.core.RedundantWrapUnwrapError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -481,7 +466,6 @@
       "type": {
         "name": "hydra.error.core.SelfApplicationError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -516,7 +500,6 @@
       "type": {
         "name": "hydra.error.core.TermVariableShadowingError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -551,7 +534,6 @@
       "type": {
         "name": "hydra.error.core.TypeVariableShadowingInTypeLambdaError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -585,7 +567,6 @@
       "type": {
         "name": "hydra.error.core.UndefinedTermVariableError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -620,7 +601,6 @@
       "type": {
         "name": "hydra.error.core.UndefinedTypeVariableInBindingTypeError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -654,7 +634,6 @@
       "type": {
         "name": "hydra.error.core.UndefinedTypeVariableInLambdaDomainError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -688,7 +667,6 @@
       "type": {
         "name": "hydra.error.core.UndefinedTypeVariableInTypeApplicationError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -723,7 +701,6 @@
       "type": {
         "name": "hydra.error.core.UnknownPrimitiveNameError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -758,7 +735,6 @@
       "type": {
         "name": "hydra.error.core.UnnecessaryIdentityApplicationError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -784,7 +760,6 @@
       "type": {
         "name": "hydra.error.core.UntypedTermVariableError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -819,7 +794,6 @@
       "type": {
         "name": "hydra.error.core.InvalidTermError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1060,7 +1034,6 @@
       "type": {
         "name": "hydra.error.core.DuplicateRecordTypeFieldNamesError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1093,7 +1066,6 @@
       "type": {
         "name": "hydra.error.core.DuplicateUnionTypeFieldNamesError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1126,7 +1098,6 @@
       "type": {
         "name": "hydra.error.core.EmptyRecordTypeError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1151,7 +1122,6 @@
       "type": {
         "name": "hydra.error.core.EmptyTypeAnnotationError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1176,7 +1146,6 @@
       "type": {
         "name": "hydra.error.core.EmptyUnionTypeError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1201,7 +1170,6 @@
       "type": {
         "name": "hydra.error.core.InvalidForallParameterNameError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1235,7 +1203,6 @@
       "type": {
         "name": "hydra.error.core.InvalidTypeSchemeVariableNameError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1269,7 +1236,6 @@
       "type": {
         "name": "hydra.error.core.NestedTypeAnnotationError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1294,7 +1260,6 @@
       "type": {
         "name": "hydra.error.core.NonComparableMapKeyTypeError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1328,7 +1293,6 @@
       "type": {
         "name": "hydra.error.core.NonComparableSetElementTypeError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1362,7 +1326,6 @@
       "type": {
         "name": "hydra.error.core.SingleVariantUnionError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1396,7 +1359,6 @@
       "type": {
         "name": "hydra.error.core.TypeVariableShadowingInForallError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1430,7 +1392,6 @@
       "type": {
         "name": "hydra.error.core.UndefinedTypeVariableError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1464,7 +1425,6 @@
       "type": {
         "name": "hydra.error.core.VoidInNonBottomPositionError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1490,7 +1450,6 @@
       "type": {
         "name": "hydra.error.core.InvalidTypeError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1640,7 +1599,7 @@
                                 "string": "TypeVoid in a position where no value can be constructed (optional)"}}}],
                         "body": {"variable": "hydra.error.core.VoidInNonBottomPositionError"}}}}]}}},
           "variables": []}}}],
-  "description": ["Error types for core type and term validation"],
+  "description": "Error types for core type and term validation",
   "namespace": "hydra.error.core",
   "termDependencies": ["hydra.paths", "hydra.core", "hydra.variants"],
   "typeDependencies": ["hydra.paths", "hydra.core", "hydra.variants"]}

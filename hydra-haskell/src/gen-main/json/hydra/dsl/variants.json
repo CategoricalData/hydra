@@ -39,14 +39,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.EliminationVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.EliminationVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.eliminationVariantUnion",
@@ -86,14 +84,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.EliminationVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.EliminationVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.eliminationVariantWrap",
@@ -133,14 +129,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.EliminationVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.EliminationVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.functionVariantElimination",
@@ -180,14 +174,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.FunctionVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.FunctionVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.functionVariantLambda",
@@ -227,14 +219,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.FunctionVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.FunctionVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.functionVariantPrimitive",
@@ -274,14 +264,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.FunctionVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.FunctionVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.literalVariantBinary",
@@ -321,14 +309,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.LiteralVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.LiteralVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.literalVariantBoolean",
@@ -368,14 +354,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.LiteralVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.LiteralVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.literalVariantFloat",
@@ -415,14 +399,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.LiteralVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.LiteralVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.literalVariantInteger",
@@ -462,14 +444,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.LiteralVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.LiteralVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.literalVariantString",
@@ -509,14 +489,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.LiteralVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.LiteralVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.termVariantAnnotated",
@@ -556,14 +534,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TermVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TermVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.termVariantApplication",
@@ -603,14 +579,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TermVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TermVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.termVariantEither",
@@ -650,14 +624,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TermVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TermVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.termVariantFunction",
@@ -697,14 +669,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TermVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TermVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.termVariantLet",
@@ -744,14 +714,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TermVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TermVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.termVariantList",
@@ -791,14 +759,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TermVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TermVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.termVariantLiteral",
@@ -838,14 +804,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TermVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TermVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.termVariantMap",
@@ -885,14 +849,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TermVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TermVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.termVariantMaybe",
@@ -932,14 +894,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TermVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TermVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.termVariantPair",
@@ -979,14 +939,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TermVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TermVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.termVariantRecord",
@@ -1026,14 +984,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TermVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TermVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.termVariantSet",
@@ -1073,14 +1029,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TermVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TermVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.termVariantTypeApplication",
@@ -1120,14 +1074,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TermVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TermVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.termVariantTypeLambda",
@@ -1167,14 +1119,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TermVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TermVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.termVariantUnion",
@@ -1214,14 +1164,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TermVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TermVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.termVariantUnit",
@@ -1261,14 +1209,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TermVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TermVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.termVariantVariable",
@@ -1308,14 +1254,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TermVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TermVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.termVariantWrap",
@@ -1355,14 +1299,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TermVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TermVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.typeVariantAnnotated",
@@ -1402,14 +1344,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TypeVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TypeVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.typeVariantApplication",
@@ -1449,14 +1389,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TypeVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TypeVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.typeVariantEither",
@@ -1496,14 +1434,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TypeVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TypeVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.typeVariantForall",
@@ -1543,14 +1479,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TypeVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TypeVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.typeVariantFunction",
@@ -1590,14 +1524,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TypeVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TypeVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.typeVariantList",
@@ -1637,14 +1569,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TypeVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TypeVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.typeVariantLiteral",
@@ -1684,14 +1614,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TypeVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TypeVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.typeVariantMap",
@@ -1731,14 +1659,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TypeVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TypeVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.typeVariantMaybe",
@@ -1778,14 +1704,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TypeVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TypeVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.typeVariantPair",
@@ -1825,14 +1749,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TypeVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TypeVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.typeVariantRecord",
@@ -1872,14 +1794,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TypeVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TypeVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.typeVariantSet",
@@ -1919,14 +1839,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TypeVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TypeVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.typeVariantUnion",
@@ -1966,14 +1884,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TypeVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TypeVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.typeVariantUnit",
@@ -2013,14 +1929,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TypeVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TypeVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.typeVariantVariable",
@@ -2060,14 +1974,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TypeVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TypeVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.typeVariantVoid",
@@ -2107,14 +2019,12 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TypeVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TypeVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.variants.typeVariantWrap",
@@ -2154,15 +2064,13 @@
                       "typeName": "hydra.core.Injection"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.variants.TypeVariant"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}}],
-  "description": ["DSL functions for hydra.variants"],
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.variants.TypeVariant"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}}],
+  "description": "DSL functions for hydra.variants",
   "namespace": "hydra.dsl.variants",
   "termDependencies": ["hydra.dsl.core"],
   "typeDependencies": ["hydra.variants", "hydra.phantoms", "hydra.core"]}
