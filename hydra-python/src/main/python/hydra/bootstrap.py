@@ -112,7 +112,7 @@ def main():
     main_namespaces = read_manifest_field(args.json_dir, "mainModules")
     eval_lib_namespaces = read_manifest_field(args.json_dir, "evalLibModules")
     all_kernel_namespaces = main_namespaces + eval_lib_namespaces
-    main_mods = load_modules_from_json(False, args.json_dir, all_kernel_namespaces)
+    main_mods = load_modules_from_json(args.json_dir, all_kernel_namespaces)
     step_time = time.time() - step_start
     total_bindings = sum(len(m.definitions) for m in main_mods)
     print(f"  Loaded {len(main_mods)} modules ({total_bindings} bindings).", flush=True)
@@ -128,7 +128,7 @@ def main():
         kernel_ns_set = {ns.value for ns in all_kernel_namespaces}
         ext_coder_namespaces = [ns for ns in coder_namespaces if ns.value not in kernel_ns_set]
         step_start = time.time()
-        coder_mods = load_modules_from_json(False, args.ext_json_dir, ext_coder_namespaces)
+        coder_mods = load_modules_from_json(args.ext_json_dir, ext_coder_namespaces)
         step_time = time.time() - step_start
         print(f"  Loaded {len(coder_mods)} modules.", flush=True)
         print(f"  Time: {_format_time(step_time)}", flush=True)
@@ -209,7 +209,7 @@ def main():
         print(f"  Source: {test_json_dir}", flush=True)
         step_start = time.time()
         test_namespaces = read_manifest_field(args.json_dir, "testModules")
-        test_mods = load_modules_from_json(False, test_json_dir, test_namespaces)
+        test_mods = load_modules_from_json(test_json_dir, test_namespaces)
         step_time = time.time() - step_start
         test_bindings = sum(len(m.definitions) for m in test_mods)
         print(f"  Loaded {len(test_mods)} test modules ({test_bindings} bindings).", flush=True)

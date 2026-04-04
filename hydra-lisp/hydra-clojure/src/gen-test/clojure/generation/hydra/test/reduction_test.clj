@@ -411,3 +411,89 @@
   (is (= maybe<string>
 
          maybe<string>)))
+
+;; etaExpandTerm
+
+(deftest test-reduction-negetaexpandterm-neginteger-literal-unchanged
+
+  (is (= 42:int32
+
+         42:int32)))
+
+(deftest test-reduction-negetaexpandterm-negstring-list-unchanged
+
+  (is (= ["foo", "bar"]
+
+         ["foo", "bar"])))
+
+(deftest test-reduction-negetaexpandterm-negfully-applied-binary-function-unchanged
+
+  (is (= (hydra.lib.strings.splitOn! @ "foo" @ "bar")
+
+         (hydra.lib.strings.splitOn! @ "foo" @ "bar"))))
+
+(deftest test-reduction-negetaexpandterm-neglambda-with-fully-applied-primitive-unchanged
+
+  (is (= λx.(hydra.lib.strings.splitOn! @ "," @ x)
+
+         λx.(hydra.lib.strings.splitOn! @ "," @ x))))
+
+(deftest test-reduction-negetaexpandterm-neglambda-returning-constant-unchanged
+
+  (is (= λx.42:int32
+
+         λx.42:int32)))
+
+(deftest test-reduction-negetaexpandterm-negbare-unary-primitive-unchanged
+
+  (is (= hydra.lib.strings.toLower!
+
+         hydra.lib.strings.toLower!)))
+
+(deftest test-reduction-negetaexpandterm-negbare-binary-primitive-unchanged
+
+  (is (= hydra.lib.strings.splitOn!
+
+         hydra.lib.strings.splitOn!)))
+
+(deftest test-reduction-negetaexpandterm-negpartially-applied-binary-primitive-expands-to-one-lambda
+
+  (is (= λv1.(hydra.lib.strings.splitOn! @ foo @ v1)
+
+         λv1.(hydra.lib.strings.splitOn! @ foo @ v1))))
+
+(deftest test-reduction-negetaexpandterm-negprojection-expands-to-lambda
+
+  (is (= λv1.(project(Person){firstName} @ v1)
+
+         λv1.(project(Person){firstName} @ v1))))
+
+(deftest test-reduction-negetaexpandterm-negpartial-application-inside-lambda-expands
+
+  (is (= λx.λv1.(hydra.lib.strings.splitOn! @ x @ v1)
+
+         λx.λv1.(hydra.lib.strings.splitOn! @ x @ v1))))
+
+(deftest test-reduction-negetaexpandterm-neglet-with-constant-body-unchanged
+
+  (is (= let foo = 137:int32 in 42:int32
+
+         let foo = 137:int32 in 42:int32)))
+
+(deftest test-reduction-negetaexpandterm-neglet-with-bare-primitive-value-unchanged
+
+  (is (= let foo = hydra.lib.strings.splitOn! in foo
+
+         let foo = hydra.lib.strings.splitOn! in foo)))
+
+(deftest test-reduction-negetaexpandterm-negfully-applied-unary-unchanged
+
+  (is (= (hydra.lib.strings.toLower! @ "FOO")
+
+         (hydra.lib.strings.toLower! @ "FOO"))))
+
+(deftest test-reduction-negetaexpandterm-negpartial-application-in-list-expands
+
+  (is (= [λx.["foo"], λv1.(hydra.lib.strings.splitOn! @ "bar" @ v1)]
+
+         [λx.["foo"], λv1.(hydra.lib.strings.splitOn! @ "bar" @ v1)])))

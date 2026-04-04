@@ -92,41 +92,9 @@ contractTerm term =
 countPrimitiveInvocations :: Bool
 countPrimitiveInvocations = True
 
--- | Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x', in which the implicit parameters of primitive functions and eliminations are made into explicit lambda parameters. Variable references are not expanded. This is useful for targets like Python with weaker support for currying than Hydra or Haskell. Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references.
-etaExpandTerm :: Graph.Graph -> Core.Term -> Core.Term
-etaExpandTerm graph term =
-
-      let expand =
-              \args -> \arity -> \t ->
-                let apps =
-                        Lists.foldl (\lhs -> \arg -> Core.TermApplication (Core.Application {
-                          Core.applicationFunction = lhs,
-                          Core.applicationArgument = arg})) t args
-                    is = Logic.ifElse (Equality.lte arity (Lists.length args)) [] (Math.range 1 (Math.sub arity (Lists.length args)))
-                    pad =
-                            \indices -> \t2 -> Logic.ifElse (Lists.null indices) t2 (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                              Core.lambdaParameter = (Core.Name (Strings.cat2 "v" (Literals.showInt32 (Lists.head indices)))),
-                              Core.lambdaDomain = Nothing,
-                              Core.lambdaBody = (pad (Lists.tail indices) (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = t2,
-                                Core.applicationArgument = (Core.TermVariable (Core.Name (Strings.cat2 "v" (Literals.showInt32 (Lists.head indices)))))})))})))
-                in (pad is apps)
-          rewrite =
-                  \args -> \recurse -> \t ->
-                    let afterRecursion = \term2 -> expand args (etaExpansionArity graph term2) term2
-                        t2 = Strip.detypeTerm t
-                    in case t2 of
-                      Core.TermApplication v0 ->
-                        let lhs = Core.applicationFunction v0
-                            rhs = Core.applicationArgument v0
-                            erhs = rewrite [] recurse rhs
-                        in (rewrite (Lists.cons erhs args) recurse lhs)
-                      _ -> afterRecursion (recurse t2)
-      in (contractTerm (Rewriting.rewriteTerm (rewrite []) term))
-
 -- | Recursively transform terms to eliminate partial application, e.g. 'add 42' becomes '\x.add 42 x'. Uses the Graph to look up types for arity calculation. Bare primitives and variables are NOT expanded; eliminations and partial applications are. This version properly tracks the Graph through nested scopes.
-etaExpandTermNew :: Graph.Graph -> Core.Term -> Core.Term
-etaExpandTermNew tx0 term0 =
+etaExpandTerm :: Graph.Graph -> Core.Term -> Core.Term
+etaExpandTerm tx0 term0 =
 
       let primTypes =
               Maps.fromList (Lists.map (\_gpt_p -> (Graph.primitiveName _gpt_p, (Graph.primitiveType _gpt_p))) (Maps.elems (Graph.graphPrimitives tx0)))
@@ -438,7 +406,7 @@ etaExpansionArity graph term =
         Core.FunctionPrimitive v1 -> Arity.primitiveArity (Maybes.fromJust (Lexical.lookupPrimitive graph v1))
       Core.TermTypeLambda v0 -> etaExpansionArity graph (Core.typeLambdaBody v0)
       Core.TermTypeApplication v0 -> etaExpansionArity graph (Core.typeApplicationTermBody v0)
-      Core.TermVariable v0 -> Maybes.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeType ts)) (Maybes.bind (Lexical.lookupElement graph v0) (\b -> Core.bindingType b))
+      Core.TermVariable v0 -> Maybes.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeType ts)) (Maybes.bind (Lexical.lookupBinding graph v0) (\b -> Core.bindingType b))
       _ -> 0
 
 -- | Eta-reduce a term by removing redundant lambda abstractions
@@ -560,7 +528,7 @@ reduceTerm cx graph eager term =
                           let arity = Arity.primitiveArity prim
                           in (Logic.ifElse (Equality.gt arity (Lists.length args)) (Right (applyToArguments original args)) (forPrimitive prim arity args)))
                       Core.TermVariable v0 ->
-                        let mBinding = Lexical.dereferenceElement graph v0
+                        let mBinding = Lexical.lookupBinding graph v0
                         in (Maybes.maybe (Right (applyToArguments original args)) (\binding -> applyIfNullary eager2 (Core.bindingTerm binding) args) mBinding)
                       Core.TermLet v0 ->
                         let bindings = Core.letBindings v0

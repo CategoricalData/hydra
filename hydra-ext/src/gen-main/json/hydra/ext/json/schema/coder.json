@@ -731,8 +731,7 @@
     "hydra.annotations",
     "hydra.constants",
     "hydra.reflect",
-    "hydra.ext.json.schema.serde",
-    "hydra.coderUtils"],
+    "hydra.ext.json.schema.serde"],
   "typeDependencies": [
     "hydra.ext.org.json.schema",
     "hydra.json.model",
@@ -749,7 +748,6 @@
     "hydra.errors",
     "hydra.graph",
     "hydra.json.model",
-    "hydra.module",
     "hydra.packaging",
     "hydra.parsing",
     "hydra.phantoms",

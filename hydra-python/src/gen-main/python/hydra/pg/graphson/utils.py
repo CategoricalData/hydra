@@ -21,7 +21,7 @@ import hydra.lib.pairs
 import hydra.pg.graphson.construct
 import hydra.pg.graphson.syntax
 import hydra.pg.model
-import hydra.rewriting
+import hydra.strip
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
@@ -107,7 +107,7 @@ def encode_term_value(term: hydra.core.Term):
 
             case _:
                 return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unsupported literal type for GraphSON encoding"))), hydra.lexical.empty_context()))
-    match hydra.rewriting.deannotate_term(term):
+    match hydra.strip.deannotate_term(term):
         case hydra.core.TermLiteral(value=lit):
             return _hoist_hydra_pg_graphson_utils_encode_term_value_3(lit)
 

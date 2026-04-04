@@ -3,7 +3,8 @@ module Hydra.Sources.Kernel.Terms.Annotations where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  aggregateAnnotations, debugIf, failOnFlag, getDebugId,
+  aggregateAnnotations, commentsFromBinding, commentsFromFieldType,
+  debugIf, failOnFlag, getDebugId,
   getAttr, getAttrWithDefault, getCount,
   getDescription, getTermAnnotation, getTermDescription,
   getType, getTypeAnnotation, getTypeClasses,
@@ -12,7 +13,7 @@ import Hydra.Kernel hiding (
   normalizeTermAnnotations, normalizeTypeAnnotations, putAttr, putCount,
   resetCount, setAnnotation,
   setDescription, setTermAnnotation, setTermDescription, setType, setTypeAnnotation, setTypeClasses,
-  setTypeDescription, termAnnotationInternal, typeAnnotationInternal, typeElement, whenFlag)
+  setTypeDescription, termAnnotationInternal, typeAnnotationInternal, whenFlag)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
@@ -41,7 +42,7 @@ import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
 import qualified Hydra.Dsl.Meta.Terms        as MetaTerms
 import qualified Hydra.Dsl.Meta.Types        as MetaTypes
-import qualified Hydra.Dsl.Module       as Module
+import qualified Hydra.Dsl.Packaging       as Packaging
 import qualified Hydra.Dsl.Parsing      as Parsing
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Prims             as Prims
@@ -85,6 +86,8 @@ module_ = Module ns elements
   where
    elements = [
      toDefinition aggregateAnnotations,
+     toDefinition commentsFromBinding,
+     toDefinition commentsFromFieldType,
      toDefinition debugIf,
      toDefinition failOnFlag,
      toDefinition getDebugId,
@@ -118,7 +121,6 @@ module_ = Module ns elements
      toDefinition setTypeDescription,
      toDefinition termAnnotationInternal,
      toDefinition typeAnnotationInternal,
-     toDefinition typeElement,
      toDefinition whenFlag]
 
 define :: String -> TTerm a -> TTermDefinition a
@@ -137,6 +139,18 @@ aggregateAnnotations = define "aggregateAnnotations" $
       @@ (var "getX" @@ var "yy")))
     (var "getValue" @@ var "t")) $
   Maps.fromList (Lists.concat (var "toPairs" @@ list ([] :: [TTerm [(Name, Term)]]) @@ var "t"))
+
+commentsFromBinding :: TTermDefinition (Context -> Graph -> Binding -> Either (InContext Error) (Maybe String))
+commentsFromBinding = define "commentsFromBinding" $
+  doc "Extract comments/description from a Binding" $
+  "cx" ~> "g" ~> "b" ~>
+  getTermDescription @@ var "cx" @@ var "g" @@ (Core.bindingTerm $ var "b")
+
+commentsFromFieldType :: TTermDefinition (Context -> Graph -> FieldType -> Either (InContext Error) (Maybe String))
+commentsFromFieldType = define "commentsFromFieldType" $
+  doc "Extract comments/description from a FieldType" $
+  "cx" ~> "g" ~> "ft" ~>
+  getTypeDescription @@ var "cx" @@ var "g" @@ (Core.fieldTypeType $ var "ft")
 
 debugIf :: TTermDefinition (Context -> String -> String -> Prelude.Either (InContext Error) ())
 debugIf = define "debugIf" $
@@ -432,20 +446,20 @@ typeAnnotationInternal = define "typeAnnotationInternal" $
     @@ ("at" ~> Core.annotatedTypeAnnotation $ var "at")
     @@ var "typ"
 
--- TODO: deprecate
-typeElement :: TTermDefinition (Name -> Type -> Binding)
-typeElement = define "typeElement" $
-  doc "Create a type element with proper annotations" $
-  "name" ~> "typ" ~>
-  "schemaTerm" <~ Core.termVariable (Core.nameLift _Type) $
-  "dataTerm" <~ normalizeTermAnnotations @@ (Core.termAnnotated (Core.annotatedTerm
-    (encoderFor _Type @@ var "typ")
-    (Maps.fromList (list [pair (Constants.key_type) (var "schemaTerm")])))) $
-  Core.binding (var "name") (var "dataTerm") (just (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable $ Core.nameLift _Type) Phantoms.nothing))
-
 whenFlag :: TTermDefinition (Context -> Name -> Prelude.Either (InContext Error) a -> Prelude.Either (InContext Error) a -> Prelude.Either (InContext Error) a)
 whenFlag = define "whenFlag" $
   doc "Execute different branches based on flag (Either version)" $
   "cx" ~> "flag" ~> "ethen" ~> "eelse" ~>
   "b" <<~ hasFlag @@ var "cx" @@ var "flag" $
   Logic.ifElse (var "b") (var "ethen") (var "eelse")
+
+-- | Helper (not a registered definition) for creating a type binding from a name and type.
+-- This was previously the deprecated "typeElement" definition.
+typeBinding :: TTerm (Name -> Type -> Binding)
+typeBinding =
+  "name" ~> "typ" ~>
+  "schemaTerm" <~ Core.termVariable (Core.nameLift _Type) $
+  "dataTerm" <~ normalizeTermAnnotations @@ (Core.termAnnotated (Core.annotatedTerm
+    (encoderFor _Type @@ var "typ")
+    (Maps.fromList (list [pair (Constants.key_type) (var "schemaTerm")])))) $
+  Core.binding (var "name") (var "dataTerm") (just (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable $ Core.nameLift _Type) Phantoms.nothing))

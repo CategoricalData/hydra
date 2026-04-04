@@ -26,7 +26,7 @@ public class Package_ implements Serializable, Comparable<Package_> {
   /**
    * The modules in this package
    */
-  public final hydra.util.ConsList<hydra.module.Module> modules;
+  public final hydra.util.ConsList<hydra.packaging.Module> modules;
 
   /**
    * The packages which this package depends on
@@ -38,7 +38,7 @@ public class Package_ implements Serializable, Comparable<Package_> {
    */
   public final hydra.util.Maybe<String> description;
 
-  public Package_ (hydra.packaging.PackageName name, hydra.util.ConsList<hydra.module.Module> modules, hydra.util.ConsList<hydra.packaging.PackageName> dependencies, hydra.util.Maybe<String> description) {
+  public Package_ (hydra.packaging.PackageName name, hydra.util.ConsList<hydra.packaging.Module> modules, hydra.util.ConsList<hydra.packaging.PackageName> dependencies, hydra.util.Maybe<String> description) {
     this.name = name;
     this.modules = modules;
     this.dependencies = dependencies;
@@ -90,7 +90,7 @@ public class Package_ implements Serializable, Comparable<Package_> {
     return new Package_(name, modules, dependencies, description);
   }
 
-  public Package_ withModules(hydra.util.ConsList<hydra.module.Module> modules) {
+  public Package_ withModules(hydra.util.ConsList<hydra.packaging.Module> modules) {
     return new Package_(name, modules, dependencies, description);
   }
 

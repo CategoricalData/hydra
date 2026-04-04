@@ -7,9 +7,9 @@ from dataclasses import dataclass
 from functools import lru_cache
 from hydra.dsl.python import Node, frozenlist
 from typing import Annotated, Generic, TypeAlias, TypeVar, cast
+import hydra.coders
 import hydra.core
 import hydra.pg.model
-import hydra.util
 
 S = TypeVar("S")
 T = TypeVar("T")
@@ -102,12 +102,12 @@ class PropertySpec:
 class Schema(Generic[S, T, V]):
     r"""A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types."""
 
-    vertex_id_types: hydra.util.Coder[hydra.core.Type, T]
-    vertex_ids: hydra.util.Coder[hydra.core.Term, V]
-    edge_id_types: hydra.util.Coder[hydra.core.Type, T]
-    edge_ids: hydra.util.Coder[hydra.core.Term, V]
-    property_types: hydra.util.Coder[hydra.core.Type, T]
-    property_values: hydra.util.Coder[hydra.core.Term, V]
+    vertex_id_types: hydra.coders.Coder[hydra.core.Type, T]
+    vertex_ids: hydra.coders.Coder[hydra.core.Term, V]
+    edge_id_types: hydra.coders.Coder[hydra.core.Type, T]
+    edge_ids: hydra.coders.Coder[hydra.core.Term, V]
+    property_types: hydra.coders.Coder[hydra.core.Type, T]
+    property_values: hydra.coders.Coder[hydra.core.Term, V]
     annotations: AnnotationSchema
     default_vertex_id: V
     default_edge_id: V

@@ -31,7 +31,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
 import qualified Hydra.Dsl.Topology                   as Topology
@@ -163,11 +163,11 @@ encodeNameQualified = def "encodeNameQualified" $
     "boundVars">: Pairs.second $
       project CppUtils._CppEnvironment CppUtils._CppEnvironment_boundTypeVariables @@ var "env",
     "focusNs">: Pairs.first $
-      Module.namespacesFocus
+      Packaging.namespacesFocus
         (project CppUtils._CppEnvironment CppUtils._CppEnvironment_namespaces @@ var "env"),
     "qualName">: Names.qualifyName @@ var "name",
-    "mns">: Module.qualifiedNameNamespace $ var "qualName",
-    "local">: Module.qualifiedNameLocal $ var "qualName"] $
+    "mns">: Packaging.qualifiedNameNamespace $ var "qualName",
+    "local">: Packaging.qualifiedNameLocal $ var "qualName"] $
     Maybes.maybe
       (Logic.ifElse (Equality.equal (var "mns") (just $ var "focusNs"))
         (sanitizeCppName @@ var "local")
@@ -183,17 +183,17 @@ encodeName = def "encodeName" $
   doc "Encode a name with specified convention" $
   lambdas ["isQualified", "conv", "env", "name"] $ lets [
     "focusNs">: Pairs.first $
-      Module.namespacesFocus
+      Packaging.namespacesFocus
         (project CppUtils._CppEnvironment CppUtils._CppEnvironment_namespaces @@ var "env"),
     "boundVars">: Pairs.second $
       project CppUtils._CppEnvironment CppUtils._CppEnvironment_boundTypeVariables @@ var "env",
     "qualName">: Names.qualifyName @@ var "name",
-    "mns">: Module.qualifiedNameNamespace $ var "qualName",
-    "local">: Module.qualifiedNameLocal $ var "qualName",
+    "mns">: Packaging.qualifiedNameNamespace $ var "qualName",
+    "local">: Packaging.qualifiedNameLocal $ var "qualName",
     "cppLocal">: sanitizeCppName @@ (Formatting.convertCase @@ Util.caseConventionCamel @@ var "conv" @@ var "local"),
     "cppNs">: lambda "nsVal" $ Strings.intercalate (string "::")
       (Lists.map (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake)
-        (Strings.splitOn (string ".") (Module.unNamespace $ var "nsVal")))] $
+        (Strings.splitOn (string ".") (Packaging.unNamespace $ var "nsVal")))] $
     Logic.ifElse (var "isQualified")
       (Maybes.maybe
         (Maybes.maybe
@@ -211,7 +211,7 @@ encodeNamespace = def "encodeNamespace" $
   lambda "nsVal" $
     Strings.intercalate (string "::")
       (Lists.map (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake)
-        (Strings.splitOn (string ".") (Module.unNamespace $ var "nsVal")))
+        (Strings.splitOn (string ".") (Packaging.unNamespace $ var "nsVal")))
 
 -- | Encode a type variable name
 encodeTypeVariable :: TTermDefinition (Name -> String)
@@ -226,7 +226,7 @@ fwdHeaderName = def "fwdHeaderName" $
   doc "Get the forward header name for a namespace" $
   lambda "nsVal" $
     Names.unqualifyName @@
-      (Module.qualifiedName (just $ var "nsVal") (string "Fwd"))
+      (Packaging.qualifiedName (just $ var "nsVal") (string "Fwd"))
 
 -- | Create a namespace declaration wrapping inner declarations
 namespaceDecl :: TTermDefinition (Namespace -> [Cpp.Declaration] -> Cpp.Declaration)

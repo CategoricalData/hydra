@@ -280,9 +280,217 @@ See the [full style guide](https://github.com/CategoricalData/hydra/wiki/Coding-
 
 ---
 
+## Verifying primitive consistency
+
+Primitives are defined in Haskell and reimplemented in each target language.
+Several kinds of inconsistency can creep in:
+
+- A primitive exists in one language but is missing from another.
+- A primitive is implemented but not registered (invisible at runtime).
+- Type signatures differ subtly — especially the **order of `forall` type variables**,
+  which causes hard-to-diagnose inference and type-checking errors.
+- Documentation comments differ across languages.
+
+### Registration files
+
+Each implementation has a registration file that maps primitive names to implementations:
+
+| Implementation | Registration file |
+|---------------|-------------------|
+| Haskell | `hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs` |
+| Java | `hydra-java/src/main/java/hydra/lib/Libraries.java` |
+| Python | `hydra-python/src/main/python/hydra/sources/libraries.py` |
+| Scala | `hydra-scala/src/main/scala/hydra/lib/Libraries.scala` |
+| Clojure | `hydra-lisp/hydra-clojure/src/main/clojure/hydra/lib/libraries.clj` |
+
+### Checking primitive coverage
+
+1. **Extract the canonical list** from the Haskell registration
+   (`Libraries.hs`), which defines all primitive names and their types
+   via `prim1`, `prim2`, `prim2Eval`, `prim3` calls.
+
+2. **Compare against each implementation's registration.**
+   Each implementation registers primitives differently,
+   but the set of fully qualified primitive names should match.
+   ```bash
+   # Extract Haskell primitive names
+   grep -E 'prim[0-3]' hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs \
+     | grep -oE '_[a-z]+_[a-zA-Z]+' | sort -u
+
+   # Compare against Java class files
+   find hydra-java/src/main/java/hydra/lib -name '*.java' \
+     ! -name 'Libraries.java' | sort
+   ```
+
+3. **Verify registration completeness.**
+   A primitive class can exist but be invisible if it's not listed in the registration file.
+   For each implementation, check that every primitive implementation file
+   has a corresponding entry in the registration.
+
+### Checking type signature consistency
+
+This is the most error-prone area.
+The canonical type signatures are in `Libraries.hs`, specified as arguments to `prim1`/`prim2`/etc.
+Each Java primitive class has a `type()` method returning a `TypeScheme`;
+Python and Clojure registrations specify types inline.
+
+**Critical: `forall` variable ordering must match.**
+For example, if `Libraries.hs` defines `foldl` with type variables `[_y, _x]`,
+every implementation must use the same order (`y` before `x`).
+A mismatch causes the type checker to assign the wrong type to each variable,
+leading to inference failures that don't point back to the primitive as the root cause.
+
+To check:
+1. Extract the type variable lists from `Libraries.hs` (the `[_x]`, `[_y, _x]`, etc. arguments).
+2. Compare against the `TypeScheme` in each Java primitive's `type()` method.
+3. Compare against the type variable lists in Python and Clojure registrations.
+
+### Checking documentation consistency
+
+Primitive documentation comments should be the same across all languages.
+The canonical descriptions are in `Libraries.hs` (as `doc` strings on the Source definitions)
+or in the Haskell implementation files (`hydra-haskell/src/main/haskell/Hydra/Lib/*.hs`).
+Check that the Javadoc, Python docstrings, and Clojure docstrings match.
+
+### See also
+
+The [adding primitives](adding-primitives.md) recipe documents the full set of files
+that must be updated when adding a new primitive.
+
+---
+
+## Verifying test parity
+
+After a sync-all run or a benchmarking run, compare test counts across implementations.
+All implementations should have the same number of passing tests
+(modulo documented skips for language-specific limitations).
+
+### Procedure
+
+1. **Run tests in each implementation** and capture the summary line:
+   ```bash
+   # Haskell
+   cd hydra-haskell && stack test 2>&1 | tail -5
+
+   # Java
+   cd hydra-java && ./gradlew test 2>&1 | grep -E 'tests.*passed'
+
+   # Python
+   cd hydra-python && uv run pytest --tb=no -q 2>&1 | tail -3
+
+   # Scala
+   cd hydra-scala && sbt test 2>&1 | tail -5
+
+   # Clojure
+   cd hydra-lisp/hydra-clojure && clojure -M:test 2>&1 | tail -5
+   ```
+
+2. **Compare pass/skip/fail counts.**
+   Expected: all implementations have the same pass count,
+   with small documented differences in skip counts.
+
+3. **Investigate any divergence.**
+   Common causes:
+   - A new test case was added to the common test suite but a runner wasn't updated.
+   - A primitive was added/changed in some implementations but not others.
+   - A language-specific limitation prevents a test from running
+     (should be documented as a skip, not silently absent).
+
+---
+
+## Checking `.cabal` exposed-modules
+
+When generated Haskell modules are deleted, their entries in the `exposed-modules`
+list of `hydra-haskell/hydra.cabal` (or `package.yaml`) may linger.
+This causes build errors on clean builds or warnings about missing modules.
+
+### Procedure
+
+```bash
+# Extract exposed-modules from package.yaml and check each exists
+grep '^ *- Hydra\.' hydra-haskell/package.yaml \
+  | sed 's/^ *- //' \
+  | while read mod; do
+      path="hydra-haskell/src/gen-main/haskell/$(echo $mod | tr '.' '/').hs"
+      if [ ! -f "$path" ]; then
+        alt="hydra-haskell/src/main/haskell/$(echo $mod | tr '.' '/').hs"
+        if [ ! -f "$alt" ]; then
+          echo "MISSING: $mod"
+        fi
+      fi
+    done
+```
+
+---
+
+## Verifying JSON kernel freshness
+
+The JSON kernel files (`hydra-haskell/src/gen-main/json/`) are generated from Haskell sources.
+They can go stale if someone rebuilds Haskell but forgets to re-export.
+The `verify-json-kernel.sh` script checks that JSON files match the current Haskell modules.
+
+```bash
+cd hydra-haskell && bin/verify-json-kernel.sh
+```
+
+This loads each kernel module from Haskell, decodes the corresponding JSON file,
+and compares them element by element.
+Run this after any kernel changes, or as a periodic sanity check.
+
+---
+
+## Checking Python `__init__.py` freshness
+
+Python `__init__.py` files contain explicit imports of submodules.
+When a Python module is added or removed by regeneration,
+these files can go stale (missing imports for new modules, or imports of deleted modules).
+
+### Procedure
+
+For each `__init__.py` under `hydra-python/src/gen-main/python/hydra/`,
+check that every `.py` sibling and subdirectory with an `__init__.py` is imported,
+and that no import references a missing file.
+
+```bash
+# Check for imports of nonexistent modules in __init__.py files
+find hydra-python/src/gen-main/python/hydra -name '__init__.py' -exec \
+  grep -l 'from \. import' {} \;
+```
+
+A mismatch typically manifests as `ImportError` at test time.
+
+---
+
+## Full maintenance pass
+
+To run all checks in sequence (invoked via `/maintenance()` in CLAUDE.md):
+
+1. Scan for non-source files; remove or untrack as appropriate; update `.gitignore`.
+2. Find stale generated files across all implementations; delete confirmed orphans.
+3. Check coding style (definition ordering) across all Source modules; fix violations.
+4. Verify primitive consistency (coverage, `forall` variable ordering, documentation).
+5. Check `.cabal`/`package.yaml` exposed-modules for stale entries.
+6. Verify JSON kernel freshness via `hydra-haskell/bin/verify-json-kernel.sh`.
+7. Check Python `__init__.py` freshness.
+
+After all checks, present a summary of findings and changes to the user.
+If any changes affect Source modules (e.g., definition reordering),
+generated files (e.g., stale file deletion, `.cabal` fixes),
+or could affect test outcomes (e.g., primitive fixes),
+run `bin/sync-all.sh --targets all` and verify all tests pass.
+If no changes affect generated files or tests, skip the sync.
+
+---
+
 ## When to run these checks
 
-- After merging feature branches (especially ones that renamed or deleted modules)
-- After a major refactoring pass
-- Before a release
-- Periodically (e.g., monthly) as general hygiene
+| Check | When to run |
+|-------|------------|
+| Non-source file scan | After branch merges, periodically |
+| Stale generated files | After refactoring (renames, deletes, splits) |
+| Coding style | After large changes, before release |
+| Primitive consistency | After adding/changing primitives, after adding a new implementation |
+| Test parity | After sync-all, after benchmarking runs |
+| `.cabal` exposed-modules | After deleting generated Haskell modules |
+| JSON kernel freshness | After kernel changes |
+| Python `__init__.py` | After sync-python |

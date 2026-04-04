@@ -5,16 +5,16 @@
 module Hydra.Error.Packaging where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Module as Module
+import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
 -- | A module namespace which, when mapped to a target language's directory or package structure, conflicts with another module's mapped namespace. For example, hydra.foo.bar and hydra.fooBar might both map to the same directory in a case-insensitive filesystem.
 data ConflictingModuleNamespaceError =
   ConflictingModuleNamespaceError {
     -- | The first module namespace
-    conflictingModuleNamespaceErrorFirst :: Module.Namespace,
+    conflictingModuleNamespaceErrorFirst :: Packaging.Namespace,
     -- | The second module namespace that conflicts with the first
-    conflictingModuleNamespaceErrorSecond :: Module.Namespace}
+    conflictingModuleNamespaceErrorSecond :: Packaging.Namespace}
   deriving (Eq, Ord, Read, Show)
 
 _ConflictingModuleNamespaceError = Core.Name "hydra.error.packaging.ConflictingModuleNamespaceError"
@@ -27,7 +27,7 @@ _ConflictingModuleNamespaceError_second = Core.Name "second"
 data ConflictingVariantNameError =
   ConflictingVariantNameError {
     -- | The namespace of the module containing the conflict
-    conflictingVariantNameErrorNamespace :: Module.Namespace,
+    conflictingVariantNameErrorNamespace :: Packaging.Namespace,
     -- | The name of the union type
     conflictingVariantNameErrorTypeName :: Core.Name,
     -- | The name of the variant field causing the conflict
@@ -50,7 +50,7 @@ _ConflictingVariantNameError_conflictingName = Core.Name "conflictingName"
 data DefinitionNotInModuleNamespaceError =
   DefinitionNotInModuleNamespaceError {
     -- | The namespace of the module
-    definitionNotInModuleNamespaceErrorNamespace :: Module.Namespace,
+    definitionNotInModuleNamespaceErrorNamespace :: Packaging.Namespace,
     -- | The definition name that does not match the module namespace
     definitionNotInModuleNamespaceErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -65,7 +65,7 @@ _DefinitionNotInModuleNamespaceError_name = Core.Name "name"
 data DuplicateDefinitionNameError =
   DuplicateDefinitionNameError {
     -- | The namespace of the module containing the duplicates
-    duplicateDefinitionNameErrorNamespace :: Module.Namespace,
+    duplicateDefinitionNameErrorNamespace :: Packaging.Namespace,
     -- | The duplicated definition name
     duplicateDefinitionNameErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -80,7 +80,7 @@ _DuplicateDefinitionNameError_name = Core.Name "name"
 data DuplicateModuleNamespaceError =
   DuplicateModuleNamespaceError {
     -- | The duplicated module namespace
-    duplicateModuleNamespaceErrorNamespace :: Module.Namespace}
+    duplicateModuleNamespaceErrorNamespace :: Packaging.Namespace}
   deriving (Eq, Ord, Read, Show)
 
 _DuplicateModuleNamespaceError = Core.Name "hydra.error.packaging.DuplicateModuleNamespaceError"

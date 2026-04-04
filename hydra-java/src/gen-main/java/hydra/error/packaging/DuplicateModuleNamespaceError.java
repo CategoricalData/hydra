@@ -15,9 +15,9 @@ public class DuplicateModuleNamespaceError implements Serializable, Comparable<D
   /**
    * The duplicated module namespace
    */
-  public final hydra.module.Namespace namespace;
+  public final hydra.packaging.Namespace namespace;
 
-  public DuplicateModuleNamespaceError (hydra.module.Namespace namespace) {
+  public DuplicateModuleNamespaceError (hydra.packaging.Namespace namespace) {
     this.namespace = namespace;
   }
 

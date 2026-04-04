@@ -22,9 +22,10 @@ import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Errors                      as Error
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
+import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Typing                     as Typing
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
@@ -32,12 +33,11 @@ import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Variables      as Variables
 import qualified Hydra.Sources.Kernel.Terms.Scoping        as Scoping
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
-import qualified Hydra.Sources.CoderUtils                  as CoderUtils
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Resolution    as Resolution
 import qualified Hydra.Sources.Kernel.Terms.Analysis      as Analysis
 import qualified Hydra.Sources.Kernel.Terms.Environment   as Environment
-import qualified Hydra.Sources.CoderUtils                   as CoderUtils
+import qualified Hydra.Sources.Kernel.Terms.Predicates    as Predicates
 import qualified Hydra.Sources.Kernel.Terms.Inference      as Inference
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
@@ -74,7 +74,7 @@ ns = Namespace "hydra.ext.scala.coder"
 
 module_ :: Module
 module_ = Module ns elements
-    [ScalaUtilsSource.ns, ScalaSerdeSource.ns, Formatting.ns, Names.ns, Scoping.ns, Strip.ns, Variables.ns, CoderUtils.ns, Analysis.ns, Environment.ns, Resolution.ns, ShowCore.ns, Annotations.ns, Constants.ns,
+    [ScalaUtilsSource.ns, ScalaSerdeSource.ns, Formatting.ns, Names.ns, Scoping.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Resolution.ns, ShowCore.ns, Annotations.ns, Constants.ns,
       Inference.ns, Sorting.ns, Arity.ns, SerializationSource.ns, Reduction.ns]
     (ScalaSyntax.ns:moduleNamespace ScalaLanguageSource.module_:KernelTypes.kernelTypesNamespaces) $
     Just "Scala code generator: converts Hydra modules to Scala source code"
@@ -134,7 +134,7 @@ constructModule = def "constructModule" $
     "partitioned">: Environment.partitionDefinitions @@ var "defs",
     "typeDefs">: Pairs.first (var "partitioned"),
     "termDefs">: Pairs.second (var "partitioned"),
-    "nsName">: Module.unNamespace (Module.moduleNamespace (var "mod")),
+    "nsName">: Packaging.unNamespace (Packaging.moduleNamespace (var "mod")),
     "pname">: toScalaName (var "nsName"),
     "pref">: inject _Data_Ref _Data_Ref_name (var "pname")] $
     Eithers.bind
@@ -268,7 +268,7 @@ encodeComplexTermDef = def "encodeComplexTermDef" $
                 lets [
                 "gForLets">: Logic.ifElse (Lists.null (var "letBindings"))
                   (var "gWithTypeVars")
-                  (Scoping.extendGraphForLet @@ CoderUtils.bindingMetadata @@ var "gWithTypeVars"
+                  (Scoping.extendGraphForLet @@ ("g" ~> "b" ~> Logic.ifElse (Predicates.isComplexBinding @@ var "g" @@ var "b") (just MetaTerms.true) nothing) @@ var "gWithTypeVars"
                     @@ Core.let_ (var "letBindings") (Core.termVariable (wrap _Name (string "dummy"))))] $
                 -- Encode let bindings, passing current type params as outer scope
                 Eithers.bind (Eithers.mapList (asTerm encodeLetBinding @@ var "cx" @@ var "gForLets" @@ (Sets.fromList (var "freeTypeVars"))) (var "letBindings"))
@@ -532,7 +532,7 @@ encodeLocalDef = def "encodeLocalDef" $
                 lets [
                 "gForLets">: Logic.ifElse (Lists.null (var "letBindings"))
                   (var "gWithTypeVars")
-                  (Scoping.extendGraphForLet @@ CoderUtils.bindingMetadata @@ var "gWithTypeVars"
+                  (Scoping.extendGraphForLet @@ ("g" ~> "b" ~> Logic.ifElse (Predicates.isComplexBinding @@ var "g" @@ var "b") (just MetaTerms.true) nothing) @@ var "gWithTypeVars"
                     @@ Core.let_ (var "letBindings") (Core.termVariable (wrap _Name (string "dummy"))))] $
                 Eithers.bind (Eithers.mapList (asTerm encodeLetBinding @@ var "cx" @@ var "gForLets" @@ var "allTypeVars") (var "letBindings"))
                   ("sbindings" ~> lets [
@@ -825,7 +825,7 @@ encodeTerm = def "encodeTerm" $
         "bindings">: Core.letBindings $ var "lt",
         "body">: Core.letBody $ var "lt",
         -- Extend the graph with the let bindings so type lookups work for recursive refs
-        "gLet">: Scoping.extendGraphForLet @@ CoderUtils.bindingMetadata @@ var "g" @@ var "lt"] $
+        "gLet">: Scoping.extendGraphForLet @@ ("g" ~> "b" ~> Logic.ifElse (Predicates.isComplexBinding @@ var "g" @@ var "b") (just MetaTerms.true) nothing) @@ var "g" @@ var "lt"] $
         Eithers.bind
           (Eithers.mapList (asTerm encodeLetBinding @@ var "cx" @@ var "gLet" @@ (Graph.graphTypeVariables $ var "gLet"))
             (var "bindings"))
@@ -993,7 +993,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
   doc "Encode a type definition as a Scala statement" $
   lambda "cx" $ lambda "g" $ lambda "td" $ lets [
     "name">: project _TypeDefinition _TypeDefinition_name @@ var "td",
-    "typ">: project _TypeDefinition _TypeDefinition_type @@ var "td",
+    "typ">: Core.typeSchemeType $ project _TypeDefinition _TypeDefinition_type @@ var "td",
     "lname">: Names.localNameOf @@ var "name",
     "tname">: record _Type_Name [_Type_Name_value>>: var "lname"],
     "dname">: record _Data_Name [_Data_Name_value>>: wrap _PredefString (var "lname")],
@@ -1333,7 +1333,7 @@ moduleToScala = def "moduleToScala" $
       ("pkg" ~> lets [
         "s">: SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (TTerm (TermVariable (Name "hydra.ext.scala.serde.writePkg")) @@ var "pkg"))] $
         right (Maps.singleton
-          (Names.namespaceToFilePath @@ Util.caseConventionCamel @@ wrap _FileExtension (string "scala") @@ Module.moduleNamespace (var "mod"))
+          (Names.namespaceToFilePath @@ Util.caseConventionCamel @@ wrap _FileExtension (string "scala") @@ Packaging.moduleNamespace (var "mod"))
           (var "s")))
 
 -- | Strip wrap eliminations from a term (newtypes are erased in Scala)
@@ -1382,7 +1382,7 @@ toElImport = def "toElImport" $
               _Importer_ref>>: inject _Data_Ref _Data_Ref_name (
                 record _Data_Name [
                   _Data_Name_value>>: wrap _PredefString (
-                    Strings.intercalate (string ".") (Strings.splitOn (string ".") (Module.unNamespace (var "ns"))))]),
+                    Strings.intercalate (string ".") (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))))]),
               _Importer_importees>>: list [inject _Importee _Importee_wildcard unit]]]]))
 
 toPrimImport :: TTermDefinition (Namespace -> Scala.Stat)
@@ -1397,7 +1397,7 @@ toPrimImport = def "toPrimImport" $
               _Importer_ref>>: inject _Data_Ref _Data_Ref_name (
                 record _Data_Name [
                   _Data_Name_value>>: wrap _PredefString (
-                    Strings.intercalate (string ".") (Strings.splitOn (string ".") (Module.unNamespace (var "ns"))))]),
+                    Strings.intercalate (string ".") (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))))]),
               _Importer_importees>>: emptyList]]]))
 
 typeParamToTypeVar :: TTermDefinition (Scala.Type_Param -> Scala.Type)

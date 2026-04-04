@@ -13,7 +13,7 @@ import qualified Hydra.Sources.Kernel.Types.Core           as Core
 -- Additional imports
 import qualified Hydra.Sources.Kernel.Types.Graph as Graph
 import qualified Hydra.Sources.Kernel.Types.Util as Util
-import qualified Hydra.Sources.Kernel.Types.Module as Module
+import qualified Hydra.Sources.Kernel.Types.Packaging as Module
 import qualified Hydra.Sources.Kernel.Types.Typing as Typing
 import qualified Hydra.Ext.Sources.Python.Syntax as Syntax
 

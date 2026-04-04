@@ -4,7 +4,7 @@ import hydra.coders.*
 
 import hydra.core.*
 
-import hydra.module.*
+import hydra.packaging.*
 
 import hydra.lib.eithers
 
@@ -28,7 +28,7 @@ import hydra.lib.sets
 
 import hydra.lib.strings
 
-def elementsWithDependencies(cx: hydra.context.Context)(graph: hydra.graph.Graph)(original: Seq[hydra.core.Binding]): Either[hydra.context.InContext[hydra.errors.Error],
+def definitionsWithDependencies(cx: hydra.context.Context)(graph: hydra.graph.Graph)(original: Seq[hydra.core.Binding]): Either[hydra.context.InContext[hydra.errors.Error],
    Seq[hydra.core.Binding]] =
   {
   def depNames(el: hydra.core.Binding): Seq[hydra.core.Name] =
@@ -36,7 +36,7 @@ def elementsWithDependencies(cx: hydra.context.Context)(graph: hydra.graph.Graph
   lazy val allDepNames: Seq[hydra.core.Name] = hydra.lib.lists.nub[hydra.core.Name](hydra.lib.lists.concat2[hydra.core.Name](hydra.lib.lists.map[hydra.core.Binding,
      hydra.core.Name]((x: hydra.core.Binding) => (x.name))(original))(hydra.lib.lists.concat[hydra.core.Name](hydra.lib.lists.map[hydra.core.Binding,
      Seq[hydra.core.Name]](depNames)(original))))
-  hydra.lib.eithers.mapList[hydra.core.Name, hydra.core.Binding, hydra.context.InContext[hydra.errors.Error]]((name: hydra.core.Name) => hydra.lexical.requireElement(cx)(graph)(name))(allDepNames)
+  hydra.lib.eithers.mapList[hydra.core.Name, hydra.core.Binding, hydra.context.InContext[hydra.errors.Error]]((name: hydra.core.Name) => hydra.lexical.requireBinding(cx)(graph)(name))(allDepNames)
 }
 
 def flattenLetTerms(term: hydra.core.Term): hydra.core.Term =
@@ -360,18 +360,18 @@ def topologicalSortBindings(els: Seq[hydra.core.Binding]): Either[Seq[Seq[hydra.
   hydra.sorting.topologicalSort(hydra.lib.lists.map[hydra.core.Binding, Tuple2[hydra.core.Name, Seq[hydra.core.Name]]](adjlist)(els))
 }
 
-def topologicalSortTypeDefinitions(defs: Seq[hydra.module.TypeDefinition]): Seq[Seq[hydra.module.TypeDefinition]] =
+def topologicalSortTypeDefinitions(defs: Seq[hydra.packaging.TypeDefinition]): Seq[Seq[hydra.packaging.TypeDefinition]] =
   {
-  def toPair(`def`: hydra.module.TypeDefinition): Tuple2[hydra.core.Name, Seq[hydra.core.Name]] =
-    Tuple2(`def`.name, hydra.lib.sets.toList[hydra.core.Name](hydra.dependencies.typeDependencyNames(false)(`def`.`type`)))
-  lazy val nameToDef: Map[hydra.core.Name, hydra.module.TypeDefinition] = hydra.lib.maps.fromList[hydra.core.Name,
-     hydra.module.TypeDefinition](hydra.lib.lists.map[hydra.module.TypeDefinition, Tuple2[hydra.core.Name,
-     hydra.module.TypeDefinition]]((d: hydra.module.TypeDefinition) => Tuple2(d.name, d))(defs))
-  lazy val sorted: Seq[Seq[hydra.core.Name]] = hydra.sorting.topologicalSortComponents(hydra.lib.lists.map[hydra.module.TypeDefinition,
+  def toPair(`def`: hydra.packaging.TypeDefinition): Tuple2[hydra.core.Name, Seq[hydra.core.Name]] =
+    Tuple2(`def`.name, hydra.lib.sets.toList[hydra.core.Name](hydra.dependencies.typeDependencyNames(false)(`def`.`type`.`type`)))
+  lazy val nameToDef: Map[hydra.core.Name, hydra.packaging.TypeDefinition] = hydra.lib.maps.fromList[hydra.core.Name,
+     hydra.packaging.TypeDefinition](hydra.lib.lists.map[hydra.packaging.TypeDefinition, Tuple2[hydra.core.Name,
+     hydra.packaging.TypeDefinition]]((d: hydra.packaging.TypeDefinition) => Tuple2(d.name, d))(defs))
+  lazy val sorted: Seq[Seq[hydra.core.Name]] = hydra.sorting.topologicalSortComponents(hydra.lib.lists.map[hydra.packaging.TypeDefinition,
      Tuple2[hydra.core.Name, Seq[hydra.core.Name]]](toPair)(defs))
-  hydra.lib.lists.map[Seq[hydra.core.Name], Seq[hydra.module.TypeDefinition]]((names: Seq[hydra.core.Name]) =>
-    hydra.lib.maybes.cat[hydra.module.TypeDefinition](hydra.lib.lists.map[hydra.core.Name, Option[hydra.module.TypeDefinition]]((n: hydra.core.Name) =>
-    hydra.lib.maps.lookup[hydra.core.Name, hydra.module.TypeDefinition](n)(nameToDef))(names)))(sorted)
+  hydra.lib.lists.map[Seq[hydra.core.Name], Seq[hydra.packaging.TypeDefinition]]((names: Seq[hydra.core.Name]) =>
+    hydra.lib.maybes.cat[hydra.packaging.TypeDefinition](hydra.lib.lists.map[hydra.core.Name, Option[hydra.packaging.TypeDefinition]]((n: hydra.core.Name) =>
+    hydra.lib.maps.lookup[hydra.core.Name, hydra.packaging.TypeDefinition](n)(nameToDef))(names)))(sorted)
 }
 
 def typeDependencyNames(withSchema: Boolean)(typ: hydra.core.Type): scala.collection.immutable.Set[hydra.core.Name] =

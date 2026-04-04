@@ -3,234 +3,306 @@
     {
       "type": {
         "name": "hydra.pg.query.AggregationQuery",
-        "type": {"union": [{"name": "count", "type": {"unit": {}}}]}}},
+        "type": {
+          "constraints": null,
+          "type": {"union": [{"name": "count", "type": {"unit": {}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.ApplicationQuery",
-        "type": {"wrap": {"list": {"variable": "hydra.pg.query.Query"}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"list": {"variable": "hydra.pg.query.Query"}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.AssociativeExpression",
         "type": {
-          "record": [
-            {
-              "name": "operator",
-              "type": {"variable": "hydra.pg.query.BinaryOperator"}},
-            {
-              "name": "operands",
-              "type": {"list": {"variable": "hydra.pg.query.Expression"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "operator",
+                "type": {"variable": "hydra.pg.query.BinaryOperator"}},
+              {
+                "name": "operands",
+                "type": {"list": {"variable": "hydra.pg.query.Expression"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.BinaryExpression",
         "type": {
-          "record": [
-            {"name": "left", "type": {"variable": "hydra.pg.query.Expression"}},
-            {
-              "name": "operator",
-              "type": {"variable": "hydra.pg.query.BinaryOperator"}},
-            {"name": "right", "type": {"variable": "hydra.pg.query.Expression"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {"name": "left", "type": {"variable": "hydra.pg.query.Expression"}},
+              {
+                "name": "operator",
+                "type": {"variable": "hydra.pg.query.BinaryOperator"}},
+              {"name": "right", "type": {"variable": "hydra.pg.query.Expression"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.BinaryBooleanOperator",
         "type": {
-          "union": [
-            {"name": "and", "type": {"unit": {}}},
-            {"name": "or", "type": {"unit": {}}},
-            {"name": "xor", "type": {"unit": {}}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {"name": "and", "type": {"unit": {}}},
+              {"name": "or", "type": {"unit": {}}},
+              {"name": "xor", "type": {"unit": {}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.BinaryOperator",
         "type": {
-          "union": [
-            {
-              "name": "boolean",
-              "type": {"variable": "hydra.pg.query.BinaryBooleanOperator"}},
-            {
-              "name": "comparison",
-              "type": {"variable": "hydra.pg.query.ComparisonOperator"}},
-            {"name": "power", "type": {"unit": {}}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "boolean",
+                "type": {"variable": "hydra.pg.query.BinaryBooleanOperator"}},
+              {
+                "name": "comparison",
+                "type": {"variable": "hydra.pg.query.ComparisonOperator"}},
+              {"name": "power", "type": {"unit": {}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.Binding",
         "type": {
-          "record": [
-            {"name": "key", "type": {"variable": "hydra.pg.query.Variable"}},
-            {"name": "value", "type": {"variable": "hydra.pg.query.Query"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {"name": "key", "type": {"variable": "hydra.pg.query.Variable"}},
+              {"name": "value", "type": {"variable": "hydra.pg.query.Query"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.ComparisonOperator",
         "type": {
-          "union": [
-            {"name": "eq", "type": {"unit": {}}},
-            {"name": "neq", "type": {"unit": {}}},
-            {"name": "lt", "type": {"unit": {}}},
-            {"name": "lte", "type": {"unit": {}}},
-            {"name": "gt", "type": {"unit": {}}},
-            {"name": "gte", "type": {"unit": {}}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {"name": "eq", "type": {"unit": {}}},
+              {"name": "neq", "type": {"unit": {}}},
+              {"name": "lt", "type": {"unit": {}}},
+              {"name": "lte", "type": {"unit": {}}},
+              {"name": "gt", "type": {"unit": {}}},
+              {"name": "gte", "type": {"unit": {}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.EdgeProjectionPattern",
         "type": {
-          "record": [
-            {
-              "name": "direction",
-              "type": {"variable": "hydra.pg.model.Direction"}},
-            {
-              "name": "label",
-              "type": {"maybe": {"variable": "hydra.pg.model.EdgeLabel"}}},
-            {
-              "name": "properties",
-              "type": {"list": {"variable": "hydra.pg.query.PropertyPattern"}}},
-            {
-              "name": "vertex",
-              "type": {"maybe": {"variable": "hydra.pg.query.VertexPattern"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "direction",
+                "type": {"variable": "hydra.pg.model.Direction"}},
+              {
+                "name": "label",
+                "type": {"maybe": {"variable": "hydra.pg.model.EdgeLabel"}}},
+              {
+                "name": "properties",
+                "type": {"list": {"variable": "hydra.pg.query.PropertyPattern"}}},
+              {
+                "name": "vertex",
+                "type": {"maybe": {"variable": "hydra.pg.query.VertexPattern"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.Expression",
         "type": {
-          "union": [
-            {
-              "name": "associative",
-              "type": {"variable": "hydra.pg.query.AssociativeExpression"}},
-            {
-              "name": "binary",
-              "type": {"variable": "hydra.pg.query.BinaryExpression"}},
-            {
-              "name": "property",
-              "type": {"variable": "hydra.pg.query.PropertyProjection"}},
-            {
-              "name": "unary",
-              "type": {"variable": "hydra.pg.query.UnaryExpression"}},
-            {"name": "variable", "type": {"variable": "hydra.pg.query.Variable"}},
-            {
-              "name": "vertex",
-              "type": {"variable": "hydra.pg.query.VertexPattern"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "associative",
+                "type": {"variable": "hydra.pg.query.AssociativeExpression"}},
+              {
+                "name": "binary",
+                "type": {"variable": "hydra.pg.query.BinaryExpression"}},
+              {
+                "name": "property",
+                "type": {"variable": "hydra.pg.query.PropertyProjection"}},
+              {
+                "name": "unary",
+                "type": {"variable": "hydra.pg.query.UnaryExpression"}},
+              {"name": "variable", "type": {"variable": "hydra.pg.query.Variable"}},
+              {
+                "name": "vertex",
+                "type": {"variable": "hydra.pg.query.VertexPattern"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.LetQuery",
         "type": {
-          "record": [
-            {
-              "name": "bindings",
-              "type": {"list": {"variable": "hydra.pg.query.Binding"}}},
-            {"name": "environment", "type": {"variable": "hydra.pg.query.Query"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "bindings",
+                "type": {"list": {"variable": "hydra.pg.query.Binding"}}},
+              {"name": "environment", "type": {"variable": "hydra.pg.query.Query"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.MatchQuery",
         "type": {
-          "record": [
-            {"name": "optional", "type": {"literal": {"boolean": {}}}},
-            {
-              "name": "pattern",
-              "type": {"list": {"variable": "hydra.pg.query.Projection"}}},
-            {
-              "name": "where",
-              "type": {"maybe": {"variable": "hydra.pg.query.Expression"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {"name": "optional", "type": {"literal": {"boolean": {}}}},
+              {
+                "name": "pattern",
+                "type": {"list": {"variable": "hydra.pg.query.Projection"}}},
+              {
+                "name": "where",
+                "type": {"maybe": {"variable": "hydra.pg.query.Expression"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.Projection",
         "type": {
-          "record": [
-            {"name": "value", "type": {"variable": "hydra.pg.query.Expression"}},
-            {
-              "name": "as",
-              "type": {"maybe": {"variable": "hydra.pg.query.Variable"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {"name": "value", "type": {"variable": "hydra.pg.query.Expression"}},
+              {
+                "name": "as",
+                "type": {"maybe": {"variable": "hydra.pg.query.Variable"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.Projections",
         "type": {
-          "record": [
-            {"name": "all", "type": {"literal": {"boolean": {}}}},
-            {
-              "name": "explicit",
-              "type": {"list": {"variable": "hydra.pg.query.Projection"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {"name": "all", "type": {"literal": {"boolean": {}}}},
+              {
+                "name": "explicit",
+                "type": {"list": {"variable": "hydra.pg.query.Projection"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.PropertyPattern",
         "type": {
-          "record": [
-            {"name": "key", "type": {"variable": "hydra.pg.model.PropertyKey"}},
-            {
-              "name": "value",
-              "type": {"variable": "hydra.pg.query.PropertyValuePattern"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {"name": "key", "type": {"variable": "hydra.pg.model.PropertyKey"}},
+              {
+                "name": "value",
+                "type": {"variable": "hydra.pg.query.PropertyValuePattern"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.PropertyProjection",
         "type": {
-          "record": [
-            {"name": "base", "type": {"variable": "hydra.pg.query.Expression"}},
-            {"name": "key", "type": {"variable": "hydra.pg.model.PropertyKey"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {"name": "base", "type": {"variable": "hydra.pg.query.Expression"}},
+              {"name": "key", "type": {"variable": "hydra.pg.model.PropertyKey"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.PropertyValue",
-        "type": {"wrap": {"literal": {"string": {}}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"literal": {"string": {}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.PropertyValuePattern",
         "type": {
-          "union": [
-            {
-              "name": "variable",
-              "type": {"variable": "hydra.pg.model.PropertyKey"}},
-            {"name": "value", "type": {"literal": {"string": {}}}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "variable",
+                "type": {"variable": "hydra.pg.model.PropertyKey"}},
+              {"name": "value", "type": {"literal": {"string": {}}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.Query",
         "type": {
-          "union": [
-            {
-              "name": "application",
-              "type": {"variable": "hydra.pg.query.ApplicationQuery"}},
-            {
-              "name": "aggregate",
-              "type": {"variable": "hydra.pg.query.AggregationQuery"}},
-            {"name": "LetQuery", "type": {"variable": "hydra.pg.query.LetQuery"}},
-            {"name": "match", "type": {"variable": "hydra.pg.query.MatchQuery"}},
-            {"name": "select", "type": {"variable": "hydra.pg.query.SelectQuery"}},
-            {"name": "value", "type": {"literal": {"string": {}}}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "application",
+                "type": {"variable": "hydra.pg.query.ApplicationQuery"}},
+              {
+                "name": "aggregate",
+                "type": {"variable": "hydra.pg.query.AggregationQuery"}},
+              {"name": "LetQuery", "type": {"variable": "hydra.pg.query.LetQuery"}},
+              {"name": "match", "type": {"variable": "hydra.pg.query.MatchQuery"}},
+              {"name": "select", "type": {"variable": "hydra.pg.query.SelectQuery"}},
+              {"name": "value", "type": {"literal": {"string": {}}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.SelectQuery",
         "type": {
-          "record": [
-            {"name": "distinct", "type": {"literal": {"boolean": {}}}},
-            {
-              "name": "projection",
-              "type": {"variable": "hydra.pg.query.Projections"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {"name": "distinct", "type": {"literal": {"boolean": {}}}},
+              {
+                "name": "projection",
+                "type": {"variable": "hydra.pg.query.Projections"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.UnaryExpression",
         "type": {
-          "record": [
-            {
-              "name": "operator",
-              "type": {"variable": "hydra.pg.query.UnaryOperator"}},
-            {"name": "operand", "type": {"variable": "hydra.pg.query.Expression"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "operator",
+                "type": {"variable": "hydra.pg.query.UnaryOperator"}},
+              {"name": "operand", "type": {"variable": "hydra.pg.query.Expression"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.UnaryOperator",
-        "type": {"union": [{"name": "negate", "type": {"unit": {}}}]}}},
+        "type": {
+          "constraints": null,
+          "type": {"union": [{"name": "negate", "type": {"unit": {}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.Variable",
-        "type": {"wrap": {"literal": {"string": {}}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"literal": {"string": {}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.query.VertexPattern",
         "type": {
-          "record": [
-            {
-              "name": "variable",
-              "type": {"maybe": {"variable": "hydra.pg.query.Variable"}}},
-            {
-              "name": "label",
-              "type": {"maybe": {"variable": "hydra.pg.model.VertexLabel"}}},
-            {
-              "name": "properties",
-              "type": {"list": {"variable": "hydra.pg.query.PropertyPattern"}}},
-            {
-              "name": "edges",
-              "type": {"list": {"variable": "hydra.pg.query.EdgeProjectionPattern"}}}]}}}],
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "variable",
+                "type": {"maybe": {"variable": "hydra.pg.query.Variable"}}},
+              {
+                "name": "label",
+                "type": {"maybe": {"variable": "hydra.pg.model.VertexLabel"}}},
+              {
+                "name": "properties",
+                "type": {"list": {"variable": "hydra.pg.query.PropertyPattern"}}},
+              {
+                "name": "edges",
+                "type": {"list": {"variable": "hydra.pg.query.EdgeProjectionPattern"}}}]},
+          "variables": []}}}],
   "description": ["A common model for pattern-matching queries over property graphs"],
   "namespace": "hydra.pg.query",
   "termDependencies": ["hydra.pg.model"],

@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Coders                          as Coders
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Errors                           as Error
-import qualified Hydra.Dsl.Module                          as Module
+import qualified Hydra.Dsl.Packaging                          as Packaging
 import qualified Hydra.Dsl.Util                            as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
@@ -49,7 +49,6 @@ import qualified Data.Maybe                                as Y
 import qualified Hydra.Ext.Lisp.Syntax as L
 import qualified Hydra.Ext.Sources.Lisp.Syntax as LispSyntax
 import qualified Hydra.Ext.Sources.Lisp.Language as LispLanguageSource
-import qualified Hydra.Sources.CoderUtils as CoderUtils
 
 
 def :: String -> TTerm a -> TTermDefinition a
@@ -61,7 +60,7 @@ ns = Namespace "hydra.ext.lisp.coder"
 module_ :: Module
 module_ = Module ns elements
     [moduleNamespace LispLanguageSource.module_,
-      Formatting.ns, Names.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Sorting.ns, Lexical.ns, CoderUtils.ns]
+      Formatting.ns, Names.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Sorting.ns, Lexical.ns]
     (LispSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Lisp code generator: converts Hydra type and term modules to Lisp AST"
   where
@@ -102,7 +101,7 @@ module_ = Module ns elements
       toDefinition moduleToLisp,
       toDefinition qualifiedSnakeName,
       toDefinition qualifiedTypeName,
-      toDefinition CoderUtils.reorderDefs,
+      toDefinition Environment.reorderDefs,
       toDefinition wrapInThunk]
 
 
@@ -668,8 +667,8 @@ encodeTerm = def "encodeTerm" $
 encodeTermDefinition :: TTermDefinition (L.Dialect -> Context -> Graph -> TermDefinition -> Either (InContext Error) L.TopLevelFormWithComments)
 encodeTermDefinition = def "encodeTermDefinition" $
   "dialect" ~> "cx" ~> "g" ~> lambda "tdef" $
-    "name" <~ Module.termDefinitionName (var "tdef") $
-    "term" <~ Module.termDefinitionTerm (var "tdef") $
+    "name" <~ Packaging.termDefinitionName (var "tdef") $
+    "term" <~ Packaging.termDefinitionTerm (var "tdef") $
     "lname" <~ (qualifiedSnakeName @@ var "name") $
     "dterm" <~ (Strip.deannotateTerm @@ var "term") $
     -- Check if the term is a lambda (function) or a value
@@ -821,8 +820,8 @@ encodeTypeBody = def "encodeTypeBody" $
 encodeTypeDefinition :: TTermDefinition (Context -> Graph -> TypeDefinition -> Either (InContext Error) L.TopLevelFormWithComments)
 encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
-    "name" <~ Module.typeDefinitionName (var "tdef") $
-    "typ" <~ Module.typeDefinitionType (var "tdef") $
+    "name" <~ Packaging.typeDefinitionName (var "tdef") $
+    "typ" <~ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "tdef")) $
     "lname" <~ (qualifiedSnakeName @@ var "name") $
     "dtyp" <~ (Strip.deannotateType @@ var "typ") $
     encodeTypeBody @@ var "lname" @@ var "typ" @@ var "dtyp"
@@ -1004,7 +1003,7 @@ moduleImports = def "moduleImports" $
       (Analysis.definitionDependencyNamespaces @@ var "defs")) $
     Lists.map ("ns" ~>
       record L._ImportDeclaration [
-        L._ImportDeclaration_module>>: wrap L._NamespaceName (Module.unNamespace (var "ns")),
+        L._ImportDeclaration_module>>: wrap L._NamespaceName (Packaging.unNamespace (var "ns")),
         L._ImportDeclaration_spec>>: inject L._ImportSpec L._ImportSpec_all unit])
       (var "depNss")
 
@@ -1013,19 +1012,19 @@ moduleToLisp :: TTermDefinition (L.Dialect -> Module -> [Definition] -> Context 
 moduleToLisp = def "moduleToLisp" $
   "dialect" ~> "mod" ~> "defs0" ~> "cx" ~> "g" ~>
     -- Reorder definitions: types first, then topologically sorted terms
-    "defs" <~ (CoderUtils.reorderDefs @@ var "defs0") $
+    "defs" <~ (Environment.reorderDefs @@ var "defs0") $
     "partitioned" <~ (Environment.partitionDefinitions @@ var "defs") $
     "allTypeDefs" <~ Pairs.first (var "partitioned") $
     "termDefs" <~ Pairs.second (var "partitioned") $
     -- Filter out type aliases (non-nominal types)
     "typeDefs" <~ Lists.filter (lambda "td" $
-      Predicates.isNominalType @@ Module.typeDefinitionType (var "td"))
+      Predicates.isNominalType @@ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "td")))
       (var "allTypeDefs") $
     "typeItems" <<~ (Eithers.mapList (encodeTypeDefinition @@ var "cx" @@ var "g") (var "typeDefs")) $
     "termItems" <<~ (Eithers.mapList (encodeTermDefinition @@ var "dialect" @@ var "cx" @@ var "g") (var "termDefs")) $
     "allItems" <~ Lists.concat2 (var "typeItems") (var "termItems") $
-    "nsName" <~ Module.unNamespace (Module.moduleNamespace (var "mod")) $
-    "focusNs" <~ Module.moduleNamespace (var "mod") $
+    "nsName" <~ Packaging.unNamespace (Packaging.moduleNamespace (var "mod")) $
+    "focusNs" <~ Packaging.moduleNamespace (var "mod") $
     -- Generate imports from cross-module dependencies
     "imports" <~ (moduleImports @@ var "focusNs" @@ var "defs") $
     -- Generate exports from all forms

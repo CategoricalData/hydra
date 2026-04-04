@@ -66,7 +66,7 @@ public interface Testing {
     });
   }
 
-  static <T0, T1> hydra.util.Either<T1, hydra.util.Pair<String, String>> generatePythonTestFile(hydra.module.Module testModule, hydra.testing.TestGroup testGroup, T0 _g) {
+  static <T0, T1> hydra.util.Either<T1, hydra.util.Pair<String, String>> generatePythonTestFile(hydra.packaging.Module testModule, hydra.testing.TestGroup testGroup, T0 _g) {
     return hydra.ext.python.Testing.<T1>generateTestFileWithPythonCodec(
       testModule,
       testGroup);
@@ -123,10 +123,10 @@ public interface Testing {
         }))));
   }
 
-  static <T0> hydra.util.Either<T0, hydra.util.Pair<String, String>> generateTestFileWithPythonCodec(hydra.module.Module testModule, hydra.testing.TestGroup testGroup) {
+  static <T0> hydra.util.Either<T0, hydra.util.Pair<String, String>> generateTestFileWithPythonCodec(hydra.packaging.Module testModule, hydra.testing.TestGroup testGroup) {
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<String, hydra.util.Pair<String, String>>) (testBody -> {
-        hydra.module.Namespace ns_ = (testModule).namespace;
+        hydra.packaging.Namespace ns_ = (testModule).namespace;
         hydra.util.ConsList<String> parts = hydra.lib.strings.SplitOn.apply(
           ".",
           (ns_).value);

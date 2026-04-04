@@ -93,7 +93,7 @@ def subterm_step(step: hydra.paths.SubtermStep) -> Maybe[str]:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def term_to_subterm_graph(namespaces: FrozenDict[hydra.module.Namespace, str], term: hydra.core.Term) -> hydra.paths.SubtermGraph:
+def term_to_subterm_graph(namespaces: FrozenDict[hydra.packaging.Namespace, str], term: hydra.core.Term) -> hydra.paths.SubtermGraph:
     r"""Build a subterm graph from a term."""
 
     dont_care_step = cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepAnnotatedBody())

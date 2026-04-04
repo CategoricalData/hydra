@@ -23,7 +23,7 @@ import qualified Hydra.Ext.Sources.Pg.Model as PgModel
 import qualified Hydra.Ext.Sources.Error.Pg as ErrorPg
 
 
-validationDefinition :: String -> TTerm a -> TBinding a
+validationDefinition :: String -> TTerm a -> TTermDefinition a
 validationDefinition = definitionInModule module_
 
 module_ :: Module
@@ -33,19 +33,19 @@ module_ = Module (Namespace "hydra.validate.pg") elements
     Just "Validation functions for property graphs"
   where
    elements = [
-     toTermDefinition checkAll,
-     toTermDefinition validateEdge,
-     toTermDefinition validateGraph,
-     toTermDefinition validateProperties,
-     toTermDefinition validateVertex]
+     toDefinition checkAll,
+     toDefinition validateEdge,
+     toDefinition validateGraph,
+     toDefinition validateProperties,
+     toDefinition validateVertex]
 
-checkAll :: TBinding ([Y.Maybe a] -> Y.Maybe a)
+checkAll :: TTermDefinition ([Y.Maybe a] -> Y.Maybe a)
 checkAll = validationDefinition "checkAll" $
   "checks" ~> lets [
     "errors">: Maybes.cat $ var "checks"]
     $ Lists.safeHead $ var "errors"
 
-validateVertex :: TBinding (
+validateVertex :: TTermDefinition (
      (t -> v -> Maybe InvalidValueError)
   -> PG.VertexType t
   -> PG.Vertex v
@@ -74,7 +74,7 @@ validateVertex = validationDefinition "validateVertex" $
         @@ (project _Vertex _Vertex_properties @@ var "el"))]
     $ checkAll @@ list [var "checkLabel", var "checkId", var "checkProperties"]
 
-validateEdge :: TBinding (
+validateEdge :: TTermDefinition (
      (t -> v -> Maybe InvalidValueError)
   -> Y.Maybe (v -> Y.Maybe PG.VertexLabel)
   -> PG.EdgeType t
@@ -135,7 +135,7 @@ validateEdge = validationDefinition "validateEdge" $
         (var "labelForVertexId")]
       $ checkAll @@ list [var "checkLabel", var "checkId", var "checkProperties", var "checkOut", var "checkIn"]
 
-validateProperties :: TBinding (
+validateProperties :: TTermDefinition (
      (t -> v -> Maybe InvalidValueError)
   -> [PG.PropertyType t]
   -> M.Map PG.PropertyKey v
@@ -178,7 +178,7 @@ validateProperties = validationDefinition "validateProperties" $
       $ checkAll @@ (Lists.map (var "checkPair") (Maps.toList $ var "props"))]
     $ checkAll @@ list [var "checkTypes", var "checkValues"]
 
-validateGraph :: TBinding (
+validateGraph :: TTermDefinition (
      (t -> v -> Maybe InvalidValueError)
   -> PG.GraphSchema t
   -> PG.Graph v

@@ -14,16 +14,16 @@ import hydra.lib.logic
 import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.strings
-import hydra.module
+import hydra.packaging
 import hydra.testing
 import hydra.util
 
 T0 = TypeVar("T0")
 
-def add_generation_prefix(ns_: hydra.module.Namespace) -> hydra.module.Namespace:
+def add_generation_prefix(ns_: hydra.packaging.Namespace) -> hydra.packaging.Namespace:
     r"""Add generation namespace prefix."""
 
-    return hydra.module.Namespace(hydra.lib.strings.cat2("generation.", ns_.value))
+    return hydra.packaging.Namespace(hydra.lib.strings.cat2("generation.", ns_.value))
 
 def encode_case_convention(conv: hydra.util.CaseConvention) -> hydra.core.Term:
     def _hoist_hydra_test_transform_encode_case_convention_1(v1):
@@ -89,10 +89,10 @@ def encode_either_list_list(e: Either[frozenlist[frozenlist[int]], frozenlist[in
 
     return cast(hydra.core.Term, hydra.core.TermEither(hydra.lib.eithers.bimap((lambda cycles: encode_list_list(cycles)), (lambda sorted: encode_int_list(sorted)), e)))
 
-def transform_module(m: hydra.module.Module) -> hydra.module.Module:
+def transform_module(m: hydra.packaging.Module) -> hydra.packaging.Module:
     r"""Transform module with generation namespace."""
 
-    return hydra.module.Module(add_generation_prefix(m.namespace), m.definitions, m.term_dependencies, m.type_dependencies, m.description)
+    return hydra.packaging.Module(add_generation_prefix(m.namespace), m.definitions, m.term_dependencies, m.type_dependencies, m.description)
 
 def transform_test_case(tcm: T0) -> Maybe[T0]:
     r"""Pass through test cases unchanged."""

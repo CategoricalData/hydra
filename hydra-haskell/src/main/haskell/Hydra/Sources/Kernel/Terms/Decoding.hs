@@ -31,7 +31,7 @@ import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
 import qualified Hydra.Dsl.Meta.Terms        as MetaTerms
 import qualified Hydra.Dsl.Meta.Types        as MetaTypes
-import qualified Hydra.Dsl.Module       as Module
+import qualified Hydra.Dsl.Packaging       as Packaging
 import qualified Hydra.Dsl.Parsing      as Parsing
 import qualified Hydra.Dsl.Meta.Phantoms     as Phantoms
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms hiding (
@@ -616,8 +616,8 @@ decodeModule = define "decodeModule" $
       (Maybes.cat $ Lists.map
         ("d" ~> cases _Definition (var "d") (Just nothing) [
           _Definition_type>>: "td" ~>
-            just (Annotations.typeElement @@ (Module.typeDefinitionName $ var "td") @@ (Module.typeDefinitionType $ var "td"))])
-        (Module.moduleDefinitions (var "mod")))) $
+            just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeType $ Packaging.typeDefinitionType $ var "td"))])
+        (Packaging.moduleDefinitions (var "mod")))) $
     Logic.ifElse (Lists.null (var "typeBindings"))
       (right nothing)
       ("decodedBindings" <<~ Eithers.mapList ("b" ~>
@@ -632,28 +632,28 @@ decodeModule = define "decodeModule" $
         -- 4. Decoded versions of term dependencies (e.g., hydra.query -> hydra.decode.query)
         --    This is needed because if type A references type B, the decoder for A needs
         --    to call the decoder for B, which is in the decode module for B's source module.
-        "decodedTypeDeps" <~ (Lists.map decodeNamespace (Module.moduleTypeDependencies (var "mod"))) $
-        "decodedTermDeps" <~ (Lists.map decodeNamespace (Module.moduleTermDependencies (var "mod"))) $
+        "decodedTypeDeps" <~ (Lists.map decodeNamespace (Packaging.moduleTypeDependencies (var "mod"))) $
+        "decodedTermDeps" <~ (Lists.map decodeNamespace (Packaging.moduleTermDependencies (var "mod"))) $
         -- Use nub to remove duplicates (a module may appear in both type and term dependencies)
         "allDecodedDeps" <~ (primitive _lists_nub @@ Lists.concat2 (var "decodedTypeDeps") (var "decodedTermDeps")) $
-        right (just (Module.module_
-          (decodeNamespace @@ (Module.moduleNamespace (var "mod")))
-          (Lists.map ("b" ~> Module.definitionTerm (Module.termDefinition
+        right (just (Packaging.module_
+          (decodeNamespace @@ (Packaging.moduleNamespace (var "mod")))
+          (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
             (Core.bindingType $ var "b")))
             (var "decodedBindings"))
           (Lists.concat2
             (list [
-              (Module.namespace $ string "hydra.extract.core"),
-              (Module.namespace $ string "hydra.lexical"),
-              (Module.namespace $ string "hydra.rewriting")])
+              (Packaging.namespace $ string "hydra.extract.core"),
+              (Packaging.namespace $ string "hydra.lexical"),
+              (Packaging.namespace $ string "hydra.rewriting")])
             (var "allDecodedDeps"))
           (list [
-            Module.moduleNamespace (var "mod"),
-            Module.namespace $ string "hydra.util"])
+            Packaging.moduleNamespace (var "mod"),
+            Packaging.namespace $ string "hydra.util"])
           (just (Strings.cat $ list [
             string "Term decoders for ",
-            Module.unNamespace (Module.moduleNamespace (var "mod"))])))))
+            Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))])))))
 
 -- | Generate a decoder module namespace from a source module namespace
 -- For example, "hydra.util" -> "hydra.decode.util"
@@ -661,11 +661,11 @@ decodeNamespace :: TTermDefinition (Namespace -> Namespace)
 decodeNamespace = define "decodeNamespace" $
   doc "Generate a decoder module namespace from a source module namespace" $
   "ns" ~> (
-    Module.namespace (
+    Packaging.namespace (
       Strings.cat $ list [
         string "hydra.decode.",
         Strings.intercalate (string ".")
-          (Lists.tail (Strings.splitOn (string ".") (Module.unNamespace (var "ns"))))]))
+          (Lists.tail (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))))]))
 
 -- | Generate a decoder for a record type with element name
 decodeRecordTypeNamed :: TTermDefinition (Name -> [FieldType] -> Term)

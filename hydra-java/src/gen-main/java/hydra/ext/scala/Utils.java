@@ -155,7 +155,7 @@ public interface Utils {
   }
 
   static hydra.ext.scala.syntax.Data sprim(hydra.core.Name name) {
-    hydra.module.QualifiedName qname = hydra.Names.qualifyName(name);
+    hydra.packaging.QualifiedName qname = hydra.Names.qualifyName(name);
     String local = hydra.ext.scala.Utils.scalaEscapeName((qname).local);
     hydra.util.Lazy<String> prefix = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromJust.apply((qname).namespace).value);
     return hydra.ext.scala.Utils.sname(hydra.lib.strings.Cat2.apply(

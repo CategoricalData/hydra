@@ -4,1017 +4,1239 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.AnnotatedApplication",
         "type": {
-          "record": [
-            {
-              "name": "annot",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.QualidAnnotated"}},
-            {
-              "name": "terms",
-              "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Term1"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "annot",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.QualidAnnotated"}},
+              {
+                "name": "terms",
+                "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Term1"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Application",
         "type": {
-          "union": [
-            {
-              "name": "normal",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.NormalApplication"}},
-            {
-              "name": "annotated",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.AnnotatedApplication"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "normal",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.NormalApplication"}},
+              {
+                "name": "annotated",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.AnnotatedApplication"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Arg",
         "type": {
-          "union": [
-            {
-              "name": "ident",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.IdentArg"}},
-            {
-              "name": "natural",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.NaturalArg"}},
-            {
-              "name": "term",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term1"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "ident",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.IdentArg"}},
+              {
+                "name": "natural",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.NaturalArg"}},
+              {
+                "name": "term",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term1"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Binder",
         "type": {
-          "union": [
-            {
-              "name": "name",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Name"}},
-            {
-              "name": "type",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.TypeBinders"}},
-            {
-              "name": "term",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.LetBinder"}},
-            {
-              "name": "implicit",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.ImplicitBinders"}},
-            {
-              "name": "generalizing",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.GeneralizingBinder"}},
-            {
-              "name": "pattern",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern0"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "name",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Name"}},
+              {
+                "name": "type",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.TypeBinders"}},
+              {
+                "name": "term",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.LetBinder"}},
+              {
+                "name": "implicit",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.ImplicitBinders"}},
+              {
+                "name": "generalizing",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.GeneralizingBinder"}},
+              {
+                "name": "pattern",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern0"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.CaseItem",
         "type": {
-          "record": [
-            {
-              "name": "term",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term100"}},
-            {
-              "name": "as",
-              "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Name"}}},
-            {
-              "name": "in",
-              "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "term",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term100"}},
+              {
+                "name": "as",
+                "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Name"}}},
+              {
+                "name": "in",
+                "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Cofix",
         "type": {
-          "record": [
-            {
-              "name": "body",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.CofixBody"}},
-            {
-              "name": "qual",
-              "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.CofixQual"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "body",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.CofixBody"}},
+              {
+                "name": "qual",
+                "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.CofixQual"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.CofixBody",
         "type": {
-          "record": [
-            {
-              "name": "ident",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
-            {
-              "name": "binders",
-              "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Binder"}}},
-            {
-              "name": "type",
-              "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Type"}}},
-            {
-              "name": "term",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "ident",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
+              {
+                "name": "binders",
+                "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Binder"}}},
+              {
+                "name": "type",
+                "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Type"}}},
+              {
+                "name": "term",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.CofixQual",
         "type": {
-          "union": [
-            {
-              "name": "in",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}},
-            {
-              "name": "with",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.CofixWith"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "in",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}},
+              {
+                "name": "with",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.CofixWith"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.CofixWith",
         "type": {
-          "record": [
-            {
-              "name": "with",
-              "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.CofixBody"}}},
-            {
-              "name": "for",
-              "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "with",
+                "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.CofixBody"}}},
+              {
+                "name": "for",
+                "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Equation",
         "type": {
-          "record": [
-            {
-              "name": "pattern",
-              "type": {
-                "list": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern"}}}},
-            {
-              "name": "term",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "pattern",
+                "type": {
+                  "list": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern"}}}},
+              {
+                "name": "term",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.ExistentialVariable",
         "type": {
-          "record": [
-            {
-              "name": "ident",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
-            {
-              "name": "variant",
-              "type": {
-                "variable": "hydra.ext.fr.inria.coq.syntax.ExistentialVariableVariant"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "ident",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
+              {
+                "name": "variant",
+                "type": {
+                  "variable": "hydra.ext.fr.inria.coq.syntax.ExistentialVariableVariant"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.ExistentialVariableVariant",
         "type": {
-          "union": [
-            {"name": "placeholder", "type": {"unit": {}}},
-            {"name": "inside1", "type": {"unit": {}}},
-            {"name": "inside2", "type": {"unit": {}}},
-            {
-              "name": "outside",
-              "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.IdentArg"}}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {"name": "placeholder", "type": {"unit": {}}},
+              {"name": "inside1", "type": {"unit": {}}},
+              {"name": "inside2", "type": {"unit": {}}},
+              {
+                "name": "outside",
+                "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.IdentArg"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.FieldIdent",
-        "type": {"wrap": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Fix",
         "type": {
-          "union": [
-            {
-              "name": "decl",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Fix_Decl"}},
-            {
-              "name": "qual",
-              "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Fix_Qual"}}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "decl",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Fix_Decl"}},
+              {
+                "name": "qual",
+                "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Fix_Qual"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.FixAnnot",
         "type": {
-          "union": [
-            {
-              "name": "struct",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
-            {
-              "name": "wf",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.FixAnnot_Wf"}},
-            {
-              "name": "measure",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.FixAnnot_Measure"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "struct",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
+              {
+                "name": "wf",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.FixAnnot_Wf"}},
+              {
+                "name": "measure",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.FixAnnot_Measure"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.FixAnnot_Measure",
         "type": {
-          "record": [
-            {
-              "name": "term",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.OneTerm"}},
-            {
-              "name": "ident",
-              "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}}},
-            {
-              "name": "term2",
-              "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.OneTerm"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "term",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.OneTerm"}},
+              {
+                "name": "ident",
+                "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}}},
+              {
+                "name": "term2",
+                "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.OneTerm"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.FixAnnot_Wf",
         "type": {
-          "record": [
-            {
-              "name": "term",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.OneTerm"}},
-            {
-              "name": "ident",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "term",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.OneTerm"}},
+              {
+                "name": "ident",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Fix_Decl",
         "type": {
-          "record": [
-            {
-              "name": "ident",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
-            {
-              "name": "binders",
-              "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Binder"}}},
-            {
-              "name": "annot",
-              "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.FixAnnot"}}},
-            {
-              "name": "type",
-              "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Type"}}},
-            {
-              "name": "term",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "ident",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
+              {
+                "name": "binders",
+                "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Binder"}}},
+              {
+                "name": "annot",
+                "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.FixAnnot"}}},
+              {
+                "name": "type",
+                "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Type"}}},
+              {
+                "name": "term",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Fix_Qual",
         "type": {
-          "union": [
-            {
-              "name": "in",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}},
-            {
-              "name": "with",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.FixWith"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "in",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}},
+              {
+                "name": "with",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.FixWith"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.FixWith",
         "type": {
-          "record": [
-            {
-              "name": "decls",
-              "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Fix_Decl"}}},
-            {
-              "name": "for",
-              "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "decls",
+                "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Fix_Decl"}}},
+              {
+                "name": "for",
+                "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Forall",
         "type": {
-          "record": [
-            {
-              "name": "binders",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.OpenBinders"}},
-            {
-              "name": "type",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Type"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "binders",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.OpenBinders"}},
+              {
+                "name": "type",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Type"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.ForallOrFun",
         "type": {
-          "union": [
-            {
-              "name": "forall",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Forall"}},
-            {
-              "name": "fun",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Fun"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "forall",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Forall"}},
+              {
+                "name": "fun",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Fun"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Fun",
         "type": {
-          "record": [
-            {
-              "name": "binders",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.OpenBinders"}},
-            {
-              "name": "body",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "binders",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.OpenBinders"}},
+              {
+                "name": "body",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.GeneralizingBinder",
         "type": {
-          "union": [
-            {
-              "name": "explicit",
-              "type": {
-                "annotated": {
-                  "annotation": [
-                    {
-                      "@key": "description",
-                      "@value": {
-                        "literal": {
-                          "string": "Terms surrounded by `( ) introduce their free variables as explicit arguments"}}}],
-                  "body": {"variable": "hydra.ext.fr.inria.coq.syntax.TypeclassConstraint"}}}},
-            {
-              "name": "implicitMaximallyInserted",
-              "type": {
-                "annotated": {
-                  "annotation": [
-                    {
-                      "@key": "description",
-                      "@value": {
-                        "literal": {
-                          "string": "Terms surrounded by `{ } introduce their free variables as maximally inserted implicit arguments"}}}],
-                  "body": {"variable": "hydra.ext.fr.inria.coq.syntax.TypeclassConstraint"}}}},
-            {
-              "name": "implicitNonMaximallyInserted",
-              "type": {
-                "annotated": {
-                  "annotation": [
-                    {
-                      "@key": "description",
-                      "@value": {
-                        "literal": {
-                          "string": "Terms surrounded by `[ ] introduce them as non-maximally inserted implicit arguments"}}}],
-                  "body": {"variable": "hydra.ext.fr.inria.coq.syntax.TypeclassConstraint"}}}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "explicit",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {
+                          "literal": {
+                            "string": "Terms surrounded by `( ) introduce their free variables as explicit arguments"}}}],
+                    "body": {"variable": "hydra.ext.fr.inria.coq.syntax.TypeclassConstraint"}}}},
+              {
+                "name": "implicitMaximallyInserted",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {
+                          "literal": {
+                            "string": "Terms surrounded by `{ } introduce their free variables as maximally inserted implicit arguments"}}}],
+                    "body": {"variable": "hydra.ext.fr.inria.coq.syntax.TypeclassConstraint"}}}},
+              {
+                "name": "implicitNonMaximallyInserted",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {
+                          "literal": {
+                            "string": "Terms surrounded by `[ ] introduce them as non-maximally inserted implicit arguments"}}}],
+                    "body": {"variable": "hydra.ext.fr.inria.coq.syntax.TypeclassConstraint"}}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Ident",
-        "type": {"wrap": {"variable": "hydra.ext.fr.inria.coq.syntax.String"}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"variable": "hydra.ext.fr.inria.coq.syntax.String"}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.IdentArg",
         "type": {
-          "record": [
-            {
-              "name": "ident",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
-            {
-              "name": "term",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "ident",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
+              {
+                "name": "term",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.If",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {"literal": {"string": "Pattern match on boolean values"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "condition",
-                  "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}},
-                {
-                  "name": "returnAs",
-                  "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.ReturnAs"}}},
-                {
-                  "name": "then",
-                  "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}},
-                {
-                  "name": "else",
-                  "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]}}}}},
+                  "@key": "description",
+                  "@value": {"literal": {"string": "Pattern match on boolean values"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "condition",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}},
+                  {
+                    "name": "returnAs",
+                    "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.ReturnAs"}}},
+                  {
+                    "name": "then",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}},
+                  {
+                    "name": "else",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.ImplicitBinders",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "In the context of a function definition, these forms specify that name is an implicit argument."}}}],
-            "body": {
-              "union": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "maximallyInserted",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "The first form, with curly braces, makes name a maximally inserted implicit argument"}}}],
-                      "body": {"variable": "hydra.ext.fr.inria.coq.syntax.TypeBinders"}}}},
-                {
-                  "name": "nonMaximallyInserted",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "The second form, with square brackets, makes name a non-maximally inserted implicit argument."}}}],
-                      "body": {"variable": "hydra.ext.fr.inria.coq.syntax.TypeBinders"}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "In the context of a function definition, these forms specify that name is an implicit argument."}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "maximallyInserted",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The first form, with curly braces, makes name a maximally inserted implicit argument"}}}],
+                        "body": {"variable": "hydra.ext.fr.inria.coq.syntax.TypeBinders"}}}},
+                  {
+                    "name": "nonMaximallyInserted",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The second form, with square brackets, makes name a non-maximally inserted implicit argument."}}}],
+                        "body": {"variable": "hydra.ext.fr.inria.coq.syntax.TypeBinders"}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Let",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {"literal": {"string": "A let-in definition"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "bindings",
-                  "type": {"variable": "hydra.ext.fr.inria.coq.syntax.LetBindings"}},
-                {
-                  "name": "in",
-                  "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]}}}}},
+                  "@key": "description",
+                  "@value": {"literal": {"string": "A let-in definition"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "bindings",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.LetBindings"}},
+                  {
+                    "name": "in",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.LetBinder",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "Some constructions allow the binding of a variable to value. This is called a 'let-binder'."}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "name",
-                  "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Name"}},
-                {
-                  "name": "type",
-                  "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Type"}}},
-                {
-                  "name": "term",
-                  "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "Some constructions allow the binding of a variable to value. This is called a 'let-binder'."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Name"}},
+                  {
+                    "name": "type",
+                    "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Type"}}},
+                  {
+                    "name": "term",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.LetBindings",
         "type": {
-          "union": [
-            {
-              "name": "named",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.LetNamed"}},
-            {
-              "name": "destructuring",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.LetDestructuring"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "named",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.LetNamed"}},
+              {
+                "name": "destructuring",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.LetDestructuring"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.LetNamed",
         "type": {
-          "record": [
-            {
-              "name": "binder",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.LetBinder"}},
-            {
-              "name": "binders",
-              "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Binder"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "binder",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.LetBinder"}},
+              {
+                "name": "binders",
+                "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Binder"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.LetDestructuring",
         "type": {
-          "union": [
-            {
-              "name": "variant1",
-              "type": {
-                "variable": "hydra.ext.fr.inria.coq.syntax.LetDestructuring_Variant1"}},
-            {
-              "name": "variant2",
-              "type": {
-                "variable": "hydra.ext.fr.inria.coq.syntax.LetDestructuring_Variant2"}},
-            {
-              "name": "variant3",
-              "type": {
-                "variable": "hydra.ext.fr.inria.coq.syntax.LetDestructuring_Variant3"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "variant1",
+                "type": {
+                  "variable": "hydra.ext.fr.inria.coq.syntax.LetDestructuring_Variant1"}},
+              {
+                "name": "variant2",
+                "type": {
+                  "variable": "hydra.ext.fr.inria.coq.syntax.LetDestructuring_Variant2"}},
+              {
+                "name": "variant3",
+                "type": {
+                  "variable": "hydra.ext.fr.inria.coq.syntax.LetDestructuring_Variant3"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.LetDestructuring_Variant1",
         "type": {
-          "record": [
-            {
-              "name": "names",
-              "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Name"}}},
-            {
-              "name": "returnAs",
-              "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.ReturnAs"}}},
-            {
-              "name": "term",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "names",
+                "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Name"}}},
+              {
+                "name": "returnAs",
+                "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.ReturnAs"}}},
+              {
+                "name": "term",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.LetDestructuring_Variant2",
         "type": {
-          "record": [
-            {
-              "name": "pattern",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern"}},
-            {
-              "name": "term",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}},
-            {
-              "name": "return",
-              "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Term100"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "pattern",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern"}},
+              {
+                "name": "term",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}},
+              {
+                "name": "return",
+                "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Term100"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.LetDestructuring_Variant3",
         "type": {
-          "record": [
-            {
-              "name": "pattern1",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern"}},
-            {
-              "name": "pattern2",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern"}},
-            {
-              "name": "term",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}},
-            {
-              "name": "return",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term100"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "pattern1",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern"}},
+              {
+                "name": "pattern2",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern"}},
+              {
+                "name": "term",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}},
+              {
+                "name": "return",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term100"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Match",
         "type": {
-          "record": [
-            {
-              "name": "caseItems",
-              "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.CaseItem"}}},
-            {
-              "name": "return",
-              "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Term100"}}},
-            {"name": "pipe", "type": {"literal": {"boolean": {}}}},
-            {
-              "name": "equations",
-              "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Equation"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "caseItems",
+                "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.CaseItem"}}},
+              {
+                "name": "return",
+                "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Term100"}}},
+              {"name": "pipe", "type": {"literal": {"boolean": {}}}},
+              {
+                "name": "equations",
+                "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Equation"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Name",
         "type": {
-          "wrap": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}}}}},
+          "constraints": null,
+          "type": {
+            "wrap": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Natural",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {"literal": {"string": "A non-negative arbitrary-precision integer"}}}],
-            "body": {"wrap": {"literal": {"integer": {"bigint": {}}}}}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "A non-negative arbitrary-precision integer"}}}],
+              "body": {"wrap": {"literal": {"integer": {"bigint": {}}}}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.NaturalArg",
         "type": {
-          "record": [
-            {
-              "name": "natural",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Natural"}},
-            {
-              "name": "term",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "natural",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Natural"}},
+              {
+                "name": "term",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.NormalApplication",
         "type": {
-          "record": [
-            {
-              "name": "lhs",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term1"}},
-            {
-              "name": "rhs",
-              "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Arg"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "lhs",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term1"}},
+              {
+                "name": "rhs",
+                "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Arg"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Number",
-        "type": {"wrap": {"literal": {"float": {"bigfloat": {}}}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"literal": {"float": {"bigfloat": {}}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.OneTerm",
         "type": {
-          "union": [
-            {
-              "name": "explicit",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.QualidAnnotated"}},
-            {
-              "name": "term1",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term1"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "explicit",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.QualidAnnotated"}},
+              {
+                "name": "term1",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term1"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.OpenBinders",
         "type": {
-          "union": [
-            {
-              "name": "type",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.TypeBinders"}},
-            {
-              "name": "binders",
-              "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Binder"}}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "type",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.TypeBinders"}},
+              {
+                "name": "binders",
+                "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Binder"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Pattern",
         "type": {
-          "union": [
-            {
-              "name": "pattern",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern10"}},
-            {
-              "name": "term",
-              "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "pattern",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern10"}},
+              {
+                "name": "term",
+                "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Pattern0",
         "type": {
-          "union": [
-            {
-              "name": "qualid",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Qualid"}},
-            {
-              "name": "qualIdAndPattern",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.QualidAndPattern"}},
-            {"name": "placeholder", "type": {"unit": {}}},
-            {
-              "name": "parens",
-              "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern"}}},
-            {
-              "name": "number",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Number"}},
-            {
-              "name": "string",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.String"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "qualid",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Qualid"}},
+              {
+                "name": "qualIdAndPattern",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.QualidAndPattern"}},
+              {"name": "placeholder", "type": {"unit": {}}},
+              {
+                "name": "parens",
+                "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern"}}},
+              {
+                "name": "number",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Number"}},
+              {
+                "name": "string",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.String"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Pattern1",
         "type": {
-          "record": [
-            {
-              "name": "pattern",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern0"}},
-            {
-              "name": "scope",
-              "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.ScopeKey"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "pattern",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern0"}},
+              {
+                "name": "scope",
+                "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.ScopeKey"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Pattern10",
         "type": {
-          "union": [
-            {
-              "name": "as",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern10_As"}},
-            {
-              "name": "patterns",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern10_Patterns"}},
-            {
-              "name": "qualiid",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern10_Qualid"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "as",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern10_As"}},
+              {
+                "name": "patterns",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern10_Patterns"}},
+              {
+                "name": "qualiid",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern10_Qualid"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Pattern10_As",
         "type": {
-          "record": [
-            {
-              "name": "pattern",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern1"}},
-            {
-              "name": "as",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Name"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "pattern",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern1"}},
+              {
+                "name": "as",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Name"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Pattern10_Patterns",
         "type": {
-          "record": [
-            {
-              "name": "pattern",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern1"}},
-            {
-              "name": "patterns",
-              "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern1"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "pattern",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern1"}},
+              {
+                "name": "patterns",
+                "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern1"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Pattern10_Qualid",
         "type": {
-          "record": [
-            {
-              "name": "qualid",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Qualid"}},
-            {
-              "name": "patterns",
-              "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern1"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "qualid",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Qualid"}},
+              {
+                "name": "patterns",
+                "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern1"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.PrimitiveNotations",
         "type": {
-          "union": [
-            {
-              "name": "number",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Number"}},
-            {
-              "name": "string",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.String"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "number",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Number"}},
+              {
+                "name": "string",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.String"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Qualid",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {"literal": {"string": "A qualified identifier"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "id",
-                  "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
-                {
-                  "name": "fieldIds",
-                  "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.FieldIdent"}}}]}}}}},
+                  "@key": "description",
+                  "@value": {"literal": {"string": "A qualified identifier"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "id",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
+                  {
+                    "name": "fieldIds",
+                    "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.FieldIdent"}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.QualidAndPattern",
         "type": {
-          "record": [
-            {
-              "name": "qualid",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Qualid"}},
-            {
-              "name": "pattern",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "qualid",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Qualid"}},
+              {
+                "name": "pattern",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Pattern"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.QualidAnnotated",
         "type": {
-          "record": [
-            {
-              "name": "qualid",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Qualid"}},
-            {
-              "name": "univAnnot",
-              "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.UnivAnnot"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "qualid",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Qualid"}},
+              {
+                "name": "univAnnot",
+                "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.UnivAnnot"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.ReturnAs",
         "type": {
-          "record": [
-            {
-              "name": "as",
-              "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Name"}}},
-            {
-              "name": "return",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term100"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "as",
+                "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Name"}}},
+              {
+                "name": "return",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term100"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.ScopeKey",
-        "type": {"wrap": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Sort",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {"literal": {"string": "The types of types are called sorts."}}}],
-            "body": {
-              "union": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "set",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "The sort 𝖲𝖾𝗍 intends to be the type of small sets."}}}],
-                      "body": {"unit": {}}}}},
-                {
-                  "name": "prop",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "The sort 𝖯𝗋𝗈𝗉 intends to be the type of logical propositions."}}}],
-                      "body": {"unit": {}}}}},
-                {
-                  "name": "sProp",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "The sort 𝖲𝖯𝗋𝗈𝗉 is like 𝖯𝗋𝗈𝗉 but the propositions in 𝖲𝖯𝗋𝗈𝗉 are known to have irrelevant proofs (all proofs are equal)."}}}],
-                      "body": {"unit": {}}}}},
-                {"name": "type", "type": {"unit": {}}},
-                {"name": "typeWithAnyUniverse", "type": {"unit": {}}},
-                {
-                  "name": "typeWithUniverse",
-                  "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Universe"}}]}}}}},
+                  "@key": "description",
+                  "@value": {"literal": {"string": "The types of types are called sorts."}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "set",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "The sort 𝖲𝖾𝗍 intends to be the type of small sets."}}}],
+                        "body": {"unit": {}}}}},
+                  {
+                    "name": "prop",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The sort 𝖯𝗋𝗈𝗉 intends to be the type of logical propositions."}}}],
+                        "body": {"unit": {}}}}},
+                  {
+                    "name": "sProp",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "The sort 𝖲𝖯𝗋𝗈𝗉 is like 𝖯𝗋𝗈𝗉 but the propositions in 𝖲𝖯𝗋𝗈𝗉 are known to have irrelevant proofs (all proofs are equal)."}}}],
+                        "body": {"unit": {}}}}},
+                  {"name": "type", "type": {"unit": {}}},
+                  {"name": "typeWithAnyUniverse", "type": {"unit": {}}},
+                  {
+                    "name": "typeWithUniverse",
+                    "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Universe"}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.String",
-        "type": {"wrap": {"literal": {"string": {}}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"literal": {"string": {}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Term",
         "type": {
-          "union": [
-            {
-              "name": "forallOrFun",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.ForallOrFun"}},
-            {
-              "name": "let",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Let"}},
-            {
-              "name": "if",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.If"}},
-            {
-              "name": "fix",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Fix"}},
-            {
-              "name": "cofix",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Cofix"}},
-            {
-              "name": "term100",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term100"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "forallOrFun",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.ForallOrFun"}},
+              {
+                "name": "let",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Let"}},
+              {
+                "name": "if",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.If"}},
+              {
+                "name": "fix",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Fix"}},
+              {
+                "name": "cofix",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Cofix"}},
+              {
+                "name": "term100",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term100"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Term0",
         "type": {
-          "union": [
-            {
-              "name": "qualidAnnotated",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.QualidAnnotated"}},
-            {
-              "name": "sort",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Sort"}},
-            {
-              "name": "primitiveNotations",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.PrimitiveNotations"}},
-            {
-              "name": "evar",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.ExistentialVariable"}},
-            {
-              "name": "match",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Match"}},
-            {"name": "record", "type": {"unit": {}}},
-            {"name": "generalizing", "type": {"unit": {}}},
-            {"name": "ltac", "type": {"unit": {}}},
-            {
-              "name": "parens",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "qualidAnnotated",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.QualidAnnotated"}},
+              {
+                "name": "sort",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Sort"}},
+              {
+                "name": "primitiveNotations",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.PrimitiveNotations"}},
+              {
+                "name": "evar",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.ExistentialVariable"}},
+              {
+                "name": "match",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Match"}},
+              {"name": "record", "type": {"unit": {}}},
+              {"name": "generalizing", "type": {"unit": {}}},
+              {"name": "ltac", "type": {"unit": {}}},
+              {
+                "name": "parens",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Term1",
         "type": {
-          "union": [
-            {"name": "projection", "type": {"unit": {}}},
-            {"name": "scope", "type": {"unit": {}}},
-            {
-              "name": "term0",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term0"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {"name": "projection", "type": {"unit": {}}},
+              {"name": "scope", "type": {"unit": {}}},
+              {
+                "name": "term0",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term0"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Term10",
         "type": {
-          "union": [
-            {
-              "name": "application",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Application"}},
-            {
-              "name": "oneTerm",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.OneTerm"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "application",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Application"}},
+              {
+                "name": "oneTerm",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.OneTerm"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Term100",
         "type": {
-          "union": [
-            {
-              "name": "cast",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.TypeCast"}},
-            {
-              "name": "term10",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term10"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "cast",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.TypeCast"}},
+              {
+                "name": "term10",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term10"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Type",
-        "type": {"wrap": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.TypeCast",
         "type": {
-          "record": [
-            {
-              "name": "term",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term10"}},
-            {
-              "name": "type",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Type"}},
-            {
-              "name": "operator",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.TypeCastOperator"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "term",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term10"}},
+              {
+                "name": "type",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Type"}},
+              {
+                "name": "operator",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.TypeCastOperator"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.TypeCastOperator",
         "type": {
-          "union": [
-            {
-              "name": "normal",
-              "type": {
-                "annotated": {
-                  "annotation": [
-                    {
-                      "@key": "description",
-                      "@value": {
-                        "literal": {
-                          "string": "The expression term10 : type is a type cast expression. It enforces the type of term10 to be type."}}}],
-                  "body": {"unit": {}}}}},
-            {
-              "name": "vmCompute",
-              "type": {
-                "annotated": {
-                  "annotation": [
-                    {
-                      "@key": "description",
-                      "@value": {
-                        "literal": {
-                          "string": "term10 <: type specifies that the virtual machine will be used to type check that term10 has type type (see vm_compute)."}}}],
-                  "body": {"unit": {}}}}},
-            {
-              "name": "nativeCompute",
-              "type": {
-                "annotated": {
-                  "annotation": [
-                    {
-                      "@key": "description",
-                      "@value": {
-                        "literal": {
-                          "string": "term10 <<: type specifies that compilation to OCaml will be used to type check that term10 has type type (see native_compute)."}}}],
-                  "body": {"unit": {}}}}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "normal",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {
+                          "literal": {
+                            "string": "The expression term10 : type is a type cast expression. It enforces the type of term10 to be type."}}}],
+                    "body": {"unit": {}}}}},
+              {
+                "name": "vmCompute",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {
+                          "literal": {
+                            "string": "term10 <: type specifies that the virtual machine will be used to type check that term10 has type type (see vm_compute)."}}}],
+                    "body": {"unit": {}}}}},
+              {
+                "name": "nativeCompute",
+                "type": {
+                  "annotated": {
+                    "annotation": [
+                      {
+                        "@key": "description",
+                        "@value": {
+                          "literal": {
+                            "string": "term10 <<: type specifies that compilation to OCaml will be used to type check that term10 has type type (see native_compute)."}}}],
+                    "body": {"unit": {}}}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.TypeBinders",
         "type": {
-          "record": [
-            {
-              "name": "names",
-              "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Name"}}},
-            {
-              "name": "type",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Type"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "names",
+                "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Name"}}},
+              {
+                "name": "type",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Type"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.TypeclassConstraint",
         "type": {
-          "record": [
-            {
-              "name": "name",
-              "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Name"}}},
-            {"name": "generalizing", "type": {"literal": {"boolean": {}}}},
-            {
-              "name": "term",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "name",
+                "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Name"}}},
+              {"name": "generalizing", "type": {"literal": {"boolean": {}}}},
+              {
+                "name": "term",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.UnivAnnot",
         "type": {
-          "wrap": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.UniverseLevel"}}}}},
+          "constraints": null,
+          "type": {
+            "wrap": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.UniverseLevel"}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Universe",
         "type": {
-          "union": [
-            {
-              "name": "max",
-              "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Universe_Expr"}}},
-            {
-              "name": "expr",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Universe_Expr"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "max",
+                "type": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.Universe_Expr"}}},
+              {
+                "name": "expr",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Universe_Expr"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Universe_Expr",
         "type": {
-          "record": [
-            {
-              "name": "name",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.UniverseName"}},
-            {
-              "name": "number",
-              "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Natural"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "name",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.UniverseName"}},
+              {
+                "name": "number",
+                "type": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Natural"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.UniverseLevel",
         "type": {
-          "union": [
-            {"name": "set", "type": {"unit": {}}},
-            {"name": "prop", "type": {"unit": {}}},
-            {"name": "type", "type": {"unit": {}}},
-            {"name": "ignored", "type": {"unit": {}}},
-            {
-              "name": "qualid",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Qualid"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {"name": "set", "type": {"unit": {}}},
+              {"name": "prop", "type": {"unit": {}}},
+              {"name": "type", "type": {"unit": {}}},
+              {"name": "ignored", "type": {"unit": {}}},
+              {
+                "name": "qualid",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Qualid"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.UniverseName",
         "type": {
-          "union": [
-            {
-              "name": "qualid",
-              "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Qualid"}},
-            {"name": "set", "type": {"unit": {}}},
-            {"name": "prop", "type": {"unit": {}}}]}}}],
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "qualid",
+                "type": {"variable": "hydra.ext.fr.inria.coq.syntax.Qualid"}},
+              {"name": "set", "type": {"unit": {}}},
+              {"name": "prop", "type": {"unit": {}}}]},
+          "variables": []}}}],
   "description": [
     "A model for Coq core and extensions. Based on the Coq 8.15 grammar:\n  https://coq.github.io/doc/v8.15/refman/language/core/basic.html#essential-vocabulary"],
   "namespace": "hydra.ext.fr.inria.coq.syntax",

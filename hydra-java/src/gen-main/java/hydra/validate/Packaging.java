@@ -7,60 +7,60 @@ package hydra.validate;
  */
 public interface Packaging {
   static hydra.util.Maybe<hydra.error.packaging.InvalidPackageError> checkConflictingModuleNamespaces(hydra.packaging.Package_ pkg) {
-    hydra.util.Lazy<hydra.util.Pair<hydra.util.PersistentMap<String, hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>> result = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-      (java.util.function.Function<hydra.util.Pair<hydra.util.PersistentMap<String, hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>, java.util.function.Function<hydra.module.Module, hydra.util.Pair<hydra.util.PersistentMap<String, hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>>>) (acc -> (java.util.function.Function<hydra.module.Module, hydra.util.Pair<hydra.util.PersistentMap<String, hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>>) (mod -> {
+    hydra.util.Lazy<hydra.util.Pair<hydra.util.PersistentMap<String, hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>> result = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+      (java.util.function.Function<hydra.util.Pair<hydra.util.PersistentMap<String, hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>, java.util.function.Function<hydra.packaging.Module, hydra.util.Pair<hydra.util.PersistentMap<String, hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>>>) (acc -> (java.util.function.Function<hydra.packaging.Module, hydra.util.Pair<hydra.util.PersistentMap<String, hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>>) (mod -> {
         hydra.util.Lazy<hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>> err = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(acc));
-        hydra.util.Lazy<hydra.util.PersistentMap<String, hydra.module.Namespace>> seen = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(acc));
+        hydra.util.Lazy<hydra.util.PersistentMap<String, hydra.packaging.Namespace>> seen = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(acc));
         return hydra.lib.maybes.Cases.applyLazy(
           err.get(),
-          () -> ((java.util.function.Supplier<hydra.util.Pair<hydra.util.PersistentMap<String, hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>>) (() -> {
-            hydra.module.Namespace ns = (mod).namespace;
-            return ((java.util.function.Supplier<hydra.util.Pair<hydra.util.PersistentMap<String, hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>>) (() -> {
+          () -> ((java.util.function.Supplier<hydra.util.Pair<hydra.util.PersistentMap<String, hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>>) (() -> {
+            hydra.packaging.Namespace ns = (mod).namespace;
+            return ((java.util.function.Supplier<hydra.util.Pair<hydra.util.PersistentMap<String, hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>>) (() -> {
               String key = hydra.lib.strings.ToLower.apply((ns).value);
-              return ((java.util.function.Supplier<hydra.util.Pair<hydra.util.PersistentMap<String, hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>>) (() -> {
-                hydra.util.Lazy<hydra.util.Maybe<hydra.module.Namespace>> existing = new hydra.util.Lazy<>(() -> hydra.lib.maps.Lookup.apply(
+              return ((java.util.function.Supplier<hydra.util.Pair<hydra.util.PersistentMap<String, hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>>) (() -> {
+                hydra.util.Lazy<hydra.util.Maybe<hydra.packaging.Namespace>> existing = new hydra.util.Lazy<>(() -> hydra.lib.maps.Lookup.apply(
                   key,
                   seen.get()));
                 return hydra.lib.maybes.Cases.applyLazy(
                   existing.get(),
-                  () -> (hydra.util.Pair<hydra.util.PersistentMap<String, hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) ((hydra.util.Pair<hydra.util.PersistentMap<String, hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) (new hydra.util.Pair<hydra.util.PersistentMap<String, hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>(hydra.lib.maps.Insert.apply(
+                  () -> (hydra.util.Pair<hydra.util.PersistentMap<String, hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) ((hydra.util.Pair<hydra.util.PersistentMap<String, hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) (new hydra.util.Pair<hydra.util.PersistentMap<String, hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>(hydra.lib.maps.Insert.apply(
                     key,
                     ns,
                     seen.get()), (hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>) (hydra.util.Maybe.<hydra.error.packaging.InvalidPackageError>nothing())))),
-                  (java.util.function.Function<hydra.module.Namespace, hydra.util.Pair<hydra.util.PersistentMap<String, hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>>) (first -> (hydra.util.Pair<hydra.util.PersistentMap<String, hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) ((hydra.util.Pair<hydra.util.PersistentMap<String, hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) (new hydra.util.Pair<hydra.util.PersistentMap<String, hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>(seen.get(), hydra.util.Maybe.just(new hydra.error.packaging.InvalidPackageError.ConflictingModuleNamespace(new hydra.error.packaging.ConflictingModuleNamespaceError(first, ns))))))));
+                  (java.util.function.Function<hydra.packaging.Namespace, hydra.util.Pair<hydra.util.PersistentMap<String, hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>>) (first -> (hydra.util.Pair<hydra.util.PersistentMap<String, hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) ((hydra.util.Pair<hydra.util.PersistentMap<String, hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) (new hydra.util.Pair<hydra.util.PersistentMap<String, hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>(seen.get(), hydra.util.Maybe.just(new hydra.error.packaging.InvalidPackageError.ConflictingModuleNamespace(new hydra.error.packaging.ConflictingModuleNamespaceError(first, ns))))))));
               })).get();
             })).get();
           })).get(),
-          (java.util.function.Function<hydra.error.packaging.InvalidPackageError, hydra.util.Pair<hydra.util.PersistentMap<String, hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>>) (ignored -> acc));
+          (java.util.function.Function<hydra.error.packaging.InvalidPackageError, hydra.util.Pair<hydra.util.PersistentMap<String, hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>>) (ignored -> acc));
       })),
-      (hydra.util.Pair<hydra.util.PersistentMap<String, hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) ((hydra.util.Pair<hydra.util.PersistentMap<String, hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) (new hydra.util.Pair<hydra.util.PersistentMap<String, hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>((hydra.util.PersistentMap<String, hydra.module.Namespace>) ((hydra.util.PersistentMap<String, hydra.module.Namespace>) (hydra.lib.maps.Empty.<String, hydra.module.Namespace>apply())), (hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>) (hydra.util.Maybe.<hydra.error.packaging.InvalidPackageError>nothing())))),
+      (hydra.util.Pair<hydra.util.PersistentMap<String, hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) ((hydra.util.Pair<hydra.util.PersistentMap<String, hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) (new hydra.util.Pair<hydra.util.PersistentMap<String, hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>((hydra.util.PersistentMap<String, hydra.packaging.Namespace>) ((hydra.util.PersistentMap<String, hydra.packaging.Namespace>) (hydra.lib.maps.Empty.<String, hydra.packaging.Namespace>apply())), (hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>) (hydra.util.Maybe.<hydra.error.packaging.InvalidPackageError>nothing())))),
       (pkg).modules));
     return hydra.lib.pairs.Second.apply(result.get());
   }
 
-  static hydra.util.Maybe<hydra.error.packaging.InvalidModuleError> checkConflictingVariantNames(hydra.module.Module mod) {
-    hydra.util.ConsList<hydra.module.Definition> defs = (mod).definitions;
+  static hydra.util.Maybe<hydra.error.packaging.InvalidModuleError> checkConflictingVariantNames(hydra.packaging.Module mod) {
+    hydra.util.ConsList<hydra.packaging.Definition> defs = (mod).definitions;
     hydra.util.Lazy<hydra.util.PersistentSet<String>> defNames = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-      (java.util.function.Function<hydra.util.PersistentSet<String>, java.util.function.Function<hydra.module.Definition, hydra.util.PersistentSet<String>>>) (acc -> (java.util.function.Function<hydra.module.Definition, hydra.util.PersistentSet<String>>) (def -> hydra.lib.sets.Insert.apply(
+      (java.util.function.Function<hydra.util.PersistentSet<String>, java.util.function.Function<hydra.packaging.Definition, hydra.util.PersistentSet<String>>>) (acc -> (java.util.function.Function<hydra.packaging.Definition, hydra.util.PersistentSet<String>>) (def -> hydra.lib.sets.Insert.apply(
         hydra.Names.localNameOf(hydra.validate.Packaging.definitionName(def)),
         acc))),
       (hydra.util.PersistentSet<String>) (hydra.lib.sets.Empty.<String>apply()),
       defs));
-    hydra.module.Namespace ns = (mod).namespace;
+    hydra.packaging.Namespace ns = (mod).namespace;
     return hydra.lib.lists.Foldl.apply(
-      (java.util.function.Function<hydra.util.Maybe<hydra.error.packaging.InvalidModuleError>, java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.error.packaging.InvalidModuleError>>>) (acc -> (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.error.packaging.InvalidModuleError>>) (def -> hydra.lib.maybes.Cases.applyLazy(
+      (java.util.function.Function<hydra.util.Maybe<hydra.error.packaging.InvalidModuleError>, java.util.function.Function<hydra.packaging.Definition, hydra.util.Maybe<hydra.error.packaging.InvalidModuleError>>>) (acc -> (java.util.function.Function<hydra.packaging.Definition, hydra.util.Maybe<hydra.error.packaging.InvalidModuleError>>) (def -> hydra.lib.maybes.Cases.applyLazy(
         acc,
-        () -> (def).accept(new hydra.module.Definition.PartialVisitor<>() {
+        () -> (def).accept(new hydra.packaging.Definition.PartialVisitor<>() {
           @Override
-          public hydra.util.Maybe<hydra.error.packaging.InvalidModuleError> otherwise(hydra.module.Definition instance) {
+          public hydra.util.Maybe<hydra.error.packaging.InvalidModuleError> otherwise(hydra.packaging.Definition instance) {
             return (hydra.util.Maybe<hydra.error.packaging.InvalidModuleError>) (hydra.util.Maybe.<hydra.error.packaging.InvalidModuleError>nothing());
           }
 
           @Override
-          public hydra.util.Maybe<hydra.error.packaging.InvalidModuleError> visit(hydra.module.Definition.Type td) {
+          public hydra.util.Maybe<hydra.error.packaging.InvalidModuleError> visit(hydra.packaging.Definition.Type td) {
             hydra.core.Name typeName = (td).value.name;
             String localTypeName = hydra.Names.localNameOf(typeName);
-            hydra.core.Type typ = (td).value.type;
+            hydra.core.Type typ = (td).value.type.type;
             return (typ).accept(new hydra.core.Type.PartialVisitor<>() {
               @Override
               public hydra.util.Maybe<hydra.error.packaging.InvalidModuleError> otherwise(hydra.core.Type instance) {
@@ -101,14 +101,14 @@ public interface Packaging {
       defs);
   }
 
-  static hydra.util.Maybe<hydra.error.packaging.InvalidModuleError> checkDefinitionNamespaces(hydra.module.Module mod) {
-    hydra.module.Namespace ns = (mod).namespace;
+  static hydra.util.Maybe<hydra.error.packaging.InvalidModuleError> checkDefinitionNamespaces(hydra.packaging.Module mod) {
+    hydra.packaging.Namespace ns = (mod).namespace;
     String prefix = hydra.lib.strings.Cat2.apply(
       (ns).value,
       ".");
     Integer prefixLen = hydra.lib.strings.Length.apply(prefix);
     return hydra.lib.lists.Foldl.apply(
-      (java.util.function.Function<hydra.util.Maybe<hydra.error.packaging.InvalidModuleError>, java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.error.packaging.InvalidModuleError>>>) (acc -> (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.error.packaging.InvalidModuleError>>) (def -> hydra.lib.maybes.Cases.applyLazy(
+      (java.util.function.Function<hydra.util.Maybe<hydra.error.packaging.InvalidModuleError>, java.util.function.Function<hydra.packaging.Definition, hydra.util.Maybe<hydra.error.packaging.InvalidModuleError>>>) (acc -> (java.util.function.Function<hydra.packaging.Definition, hydra.util.Maybe<hydra.error.packaging.InvalidModuleError>>) (def -> hydra.lib.maybes.Cases.applyLazy(
         acc,
         () -> ((java.util.function.Supplier<hydra.util.Maybe<hydra.error.packaging.InvalidModuleError>>) (() -> {
           hydra.core.Name name = hydra.validate.Packaging.definitionName(def);
@@ -132,10 +132,10 @@ public interface Packaging {
       (mod).definitions);
   }
 
-  static hydra.util.Maybe<hydra.error.packaging.InvalidModuleError> checkDuplicateDefinitionNames(hydra.module.Module mod) {
-    hydra.module.Namespace ns = (mod).namespace;
+  static hydra.util.Maybe<hydra.error.packaging.InvalidModuleError> checkDuplicateDefinitionNames(hydra.packaging.Module mod) {
+    hydra.packaging.Namespace ns = (mod).namespace;
     hydra.util.Lazy<hydra.util.Pair<hydra.util.PersistentSet<hydra.core.Name>, hydra.util.Maybe<hydra.error.packaging.InvalidModuleError>>> result = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-      (java.util.function.Function<hydra.util.Pair<hydra.util.PersistentSet<hydra.core.Name>, hydra.util.Maybe<hydra.error.packaging.InvalidModuleError>>, java.util.function.Function<hydra.module.Definition, hydra.util.Pair<hydra.util.PersistentSet<hydra.core.Name>, hydra.util.Maybe<hydra.error.packaging.InvalidModuleError>>>>) (acc -> (java.util.function.Function<hydra.module.Definition, hydra.util.Pair<hydra.util.PersistentSet<hydra.core.Name>, hydra.util.Maybe<hydra.error.packaging.InvalidModuleError>>>) (def -> {
+      (java.util.function.Function<hydra.util.Pair<hydra.util.PersistentSet<hydra.core.Name>, hydra.util.Maybe<hydra.error.packaging.InvalidModuleError>>, java.util.function.Function<hydra.packaging.Definition, hydra.util.Pair<hydra.util.PersistentSet<hydra.core.Name>, hydra.util.Maybe<hydra.error.packaging.InvalidModuleError>>>>) (acc -> (java.util.function.Function<hydra.packaging.Definition, hydra.util.Pair<hydra.util.PersistentSet<hydra.core.Name>, hydra.util.Maybe<hydra.error.packaging.InvalidModuleError>>>) (def -> {
         hydra.util.Lazy<hydra.util.Maybe<hydra.error.packaging.InvalidModuleError>> err = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(acc));
         hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> seen = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(acc));
         return hydra.lib.maybes.Cases.applyLazy(
@@ -159,45 +159,45 @@ public interface Packaging {
   }
 
   static hydra.util.Maybe<hydra.error.packaging.InvalidPackageError> checkDuplicateModuleNamespaces(hydra.packaging.Package_ pkg) {
-    hydra.util.Lazy<hydra.util.Pair<hydra.util.PersistentSet<hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>> result = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-      (java.util.function.Function<hydra.util.Pair<hydra.util.PersistentSet<hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>, java.util.function.Function<hydra.module.Module, hydra.util.Pair<hydra.util.PersistentSet<hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>>>) (acc -> (java.util.function.Function<hydra.module.Module, hydra.util.Pair<hydra.util.PersistentSet<hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>>) (mod -> {
+    hydra.util.Lazy<hydra.util.Pair<hydra.util.PersistentSet<hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>> result = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+      (java.util.function.Function<hydra.util.Pair<hydra.util.PersistentSet<hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>, java.util.function.Function<hydra.packaging.Module, hydra.util.Pair<hydra.util.PersistentSet<hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>>>) (acc -> (java.util.function.Function<hydra.packaging.Module, hydra.util.Pair<hydra.util.PersistentSet<hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>>) (mod -> {
         hydra.util.Lazy<hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>> err = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(acc));
-        hydra.util.Lazy<hydra.util.PersistentSet<hydra.module.Namespace>> seen = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(acc));
+        hydra.util.Lazy<hydra.util.PersistentSet<hydra.packaging.Namespace>> seen = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(acc));
         return hydra.lib.maybes.Cases.applyLazy(
           err.get(),
-          () -> ((java.util.function.Supplier<hydra.util.Pair<hydra.util.PersistentSet<hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>>) (() -> {
-            hydra.module.Namespace ns = (mod).namespace;
+          () -> ((java.util.function.Supplier<hydra.util.Pair<hydra.util.PersistentSet<hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>>) (() -> {
+            hydra.packaging.Namespace ns = (mod).namespace;
             return hydra.lib.logic.IfElse.lazy(
               hydra.lib.sets.Member.apply(
                 ns,
                 seen.get()),
-              () -> (hydra.util.Pair<hydra.util.PersistentSet<hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) ((hydra.util.Pair<hydra.util.PersistentSet<hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) (new hydra.util.Pair<hydra.util.PersistentSet<hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>(seen.get(), hydra.util.Maybe.just(new hydra.error.packaging.InvalidPackageError.DuplicateModuleNamespace(new hydra.error.packaging.DuplicateModuleNamespaceError(ns)))))),
-              () -> (hydra.util.Pair<hydra.util.PersistentSet<hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) ((hydra.util.Pair<hydra.util.PersistentSet<hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) (new hydra.util.Pair<hydra.util.PersistentSet<hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>(hydra.lib.sets.Insert.apply(
+              () -> (hydra.util.Pair<hydra.util.PersistentSet<hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) ((hydra.util.Pair<hydra.util.PersistentSet<hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) (new hydra.util.Pair<hydra.util.PersistentSet<hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>(seen.get(), hydra.util.Maybe.just(new hydra.error.packaging.InvalidPackageError.DuplicateModuleNamespace(new hydra.error.packaging.DuplicateModuleNamespaceError(ns)))))),
+              () -> (hydra.util.Pair<hydra.util.PersistentSet<hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) ((hydra.util.Pair<hydra.util.PersistentSet<hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) (new hydra.util.Pair<hydra.util.PersistentSet<hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>(hydra.lib.sets.Insert.apply(
                 ns,
                 seen.get()), (hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>) (hydra.util.Maybe.<hydra.error.packaging.InvalidPackageError>nothing())))));
           })).get(),
-          (java.util.function.Function<hydra.error.packaging.InvalidPackageError, hydra.util.Pair<hydra.util.PersistentSet<hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>>) (ignored -> acc));
+          (java.util.function.Function<hydra.error.packaging.InvalidPackageError, hydra.util.Pair<hydra.util.PersistentSet<hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>>) (ignored -> acc));
       })),
-      (hydra.util.Pair<hydra.util.PersistentSet<hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) ((hydra.util.Pair<hydra.util.PersistentSet<hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) (new hydra.util.Pair<hydra.util.PersistentSet<hydra.module.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>((hydra.util.PersistentSet<hydra.module.Namespace>) (hydra.lib.sets.Empty.<hydra.module.Namespace>apply()), (hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>) (hydra.util.Maybe.<hydra.error.packaging.InvalidPackageError>nothing())))),
+      (hydra.util.Pair<hydra.util.PersistentSet<hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) ((hydra.util.Pair<hydra.util.PersistentSet<hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) (new hydra.util.Pair<hydra.util.PersistentSet<hydra.packaging.Namespace>, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>((hydra.util.PersistentSet<hydra.packaging.Namespace>) (hydra.lib.sets.Empty.<hydra.packaging.Namespace>apply()), (hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>) (hydra.util.Maybe.<hydra.error.packaging.InvalidPackageError>nothing())))),
       (pkg).modules));
     return hydra.lib.pairs.Second.apply(result.get());
   }
 
-  static hydra.core.Name definitionName(hydra.module.Definition def) {
-    return (def).accept(new hydra.module.Definition.PartialVisitor<>() {
+  static hydra.core.Name definitionName(hydra.packaging.Definition def) {
+    return (def).accept(new hydra.packaging.Definition.PartialVisitor<>() {
       @Override
-      public hydra.core.Name visit(hydra.module.Definition.Term td) {
+      public hydra.core.Name visit(hydra.packaging.Definition.Term td) {
         return (td).value.name;
       }
 
       @Override
-      public hydra.core.Name visit(hydra.module.Definition.Type td) {
+      public hydra.core.Name visit(hydra.packaging.Definition.Type td) {
         return (td).value.name;
       }
     });
   }
 
-  static hydra.util.Maybe<hydra.error.packaging.InvalidModuleError> module(hydra.module.Module mod) {
+  static hydra.util.Maybe<hydra.error.packaging.InvalidModuleError> module(hydra.packaging.Module mod) {
     hydra.util.Maybe<hydra.error.packaging.InvalidModuleError> r1 = hydra.validate.Packaging.checkDefinitionNamespaces(mod);
     return hydra.lib.maybes.Cases.applyLazy(
       r1,
@@ -220,7 +220,7 @@ public interface Packaging {
         return hydra.lib.maybes.Cases.applyLazy(
           r2,
           () -> hydra.lib.lists.Foldl.apply(
-            (java.util.function.Function<hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>, java.util.function.Function<hydra.module.Module, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>>) (acc -> (java.util.function.Function<hydra.module.Module, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) (mod -> hydra.lib.maybes.Cases.applyLazy(
+            (java.util.function.Function<hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>, java.util.function.Function<hydra.packaging.Module, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>>) (acc -> (java.util.function.Function<hydra.packaging.Module, hydra.util.Maybe<hydra.error.packaging.InvalidPackageError>>) (mod -> hydra.lib.maybes.Cases.applyLazy(
               acc,
               () -> hydra.lib.maybes.Map.apply(
                 (java.util.function.Function<hydra.error.packaging.InvalidModuleError, hydra.error.packaging.InvalidPackageError>) (err -> new hydra.error.packaging.InvalidPackageError.InvalidModule(err)),

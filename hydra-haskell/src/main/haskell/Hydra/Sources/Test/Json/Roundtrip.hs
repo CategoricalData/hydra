@@ -69,7 +69,7 @@ roundtripTest testName typ term = universalCase testName
         (Phantoms.lambda "e" $ Phantoms.var "e")
         (Phantoms.lambda "decoded" $ ShowCore.term # Phantoms.var "decoded")
         (DecodeModule.fromJson # Maps.empty # Core.name (Phantoms.string "test") # typ # Phantoms.var "json"))
-    (EncodeModule.toJson # term))
+    (EncodeModule.toJson # Maps.empty # Core.name (Phantoms.string "test") # typ # term))
   (ShowCore.term # term)
 
 ----------------------------------------
@@ -137,6 +137,7 @@ collectionRoundtripGroup = subgroup "collection types" [
 
 optionalRoundtripGroup :: TTerm TestGroup
 optionalRoundtripGroup = subgroup "optional types" [
+    -- Simple Maybe (idiomatic encoding: null for Nothing, plain value for Just)
     roundtripTest "optional string with value"
       (T.optional T.string)
       (optional $ just $ string "hello"),
@@ -145,4 +146,15 @@ optionalRoundtripGroup = subgroup "optional types" [
       (optional nothing),
     roundtripTest "optional int with value"
       (T.optional T.int32)
-      (optional $ just $ int32 42)]
+      (optional $ just $ int32 42),
+
+    -- Nested Maybe (array-wrapped encoding for round-trip fidelity)
+    roundtripTest "nested optional: nothing"
+      (T.optional $ T.optional T.string)
+      (optional nothing),
+    roundtripTest "nested optional: just nothing"
+      (T.optional $ T.optional T.string)
+      (optional $ just $ optional nothing),
+    roundtripTest "nested optional: just just value"
+      (T.optional $ T.optional T.string)
+      (optional $ just $ optional $ just $ string "hello")]

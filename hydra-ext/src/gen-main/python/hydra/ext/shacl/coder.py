@@ -8,9 +8,11 @@ from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Just, Left, Maybe, Nothing, Right, frozenlist
 from typing import TypeVar, cast
 import hydra.annotations
+import hydra.constants
 import hydra.context
 import hydra.core
 import hydra.decode.core
+import hydra.encode.core
 import hydra.errors
 import hydra.ext.org.w3.rdf.syntax
 import hydra.ext.org.w3.shacl.model
@@ -26,7 +28,7 @@ import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
-import hydra.module
+import hydra.packaging
 import hydra.strip
 
 T0 = TypeVar("T0")
@@ -293,15 +295,15 @@ def encode_type(tname: hydra.core.Name, typ: hydra.core.Type, cx: hydra.context.
         case _:
             return unexpected_e(cx, "type", "unsupported type variant")
 
-def shacl_coder(mod: hydra.module.Module, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.errors.Error], tuple[hydra.ext.org.w3.shacl.model.ShapesGraph, hydra.context.Context]]:
+def shacl_coder(mod: hydra.packaging.Module, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.errors.Error], tuple[hydra.ext.org.w3.shacl.model.ShapesGraph, hydra.context.Context]]:
     r"""Encode a module's type elements as a SHACL ShapesGraph."""
 
     @lru_cache(1)
     def type_els():
         def _hoist_type_els_1(v1):
             match v1:
-                case hydra.module.DefinitionType(value=td):
-                    return Just(hydra.annotations.type_element(td.name, td.type))
+                case hydra.packaging.DefinitionType(value=td):
+                    return Just((schema_term := cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.core.Type"))), (data_term := hydra.annotations.normalize_term_annotations(cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(hydra.encode.core.type(td.type.type), hydra.lib.maps.from_list(((hydra.constants.key_type, schema_term),)))))), hydra.core.Binding(td.name, data_term, Just(hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type"))), Nothing()))))[1])[1])
 
                 case _:
                     return Nothing()
