@@ -83,7 +83,7 @@ public interface Coder {
       cx,
       dialect,
       g,
-      (java.util.function.Function<hydra.ext.lisp.syntax.Expression, java.util.function.Function<hydra.util.ConsList<hydra.ext.lisp.syntax.Expression>, hydra.ext.lisp.syntax.Expression>>) (p0 -> p1 -> hydra.ext.lisp.Coder.lispApp(
+      (java.util.function.Function<hydra.ext.lisp.syntax.Expression, java.util.function.Function<java.util.List<hydra.ext.lisp.syntax.Expression>, hydra.ext.lisp.syntax.Expression>>) (p0 -> p1 -> hydra.ext.lisp.Coder.lispApp(
         p0,
         p1)),
       rawArg,
@@ -121,8 +121,8 @@ public interface Coder {
                 (java.util.function.Function<hydra.ext.lisp.syntax.Expression, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (eArg -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right(hydra.ext.lisp.Coder.lispApp(
                   hydra.ext.lisp.Coder.lispApp(
                     ePrim,
-                    hydra.util.ConsList.of(hydra.ext.lisp.Coder.wrapInThunk(eDef))),
-                  hydra.util.ConsList.of(eArg))))))))),
+                    java.util.Arrays.asList(hydra.ext.lisp.Coder.wrapInThunk(eDef))),
+                  java.util.Arrays.asList(eArg))))))))),
           () -> (dMidFun).accept(new hydra.core.Term.PartialVisitor<>() {
             @Override
             public hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression> otherwise(hydra.core.Term instance) {
@@ -161,9 +161,9 @@ public interface Coder {
                             hydra.ext.lisp.Coder.lispApp(
                               hydra.ext.lisp.Coder.lispApp(
                                 eP,
-                                hydra.util.ConsList.of(hydra.ext.lisp.Coder.wrapInThunk(eDef))),
-                              hydra.util.ConsList.of(eF)),
-                            hydra.util.ConsList.of(eM))))))))))),
+                                java.util.Arrays.asList(hydra.ext.lisp.Coder.wrapInThunk(eDef))),
+                              java.util.Arrays.asList(eF)),
+                            java.util.Arrays.asList(eM))))))))))),
                   () -> hydra.lib.logic.IfElse.lazy(
                     hydra.ext.lisp.Coder.isPrimitiveRef(
                       "hydra.lib.maybes.cases",
@@ -180,9 +180,9 @@ public interface Coder {
                               hydra.ext.lisp.Coder.lispApp(
                                 hydra.ext.lisp.Coder.lispApp(
                                   eP,
-                                  hydra.util.ConsList.of(eM)),
-                                hydra.util.ConsList.of(hydra.ext.lisp.Coder.wrapInThunk(eN))),
-                              hydra.util.ConsList.of(eJ))))))))))),
+                                  java.util.Arrays.asList(eM)),
+                                java.util.Arrays.asList(hydra.ext.lisp.Coder.wrapInThunk(eN))),
+                              java.util.Arrays.asList(eJ))))))))))),
                     () -> normal.get())));
             }
           }));
@@ -198,7 +198,7 @@ public interface Coder {
       t);
   }
 
-  static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression> encodeApplication_normal(T0 cx, hydra.ext.lisp.syntax.Dialect dialect, T1 g, java.util.function.Function<hydra.ext.lisp.syntax.Expression, java.util.function.Function<hydra.util.ConsList<hydra.ext.lisp.syntax.Expression>, hydra.ext.lisp.syntax.Expression>> hydra_ext_lisp_coder_lispApp, hydra.core.Term rawArg, hydra.core.Term rawFun) {
+  static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression> encodeApplication_normal(T0 cx, hydra.ext.lisp.syntax.Dialect dialect, T1 g, java.util.function.Function<hydra.ext.lisp.syntax.Expression, java.util.function.Function<java.util.List<hydra.ext.lisp.syntax.Expression>, hydra.ext.lisp.syntax.Expression>> hydra_ext_lisp_coder_lispApp, hydra.core.Term rawArg, hydra.core.Term rawFun) {
     return hydra.lib.eithers.Bind.apply(
       hydra.ext.lisp.Coder.<T0, T1, T2>encodeTerm(
         dialect,
@@ -211,7 +211,7 @@ public interface Coder {
           cx,
           g,
           rawArg),
-        (java.util.function.Function<hydra.ext.lisp.syntax.Expression, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (arg -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right((hydra_ext_lisp_coder_lispApp).apply(fun).apply(hydra.util.ConsList.of(arg)))))));
+        (java.util.function.Function<hydra.ext.lisp.syntax.Expression, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (arg -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right((hydra_ext_lisp_coder_lispApp).apply(fun).apply(java.util.Arrays.asList(arg)))))));
   }
 
   static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression> encodeElimination(hydra.ext.lisp.syntax.Dialect dialect, T0 cx, T1 g, hydra.core.Elimination elim, hydra.util.Maybe<hydra.core.Term> marg) {
@@ -223,7 +223,7 @@ public interface Coder {
         return hydra.lib.maybes.Cases.applyLazy(
           marg,
           () -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right(hydra.ext.lisp.Coder.lispLambdaExpr(
-            hydra.util.ConsList.of("v"),
+            java.util.Arrays.asList("v"),
             new hydra.ext.lisp.syntax.Expression.FieldAccess(new hydra.ext.lisp.syntax.FieldAccess(new hydra.ext.lisp.syntax.Symbol(tname), new hydra.ext.lisp.syntax.Symbol(fname), hydra.ext.lisp.Coder.lispVar("v"))))),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (arg -> hydra.lib.eithers.Bind.apply(
             hydra.ext.lisp.Coder.<T0, T1, T2>encodeTerm(
@@ -236,7 +236,7 @@ public interface Coder {
 
       @Override
       public hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression> visit(hydra.core.Elimination.Union cs) {
-        hydra.util.ConsList<hydra.core.Field> caseFields = (cs).value.cases;
+        java.util.List<hydra.core.Field> caseFields = (cs).value.cases;
         hydra.util.Maybe<hydra.core.Term> defCase = (cs).value.default_;
         String tname = hydra.Names.localNameOf((cs).value.typeName);
         return hydra.lib.eithers.Bind.apply(
@@ -246,10 +246,10 @@ public interface Coder {
               hydra.core.Term cfterm = (cf).term;
               hydra.ext.lisp.syntax.Expression condExpr = hydra.ext.lisp.Coder.lispApp(
                 hydra.ext.lisp.Coder.lispVar(hydra.ext.lisp.Coder.dialectEqual(dialect)),
-                hydra.util.ConsList.of(
+                java.util.Arrays.asList(
                   hydra.ext.lisp.Coder.lispApp(
                     hydra.ext.lisp.Coder.lispVar(hydra.ext.lisp.Coder.dialectCar(dialect)),
-                    hydra.util.ConsList.of(hydra.ext.lisp.Coder.lispVar("match_target"))),
+                    java.util.Arrays.asList(hydra.ext.lisp.Coder.lispVar("match_target"))),
                   hydra.ext.lisp.Coder.lispKeyword(cfname)));
               return hydra.lib.eithers.Bind.apply(
                 hydra.ext.lisp.Coder.<T0, T1, T2>encodeTerm(
@@ -260,7 +260,7 @@ public interface Coder {
                 (java.util.function.Function<hydra.ext.lisp.syntax.Expression, hydra.util.Either<T2, hydra.ext.lisp.syntax.CondClause>>) (bodyExpr -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.CondClause>right(new hydra.ext.lisp.syntax.CondClause(condExpr, bodyExpr))));
             }),
             caseFields),
-          (java.util.function.Function<hydra.util.ConsList<hydra.ext.lisp.syntax.CondClause>, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (clauses -> hydra.lib.eithers.Bind.apply(
+          (java.util.function.Function<java.util.List<hydra.ext.lisp.syntax.CondClause>, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (clauses -> hydra.lib.eithers.Bind.apply(
             hydra.lib.maybes.Cases.applyLazy(
               defCase,
               () -> hydra.util.Either.<T2, hydra.util.Maybe<hydra.ext.lisp.syntax.Expression>>right((hydra.util.Maybe<hydra.ext.lisp.syntax.Expression>) (hydra.util.Maybe.<hydra.ext.lisp.syntax.Expression>nothing())),
@@ -275,15 +275,15 @@ public interface Coder {
               hydra.ext.lisp.syntax.Expression condExpr = new hydra.ext.lisp.syntax.Expression.Cond(new hydra.ext.lisp.syntax.CondExpression(clauses, defExpr));
               hydra.ext.lisp.syntax.Expression innerExpr = hydra.ext.lisp.Coder.lispApp(
                 hydra.ext.lisp.Coder.lispLambdaExpr(
-                  hydra.util.ConsList.of("match_value"),
+                  java.util.Arrays.asList("match_value"),
                   condExpr),
-                hydra.util.ConsList.of(hydra.ext.lisp.Coder.lispApp(
+                java.util.Arrays.asList(hydra.ext.lisp.Coder.lispApp(
                   hydra.ext.lisp.Coder.lispVar(hydra.ext.lisp.Coder.dialectCadr(dialect)),
-                  hydra.util.ConsList.of(hydra.ext.lisp.Coder.lispVar("match_target")))));
+                  java.util.Arrays.asList(hydra.ext.lisp.Coder.lispVar("match_target")))));
               return hydra.lib.maybes.Cases.applyLazy(
                 marg,
                 () -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right(hydra.ext.lisp.Coder.lispLambdaExpr(
-                  hydra.util.ConsList.of("match_target"),
+                  java.util.Arrays.asList("match_target"),
                   innerExpr)),
                 (java.util.function.Function<hydra.core.Term, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (arg -> hydra.lib.eithers.Bind.apply(
                   hydra.ext.lisp.Coder.<T0, T1, T2>encodeTerm(
@@ -293,9 +293,9 @@ public interface Coder {
                     arg),
                   (java.util.function.Function<hydra.ext.lisp.syntax.Expression, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (sarg -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right(hydra.ext.lisp.Coder.lispApp(
                     hydra.ext.lisp.Coder.lispLambdaExpr(
-                      hydra.util.ConsList.of("match_target"),
+                      java.util.Arrays.asList("match_target"),
                       innerExpr),
-                    hydra.util.ConsList.of(sarg)))))));
+                    java.util.Arrays.asList(sarg)))))));
             }))));
       }
 
@@ -304,7 +304,7 @@ public interface Coder {
         return hydra.lib.maybes.Cases.applyLazy(
           marg,
           () -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right(hydra.ext.lisp.Coder.lispLambdaExpr(
-            hydra.util.ConsList.of("v"),
+            java.util.Arrays.asList("v"),
             hydra.ext.lisp.Coder.lispVar("v"))),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (arg -> hydra.ext.lisp.Coder.<T0, T1, T2>encodeTerm(
             dialect,
@@ -334,7 +334,7 @@ public interface Coder {
             g,
             (lam).value.body),
           (java.util.function.Function<hydra.ext.lisp.syntax.Expression, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (body -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right(hydra.ext.lisp.Coder.lispLambdaExpr(
-            hydra.util.ConsList.of(param),
+            java.util.Arrays.asList(param),
             body))));
       }
 
@@ -357,7 +357,7 @@ public interface Coder {
     });
   }
 
-  static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression> encodeLetAsLambdaApp(hydra.ext.lisp.syntax.Dialect dialect, T0 cx, T1 g, hydra.util.ConsList<hydra.core.Binding> bindings, hydra.core.Term body) {
+  static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression> encodeLetAsLambdaApp(hydra.ext.lisp.syntax.Dialect dialect, T0 cx, T1 g, java.util.List<hydra.core.Binding> bindings, hydra.core.Term body) {
     return hydra.lib.eithers.Bind.apply(
       hydra.ext.lisp.Coder.<T0, T1, T2>encodeTerm(
         dialect,
@@ -377,15 +377,15 @@ public interface Coder {
               (b).term),
             (java.util.function.Function<hydra.ext.lisp.syntax.Expression, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (bval -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right(hydra.ext.lisp.Coder.lispApp(
               hydra.ext.lisp.Coder.lispLambdaExpr(
-                hydra.util.ConsList.of(bname),
+                java.util.Arrays.asList(bname),
                 acc),
-              hydra.util.ConsList.of(bval)))));
+              java.util.Arrays.asList(bval)))));
         })),
         bodyExpr,
         hydra.lib.lists.Reverse.apply(bindings))));
   }
 
-  static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression> encodeLetAsNative(hydra.ext.lisp.syntax.Dialect dialect, T0 cx, T1 g, hydra.util.ConsList<hydra.core.Binding> bindings, hydra.core.Term body) {
+  static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression> encodeLetAsNative(hydra.ext.lisp.syntax.Dialect dialect, T0 cx, T1 g, java.util.List<hydra.core.Binding> bindings, hydra.core.Term body) {
     Boolean isClojureTop = (dialect).accept(new hydra.ext.lisp.syntax.Dialect.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.ext.lisp.syntax.Dialect instance) {
@@ -404,24 +404,24 @@ public interface Coder {
         g,
         body),
       (java.util.function.Function<hydra.ext.lisp.syntax.Expression, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (bodyExpr -> {
-        hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> sortedBindings = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
+        hydra.util.Lazy<java.util.List<hydra.core.Binding>> sortedBindings = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
           true,
-          () -> ((java.util.function.Supplier<hydra.util.ConsList<hydra.core.Binding>>) (() -> {
-            hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> allNames = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
+          () -> ((java.util.function.Supplier<java.util.List<hydra.core.Binding>>) (() -> {
+            hydra.util.Lazy<java.util.Set<hydra.core.Name>> allNames = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
               (java.util.function.Function<hydra.core.Binding, hydra.core.Name>) (b -> (b).name),
               bindings)));
-            hydra.util.Lazy<hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.util.ConsList<hydra.core.Name>>>> adjList = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
-              (java.util.function.Function<hydra.core.Binding, hydra.util.Pair<hydra.core.Name, hydra.util.ConsList<hydra.core.Name>>>) (b -> (hydra.util.Pair<hydra.core.Name, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Name, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Name, hydra.util.ConsList<hydra.core.Name>>((b).name, hydra.lib.sets.ToList.apply(hydra.lib.sets.Intersection.apply(
+            hydra.util.Lazy<java.util.List<hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>>> adjList = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+              (java.util.function.Function<hydra.core.Binding, hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>>) (b -> (hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>((b).name, hydra.lib.sets.ToList.apply(hydra.lib.sets.Intersection.apply(
                 allNames.get(),
                 hydra.Variables.freeVariablesInTerm((b).term))))))),
               bindings));
-            hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Binding>> nameToBinding = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
+            hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Binding>> nameToBinding = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
               (java.util.function.Function<hydra.core.Binding, hydra.util.Pair<hydra.core.Name, hydra.core.Binding>>) (b -> (hydra.util.Pair<hydra.core.Name, hydra.core.Binding>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Binding>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Binding>((b).name, b)))),
               bindings)));
-            hydra.util.Lazy<hydra.util.Either<hydra.util.ConsList<hydra.util.ConsList<hydra.core.Name>>, hydra.util.ConsList<hydra.core.Name>>> sortResult = new hydra.util.Lazy<>(() -> hydra.Sorting.topologicalSort(adjList.get()));
+            hydra.util.Lazy<hydra.util.Either<java.util.List<java.util.List<hydra.core.Name>>, java.util.List<hydra.core.Name>>> sortResult = new hydra.util.Lazy<>(() -> hydra.Sorting.topologicalSort(adjList.get()));
             return hydra.lib.eithers.Either.apply(
-              (java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<hydra.core.Name>>, hydra.util.ConsList<hydra.core.Binding>>) (ignored -> bindings),
-              (java.util.function.Function<hydra.util.ConsList<hydra.core.Name>, hydra.util.ConsList<hydra.core.Binding>>) (sorted -> hydra.lib.lists.Map.apply(
+              (java.util.function.Function<java.util.List<java.util.List<hydra.core.Name>>, java.util.List<hydra.core.Binding>>) (ignored -> bindings),
+              (java.util.function.Function<java.util.List<hydra.core.Name>, java.util.List<hydra.core.Binding>>) (sorted -> hydra.lib.lists.Map.apply(
                 (java.util.function.Function<hydra.core.Name, hydra.core.Binding>) (name -> hydra.lib.maybes.FromMaybe.applyLazy(
                   () -> hydra.lib.lists.Head.apply(bindings),
                   hydra.lib.maps.Lookup.apply(
@@ -498,27 +498,27 @@ public interface Coder {
                         }),
                         () -> hydra.ext.lisp.Coder.lispNamedLambdaExpr(
                           bname,
-                          hydra.util.ConsList.of("_arg"),
+                          java.util.Arrays.asList("_arg"),
                           hydra.ext.lisp.Coder.lispApp(
                             bval,
-                            hydra.util.ConsList.of(hydra.ext.lisp.Coder.lispVar("_arg"))))),
+                            java.util.Arrays.asList(hydra.ext.lisp.Coder.lispVar("_arg"))))),
                       () -> bval),
                     () -> hydra.lib.logic.IfElse.lazy(
                       hydra.lib.logic.And.apply(
                         isSelfRef.get(),
                         hydra.lib.logic.Not.apply(isLambda)),
                       () -> hydra.ext.lisp.Coder.lispLambdaExpr(
-                        hydra.util.ConsList.of("_arg"),
+                        java.util.Arrays.asList("_arg"),
                         hydra.ext.lisp.Coder.lispApp(
                           bval,
-                          hydra.util.ConsList.of(hydra.ext.lisp.Coder.lispVar("_arg")))),
+                          java.util.Arrays.asList(hydra.ext.lisp.Coder.lispVar("_arg")))),
                       () -> bval)));
                   return hydra.util.Either.<T2, hydra.util.Pair<String, hydra.ext.lisp.syntax.Expression>>right((hydra.util.Pair<String, hydra.ext.lisp.syntax.Expression>) ((hydra.util.Pair<String, hydra.ext.lisp.syntax.Expression>) (new hydra.util.Pair<String, hydra.ext.lisp.syntax.Expression>(bname, wrappedVal.get()))));
                 }));
             }),
             sortedBindings.get()),
-          (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<String, hydra.ext.lisp.syntax.Expression>>, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (encodedBindings -> {
-            hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> allBindingNames = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
+          (java.util.function.Function<java.util.List<hydra.util.Pair<String, hydra.ext.lisp.syntax.Expression>>, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (encodedBindings -> {
+            hydra.util.Lazy<java.util.Set<hydra.core.Name>> allBindingNames = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
               (java.util.function.Function<hydra.core.Binding, hydra.core.Name>) (b -> (b).name),
               bindings)));
             hydra.util.Lazy<Boolean> hasCrossRefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
@@ -545,10 +545,10 @@ public interface Coder {
                 hydra.lib.lists.Null.apply(hydra.lib.lists.Tail.apply(bindings)),
                 () -> new hydra.ext.lisp.syntax.LetKind.Parallel(),
                 () -> new hydra.ext.lisp.syntax.LetKind.Sequential())));
-            hydra.util.Lazy<hydra.util.ConsList<hydra.ext.lisp.syntax.LetBinding>> lispBindings = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+            hydra.util.Lazy<java.util.List<hydra.ext.lisp.syntax.LetBinding>> lispBindings = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
               (java.util.function.Function<hydra.util.Pair<String, hydra.ext.lisp.syntax.Expression>, hydra.ext.lisp.syntax.LetBinding>) (eb -> new hydra.ext.lisp.syntax.LetBinding.Simple(new hydra.ext.lisp.syntax.SimpleBinding(new hydra.ext.lisp.syntax.Symbol(hydra.lib.pairs.First.apply(eb)), hydra.lib.pairs.Second.apply(eb)))),
               encodedBindings));
-            return hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right(new hydra.ext.lisp.syntax.Expression.Let(new hydra.ext.lisp.syntax.LetExpression(letKind.get(), lispBindings.get(), hydra.util.ConsList.of(bodyExpr))));
+            return hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right(new hydra.ext.lisp.syntax.Expression.Let(new hydra.ext.lisp.syntax.LetExpression(letKind.get(), lispBindings.get(), java.util.Arrays.asList(bodyExpr))));
           }));
       }));
   }
@@ -637,7 +637,7 @@ public interface Coder {
 
       @Override
       public hydra.ext.lisp.syntax.Expression visit(hydra.core.Literal.Binary b) {
-        hydra.util.ConsList<Integer> byteValues = hydra.lib.literals.BinaryToBytes.apply((b).value);
+        java.util.List<Integer> byteValues = hydra.lib.literals.BinaryToBytes.apply((b).value);
         return new hydra.ext.lisp.syntax.Expression.Vector(new hydra.ext.lisp.syntax.VectorLiteral(hydra.lib.lists.Map.apply(
           (java.util.function.Function<Integer, hydra.ext.lisp.syntax.Expression>) (bv -> new hydra.ext.lisp.syntax.Expression.Literal(new hydra.ext.lisp.syntax.Literal.Integer_(new hydra.ext.lisp.syntax.IntegerLiteral(hydra.lib.literals.Int32ToBigint.apply(bv), false)))),
           byteValues)));
@@ -679,7 +679,7 @@ public interface Coder {
               l),
             (java.util.function.Function<hydra.ext.lisp.syntax.Expression, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (sl -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right(hydra.ext.lisp.Coder.lispApp(
               hydra.ext.lisp.Coder.lispVar("list"),
-              hydra.util.ConsList.of(
+              java.util.Arrays.asList(
                 hydra.ext.lisp.Coder.lispKeyword("left"),
                 sl)))))),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (r -> hydra.lib.eithers.Bind.apply(
@@ -690,7 +690,7 @@ public interface Coder {
               r),
             (java.util.function.Function<hydra.ext.lisp.syntax.Expression, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (sr -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right(hydra.ext.lisp.Coder.lispApp(
               hydra.ext.lisp.Coder.lispVar("list"),
-              hydra.util.ConsList.of(
+              java.util.Arrays.asList(
                 hydra.ext.lisp.Coder.lispKeyword("right"),
                 sr)))))),
           (e).value);
@@ -707,7 +707,7 @@ public interface Coder {
 
       @Override
       public hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression> visit(hydra.core.Term.Let lt) {
-        hydra.util.ConsList<hydra.core.Binding> bindings = (lt).value.bindings;
+        java.util.List<hydra.core.Binding> bindings = (lt).value.bindings;
         hydra.core.Term body = (lt).value.body;
         return hydra.ext.lisp.Coder.<T0, T1, T2>encodeLetAsNative(
           dialect,
@@ -727,7 +727,7 @@ public interface Coder {
               g,
               v1)),
             (els).value),
-          (java.util.function.Function<hydra.util.ConsList<hydra.ext.lisp.syntax.Expression>, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (sels -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right(hydra.ext.lisp.Coder.lispListExpr(sels))));
+          (java.util.function.Function<java.util.List<hydra.ext.lisp.syntax.Expression>, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (sels -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right(hydra.ext.lisp.Coder.lispListExpr(sels))));
       }
 
       @Override
@@ -753,7 +753,7 @@ public interface Coder {
                   hydra.lib.pairs.Second.apply(entry)),
                 (java.util.function.Function<hydra.ext.lisp.syntax.Expression, hydra.util.Either<T2, hydra.ext.lisp.syntax.MapEntry>>) (v -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.MapEntry>right(new hydra.ext.lisp.syntax.MapEntry(k, v))))))),
             hydra.lib.maps.ToList.apply((m).value)),
-          (java.util.function.Function<hydra.util.ConsList<hydra.ext.lisp.syntax.MapEntry>, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (pairs -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right(new hydra.ext.lisp.syntax.Expression.Map(new hydra.ext.lisp.syntax.MapLiteral(pairs)))));
+          (java.util.function.Function<java.util.List<hydra.ext.lisp.syntax.MapEntry>, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (pairs -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right(new hydra.ext.lisp.syntax.Expression.Map(new hydra.ext.lisp.syntax.MapLiteral(pairs)))));
       }
 
       @Override
@@ -762,7 +762,7 @@ public interface Coder {
           (mt).value,
           () -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right(hydra.ext.lisp.Coder.lispApp(
             hydra.ext.lisp.Coder.lispVar("list"),
-            hydra.util.ConsList.of(hydra.ext.lisp.Coder.lispKeyword("nothing")))),
+            java.util.Arrays.asList(hydra.ext.lisp.Coder.lispKeyword("nothing")))),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (val -> hydra.lib.eithers.Bind.apply(
             hydra.ext.lisp.Coder.<T0, T1, T2>encodeTerm(
               dialect,
@@ -771,7 +771,7 @@ public interface Coder {
               val),
             (java.util.function.Function<hydra.ext.lisp.syntax.Expression, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (sval -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right(hydra.ext.lisp.Coder.lispApp(
               hydra.ext.lisp.Coder.lispVar("list"),
-              hydra.util.ConsList.of(
+              java.util.Arrays.asList(
                 hydra.ext.lisp.Coder.lispKeyword("just"),
                 sval)))))));
       }
@@ -790,14 +790,14 @@ public interface Coder {
               cx,
               g,
               hydra.lib.pairs.Second.apply((p).value)),
-            (java.util.function.Function<hydra.ext.lisp.syntax.Expression, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (s -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right(hydra.ext.lisp.Coder.lispListExpr(hydra.util.ConsList.of(
+            (java.util.function.Function<hydra.ext.lisp.syntax.Expression, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (s -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right(hydra.ext.lisp.Coder.lispListExpr(java.util.Arrays.asList(
               f,
               s)))))));
       }
 
       @Override
       public hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression> visit(hydra.core.Term.Record rec) {
-        hydra.util.ConsList<hydra.core.Field> fields = (rec).value.fields;
+        java.util.List<hydra.core.Field> fields = (rec).value.fields;
         hydra.core.Name rname = (rec).value.typeName;
         return hydra.lib.eithers.Bind.apply(
           hydra.lib.eithers.MapList.apply(
@@ -807,7 +807,7 @@ public interface Coder {
               g,
               (f).term)),
             fields),
-          (java.util.function.Function<hydra.util.ConsList<hydra.ext.lisp.syntax.Expression>, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (sfields -> {
+          (java.util.function.Function<java.util.List<hydra.ext.lisp.syntax.Expression>, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (sfields -> {
             String constructorName = hydra.lib.strings.Cat2.apply(
               hydra.ext.lisp.Coder.dialectConstructorPrefix(dialect),
               hydra.ext.lisp.Coder.qualifiedSnakeName(rname));
@@ -827,7 +827,7 @@ public interface Coder {
               g,
               v1)),
             hydra.lib.sets.ToList.apply((s).value)),
-          (java.util.function.Function<hydra.util.ConsList<hydra.ext.lisp.syntax.Expression>, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (sels -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right(new hydra.ext.lisp.syntax.Expression.Set(new hydra.ext.lisp.syntax.SetLiteral(sels)))));
+          (java.util.function.Function<java.util.List<hydra.ext.lisp.syntax.Expression>, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (sels -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right(new hydra.ext.lisp.syntax.Expression.Set(new hydra.ext.lisp.syntax.SetLiteral(sels)))));
       }
 
       @Override
@@ -857,7 +857,7 @@ public interface Coder {
           isUnit.get(),
           () -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right(hydra.ext.lisp.Coder.lispApp(
             hydra.ext.lisp.Coder.lispVar("list"),
-            hydra.util.ConsList.of(
+            java.util.Arrays.asList(
               hydra.ext.lisp.Coder.lispKeyword(hydra.Formatting.convertCaseCamelToLowerSnake(fname)),
               hydra.ext.lisp.Coder.lispNilExpr()))),
           () -> hydra.lib.eithers.Bind.apply(
@@ -868,7 +868,7 @@ public interface Coder {
               fterm),
             (java.util.function.Function<hydra.ext.lisp.syntax.Expression, hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>) (sval -> hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right(hydra.ext.lisp.Coder.lispApp(
               hydra.ext.lisp.Coder.lispVar("list"),
-              hydra.util.ConsList.of(
+              java.util.Arrays.asList(
                 hydra.ext.lisp.Coder.lispKeyword(hydra.Formatting.convertCaseCamelToLowerSnake(fname)),
                 sval))))));
       }
@@ -1120,7 +1120,7 @@ public interface Coder {
 
       @Override
       public hydra.util.Either<T0, hydra.ext.lisp.syntax.TopLevelFormWithComments> visit(hydra.core.Type.Record rt) {
-        hydra.util.Lazy<hydra.util.ConsList<hydra.ext.lisp.syntax.FieldDefinition>> fields = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+        hydra.util.Lazy<java.util.List<hydra.ext.lisp.syntax.FieldDefinition>> fields = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
           hydra.ext.lisp.Coder::encodeFieldDef,
           (rt).value));
         return hydra.util.Either.<T0, hydra.ext.lisp.syntax.TopLevelFormWithComments>right(hydra.ext.lisp.Coder.lispTopForm(new hydra.ext.lisp.syntax.TopLevelForm.RecordType(new hydra.ext.lisp.syntax.RecordTypeDefinition(new hydra.ext.lisp.syntax.Symbol(lname), fields.get(), (hydra.util.Maybe<hydra.ext.lisp.syntax.Docstring>) (hydra.util.Maybe.<hydra.ext.lisp.syntax.Docstring>nothing())))));
@@ -1128,7 +1128,7 @@ public interface Coder {
 
       @Override
       public hydra.util.Either<T0, hydra.ext.lisp.syntax.TopLevelFormWithComments> visit(hydra.core.Type.Union rt) {
-        hydra.util.Lazy<hydra.util.ConsList<hydra.ext.lisp.syntax.Expression>> variantNames = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+        hydra.util.Lazy<java.util.List<hydra.ext.lisp.syntax.Expression>> variantNames = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
           (java.util.function.Function<hydra.core.FieldType, hydra.ext.lisp.syntax.Expression>) (f -> new hydra.ext.lisp.syntax.Expression.Literal(new hydra.ext.lisp.syntax.Literal.Keyword(new hydra.ext.lisp.syntax.Keyword(hydra.Formatting.convertCaseCamelToLowerSnake((f).name.value), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()))))),
           (rt).value));
         return hydra.util.Either.<T0, hydra.ext.lisp.syntax.TopLevelFormWithComments>right(hydra.ext.lisp.Coder.lispTopForm(new hydra.ext.lisp.syntax.TopLevelForm.Variable(new hydra.ext.lisp.syntax.VariableDefinition(new hydra.ext.lisp.syntax.Symbol(hydra.lib.strings.Cat2.apply(
@@ -1140,7 +1140,7 @@ public interface Coder {
 
       @Override
       public hydra.util.Either<T0, hydra.ext.lisp.syntax.TopLevelFormWithComments> visit(hydra.core.Type.Wrap wt) {
-        return hydra.util.Either.<T0, hydra.ext.lisp.syntax.TopLevelFormWithComments>right(hydra.ext.lisp.Coder.lispTopForm(new hydra.ext.lisp.syntax.TopLevelForm.RecordType(new hydra.ext.lisp.syntax.RecordTypeDefinition(new hydra.ext.lisp.syntax.Symbol(lname), hydra.util.ConsList.of(new hydra.ext.lisp.syntax.FieldDefinition(new hydra.ext.lisp.syntax.Symbol("value"), (hydra.util.Maybe<hydra.ext.lisp.syntax.Expression>) (hydra.util.Maybe.<hydra.ext.lisp.syntax.Expression>nothing()))), (hydra.util.Maybe<hydra.ext.lisp.syntax.Docstring>) (hydra.util.Maybe.<hydra.ext.lisp.syntax.Docstring>nothing())))));
+        return hydra.util.Either.<T0, hydra.ext.lisp.syntax.TopLevelFormWithComments>right(hydra.ext.lisp.Coder.lispTopForm(new hydra.ext.lisp.syntax.TopLevelForm.RecordType(new hydra.ext.lisp.syntax.RecordTypeDefinition(new hydra.ext.lisp.syntax.Symbol(lname), java.util.Arrays.asList(new hydra.ext.lisp.syntax.FieldDefinition(new hydra.ext.lisp.syntax.Symbol("value"), (hydra.util.Maybe<hydra.ext.lisp.syntax.Expression>) (hydra.util.Maybe.<hydra.ext.lisp.syntax.Expression>nothing()))), (hydra.util.Maybe<hydra.ext.lisp.syntax.Docstring>) (hydra.util.Maybe.<hydra.ext.lisp.syntax.Docstring>nothing())))));
       }
     });
   }
@@ -1236,7 +1236,7 @@ public interface Coder {
     });
   }
 
-  static hydra.ext.lisp.syntax.Expression lispApp(hydra.ext.lisp.syntax.Expression fun, hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> args) {
+  static hydra.ext.lisp.syntax.Expression lispApp(hydra.ext.lisp.syntax.Expression fun, java.util.List<hydra.ext.lisp.syntax.Expression> args) {
     return new hydra.ext.lisp.syntax.Expression.Application(new hydra.ext.lisp.syntax.Application(fun, args));
   }
 
@@ -1244,13 +1244,13 @@ public interface Coder {
     return new hydra.ext.lisp.syntax.Expression.Literal(new hydra.ext.lisp.syntax.Literal.Keyword(new hydra.ext.lisp.syntax.Keyword(name, (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()))));
   }
 
-  static hydra.ext.lisp.syntax.Expression lispLambdaExpr(hydra.util.ConsList<String> params, hydra.ext.lisp.syntax.Expression body) {
+  static hydra.ext.lisp.syntax.Expression lispLambdaExpr(java.util.List<String> params, hydra.ext.lisp.syntax.Expression body) {
     return new hydra.ext.lisp.syntax.Expression.Lambda(new hydra.ext.lisp.syntax.Lambda((hydra.util.Maybe<hydra.ext.lisp.syntax.Symbol>) (hydra.util.Maybe.<hydra.ext.lisp.syntax.Symbol>nothing()), hydra.lib.lists.Map.apply(
       (java.util.function.Function<String, hydra.ext.lisp.syntax.Symbol>) (p -> new hydra.ext.lisp.syntax.Symbol(p)),
-      params), (hydra.util.Maybe<hydra.ext.lisp.syntax.Symbol>) (hydra.util.Maybe.<hydra.ext.lisp.syntax.Symbol>nothing()), hydra.util.ConsList.of(body)));
+      params), (hydra.util.Maybe<hydra.ext.lisp.syntax.Symbol>) (hydra.util.Maybe.<hydra.ext.lisp.syntax.Symbol>nothing()), java.util.Arrays.asList(body)));
   }
 
-  static hydra.ext.lisp.syntax.Expression lispListExpr(hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> elements) {
+  static hydra.ext.lisp.syntax.Expression lispListExpr(java.util.List<hydra.ext.lisp.syntax.Expression> elements) {
     return new hydra.ext.lisp.syntax.Expression.List(new hydra.ext.lisp.syntax.ListLiteral(elements, false));
   }
 
@@ -1258,10 +1258,10 @@ public interface Coder {
     return new hydra.ext.lisp.syntax.Expression.Literal(lit);
   }
 
-  static hydra.ext.lisp.syntax.Expression lispNamedLambdaExpr(String name, hydra.util.ConsList<String> params, hydra.ext.lisp.syntax.Expression body) {
+  static hydra.ext.lisp.syntax.Expression lispNamedLambdaExpr(String name, java.util.List<String> params, hydra.ext.lisp.syntax.Expression body) {
     return new hydra.ext.lisp.syntax.Expression.Lambda(new hydra.ext.lisp.syntax.Lambda(hydra.util.Maybe.just(new hydra.ext.lisp.syntax.Symbol(name)), hydra.lib.lists.Map.apply(
       (java.util.function.Function<String, hydra.ext.lisp.syntax.Symbol>) (p -> new hydra.ext.lisp.syntax.Symbol(p)),
-      params), (hydra.util.Maybe<hydra.ext.lisp.syntax.Symbol>) (hydra.util.Maybe.<hydra.ext.lisp.syntax.Symbol>nothing()), hydra.util.ConsList.of(body)));
+      params), (hydra.util.Maybe<hydra.ext.lisp.syntax.Symbol>) (hydra.util.Maybe.<hydra.ext.lisp.syntax.Symbol>nothing()), java.util.Arrays.asList(body)));
   }
 
   static hydra.ext.lisp.syntax.Expression lispNilExpr() {
@@ -1286,36 +1286,36 @@ public interface Coder {
     return new hydra.ext.lisp.syntax.Expression.Variable(new hydra.ext.lisp.syntax.VariableReference(new hydra.ext.lisp.syntax.Symbol(name), false));
   }
 
-  static hydra.util.ConsList<hydra.ext.lisp.syntax.ExportDeclaration> moduleExports(hydra.util.ConsList<hydra.ext.lisp.syntax.TopLevelFormWithComments> forms) {
-    hydra.util.Lazy<hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol>> symbols = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.ext.lisp.syntax.TopLevelFormWithComments, hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol>>) (fwc -> {
+  static java.util.List<hydra.ext.lisp.syntax.ExportDeclaration> moduleExports(java.util.List<hydra.ext.lisp.syntax.TopLevelFormWithComments> forms) {
+    hydra.util.Lazy<java.util.List<hydra.ext.lisp.syntax.Symbol>> symbols = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.ext.lisp.syntax.TopLevelFormWithComments, java.util.List<hydra.ext.lisp.syntax.Symbol>>) (fwc -> {
         hydra.ext.lisp.syntax.TopLevelForm form = (fwc).form;
         return (form).accept(new hydra.ext.lisp.syntax.TopLevelForm.PartialVisitor<>() {
           @Override
-          public hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol> otherwise(hydra.ext.lisp.syntax.TopLevelForm instance) {
-            return (hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol>) (hydra.util.ConsList.<hydra.ext.lisp.syntax.Symbol>empty());
+          public java.util.List<hydra.ext.lisp.syntax.Symbol> otherwise(hydra.ext.lisp.syntax.TopLevelForm instance) {
+            return (java.util.List<hydra.ext.lisp.syntax.Symbol>) (java.util.Collections.<hydra.ext.lisp.syntax.Symbol>emptyList());
           }
 
           @Override
-          public hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol> visit(hydra.ext.lisp.syntax.TopLevelForm.Variable vd) {
-            return hydra.util.ConsList.of((vd).value.name);
+          public java.util.List<hydra.ext.lisp.syntax.Symbol> visit(hydra.ext.lisp.syntax.TopLevelForm.Variable vd) {
+            return java.util.Arrays.asList((vd).value.name);
           }
 
           @Override
-          public hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol> visit(hydra.ext.lisp.syntax.TopLevelForm.RecordType rdef) {
-            hydra.util.ConsList<hydra.ext.lisp.syntax.FieldDefinition> fields = (rdef).value.fields;
+          public java.util.List<hydra.ext.lisp.syntax.Symbol> visit(hydra.ext.lisp.syntax.TopLevelForm.RecordType rdef) {
+            java.util.List<hydra.ext.lisp.syntax.FieldDefinition> fields = (rdef).value.fields;
             String rname = (rdef).value.name.value;
-            hydra.util.Lazy<hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol>> fieldSyms = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+            hydra.util.Lazy<java.util.List<hydra.ext.lisp.syntax.Symbol>> fieldSyms = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
               (java.util.function.Function<hydra.ext.lisp.syntax.FieldDefinition, hydra.ext.lisp.syntax.Symbol>) (f -> {
                 String fn = (f).name.value;
-                return new hydra.ext.lisp.syntax.Symbol(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+                return new hydra.ext.lisp.syntax.Symbol(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
                   rname,
                   "-",
                   fn)));
               }),
               fields));
-            return hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
-              hydra.util.ConsList.of(
+            return hydra.lib.lists.Concat.apply(java.util.Arrays.asList(
+              java.util.Arrays.asList(
                 new hydra.ext.lisp.syntax.Symbol(hydra.lib.strings.Cat2.apply(
                   "make-",
                   rname)),
@@ -1329,12 +1329,12 @@ public interface Coder {
       forms)));
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(symbols.get()),
-      () -> (hydra.util.ConsList<hydra.ext.lisp.syntax.ExportDeclaration>) (hydra.util.ConsList.<hydra.ext.lisp.syntax.ExportDeclaration>empty()),
-      () -> hydra.util.ConsList.of(new hydra.ext.lisp.syntax.ExportDeclaration(symbols.get())));
+      () -> (java.util.List<hydra.ext.lisp.syntax.ExportDeclaration>) (java.util.Collections.<hydra.ext.lisp.syntax.ExportDeclaration>emptyList()),
+      () -> java.util.Arrays.asList(new hydra.ext.lisp.syntax.ExportDeclaration(symbols.get())));
   }
 
-  static hydra.util.ConsList<hydra.ext.lisp.syntax.ImportDeclaration> moduleImports(hydra.packaging.Namespace focusNs, hydra.util.ConsList<hydra.packaging.Definition> defs) {
-    hydra.util.Lazy<hydra.util.ConsList<hydra.packaging.Namespace>> depNss = new hydra.util.Lazy<>(() -> hydra.lib.sets.ToList.apply(hydra.lib.sets.Delete.apply(
+  static java.util.List<hydra.ext.lisp.syntax.ImportDeclaration> moduleImports(hydra.packaging.Namespace focusNs, java.util.List<hydra.packaging.Definition> defs) {
+    hydra.util.Lazy<java.util.List<hydra.packaging.Namespace>> depNss = new hydra.util.Lazy<>(() -> hydra.lib.sets.ToList.apply(hydra.lib.sets.Delete.apply(
       focusNs,
       hydra.Analysis.definitionDependencyNamespaces(defs))));
     return hydra.lib.lists.Map.apply(
@@ -1342,12 +1342,12 @@ public interface Coder {
       depNss.get());
   }
 
-  static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.Program> moduleToLisp(hydra.ext.lisp.syntax.Dialect dialect, hydra.packaging.Module mod, hydra.util.ConsList<hydra.packaging.Definition> defs0, T0 cx, T1 g) {
-    hydra.util.ConsList<hydra.packaging.Definition> defs = hydra.Environment.reorderDefs(defs0);
-    hydra.util.Pair<hydra.util.ConsList<hydra.packaging.TypeDefinition>, hydra.util.ConsList<hydra.packaging.TermDefinition>> partitioned = hydra.Environment.partitionDefinitions(defs);
-    hydra.util.Lazy<hydra.util.ConsList<hydra.packaging.TypeDefinition>> allTypeDefs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(partitioned));
-    hydra.util.Lazy<hydra.util.ConsList<hydra.packaging.TermDefinition>> termDefs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(partitioned));
-    hydra.util.Lazy<hydra.util.ConsList<hydra.packaging.TypeDefinition>> typeDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+  static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.Program> moduleToLisp(hydra.ext.lisp.syntax.Dialect dialect, hydra.packaging.Module mod, java.util.List<hydra.packaging.Definition> defs0, T0 cx, T1 g) {
+    java.util.List<hydra.packaging.Definition> defs = hydra.Environment.reorderDefs(defs0);
+    hydra.util.Pair<java.util.List<hydra.packaging.TypeDefinition>, java.util.List<hydra.packaging.TermDefinition>> partitioned = hydra.Environment.partitionDefinitions(defs);
+    hydra.util.Lazy<java.util.List<hydra.packaging.TypeDefinition>> allTypeDefs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(partitioned));
+    hydra.util.Lazy<java.util.List<hydra.packaging.TermDefinition>> termDefs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(partitioned));
+    hydra.util.Lazy<java.util.List<hydra.packaging.TypeDefinition>> typeDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
       (java.util.function.Function<hydra.packaging.TypeDefinition, Boolean>) (td -> hydra.Predicates.isNominalType((td).type.type)),
       allTypeDefs.get()));
     return hydra.lib.eithers.Bind.apply(
@@ -1357,7 +1357,7 @@ public interface Coder {
           g,
           v1)),
         typeDefs.get()),
-      (java.util.function.Function<hydra.util.ConsList<hydra.ext.lisp.syntax.TopLevelFormWithComments>, hydra.util.Either<T2, hydra.ext.lisp.syntax.Program>>) (typeItems -> hydra.lib.eithers.Bind.apply(
+      (java.util.function.Function<java.util.List<hydra.ext.lisp.syntax.TopLevelFormWithComments>, hydra.util.Either<T2, hydra.ext.lisp.syntax.Program>>) (typeItems -> hydra.lib.eithers.Bind.apply(
         hydra.lib.eithers.MapList.apply(
           (java.util.function.Function<hydra.packaging.TermDefinition, hydra.util.Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments>>) (v1 -> hydra.ext.lisp.Coder.<T0, T1, T2>encodeTermDefinition(
             dialect,
@@ -1365,13 +1365,13 @@ public interface Coder {
             g,
             v1)),
           termDefs.get()),
-        (java.util.function.Function<hydra.util.ConsList<hydra.ext.lisp.syntax.TopLevelFormWithComments>, hydra.util.Either<T2, hydra.ext.lisp.syntax.Program>>) (termItems -> {
-          hydra.util.Lazy<hydra.util.ConsList<hydra.ext.lisp.syntax.TopLevelFormWithComments>> allItems = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
+        (java.util.function.Function<java.util.List<hydra.ext.lisp.syntax.TopLevelFormWithComments>, hydra.util.Either<T2, hydra.ext.lisp.syntax.Program>>) (termItems -> {
+          hydra.util.Lazy<java.util.List<hydra.ext.lisp.syntax.TopLevelFormWithComments>> allItems = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
             typeItems,
             termItems));
-          hydra.util.ConsList<hydra.ext.lisp.syntax.ExportDeclaration> exports = hydra.ext.lisp.Coder.moduleExports(allItems.get());
+          java.util.List<hydra.ext.lisp.syntax.ExportDeclaration> exports = hydra.ext.lisp.Coder.moduleExports(allItems.get());
           hydra.packaging.Namespace focusNs = (mod).namespace;
-          hydra.util.ConsList<hydra.ext.lisp.syntax.ImportDeclaration> imports = hydra.ext.lisp.Coder.moduleImports(
+          java.util.List<hydra.ext.lisp.syntax.ImportDeclaration> imports = hydra.ext.lisp.Coder.moduleImports(
             focusNs,
             defs);
           String nsName = (mod).namespace.value;
@@ -1381,10 +1381,10 @@ public interface Coder {
 
   static String qualifiedSnakeName(hydra.core.Name name) {
     String raw = (name).value;
-    hydra.util.ConsList<String> parts = hydra.lib.strings.SplitOn.apply(
+    java.util.List<String> parts = hydra.lib.strings.SplitOn.apply(
       ".",
       raw);
-    hydra.util.Lazy<hydra.util.ConsList<String>> snakeParts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+    hydra.util.Lazy<java.util.List<String>> snakeParts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (java.util.function.Function<String, String>) (p -> hydra.Formatting.convertCaseCamelOrUnderscoreToLowerSnake(p)),
       parts));
     String joined = hydra.lib.strings.Intercalate.apply(
@@ -1400,6 +1400,6 @@ public interface Coder {
   }
 
   static hydra.ext.lisp.syntax.Expression wrapInThunk(hydra.ext.lisp.syntax.Expression expr) {
-    return new hydra.ext.lisp.syntax.Expression.Lambda(new hydra.ext.lisp.syntax.Lambda((hydra.util.Maybe<hydra.ext.lisp.syntax.Symbol>) (hydra.util.Maybe.<hydra.ext.lisp.syntax.Symbol>nothing()), (hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol>) (hydra.util.ConsList.<hydra.ext.lisp.syntax.Symbol>empty()), (hydra.util.Maybe<hydra.ext.lisp.syntax.Symbol>) (hydra.util.Maybe.<hydra.ext.lisp.syntax.Symbol>nothing()), hydra.util.ConsList.of(expr)));
+    return new hydra.ext.lisp.syntax.Expression.Lambda(new hydra.ext.lisp.syntax.Lambda((hydra.util.Maybe<hydra.ext.lisp.syntax.Symbol>) (hydra.util.Maybe.<hydra.ext.lisp.syntax.Symbol>nothing()), (java.util.List<hydra.ext.lisp.syntax.Symbol>) (java.util.Collections.<hydra.ext.lisp.syntax.Symbol>emptyList()), (hydra.util.Maybe<hydra.ext.lisp.syntax.Symbol>) (hydra.util.Maybe.<hydra.ext.lisp.syntax.Symbol>nothing()), java.util.Arrays.asList(expr)));
   }
 }

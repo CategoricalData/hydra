@@ -74,7 +74,9 @@ public abstract class Definition implements Serializable, Comparable<Definition>
         return tagCmp;
       }
       Term o = (Term) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -117,7 +119,9 @@ public abstract class Definition implements Serializable, Comparable<Definition>
         return tagCmp;
       }
       Type o = (Type) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

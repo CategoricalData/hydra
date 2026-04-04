@@ -51,11 +51,15 @@ public class QualifiedName implements Serializable, Comparable<QualifiedName> {
   @SuppressWarnings("unchecked")
   public int compareTo(QualifiedName other) {
     int cmp = 0;
-    cmp = ((Comparable) namespace).compareTo(other.namespace);
+    cmp = hydra.util.Comparing.compare(
+      namespace,
+      other.namespace);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) local).compareTo(other.local);
+    return hydra.util.Comparing.compare(
+      local,
+      other.local);
   }
 
   public QualifiedName withNamespace(hydra.util.Maybe<hydra.packaging.Namespace> namespace) {

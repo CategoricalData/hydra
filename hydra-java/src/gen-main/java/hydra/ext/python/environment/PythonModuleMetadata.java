@@ -62,7 +62,7 @@ public class PythonModuleMetadata implements Serializable, Comparable<PythonModu
   /**
    * Type variables used in the module
    */
-  public final hydra.util.PersistentSet<hydra.core.Name> typeVariables;
+  public final java.util.Set<hydra.core.Name> typeVariables;
 
   public final Boolean usesAnnotated;
 
@@ -104,7 +104,7 @@ public class PythonModuleMetadata implements Serializable, Comparable<PythonModu
 
   public final Boolean usesTypeVar;
 
-  public PythonModuleMetadata (hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName> namespaces, hydra.util.PersistentSet<hydra.core.Name> typeVariables, Boolean usesAnnotated, Boolean usesCallable, Boolean usesCast, Boolean usesLruCache, Boolean usesTypeAlias, Boolean usesDataclass, Boolean usesDecimal, Boolean usesEither, Boolean usesEnum, Boolean usesFrozenDict, Boolean usesFrozenList, Boolean usesGeneric, Boolean usesJust, Boolean usesLeft, Boolean usesMaybe, Boolean usesName, Boolean usesNode, Boolean usesNothing, Boolean usesRight, Boolean usesTypeVar) {
+  public PythonModuleMetadata (hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName> namespaces, java.util.Set<hydra.core.Name> typeVariables, Boolean usesAnnotated, Boolean usesCallable, Boolean usesCast, Boolean usesLruCache, Boolean usesTypeAlias, Boolean usesDataclass, Boolean usesDecimal, Boolean usesEither, Boolean usesEnum, Boolean usesFrozenDict, Boolean usesFrozenList, Boolean usesGeneric, Boolean usesJust, Boolean usesLeft, Boolean usesMaybe, Boolean usesName, Boolean usesNode, Boolean usesNothing, Boolean usesRight, Boolean usesTypeVar) {
     this.namespaces = namespaces;
     this.typeVariables = typeVariables;
     this.usesAnnotated = usesAnnotated;
@@ -191,98 +191,142 @@ public class PythonModuleMetadata implements Serializable, Comparable<PythonModu
   @SuppressWarnings("unchecked")
   public int compareTo(PythonModuleMetadata other) {
     int cmp = 0;
-    cmp = ((Comparable) namespaces).compareTo(other.namespaces);
+    cmp = hydra.util.Comparing.compare(
+      namespaces,
+      other.namespaces);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) typeVariables).compareTo(other.typeVariables);
+    cmp = hydra.util.Comparing.compare(
+      typeVariables,
+      other.typeVariables);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) usesAnnotated).compareTo(other.usesAnnotated);
+    cmp = hydra.util.Comparing.compare(
+      usesAnnotated,
+      other.usesAnnotated);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) usesCallable).compareTo(other.usesCallable);
+    cmp = hydra.util.Comparing.compare(
+      usesCallable,
+      other.usesCallable);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) usesCast).compareTo(other.usesCast);
+    cmp = hydra.util.Comparing.compare(
+      usesCast,
+      other.usesCast);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) usesLruCache).compareTo(other.usesLruCache);
+    cmp = hydra.util.Comparing.compare(
+      usesLruCache,
+      other.usesLruCache);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) usesTypeAlias).compareTo(other.usesTypeAlias);
+    cmp = hydra.util.Comparing.compare(
+      usesTypeAlias,
+      other.usesTypeAlias);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) usesDataclass).compareTo(other.usesDataclass);
+    cmp = hydra.util.Comparing.compare(
+      usesDataclass,
+      other.usesDataclass);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) usesDecimal).compareTo(other.usesDecimal);
+    cmp = hydra.util.Comparing.compare(
+      usesDecimal,
+      other.usesDecimal);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) usesEither).compareTo(other.usesEither);
+    cmp = hydra.util.Comparing.compare(
+      usesEither,
+      other.usesEither);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) usesEnum).compareTo(other.usesEnum);
+    cmp = hydra.util.Comparing.compare(
+      usesEnum,
+      other.usesEnum);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) usesFrozenDict).compareTo(other.usesFrozenDict);
+    cmp = hydra.util.Comparing.compare(
+      usesFrozenDict,
+      other.usesFrozenDict);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) usesFrozenList).compareTo(other.usesFrozenList);
+    cmp = hydra.util.Comparing.compare(
+      usesFrozenList,
+      other.usesFrozenList);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) usesGeneric).compareTo(other.usesGeneric);
+    cmp = hydra.util.Comparing.compare(
+      usesGeneric,
+      other.usesGeneric);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) usesJust).compareTo(other.usesJust);
+    cmp = hydra.util.Comparing.compare(
+      usesJust,
+      other.usesJust);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) usesLeft).compareTo(other.usesLeft);
+    cmp = hydra.util.Comparing.compare(
+      usesLeft,
+      other.usesLeft);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) usesMaybe).compareTo(other.usesMaybe);
+    cmp = hydra.util.Comparing.compare(
+      usesMaybe,
+      other.usesMaybe);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) usesName).compareTo(other.usesName);
+    cmp = hydra.util.Comparing.compare(
+      usesName,
+      other.usesName);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) usesNode).compareTo(other.usesNode);
+    cmp = hydra.util.Comparing.compare(
+      usesNode,
+      other.usesNode);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) usesNothing).compareTo(other.usesNothing);
+    cmp = hydra.util.Comparing.compare(
+      usesNothing,
+      other.usesNothing);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) usesRight).compareTo(other.usesRight);
+    cmp = hydra.util.Comparing.compare(
+      usesRight,
+      other.usesRight);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) usesTypeVar).compareTo(other.usesTypeVar);
+    return hydra.util.Comparing.compare(
+      usesTypeVar,
+      other.usesTypeVar);
   }
 
   public PythonModuleMetadata withNamespaces(hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName> namespaces) {
     return new PythonModuleMetadata(namespaces, typeVariables, usesAnnotated, usesCallable, usesCast, usesLruCache, usesTypeAlias, usesDataclass, usesDecimal, usesEither, usesEnum, usesFrozenDict, usesFrozenList, usesGeneric, usesJust, usesLeft, usesMaybe, usesName, usesNode, usesNothing, usesRight, usesTypeVar);
   }
 
-  public PythonModuleMetadata withTypeVariables(hydra.util.PersistentSet<hydra.core.Name> typeVariables) {
+  public PythonModuleMetadata withTypeVariables(java.util.Set<hydra.core.Name> typeVariables) {
     return new PythonModuleMetadata(namespaces, typeVariables, usesAnnotated, usesCallable, usesCast, usesLruCache, usesTypeAlias, usesDataclass, usesDecimal, usesEither, usesEnum, usesFrozenDict, usesFrozenList, usesGeneric, usesJust, usesLeft, usesMaybe, usesName, usesNode, usesNothing, usesRight, usesTypeVar);
   }
 
