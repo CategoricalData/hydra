@@ -1,6 +1,6 @@
 (define-library (hydra test test_graph)
 (export hydra_test_test_graph_test_context hydra_test_test_graph_test_graph hydra_test_test_graph_test_namespace hydra_test_test_graph_test_schema_namespace hydra_test_test_graph_test_terms hydra_test_test_graph_test_types)
-(import (scheme base) (hydra core) (hydra lexical) (hydra lib maps) (hydra packaging) (hydra test test_terms) (hydra test test_types))
+(import (scheme base) (hydra core) (hydra context) (hydra graph) (hydra lexical) (hydra lib libraries) (hydra lib maps) (hydra packaging) (hydra rewriting) (hydra scoping) (hydra json bootstrap) (hydra test test_terms) (hydra test test_types))
 (begin
 (define hydra_test_test_graph_test_namespace "testGraph")
 (define hydra_test_test_graph_test_schema_namespace "testSchemaGraph")
