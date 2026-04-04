@@ -28,12 +28,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.ordering"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Namespace "hydra.reduction", Namespace "hydra.show.core", ShowUtil.ns]
     kernelTypesNamespaces $
     Just "Test cases for Ord instance comparisons on complex Hydra types"
   where
-    elements = [Phantoms.toDefinition allTests]
+    definitions = [Phantoms.toDefinition allTests]
 
 showBool :: TTerm (Bool -> String)
 showBool = Phantoms.lambda "b" $ Literals.showBoolean (Phantoms.var "b")

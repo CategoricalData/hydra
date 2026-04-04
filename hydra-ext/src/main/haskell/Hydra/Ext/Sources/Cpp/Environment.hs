@@ -24,10 +24,10 @@ modulType :: String -> Type
 modulType = typeref ModuleTypes.ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [] [CoreTypes.ns, ModuleTypes.ns] $
+module_ = Module ns (map toTypeDef definitions) [] [CoreTypes.ns, ModuleTypes.ns] $
     Just "Type definitions for C++ code generation environment"
   where
-    elements = [
+    definitions = [
       cppEnvironmentType]
 
 -- | The CppEnvironment type definition

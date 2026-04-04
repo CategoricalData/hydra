@@ -106,12 +106,12 @@ avroEnvironmentNs :: Namespace
 avroEnvironmentNs = Namespace "hydra.ext.avro.environment"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [ExtractCore.ns, Strip.ns]
     (avroEnvironmentNs:AvroSchema.ns:jsonModelNs:KernelTypes.kernelTypesNamespaces) $
     Just "Avro-to-Hydra adapter for converting Avro schemas and data to Hydra types and terms"
   where
-    elements = [
+    definitions = [
       toDefinition avro_foreignKey,
       toDefinition avro_primaryKey,
       toDefinition emptyAvroEnvironment,

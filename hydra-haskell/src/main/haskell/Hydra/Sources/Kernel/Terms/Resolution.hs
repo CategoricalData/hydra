@@ -87,12 +87,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Lexical.ns, Names.ns, Scoping.ns, ShowCore.ns, Strip.ns, Substitution.ns, Variables.ns]
     kernelTypesNamespaces $
     Just ("Type dereference, lookup, requirements, and instantiation")
   where
-    elements = [
+    definitions = [
       toDefinition dereferenceType,
       toDefinition fTypeIsPolymorphic,
       toDefinition fieldMap,

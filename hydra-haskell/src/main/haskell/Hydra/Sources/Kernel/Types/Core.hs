@@ -20,10 +20,10 @@ hydraCoreGraph :: Graph
 hydraCoreGraph = elementsToGraph bootstrapGraph M.empty (moduleBindings module_)
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [] [ns] $ -- Note: hydra.core uniquely takes itself as a type-level dependency
+module_ = Module ns (map toTypeDef definitions) [] [ns] $ -- Note: hydra.core uniquely takes itself as a type-level dependency
     Just "Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies."
   where
-    elements = [
+    definitions = [
       annotatedTerm,
       annotatedType,
       application,

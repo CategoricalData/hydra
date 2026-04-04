@@ -52,13 +52,13 @@ ns :: Namespace
 ns = Namespace "hydra.ext.rust.coder"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [moduleNamespace RustSerdeSource.module_, moduleNamespace RustLanguageSource.module_,
       Formatting.ns, Names.ns, Strip.ns, Variables.ns, Environment.ns, Lexical.ns, SerializationSource.ns]
     (RustSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Rust code generator: converts Hydra type and term modules to Rust source code"
   where
-    elements = [
+    definitions = [
       toDefinition standardDerives,
       toDefinition rustPath,
       toDefinition rustPathSegmented,

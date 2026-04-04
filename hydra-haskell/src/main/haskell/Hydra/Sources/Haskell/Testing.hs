@@ -50,13 +50,13 @@ ns :: Namespace
 ns = Namespace "hydra.ext.haskell.testing"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [HaskellUtilsSource.ns, Formatting.ns, Names.ns,
      Constants.ns, Dependencies.ns, Predicates.ns, Rewriting.ns, ShowError.ns, Lexical.ns, Strip.ns]
     (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Haskell test code generation for HSpec-based generation tests"
   where
-    elements = [
+    definitions = [
       toDefinition addNamespacesToNamespaces,
       toDefinition buildNamespacesForTestGroup,
       toDefinition buildTestModule,

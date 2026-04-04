@@ -29,13 +29,13 @@ json :: String -> Type
 json = typeref $ JsonModel.ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [JsonModel.ns] [] $
+module_ = Module ns (map toTypeDef definitions) [JsonModel.ns] [] $
     Just ("A GeoJSON model based on the specification at https://www.rfc-editor.org/rfc/rfc7946. " ++
           "This model provides some additional structure beyond the JSON encoding described in the specification; " ++
           "For example, it provides MultiPoint not as an object with an array of coordinates which encode points, " ++
           "but as an array of Points. A BoundingBox is not simply an list of numbers, but a list of CoordinateRanges.")
   where
-    elements = [
+    definitions = [
       boundingBox,
       coordinateRange,
       feature,

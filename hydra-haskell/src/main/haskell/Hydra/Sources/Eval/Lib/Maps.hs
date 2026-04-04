@@ -61,12 +61,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [ExtractCore.ns, ShowCore.ns]
     kernelTypesNamespaces $
     Just ("Evaluation-level implementations of Map functions for the Hydra interpreter.")
   where
-    elements = [
+    definitions = [
       toDefinition alter_,
       toDefinition bimap_,
       toDefinition filter_,

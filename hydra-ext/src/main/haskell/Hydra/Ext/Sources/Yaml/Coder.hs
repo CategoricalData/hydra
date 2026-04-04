@@ -47,13 +47,13 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Adapt.ns,
      ExtractCore.ns, HydraLiterals.ns, YamlLanguage.ns, Strip.ns]
     (KernelTypes.kernelTypesNamespaces L.++ [Namespace "hydra.ext.org.yaml.model"]) $
     Just "YAML encoding and decoding for Hydra terms"
   where
-    elements = [
+    definitions = [
       toDefinition yamlCoder,
       toDefinition literalYamlCoder,
       toDefinition recordCoder,

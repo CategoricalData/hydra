@@ -37,12 +37,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.rewriting"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [ShowCore.ns, RewritingModule.ns, TestGraph.ns]
     kernelTypesNamespaces
     (Just "Test cases for core rewrite/fold combinators")
   where
-    elements = [Phantoms.toDefinition allTests]
+    definitions = [Phantoms.toDefinition allTests]
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_

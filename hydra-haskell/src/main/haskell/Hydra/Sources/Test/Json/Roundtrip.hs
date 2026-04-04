@@ -34,12 +34,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.json.roundtrip"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [ShowCore.ns, Namespace "hydra.json.encode", Namespace "hydra.json.decode"]
     kernelTypesNamespaces
     (Just "Round-trip test cases for JSON encoding and decoding")
   where
-    elements = [
+    definitions = [
         Phantoms.toDefinition allTests]
 
 define :: String -> TTerm a -> TTermDefinition a

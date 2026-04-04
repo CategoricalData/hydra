@@ -59,12 +59,12 @@ ns :: Namespace
 ns = Namespace "hydra.formatting"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     []
     kernelTypesNamespaces $
     Just "String formatting types and functions."
   where
-    elements = [
+    definitions = [
       toDefinition capitalize,
       toDefinition convertCase,
       toDefinition convertCaseCamelOrUnderscoreToLowerSnake,

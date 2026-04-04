@@ -100,12 +100,12 @@ pyLanguageNs :: Namespace
 pyLanguageNs = Namespace "hydra.ext.python.language"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Names.ns, Formatting.ns, PySerde.ns, pyLanguageNs]
     (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Python naming utilities: encoding Hydra names as Python names"
   where
-    elements = [
+    definitions = [
       toDefinition encodeConstantForFieldName,
       toDefinition encodeConstantForTypeName,
       toDefinition encodeEnumValue,

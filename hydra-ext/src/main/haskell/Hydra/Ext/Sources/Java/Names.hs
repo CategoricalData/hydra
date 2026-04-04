@@ -93,12 +93,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.java.names"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     []
     (JavaSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Java naming constants and package name utilities"
   where
-    elements = [
+    definitions = [
       toDefinition acceptMethodName,
       toDefinition applyMethodName,
       toDefinition compareToMethodName,

@@ -95,12 +95,12 @@ ns :: Namespace
 ns = Namespace "hydra.demos.genpg.transform"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Reduction.ns, Rewriting.ns, Strip.ns, ExtractCore.ns]  -- term dependencies
     (kernelTypesNamespaces L.++ [PgModel.ns, TabularModel.ns, RelationalModel.ns]) $  -- type dependencies
     Just "Functions for transforming property graph mappings into property graph elements."
   where
-    elements = [
+    definitions = [
       toDefinition concatPairs,
       toDefinition decodeCell,
       toDefinition decodeRow,
