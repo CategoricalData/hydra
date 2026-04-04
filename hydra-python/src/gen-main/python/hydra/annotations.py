@@ -41,6 +41,68 @@ def aggregate_annotations(get_value: Callable[[T0], Maybe[T1]], get_x: Callable[
         return hydra.lib.maybes.maybe((lambda : rest), (lambda yy: to_pairs(hydra.lib.lists.cons(hydra.lib.maps.to_list(get_anns(yy)), rest), get_x(yy))), get_value(t2))
     return hydra.lib.maps.from_list(hydra.lib.lists.concat(to_pairs((), t)))
 
+def get_description(cx: hydra.context.Context, graph: hydra.graph.Graph, anns: FrozenDict[hydra.core.Name, hydra.core.Term]) -> Either[hydra.context.InContext[hydra.errors.Error], Maybe[str]]:
+    r"""Get description from annotations map (Either version)."""
+
+    return hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda term: hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.pure(x1)), hydra.extract.core.string(cx, graph, term))), hydra.lib.maps.lookup(hydra.core.Name("description"), anns))
+
+def term_annotation_internal(term: hydra.core.Term) -> FrozenDict[hydra.core.Name, hydra.core.Term]:
+    r"""Get internal term annotations."""
+
+    def get_ann(t: hydra.core.Term) -> Maybe[hydra.core.AnnotatedTerm]:
+        match t:
+            case hydra.core.TermAnnotated(value=a):
+                return Just(a)
+
+            case _:
+                return Nothing()
+    return aggregate_annotations((lambda x1: get_ann(x1)), (lambda at: at.body), (lambda at: at.annotation), term)
+
+def get_term_description(cx: hydra.context.Context, graph: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], Maybe[str]]:
+    r"""Get term description (Either version)."""
+
+    def peel(t: hydra.core.Term) -> hydra.core.Term:
+        while True:
+            match t:
+                case hydra.core.TermTypeLambda(value=tl):
+                    t = tl.body
+                    continue
+
+                case hydra.core.TermTypeApplication(value=ta):
+                    t = ta.body
+                    continue
+
+                case _:
+                    return t
+    return get_description(cx, graph, term_annotation_internal(peel(term)))
+
+def comments_from_binding(cx: hydra.context.Context, g: hydra.graph.Graph, b: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.errors.Error], Maybe[str]]:
+    r"""Extract comments/description from a Binding."""
+
+    return get_term_description(cx, g, b.term)
+
+def type_annotation_internal(typ: hydra.core.Type) -> FrozenDict[hydra.core.Name, hydra.core.Term]:
+    r"""Get internal type annotations."""
+
+    def get_ann(t: hydra.core.Type) -> Maybe[hydra.core.AnnotatedType]:
+        match t:
+            case hydra.core.TypeAnnotated(value=a):
+                return Just(a)
+
+            case _:
+                return Nothing()
+    return aggregate_annotations((lambda x1: get_ann(x1)), (lambda at: at.body), (lambda at: at.annotation), typ)
+
+def get_type_description(cx: hydra.context.Context, graph: hydra.graph.Graph, typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.errors.Error], Maybe[str]]:
+    r"""Get type description (Either version)."""
+
+    return get_description(cx, graph, type_annotation_internal(typ))
+
+def comments_from_field_type(cx: hydra.context.Context, g: hydra.graph.Graph, ft: hydra.core.FieldType) -> Either[hydra.context.InContext[hydra.errors.Error], Maybe[str]]:
+    r"""Extract comments/description from a FieldType."""
+
+    return get_type_description(cx, g, ft.type)
+
 def get_attr(key: hydra.core.Name, cx: hydra.context.Context) -> Maybe[hydra.core.Term]:
     r"""Get an attribute from a context (pure version)."""
 
@@ -98,62 +160,15 @@ def get_count(key: hydra.core.Name, cx: hydra.context.Context):
                 return 0
     return hydra.lib.maybes.maybe((lambda : 0), (lambda term: _hoist_hydra_annotations_get_count_3(term)), hydra.lib.maps.lookup(key, cx.other))
 
-def get_description(cx: hydra.context.Context, graph: hydra.graph.Graph, anns: FrozenDict[hydra.core.Name, hydra.core.Term]) -> Either[hydra.context.InContext[hydra.errors.Error], Maybe[str]]:
-    r"""Get description from annotations map (Either version)."""
-
-    return hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda term: hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.pure(x1)), hydra.extract.core.string(cx, graph, term))), hydra.lib.maps.lookup(hydra.core.Name("description"), anns))
-
-def term_annotation_internal(term: hydra.core.Term) -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-    r"""Get internal term annotations."""
-
-    def get_ann(t: hydra.core.Term) -> Maybe[hydra.core.AnnotatedTerm]:
-        match t:
-            case hydra.core.TermAnnotated(value=a):
-                return Just(a)
-
-            case _:
-                return Nothing()
-    return aggregate_annotations((lambda x1: get_ann(x1)), (lambda at: at.body), (lambda at: at.annotation), term)
-
 def get_term_annotation(key: hydra.core.Name, term: hydra.core.Term) -> Maybe[hydra.core.Term]:
     r"""Get a term annotation."""
 
     return hydra.lib.maps.lookup(key, term_annotation_internal(term))
 
-def get_term_description(cx: hydra.context.Context, graph: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], Maybe[str]]:
-    r"""Get term description (Either version)."""
-
-    def peel(t: hydra.core.Term) -> hydra.core.Term:
-        while True:
-            match t:
-                case hydra.core.TermTypeLambda(value=tl):
-                    t = tl.body
-                    continue
-
-                case hydra.core.TermTypeApplication(value=ta):
-                    t = ta.body
-                    continue
-
-                case _:
-                    return t
-    return get_description(cx, graph, term_annotation_internal(peel(term)))
-
 def get_type(graph: hydra.graph.Graph, anns: FrozenDict[hydra.core.Name, hydra.core.Term]) -> Either[hydra.errors.DecodingError, Maybe[hydra.core.Type]]:
     r"""Get type from annotations."""
 
     return hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda dat: hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.pure(x1)), hydra.decode.core.type(graph, dat))), hydra.lib.maps.lookup(hydra.constants.key_type, anns))
-
-def type_annotation_internal(typ: hydra.core.Type) -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-    r"""Get internal type annotations."""
-
-    def get_ann(t: hydra.core.Type) -> Maybe[hydra.core.AnnotatedType]:
-        match t:
-            case hydra.core.TypeAnnotated(value=a):
-                return Just(a)
-
-            case _:
-                return Nothing()
-    return aggregate_annotations((lambda x1: get_ann(x1)), (lambda at: at.body), (lambda at: at.annotation), typ)
 
 def get_type_annotation(key: hydra.core.Name, typ: hydra.core.Type) -> Maybe[hydra.core.Term]:
     r"""Get a type annotation."""
@@ -169,11 +184,6 @@ def get_type_classes(cx: hydra.context.Context, graph: hydra.graph.Graph, term: 
             return hydra.lib.maps.from_list(((hydra.core.Name("equality"), hydra.classes.TypeClass.EQUALITY), (hydra.core.Name("ordering"), hydra.classes.TypeClass.ORDERING)))
         return hydra.lib.eithers.bind(hydra.extract.core.unit_variant(cx, hydra.core.Name("hydra.classes.TypeClass"), graph, term2), (lambda fn: hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2("unexpected: expected type class, got ", hydra.show.core.term(term2))))), cx))), (lambda x: Right(x)), hydra.lib.maps.lookup(fn, by_name()))))
     return hydra.lib.maybes.maybe((lambda : Right(hydra.lib.maps.empty())), (lambda term2: hydra.extract.core.map(cx, (lambda t: hydra.lib.eithers.bimap((lambda de: hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(de.value))), cx)), (lambda x: x), hydra.decode.core.name(graph, t))), (lambda v1: hydra.extract.core.set_of(cx, (lambda x1: decode_class(x1)), graph, v1)), graph, term2)), get_term_annotation(hydra.constants.key_classes, term))
-
-def get_type_description(cx: hydra.context.Context, graph: hydra.graph.Graph, typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.errors.Error], Maybe[str]]:
-    r"""Get type description (Either version)."""
-
-    return get_description(cx, graph, type_annotation_internal(typ))
 
 def has_description(anns: FrozenDict[hydra.core.Name, T0]) -> bool:
     r"""Check if annotations contain description."""
@@ -310,15 +320,6 @@ def set_type_description(d: Maybe[str], v1: hydra.core.Type) -> hydra.core.Type:
     r"""Set type description."""
 
     return set_type_annotation(hydra.constants.key_description, hydra.lib.maybes.map((lambda arg_: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(arg_))))), d), v1)
-
-def type_element(name: hydra.core.Name, typ: hydra.core.Type) -> hydra.core.Binding:
-    r"""Create a type element with proper annotations."""
-
-    schema_term = cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.core.Type")))
-    @lru_cache(1)
-    def data_term() -> hydra.core.Term:
-        return normalize_term_annotations(cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(hydra.encode.core.type(typ), hydra.lib.maps.from_list(((hydra.constants.key_type, schema_term),))))))
-    return hydra.core.Binding(name, data_term(), Just(hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type"))), Nothing())))
 
 def when_flag(cx: hydra.context.Context, flag: hydra.core.Name, ethen: Either[hydra.context.InContext[hydra.errors.Error], T0], eelse: Either[hydra.context.InContext[hydra.errors.Error], T0]) -> Either[hydra.context.InContext[hydra.errors.Error], T0]:
     r"""Execute different branches based on flag (Either version)."""

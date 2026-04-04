@@ -21,8 +21,8 @@ import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
-import hydra.module
 import hydra.names
+import hydra.packaging
 import hydra.rewriting
 import hydra.sorting
 import hydra.strip
@@ -85,15 +85,15 @@ def term_dependency_names(binds: bool, with_prims: bool, with_noms: bool, term0:
                 return names
     return hydra.rewriting.fold_over_term(hydra.coders.TraversalOrder.PRE, (lambda x1, x2: add_names(x1, x2)), hydra.lib.sets.empty(), term0)
 
-def elements_with_dependencies(cx: hydra.context.Context, graph: hydra.graph.Graph, original: frozenlist[hydra.core.Binding]) -> Either[hydra.context.InContext[hydra.errors.Error], frozenlist[hydra.core.Binding]]:
-    r"""Get elements with their dependencies."""
+def definitions_with_dependencies(cx: hydra.context.Context, graph: hydra.graph.Graph, original: frozenlist[hydra.core.Binding]) -> Either[hydra.context.InContext[hydra.errors.Error], frozenlist[hydra.core.Binding]]:
+    r"""Get definitions with their dependencies."""
 
     def dep_names(el: hydra.core.Binding) -> frozenlist[hydra.core.Name]:
         return hydra.lib.sets.to_list(term_dependency_names(True, False, False, el.term))
     @lru_cache(1)
     def all_dep_names() -> frozenlist[hydra.core.Name]:
         return hydra.lib.lists.nub(hydra.lib.lists.concat2(hydra.lib.lists.map((lambda v1: v1.name), original), hydra.lib.lists.concat(hydra.lib.lists.map((lambda x1: dep_names(x1)), original))))
-    return hydra.lib.eithers.map_list((lambda name: hydra.lexical.require_element(cx, graph, name)), all_dep_names())
+    return hydra.lib.eithers.map_list((lambda name: hydra.lexical.require_binding(cx, graph, name)), all_dep_names())
 
 def flatten_let_terms(term: hydra.core.Term) -> hydra.core.Term:
     r"""Flatten nested let expressions."""
@@ -434,13 +434,13 @@ def type_names_in_type(typ0: hydra.core.Type) -> frozenset[T0]:
 def type_dependency_names(with_schema: bool, typ: hydra.core.Type) -> frozenset[hydra.core.Name]:
     return hydra.lib.logic.if_else(with_schema, (lambda : hydra.lib.sets.union(hydra.variables.free_variables_in_type(typ), type_names_in_type(typ))), (lambda : hydra.variables.free_variables_in_type(typ)))
 
-def topological_sort_type_definitions(defs: frozenlist[hydra.module.TypeDefinition]) -> frozenlist[frozenlist[hydra.module.TypeDefinition]]:
+def topological_sort_type_definitions(defs: frozenlist[hydra.packaging.TypeDefinition]) -> frozenlist[frozenlist[hydra.packaging.TypeDefinition]]:
     r"""Topologically sort type definitions by dependencies."""
 
-    def to_pair(def_: hydra.module.TypeDefinition) -> tuple[hydra.core.Name, frozenlist[hydra.core.Name]]:
-        return (def_.name, hydra.lib.sets.to_list(type_dependency_names(False, def_.type)))
+    def to_pair(def_: hydra.packaging.TypeDefinition) -> tuple[hydra.core.Name, frozenlist[hydra.core.Name]]:
+        return (def_.name, hydra.lib.sets.to_list(type_dependency_names(False, def_.type.type)))
     @lru_cache(1)
-    def name_to_def() -> FrozenDict[hydra.core.Name, hydra.module.TypeDefinition]:
+    def name_to_def() -> FrozenDict[hydra.core.Name, hydra.packaging.TypeDefinition]:
         return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda d: (d.name, d)), defs))
     @lru_cache(1)
     def sorted() -> frozenlist[frozenlist[hydra.core.Name]]:

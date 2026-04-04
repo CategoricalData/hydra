@@ -3,7 +3,7 @@
 -- This module contains a single binding, typesByName, which maps type Names to Types
 -- for all types defined in the kernel modules needed to decode the Module type
 -- and to provide schema types for inference tests:
--- hydra.coders, hydra.context, hydra.core, hydra.error, hydra.graph, hydra.module, and hydra.util.
+-- hydra.coders, hydra.context, hydra.core, hydra.error, hydra.graph, hydra.packaging, and hydra.util.
 --
 -- By consolidating these types into a single map, we avoid the need to generate
 -- individual Source modules for each kernel type module (which can exceed the JVM's
@@ -19,7 +19,7 @@ import qualified Hydra.Sources.Kernel.Types.Context as Context
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Errors as Error
 import qualified Hydra.Sources.Kernel.Types.Graph as Graph
-import qualified Hydra.Sources.Kernel.Types.Module as Module
+import qualified Hydra.Sources.Kernel.Types.Packaging as Packaging
 import qualified Hydra.Sources.Kernel.Types.Util as Util
 
 import qualified Data.Map as M
@@ -37,7 +37,7 @@ bootstrapTypeModules = [
   Core.module_,
   Error.module_,
   Graph.module_,
-  Module.module_,
+  Packaging.module_,
   Util.module_]
 
 module_ :: Module

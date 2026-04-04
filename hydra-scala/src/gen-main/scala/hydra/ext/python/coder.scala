@@ -14,7 +14,7 @@ import hydra.ext.python.syntax.*
 
 import hydra.graph.*
 
-import hydra.module.*
+import hydra.packaging.*
 
 import hydra.typing.*
 
@@ -44,7 +44,7 @@ import hydra.lib.strings
 
 def analyzePythonFunction[T0](cx: hydra.context.Context)(env: hydra.ext.python.environment.PythonEnvironment)(term: hydra.core.Term): Either[T0,
    hydra.typing.FunctionStructure[hydra.ext.python.environment.PythonEnvironment]] =
-  hydra.coderUtils.analyzeFunctionTermWith(cx)(hydra.ext.python.coder.pythonBindingMetadata)(hydra.ext.python.coder.pythonEnvironmentGetGraph)(hydra.ext.python.coder.pythonEnvironmentSetGraph)(env)(term)
+  hydra.analysis.analyzeFunctionTermWith(cx)(hydra.ext.python.coder.pythonBindingMetadata)(hydra.ext.python.coder.pythonEnvironmentGetGraph)(hydra.ext.python.coder.pythonEnvironmentSetGraph)(env)(term)
 
 def classVariantPatternUnit(pyVariantName: hydra.ext.python.syntax.Name): hydra.ext.python.syntax.ClosedPattern =
   hydra.ext.python.syntax.ClosedPattern.`class`(hydra.ext.python.syntax.ClassPattern(Seq(pyVariantName), None, None))
@@ -199,7 +199,7 @@ def eliminateUnitVar(v: hydra.core.Name)(term0: hydra.core.Term): hydra.core.Ter
   go(term0)
 }
 
-def emptyMetadata(ns: hydra.module.Namespaces[hydra.ext.python.syntax.DottedName]): hydra.ext.python.environment.PythonModuleMetadata =
+def emptyMetadata(ns: hydra.packaging.Namespaces[hydra.ext.python.syntax.DottedName]): hydra.ext.python.environment.PythonModuleMetadata =
   hydra.ext.python.environment.PythonModuleMetadata(ns, hydra.lib.sets.empty[hydra.core.Name], false,
      false, false, false, false, false, false, false, false, false, false, false, false, false, false,
      false, false, false, false, false)
@@ -209,7 +209,7 @@ def encodeApplication(cx: hydra.context.Context)(env: hydra.ext.python.environme
   {
   lazy val g: hydra.graph.Graph = hydra.ext.python.coder.pythonEnvironmentGetGraph(env)
   lazy val term: hydra.core.Term = hydra.core.Term.application(app)
-  lazy val gathered: Tuple2[hydra.core.Term, Seq[hydra.core.Term]] = hydra.coderUtils.gatherArgs(term)(Seq())
+  lazy val gathered: Tuple2[hydra.core.Term, Seq[hydra.core.Term]] = hydra.analysis.gatherArgs(term)(Seq())
   lazy val fun: hydra.core.Term = hydra.lib.pairs.first[hydra.core.Term, Seq[hydra.core.Term]](gathered)
   lazy val args: Seq[hydra.core.Term] = hydra.lib.pairs.second[hydra.core.Term, Seq[hydra.core.Term]](gathered)
   lazy val knownArity: Int = hydra.ext.python.coder.termArityWithPrimitives(g)(fun)
@@ -316,7 +316,7 @@ def encodeApplicationInner(cx: hydra.context.Context)(env: hydra.ext.python.envi
               }
             }
           }
-        })(el.`type`))(hydra.lexical.lookupElement(g)(v_Term_variable_name))
+        })(el.`type`))(hydra.lexical.lookupBinding(g)(v_Term_variable_name))
       }
     }
     case _ => defaultCase
@@ -577,7 +577,7 @@ def encodeBindingAs(cx: hydra.context.Context)(env: hydra.ext.python.environment
   })((ts: hydra.core.TypeScheme) =>
     hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Option[scala.Predef.String], hydra.ext.python.syntax.Statement](hydra.annotations.getTermDescription(cx)(hydra.ext.python.coder.pythonEnvironmentGetGraph(env))(term1))((comment: Option[scala.Predef.String]) =>
     {
-    lazy val normComment: Option[scala.Predef.String] = hydra.lib.maybes.map[scala.Predef.String, scala.Predef.String](hydra.coderUtils.normalizeComment)(comment)
+    lazy val normComment: Option[scala.Predef.String] = hydra.lib.maybes.map[scala.Predef.String, scala.Predef.String](hydra.formatting.normalizeComment)(comment)
     hydra.ext.python.coder.encodeTermAssignment(cx)(env)(name1)(term1)(ts)(normComment)
   }))(mts)
 }
@@ -594,11 +594,11 @@ def encodeBindingAsAssignment(cx: hydra.context.Context)(allowThunking: Boolean)
     {
     lazy val tc: hydra.graph.Graph = (env.graph)
     {
-      lazy val isComplexVar: Boolean = hydra.coderUtils.isComplexVariable(tc)(name)
+      lazy val isComplexVar: Boolean = hydra.predicates.isComplexVariable(tc)(name)
       {
-        lazy val termIsComplex: Boolean = hydra.coderUtils.isComplexTerm(tc)(term)
+        lazy val termIsComplex: Boolean = hydra.predicates.isComplexTerm(tc)(term)
         {
-          lazy val isTrivial: Boolean = hydra.coderUtils.isTrivialTerm(term)
+          lazy val isTrivial: Boolean = hydra.predicates.isTrivialTerm(term)
           {
             lazy val needsThunk: Boolean = hydra.lib.logic.ifElse[Boolean](isTrivial)(false)(hydra.lib.maybes.maybe[Boolean,
                hydra.core.TypeScheme](hydra.lib.logic.and(allowThunking)(hydra.lib.logic.or(isComplexVar)(termIsComplex)))((ts: hydra.core.TypeScheme) =>
@@ -662,10 +662,10 @@ def encodeDefaultCaseBlock[T0, T1](encodeTerm: (T0 => Either[T1, hydra.ext.pytho
   }
 })
 
-def encodeDefinition(cx: hydra.context.Context)(env: hydra.ext.python.environment.PythonEnvironment)(`def_`: hydra.module.Definition): Either[hydra.context.InContext[hydra.errors.Error],
+def encodeDefinition(cx: hydra.context.Context)(env: hydra.ext.python.environment.PythonEnvironment)(`def_`: hydra.packaging.Definition): Either[hydra.context.InContext[hydra.errors.Error],
    Seq[Seq[hydra.ext.python.syntax.Statement]]] =
   `def_` match
-  case hydra.module.Definition.term(v_Definition_term_td) => {
+  case hydra.packaging.Definition.term(v_Definition_term_td) => {
     lazy val name: hydra.core.Name = (v_Definition_term_td.name)
     {
       lazy val term: hydra.core.Term = (v_Definition_term_td.term)
@@ -676,22 +676,22 @@ def encodeDefinition(cx: hydra.context.Context)(env: hydra.ext.python.environmen
            Seq[Seq[hydra.ext.python.syntax.Statement]]](hydra.annotations.getTermDescription(cx)(hydra.ext.python.coder.pythonEnvironmentGetGraph(env))(term))((comment: Option[scala.Predef.String]) =>
           {
           lazy val normComment: Option[scala.Predef.String] = hydra.lib.maybes.map[scala.Predef.String,
-             scala.Predef.String](hydra.coderUtils.normalizeComment)(comment)
+             scala.Predef.String](hydra.formatting.normalizeComment)(comment)
           hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.ext.python.syntax.Statement,
              Seq[Seq[hydra.ext.python.syntax.Statement]]](hydra.ext.python.coder.encodeTermAssignment(cx)(env)(name)(term)(typ)(normComment))((stmt: hydra.ext.python.syntax.Statement) => Right(Seq(Seq(stmt))))
         })
       }
     }
   }
-  case hydra.module.Definition.`type`(v_Definition_type_td) => {
+  case hydra.packaging.Definition.`type`(v_Definition_type_td) => {
     lazy val name: hydra.core.Name = (v_Definition_type_td.name)
     {
-      lazy val typ: hydra.core.Type = (v_Definition_type_td.`type`)
+      lazy val typ: hydra.core.Type = (v_Definition_type_td.`type`.`type`)
       hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Option[scala.Predef.String],
          Seq[Seq[hydra.ext.python.syntax.Statement]]](hydra.annotations.getTypeDescription(cx)(hydra.ext.python.coder.pythonEnvironmentGetGraph(env))(typ))((comment: Option[scala.Predef.String]) =>
         {
         lazy val normComment: Option[scala.Predef.String] = hydra.lib.maybes.map[scala.Predef.String,
-           scala.Predef.String](hydra.coderUtils.normalizeComment)(comment)
+           scala.Predef.String](hydra.formatting.normalizeComment)(comment)
         hydra.ext.python.coder.encodeTypeAssignment(cx)(env)(name)(typ)(normComment)
       })
     }
@@ -878,7 +878,7 @@ def encodeFunctionDefinition(cx: hydra.context.Context)(env: hydra.ext.python.en
   lazy val pyParams: hydra.ext.python.syntax.Parameters = hydra.ext.python.syntax.Parameters.paramNoDefault(hydra.ext.python.syntax.ParamNoDefaultParameters(pyArgs,
      Seq(), None))
   {
-    lazy val isTCO: Boolean = hydra.lib.logic.and(hydra.lib.logic.not(hydra.lib.lists.`null`[hydra.core.Name](args)))(hydra.coderUtils.isSelfTailRecursive(name)(body))
+    lazy val isTCO: Boolean = hydra.lib.logic.and(hydra.lib.logic.not(hydra.lib.lists.`null`[hydra.core.Name](args)))(hydra.analysis.isSelfTailRecursive(name)(body))
     hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.ext.python.syntax.Block,
        hydra.ext.python.syntax.Statement](hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error],
        hydra.ext.python.syntax.Block]](isTCO)(hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error],
@@ -1024,30 +1024,30 @@ def encodeNameConstants(env: hydra.ext.python.environment.PythonEnvironment)(nam
      hydra.core.Name]](namePair)(fieldPairs))
 }
 
-def encodePythonModule(cx: hydra.context.Context)(g: hydra.graph.Graph)(mod: hydra.module.Module)(defs0: Seq[hydra.module.Definition]): Either[hydra.context.InContext[hydra.errors.Error],
+def encodePythonModule(cx: hydra.context.Context)(g: hydra.graph.Graph)(mod: hydra.packaging.Module)(defs0: Seq[hydra.packaging.Definition]): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.ext.python.syntax.Module] =
   {
-  lazy val defs: Seq[hydra.module.Definition] = hydra.coderUtils.reorderDefs(defs0)
+  lazy val defs: Seq[hydra.packaging.Definition] = hydra.environment.reorderDefs(defs0)
   lazy val meta0: hydra.ext.python.environment.PythonModuleMetadata = hydra.ext.python.coder.gatherMetadata(mod.namespace)(defs)
-  lazy val namespaces0: hydra.module.Namespaces[hydra.ext.python.syntax.DottedName] = (meta0.namespaces)
+  lazy val namespaces0: hydra.packaging.Namespaces[hydra.ext.python.syntax.DottedName] = (meta0.namespaces)
   lazy val env0: hydra.ext.python.environment.PythonEnvironment = hydra.ext.python.coder.initialEnvironment(namespaces0)(g)
   lazy val isTypeMod: Boolean = hydra.ext.python.coder.isTypeModuleCheck(defs0)
   hydra.ext.python.coder.withDefinitions(env0)(defs)((env: hydra.ext.python.environment.PythonEnvironment) =>
     hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Seq[Seq[hydra.ext.python.syntax.Statement]],
        hydra.ext.python.syntax.Module](hydra.lib.eithers.map[Seq[Seq[Seq[hydra.ext.python.syntax.Statement]]],
        Seq[Seq[hydra.ext.python.syntax.Statement]], hydra.context.InContext[hydra.errors.Error]]((xs: Seq[Seq[Seq[hydra.ext.python.syntax.Statement]]]) =>
-    hydra.lib.lists.concat[Seq[hydra.ext.python.syntax.Statement]](xs))(hydra.lib.eithers.mapList[hydra.module.Definition,
-       Seq[Seq[hydra.ext.python.syntax.Statement]], hydra.context.InContext[hydra.errors.Error]]((d: hydra.module.Definition) => hydra.ext.python.coder.encodeDefinition(cx)(env)(d))(defs)))((defStmts: Seq[Seq[hydra.ext.python.syntax.Statement]]) =>
+    hydra.lib.lists.concat[Seq[hydra.ext.python.syntax.Statement]](xs))(hydra.lib.eithers.mapList[hydra.packaging.Definition,
+       Seq[Seq[hydra.ext.python.syntax.Statement]], hydra.context.InContext[hydra.errors.Error]]((d: hydra.packaging.Definition) => hydra.ext.python.coder.encodeDefinition(cx)(env)(d))(defs)))((defStmts: Seq[Seq[hydra.ext.python.syntax.Statement]]) =>
     {
     lazy val meta2: hydra.ext.python.environment.PythonModuleMetadata = hydra.lib.logic.ifElse[hydra.ext.python.environment.PythonModuleMetadata](hydra.lib.logic.and(hydra.lib.logic.not(isTypeMod))(hydra.ext.python.coder.useInlineTypeParams))(hydra.ext.python.coder.setMetaUsesTypeVar(meta0)(false))(meta0)
     {
       lazy val meta: hydra.ext.python.environment.PythonModuleMetadata = hydra.lib.logic.ifElse[hydra.ext.python.environment.PythonModuleMetadata](hydra.lib.logic.and(isTypeMod)(hydra.lib.equality.equal[hydra.ext.python.environment.PythonVersion](hydra.ext.python.coder.targetPythonVersion)(hydra.ext.python.environment.PythonVersion.python310)))(hydra.ext.python.coder.setMetaUsesTypeAlias(meta2)(true))(meta2)
       {
-        lazy val namespaces: hydra.module.Namespaces[hydra.ext.python.syntax.DottedName] = (meta0.namespaces)
+        lazy val namespaces: hydra.packaging.Namespaces[hydra.ext.python.syntax.DottedName] = (meta0.namespaces)
         {
           lazy val commentStmts: Seq[hydra.ext.python.syntax.Statement] = hydra.lib.maybes.maybe[Seq[hydra.ext.python.syntax.Statement],
              scala.Predef.String](Seq())((c: scala.Predef.String) => Seq(hydra.ext.python.utils.commentStatement(c)))(hydra.lib.maybes.map[scala.Predef.String,
-             scala.Predef.String](hydra.coderUtils.normalizeComment)(mod.description))
+             scala.Predef.String](hydra.formatting.normalizeComment)(mod.description))
           {
             lazy val importStmts: Seq[hydra.ext.python.syntax.Statement] = hydra.ext.python.coder.moduleImports(namespaces)(meta)
             {
@@ -1129,9 +1129,9 @@ def encodeTermAssignment(cx: hydra.context.Context)(env: hydra.ext.python.enviro
                 {
                   lazy val binding: hydra.core.Binding = hydra.core.Binding(name, term, Some(ts))
                   {
-                    lazy val isComplex: Boolean = hydra.coderUtils.isComplexBinding(tc)(binding)
+                    lazy val isComplex: Boolean = hydra.predicates.isComplexBinding(tc)(binding)
                     {
-                      lazy val isTrivial: Boolean = hydra.coderUtils.isTrivialTerm(term)
+                      lazy val isTrivial: Boolean = hydra.predicates.isTrivialTerm(term)
                       hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.python.syntax.Statement]](hydra.lib.logic.and(isComplex)(hydra.lib.logic.not(isTrivial)))(hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error],
                          Seq[hydra.ext.python.syntax.Statement], hydra.ext.python.syntax.Statement](hydra.lib.eithers.mapList[hydra.core.Binding,
                          hydra.ext.python.syntax.Statement, hydra.context.InContext[hydra.errors.Error]]((v1: hydra.core.Binding) => hydra.ext.python.coder.encodeBindingAs(cx)(env2)(v1))(bindings))((bindingStmts: Seq[hydra.ext.python.syntax.Statement]) =>
@@ -1344,7 +1344,7 @@ def encodeTermMultiline(cx: hydra.context.Context)(env: hydra.ext.python.environ
       }
     }
   })
-  lazy val gathered: Tuple2[Seq[hydra.core.Term], hydra.core.Term] = hydra.coderUtils.gatherApplications(term)
+  lazy val gathered: Tuple2[Seq[hydra.core.Term], hydra.core.Term] = hydra.analysis.gatherApplications(term)
   lazy val args: Seq[hydra.core.Term] = hydra.lib.pairs.first[Seq[hydra.core.Term], hydra.core.Term](gathered)
   lazy val body: hydra.core.Term = hydra.lib.pairs.second[Seq[hydra.core.Term], hydra.core.Term](gathered)
   hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], Seq[hydra.ext.python.syntax.Statement]]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.Term](args))(1))({
@@ -1396,7 +1396,7 @@ def encodeTermMultilineTCO(cx: hydra.context.Context)(env: hydra.ext.python.envi
    Seq[hydra.ext.python.syntax.Statement]] =
   {
   lazy val stripped: hydra.core.Term = hydra.strip.deannotateAndDetypeTerm(term)
-  lazy val gathered: Tuple2[Seq[hydra.core.Term], hydra.core.Term] = hydra.coderUtils.gatherApplications(stripped)
+  lazy val gathered: Tuple2[Seq[hydra.core.Term], hydra.core.Term] = hydra.analysis.gatherApplications(stripped)
   lazy val gatherArgs: Seq[hydra.core.Term] = hydra.lib.pairs.first[Seq[hydra.core.Term], hydra.core.Term](gathered)
   lazy val gatherFun: hydra.core.Term = hydra.lib.pairs.second[Seq[hydra.core.Term], hydra.core.Term](gathered)
   lazy val strippedFun: hydra.core.Term = hydra.strip.deannotateAndDetypeTerm(gatherFun)
@@ -1422,7 +1422,7 @@ def encodeTermMultilineTCO(cx: hydra.context.Context)(env: hydra.ext.python.envi
       Right(hydra.lib.lists.concat2[hydra.ext.python.syntax.Statement](assignments)(Seq(continueStmt)))
     }
   }))({
-    lazy val gathered2: Tuple2[Seq[hydra.core.Term], hydra.core.Term] = hydra.coderUtils.gatherApplications(term)
+    lazy val gathered2: Tuple2[Seq[hydra.core.Term], hydra.core.Term] = hydra.analysis.gatherApplications(term)
     {
       lazy val args2: Seq[hydra.core.Term] = hydra.lib.pairs.first[Seq[hydra.core.Term], hydra.core.Term](gathered2)
       {
@@ -1759,14 +1759,14 @@ def encodeVariable(cx: hydra.context.Context)(env: hydra.ext.python.environment.
      hydra.ext.python.syntax.Expression], hydra.core.Term](Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2("Unknown variable: ")(name)),
      cx)))((_x: hydra.core.Term) => Right(asFunctionCall))(hydra.lib.maps.lookup[hydra.core.Name, hydra.core.Term](name)(tcMetadata)))((el: hydra.core.Binding) =>
     {
-    lazy val elTrivial1: Boolean = hydra.coderUtils.isTrivialTerm(el.term)
+    lazy val elTrivial1: Boolean = hydra.predicates.isTrivialTerm(el.term)
     hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.python.syntax.Expression],
        hydra.core.TypeScheme](Right(asVariable))((ts: hydra.core.TypeScheme) =>
-      hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.python.syntax.Expression]](hydra.lib.logic.and(hydra.lib.logic.and(hydra.lib.equality.equal[Int](hydra.arity.typeSchemeArity(ts))(0))(hydra.coderUtils.isComplexBinding(tc)(el)))(hydra.lib.logic.not(elTrivial1)))(Right(asFunctionCall))({
+      hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.python.syntax.Expression]](hydra.lib.logic.and(hydra.lib.logic.and(hydra.lib.equality.equal[Int](hydra.arity.typeSchemeArity(ts))(0))(hydra.predicates.isComplexBinding(tc)(el)))(hydra.lib.logic.not(elTrivial1)))(Right(asFunctionCall))({
       lazy val asFunctionRef: hydra.ext.python.syntax.Expression = hydra.lib.logic.ifElse[hydra.ext.python.syntax.Expression](hydra.lib.logic.not(hydra.lib.lists.`null`[hydra.core.Name](ts.variables)))(hydra.ext.python.coder.makeSimpleLambda(hydra.arity.typeArity(ts.`type`))(asVariable))(asVariable)
       Right(asFunctionRef)
     }))(el.`type`)
-  })(hydra.lexical.lookupElement(g)(name)))((prim: hydra.graph.Primitive) =>
+  })(hydra.lexical.lookupBinding(g)(name)))((prim: hydra.graph.Primitive) =>
     {
     lazy val primArity: Int = hydra.arity.primitiveArity(prim)
     hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.python.syntax.Expression]](hydra.lib.equality.equal[Int](primArity)(0))(Right(asFunctionCall))({
@@ -1788,19 +1788,19 @@ def encodeVariable(cx: hydra.context.Context)(env: hydra.ext.python.environment.
     Right(asFunctionRef)
   })((el: hydra.core.Binding) =>
     {
-    lazy val elTrivial: Boolean = hydra.coderUtils.isTrivialTerm(el.term)
+    lazy val elTrivial: Boolean = hydra.predicates.isTrivialTerm(el.term)
     hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.python.syntax.Expression],
        hydra.core.TypeScheme](hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error],
        hydra.ext.python.syntax.Expression]](hydra.lib.logic.and(hydra.lib.equality.equal[Int](hydra.arity.typeArity(typ))(0))(hydra.lib.logic.not(elTrivial)))(Right(asFunctionCall))({
       lazy val asFunctionRef: hydra.ext.python.syntax.Expression = hydra.lib.logic.ifElse[hydra.ext.python.syntax.Expression](hydra.lib.logic.not(hydra.lib.sets.`null`[hydra.core.Name](hydra.variables.freeVariablesInType(typ))))(hydra.ext.python.coder.makeSimpleLambda(hydra.arity.typeArity(typ))(asVariable))(asVariable)
       Right(asFunctionRef)
     }))((ts: hydra.core.TypeScheme) =>
-      hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.python.syntax.Expression]](hydra.lib.logic.and(hydra.lib.logic.and(hydra.lib.equality.equal[Int](hydra.arity.typeArity(typ))(0))(hydra.coderUtils.isComplexBinding(tc)(el)))(hydra.lib.logic.not(elTrivial)))(Right(asFunctionCall))({
+      hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.python.syntax.Expression]](hydra.lib.logic.and(hydra.lib.logic.and(hydra.lib.equality.equal[Int](hydra.arity.typeArity(typ))(0))(hydra.predicates.isComplexBinding(tc)(el)))(hydra.lib.logic.not(elTrivial)))(Right(asFunctionCall))({
       lazy val asFunctionRef: hydra.ext.python.syntax.Expression = hydra.lib.logic.ifElse[hydra.ext.python.syntax.Expression](hydra.lib.logic.not(hydra.lib.sets.`null`[hydra.core.Name](hydra.variables.freeVariablesInType(typ))))(hydra.ext.python.coder.makeSimpleLambda(hydra.arity.typeArity(typ))(asVariable))(asVariable)
       Right(asFunctionRef)
     }))(el.`type`)
-  })(hydra.lexical.lookupElement(g)(name)))(hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error],
-     hydra.ext.python.syntax.Expression]](hydra.lib.logic.and(hydra.lib.equality.equal[Int](hydra.arity.typeArity(typ))(0))(hydra.coderUtils.isComplexVariable(tc)(name)))(Right(asFunctionCall))({
+  })(hydra.lexical.lookupBinding(g)(name)))(hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error],
+     hydra.ext.python.syntax.Expression]](hydra.lib.logic.and(hydra.lib.equality.equal[Int](hydra.arity.typeArity(typ))(0))(hydra.predicates.isComplexVariable(tc)(name)))(Right(asFunctionCall))({
     lazy val asFunctionRef: hydra.ext.python.syntax.Expression = hydra.lib.logic.ifElse[hydra.ext.python.syntax.Expression](hydra.lib.logic.not(hydra.lib.sets.`null`[hydra.core.Name](hydra.variables.freeVariablesInType(typ))))(hydra.ext.python.coder.makeSimpleLambda(hydra.arity.typeArity(typ))(asVariable))(asVariable)
     Right(asFunctionRef)
   })))))(mTyp))
@@ -1886,7 +1886,7 @@ def extendMetaForTerm(topLevel: Boolean)(meta0: hydra.ext.python.environment.Pyt
           hydra.lib.maybes.maybe[hydra.ext.python.environment.PythonModuleMetadata, hydra.core.TypeScheme](m)((ts: hydra.core.TypeScheme) =>
           {
           lazy val term1: hydra.core.Term = (b.term)
-          hydra.lib.logic.ifElse[hydra.ext.python.environment.PythonModuleMetadata](hydra.coderUtils.isSimpleAssignment(term1))(m)(hydra.ext.python.coder.extendMetaForType(true)(true)(ts.`type`)(m))
+          hydra.lib.logic.ifElse[hydra.ext.python.environment.PythonModuleMetadata](hydra.analysis.isSimpleAssignment(term1))(m)(hydra.ext.python.coder.extendMetaForType(true)(true)(ts.`type`)(m))
         })(b.`type`)
         forBinding
       })(meta)(bindings)
@@ -1963,8 +1963,8 @@ def extendMetaForTypes(types: Seq[hydra.core.Type])(meta: hydra.ext.python.envir
   {
   lazy val names: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.unions[hydra.core.Name](hydra.lib.lists.map[hydra.core.Type,
      scala.collection.immutable.Set[hydra.core.Name]]((t: hydra.core.Type) => hydra.dependencies.typeDependencyNames(false)(t))(types))
-  lazy val currentNs: hydra.module.Namespaces[hydra.ext.python.syntax.DottedName] = (meta.namespaces)
-  lazy val updatedNs: hydra.module.Namespaces[hydra.ext.python.syntax.DottedName] = hydra.analysis.addNamesToNamespaces(hydra.ext.python.names.encodeNamespace)(names)(currentNs)
+  lazy val currentNs: hydra.packaging.Namespaces[hydra.ext.python.syntax.DottedName] = (meta.namespaces)
+  lazy val updatedNs: hydra.packaging.Namespaces[hydra.ext.python.syntax.DottedName] = hydra.analysis.addNamesToNamespaces(hydra.ext.python.names.encodeNamespace)(names)(currentNs)
   lazy val meta1: hydra.ext.python.environment.PythonModuleMetadata = hydra.ext.python.coder.setMetaNamespaces(updatedNs)(meta)
   hydra.lib.lists.foldl[hydra.ext.python.environment.PythonModuleMetadata, hydra.core.Type]((m: hydra.ext.python.environment.PythonModuleMetadata) =>
     (t: hydra.core.Type) => hydra.ext.python.coder.extendMetaForType(true)(false)(t)(m))(meta1)(types)
@@ -2007,12 +2007,12 @@ def gatherLambdas(term: hydra.core.Term): Tuple2[Seq[hydra.core.Name], hydra.cor
   go(Seq())(term)
 }
 
-def gatherMetadata(focusNs: hydra.module.Namespace)(defs: Seq[hydra.module.Definition]): hydra.ext.python.environment.PythonModuleMetadata =
+def gatherMetadata(focusNs: hydra.packaging.Namespace)(defs: Seq[hydra.packaging.Definition]): hydra.ext.python.environment.PythonModuleMetadata =
   {
   lazy val start: hydra.ext.python.environment.PythonModuleMetadata = hydra.ext.python.coder.emptyMetadata(hydra.ext.python.utils.findNamespaces(focusNs)(defs))
-  def addDef(meta: hydra.ext.python.environment.PythonModuleMetadata)(`def`: hydra.module.Definition): hydra.ext.python.environment.PythonModuleMetadata =
+  def addDef(meta: hydra.ext.python.environment.PythonModuleMetadata)(`def`: hydra.packaging.Definition): hydra.ext.python.environment.PythonModuleMetadata =
     `def` match
-    case hydra.module.Definition.term(v_Definition_term_termDef) => {
+    case hydra.packaging.Definition.term(v_Definition_term_termDef) => {
       lazy val term: hydra.core.Term = (v_Definition_term_termDef.term)
       {
         lazy val typ: hydra.core.Type = hydra.lib.maybes.maybe[hydra.core.Type, hydra.core.TypeScheme](hydra.core.Type.variable("hydra.core.Unit"))((x: hydra.core.TypeScheme) => (x.`type`))(v_Definition_term_termDef.`type`)
@@ -2022,8 +2022,8 @@ def gatherMetadata(focusNs: hydra.module.Namespace)(defs: Seq[hydra.module.Defin
         }
       }
     }
-    case hydra.module.Definition.`type`(v_Definition_type_typeDef) => {
-      lazy val typ: hydra.core.Type = (v_Definition_type_typeDef.`type`)
+    case hydra.packaging.Definition.`type`(v_Definition_type_typeDef) => {
+      lazy val typ: hydra.core.Type = (v_Definition_type_typeDef.`type`.`type`)
       {
         lazy val meta2: hydra.ext.python.environment.PythonModuleMetadata = hydra.ext.python.coder.setMetaUsesName(meta)(true)
         hydra.rewriting.foldOverType(hydra.coders.TraversalOrder.pre)((m: hydra.ext.python.environment.PythonModuleMetadata) =>
@@ -2031,7 +2031,7 @@ def gatherMetadata(focusNs: hydra.module.Namespace)(defs: Seq[hydra.module.Defin
       }
     }
   lazy val result: hydra.ext.python.environment.PythonModuleMetadata = hydra.lib.lists.foldl[hydra.ext.python.environment.PythonModuleMetadata,
-     hydra.module.Definition](addDef)(start)(defs)
+     hydra.packaging.Definition](addDef)(start)(defs)
   lazy val tvars: scala.collection.immutable.Set[hydra.core.Name] = (result.typeVariables)
   lazy val result2: hydra.ext.python.environment.PythonModuleMetadata = hydra.ext.python.coder.setMetaUsesCast(true)(hydra.ext.python.coder.setMetaUsesLruCache(true)(result))
   hydra.ext.python.coder.setMetaUsesTypeVar(result2)(hydra.lib.logic.not(hydra.lib.sets.`null`[hydra.core.Name](tvars)))
@@ -2046,16 +2046,16 @@ def genericArg(tparamList: Seq[hydra.core.Name]): Option[hydra.ext.python.syntax
      hydra.ext.python.syntax.Primary.simple(hydra.ext.python.syntax.Atom.name(hydra.ext.python.names.encodeTypeVariable(n)))),
      None)))))))), Seq()))))))(tparamList)))))
 
-def initialEnvironment(namespaces: hydra.module.Namespaces[hydra.ext.python.syntax.DottedName])(tcontext: hydra.graph.Graph): hydra.ext.python.environment.PythonEnvironment =
+def initialEnvironment(namespaces: hydra.packaging.Namespaces[hydra.ext.python.syntax.DottedName])(tcontext: hydra.graph.Graph): hydra.ext.python.environment.PythonEnvironment =
   hydra.ext.python.environment.PythonEnvironment(namespaces, Tuple2(Seq(), hydra.lib.maps.empty[hydra.core.Name,
      hydra.ext.python.syntax.Name]), tcontext, hydra.lib.sets.empty[hydra.core.Name], hydra.ext.python.coder.targetPythonVersion,
      true, hydra.lib.sets.empty[hydra.core.Name])
 
-def initialMetadata(ns: hydra.module.Namespace): hydra.ext.python.environment.PythonModuleMetadata =
+def initialMetadata(ns: hydra.packaging.Namespace): hydra.ext.python.environment.PythonModuleMetadata =
   {
   lazy val dottedNs: hydra.ext.python.syntax.DottedName = hydra.ext.python.names.encodeNamespace(ns)
-  lazy val emptyNs: hydra.module.Namespaces[hydra.ext.python.syntax.DottedName] = hydra.module.Namespaces(Tuple2(ns,
-     dottedNs), hydra.lib.maps.empty[hydra.module.Namespace, hydra.ext.python.syntax.DottedName])
+  lazy val emptyNs: hydra.packaging.Namespaces[hydra.ext.python.syntax.DottedName] = hydra.packaging.Namespaces(Tuple2(ns,
+     dottedNs), hydra.lib.maps.empty[hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName])
   hydra.ext.python.environment.PythonModuleMetadata(emptyNs, hydra.lib.sets.empty[hydra.core.Name], false,
      false, false, false, false, false, false, false, false, false, false, false, false, false, false,
      false, false, false, false, false)
@@ -2064,7 +2064,7 @@ def initialMetadata(ns: hydra.module.Namespace): hydra.ext.python.environment.Py
 def isCaseStatementApplication(term: hydra.core.Term): Option[Tuple2[hydra.core.Name, Tuple2[Option[hydra.core.Term],
    Tuple2[Seq[hydra.core.Field], hydra.core.Term]]]] =
   {
-  lazy val gathered: Tuple2[Seq[hydra.core.Term], hydra.core.Term] = hydra.coderUtils.gatherApplications(term)
+  lazy val gathered: Tuple2[Seq[hydra.core.Term], hydra.core.Term] = hydra.analysis.gatherApplications(term)
   lazy val args: Seq[hydra.core.Term] = hydra.lib.pairs.first[Seq[hydra.core.Term], hydra.core.Term](gathered)
   lazy val body: hydra.core.Term = hydra.lib.pairs.second[Seq[hydra.core.Term], hydra.core.Term](gathered)
   hydra.lib.logic.ifElse[Option[Tuple2[hydra.core.Name, Tuple2[Option[hydra.core.Term], Tuple2[Seq[hydra.core.Field],
@@ -2088,10 +2088,10 @@ def isCasesFull[T0, T1](rowType: Seq[T0])(`cases_`: Seq[T1]): Boolean =
   hydra.lib.logic.not(hydra.lib.equality.lt[Int](numCases)(numFields))
 }
 
-def isTypeModuleCheck(defs: Seq[hydra.module.Definition]): Boolean =
-  hydra.lib.logic.not(hydra.lib.lists.`null`[hydra.module.Definition](hydra.lib.lists.filter[hydra.module.Definition]((d: hydra.module.Definition) =>
+def isTypeModuleCheck(defs: Seq[hydra.packaging.Definition]): Boolean =
+  hydra.lib.logic.not(hydra.lib.lists.`null`[hydra.packaging.Definition](hydra.lib.lists.filter[hydra.packaging.Definition]((d: hydra.packaging.Definition) =>
   d match
-  case hydra.module.Definition.`type`(v_Definition_type__) => true
+  case hydra.packaging.Definition.`type`(v_Definition_type__) => true
   case _ => false)(defs)))
 
 def isTypeVariableName(name: hydra.core.Name): Boolean =
@@ -2137,15 +2137,15 @@ def makeUncurriedLambda(params: Seq[hydra.ext.python.syntax.Name])(body: hydra.e
      hydra.lib.lists.map[hydra.ext.python.syntax.Name, hydra.ext.python.syntax.LambdaParamNoDefault]((p: hydra.ext.python.syntax.Name) => p)(params),
      Seq(), None), body))
 
-def moduleDomainImports(namespaces: hydra.module.Namespaces[hydra.ext.python.syntax.DottedName]): Seq[hydra.ext.python.syntax.ImportStatement] =
+def moduleDomainImports(namespaces: hydra.packaging.Namespaces[hydra.ext.python.syntax.DottedName]): Seq[hydra.ext.python.syntax.ImportStatement] =
   {
-  lazy val names: Seq[hydra.ext.python.syntax.DottedName] = hydra.lib.lists.sort[hydra.ext.python.syntax.DottedName](hydra.lib.maps.elems[hydra.module.Namespace,
+  lazy val names: Seq[hydra.ext.python.syntax.DottedName] = hydra.lib.lists.sort[hydra.ext.python.syntax.DottedName](hydra.lib.maps.elems[hydra.packaging.Namespace,
      hydra.ext.python.syntax.DottedName](namespaces.mapping))
   hydra.lib.lists.map[hydra.ext.python.syntax.DottedName, hydra.ext.python.syntax.ImportStatement]((ns: hydra.ext.python.syntax.DottedName) =>
     hydra.ext.python.syntax.ImportStatement.name(Seq(hydra.ext.python.syntax.DottedAsName(ns, None))))(names)
 }
 
-def moduleImports(namespaces: hydra.module.Namespaces[hydra.ext.python.syntax.DottedName])(meta: hydra.ext.python.environment.PythonModuleMetadata): Seq[hydra.ext.python.syntax.Statement] =
+def moduleImports(namespaces: hydra.packaging.Namespaces[hydra.ext.python.syntax.DottedName])(meta: hydra.ext.python.environment.PythonModuleMetadata): Seq[hydra.ext.python.syntax.Statement] =
   hydra.lib.lists.map[hydra.ext.python.syntax.ImportStatement, hydra.ext.python.syntax.Statement]((imp: hydra.ext.python.syntax.ImportStatement) =>
   hydra.ext.python.utils.pySimpleStatementToPyStatement(hydra.ext.python.syntax.SimpleStatement.`import`(imp)))(hydra.lib.lists.concat[hydra.ext.python.syntax.ImportStatement](Seq(hydra.ext.python.coder.moduleStandardImports(meta),
      hydra.ext.python.coder.moduleDomainImports(namespaces))))
@@ -2184,7 +2184,7 @@ def moduleStandardImports(meta: hydra.ext.python.environment.PythonModuleMetadat
        Seq[scala.Predef.String]](p)))(simplified)
 }
 
-def moduleToPython(mod: hydra.module.Module)(defs: Seq[hydra.module.Definition])(cx: hydra.context.Context)(g: hydra.graph.Graph): Either[hydra.context.InContext[hydra.errors.Error],
+def moduleToPython(mod: hydra.packaging.Module)(defs: Seq[hydra.packaging.Definition])(cx: hydra.context.Context)(g: hydra.graph.Graph): Either[hydra.context.InContext[hydra.errors.Error],
    Map[scala.Predef.String, scala.Predef.String]] =
   hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.ext.python.syntax.Module,
      Map[scala.Predef.String, scala.Predef.String]](hydra.ext.python.coder.encodePythonModule(cx)(g)(mod)(defs))((file: hydra.ext.python.syntax.Module) =>
@@ -2204,7 +2204,7 @@ def pyInt(n: BigInt): hydra.ext.python.syntax.Expression =
   hydra.ext.python.utils.pyAtomToPyExpression(hydra.ext.python.syntax.Atom.number(hydra.ext.python.syntax.Number.integer(n)))
 
 def pythonBindingMetadata(g: hydra.graph.Graph)(b: hydra.core.Binding): Option[hydra.core.Term] =
-  hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.ext.python.coder.shouldThunkBinding(g)(b))(hydra.coderUtils.bindingMetadata(g)(b))(None)
+  hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.ext.python.coder.shouldThunkBinding(g)(b))(hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.predicates.isComplexBinding(g)(b))(Some(hydra.core.Term.literal(hydra.core.Literal.boolean(true))))(None))(None)
 
 def pythonEnvironmentGetGraph(env: hydra.ext.python.environment.PythonEnvironment): hydra.graph.Graph = (env.graph)
 
@@ -2212,7 +2212,7 @@ def pythonEnvironmentSetGraph(tc: hydra.graph.Graph)(env: hydra.ext.python.envir
   hydra.ext.python.environment.PythonEnvironment(env.namespaces, (env.boundTypeVariables), tc, (env.nullaryBindings),
      (env.version), (env.skipCasts), (env.inlineVariables))
 
-def setMetaNamespaces(ns: hydra.module.Namespaces[hydra.ext.python.syntax.DottedName])(m: hydra.ext.python.environment.PythonModuleMetadata): hydra.ext.python.environment.PythonModuleMetadata =
+def setMetaNamespaces(ns: hydra.packaging.Namespaces[hydra.ext.python.syntax.DottedName])(m: hydra.ext.python.environment.PythonModuleMetadata): hydra.ext.python.environment.PythonModuleMetadata =
   hydra.ext.python.environment.PythonModuleMetadata(ns, (m.typeVariables), (m.usesAnnotated), (m.usesCallable),
      (m.usesCast), (m.usesLruCache), (m.usesTypeAlias), (m.usesDataclass), (m.usesDecimal), (m.usesEither),
      (m.usesEnum), (m.usesFrozenDict), (m.usesFrozenList), (m.usesGeneric), (m.usesJust), (m.usesLeft),
@@ -2345,7 +2345,7 @@ def setMetaUsesTypeVar(m: hydra.ext.python.environment.PythonModuleMetadata)(b: 
      (m.usesLeft), (m.usesMaybe), (m.usesName), (m.usesNode), (m.usesNothing), (m.usesRight), b)
 
 def shouldThunkBinding(g: hydra.graph.Graph)(b: hydra.core.Binding): Boolean =
-  hydra.lib.logic.and(hydra.coderUtils.isComplexBinding(g)(b))(hydra.lib.logic.not(hydra.coderUtils.isTrivialTerm(b.term)))
+  hydra.lib.logic.and(hydra.predicates.isComplexBinding(g)(b))(hydra.lib.logic.not(hydra.predicates.isTrivialTerm(b.term)))
 
 def standardImportStatement(modName: scala.Predef.String)(symbols: Seq[scala.Predef.String]): hydra.ext.python.syntax.ImportStatement =
   hydra.ext.python.syntax.ImportStatement.from(hydra.ext.python.syntax.ImportFrom(Seq(), Some(Seq(modName)),
@@ -2359,7 +2359,7 @@ def termArityWithPrimitives(graph: hydra.graph.Graph)(term: hydra.core.Term): In
   case hydra.core.Term.application(v_Term_application_app) => hydra.lib.math.max(0)(hydra.lib.math.sub(hydra.ext.python.coder.termArityWithPrimitives(graph)(v_Term_application_app.function))(1))
   case hydra.core.Term.function(v_Term_function_f) => hydra.ext.python.coder.functionArityWithPrimitives(graph)(v_Term_function_f)
   case hydra.core.Term.variable(v_Term_variable_name) => hydra.lib.maybes.maybe[Int, hydra.core.Binding](0)((el: hydra.core.Binding) =>
-    hydra.lib.maybes.maybe[Int, hydra.core.TypeScheme](hydra.arity.termArity(el.term))((ts: hydra.core.TypeScheme) => hydra.arity.typeSchemeArity(ts))(el.`type`))(hydra.lexical.lookupElement(graph)(v_Term_variable_name))
+    hydra.lib.maybes.maybe[Int, hydra.core.TypeScheme](hydra.arity.termArity(el.term))((ts: hydra.core.TypeScheme) => hydra.arity.typeSchemeArity(ts))(el.`type`))(hydra.lexical.lookupBinding(graph)(v_Term_variable_name))
   case _ => 0
 
 def tvarStatement(name: hydra.ext.python.syntax.Name): hydra.ext.python.syntax.Statement =
@@ -2394,14 +2394,14 @@ def wildcardCaseBlock(stmt: hydra.ext.python.syntax.Statement): hydra.ext.python
   hydra.ext.python.syntax.CaseBlock(hydra.ext.python.utils.pyClosedPatternToPyPatterns(hydra.ext.python.syntax.ClosedPattern.wildcard),
      None, hydra.ext.python.utils.indentedBlock(None)(Seq(Seq(stmt))))
 
-def withDefinitions[T0](env: hydra.ext.python.environment.PythonEnvironment)(defs: Seq[hydra.module.Definition])(body: (hydra.ext.python.environment.PythonEnvironment => T0)): T0 =
+def withDefinitions[T0](env: hydra.ext.python.environment.PythonEnvironment)(defs: Seq[hydra.packaging.Definition])(body: (hydra.ext.python.environment.PythonEnvironment => T0)): T0 =
   {
-  lazy val bindings: Seq[hydra.core.Binding] = hydra.lib.maybes.cat[hydra.core.Binding](hydra.lib.lists.map[hydra.module.Definition,
-     Option[hydra.core.Binding]]((`def_`: hydra.module.Definition) =>
+  lazy val bindings: Seq[hydra.core.Binding] = hydra.lib.maybes.cat[hydra.core.Binding](hydra.lib.lists.map[hydra.packaging.Definition,
+     Option[hydra.core.Binding]]((`def_`: hydra.packaging.Definition) =>
     `def_` match
-    case hydra.module.Definition.term(v_Definition_term_td) => Some(hydra.core.Binding(v_Definition_term_td.name,
+    case hydra.packaging.Definition.term(v_Definition_term_td) => Some(hydra.core.Binding(v_Definition_term_td.name,
        (v_Definition_term_td.term), (v_Definition_term_td.`type`)))
-    case hydra.module.Definition.`type`(v_Definition_type__) => None
+    case hydra.packaging.Definition.`type`(v_Definition_type__) => None
     case _ => None)(defs))
   lazy val dummyLet: hydra.core.Let = hydra.core.Let(bindings, hydra.core.Term.literal(hydra.core.Literal.string("dummy")))
   hydra.ext.python.coder.withLet(env)(dummyLet)(body)

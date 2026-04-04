@@ -11,14 +11,14 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
 -- | Add generation namespace prefix
-addGenerationPrefix :: Module.Namespace -> Module.Namespace
-addGenerationPrefix ns_ = Module.Namespace (Strings.cat2 "generation." (Module.unNamespace ns_))
+addGenerationPrefix :: Packaging.Namespace -> Packaging.Namespace
+addGenerationPrefix ns_ = Packaging.Namespace (Strings.cat2 "generation." (Packaging.unNamespace ns_))
 
 -- | Build a Term representing a convertCase function call
 buildConvertCaseCall :: Util.CaseConvention -> Util.CaseConvention -> String -> Core.Term
@@ -86,14 +86,14 @@ encodeListList :: [[Int]] -> Core.Term
 encodeListList lists = Core.TermList (Lists.map (\l -> encodeIntList l) lists)
 
 -- | Transform module with generation namespace
-transformModule :: Module.Module -> Module.Module
+transformModule :: Packaging.Module -> Packaging.Module
 transformModule m =
-    Module.Module {
-      Module.moduleNamespace = (addGenerationPrefix (Module.moduleNamespace m)),
-      Module.moduleDefinitions = (Module.moduleDefinitions m),
-      Module.moduleTermDependencies = (Module.moduleTermDependencies m),
-      Module.moduleTypeDependencies = (Module.moduleTypeDependencies m),
-      Module.moduleDescription = (Module.moduleDescription m)}
+    Packaging.Module {
+      Packaging.moduleNamespace = (addGenerationPrefix (Packaging.moduleNamespace m)),
+      Packaging.moduleDefinitions = (Packaging.moduleDefinitions m),
+      Packaging.moduleTermDependencies = (Packaging.moduleTermDependencies m),
+      Packaging.moduleTypeDependencies = (Packaging.moduleTypeDependencies m),
+      Packaging.moduleDescription = (Packaging.moduleDescription m)}
 
 -- | Pass through test cases unchanged
 transformTestCase :: t0 -> Maybe t0

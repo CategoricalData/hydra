@@ -4,243 +4,270 @@
       "type": {
         "name": "hydra.ext.org.apache.atlas.AtlasAttributeDef",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "class that captures details of a struct-attribute."}}}],
-            "body": {
-              "record": [
-                {"name": "name", "type": {"maybe": {"literal": {"string": {}}}}},
-                {"name": "typeName", "type": {"maybe": {"literal": {"string": {}}}}},
-                {"name": "isOptional", "type": {"literal": {"boolean": {}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "cardinality",
-                  "type": {
-                    "maybe": {
-                      "variable": "hydra.ext.org.apache.atlas.AtlasAttributeDef_Cardinality"}}},
-                {
-                  "name": "valuesMinCount",
-                  "type": {"literal": {"integer": {"int32": {}}}}},
-                {
-                  "name": "valuesMaxCount",
-                  "type": {"literal": {"integer": {"int32": {}}}}},
-                {"name": "isUnique", "type": {"literal": {"boolean": {}}}},
-                {"name": "isIndexable", "type": {"literal": {"boolean": {}}}},
-                {
-                  "name": "includeInNotification",
-                  "type": {"literal": {"boolean": {}}}},
-                {
-                  "name": "defaultValue",
-                  "type": {"maybe": {"literal": {"string": {}}}}},
-                {
-                  "name": "description",
-                  "type": {"maybe": {"literal": {"string": {}}}}},
-                {
-                  "name": "searchWeight",
-                  "type": {"literal": {"integer": {"int32": {}}}}},
-                {
-                  "name": "indexType",
-                  "type": {
-                    "maybe": {"variable": "hydra.ext.org.apache.atlas.AtlasAttributeDef_IndexType"}}},
-                {
-                  "name": "constraints",
-                  "type": {
-                    "list": {"variable": "hydra.ext.org.apache.atlas.AtlasConstraintDef"}}},
-                {
-                  "name": "options",
-                  "type": {
-                    "map": {
-                      "keys": {"literal": {"string": {}}},
-                      "values": {"literal": {"string": {}}}}}},
-                {
-                  "name": "displayName",
-                  "type": {"maybe": {"literal": {"string": {}}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "class that captures details of a struct-attribute."}}}],
+              "body": {
+                "record": [
+                  {"name": "name", "type": {"maybe": {"literal": {"string": {}}}}},
+                  {"name": "typeName", "type": {"maybe": {"literal": {"string": {}}}}},
+                  {"name": "isOptional", "type": {"literal": {"boolean": {}}}},
+                  {
+                    "name": "cardinality",
+                    "type": {
+                      "maybe": {
+                        "variable": "hydra.ext.org.apache.atlas.AtlasAttributeDef_Cardinality"}}},
+                  {
+                    "name": "valuesMinCount",
+                    "type": {"literal": {"integer": {"int32": {}}}}},
+                  {
+                    "name": "valuesMaxCount",
+                    "type": {"literal": {"integer": {"int32": {}}}}},
+                  {"name": "isUnique", "type": {"literal": {"boolean": {}}}},
+                  {"name": "isIndexable", "type": {"literal": {"boolean": {}}}},
+                  {
+                    "name": "includeInNotification",
+                    "type": {"literal": {"boolean": {}}}},
+                  {
+                    "name": "defaultValue",
+                    "type": {"maybe": {"literal": {"string": {}}}}},
+                  {
+                    "name": "description",
+                    "type": {"maybe": {"literal": {"string": {}}}}},
+                  {
+                    "name": "searchWeight",
+                    "type": {"literal": {"integer": {"int32": {}}}}},
+                  {
+                    "name": "indexType",
+                    "type": {
+                      "maybe": {"variable": "hydra.ext.org.apache.atlas.AtlasAttributeDef_IndexType"}}},
+                  {
+                    "name": "constraints",
+                    "type": {
+                      "list": {"variable": "hydra.ext.org.apache.atlas.AtlasConstraintDef"}}},
+                  {
+                    "name": "options",
+                    "type": {
+                      "map": {
+                        "keys": {"literal": {"string": {}}},
+                        "values": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "displayName",
+                    "type": {"maybe": {"literal": {"string": {}}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.apache.atlas.AtlasAttributeDef_Cardinality",
         "type": {
-          "union": [
-            {"name": "single", "type": {"unit": {}}},
-            {"name": "list", "type": {"unit": {}}},
-            {"name": "set", "type": {"unit": {}}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {"name": "single", "type": {"unit": {}}},
+              {"name": "list", "type": {"unit": {}}},
+              {"name": "set", "type": {"unit": {}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.apache.atlas.AtlasAttributeDef_IndexType",
         "type": {
-          "union": [
-            {"name": "default", "type": {"unit": {}}},
-            {"name": "string", "type": {"unit": {}}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {"name": "default", "type": {"unit": {}}},
+              {"name": "string", "type": {"unit": {}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.apache.atlas.AtlasBaseTypeDef",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "Base class that captures common-attributes for all Atlas types."}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "category",
-                  "type": {"maybe": {"variable": "hydra.ext.org.apache.atlas.TypeCategory"}}},
-                {"name": "guid", "type": {"maybe": {"literal": {"string": {}}}}},
-                {"name": "createdBy", "type": {"maybe": {"literal": {"string": {}}}}},
-                {"name": "updatedBy", "type": {"maybe": {"literal": {"string": {}}}}},
-                {
-                  "name": "createTime",
-                  "type": {"maybe": {"variable": "hydra.ext.org.w3.xml.schema.DateTime"}}},
-                {
-                  "name": "updateTime",
-                  "type": {"maybe": {"variable": "hydra.ext.org.w3.xml.schema.DateTime"}}},
-                {
-                  "name": "version",
-                  "type": {"maybe": {"literal": {"integer": {"int64": {}}}}}},
-                {"name": "name", "type": {"maybe": {"literal": {"string": {}}}}},
-                {
-                  "name": "description",
-                  "type": {"maybe": {"literal": {"string": {}}}}},
-                {
-                  "name": "typeVersion",
-                  "type": {"maybe": {"literal": {"string": {}}}}},
-                {
-                  "name": "serviceType",
-                  "type": {"maybe": {"literal": {"string": {}}}}},
-                {
-                  "name": "options",
-                  "type": {
-                    "map": {
-                      "keys": {"literal": {"string": {}}},
-                      "values": {"literal": {"string": {}}}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "Base class that captures common-attributes for all Atlas types."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "category",
+                    "type": {"maybe": {"variable": "hydra.ext.org.apache.atlas.TypeCategory"}}},
+                  {"name": "guid", "type": {"maybe": {"literal": {"string": {}}}}},
+                  {"name": "createdBy", "type": {"maybe": {"literal": {"string": {}}}}},
+                  {"name": "updatedBy", "type": {"maybe": {"literal": {"string": {}}}}},
+                  {
+                    "name": "createTime",
+                    "type": {"maybe": {"variable": "hydra.ext.org.w3.xml.schema.DateTime"}}},
+                  {
+                    "name": "updateTime",
+                    "type": {"maybe": {"variable": "hydra.ext.org.w3.xml.schema.DateTime"}}},
+                  {
+                    "name": "version",
+                    "type": {"maybe": {"literal": {"integer": {"int64": {}}}}}},
+                  {"name": "name", "type": {"maybe": {"literal": {"string": {}}}}},
+                  {
+                    "name": "description",
+                    "type": {"maybe": {"literal": {"string": {}}}}},
+                  {
+                    "name": "typeVersion",
+                    "type": {"maybe": {"literal": {"string": {}}}}},
+                  {
+                    "name": "serviceType",
+                    "type": {"maybe": {"literal": {"string": {}}}}},
+                  {
+                    "name": "options",
+                    "type": {
+                      "map": {
+                        "keys": {"literal": {"string": {}}},
+                        "values": {"literal": {"string": {}}}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.apache.atlas.AtlasConstraintDef",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "class that captures details of a constraint."}}}],
-            "body": {
-              "record": [
-                {"name": "type", "type": {"maybe": {"literal": {"string": {}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "params",
-                  "type": {
-                    "map": {
-                      "keys": {"literal": {"string": {}}},
-                      "values": {"literal": {"string": {}}}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "class that captures details of a constraint."}}}],
+              "body": {
+                "record": [
+                  {"name": "type", "type": {"maybe": {"literal": {"string": {}}}}},
+                  {
+                    "name": "params",
+                    "type": {
+                      "map": {
+                        "keys": {"literal": {"string": {}}},
+                        "values": {"literal": {"string": {}}}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.apache.atlas.AtlasEntityDef",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "class that captures details of a entity-type."}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "asAtlasStruct",
-                  "type": {"variable": "hydra.ext.org.apache.atlas.AtlasStructDef"}},
-                {"name": "superTypes", "type": {"set": {"literal": {"string": {}}}}},
-                {
-                  "name": "subTypes",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "the value of this field is derived from 'superTypes' specified in all AtlasEntityDef"}}}],
-                      "body": {"set": {"literal": {"string": {}}}}}}},
-                {
-                  "name": "relationshipAttributeDefs",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "the value of this field is derived from all the relationshipDefs this entityType is referenced in"}}}],
-                      "body": {
-                        "list": {
-                          "variable": "hydra.ext.org.apache.atlas.AtlasRelationshipAttributeDef"}}}}},
-                {
-                  "name": "businessAttributeDefs",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "the value of this field is derived from all the businessMetadataDefs this entityType is referenced in"}}}],
-                      "body": {
-                        "map": {
-                          "keys": {"literal": {"string": {}}},
-                          "values": {"list": {"variable": "hydra.ext.org.apache.atlas.AtlasAttributeDef"}}}}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "class that captures details of a entity-type."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "asAtlasStruct",
+                    "type": {"variable": "hydra.ext.org.apache.atlas.AtlasStructDef"}},
+                  {"name": "superTypes", "type": {"set": {"literal": {"string": {}}}}},
+                  {
+                    "name": "subTypes",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "the value of this field is derived from 'superTypes' specified in all AtlasEntityDef"}}}],
+                        "body": {"set": {"literal": {"string": {}}}}}}},
+                  {
+                    "name": "relationshipAttributeDefs",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "the value of this field is derived from all the relationshipDefs this entityType is referenced in"}}}],
+                        "body": {
+                          "list": {
+                            "variable": "hydra.ext.org.apache.atlas.AtlasRelationshipAttributeDef"}}}}},
+                  {
+                    "name": "businessAttributeDefs",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "the value of this field is derived from all the businessMetadataDefs this entityType is referenced in"}}}],
+                        "body": {
+                          "map": {
+                            "keys": {"literal": {"string": {}}},
+                            "values": {"list": {"variable": "hydra.ext.org.apache.atlas.AtlasAttributeDef"}}}}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.apache.atlas.AtlasRelationshipAttributeDef",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "class that captures details of a struct-attribute."}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "asAtlasAttribute",
-                  "type": {"variable": "hydra.ext.org.apache.atlas.AtlasAttributeDef"}},
-                {
-                  "name": "relationshipTypeName",
-                  "type": {"maybe": {"literal": {"string": {}}}}},
-                {"name": "isLegacyAttribute", "type": {"literal": {"boolean": {}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "class that captures details of a struct-attribute."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "asAtlasAttribute",
+                    "type": {"variable": "hydra.ext.org.apache.atlas.AtlasAttributeDef"}},
+                  {
+                    "name": "relationshipTypeName",
+                    "type": {"maybe": {"literal": {"string": {}}}}},
+                  {"name": "isLegacyAttribute", "type": {"literal": {"boolean": {}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.apache.atlas.AtlasStructDef",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "class that captures details of a struct-type."}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "asAtlasBaseType",
-                  "type": {"variable": "hydra.ext.org.apache.atlas.AtlasBaseTypeDef"}},
-                {
-                  "name": "attributeDefs",
-                  "type": {"list": {"variable": "hydra.ext.org.apache.atlas.AtlasAttributeDef"}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "class that captures details of a struct-type."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "asAtlasBaseType",
+                    "type": {"variable": "hydra.ext.org.apache.atlas.AtlasBaseTypeDef"}},
+                  {
+                    "name": "attributeDefs",
+                    "type": {"list": {"variable": "hydra.ext.org.apache.atlas.AtlasAttributeDef"}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.apache.atlas.TypeCategory",
         "type": {
-          "union": [
-            {"name": "primitive", "type": {"unit": {}}},
-            {"name": "objectIdType", "type": {"unit": {}}},
-            {"name": "enum", "type": {"unit": {}}},
-            {"name": "struct", "type": {"unit": {}}},
-            {"name": "classification", "type": {"unit": {}}},
-            {"name": "entity", "type": {"unit": {}}},
-            {"name": "array", "type": {"unit": {}}},
-            {"name": "map", "type": {"unit": {}}},
-            {"name": "relationship", "type": {"unit": {}}},
-            {"name": "businessMetadata", "type": {"unit": {}}}]}}}],
+          "constraints": null,
+          "type": {
+            "union": [
+              {"name": "primitive", "type": {"unit": {}}},
+              {"name": "objectIdType", "type": {"unit": {}}},
+              {"name": "enum", "type": {"unit": {}}},
+              {"name": "struct", "type": {"unit": {}}},
+              {"name": "classification", "type": {"unit": {}}},
+              {"name": "entity", "type": {"unit": {}}},
+              {"name": "array", "type": {"unit": {}}},
+              {"name": "map", "type": {"unit": {}}},
+              {"name": "relationship", "type": {"unit": {}}},
+              {"name": "businessMetadata", "type": {"unit": {}}}]},
+          "variables": []}}}],
   "description": [
     "The Apache Atlas meta-model\nBased on the the org.apache.atlas.model package in the master branch as of 2022-06-01\n  https://github.com/apache/atlas/tree/master/intg/src/main/java/org/apache/atlas/model"],
   "namespace": "hydra.ext.org.apache.atlas",

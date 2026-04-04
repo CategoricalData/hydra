@@ -22,6 +22,7 @@ import Hydra.Annotations
 import Hydra.Module
 import Hydra.Sources.Libraries
 import qualified Hydra.Decode.Core as Decode
+import qualified Hydra.Encode.Core as Encode
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -41,7 +42,16 @@ bootstrapGraph = Graph {
   graphTypeVariables = S.empty}
 
 datatype :: Namespace -> String -> Type -> Binding
-datatype gname lname typ = typeElement elName typ
+datatype gname lname typ = Binding {
+    bindingName = elName,
+    bindingTerm = normalizeTermAnnotations (TermAnnotated (AnnotatedTerm {
+      annotatedTermBody = Encode.type_ typ,
+      annotatedTermAnnotation = M.fromList [
+        (Name "type", TermVariable (Name "hydra.core.Type"))]})),
+    bindingType = Just (TypeScheme {
+      typeSchemeVariables = [],
+      typeSchemeType = TypeVariable (Name "hydra.core.Type"),
+      typeSchemeConstraints = Nothing})}
   where
     elName = qualify gname (Name lname)
 
@@ -59,10 +69,10 @@ defineType = datatype
 
 -- | Convert a type Binding (from defineType) to a type Definition.
 -- The Binding must have been created by defineType/datatype, which stores
--- the type encoded as a term via typeElement. We decode it back.
+-- the type encoded as a term. We decode it back.
 toTypeDef :: Binding -> Definition
 toTypeDef b = case Decode.type_ bootstrapGraph (stripAnnotations $ bindingTerm b) of
-  Right typ -> DefinitionType $ TypeDefinition (bindingName b) typ
+  Right typ -> DefinitionType $ TypeDefinition (bindingName b) (TypeScheme [] typ Nothing)
   Left err -> error $ "toTypeDef: failed to decode type from binding "
     ++ show (bindingName b) ++ ": " ++ show err
   where

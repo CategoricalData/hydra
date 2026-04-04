@@ -18,8 +18,8 @@ import hydra.lib.math
 import hydra.lib.maybes
 import hydra.lib.sets
 import hydra.lib.strings
-import hydra.module
 import hydra.names
+import hydra.packaging
 import hydra.strip
 
 T0 = TypeVar("T0")
@@ -164,7 +164,7 @@ def sprim(name: hydra.core.Name) -> hydra.ext.scala.syntax.Data:
     r"""Create a Scala primitive reference from a Hydra name."""
 
     @lru_cache(1)
-    def qname() -> hydra.module.QualifiedName:
+    def qname() -> hydra.packaging.QualifiedName:
         return hydra.names.qualify_name(name)
     @lru_cache(1)
     def prefix() -> str:

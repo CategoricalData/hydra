@@ -13,7 +13,7 @@ import hydra.ext.org.apache.tinkerpop.features
 import hydra.lib.logic
 import hydra.lib.maybes
 import hydra.lib.sets
-import hydra.rewriting
+import hydra.strip
 import hydra.variants
 
 T0 = TypeVar("T0")
@@ -52,7 +52,7 @@ def tinkerpop_language(name: hydra.coders.LanguageName, features: hydra.ext.org.
     def type_predicate(typ: hydra.core.Type):
         @lru_cache(1)
         def dt() -> hydra.core.Type:
-            return hydra.rewriting.deannotate_type(typ)
+            return hydra.strip.deannotate_type(typ)
         def _hoist_dt_body_1(v1):
             match v1:
                 case hydra.core.FloatType.FLOAT64:
@@ -108,7 +108,7 @@ def tinkerpop_language(name: hydra.coders.LanguageName, features: hydra.ext.org.
                     return False
         match dt():
             case hydra.core.TypeList(value=t):
-                return _hoist_dt_body_4(hydra.rewriting.deannotate_type(t))
+                return _hoist_dt_body_4(hydra.strip.deannotate_type(t))
 
             case hydra.core.TypeLiteral():
                 return True
@@ -120,7 +120,7 @@ def tinkerpop_language(name: hydra.coders.LanguageName, features: hydra.ext.org.
                 return True
 
             case hydra.core.TypeMaybe(value=ot):
-                return _hoist_dt_body_5(hydra.rewriting.deannotate_type(ot))
+                return _hoist_dt_body_5(hydra.strip.deannotate_type(ot))
 
             case _:
                 return True

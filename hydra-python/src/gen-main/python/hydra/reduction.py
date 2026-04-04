@@ -113,75 +113,7 @@ def contract_term(term: hydra.core.Term) -> hydra.core.Term:
 
 count_primitive_invocations = True
 
-def eta_expansion_arity(graph: hydra.graph.Graph, term: hydra.core.Term):
-    def _hoist_hydra_reduction_eta_expansion_arity_1(graph, v1):
-        match v1:
-            case hydra.core.FunctionElimination():
-                return 1
-
-            case hydra.core.FunctionLambda():
-                return 0
-
-            case hydra.core.FunctionPrimitive(value=name):
-                return hydra.arity.primitive_arity(hydra.lib.maybes.from_just(hydra.lexical.lookup_primitive(graph, name)))
-
-            case _:
-                raise AssertionError("Unreachable: all variants handled")
-    match term:
-        case hydra.core.TermAnnotated(value=at):
-            return eta_expansion_arity(graph, at.body)
-
-        case hydra.core.TermApplication(value=app):
-            return hydra.lib.math.sub(eta_expansion_arity(graph, app.function), 1)
-
-        case hydra.core.TermFunction(value=f):
-            return _hoist_hydra_reduction_eta_expansion_arity_1(graph, f)
-
-        case hydra.core.TermTypeLambda(value=ta):
-            return eta_expansion_arity(graph, ta.body)
-
-        case hydra.core.TermTypeApplication(value=tt):
-            return eta_expansion_arity(graph, tt.body)
-
-        case hydra.core.TermVariable(value=name):
-            return hydra.lib.maybes.maybe((lambda : 0), (lambda ts: hydra.arity.type_arity(ts.type)), hydra.lib.maybes.bind(hydra.lexical.lookup_element(graph, name), (lambda b: b.type)))
-
-        case _:
-            return 0
-
-def eta_expand_term(graph: hydra.graph.Graph, term: hydra.core.Term) -> hydra.core.Term:
-    r"""Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x', in which the implicit parameters of primitive functions and eliminations are made into explicit lambda parameters. Variable references are not expanded. This is useful for targets like Python with weaker support for currying than Hydra or Haskell. Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references."""
-
-    def expand(args: frozenlist[hydra.core.Term], arity: int, t: hydra.core.Term) -> hydra.core.Term:
-        @lru_cache(1)
-        def apps() -> hydra.core.Term:
-            return hydra.lib.lists.foldl((lambda lhs, arg: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(lhs, arg)))), t, args)
-        @lru_cache(1)
-        def is_() -> frozenlist[int]:
-            return hydra.lib.logic.if_else(hydra.lib.equality.lte(arity, hydra.lib.lists.length(args)), (lambda : ()), (lambda : hydra.lib.math.range_(1, hydra.lib.math.sub(arity, hydra.lib.lists.length(args)))))
-        def pad(indices: frozenlist[int], t2: hydra.core.Term) -> hydra.core.Term:
-            return hydra.lib.logic.if_else(hydra.lib.lists.null(indices), (lambda : t2), (lambda : cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name(hydra.lib.strings.cat2("v", hydra.lib.literals.show_int32(hydra.lib.lists.head(indices)))), Nothing(), pad(hydra.lib.lists.tail(indices), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(t2, cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name(hydra.lib.strings.cat2("v", hydra.lib.literals.show_int32(hydra.lib.lists.head(indices)))))))))))))))))
-        return pad(is_(), apps())
-    def rewrite(args: frozenlist[hydra.core.Term], recurse: Callable[[hydra.core.Term], hydra.core.Term], t: hydra.core.Term) -> hydra.core.Term:
-        def after_recursion(term2: hydra.core.Term) -> hydra.core.Term:
-            return expand(args, eta_expansion_arity(graph, term2), term2)
-        @lru_cache(1)
-        def t2() -> hydra.core.Term:
-            return hydra.strip.detype_term(t)
-        match t2():
-            case hydra.core.TermApplication(value=app):
-                lhs = app.function
-                rhs = app.argument
-                @lru_cache(1)
-                def erhs() -> hydra.core.Term:
-                    return rewrite((), recurse, rhs)
-                return rewrite(hydra.lib.lists.cons(erhs(), args), recurse, lhs)
-
-            case _:
-                return after_recursion(recurse(t2()))
-    return contract_term(hydra.rewriting.rewrite_term((lambda v1, v2: rewrite((), v1, v2)), term))
-
-def eta_expand_term_new(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra.core.Term:
+def eta_expand_term(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra.core.Term:
     r"""Recursively transform terms to eliminate partial application, e.g. 'add 42' becomes '\x.add 42 x'. Uses the Graph to look up types for arity calculation. Bare primitives and variables are NOT expanded; eliminations and partial applications are. This version properly tracks the Graph through nested scopes."""
 
     @lru_cache(1)
@@ -626,6 +558,42 @@ def eta_expand_typed_term(cx: hydra.context.Context, tx0: hydra.graph.Graph, ter
                 return recurse_or_force(term)
     return hydra.rewriting.rewrite_term_with_context_m((lambda v1, v2, v3: rewrite(True, False, (), v1, v2, v3)), tx0, term0)
 
+def eta_expansion_arity(graph: hydra.graph.Graph, term: hydra.core.Term):
+    def _hoist_hydra_reduction_eta_expansion_arity_1(graph, v1):
+        match v1:
+            case hydra.core.FunctionElimination():
+                return 1
+
+            case hydra.core.FunctionLambda():
+                return 0
+
+            case hydra.core.FunctionPrimitive(value=name):
+                return hydra.arity.primitive_arity(hydra.lib.maybes.from_just(hydra.lexical.lookup_primitive(graph, name)))
+
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
+    match term:
+        case hydra.core.TermAnnotated(value=at):
+            return eta_expansion_arity(graph, at.body)
+
+        case hydra.core.TermApplication(value=app):
+            return hydra.lib.math.sub(eta_expansion_arity(graph, app.function), 1)
+
+        case hydra.core.TermFunction(value=f):
+            return _hoist_hydra_reduction_eta_expansion_arity_1(graph, f)
+
+        case hydra.core.TermTypeLambda(value=ta):
+            return eta_expansion_arity(graph, ta.body)
+
+        case hydra.core.TermTypeApplication(value=tt):
+            return eta_expansion_arity(graph, tt.body)
+
+        case hydra.core.TermVariable(value=name):
+            return hydra.lib.maybes.maybe((lambda : 0), (lambda ts: hydra.arity.type_arity(ts.type)), hydra.lib.maybes.bind(hydra.lexical.lookup_binding(graph, name), (lambda b: b.type)))
+
+        case _:
+            return 0
+
 def eta_reduce_term(term: hydra.core.Term):
     r"""Eta-reduce a term by removing redundant lambda abstractions."""
 
@@ -769,7 +737,7 @@ def reduce_term(cx: hydra.context.Context, graph: hydra.graph.Graph, eager: bool
             case hydra.core.TermVariable(value=v):
                 @lru_cache(1)
                 def m_binding() -> Maybe[hydra.core.Binding]:
-                    return hydra.lexical.dereference_element(graph, v)
+                    return hydra.lexical.lookup_binding(graph, v)
                 return hydra.lib.maybes.maybe((lambda : Right(apply_to_arguments(original, args))), (lambda binding: apply_if_nullary(eager2, binding.term, args)), m_binding())
 
             case hydra.core.TermLet(value=lt):

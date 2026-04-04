@@ -6,11 +6,11 @@ module Hydra.Dsl.Error.Packaging where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Packaging as Packaging
-import qualified Hydra.Module as Module
+import qualified Hydra.Packaging as Packaging_
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
-conflictingModuleNamespaceError :: Phantoms.TTerm Module.Namespace -> Phantoms.TTerm Module.Namespace -> Phantoms.TTerm Packaging.ConflictingModuleNamespaceError
+conflictingModuleNamespaceError :: Phantoms.TTerm Packaging_.Namespace -> Phantoms.TTerm Packaging_.Namespace -> Phantoms.TTerm Packaging.ConflictingModuleNamespaceError
 conflictingModuleNamespaceError first second =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.packaging.ConflictingModuleNamespaceError"),
@@ -22,7 +22,7 @@ conflictingModuleNamespaceError first second =
           Core.fieldName = (Core.Name "second"),
           Core.fieldTerm = (Phantoms.unTTerm second)}]}))
 
-conflictingModuleNamespaceErrorFirst :: Phantoms.TTerm Packaging.ConflictingModuleNamespaceError -> Phantoms.TTerm Module.Namespace
+conflictingModuleNamespaceErrorFirst :: Phantoms.TTerm Packaging.ConflictingModuleNamespaceError -> Phantoms.TTerm Packaging_.Namespace
 conflictingModuleNamespaceErrorFirst x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -30,7 +30,7 @@ conflictingModuleNamespaceErrorFirst x =
         Core.projectionField = (Core.Name "first")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-conflictingModuleNamespaceErrorSecond :: Phantoms.TTerm Packaging.ConflictingModuleNamespaceError -> Phantoms.TTerm Module.Namespace
+conflictingModuleNamespaceErrorSecond :: Phantoms.TTerm Packaging.ConflictingModuleNamespaceError -> Phantoms.TTerm Packaging_.Namespace
 conflictingModuleNamespaceErrorSecond x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -38,7 +38,7 @@ conflictingModuleNamespaceErrorSecond x =
         Core.projectionField = (Core.Name "second")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-conflictingModuleNamespaceErrorWithFirst :: Phantoms.TTerm Packaging.ConflictingModuleNamespaceError -> Phantoms.TTerm Module.Namespace -> Phantoms.TTerm Packaging.ConflictingModuleNamespaceError
+conflictingModuleNamespaceErrorWithFirst :: Phantoms.TTerm Packaging.ConflictingModuleNamespaceError -> Phantoms.TTerm Packaging_.Namespace -> Phantoms.TTerm Packaging.ConflictingModuleNamespaceError
 conflictingModuleNamespaceErrorWithFirst original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.packaging.ConflictingModuleNamespaceError"),
@@ -54,7 +54,7 @@ conflictingModuleNamespaceErrorWithFirst original newVal =
               Core.projectionField = (Core.Name "second")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-conflictingModuleNamespaceErrorWithSecond :: Phantoms.TTerm Packaging.ConflictingModuleNamespaceError -> Phantoms.TTerm Module.Namespace -> Phantoms.TTerm Packaging.ConflictingModuleNamespaceError
+conflictingModuleNamespaceErrorWithSecond :: Phantoms.TTerm Packaging.ConflictingModuleNamespaceError -> Phantoms.TTerm Packaging_.Namespace -> Phantoms.TTerm Packaging.ConflictingModuleNamespaceError
 conflictingModuleNamespaceErrorWithSecond original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.packaging.ConflictingModuleNamespaceError"),
@@ -70,7 +70,7 @@ conflictingModuleNamespaceErrorWithSecond original newVal =
           Core.fieldName = (Core.Name "second"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-conflictingVariantNameError :: Phantoms.TTerm Module.Namespace -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Packaging.ConflictingVariantNameError
+conflictingVariantNameError :: Phantoms.TTerm Packaging_.Namespace -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Packaging.ConflictingVariantNameError
 conflictingVariantNameError namespace typeName variantName conflictingName =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.packaging.ConflictingVariantNameError"),
@@ -96,7 +96,7 @@ conflictingVariantNameErrorConflictingName x =
         Core.projectionField = (Core.Name "conflictingName")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-conflictingVariantNameErrorNamespace :: Phantoms.TTerm Packaging.ConflictingVariantNameError -> Phantoms.TTerm Module.Namespace
+conflictingVariantNameErrorNamespace :: Phantoms.TTerm Packaging.ConflictingVariantNameError -> Phantoms.TTerm Packaging_.Namespace
 conflictingVariantNameErrorNamespace x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -150,7 +150,7 @@ conflictingVariantNameErrorWithConflictingName original newVal =
           Core.fieldName = (Core.Name "conflictingName"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-conflictingVariantNameErrorWithNamespace :: Phantoms.TTerm Packaging.ConflictingVariantNameError -> Phantoms.TTerm Module.Namespace -> Phantoms.TTerm Packaging.ConflictingVariantNameError
+conflictingVariantNameErrorWithNamespace :: Phantoms.TTerm Packaging.ConflictingVariantNameError -> Phantoms.TTerm Packaging_.Namespace -> Phantoms.TTerm Packaging.ConflictingVariantNameError
 conflictingVariantNameErrorWithNamespace original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.packaging.ConflictingVariantNameError"),
@@ -240,7 +240,7 @@ conflictingVariantNameErrorWithVariantName original newVal =
               Core.projectionField = (Core.Name "conflictingName")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-definitionNotInModuleNamespaceError :: Phantoms.TTerm Module.Namespace -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Packaging.DefinitionNotInModuleNamespaceError
+definitionNotInModuleNamespaceError :: Phantoms.TTerm Packaging_.Namespace -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Packaging.DefinitionNotInModuleNamespaceError
 definitionNotInModuleNamespaceError namespace name =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.packaging.DefinitionNotInModuleNamespaceError"),
@@ -260,7 +260,7 @@ definitionNotInModuleNamespaceErrorName x =
         Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-definitionNotInModuleNamespaceErrorNamespace :: Phantoms.TTerm Packaging.DefinitionNotInModuleNamespaceError -> Phantoms.TTerm Module.Namespace
+definitionNotInModuleNamespaceErrorNamespace :: Phantoms.TTerm Packaging.DefinitionNotInModuleNamespaceError -> Phantoms.TTerm Packaging_.Namespace
 definitionNotInModuleNamespaceErrorNamespace x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -284,7 +284,7 @@ definitionNotInModuleNamespaceErrorWithName original newVal =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-definitionNotInModuleNamespaceErrorWithNamespace :: Phantoms.TTerm Packaging.DefinitionNotInModuleNamespaceError -> Phantoms.TTerm Module.Namespace -> Phantoms.TTerm Packaging.DefinitionNotInModuleNamespaceError
+definitionNotInModuleNamespaceErrorWithNamespace :: Phantoms.TTerm Packaging.DefinitionNotInModuleNamespaceError -> Phantoms.TTerm Packaging_.Namespace -> Phantoms.TTerm Packaging.DefinitionNotInModuleNamespaceError
 definitionNotInModuleNamespaceErrorWithNamespace original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.packaging.DefinitionNotInModuleNamespaceError"),
@@ -300,7 +300,7 @@ definitionNotInModuleNamespaceErrorWithNamespace original newVal =
               Core.projectionField = (Core.Name "name")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-duplicateDefinitionNameError :: Phantoms.TTerm Module.Namespace -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Packaging.DuplicateDefinitionNameError
+duplicateDefinitionNameError :: Phantoms.TTerm Packaging_.Namespace -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Packaging.DuplicateDefinitionNameError
 duplicateDefinitionNameError namespace name =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.packaging.DuplicateDefinitionNameError"),
@@ -320,7 +320,7 @@ duplicateDefinitionNameErrorName x =
         Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-duplicateDefinitionNameErrorNamespace :: Phantoms.TTerm Packaging.DuplicateDefinitionNameError -> Phantoms.TTerm Module.Namespace
+duplicateDefinitionNameErrorNamespace :: Phantoms.TTerm Packaging.DuplicateDefinitionNameError -> Phantoms.TTerm Packaging_.Namespace
 duplicateDefinitionNameErrorNamespace x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -344,7 +344,7 @@ duplicateDefinitionNameErrorWithName original newVal =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-duplicateDefinitionNameErrorWithNamespace :: Phantoms.TTerm Packaging.DuplicateDefinitionNameError -> Phantoms.TTerm Module.Namespace -> Phantoms.TTerm Packaging.DuplicateDefinitionNameError
+duplicateDefinitionNameErrorWithNamespace :: Phantoms.TTerm Packaging.DuplicateDefinitionNameError -> Phantoms.TTerm Packaging_.Namespace -> Phantoms.TTerm Packaging.DuplicateDefinitionNameError
 duplicateDefinitionNameErrorWithNamespace original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.packaging.DuplicateDefinitionNameError"),
@@ -360,7 +360,7 @@ duplicateDefinitionNameErrorWithNamespace original newVal =
               Core.projectionField = (Core.Name "name")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-duplicateModuleNamespaceError :: Phantoms.TTerm Module.Namespace -> Phantoms.TTerm Packaging.DuplicateModuleNamespaceError
+duplicateModuleNamespaceError :: Phantoms.TTerm Packaging_.Namespace -> Phantoms.TTerm Packaging.DuplicateModuleNamespaceError
 duplicateModuleNamespaceError namespace =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.packaging.DuplicateModuleNamespaceError"),
@@ -369,7 +369,7 @@ duplicateModuleNamespaceError namespace =
           Core.fieldName = (Core.Name "namespace"),
           Core.fieldTerm = (Phantoms.unTTerm namespace)}]}))
 
-duplicateModuleNamespaceErrorNamespace :: Phantoms.TTerm Packaging.DuplicateModuleNamespaceError -> Phantoms.TTerm Module.Namespace
+duplicateModuleNamespaceErrorNamespace :: Phantoms.TTerm Packaging.DuplicateModuleNamespaceError -> Phantoms.TTerm Packaging_.Namespace
 duplicateModuleNamespaceErrorNamespace x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -377,7 +377,7 @@ duplicateModuleNamespaceErrorNamespace x =
         Core.projectionField = (Core.Name "namespace")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-duplicateModuleNamespaceErrorWithNamespace :: Phantoms.TTerm Packaging.DuplicateModuleNamespaceError -> Phantoms.TTerm Module.Namespace -> Phantoms.TTerm Packaging.DuplicateModuleNamespaceError
+duplicateModuleNamespaceErrorWithNamespace :: Phantoms.TTerm Packaging.DuplicateModuleNamespaceError -> Phantoms.TTerm Packaging_.Namespace -> Phantoms.TTerm Packaging.DuplicateModuleNamespaceError
 duplicateModuleNamespaceErrorWithNamespace original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.packaging.DuplicateModuleNamespaceError"),

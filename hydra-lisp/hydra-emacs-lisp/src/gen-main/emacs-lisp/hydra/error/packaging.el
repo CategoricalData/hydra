@@ -2,7 +2,7 @@
 
 (require 'hydra.core)
 
-(require 'hydra.module)
+(require 'hydra.packaging)
 
 (cl-defstruct hydra_error_packaging_conflicting_module_namespace_error first second)
 

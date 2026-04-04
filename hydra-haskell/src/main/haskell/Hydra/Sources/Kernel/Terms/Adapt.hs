@@ -166,7 +166,7 @@ adaptDataGraph = define "adaptDataGraph" $
     "tx" <~ var "g" $
     "t1" <~ Variables.unshadowVariables @@ (pushTypeAppsInward @@ var "term") $
     "t2" <~ Variables.unshadowVariables @@ (Logic.ifElse (var "doExpand")
-      (pushTypeAppsInward @@ (Reduction.etaExpandTermNew @@ var "tx" @@ var "t1"))
+      (pushTypeAppsInward @@ (Reduction.etaExpandTerm @@ var "tx" @@ var "t1"))
       (var "t1")) $
     Dependencies.liftLambdaAboveLet @@ var "t2") $
   -- Transform each binding's term individually, preserving name and type
@@ -179,7 +179,7 @@ adaptDataGraph = define "adaptDataGraph" $
   "prims0" <~ Graph.graphPrimitives (var "graph0") $
   "schemaTypes0" <~ Graph.graphSchemaTypes (var "graph0") $
   -- Adapt schema types
-  "schemaBindings" <~ Environment.typesToElements @@ Maps.map ("ts" ~> Scoping.typeSchemeToFType @@ var "ts") (var "schemaTypes0") $
+  "schemaBindings" <~ Environment.typesToDefinitions @@ Maps.map ("ts" ~> Scoping.typeSchemeToFType @@ var "ts") (var "schemaTypes0") $
   "schemaResult" <<~ Logic.ifElse (Maps.null (var "schemaTypes0"))
     (right (Maps.empty :: TTerm (M.Map Name TypeScheme)))
     ("tmap0" <<~ Eithers.bimap formatDecodingError ("x" ~> var "x") (Environment.graphAsTypes @@ var "cx" @@ var "graph0" @@ var "schemaBindings") $
@@ -736,7 +736,7 @@ schemaGraphToDefinitions = define "schemaGraphToDefinitions" $
   "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
   "tmap0" <<~ Eithers.bimap formatDecodingError ("x" ~> var "x") (Environment.graphAsTypes @@ var "cx" @@ var "graph" @@ (Lexical.graphToBindings @@ var "graph")) $
   "tmap1" <<~ adaptGraphSchema @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
-  "toDef" <~ ("pair" ~> Module.typeDefinition (Pairs.first $ var "pair") (Pairs.second $ var "pair")) $
+  "toDef" <~ ("pair" ~> Module.typeDefinition (Pairs.first $ var "pair") (Core.typeScheme (list ([] :: [TTerm Name])) (Pairs.second $ var "pair") nothing)) $
   right $ pair
     (var "tmap1")
     (Lists.map

@@ -13,6 +13,7 @@ import hydra.lib.equality
 import hydra.lib.lists
 import hydra.lib.logic
 import hydra.lib.maps
+import hydra.lib.math
 import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.sets
@@ -141,6 +142,19 @@ def non_alnum_to_underscores(input: str) -> str:
         return hydra.lib.lists.foldl(replace, ((), False), hydra.lib.strings.to_list(input))
     return hydra.lib.strings.from_list(hydra.lib.lists.reverse(hydra.lib.pairs.first(result())))
 
+def strip_leading_and_trailing_whitespace(s: str) -> str:
+    r"""Remove leading and trailing whitespace from a string."""
+
+    return hydra.lib.strings.from_list(hydra.lib.lists.drop_while(hydra.lib.chars.is_space, hydra.lib.lists.reverse(hydra.lib.lists.drop_while(hydra.lib.chars.is_space, hydra.lib.lists.reverse(hydra.lib.strings.to_list(s))))))
+
+def normalize_comment(s: str) -> str:
+    r"""Normalize a comment string for consistent output across coders."""
+
+    @lru_cache(1)
+    def stripped() -> str:
+        return strip_leading_and_trailing_whitespace(s)
+    return hydra.lib.logic.if_else(hydra.lib.strings.null(stripped()), (lambda : ""), (lambda : (last_idx := hydra.lib.math.sub(hydra.lib.strings.length(stripped()), 1), (last_char := hydra.lib.strings.char_at(last_idx, stripped()), hydra.lib.logic.if_else(hydra.lib.equality.equal(last_char, 46), (lambda : stripped()), (lambda : hydra.lib.strings.cat2(stripped(), "."))))[1])[1]))
+
 def sanitize_with_underscores(reserved: frozenset[str], s: str) -> str:
     r"""Sanitize a string by replacing non-alphanumeric characters and escaping reserved words."""
 
@@ -150,11 +164,6 @@ def show_list(f: Callable[[T0], str], els: frozenlist[T0]) -> str:
     r"""Format a list of elements as a bracketed, comma-separated string."""
 
     return hydra.lib.strings.cat(("[", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map(f, els)), "]"))
-
-def strip_leading_and_trailing_whitespace(s: str) -> str:
-    r"""Remove leading and trailing whitespace from a string."""
-
-    return hydra.lib.strings.from_list(hydra.lib.lists.drop_while(hydra.lib.chars.is_space, hydra.lib.lists.reverse(hydra.lib.lists.drop_while(hydra.lib.chars.is_space, hydra.lib.lists.reverse(hydra.lib.strings.to_list(s))))))
 
 def with_character_aliases(original: str) -> str:
     r"""Replace special characters with their alphanumeric aliases."""

@@ -2,7 +2,7 @@ module Hydra.Sources.Kernel.Terms.Reduction where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  alphaConvert, betaReduceType, contractTerm, countPrimitiveInvocations, etaReduceTerm, etaExpandTerm, etaExpandTermNew, etaExpansionArity, etaExpandTypedTerm,
+  alphaConvert, betaReduceType, contractTerm, countPrimitiveInvocations, etaReduceTerm, etaExpandTerm, etaExpansionArity, etaExpandTypedTerm,
   reduceTerm, termIsClosed, termIsValue)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths    as Paths
@@ -92,7 +92,6 @@ module_ = Module ns elements
      toDefinition countPrimitiveInvocations,
      toDefinition etaReduceTerm,
      toDefinition etaExpandTerm,
-     toDefinition etaExpandTermNew,
      toDefinition etaExpansionArity,
      toDefinition etaExpandTypedTerm,
      toDefinition reduceTerm,
@@ -170,45 +169,6 @@ contractTerm = define "contractTerm" $
 countPrimitiveInvocations :: TTermDefinition Bool
 countPrimitiveInvocations = define "countPrimitiveInvocations" true
 
--- TODO: see notes on etaExpansionArity
-etaExpandTerm :: TTermDefinition (Graph -> Term -> Term)
-etaExpandTerm = define "etaExpandTerm" $
-  doc ("Recursively transform arbitrary terms like 'add 42' into terms like '\\x.add 42 x', in which the implicit"
-    <> " parameters of primitive functions and eliminations are made into explicit lambda parameters."
-    <> " Variable references are not expanded."
-    <> " This is useful for targets like Python with weaker support for currying than Hydra or Haskell."
-    <> " Note: this is a \"trusty\" function which assumes the graph is well-formed, i.e. no dangling references.") $
-  "graph" ~> "term" ~>
-  "expand" <~ ("args" ~> "arity" ~> "t" ~>
-    "apps" <~ Lists.foldl
-      ("lhs" ~> "arg" ~> Core.termApplication $ Core.application (var "lhs") (var "arg"))
-      (var "t")
-      (var "args") $
-    "is" <~ Logic.ifElse (Equality.lte (var "arity") (Lists.length $ var "args"))
-      (list ([] :: [TTerm Int]))
-      (Math.range (int32 1) (Math.sub (var "arity") (Lists.length $ var "args"))) $
-    "pad" <~ ("indices" ~> "t" ~>
-      Logic.ifElse (Lists.null $ var "indices")
-        (var "t")
-        (Core.termFunction $ Core.functionLambda $
-          Core.lambda (Core.name $ Strings.cat2 (string "v") (Literals.showInt32 $ Lists.head $ var "indices")) nothing $
-            var "pad" @@ Lists.tail (var "indices") @@
-              (Core.termApplication $ Core.application (var "t") $ Core.termVariable $
-                Core.name $ Strings.cat2 (string "v") (Literals.showInt32 $ Lists.head $ var "indices")))) $
-    var "pad" @@ var "is" @@ var "apps") $
-  "rewrite" <~ ("args" ~> "recurse" ~> "t" ~>
-    "afterRecursion" <~ ("term" ~>
-      var "expand" @@ var "args" @@ (etaExpansionArity @@ var "graph" @@ var "term") @@ var "term") $
-    "t2" <~ Strip.detypeTerm @@ var "t" $
-    cases _Term (var "t2")
-      (Just $ var "afterRecursion" @@ (var "recurse" @@ var "t2")) [
-      _Term_application>>: "app" ~>
-        "lhs" <~ Core.applicationFunction (var "app") $
-        "rhs" <~ Core.applicationArgument (var "app") $
-        "erhs" <~ var "rewrite" @@ (list ([] :: [TTerm Term])) @@ var "recurse" @@ var "rhs" $
-        var "rewrite" @@ (Lists.cons (var "erhs") (var "args")) @@ var "recurse" @@ var "lhs"]) $
-  contractTerm @@ (Rewriting.rewriteTerm @@ (var "rewrite" @@ list ([] :: [TTerm Term])) @@ var "term")
-
 -- | Eta-expand a term using Graph for type lookups. This is a pure function that does not
 -- require type inference, instead relying on the Graph being properly populated with types
 -- for all in-scope variables.
@@ -217,8 +177,8 @@ etaExpandTerm = define "etaExpandTerm" $
 -- 1. Pure because we look up types directly from the context
 -- 2. Manually tracks Graph when entering lambdas, lets, and type lambdas
 -- 3. Preserves existing type annotations where possible
-etaExpandTermNew :: TTermDefinition (Graph -> Term -> Term)
-etaExpandTermNew = define "etaExpandTermNew" $
+etaExpandTerm :: TTermDefinition (Graph -> Term -> Term)
+etaExpandTerm = define "etaExpandTerm" $
   doc ("Recursively transform terms to eliminate partial application, e.g. 'add 42' becomes '\\x.add 42 x'."
     <> " Uses the Graph to look up types for arity calculation."
     <> " Bare primitives and variables are NOT expanded; eliminations and partial applications are."
@@ -567,7 +527,7 @@ etaExpansionArity = define "etaExpansionArity" $
       Maybes.maybe (int32 0)
         ("ts" ~> Arity.typeArity @@ (Core.typeSchemeType $ var "ts"))
         (Maybes.bind
-          (Lexical.lookupElement @@ var "graph" @@ var "name")
+          (Lexical.lookupBinding @@ var "graph" @@ var "name")
           ("b" ~> Core.bindingType $ var "b"))]
 
 -- TODO: add lambda domains as part of the rewriting process, so inference does not need to be performed again.
@@ -866,7 +826,7 @@ reduceTerm = define "reduceTerm" $
               (var "forPrimitive" @@ var "prim" @@ var "arity" @@ var "args")],
       _Term_variable>>: "v" ~>
         -- Look up the variable in the graph; if found, reduce its definition
-        "mBinding" <~ Lexical.dereferenceElement @@ var "graph" @@ var "v" $
+        "mBinding" <~ Lexical.lookupBinding @@ var "graph" @@ var "v" $
         Maybes.maybe
           -- Not found: lambda-bound variable, return with args applied
           (right $ var "applyToArguments" @@ var "original" @@ var "args")

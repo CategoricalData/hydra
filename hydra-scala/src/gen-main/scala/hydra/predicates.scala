@@ -8,6 +8,8 @@ import hydra.core.*
 
 import hydra.errors.*
 
+import hydra.graph.*
+
 import hydra.variants.*
 
 import hydra.lib.eithers
@@ -20,11 +22,50 @@ import hydra.lib.logic
 
 import hydra.lib.maps
 
+import hydra.lib.maybes
+
 import hydra.lib.pairs
 
 import hydra.lib.sets
 
 import hydra.lib.strings
+
+def isComplexBinding(tc: hydra.graph.Graph)(b: hydra.core.Binding): Boolean =
+  {
+  lazy val term: hydra.core.Term = (b.term)
+  lazy val mts: Option[hydra.core.TypeScheme] = (b.`type`)
+  hydra.lib.maybes.cases[hydra.core.TypeScheme, Boolean](mts)(hydra.predicates.isComplexTerm(tc)(term))((ts: hydra.core.TypeScheme) =>
+    {
+    lazy val isPolymorphic: Boolean = hydra.lib.logic.not(hydra.lib.lists.`null`[hydra.core.Name](ts.variables))
+    {
+      lazy val isNonNullary: Boolean = hydra.lib.equality.gt[Int](hydra.arity.typeArity(ts.`type`))(0)
+      {
+        lazy val isComplex: Boolean = hydra.predicates.isComplexTerm(tc)(term)
+        hydra.lib.logic.or(hydra.lib.logic.or(isPolymorphic)(isNonNullary))(isComplex)
+      }
+    }
+  })
+}
+
+def isComplexTerm(tc: hydra.graph.Graph)(t: hydra.core.Term): Boolean =
+  t match
+  case hydra.core.Term.let(v_Term_let__) => true
+  case hydra.core.Term.typeApplication(v_Term_typeApplication__) => true
+  case hydra.core.Term.typeLambda(v_Term_typeLambda__) => true
+  case hydra.core.Term.variable(v_Term_variable_name) => hydra.predicates.isComplexVariable(tc)(v_Term_variable_name)
+  case _ => hydra.lib.lists.foldl[Boolean, hydra.core.Term]((b: Boolean) =>
+    (sub: hydra.core.Term) =>
+    hydra.lib.logic.or(b)(hydra.predicates.isComplexTerm(tc)(sub)))(false)(hydra.rewriting.subterms(t))
+
+def isComplexVariable(tc: hydra.graph.Graph)(name: hydra.core.Name): Boolean =
+  {
+  lazy val metaLookup: Option[hydra.core.Term] = hydra.lib.maps.lookup[hydra.core.Name, hydra.core.Term](name)(tc.metadata)
+  hydra.lib.logic.ifElse[Boolean](hydra.lib.maybes.isJust[hydra.core.Term](metaLookup))(true)(hydra.lib.logic.ifElse[Boolean](hydra.lib.sets.member[hydra.core.Name](name)(tc.lambdaVariables))(true)({
+    lazy val typeLookup: Option[hydra.core.TypeScheme] = hydra.lib.maps.lookup[hydra.core.Name, hydra.core.TypeScheme](name)(tc.boundTypes)
+    hydra.lib.maybes.maybe[Boolean, hydra.core.TypeScheme](true)((ts: hydra.core.TypeScheme) =>
+      hydra.lib.equality.gt[Int](hydra.arity.typeSchemeArity(ts))(0))(typeLookup)
+  }))
+}
 
 def isEncodedTerm(t: hydra.core.Term): Boolean =
   hydra.strip.deannotateTerm(t) match
@@ -92,6 +133,34 @@ def isSerializableType(typ: hydra.core.Type): Boolean =
   hydra.lib.logic.not(hydra.lib.sets.member[hydra.variants.TypeVariant](hydra.variants.TypeVariant.function)(allVariants))
 }
 
+def isTrivialTerm(t: hydra.core.Term): Boolean =
+  hydra.strip.deannotateTerm(t) match
+  case hydra.core.Term.literal(v_Term_literal__) => true
+  case hydra.core.Term.variable(v_Term_variable__) => true
+  case hydra.core.Term.unit => true
+  case hydra.core.Term.application(v_Term_application_app) => {
+    lazy val fun: hydra.core.Term = (v_Term_application_app.function)
+    {
+      lazy val arg: hydra.core.Term = (v_Term_application_app.argument)
+      fun match
+        case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
+          case hydra.core.Function.elimination(v_Function_elimination_e) => v_Function_elimination_e match
+            case hydra.core.Elimination.record(v_Elimination_record__) => hydra.predicates.isTrivialTerm(arg)
+            case hydra.core.Elimination.wrap(v_Elimination_wrap__) => hydra.predicates.isTrivialTerm(arg)
+            case _ => false
+          case _ => false
+        case _ => false
+    }
+  }
+  case hydra.core.Term.maybe(v_Term_maybe_opt) => hydra.lib.maybes.maybe[Boolean, hydra.core.Term](true)((inner: hydra.core.Term) => hydra.predicates.isTrivialTerm(inner))(v_Term_maybe_opt)
+  case hydra.core.Term.record(v_Term_record_rec) => hydra.lib.lists.foldl[Boolean, hydra.core.Field]((acc: Boolean) =>
+    (fld: hydra.core.Field) =>
+    hydra.lib.logic.and(acc)(hydra.predicates.isTrivialTerm(fld.term)))(true)(v_Term_record_rec.fields)
+  case hydra.core.Term.wrap(v_Term_wrap_wt) => hydra.predicates.isTrivialTerm(v_Term_wrap_wt.body)
+  case hydra.core.Term.typeApplication(v_Term_typeApplication_ta) => hydra.predicates.isTrivialTerm(v_Term_typeApplication_ta.body)
+  case hydra.core.Term.typeLambda(v_Term_typeLambda_tl) => hydra.predicates.isTrivialTerm(v_Term_typeLambda_tl.body)
+  case _ => false
+
 def isType(t: hydra.core.Type): Boolean =
   hydra.strip.deannotateType(t) match
   case hydra.core.Type.application(v_Type_application_a) => hydra.predicates.isType(v_Type_application_a.function)
@@ -117,7 +186,7 @@ def typeDependencies(cx: hydra.context.Context)(graph: hydra.graph.Graph)(withSc
     {
     lazy val cx1: hydra.context.Context = hydra.context.Context(hydra.lib.lists.cons[scala.Predef.String](hydra.lib.strings.cat2("type dependencies of ")(name2))(cx.trace),
        (cx.messages), (cx.other))
-    hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Binding, hydra.core.Type](hydra.lexical.requireElement(cx1)(graph)(name2))((el: hydra.core.Binding) =>
+    hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Binding, hydra.core.Type](hydra.lexical.requireBinding(cx1)(graph)(name2))((el: hydra.core.Binding) =>
       hydra.lib.eithers.bimap[hydra.errors.Error, hydra.core.Type, hydra.context.InContext[hydra.errors.Error],
          hydra.core.Type]((_wc_e: hydra.errors.Error) => hydra.context.InContext(_wc_e, cx1))((_wc_a: hydra.core.Type) => _wc_a)(hydra.lib.eithers.bimap[hydra.errors.DecodingError,
          hydra.core.Type, hydra.errors.Error, hydra.core.Type]((_e: hydra.errors.DecodingError) => hydra.errors.Error.other(_e))((_a: hydra.core.Type) => _a)(hydra.decode.core.`type`(graph)(el.term))))

@@ -25,8 +25,8 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Literals as Literals_
-import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Reduction as Reduction
 import qualified Hydra.Reflect as Reflect
 import qualified Hydra.Resolution as Resolution
@@ -48,7 +48,7 @@ adaptDataGraph constraints doExpand els0 cx graph0 =
               \g -> \term ->
                 let tx = g
                     t1 = Variables.unshadowVariables (pushTypeAppsInward term)
-                    t2 = Variables.unshadowVariables (Logic.ifElse doExpand (pushTypeAppsInward (Reduction.etaExpandTermNew tx t1)) t1)
+                    t2 = Variables.unshadowVariables (Logic.ifElse doExpand (pushTypeAppsInward (Reduction.etaExpandTerm tx t1)) t1)
                 in (Dependencies.liftLambdaAboveLet t2)
           transformBinding =
                   \g -> \el -> Core.Binding {
@@ -58,7 +58,7 @@ adaptDataGraph constraints doExpand els0 cx graph0 =
           litmap = adaptLiteralTypesMap constraints
           prims0 = Graph.graphPrimitives graph0
           schemaTypes0 = Graph.graphSchemaTypes graph0
-          schemaBindings = Environment.typesToElements (Maps.map (\ts -> Scoping.typeSchemeToFType ts) schemaTypes0)
+          schemaBindings = Environment.typesToDefinitions (Maps.map (\ts -> Scoping.typeSchemeToFType ts) schemaTypes0)
       in (Eithers.bind (Logic.ifElse (Maps.null schemaTypes0) (Right Maps.empty) (Eithers.bind (Eithers.bimap (\ic -> Errors.unDecodingError (Context.inContextObject ic)) (\x -> x) (Environment.graphAsTypes cx graph0 schemaBindings)) (\tmap0 -> Eithers.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 -> Right (Maps.map (\t -> Resolution.typeToTypeScheme t) tmap1))))) (\schemaResult ->
         let adaptedSchemaTypes = schemaResult
             adaptBinding =
@@ -296,7 +296,7 @@ composeCoders c1 c2 =
       Coders.coderDecode = (\cx -> \c -> Eithers.bind (Coders.coderDecode c2 cx c) (\b2 -> Coders.coderDecode c1 cx b2))}
 
 -- | Given a data graph along with language constraints, original ordered bindings, and a designated list of namespaces, adapt the graph to the language constraints, then return the processed graph along with term definitions grouped by namespace (in the order of the input namespaces). Inference is performed before adaptation if bindings lack type annotations. Hoisting must preserve type schemes; if any binding loses its type scheme after hoisting, the pipeline fails. Adaptation preserves type application/lambda wrappers and adapts embedded types. Post-adaptation inference is performed to ensure binding TypeSchemes are fully consistent. The doExpand flag controls eta expansion. The doHoistCaseStatements flag controls case statement hoisting (needed for Python). The doHoistPolymorphicLetBindings flag controls polymorphic let binding hoisting (needed for Java). The originalBindings parameter provides the original ordered bindings (from module elements).
-dataGraphToDefinitions :: Coders.LanguageConstraints -> Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Graph.Graph -> [Module.Namespace] -> Context.Context -> Either String (Graph.Graph, [[Module.TermDefinition]])
+dataGraphToDefinitions :: Coders.LanguageConstraints -> Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Graph.Graph -> [Packaging.Namespace] -> Context.Context -> Either String (Graph.Graph, [[Packaging.TermDefinition]])
 dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings originalBindings graph0 namespaces cx =
 
       let namespacesSet = Sets.fromList namespaces
@@ -362,10 +362,10 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
         in (Eithers.bind (checkBindingsTyped "after adaptation" adaptedBindings) (\bins4 ->
           let bins5 = normalizeBindings bins4
               toDef =
-                      \el -> Maybes.map (\ts -> Module.TermDefinition {
-                        Module.termDefinitionName = (Core.bindingName el),
-                        Module.termDefinitionTerm = (Core.bindingTerm el),
-                        Module.termDefinitionType = (Just ts)}) (Core.bindingType el)
+                      \el -> Maybes.map (\ts -> Packaging.TermDefinition {
+                        Packaging.termDefinitionName = (Core.bindingName el),
+                        Packaging.termDefinitionTerm = (Core.bindingTerm el),
+                        Packaging.termDefinitionType = (Just ts)}) (Core.bindingType el)
               selectedElements =
                       Lists.filter (\el -> Maybes.maybe False (\ns -> Sets.member ns namespacesSet) (Names.namespaceOf (Core.bindingName el))) bins5
               elementsByNamespace =
@@ -576,15 +576,18 @@ pushTypeAppsInward term =
       in (go term)
 
 -- | Given a schema graph along with language constraints and a designated list of element names, adapt the graph to the language constraints, then return a corresponding type definition for each element name.
-schemaGraphToDefinitions :: Coders.LanguageConstraints -> Graph.Graph -> [[Core.Name]] -> Context.Context -> Either String (M.Map Core.Name Core.Type, [[Module.TypeDefinition]])
+schemaGraphToDefinitions :: Coders.LanguageConstraints -> Graph.Graph -> [[Core.Name]] -> Context.Context -> Either String (M.Map Core.Name Core.Type, [[Packaging.TypeDefinition]])
 schemaGraphToDefinitions constraints graph nameLists cx =
 
       let litmap = adaptLiteralTypesMap constraints
       in (Eithers.bind (Eithers.bimap (\ic -> Errors.unDecodingError (Context.inContextObject ic)) (\x -> x) (Environment.graphAsTypes cx graph (Lexical.graphToBindings graph))) (\tmap0 -> Eithers.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 ->
         let toDef =
-                \pair -> Module.TypeDefinition {
-                  Module.typeDefinitionName = (Pairs.first pair),
-                  Module.typeDefinitionType = (Pairs.second pair)}
+                \pair -> Packaging.TypeDefinition {
+                  Packaging.typeDefinitionName = (Pairs.first pair),
+                  Packaging.typeDefinitionType = Core.TypeScheme {
+                    Core.typeSchemeVariables = [],
+                    Core.typeSchemeType = (Pairs.second pair),
+                    Core.typeSchemeConstraints = Nothing}}
         in (Right (tmap1, (Lists.map (\names -> Lists.map toDef (Lists.map (\n -> (n, (Maybes.fromJust (Maps.lookup n tmap1)))) names)) nameLists))))))
 
 -- | Given a target language and a source type, produce an adapter which rewrites the type and its terms according to the language's constraints. The encode direction adapts terms; the decode direction is identity.

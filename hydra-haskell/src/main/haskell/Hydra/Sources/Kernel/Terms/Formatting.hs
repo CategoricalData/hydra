@@ -4,7 +4,7 @@ module Hydra.Sources.Kernel.Terms.Formatting where
 import Hydra.Kernel hiding (
   capitalize, convertCase, convertCaseCamelOrUnderscoreToLowerSnake, convertCaseCamelToLowerSnake, convertCaseCamelToUpperSnake,
   convertCasePascalToUpperSnake, decapitalize, escapeWithUnderscore, indentLines,
-  javaStyleComment, mapFirstLetter, nonAlnumToUnderscores, sanitizeWithUnderscores,
+  javaStyleComment, mapFirstLetter, nonAlnumToUnderscores, normalizeComment, sanitizeWithUnderscores,
   showList, stripLeadingAndTrailingWhitespace, withCharacterAliases, wrapLine)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths    as Paths
@@ -76,6 +76,7 @@ module_ = Module ns elements
       toDefinition indentLines,
       toDefinition javaStyleComment,
       toDefinition mapFirstLetter,
+      toDefinition normalizeComment,
       toDefinition nonAlnumToUnderscores,
       toDefinition sanitizeWithUnderscores,
       toDefinition showList,
@@ -176,6 +177,23 @@ mapFirstLetter = define "mapFirstLetter" $
     ("list" <~ Strings.toList (var "s") $
      "firstLetter" <~ var "mapping" @@ (Strings.fromList (Lists.pure (Lists.head $ var "list"))) $
      Strings.cat2 (var "firstLetter") (Strings.fromList (Lists.tail $ var "list")))
+
+normalizeComment :: TTermDefinition (String -> String)
+normalizeComment = define "normalizeComment" $
+  doc "Normalize a comment string for consistent output across coders" $
+  "s" ~>
+  "stripped" <~ stripLeadingAndTrailingWhitespace @@ var "s" $
+  Logic.ifElse
+    (Strings.null (var "stripped"))
+    (string "")
+    -- Get the last character by using charAt with (length - 1)
+    -- Code point 46 is '.'
+    ("lastIdx" <~ Math.sub (Strings.length (var "stripped")) (int32 1) $
+     "lastChar" <~ Strings.charAt (var "lastIdx") (var "stripped") $
+     Logic.ifElse
+       (Equality.equal (var "lastChar") (int32 46))
+       (var "stripped")
+       (Strings.cat2 (var "stripped") (string ".")))
 
 nonAlnumToUnderscores :: TTermDefinition (String -> String)
 nonAlnumToUnderscores = define "nonAlnumToUnderscores" $

@@ -26,8 +26,8 @@ import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
-import hydra.module
 import hydra.names
+import hydra.packaging
 
 T0 = TypeVar("T0")
 
@@ -129,7 +129,7 @@ def field_name_to_java_variable_declarator_id(fname: hydra.core.Name) -> hydra.e
 def final_var_declaration_statement(id: hydra.ext.java.syntax.Identifier, rhs: hydra.ext.java.syntax.Expression) -> hydra.ext.java.syntax.BlockStatement:
     return cast(hydra.ext.java.syntax.BlockStatement, hydra.ext.java.syntax.BlockStatementLocalVariableDeclaration(hydra.ext.java.syntax.LocalVariableDeclarationStatement(hydra.ext.java.syntax.LocalVariableDeclaration((cast(hydra.ext.java.syntax.VariableModifier, hydra.ext.java.syntax.VariableModifierFinal()),), cast(hydra.ext.java.syntax.LocalVariableType, hydra.ext.java.syntax.LocalVariableTypeVar()), (java_variable_declarator(id, Just(cast(hydra.ext.java.syntax.VariableInitializer, hydra.ext.java.syntax.VariableInitializerExpression(rhs)))),)))))
 
-def import_aliases_for_module(mod: hydra.module.Module) -> hydra.ext.java.environment.Aliases:
+def import_aliases_for_module(mod: hydra.packaging.Module) -> hydra.ext.java.environment.Aliases:
     return hydra.ext.java.environment.Aliases(mod.namespace, hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), Nothing(), hydra.lib.sets.empty())
 
 def java_method_body(mstmts: Maybe[frozenlist[hydra.ext.java.syntax.BlockStatement]]) -> hydra.ext.java.syntax.MethodBody:
@@ -199,7 +199,7 @@ def java_type_identifier(s: str) -> hydra.ext.java.syntax.TypeIdentifier:
 
 def name_to_qualified_java_name(aliases: hydra.ext.java.environment.Aliases, qualify: bool, name: hydra.core.Name, mlocal: Maybe[str]) -> tuple[hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier]:
     @lru_cache(1)
-    def qn() -> hydra.module.QualifiedName:
+    def qn() -> hydra.packaging.QualifiedName:
         return hydra.names.qualify_name(name)
     ns_ = qn().namespace
     local = qn().local
@@ -378,7 +378,7 @@ def java_method_invocation_to_java_statement(mi: hydra.ext.java.syntax.MethodInv
 def java_multiplicative_expression_to_java_relational_expression(me: hydra.ext.java.syntax.MultiplicativeExpression) -> hydra.ext.java.syntax.RelationalExpression:
     return cast(hydra.ext.java.syntax.RelationalExpression, hydra.ext.java.syntax.RelationalExpressionSimple(cast(hydra.ext.java.syntax.ShiftExpression, hydra.ext.java.syntax.ShiftExpressionUnary(cast(hydra.ext.java.syntax.AdditiveExpression, hydra.ext.java.syntax.AdditiveExpressionUnary(me))))))
 
-def java_package_declaration(ns: hydra.module.Namespace) -> hydra.ext.java.syntax.PackageDeclaration:
+def java_package_declaration(ns: hydra.packaging.Namespace) -> hydra.ext.java.syntax.PackageDeclaration:
     return hydra.ext.java.syntax.PackageDeclaration((), hydra.lib.lists.map((lambda s: hydra.ext.java.syntax.Identifier(s)), hydra.lib.strings.split_on(".", ns.value)))
 
 def java_postfix_expression_to_java_equality_expression(pe: hydra.ext.java.syntax.PostfixExpression) -> hydra.ext.java.syntax.EqualityExpression:
@@ -547,7 +547,7 @@ def method_invocation_static_with_type_args(self: hydra.ext.java.syntax.Identifi
 
 def name_to_java_name(aliases: hydra.ext.java.environment.Aliases, name: hydra.core.Name) -> hydra.ext.java.syntax.Identifier:
     @lru_cache(1)
-    def qn() -> hydra.module.QualifiedName:
+    def qn() -> hydra.packaging.QualifiedName:
         return hydra.names.qualify_name(name)
     ns_ = qn().namespace
     local = qn().local
@@ -674,7 +674,7 @@ def variable_declaration_statement(aliases: T0, jtype: hydra.ext.java.syntax.Typ
 
 def variant_class_name(qualify: bool, el_name: hydra.core.Name, fname: hydra.core.Name) -> hydra.core.Name:
     @lru_cache(1)
-    def qn() -> hydra.module.QualifiedName:
+    def qn() -> hydra.packaging.QualifiedName:
         return hydra.names.qualify_name(el_name)
     ns_ = qn().namespace
     local = qn().local
@@ -684,4 +684,4 @@ def variant_class_name(qualify: bool, el_name: hydra.core.Name, fname: hydra.cor
     @lru_cache(1)
     def local1() -> str:
         return hydra.lib.logic.if_else(qualify, (lambda : hydra.lib.strings.cat2(hydra.lib.strings.cat2(local, "."), flocal())), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(flocal(), local), (lambda : hydra.lib.strings.cat2(flocal(), "_")), (lambda : flocal()))))
-    return hydra.names.unqualify_name(hydra.module.QualifiedName(ns_, local1()))
+    return hydra.names.unqualify_name(hydra.packaging.QualifiedName(ns_, local1()))

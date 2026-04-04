@@ -705,7 +705,7 @@ encodeTypeDefinition :: TTermDefinition (Context -> Graph -> TypeDefinition -> E
 encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Module.typeDefinitionName (var "tdef") $
-    "typ" <~ Module.typeDefinitionType (var "tdef") $
+    "typ" <~ (Core.typeSchemeType $ Module.typeDefinitionType (var "tdef")) $
     "lname" <~ (Formatting.capitalize @@ (Names.localNameOf @@ var "name")) $
     -- Filter free type variables to unqualified names only (type parameters, not type references)
     "freeVars" <~ (Lists.filter

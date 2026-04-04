@@ -83,7 +83,6 @@ import qualified Hydra.Ext.Org.Json.Schema as JS
 import qualified Hydra.Json.Model as JM
 import qualified Hydra.Ext.Sources.Json.Schema as JsonSchema
 import qualified Hydra.Ext.Sources.Json.Schema.Serde as JsonSchemaSerde
-import qualified Hydra.Sources.CoderUtils as CoderUtils
 
 -- Phantom type for JsonSchemaOptions (was previously in Staging module)
 data JsonSchemaOptions
@@ -103,7 +102,7 @@ ns = Namespace "hydra.ext.json.schema.coder"
 
 module_ :: Module
 module_ = Module ns elements
-    [Formatting.ns, Names.ns, Strip.ns, Annotations.ns, Constants.ns, Reflect.ns, JsonSchemaSerde.ns, moduleNamespace CoderUtils.module_]
+    [Formatting.ns, Names.ns, Strip.ns, Annotations.ns, Constants.ns, Reflect.ns, JsonSchemaSerde.ns]
     (moduleNamespace JsonSchema.module_:jsonModelNs:KernelTypes.kernelTypesNamespaces) $
     Just "JSON Schema code generator: converts Hydra modules to JSON Schema documents"
   where

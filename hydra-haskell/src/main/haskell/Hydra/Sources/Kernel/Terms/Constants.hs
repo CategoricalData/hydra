@@ -65,7 +65,6 @@ module_ = Module ns elements
     Just ("A module for tier-0 constants.")
   where
    elements = [
---     toDefinition tryMe,
      toDefinition debugInference,
      toDefinition ignoredVariable,
      toDefinition key_classes,
@@ -92,16 +91,6 @@ defineAnnotationKey name mdesc = define ("key_" <> name) $ case mdesc of
     Just comment -> doc comment def
   where
     def = wrap _Name $ string name
-
--- 
-
--- An extra definition, normally commented out, for debugging
-tryMe = define "tryMe" $
-  left $ string "foo"
---  Core.termPair $ pair Core.termUnit Core.termUnit
---  Core.termPair $ pair Core.termUnit Core.termUnit
---  pair Core.termUnit Core.termUnit
---  Core.termProduct $ list [Core.termUnit, Core.termUnit]
 
 debugInference :: TTermDefinition Bool
 debugInference = define "debugInference" $

@@ -2,7 +2,7 @@
 module Hydra.Sources.Kernel.Terms.Lexical where
 
 -- Standard imports for kernel terms modules
-import Hydra.Kernel hiding (buildGraph, chooseUniqueName, dereferenceElement, dereferenceSchemaType, dereferenceVariable, elementsToGraph, emptyContext, emptyGraph, fieldsOf, getField, graphToBindings, lookupElement, lookupPrimitive, lookupTerm, matchEnum, matchRecord, matchUnion, matchUnitField, requireElement, requirePrimitive, requirePrimitiveType, requireTerm, resolveTerm, stripAndDereferenceTerm, stripAndDereferenceTermEither)
+import Hydra.Kernel hiding (buildGraph, chooseUniqueName, dereferenceSchemaType, dereferenceVariable, elementsToGraph, emptyContext, emptyGraph, fieldsOf, getField, graphToBindings, lookupBinding, lookupPrimitive, lookupTerm, matchEnum, matchRecord, matchUnion, matchUnitField, requireBinding, requirePrimitive, requirePrimitiveType, requireTerm, resolveTerm, stripAndDereferenceTerm, stripAndDereferenceTermEither)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
@@ -74,7 +74,6 @@ module_ = Module ns elements
     elements = [
       toDefinition buildGraph,
       toDefinition chooseUniqueName,
-      toDefinition dereferenceElement,
       toDefinition dereferenceSchemaType,
       toDefinition dereferenceVariable,
       toDefinition elementsToGraph,
@@ -83,14 +82,14 @@ module_ = Module ns elements
       toDefinition graphToBindings,
       toDefinition fieldsOf,
       toDefinition getField,
-      toDefinition lookupElement,
+      toDefinition lookupBinding,
       toDefinition lookupPrimitive,
       toDefinition lookupTerm,
       toDefinition matchEnum,
       toDefinition matchRecord,
       toDefinition matchUnion,
       toDefinition matchUnitField,
-      toDefinition requireElement,
+      toDefinition requireBinding,
       toDefinition requirePrimitive,
       toDefinition requirePrimitiveType,
       toDefinition requireTerm,
@@ -137,11 +136,6 @@ chooseUniqueName = define "chooseUniqueName" $
       (var "candidate")) $
   var "tryName" @@ (int32 1)
 
-dereferenceElement :: TTermDefinition (Graph -> Name -> Maybe Binding)
-dereferenceElement = define "dereferenceElement" $
-  doc "Look up an element in a graph" $
-  "graph" ~> "name" ~> lookupElement @@ var "graph" @@ var "name"
-
 dereferenceSchemaType :: TTermDefinition (Name -> M.Map Name TypeScheme -> Maybe TypeScheme)
 dereferenceSchemaType = define "dereferenceSchemaType" $
   doc "Resolve a schema type through a chain of zero or more typedefs" $
@@ -174,7 +168,7 @@ dereferenceVariable = define "dereferenceVariable" $
   Maybes.maybe
     (left ((string "no such element: ") ++ (Core.unName (var "name"))))
     right_
-    (lookupElement @@ var "graph" @@ var "name")
+    (lookupBinding @@ var "graph" @@ var "name")
 
 elementsToGraph :: TTermDefinition (Graph -> M.Map Name TypeScheme -> [Binding] -> Graph)
 elementsToGraph = define "elementsToGraph" $
@@ -227,8 +221,8 @@ getField = define "getField" $
     (var "decode")
     (Maps.lookup (var "fname") (var "m"))
 
-lookupElement :: TTermDefinition (Graph -> Name -> Maybe Binding)
-lookupElement = define "lookupElement" $
+lookupBinding :: TTermDefinition (Graph -> Name -> Maybe Binding)
+lookupBinding = define "lookupBinding" $
   doc "Look up a binding in a graph by name" $
   "graph" ~> "name" ~>
   Maybes.map
@@ -278,7 +272,7 @@ matchUnion = define "matchUnion" $
         string "}, got ",
         (ShowCore.term @@ var "stripped")])) (var "cx"))) [
     _Term_variable>>: "name" ~>
-      "el" <<~ requireElement @@ var "cx" @@ var "graph" @@ var "name" $
+      "el" <<~ requireBinding @@ var "cx" @@ var "graph" @@ var "name" $
       matchUnion @@ var "cx" @@ var "graph" @@ var "tname" @@ var "pairs" @@ (Core.bindingTerm (var "el")),
     _Term_union>>: "injection" ~>
       "exp" <~ (
@@ -298,8 +292,8 @@ matchUnitField :: TTermDefinition (Name -> y -> (Name, x -> Either (InContext Er
 matchUnitField = define "matchUnitField" $
   "fname" ~> "x" ~> pair (var "fname") ("ignored" ~> right (var "x"))
 
-requireElement :: TTermDefinition (Context -> Graph -> Name -> Either (InContext Error) Binding)
-requireElement = define "requireElement" $
+requireBinding :: TTermDefinition (Context -> Graph -> Name -> Either (InContext Error) Binding)
+requireBinding = define "requireBinding" $
   "cx" ~> "graph" ~> "name" ~>
   "showAll" <~ false $
   "ellipsis" <~ ("strings" ~>
@@ -314,7 +308,7 @@ requireElement = define "requireElement" $
   Maybes.maybe
     (Ctx.failInContext (Error.errorOther $ Error.otherError (var "errMsg")) (var "cx"))
     (unaryFunction right)
-    (dereferenceElement @@ var "graph" @@ var "name")
+    (lookupBinding @@ var "graph" @@ var "name")
 
 requirePrimitive :: TTermDefinition (Context -> Graph -> Name -> Either (InContext Error) Primitive)
 requirePrimitive = define "requirePrimitive" $

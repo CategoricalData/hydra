@@ -674,4 +674,146 @@ class ReductionTest extends AnyFunSuite {
       maybe<string>))
 
   }
+
+  // etaExpandTerm
+
+  test("etaExpandTerm - integer literal unchanged") {
+
+    assert((
+
+      42:int32) == (
+
+      42:int32))
+
+  }
+
+  test("etaExpandTerm - string list unchanged") {
+
+    assert((
+
+      ["foo", "bar"]) == (
+
+      ["foo", "bar"]))
+
+  }
+
+  test("etaExpandTerm - fully applied binary function unchanged") {
+
+    assert((
+
+      (hydra.lib.strings.splitOn! @ "foo" @ "bar")) == (
+
+      (hydra.lib.strings.splitOn! @ "foo" @ "bar")))
+
+  }
+
+  test("etaExpandTerm - lambda with fully applied primitive unchanged") {
+
+    assert((
+
+      λx.(hydra.lib.strings.splitOn! @ "," @ x)) == (
+
+      λx.(hydra.lib.strings.splitOn! @ "," @ x)))
+
+  }
+
+  test("etaExpandTerm - lambda returning constant unchanged") {
+
+    assert((
+
+      λx.42:int32) == (
+
+      λx.42:int32))
+
+  }
+
+  test("etaExpandTerm - bare unary primitive unchanged") {
+
+    assert((
+
+      hydra.lib.strings.toLower!) == (
+
+      hydra.lib.strings.toLower!))
+
+  }
+
+  test("etaExpandTerm - bare binary primitive unchanged") {
+
+    assert((
+
+      hydra.lib.strings.splitOn!) == (
+
+      hydra.lib.strings.splitOn!))
+
+  }
+
+  test("etaExpandTerm - partially applied binary primitive expands to one lambda") {
+
+    assert((
+
+      λv1.(hydra.lib.strings.splitOn! @ foo @ v1)) == (
+
+      λv1.(hydra.lib.strings.splitOn! @ foo @ v1)))
+
+  }
+
+  test("etaExpandTerm - projection expands to lambda") {
+
+    assert((
+
+      λv1.(project(Person){firstName} @ v1)) == (
+
+      λv1.(project(Person){firstName} @ v1)))
+
+  }
+
+  test("etaExpandTerm - partial application inside lambda expands") {
+
+    assert((
+
+      λx.λv1.(hydra.lib.strings.splitOn! @ x @ v1)) == (
+
+      λx.λv1.(hydra.lib.strings.splitOn! @ x @ v1)))
+
+  }
+
+  test("etaExpandTerm - let with constant body unchanged") {
+
+    assert((
+
+      let foo = 137:int32 in 42:int32) == (
+
+      let foo = 137:int32 in 42:int32))
+
+  }
+
+  test("etaExpandTerm - let with bare primitive value unchanged") {
+
+    assert((
+
+      let foo = hydra.lib.strings.splitOn! in foo) == (
+
+      let foo = hydra.lib.strings.splitOn! in foo))
+
+  }
+
+  test("etaExpandTerm - fully applied unary unchanged") {
+
+    assert((
+
+      (hydra.lib.strings.toLower! @ "FOO")) == (
+
+      (hydra.lib.strings.toLower! @ "FOO")))
+
+  }
+
+  test("etaExpandTerm - partial application in list expands") {
+
+    assert((
+
+      [λx.["foo"], λv1.(hydra.lib.strings.splitOn! @ "bar" @ v1)]) == (
+
+      [λx.["foo"], λv1.(hydra.lib.strings.splitOn! @ "bar" @ v1)]))
+
+  }
 }

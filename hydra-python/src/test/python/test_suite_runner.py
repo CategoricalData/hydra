@@ -101,7 +101,7 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
         hydra.core.Name("hydra.variables"),
     ]
 
-    term_mods = load_modules_from_json(False, json_dir, evaluator_term_namespaces)
+    term_mods = load_modules_from_json(json_dir, evaluator_term_namespaces)
 
     # Strip System F type annotations (TypeLambda, TypeApplication, etc.) from
     # term bodies. The JSON representation preserves the full System F encoding,
@@ -110,7 +110,7 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
 
     sys.setrecursionlimit(old_limit)
 
-    from hydra.module import DefinitionTerm
+    from hydra.packaging import DefinitionTerm
     from hydra.core import Binding
     bindings = {}
     for mod in term_mods:

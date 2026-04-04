@@ -102,7 +102,7 @@ import java.io.File
   println()
 
   // Step 3: Optionally load ext coder modules
-  var coderMods: Seq[hydra.module.Module] = Seq.empty
+  var coderMods: Seq[hydra.packaging.Module] = Seq.empty
   if includeCoders then
     println("Step 3: Loading hydra-ext coder modules from JSON...")
     val coderNamespaces = Generation.readManifestField(extJsonDir.get, "hydraBootstrapCoderModules")

@@ -3,6 +3,9 @@ module Hydra.Sources.Kernel.Terms.Predicates where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
+  isComplexBinding,
+  isComplexTerm,
+  isComplexVariable,
   isEncodedTerm,
   isEncodedType,
   isEnumRowType,
@@ -11,6 +14,7 @@ import Hydra.Kernel hiding (
   isSerializable,
   isSerializableByName,
   isSerializableType,
+  isTrivialTerm,
   isType,
   isUnitTerm,
   isUnitType,
@@ -64,6 +68,7 @@ import qualified Data.Map                    as M
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
+import qualified Hydra.Sources.Kernel.Terms.Arity        as Arity
 import qualified Hydra.Sources.Kernel.Terms.Reflect      as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting    as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Strip        as Strip
@@ -81,11 +86,14 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [Dependencies.ns, moduleNamespace DecodeCore.module_, Lexical.ns, Reflect.ns, Rewriting.ns, Strip.ns]
+    [Arity.ns, Dependencies.ns, moduleNamespace DecodeCore.module_, Lexical.ns, Reflect.ns, Rewriting.ns, Strip.ns]
     kernelTypesNamespaces $
     Just ("Type and term classification predicates")
   where
     elements = [
+      toDefinition isComplexBinding,
+      toDefinition isComplexTerm,
+      toDefinition isComplexVariable,
       toDefinition isEncodedTerm,
       toDefinition isEncodedType,
       toDefinition isEnumRowType,
@@ -94,10 +102,71 @@ module_ = Module ns elements
       toDefinition isSerializable,
       toDefinition isSerializableByName,
       toDefinition isSerializableType,
+      toDefinition isTrivialTerm,
       toDefinition isType,
       toDefinition isUnitTerm,
       toDefinition isUnitType,
       toDefinition typeDependencies]
+
+isComplexBinding :: TTermDefinition (Graph -> Binding -> Bool)
+isComplexBinding = define "isComplexBinding" $
+  doc "Check if a binding needs to be treated as a function" $
+  "tc" ~> "b" ~>
+  "term" <~ Core.bindingTerm (var "b") $
+  "mts" <~ Core.bindingType (var "b") $
+  -- Bindings without type schemes are complex (e.g., lifted case expressions)
+  Maybes.cases (var "mts")
+    (isComplexTerm @@ var "tc" @@ var "term") $
+    "ts" ~>
+      -- Check if polymorphic
+      "isPolymorphic" <~ Logic.not (Lists.null (Core.typeSchemeVariables $ var "ts")) $
+      -- Check if non-nullary
+      "isNonNullary" <~ Equality.gt (Arity.typeArity @@ (Core.typeSchemeType $ var "ts")) (int32 0) $
+      -- Check if complex term
+      "isComplex" <~ isComplexTerm @@ var "tc" @@ var "term" $
+      Logic.or (Logic.or (var "isPolymorphic") (var "isNonNullary")) (var "isComplex")
+
+isComplexTerm :: TTermDefinition (Graph -> Term -> Bool)
+isComplexTerm = define "isComplexTerm" $
+  doc "Check if a term needs to be treated as a function rather than a simple value" $
+  "tc" ~> "t" ~>
+  cases _Term (var "t")
+    (Just $
+      -- Default: check if any subterm is complex
+      Lists.foldl
+        ("b" ~> "sub" ~> Logic.or (var "b") (isComplexTerm @@ var "tc" @@ var "sub"))
+        (boolean False)
+        (Rewriting.subterms @@ var "t")) [
+    _Term_let>>: constant (boolean True),
+    _Term_typeApplication>>: constant (boolean True),
+    _Term_typeLambda>>: constant (boolean True),
+    _Term_variable>>: "name" ~> isComplexVariable @@ var "tc" @@ var "name"]
+
+isComplexVariable :: TTermDefinition (Graph -> Name -> Bool)
+isComplexVariable = define "isComplexVariable" $
+  doc "Check if a variable is bound to a complex term" $
+  "tc" ~> "name" ~>
+  -- Check if there's metadata for this variable (indicates complexity)
+  "metaLookup" <~ Maps.lookup (var "name") (Graph.graphMetadata $ var "tc") $
+  Logic.ifElse
+    (Maybes.isJust (var "metaLookup"))
+    (boolean True)
+    -- Lambda-bound variables are complex because they might be thunked
+    (Logic.ifElse
+      (Sets.member (var "name") (Graph.graphLambdaVariables $ var "tc"))
+      (boolean True)
+      -- Check if the variable is in the graph's bound types
+      ("typeLookup" <~ Maps.lookup (var "name") (Graph.graphBoundTypes $ var "tc") $
+       Maybes.maybe
+         -- If not in graph at all, assume mutual recursion (complex)
+         (boolean True)
+         -- If in graph, check if the binding itself is non-nullary (a function).
+         -- Non-nullary bindings are always complex (they take parameters).
+         -- Nullary bindings are assumed non-complex from this check;
+         -- their actual complexity will be determined by isComplexBinding
+         -- at the reference site.
+         ("ts" ~> Equality.gt (Arity.typeSchemeArity @@ var "ts") (int32 0))
+         (var "typeLookup")))
 
 isEncodedTerm :: TTermDefinition (Term -> Bool)
 isEncodedTerm = define "isEncodedTerm" $
@@ -191,6 +260,44 @@ isType = define "isType" $
     _Type_union>>: "rt" ~> false,
     _Type_variable>>: "v" ~> Equality.equal (var "v") (Core.nameLift _Type)]
 
+isTrivialTerm :: TTermDefinition (Term -> Bool)
+isTrivialTerm = define "isTrivialTerm" $
+  doc "Check if a term is trivially cheap (no thunking needed)" $
+  "t" ~>
+  cases _Term (Strip.deannotateTerm @@ var "t")
+    (Just $ boolean False) [
+    -- Literals are always trivial
+    _Term_literal>>: constant (boolean True),
+    -- Plain variables are trivial (the variable itself is cheap to reference)
+    _Term_variable>>: constant (boolean True),
+    -- Unit is trivial
+    _Term_unit>>: constant (boolean True),
+    -- Field projection on a trivial subterm is trivial (e.g. app.function)
+    _Term_application>>: "app" ~>
+      "fun" <~ Core.applicationFunction (var "app") $
+      "arg" <~ Core.applicationArgument (var "app") $
+      cases _Term (var "fun") (Just $ boolean False) [
+        _Term_function>>: "f" ~>
+          cases _Function (var "f") (Just $ boolean False) [
+            _Function_elimination>>: "e" ~>
+              cases _Elimination (var "e") (Just $ boolean False) [
+                -- record projection: trivial if the subject is trivial
+                _Elimination_record>>: constant (isTrivialTerm @@ var "arg"),
+                -- newtype unwrap: trivial if the subject is trivial
+                _Elimination_wrap>>: constant (isTrivialTerm @@ var "arg")]]],
+    -- Maybe term (just x) where x is trivial; nothing is also trivial
+    _Term_maybe>>: "opt" ~>
+      Maybes.maybe (boolean True) ("inner" ~> isTrivialTerm @@ var "inner") (var "opt"),
+    -- Record construction is trivial if all field terms are trivial
+    _Term_record>>: "rec" ~>
+      Lists.foldl ("acc" ~> "fld" ~> Logic.and (var "acc") (isTrivialTerm @@ (Core.fieldTerm $ var "fld")))
+        (boolean True) (Core.recordFields $ var "rec"),
+    -- Wrap (newtype construction) is trivial if the inner term is trivial
+    _Term_wrap>>: "wt" ~> isTrivialTerm @@ (Core.wrappedTermBody $ var "wt"),
+    -- Type applications/lambdas: check the inner term
+    _Term_typeApplication>>: "ta" ~> isTrivialTerm @@ (Core.typeApplicationTermBody $ var "ta"),
+    _Term_typeLambda>>: "tl" ~> isTrivialTerm @@ (Core.typeLambdaBody $ var "tl")]
+
 isUnitTerm :: TTermDefinition (Term -> Bool)
 isUnitTerm = define "isUnitTerm" $
   doc "Check whether a term is the unit term" $
@@ -207,7 +314,7 @@ typeDependencies = define "typeDependencies" $
   "cx" ~> "graph" ~> "withSchema" ~> "transform" ~> "name" ~>
   "requireType" <~ ("name" ~>
     "cx1" <~ Ctx.pushTrace (Strings.cat2 (string "type dependencies of ") (Core.unName (var "name"))) (var "cx") $
-    Eithers.bind (Lexical.requireElement @@ var "cx1" @@ var "graph" @@ var "name") (
+    Eithers.bind (Lexical.requireBinding @@ var "cx1" @@ var "graph" @@ var "name") (
       "el" ~> Ctx.withContext (var "cx1")
         (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
           (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el"))))) $

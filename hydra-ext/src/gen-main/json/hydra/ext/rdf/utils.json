@@ -987,7 +987,7 @@
                                 "type": [
                                   {
                                     "constraints": null,
-                                    "type": {"variable": "hydra.module.QualifiedName"},
+                                    "type": {"variable": "hydra.packaging.QualifiedName"},
                                     "variables": []}]},
                               {
                                 "name": "gname",
@@ -997,11 +997,11 @@
                                     "function": {
                                       "function": {
                                         "elimination": {
-                                          "record": {"field": "namespace", "typeName": "hydra.module.QualifiedName"}}}}}},
+                                          "record": {"field": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}}}},
                                 "type": [
                                   {
                                     "constraints": null,
-                                    "type": {"maybe": {"variable": "hydra.module.Namespace"}},
+                                    "type": {"maybe": {"variable": "hydra.packaging.Namespace"}},
                                     "variables": []}]},
                               {
                                 "name": "local_",
@@ -1011,7 +1011,7 @@
                                     "function": {
                                       "function": {
                                         "elimination": {
-                                          "record": {"field": "local", "typeName": "hydra.module.QualifiedName"}}}}}},
+                                          "record": {"field": "local", "typeName": "hydra.packaging.QualifiedName"}}}}}},
                                 "type": [
                                   {
                                     "constraints": null,
@@ -1029,7 +1029,7 @@
                                             "argument": {"variable": "gname"},
                                             "function": {
                                               "application": {
-                                                "argument": {"function": {"elimination": {"wrap": "hydra.module.Namespace"}}},
+                                                "argument": {"function": {"elimination": {"wrap": "hydra.packaging.Namespace"}}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {"literal": {"string": ""}},
@@ -1039,7 +1039,7 @@
                                                           "typeApplication": {
                                                             "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
                                                             "type": {"literal": {"string": {}}}}},
-                                                        "type": {"variable": "hydra.module.Namespace"}}}}}}}}},
+                                                        "type": {"variable": "hydra.packaging.Namespace"}}}}}}}}},
                                         {"literal": {"string": "#"}},
                                         {
                                           "application": {
@@ -1305,7 +1305,6 @@
     "hydra.errors",
     "hydra.graph",
     "hydra.json.model",
-    "hydra.module",
     "hydra.packaging",
     "hydra.parsing",
     "hydra.phantoms",

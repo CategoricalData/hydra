@@ -17,14 +17,13 @@ from hydra.annotations import is_native_type
 from hydra.codegen import (
     generate_source_files,
     namespace_to_path,
-    strip_module_type_schemes,
 )
 from hydra.context import Context, InContext
 from hydra.core import Binding
 from hydra.dsl.python import FrozenDict, Just, Left, Nothing, Right
 from hydra.graph import Graph
 from hydra.json import model as JsonModel
-from hydra.module import Module, Namespace
+from hydra.packaging import Module, Namespace
 from hydra.strip import deannotate_type_recursive, remove_types_from_term
 from hydra.scoping import f_type_to_type_scheme
 from hydra.sources.libraries import standard_library
@@ -120,20 +119,20 @@ def parse_json_file(path):
     return _python_to_hydra_json(obj)
 
 
-def decode_module(bs_graph, schema_map, do_strip_type_schemes, json_val):
+def decode_module(bs_graph, schema_map, json_val):
     """Decode a single module from a JSON value.
 
     Uses a pre-built schema map (from bootstrap_schema_map()) to decode the
     JSON into a Term, then decodes the Term into a Module.
     """
     import hydra.json.decode as json_decode
-    import hydra.decode.module as decode_mod
+    import hydra.decode.packaging as decode_pkg
     from hydra.core import Name, Type, TypeVariable
 
-    mod_type = TypeVariable(Name("hydra.module.Module"))
+    mod_type = TypeVariable(Name("hydra.packaging.Module"))
 
     # Step 1: Decode JSON to a Term using the schema map
-    json_result = json_decode.from_json(schema_map, Name("hydra.module.Module"), mod_type, json_val)
+    json_result = json_decode.from_json(schema_map, Name("hydra.packaging.Module"), mod_type, json_val)
     match json_result:
         case Left(value=err):
             raise RuntimeError(f"Module JSON decode error: {err}")
@@ -143,19 +142,17 @@ def decode_module(bs_graph, schema_map, do_strip_type_schemes, json_val):
             raise RuntimeError("Unexpected JSON decode result type")
 
     # Step 2: Decode the Term to a Module
-    mod_result = decode_mod.module(bs_graph, term)
+    mod_result = decode_pkg.module(bs_graph, term)
     match mod_result:
         case Left(value=dec_err):
             raise RuntimeError(f"Module decode error: {dec_err.value}")
         case Right(value=mod):
-            if do_strip_type_schemes:
-                return strip_module_type_schemes(mod)
             return mod
         case _:
             raise RuntimeError("Unexpected module decode result type")
 
 
-def load_modules_from_json(strip_type_schemes, base_path, namespaces):
+def load_modules_from_json(base_path, namespaces):
     """Load modules from JSON files using the bootstrap schema map.
 
     Uses bootstrap_schema_map() (from hydra.json.bootstrap.types_by_name)
@@ -167,7 +164,7 @@ def load_modules_from_json(strip_type_schemes, base_path, namespaces):
     for ns in namespaces:
         file_path = os.path.join(base_path, namespace_to_path(ns) + ".json")
         json_val = parse_json_file(file_path)
-        mod = decode_module(bs_graph, schema_map, strip_type_schemes, json_val)
+        mod = decode_module(bs_graph, schema_map, json_val)
         print(f"  Loaded: {ns.value}")
         modules.append(mod)
     return modules
@@ -213,7 +210,7 @@ def strip_term_types(m):
     bigfloat/float64 conflicts) but preserved on type-defining bindings
     (needed by is_native_type for schema graph construction).
     """
-    from hydra.module import TermDefinition, DefinitionTerm, DefinitionType
+    from hydra.packaging import TermDefinition, DefinitionTerm, DefinitionType
     stripped = []
     for d in m.definitions:
         if isinstance(d, DefinitionTerm):
@@ -237,7 +234,7 @@ def filter_kernel_modules(modules):
 
 def filter_type_modules(modules):
     """Filter modules to only those containing type-defining bindings."""
-    from hydra.module import DefinitionType
+    from hydra.packaging import DefinitionType
     return [m for m in modules if any(
         isinstance(d, DefinitionType) for d in m.definitions)]
 
@@ -290,7 +287,7 @@ def write_lisp_dialect(base_path, dialect_name, ext, universe, mods):
     from hydra.ext.lisp.syntax import Dialect
     from hydra.serialization import print_expr, parenthesize
     from hydra.names import namespace_to_file_path
-    from hydra.module import FileExtension, Namespace
+    from hydra.packaging import FileExtension, Namespace
     from hydra.util import CaseConvention
 
     dialect_map = {
