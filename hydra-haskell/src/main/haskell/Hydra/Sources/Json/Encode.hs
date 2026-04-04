@@ -97,6 +97,7 @@ module_ = Module ns elements
   where
     elements = [
       toDefinition toJson,
+      toDefinition toJsonUntyped,
       toDefinition encodeLiteral,
       toDefinition encodeFloat,
       toDefinition encodeInteger]
@@ -298,15 +299,123 @@ toJson = define "toJson" $
                 (var "encodedR"))
             (var "e")],
 
-    -- Type variables (look up in type table and recurse)
+    -- Type variables (look up in type table and recurse; fall back to untyped encoding)
     _Type_variable>>: "name" ~>
       "lookedUp" <~ (Maps.lookup (var "name") (var "types")) $
       Maybes.maybe
-        (left $ Strings.cat $ list [
-          string "unknown type variable: ",
-          Core.unName $ var "name"])
+        (toJsonUntyped @@ var "term")
         ("resolvedType" ~> toJson @@ var "types" @@ var "name" @@ var "resolvedType" @@ var "term")
         (var "lookedUp")]
+
+-- | Encode a Term to a JSON Value without type information.
+-- This is a structural fallback used when type information is unavailable (e.g. unresolved
+-- type variables). It encodes terms based on their structure alone, using the legacy encoding
+-- for Maybe (null/[value]) since without type info we cannot determine if idiomatic encoding
+-- is safe.
+toJsonUntyped :: TTermDefinition (Term -> Either String Value)
+toJsonUntyped = define "toJsonUntyped" $
+  doc "Encode a Hydra term to a JSON value without type information. Falls back to array-wrapped Maybe encoding." $
+  "term" ~>
+  "stripped" <~ (Strip.deannotateTerm @@ var "term") $
+  cases _Term (var "stripped")
+    (Just $ left $ Strings.cat $ list [
+      string "unsupported term variant for JSON encoding: ",
+      ShowCore.term @@ var "term"]) [
+    -- Literals
+    _Term_literal>>: "lit" ~> encodeLiteral @@ var "lit",
+
+    -- Lists
+    _Term_list>>: "terms" ~>
+      "results" <~ (Eithers.mapList ("t" ~> toJsonUntyped @@ var "t") (var "terms")) $
+      Eithers.map ("vs" ~> Json.valueArray $ var "vs") (var "results"),
+
+    -- Sets (encode as arrays)
+    _Term_set>>: "vals" ~>
+      "terms" <~ (Sets.toList $ var "vals") $
+      "results" <~ (Eithers.mapList ("t" ~> toJsonUntyped @@ var "t") (var "terms")) $
+      Eithers.map ("vs" ~> Json.valueArray $ var "vs") (var "results"),
+
+    -- Maybe (legacy encoding: null/[value], since we don't know if it's nested)
+    _Term_maybe>>: "opt" ~> optCases (var "opt")
+      (right Json.valueNull)
+      ("v" ~>
+        "encodedMaybe" <~ (toJsonUntyped @@ var "v") $
+        Eithers.map ("encoded" ~> Json.valueArray $ list [var "encoded"]) (var "encodedMaybe")),
+
+    -- Records
+    _Term_record>>: "r" ~>
+      "encodeField" <~ ("f" ~>
+        "fname" <~ (Core.unName $ Core.fieldName $ var "f") $
+        "fterm" <~ (Core.fieldTerm $ var "f") $
+        "encodedField" <~ (toJsonUntyped @@ var "fterm") $
+        Eithers.map ("v" ~> pair (var "fname") (var "v")) (var "encodedField")) $
+      "fields" <~ (Core.recordFields $ var "r") $
+      "encodedFields" <~ (Eithers.mapList (var "encodeField") (var "fields")) $
+      Eithers.map ("fs" ~> Json.valueObject $ Maps.fromList $ var "fs") (var "encodedFields"),
+
+    -- Unions (single-key object)
+    _Term_union>>: "inj" ~>
+      "field" <~ (Core.injectionField $ var "inj") $
+      "fname" <~ (Core.unName $ Core.fieldName $ var "field") $
+      "fterm" <~ (Core.fieldTerm $ var "field") $
+      "encodedUnion" <~ (toJsonUntyped @@ var "fterm") $
+      Eithers.map
+        ("v" ~> Json.valueObject $ Maps.fromList $ list [pair (var "fname") (var "v")])
+        (var "encodedUnion"),
+
+    -- Unit
+    _Term_unit>>: constant $ right $ Json.valueObject $ Maps.empty,
+
+    -- Wrapped terms (transparent)
+    _Term_wrap>>: "wt" ~> toJsonUntyped @@ (Core.wrappedTermBody $ var "wt"),
+
+    -- Maps -> array of {\"@key\": k, \"@value\": v}
+    _Term_map>>: "m" ~>
+      "encodeEntry" <~ ("kv" ~>
+        "k" <~ (Pairs.first $ var "kv") $
+        "v" <~ (Pairs.second $ var "kv") $
+        "encodedK" <~ (toJsonUntyped @@ var "k") $
+        "encodedV" <~ (toJsonUntyped @@ var "v") $
+        Eithers.either_
+          ("err" ~> left $ var "err")
+          ("ek" ~> Eithers.map
+            ("ev" ~> Json.valueObject $ Maps.fromList $ list [
+              pair (string "@key") (var "ek"),
+              pair (string "@value") (var "ev")])
+            (var "encodedV"))
+          (var "encodedK")) $
+      "entries" <~ (Eithers.mapList (var "encodeEntry") (Maps.toList $ var "m")) $
+      Eithers.map ("es" ~> Json.valueArray $ var "es") (var "entries"),
+
+    -- Pairs -> {\"@first\": ..., \"@second\": ...}
+    _Term_pair>>: "p" ~>
+      "first" <~ (Pairs.first $ var "p") $
+      "second" <~ (Pairs.second $ var "p") $
+      "encodedFirst" <~ (toJsonUntyped @@ var "first") $
+      "encodedSecond" <~ (toJsonUntyped @@ var "second") $
+      Eithers.either_
+        ("err" ~> left $ var "err")
+        ("ef" ~> Eithers.map
+          ("es" ~> Json.valueObject $ Maps.fromList $ list [
+            pair (string "@first") (var "ef"),
+            pair (string "@second") (var "es")])
+          (var "encodedSecond"))
+        (var "encodedFirst"),
+
+    -- Either -> {\"@left\": ...} or {\"@right\": ...}
+    _Term_either>>: "e" ~>
+      Eithers.either_
+        ("l" ~>
+          "encodedL" <~ (toJsonUntyped @@ var "l") $
+          Eithers.map
+            ("v" ~> Json.valueObject $ Maps.fromList $ list [pair (string "@left") (var "v")])
+            (var "encodedL"))
+        ("r" ~>
+          "encodedR" <~ (toJsonUntyped @@ var "r") $
+          Eithers.map
+            ("v" ~> Json.valueObject $ Maps.fromList $ list [pair (string "@right") (var "v")])
+            (var "encodedR"))
+        (var "e")]
 
 -- | Encode a literal value to JSON
 encodeLiteral :: TTermDefinition (Literal -> Either String Value)
