@@ -15,11 +15,11 @@ public class ArrayCreationExpression_ClassOrInterface implements Serializable, C
 
   public final hydra.ext.java.syntax.ClassOrInterfaceType type;
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.DimExpr> dimExprs;
+  public final java.util.List<hydra.ext.java.syntax.DimExpr> dimExprs;
 
   public final hydra.util.Maybe<hydra.ext.java.syntax.Dims> dims;
 
-  public ArrayCreationExpression_ClassOrInterface (hydra.ext.java.syntax.ClassOrInterfaceType type, hydra.util.ConsList<hydra.ext.java.syntax.DimExpr> dimExprs, hydra.util.Maybe<hydra.ext.java.syntax.Dims> dims) {
+  public ArrayCreationExpression_ClassOrInterface (hydra.ext.java.syntax.ClassOrInterfaceType type, java.util.List<hydra.ext.java.syntax.DimExpr> dimExprs, hydra.util.Maybe<hydra.ext.java.syntax.Dims> dims) {
     this.type = type;
     this.dimExprs = dimExprs;
     this.dims = dims;
@@ -49,22 +49,28 @@ public class ArrayCreationExpression_ClassOrInterface implements Serializable, C
   @SuppressWarnings("unchecked")
   public int compareTo(ArrayCreationExpression_ClassOrInterface other) {
     int cmp = 0;
-    cmp = ((Comparable) type).compareTo(other.type);
+    cmp = hydra.util.Comparing.compare(
+      type,
+      other.type);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) dimExprs).compareTo(other.dimExprs);
+    cmp = hydra.util.Comparing.compare(
+      dimExprs,
+      other.dimExprs);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) dims).compareTo(other.dims);
+    return hydra.util.Comparing.compare(
+      dims,
+      other.dims);
   }
 
   public ArrayCreationExpression_ClassOrInterface withType(hydra.ext.java.syntax.ClassOrInterfaceType type) {
     return new ArrayCreationExpression_ClassOrInterface(type, dimExprs, dims);
   }
 
-  public ArrayCreationExpression_ClassOrInterface withDimExprs(hydra.util.ConsList<hydra.ext.java.syntax.DimExpr> dimExprs) {
+  public ArrayCreationExpression_ClassOrInterface withDimExprs(java.util.List<hydra.ext.java.syntax.DimExpr> dimExprs) {
     return new ArrayCreationExpression_ClassOrInterface(type, dimExprs, dims);
   }
 

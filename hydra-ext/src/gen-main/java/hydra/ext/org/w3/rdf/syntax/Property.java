@@ -19,16 +19,16 @@ public class Property implements Serializable, Comparable<Property> {
   /**
    * State that any resource that has a given property is an instance of one or more classes
    */
-  public final hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.RdfsClass> domain;
+  public final java.util.Set<hydra.ext.org.w3.rdf.syntax.RdfsClass> domain;
 
   /**
    * States that the values of a property are instances of one or more classes
    */
-  public final hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.RdfsClass> range;
+  public final java.util.Set<hydra.ext.org.w3.rdf.syntax.RdfsClass> range;
 
-  public final hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property> subPropertyOf;
+  public final java.util.Set<hydra.ext.org.w3.rdf.syntax.Property> subPropertyOf;
 
-  public Property (hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.RdfsClass> domain, hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.RdfsClass> range, hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property> subPropertyOf) {
+  public Property (java.util.Set<hydra.ext.org.w3.rdf.syntax.RdfsClass> domain, java.util.Set<hydra.ext.org.w3.rdf.syntax.RdfsClass> range, java.util.Set<hydra.ext.org.w3.rdf.syntax.Property> subPropertyOf) {
     this.domain = domain;
     this.range = range;
     this.subPropertyOf = subPropertyOf;
@@ -58,26 +58,32 @@ public class Property implements Serializable, Comparable<Property> {
   @SuppressWarnings("unchecked")
   public int compareTo(Property other) {
     int cmp = 0;
-    cmp = ((Comparable) domain).compareTo(other.domain);
+    cmp = hydra.util.Comparing.compare(
+      domain,
+      other.domain);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) range).compareTo(other.range);
+    cmp = hydra.util.Comparing.compare(
+      range,
+      other.range);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) subPropertyOf).compareTo(other.subPropertyOf);
+    return hydra.util.Comparing.compare(
+      subPropertyOf,
+      other.subPropertyOf);
   }
 
-  public Property withDomain(hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.RdfsClass> domain) {
+  public Property withDomain(java.util.Set<hydra.ext.org.w3.rdf.syntax.RdfsClass> domain) {
     return new Property(domain, range, subPropertyOf);
   }
 
-  public Property withRange(hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.RdfsClass> range) {
+  public Property withRange(java.util.Set<hydra.ext.org.w3.rdf.syntax.RdfsClass> range) {
     return new Property(domain, range, subPropertyOf);
   }
 
-  public Property withSubPropertyOf(hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property> subPropertyOf) {
+  public Property withSubPropertyOf(java.util.Set<hydra.ext.org.w3.rdf.syntax.Property> subPropertyOf) {
     return new Property(domain, range, subPropertyOf);
   }
 }

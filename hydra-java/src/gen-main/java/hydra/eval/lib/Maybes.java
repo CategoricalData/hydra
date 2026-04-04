@@ -92,30 +92,30 @@ public interface Maybes {
     });
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.core.Term>> cat(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term listTerm) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.core.Term>> cat(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term listTerm) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.Core.list(
         cx,
         g,
         listTerm),
-      (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.core.Term>>>) (elements -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.core.Term>>right(hydra.lib.lists.Foldl.apply(
-        (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>>) (acc -> (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>) (el -> (el).accept(new hydra.core.Term.PartialVisitor<>() {
+      (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.core.Term>>>) (elements -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.core.Term>>right(hydra.lib.lists.Foldl.apply(
+        (java.util.function.Function<java.util.List<hydra.core.Term>, java.util.function.Function<hydra.core.Term, java.util.List<hydra.core.Term>>>) (acc -> (java.util.function.Function<hydra.core.Term, java.util.List<hydra.core.Term>>) (el -> (el).accept(new hydra.core.Term.PartialVisitor<>() {
           @Override
-          public hydra.util.ConsList<hydra.core.Term> otherwise(hydra.core.Term instance) {
+          public java.util.List<hydra.core.Term> otherwise(hydra.core.Term instance) {
             return acc;
           }
 
           @Override
-          public hydra.util.ConsList<hydra.core.Term> visit(hydra.core.Term.Maybe m) {
+          public java.util.List<hydra.core.Term> visit(hydra.core.Term.Maybe m) {
             return hydra.lib.maybes.Maybe.applyLazy(
               () -> acc,
-              (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>) (v -> hydra.lib.lists.Concat2.apply(
+              (java.util.function.Function<hydra.core.Term, java.util.List<hydra.core.Term>>) (v -> hydra.lib.lists.Concat2.apply(
                 acc,
                 hydra.lib.lists.Pure.apply(v))),
               (m).value);
           }
         }))),
-        (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()),
+        (java.util.List<hydra.core.Term>) (java.util.Collections.<hydra.core.Term>emptyList()),
         elements))));
   }
 
@@ -249,7 +249,7 @@ public interface Maybes {
         cx,
         g,
         listTerm),
-      (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (elements -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.maybes.cat"))), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (elements -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.maybes.cat"))), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
         (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (el -> new hydra.core.Term.Application(new hydra.core.Application(funTerm, el))),
         elements)))))));
   }
@@ -297,8 +297,8 @@ public interface Maybes {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> visit(hydra.core.Term.Maybe m) {
         return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(new hydra.core.Term.List(hydra.lib.maybes.Maybe.applyLazy(
-          () -> (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()),
-          (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>) (val -> hydra.lib.lists.Pure.apply(val)),
+          () -> (java.util.List<hydra.core.Term>) (java.util.Collections.<hydra.core.Term>emptyList()),
+          (java.util.function.Function<hydra.core.Term, java.util.List<hydra.core.Term>>) (val -> hydra.lib.lists.Pure.apply(val)),
           (m).value)));
       }
     });

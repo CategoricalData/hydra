@@ -68,7 +68,9 @@ public abstract class MapEntry implements Serializable, Comparable<MapEntry> {
         return tagCmp;
       }
       Key o = (Key) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class MapEntry implements Serializable, Comparable<MapEntry> {
         return tagCmp;
       }
       Value o = (Value) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

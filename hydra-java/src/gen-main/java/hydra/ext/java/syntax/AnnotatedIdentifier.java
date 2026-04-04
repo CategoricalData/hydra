@@ -11,11 +11,11 @@ public class AnnotatedIdentifier implements Serializable, Comparable<AnnotatedId
 
   public static final hydra.core.Name IDENTIFIER = new hydra.core.Name("identifier");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations;
+  public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
 
   public final hydra.ext.java.syntax.Identifier identifier;
 
-  public AnnotatedIdentifier (hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations, hydra.ext.java.syntax.Identifier identifier) {
+  public AnnotatedIdentifier (java.util.List<hydra.ext.java.syntax.Annotation> annotations, hydra.ext.java.syntax.Identifier identifier) {
     this.annotations = annotations;
     this.identifier = identifier;
   }
@@ -42,14 +42,18 @@ public class AnnotatedIdentifier implements Serializable, Comparable<AnnotatedId
   @SuppressWarnings("unchecked")
   public int compareTo(AnnotatedIdentifier other) {
     int cmp = 0;
-    cmp = ((Comparable) annotations).compareTo(other.annotations);
+    cmp = hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) identifier).compareTo(other.identifier);
+    return hydra.util.Comparing.compare(
+      identifier,
+      other.identifier);
   }
 
-  public AnnotatedIdentifier withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {
+  public AnnotatedIdentifier withAnnotations(java.util.List<hydra.ext.java.syntax.Annotation> annotations) {
     return new AnnotatedIdentifier(annotations, identifier);
   }
 

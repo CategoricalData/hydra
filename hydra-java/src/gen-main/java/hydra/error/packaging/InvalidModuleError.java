@@ -82,7 +82,9 @@ public abstract class InvalidModuleError implements Serializable, Comparable<Inv
         return tagCmp;
       }
       ConflictingVariantName o = (ConflictingVariantName) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -125,7 +127,9 @@ public abstract class InvalidModuleError implements Serializable, Comparable<Inv
         return tagCmp;
       }
       DefinitionNotInModuleNamespace o = (DefinitionNotInModuleNamespace) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -168,7 +172,9 @@ public abstract class InvalidModuleError implements Serializable, Comparable<Inv
         return tagCmp;
       }
       DuplicateDefinitionName o = (DuplicateDefinitionName) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

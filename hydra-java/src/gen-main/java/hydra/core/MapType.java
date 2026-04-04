@@ -51,11 +51,15 @@ public class MapType implements Serializable, Comparable<MapType> {
   @SuppressWarnings("unchecked")
   public int compareTo(MapType other) {
     int cmp = 0;
-    cmp = ((Comparable) keys).compareTo(other.keys);
+    cmp = hydra.util.Comparing.compare(
+      keys,
+      other.keys);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) values).compareTo(other.values);
+    return hydra.util.Comparing.compare(
+      values,
+      other.values);
   }
 
   public MapType withKeys(hydra.core.Type keys) {

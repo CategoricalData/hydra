@@ -68,7 +68,9 @@ public abstract class BlankNodeLabel_ListOfAlts_Option_Elmt implements Serializa
         return tagCmp;
       }
       PnChars o = (PnChars) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

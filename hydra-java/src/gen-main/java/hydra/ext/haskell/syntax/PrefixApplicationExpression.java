@@ -51,11 +51,15 @@ public class PrefixApplicationExpression implements Serializable, Comparable<Pre
   @SuppressWarnings("unchecked")
   public int compareTo(PrefixApplicationExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) operator).compareTo(other.operator);
+    cmp = hydra.util.Comparing.compare(
+      operator,
+      other.operator);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) rhs).compareTo(other.rhs);
+    return hydra.util.Comparing.compare(
+      rhs,
+      other.rhs);
   }
 
   public PrefixApplicationExpression withOperator(hydra.ext.haskell.syntax.Operator operator) {

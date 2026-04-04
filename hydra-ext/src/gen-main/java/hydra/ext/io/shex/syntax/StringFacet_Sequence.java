@@ -42,11 +42,15 @@ public class StringFacet_Sequence implements Serializable, Comparable<StringFace
   @SuppressWarnings("unchecked")
   public int compareTo(StringFacet_Sequence other) {
     int cmp = 0;
-    cmp = ((Comparable) StringLength).compareTo(other.StringLength);
+    cmp = hydra.util.Comparing.compare(
+      StringLength,
+      other.StringLength);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) Integer_).compareTo(other.Integer_);
+    return hydra.util.Comparing.compare(
+      Integer_,
+      other.Integer_);
   }
 
   public StringFacet_Sequence withStringLength(hydra.ext.io.shex.syntax.StringLength StringLength) {

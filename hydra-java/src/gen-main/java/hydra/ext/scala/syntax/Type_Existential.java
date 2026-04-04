@@ -13,9 +13,9 @@ public class Type_Existential implements Serializable, Comparable<Type_Existenti
 
   public final hydra.ext.scala.syntax.Type tpe;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Stat> stats;
+  public final java.util.List<hydra.ext.scala.syntax.Stat> stats;
 
-  public Type_Existential (hydra.ext.scala.syntax.Type tpe, hydra.util.ConsList<hydra.ext.scala.syntax.Stat> stats) {
+  public Type_Existential (hydra.ext.scala.syntax.Type tpe, java.util.List<hydra.ext.scala.syntax.Stat> stats) {
     this.tpe = tpe;
     this.stats = stats;
   }
@@ -42,18 +42,22 @@ public class Type_Existential implements Serializable, Comparable<Type_Existenti
   @SuppressWarnings("unchecked")
   public int compareTo(Type_Existential other) {
     int cmp = 0;
-    cmp = ((Comparable) tpe).compareTo(other.tpe);
+    cmp = hydra.util.Comparing.compare(
+      tpe,
+      other.tpe);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) stats).compareTo(other.stats);
+    return hydra.util.Comparing.compare(
+      stats,
+      other.stats);
   }
 
   public Type_Existential withTpe(hydra.ext.scala.syntax.Type tpe) {
     return new Type_Existential(tpe, stats);
   }
 
-  public Type_Existential withStats(hydra.util.ConsList<hydra.ext.scala.syntax.Stat> stats) {
+  public Type_Existential withStats(java.util.List<hydra.ext.scala.syntax.Stat> stats) {
     return new Type_Existential(tpe, stats);
   }
 }

@@ -17,17 +17,17 @@ public class Defn_EnumCase implements Serializable, Comparable<Defn_EnumCase> {
 
   public static final hydra.core.Name INITS = new hydra.core.Name("inits");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods;
+  public final java.util.List<hydra.ext.scala.syntax.Mod> mods;
 
   public final hydra.ext.scala.syntax.Data_Name name;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams;
+  public final java.util.List<hydra.ext.scala.syntax.Type_Param> tparams;
 
   public final hydra.ext.scala.syntax.Ctor_Primary ctor;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Init> inits;
+  public final java.util.List<hydra.ext.scala.syntax.Init> inits;
 
-  public Defn_EnumCase (hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods, hydra.ext.scala.syntax.Data_Name name, hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams, hydra.ext.scala.syntax.Ctor_Primary ctor, hydra.util.ConsList<hydra.ext.scala.syntax.Init> inits) {
+  public Defn_EnumCase (java.util.List<hydra.ext.scala.syntax.Mod> mods, hydra.ext.scala.syntax.Data_Name name, java.util.List<hydra.ext.scala.syntax.Type_Param> tparams, hydra.ext.scala.syntax.Ctor_Primary ctor, java.util.List<hydra.ext.scala.syntax.Init> inits) {
     this.mods = mods;
     this.name = name;
     this.tparams = tparams;
@@ -63,26 +63,36 @@ public class Defn_EnumCase implements Serializable, Comparable<Defn_EnumCase> {
   @SuppressWarnings("unchecked")
   public int compareTo(Defn_EnumCase other) {
     int cmp = 0;
-    cmp = ((Comparable) mods).compareTo(other.mods);
+    cmp = hydra.util.Comparing.compare(
+      mods,
+      other.mods);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) tparams).compareTo(other.tparams);
+    cmp = hydra.util.Comparing.compare(
+      tparams,
+      other.tparams);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) ctor).compareTo(other.ctor);
+    cmp = hydra.util.Comparing.compare(
+      ctor,
+      other.ctor);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) inits).compareTo(other.inits);
+    return hydra.util.Comparing.compare(
+      inits,
+      other.inits);
   }
 
-  public Defn_EnumCase withMods(hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods) {
+  public Defn_EnumCase withMods(java.util.List<hydra.ext.scala.syntax.Mod> mods) {
     return new Defn_EnumCase(mods, name, tparams, ctor, inits);
   }
 
@@ -90,7 +100,7 @@ public class Defn_EnumCase implements Serializable, Comparable<Defn_EnumCase> {
     return new Defn_EnumCase(mods, name, tparams, ctor, inits);
   }
 
-  public Defn_EnumCase withTparams(hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams) {
+  public Defn_EnumCase withTparams(java.util.List<hydra.ext.scala.syntax.Type_Param> tparams) {
     return new Defn_EnumCase(mods, name, tparams, ctor, inits);
   }
 
@@ -98,7 +108,7 @@ public class Defn_EnumCase implements Serializable, Comparable<Defn_EnumCase> {
     return new Defn_EnumCase(mods, name, tparams, ctor, inits);
   }
 
-  public Defn_EnumCase withInits(hydra.util.ConsList<hydra.ext.scala.syntax.Init> inits) {
+  public Defn_EnumCase withInits(java.util.List<hydra.ext.scala.syntax.Init> inits) {
     return new Defn_EnumCase(mods, name, tparams, ctor, inits);
   }
 }

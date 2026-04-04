@@ -76,7 +76,9 @@ public abstract class ShapeDefinition_ListOfAlts_Elmt implements Serializable, C
         return tagCmp;
       }
       IncludeSet o = (IncludeSet) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class ShapeDefinition_ListOfAlts_Elmt implements Serializable, C
         return tagCmp;
       }
       ExtraPropertySet o = (ExtraPropertySet) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

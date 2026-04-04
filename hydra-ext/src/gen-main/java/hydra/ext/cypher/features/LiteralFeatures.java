@@ -101,31 +101,45 @@ public class LiteralFeatures implements Serializable, Comparable<LiteralFeatures
   @SuppressWarnings("unchecked")
   public int compareTo(LiteralFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) boolean_).compareTo(other.boolean_);
+    cmp = hydra.util.Comparing.compare(
+      boolean_,
+      other.boolean_);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) double_).compareTo(other.double_);
+    cmp = hydra.util.Comparing.compare(
+      double_,
+      other.double_);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) integer).compareTo(other.integer);
+    cmp = hydra.util.Comparing.compare(
+      integer,
+      other.integer);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) list).compareTo(other.list);
+    cmp = hydra.util.Comparing.compare(
+      list,
+      other.list);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) map).compareTo(other.map);
+    cmp = hydra.util.Comparing.compare(
+      map,
+      other.map);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) null_).compareTo(other.null_);
+    cmp = hydra.util.Comparing.compare(
+      null_,
+      other.null_);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) string).compareTo(other.string);
+    return hydra.util.Comparing.compare(
+      string,
+      other.string);
   }
 
   public LiteralFeatures withBoolean(Boolean boolean_) {

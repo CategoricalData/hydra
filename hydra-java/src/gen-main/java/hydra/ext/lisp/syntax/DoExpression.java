@@ -15,9 +15,9 @@ public class DoExpression implements Serializable, Comparable<DoExpression> {
   /**
    * The expressions to evaluate in sequence
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> expressions;
+  public final java.util.List<hydra.ext.lisp.syntax.Expression> expressions;
 
-  public DoExpression (hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> expressions) {
+  public DoExpression (java.util.List<hydra.ext.lisp.syntax.Expression> expressions) {
     this.expressions = expressions;
   }
 
@@ -40,6 +40,8 @@ public class DoExpression implements Serializable, Comparable<DoExpression> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DoExpression other) {
-    return ((Comparable) expressions).compareTo(other.expressions);
+    return hydra.util.Comparing.compare(
+      expressions,
+      other.expressions);
   }
 }

@@ -51,11 +51,15 @@ public class UnexpectedTermVariantError implements Serializable, Comparable<Unex
   @SuppressWarnings("unchecked")
   public int compareTo(UnexpectedTermVariantError other) {
     int cmp = 0;
-    cmp = ((Comparable) expectedVariant).compareTo(other.expectedVariant);
+    cmp = hydra.util.Comparing.compare(
+      expectedVariant,
+      other.expectedVariant);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) actualTerm).compareTo(other.actualTerm);
+    return hydra.util.Comparing.compare(
+      actualTerm,
+      other.actualTerm);
   }
 
   public UnexpectedTermVariantError withExpectedVariant(hydra.variants.TermVariant expectedVariant) {

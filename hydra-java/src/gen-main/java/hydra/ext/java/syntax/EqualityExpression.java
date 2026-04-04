@@ -76,7 +76,9 @@ public abstract class EqualityExpression implements Serializable, Comparable<Equ
         return tagCmp;
       }
       Unary o = (Unary) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class EqualityExpression implements Serializable, Comparable<Equ
         return tagCmp;
       }
       Equal o = (Equal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class EqualityExpression implements Serializable, Comparable<Equ
         return tagCmp;
       }
       NotEqual o = (NotEqual) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

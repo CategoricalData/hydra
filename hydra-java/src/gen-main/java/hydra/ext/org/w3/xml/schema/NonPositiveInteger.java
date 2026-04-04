@@ -32,6 +32,8 @@ public class NonPositiveInteger implements Serializable, Comparable<NonPositiveI
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(NonPositiveInteger other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

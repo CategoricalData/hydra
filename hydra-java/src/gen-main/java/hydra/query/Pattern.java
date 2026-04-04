@@ -98,7 +98,9 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         return tagCmp;
       }
       Triple o = (Triple) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -141,7 +143,9 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         return tagCmp;
       }
       Negation o = (Negation) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -154,9 +158,9 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
    * The conjunction ('and') of several other patterns
    */
   public static final class Conjunction extends hydra.query.Pattern implements Serializable {
-    public final hydra.util.ConsList<hydra.query.Pattern> value;
+    public final java.util.List<hydra.query.Pattern> value;
 
-    public Conjunction (hydra.util.ConsList<hydra.query.Pattern> value) {
+    public Conjunction (java.util.List<hydra.query.Pattern> value) {
       this.value = value;
     }
 
@@ -184,7 +188,9 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         return tagCmp;
       }
       Conjunction o = (Conjunction) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -197,9 +203,9 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
    * The disjunction (inclusive 'or') of several other patterns
    */
   public static final class Disjunction extends hydra.query.Pattern implements Serializable {
-    public final hydra.util.ConsList<hydra.query.Pattern> value;
+    public final java.util.List<hydra.query.Pattern> value;
 
-    public Disjunction (hydra.util.ConsList<hydra.query.Pattern> value) {
+    public Disjunction (java.util.List<hydra.query.Pattern> value) {
       this.value = value;
     }
 
@@ -227,7 +233,9 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         return tagCmp;
       }
       Disjunction o = (Disjunction) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -270,7 +278,9 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         return tagCmp;
       }
       Graph o = (Graph) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

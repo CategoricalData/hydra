@@ -51,11 +51,15 @@ public class ForallType implements Serializable, Comparable<ForallType> {
   @SuppressWarnings("unchecked")
   public int compareTo(ForallType other) {
     int cmp = 0;
-    cmp = ((Comparable) parameter).compareTo(other.parameter);
+    cmp = hydra.util.Comparing.compare(
+      parameter,
+      other.parameter);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
   public ForallType withParameter(hydra.core.Name parameter) {

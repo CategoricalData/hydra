@@ -42,11 +42,15 @@ public class KeywordPattern implements Serializable, Comparable<KeywordPattern> 
   @SuppressWarnings("unchecked")
   public int compareTo(KeywordPattern other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) pattern).compareTo(other.pattern);
+    return hydra.util.Comparing.compare(
+      pattern,
+      other.pattern);
   }
 
   public KeywordPattern withName(hydra.ext.python.syntax.Name name) {

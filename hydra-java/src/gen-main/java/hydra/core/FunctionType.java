@@ -51,11 +51,15 @@ public class FunctionType implements Serializable, Comparable<FunctionType> {
   @SuppressWarnings("unchecked")
   public int compareTo(FunctionType other) {
     int cmp = 0;
-    cmp = ((Comparable) domain).compareTo(other.domain);
+    cmp = hydra.util.Comparing.compare(
+      domain,
+      other.domain);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) codomain).compareTo(other.codomain);
+    return hydra.util.Comparing.compare(
+      codomain,
+      other.codomain);
   }
 
   public FunctionType withDomain(hydra.core.Type domain) {

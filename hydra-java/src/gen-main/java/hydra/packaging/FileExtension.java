@@ -37,6 +37,8 @@ public class FileExtension implements Serializable, Comparable<FileExtension> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(FileExtension other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

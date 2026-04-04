@@ -49,15 +49,21 @@ public class ClassPattern implements Serializable, Comparable<ClassPattern> {
   @SuppressWarnings("unchecked")
   public int compareTo(ClassPattern other) {
     int cmp = 0;
-    cmp = ((Comparable) nameOrAttribute).compareTo(other.nameOrAttribute);
+    cmp = hydra.util.Comparing.compare(
+      nameOrAttribute,
+      other.nameOrAttribute);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) positionalPatterns).compareTo(other.positionalPatterns);
+    cmp = hydra.util.Comparing.compare(
+      positionalPatterns,
+      other.positionalPatterns);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) keywordPatterns).compareTo(other.keywordPatterns);
+    return hydra.util.Comparing.compare(
+      keywordPatterns,
+      other.keywordPatterns);
   }
 
   public ClassPattern withNameOrAttribute(hydra.ext.python.syntax.NameOrAttribute nameOrAttribute) {

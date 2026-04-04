@@ -82,9 +82,9 @@ public abstract class SubspecImportExportSpec implements Serializable, Comparabl
    * Import/export specific names
    */
   public static final class List extends hydra.ext.haskell.syntax.SubspecImportExportSpec implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.haskell.syntax.Name> value;
+    public final java.util.List<hydra.ext.haskell.syntax.Name> value;
 
-    public List (hydra.util.ConsList<hydra.ext.haskell.syntax.Name> value) {
+    public List (java.util.List<hydra.ext.haskell.syntax.Name> value) {
       this.value = value;
     }
 
@@ -112,7 +112,9 @@ public abstract class SubspecImportExportSpec implements Serializable, Comparabl
         return tagCmp;
       }
       List o = (List) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

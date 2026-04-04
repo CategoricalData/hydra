@@ -42,11 +42,15 @@ public class ExceptBlock implements Serializable, Comparable<ExceptBlock> {
   @SuppressWarnings("unchecked")
   public int compareTo(ExceptBlock other) {
     int cmp = 0;
-    cmp = ((Comparable) expression).compareTo(other.expression);
+    cmp = hydra.util.Comparing.compare(
+      expression,
+      other.expression);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
   public ExceptBlock withExpression(hydra.util.Maybe<hydra.ext.python.syntax.ExceptExpression> expression) {

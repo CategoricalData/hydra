@@ -12,9 +12,9 @@ public class SubtypePath implements Serializable, Comparable<SubtypePath> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.paths.SubtypeStep> value;
+  public final java.util.List<hydra.paths.SubtypeStep> value;
 
-  public SubtypePath (hydra.util.ConsList<hydra.paths.SubtypeStep> value) {
+  public SubtypePath (java.util.List<hydra.paths.SubtypeStep> value) {
     this.value = value;
   }
 
@@ -37,6 +37,8 @@ public class SubtypePath implements Serializable, Comparable<SubtypePath> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(SubtypePath other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

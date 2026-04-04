@@ -68,7 +68,9 @@ public abstract class PnCharsU implements Serializable, Comparable<PnCharsU> {
         return tagCmp;
       }
       PnCharsBase o = (PnCharsBase) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

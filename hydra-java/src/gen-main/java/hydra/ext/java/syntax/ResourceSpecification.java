@@ -9,9 +9,9 @@ public class ResourceSpecification implements Serializable, Comparable<ResourceS
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.Resource> value;
+  public final java.util.List<hydra.ext.java.syntax.Resource> value;
 
-  public ResourceSpecification (hydra.util.ConsList<hydra.ext.java.syntax.Resource> value) {
+  public ResourceSpecification (java.util.List<hydra.ext.java.syntax.Resource> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class ResourceSpecification implements Serializable, Comparable<ResourceS
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ResourceSpecification other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

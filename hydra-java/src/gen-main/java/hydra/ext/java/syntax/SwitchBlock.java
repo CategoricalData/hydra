@@ -9,9 +9,9 @@ public class SwitchBlock implements Serializable, Comparable<SwitchBlock> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.SwitchBlock_Pair> value;
+  public final java.util.List<hydra.ext.java.syntax.SwitchBlock_Pair> value;
 
-  public SwitchBlock (hydra.util.ConsList<hydra.ext.java.syntax.SwitchBlock_Pair> value) {
+  public SwitchBlock (java.util.List<hydra.ext.java.syntax.SwitchBlock_Pair> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class SwitchBlock implements Serializable, Comparable<SwitchBlock> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(SwitchBlock other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

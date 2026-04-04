@@ -42,11 +42,15 @@ public class StringNullableArgumentAndGenericLiteralArgument implements Serializ
   @SuppressWarnings("unchecked")
   public int compareTo(StringNullableArgumentAndGenericLiteralArgument other) {
     int cmp = 0;
-    cmp = ((Comparable) string).compareTo(other.string);
+    cmp = hydra.util.Comparing.compare(
+      string,
+      other.string);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) literal).compareTo(other.literal);
+    return hydra.util.Comparing.compare(
+      literal,
+      other.literal);
   }
 
   public StringNullableArgumentAndGenericLiteralArgument withString(hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument string) {

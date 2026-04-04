@@ -146,7 +146,9 @@ public abstract class Error_ implements Serializable, Comparable<Error_> {
         return tagCmp;
       }
       Checking o = (Checking) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -189,7 +191,9 @@ public abstract class Error_ implements Serializable, Comparable<Error_> {
         return tagCmp;
       }
       Decoding o = (Decoding) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -232,7 +236,9 @@ public abstract class Error_ implements Serializable, Comparable<Error_> {
         return tagCmp;
       }
       DuplicateBinding o = (DuplicateBinding) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -275,7 +281,9 @@ public abstract class Error_ implements Serializable, Comparable<Error_> {
         return tagCmp;
       }
       DuplicateField o = (DuplicateField) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -318,7 +326,9 @@ public abstract class Error_ implements Serializable, Comparable<Error_> {
         return tagCmp;
       }
       Other o = (Other) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -361,7 +371,9 @@ public abstract class Error_ implements Serializable, Comparable<Error_> {
         return tagCmp;
       }
       UndefinedField o = (UndefinedField) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -404,7 +416,9 @@ public abstract class Error_ implements Serializable, Comparable<Error_> {
         return tagCmp;
       }
       UndefinedTermVariable o = (UndefinedTermVariable) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -447,7 +461,9 @@ public abstract class Error_ implements Serializable, Comparable<Error_> {
         return tagCmp;
       }
       UntypedTermVariable o = (UntypedTermVariable) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -490,7 +506,9 @@ public abstract class Error_ implements Serializable, Comparable<Error_> {
         return tagCmp;
       }
       UnexpectedTermVariant o = (UnexpectedTermVariant) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -533,7 +551,9 @@ public abstract class Error_ implements Serializable, Comparable<Error_> {
         return tagCmp;
       }
       UnexpectedTypeVariant o = (UnexpectedTypeVariant) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -576,7 +596,9 @@ public abstract class Error_ implements Serializable, Comparable<Error_> {
         return tagCmp;
       }
       Unification o = (Unification) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

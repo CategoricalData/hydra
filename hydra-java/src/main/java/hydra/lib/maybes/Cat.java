@@ -8,8 +8,6 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Maybe;
 
-import hydra.util.ConsList;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -51,7 +49,7 @@ public class Cat extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<ConsList<Maybe<Term>>, Term>) optionals -> Terms.list(apply(optionals)), hydra.extract.Core.listOf(cx, x -> hydra.extract.Core.maybeTerm(cx, t -> Either.right(t), graph, x), graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<java.util.List<Maybe<Term>>, Term>) optionals -> Terms.list(apply(optionals)), hydra.extract.Core.listOf(cx, x -> hydra.extract.Core.maybeTerm(cx, t -> Either.right(t), graph, x), graph, args.get(0)));
     }
 
     /**
@@ -60,11 +58,11 @@ public class Cat extends PrimitiveFunction {
      * @param opt the list of optional values
      * @return a list containing only the present values
      */
-    public static <X> ConsList<X> apply(ConsList<Maybe<X>> opt) {
+    public static <X> List<X> apply(List<Maybe<X>> opt) {
         ArrayList<X> result = new ArrayList<>();
         for (Maybe<X> x : opt) {
             x.ifJust(result::add);
         }
-        return ConsList.fromList(result);
+        return result;
     }
 }

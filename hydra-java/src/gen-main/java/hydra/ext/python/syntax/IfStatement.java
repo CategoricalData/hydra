@@ -49,15 +49,21 @@ public class IfStatement implements Serializable, Comparable<IfStatement> {
   @SuppressWarnings("unchecked")
   public int compareTo(IfStatement other) {
     int cmp = 0;
-    cmp = ((Comparable) condition).compareTo(other.condition);
+    cmp = hydra.util.Comparing.compare(
+      condition,
+      other.condition);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) body).compareTo(other.body);
+    cmp = hydra.util.Comparing.compare(
+      body,
+      other.body);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) continuation).compareTo(other.continuation);
+    return hydra.util.Comparing.compare(
+      continuation,
+      other.continuation);
   }
 
   public IfStatement withCondition(hydra.ext.python.syntax.NamedExpression condition) {

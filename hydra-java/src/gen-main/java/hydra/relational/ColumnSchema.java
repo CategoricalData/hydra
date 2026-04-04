@@ -51,11 +51,15 @@ public class ColumnSchema<T> implements Serializable, Comparable<ColumnSchema<T>
   @SuppressWarnings("unchecked")
   public int compareTo(ColumnSchema other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) domain).compareTo(other.domain);
+    return hydra.util.Comparing.compare(
+      domain,
+      other.domain);
   }
 
   public ColumnSchema withName(hydra.relational.ColumnName name) {

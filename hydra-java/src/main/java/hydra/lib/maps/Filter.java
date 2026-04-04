@@ -8,8 +8,7 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.PersistentMap;
-
+import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -78,7 +77,7 @@ public class Filter extends PrimitiveFunction {
      * @param pred the predicate to test values
      * @return a function that takes a map and returns the filtered map
      */
-    public static <K, V> Function<PersistentMap<K, V>, PersistentMap<K, V>> apply(Predicate<V> pred) {
+    public static <K, V> Function<Map<K, V>, Map<K, V>> apply(Predicate<V> pred) {
         return mp -> apply((Function<V, Boolean>) v -> pred.test(v), mp);
     }
 
@@ -89,7 +88,7 @@ public class Filter extends PrimitiveFunction {
      * @param pred the predicate as a Function (used by generated code)
      * @return a function that takes a map and returns the filtered map
      */
-    public static <K, V> Function<PersistentMap<K, V>, PersistentMap<K, V>> apply(Function<V, Boolean> pred) {
+    public static <K, V> Function<Map<K, V>, Map<K, V>> apply(Function<V, Boolean> pred) {
         return mp -> apply(pred, mp);
     }
 
@@ -101,7 +100,7 @@ public class Filter extends PrimitiveFunction {
      * @param mp the map to filter
      * @return the filtered map
      */
-    public static <K, V> PersistentMap<K, V> apply(Predicate<V> pred, PersistentMap<K, V> mp) {
+    public static <K, V> Map<K, V> apply(Predicate<V> pred, Map<K, V> mp) {
         return apply((Function<V, Boolean>) v -> pred.test(v), mp);
     }
 
@@ -113,7 +112,13 @@ public class Filter extends PrimitiveFunction {
      * @param mp the map to filter
      * @return the filtered map
      */
-    public static <K, V> PersistentMap<K, V> apply(Function<V, Boolean> pred, PersistentMap<K, V> mp) {
-        return mp.filter(v -> pred.apply(v));
+    public static <K, V> Map<K, V> apply(Function<V, Boolean> pred, Map<K, V> mp) {
+        Map<K, V> result = new TreeMap<>();
+        for (Map.Entry<K, V> e : mp.entrySet()) {
+            if (pred.apply(e.getValue())) {
+                result.put(e.getKey(), e.getValue());
+            }
+        }
+        return result;
     }
 }

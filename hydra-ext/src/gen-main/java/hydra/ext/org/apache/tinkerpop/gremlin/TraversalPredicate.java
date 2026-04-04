@@ -236,7 +236,9 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       Eq o = (Eq) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -276,7 +278,9 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       Neq o = (Neq) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -316,7 +320,9 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       Lt o = (Lt) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -356,7 +362,9 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       Lte o = (Lte) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -396,7 +404,9 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       Gt o = (Gt) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -436,7 +446,9 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       Gte o = (Gte) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -476,7 +488,9 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       Inside o = (Inside) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -516,7 +530,9 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       Outside o = (Outside) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -556,7 +572,9 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       Between o = (Between) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -596,7 +614,9 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       Within o = (Within) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -636,7 +656,9 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       Without o = (Without) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -676,7 +698,9 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       Not o = (Not) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -716,7 +740,9 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       StartingWith o = (StartingWith) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -756,7 +782,9 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       NotStartingWith o = (NotStartingWith) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -796,7 +824,9 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       EndingWith o = (EndingWith) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -836,7 +866,9 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       NotEndingWith o = (NotEndingWith) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -876,7 +908,9 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       Containing o = (Containing) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -916,7 +950,9 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       NotContaining o = (NotContaining) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -956,7 +992,9 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       Regex o = (Regex) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -996,7 +1034,9 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       NotRegex o = (NotRegex) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1036,7 +1076,9 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       And o = (And) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1076,7 +1118,9 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       Or o = (Or) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1116,7 +1160,9 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       Negate o = (Negate) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

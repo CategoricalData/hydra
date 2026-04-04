@@ -68,7 +68,9 @@ public abstract class IriRef_Elmt implements Serializable, Comparable<IriRef_Elm
         return tagCmp;
       }
       Regex o = (Regex) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class IriRef_Elmt implements Serializable, Comparable<IriRef_Elm
         return tagCmp;
       }
       Uchar o = (Uchar) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

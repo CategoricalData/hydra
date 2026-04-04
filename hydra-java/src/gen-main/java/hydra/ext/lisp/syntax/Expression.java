@@ -266,7 +266,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Application o = (Application) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -309,7 +311,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Lambda o = (Lambda) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -352,7 +356,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Let o = (Let) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -395,7 +401,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       If o = (If) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -438,7 +446,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Cond o = (Cond) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -481,7 +491,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Case o = (Case) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -524,7 +536,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       And o = (And) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -567,7 +581,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Or o = (Or) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -610,7 +626,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Not o = (Not) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -653,7 +671,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Do o = (Do) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -696,7 +716,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Begin o = (Begin) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -739,7 +761,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Variable o = (Variable) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -782,7 +806,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Literal o = (Literal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -825,7 +851,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       List o = (List) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -868,7 +896,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Vector o = (Vector) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -911,7 +941,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Map o = (Map) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -954,7 +986,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Set o = (Set) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -997,7 +1031,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Cons o = (Cons) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1040,7 +1076,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       DottedPair o = (DottedPair) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1083,7 +1121,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       FieldAccess o = (FieldAccess) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1126,7 +1166,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       TypeAnnotation o = (TypeAnnotation) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1169,7 +1211,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Quote o = (Quote) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1212,7 +1256,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Quasiquote o = (Quasiquote) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1255,7 +1301,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Unquote o = (Unquote) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1298,7 +1346,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       SplicingUnquote o = (SplicingUnquote) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1341,7 +1391,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       SExpression o = (SExpression) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

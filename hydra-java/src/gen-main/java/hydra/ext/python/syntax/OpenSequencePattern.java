@@ -42,11 +42,15 @@ public class OpenSequencePattern implements Serializable, Comparable<OpenSequenc
   @SuppressWarnings("unchecked")
   public int compareTo(OpenSequencePattern other) {
     int cmp = 0;
-    cmp = ((Comparable) head).compareTo(other.head);
+    cmp = hydra.util.Comparing.compare(
+      head,
+      other.head);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) tail).compareTo(other.tail);
+    return hydra.util.Comparing.compare(
+      tail,
+      other.tail);
   }
 
   public OpenSequencePattern withHead(hydra.ext.python.syntax.MaybeStarPattern head) {

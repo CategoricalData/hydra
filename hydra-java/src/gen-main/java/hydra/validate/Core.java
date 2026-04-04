@@ -6,8 +6,8 @@ package hydra.validate;
  * Validation functions for core terms and types
  */
 public interface Core {
-  static hydra.util.Maybe<hydra.error.core.InvalidTermError> checkDuplicateBindings(hydra.paths.SubtermPath path, hydra.util.ConsList<hydra.core.Binding> bindings) {
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> names = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+  static hydra.util.Maybe<hydra.error.core.InvalidTermError> checkDuplicateBindings(hydra.paths.SubtermPath path, java.util.List<hydra.core.Binding> bindings) {
+    hydra.util.Lazy<java.util.List<hydra.core.Name>> names = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       projected -> projected.name,
       bindings));
     hydra.util.Lazy<hydra.util.Maybe<hydra.core.Name>> dup = new hydra.util.Lazy<>(() -> hydra.validate.Core.findDuplicate(names.get()));
@@ -16,8 +16,8 @@ public interface Core {
       dup.get());
   }
 
-  static <T0> hydra.util.Maybe<T0> checkDuplicateFieldTypes(hydra.util.ConsList<hydra.core.FieldType> fields, java.util.function.Function<hydra.core.Name, hydra.util.Maybe<T0>> mkError) {
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> names = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+  static <T0> hydra.util.Maybe<T0> checkDuplicateFieldTypes(java.util.List<hydra.core.FieldType> fields, java.util.function.Function<hydra.core.Name, hydra.util.Maybe<T0>> mkError) {
+    hydra.util.Lazy<java.util.List<hydra.core.Name>> names = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       projected -> projected.name,
       fields));
     hydra.util.Lazy<hydra.util.Maybe<hydra.core.Name>> dup = new hydra.util.Lazy<>(() -> hydra.validate.Core.findDuplicateFieldType(names.get()));
@@ -27,14 +27,14 @@ public interface Core {
       (java.util.function.Function<hydra.core.Name, hydra.util.Maybe<T0>>) (name -> (mkError).apply(name)));
   }
 
-  static hydra.util.Maybe<hydra.error.core.InvalidTermError> checkDuplicateFields(hydra.paths.SubtermPath path, hydra.util.ConsList<hydra.core.Name> names) {
+  static hydra.util.Maybe<hydra.error.core.InvalidTermError> checkDuplicateFields(hydra.paths.SubtermPath path, java.util.List<hydra.core.Name> names) {
     hydra.util.Lazy<hydra.util.Maybe<hydra.core.Name>> dup = new hydra.util.Lazy<>(() -> hydra.validate.Core.findDuplicate(names));
     return hydra.lib.maybes.Map.apply(
       (java.util.function.Function<hydra.core.Name, hydra.error.core.InvalidTermError>) (name -> new hydra.error.core.InvalidTermError.DuplicateField(new hydra.error.core.DuplicateFieldError(path, name))),
       dup.get());
   }
 
-  static hydra.util.Maybe<hydra.error.core.InvalidTermError> checkShadowing(hydra.paths.SubtermPath path, hydra.graph.Graph cx, hydra.util.ConsList<hydra.core.Name> names) {
+  static hydra.util.Maybe<hydra.error.core.InvalidTermError> checkShadowing(hydra.paths.SubtermPath path, hydra.graph.Graph cx, java.util.List<hydra.core.Name> names) {
     hydra.util.Lazy<hydra.util.Maybe<hydra.error.core.InvalidTermError>> result = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<hydra.util.Maybe<hydra.error.core.InvalidTermError>, java.util.function.Function<hydra.core.Name, hydra.util.Maybe<hydra.error.core.InvalidTermError>>>) (acc -> (java.util.function.Function<hydra.core.Name, hydra.util.Maybe<hydra.error.core.InvalidTermError>>) (name -> hydra.lib.maybes.Cases.applyLazy(
         acc,
@@ -63,9 +63,9 @@ public interface Core {
 
       @Override
       public hydra.util.Maybe<hydra.error.core.InvalidTermError> visit(hydra.core.Term.Annotated ann) {
-        hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> annMap = (ann).value.annotation;
+        java.util.Map<hydra.core.Name, hydra.core.Term> annMap = (ann).value.annotation;
         hydra.core.Term body = (ann).value.body;
-        return hydra.validate.Core.firstError(hydra.util.ConsList.of(
+        return hydra.validate.Core.firstError(java.util.Arrays.asList(
           hydra.lib.logic.IfElse.lazy(
             hydra.lib.maps.Null.apply(annMap),
             () -> hydra.util.Maybe.just(new hydra.error.core.InvalidTermError.EmptyTermAnnotation(new hydra.error.core.EmptyTermAnnotationError(path))),
@@ -87,7 +87,7 @@ public interface Core {
       public hydra.util.Maybe<hydra.error.core.InvalidTermError> visit(hydra.core.Term.Application app) {
         hydra.core.Term arg = (app).value.argument;
         hydra.core.Term fun = (app).value.function;
-        return hydra.validate.Core.firstError(hydra.util.ConsList.of(
+        return hydra.validate.Core.firstError(java.util.Arrays.asList(
           (fun).accept(new hydra.core.Term.PartialVisitor<>() {
             @Override
             public hydra.util.Maybe<hydra.error.core.InvalidTermError> otherwise(hydra.core.Term instance) {
@@ -249,9 +249,9 @@ public interface Core {
 
       @Override
       public hydra.util.Maybe<hydra.error.core.InvalidTermError> visit(hydra.core.Term.Record rec) {
-        hydra.util.ConsList<hydra.core.Field> flds = (rec).value.fields;
+        java.util.List<hydra.core.Field> flds = (rec).value.fields;
         hydra.core.Name tname = (rec).value.typeName;
-        return hydra.validate.Core.firstError(hydra.util.ConsList.of(
+        return hydra.validate.Core.firstError(java.util.Arrays.asList(
           hydra.lib.logic.IfElse.lazy(
             hydra.lib.equality.Equal.apply(
               (tname).value,
@@ -267,11 +267,11 @@ public interface Core {
 
       @Override
       public hydra.util.Maybe<hydra.error.core.InvalidTermError> visit(hydra.core.Term.Let lt) {
-        hydra.util.ConsList<hydra.core.Binding> bindings = (lt).value.bindings;
-        hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> names = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+        java.util.List<hydra.core.Binding> bindings = (lt).value.bindings;
+        hydra.util.Lazy<java.util.List<hydra.core.Name>> names = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
           projected -> projected.name,
           bindings));
-        return hydra.validate.Core.firstError(hydra.util.ConsList.of(
+        return hydra.validate.Core.firstError(java.util.Arrays.asList(
           hydra.lib.logic.IfElse.lazy(
             hydra.lib.lists.Null.apply(bindings),
             () -> hydra.util.Maybe.just(new hydra.error.core.InvalidTermError.EmptyLetBindings(new hydra.error.core.EmptyLetBindingsError(path))),
@@ -323,7 +323,7 @@ public interface Core {
           @Override
           public hydra.util.Maybe<hydra.error.core.InvalidTermError> visit(hydra.core.Function.Lambda lam) {
             hydra.core.Name paramName = (lam).value.parameter;
-            return hydra.validate.Core.firstError(hydra.util.ConsList.of(
+            return hydra.validate.Core.firstError(java.util.Arrays.asList(
               hydra.lib.logic.IfElse.lazy(
                 hydra.lib.maybes.IsJust.apply(hydra.lib.maps.Lookup.apply(
                   paramName,
@@ -378,10 +378,10 @@ public interface Core {
 
               @Override
               public hydra.util.Maybe<hydra.error.core.InvalidTermError> visit(hydra.core.Elimination.Union cs) {
-                hydra.util.ConsList<hydra.core.Field> csCases = (cs).value.cases;
+                java.util.List<hydra.core.Field> csCases = (cs).value.cases;
                 hydra.util.Maybe<hydra.core.Term> csDefault = (cs).value.default_;
                 hydra.core.Name tname = (cs).value.typeName;
-                return hydra.validate.Core.firstError(hydra.util.ConsList.of(
+                return hydra.validate.Core.firstError(java.util.Arrays.asList(
                   hydra.lib.logic.IfElse.lazy(
                     hydra.lib.equality.Equal.apply(
                       (tname).value,
@@ -420,7 +420,7 @@ public interface Core {
       @Override
       public hydra.util.Maybe<hydra.error.core.InvalidTermError> visit(hydra.core.Term.TypeLambda tl) {
         hydra.core.Name tvName = (tl).value.parameter;
-        return hydra.validate.Core.firstError(hydra.util.ConsList.of(
+        return hydra.validate.Core.firstError(java.util.Arrays.asList(
           hydra.lib.logic.IfElse.lazy(
             hydra.lib.sets.Member.apply(
               tvName,
@@ -467,8 +467,8 @@ public interface Core {
   }
 
   static <T0, T1> hydra.util.Maybe<T1> checkUndefinedTypeVariablesInType(T0 path, hydra.graph.Graph cx, hydra.core.Type typ, java.util.function.Function<hydra.core.Name, hydra.util.Maybe<T1>> mkError) {
-    hydra.util.PersistentSet<hydra.core.Name> freeVars = hydra.Variables.freeVariablesInType(typ);
-    hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> undefined = new hydra.util.Lazy<>(() -> hydra.lib.sets.Difference.apply(
+    java.util.Set<hydra.core.Name> freeVars = hydra.Variables.freeVariablesInType(typ);
+    hydra.util.Lazy<java.util.Set<hydra.core.Name>> undefined = new hydra.util.Lazy<>(() -> hydra.lib.sets.Difference.apply(
       freeVars,
       (cx).typeVariables));
     return hydra.lib.logic.IfElse.lazy(
@@ -481,8 +481,8 @@ public interface Core {
   }
 
   static <T0, T1> hydra.util.Maybe<T1> checkUndefinedTypeVariablesInTypeScheme(T0 path, hydra.graph.Graph cx, hydra.core.TypeScheme ts, java.util.function.Function<hydra.core.Name, hydra.util.Maybe<T1>> mkError) {
-    hydra.util.PersistentSet<hydra.core.Name> freeVars = hydra.Variables.freeVariablesInTypeScheme(ts);
-    hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> undefined = new hydra.util.Lazy<>(() -> hydra.lib.sets.Difference.apply(
+    java.util.Set<hydra.core.Name> freeVars = hydra.Variables.freeVariablesInTypeScheme(ts);
+    hydra.util.Lazy<java.util.Set<hydra.core.Name>> undefined = new hydra.util.Lazy<>(() -> hydra.lib.sets.Difference.apply(
       freeVars,
       (cx).typeVariables));
     return hydra.lib.logic.IfElse.lazy(
@@ -503,76 +503,76 @@ public interface Core {
 
       @Override
       public hydra.util.Maybe<hydra.error.core.InvalidTypeError> visit(hydra.core.Type.Void_ ignored) {
-        return hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.VoidInNonBottomPosition(new hydra.error.core.VoidInNonBottomPositionError(new hydra.paths.SubtermPath((hydra.util.ConsList<hydra.paths.SubtermStep>) (hydra.util.ConsList.<hydra.paths.SubtermStep>empty())))));
+        return hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.VoidInNonBottomPosition(new hydra.error.core.VoidInNonBottomPositionError(new hydra.paths.SubtermPath((java.util.List<hydra.paths.SubtermStep>) (java.util.Collections.<hydra.paths.SubtermStep>emptyList())))));
       }
     });
   }
 
-  static <T0> hydra.util.Maybe<T0> findDuplicate(hydra.util.ConsList<T0> names) {
+  static <T0> hydra.util.Maybe<T0> findDuplicate(java.util.List<T0> names) {
     return hydra.lib.pairs.Second.apply(hydra.validate.Core.<T0>findDuplicate_result(names));
   }
 
-  static <T0> hydra.util.Maybe<T0> findDuplicateFieldType(hydra.util.ConsList<T0> names) {
+  static <T0> hydra.util.Maybe<T0> findDuplicateFieldType(java.util.List<T0> names) {
     return hydra.lib.pairs.Second.apply(hydra.validate.Core.<T0>findDuplicateFieldType_result(names));
   }
 
-  static <T0> hydra.util.Maybe<T0> findDuplicateFieldType_dup(hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>> acc) {
+  static <T0> hydra.util.Maybe<T0> findDuplicateFieldType_dup(hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>> acc) {
     return hydra.lib.pairs.Second.apply(acc);
   }
 
-  static <T0> hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>> findDuplicateFieldType_result(hydra.util.ConsList<T0> names) {
+  static <T0> hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>> findDuplicateFieldType_result(java.util.List<T0> names) {
     return hydra.lib.lists.Foldl.apply(
-      (java.util.function.Function<hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>, java.util.function.Function<T0, hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>>>) (acc -> (java.util.function.Function<T0, hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>>) (name -> {
-        hydra.util.Lazy<hydra.util.PersistentSet<T0>> seen = new hydra.util.Lazy<>(() -> hydra.validate.Core.<T0>findDuplicateFieldType_seen(acc));
+      (java.util.function.Function<hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>, java.util.function.Function<T0, hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>>>) (acc -> (java.util.function.Function<T0, hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>>) (name -> {
+        hydra.util.Lazy<java.util.Set<T0>> seen = new hydra.util.Lazy<>(() -> hydra.validate.Core.<T0>findDuplicateFieldType_seen(acc));
         return hydra.lib.maybes.Cases.applyLazy(
           hydra.validate.Core.<T0>findDuplicateFieldType_dup(acc),
           () -> hydra.lib.logic.IfElse.lazy(
             hydra.lib.sets.Member.apply(
               name,
               seen.get()),
-            () -> (hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>) ((hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>) (new hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>(seen.get(), hydra.util.Maybe.just(name)))),
-            () -> (hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>) ((hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>) (new hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>(hydra.lib.sets.Insert.apply(
+            () -> (hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>) ((hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>) (new hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>(seen.get(), hydra.util.Maybe.just(name)))),
+            () -> (hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>) ((hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>) (new hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>(hydra.lib.sets.Insert.apply(
               name,
               seen.get()), (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()))))),
-          (java.util.function.Function<T0, hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>>) (ignored -> acc));
+          (java.util.function.Function<T0, hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>>) (ignored -> acc));
       })),
-      (hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>) ((hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>) (new hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>((hydra.util.PersistentSet<T0>) (hydra.lib.sets.Empty.<T0>apply()), (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())))),
+      (hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>) ((hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>) (new hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>((java.util.Set<T0>) (hydra.lib.sets.Empty.<T0>apply()), (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())))),
       names);
   }
 
-  static <T0> hydra.util.PersistentSet<T0> findDuplicateFieldType_seen(hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>> acc) {
+  static <T0> java.util.Set<T0> findDuplicateFieldType_seen(hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>> acc) {
     return hydra.lib.pairs.First.apply(acc);
   }
 
-  static <T0> hydra.util.Maybe<T0> findDuplicate_dup(hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>> acc) {
+  static <T0> hydra.util.Maybe<T0> findDuplicate_dup(hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>> acc) {
     return hydra.lib.pairs.Second.apply(acc);
   }
 
-  static <T0> hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>> findDuplicate_result(hydra.util.ConsList<T0> names) {
+  static <T0> hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>> findDuplicate_result(java.util.List<T0> names) {
     return hydra.lib.lists.Foldl.apply(
-      (java.util.function.Function<hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>, java.util.function.Function<T0, hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>>>) (acc -> (java.util.function.Function<T0, hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>>) (name -> {
-        hydra.util.Lazy<hydra.util.PersistentSet<T0>> seen = new hydra.util.Lazy<>(() -> hydra.validate.Core.<T0>findDuplicate_seen(acc));
+      (java.util.function.Function<hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>, java.util.function.Function<T0, hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>>>) (acc -> (java.util.function.Function<T0, hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>>) (name -> {
+        hydra.util.Lazy<java.util.Set<T0>> seen = new hydra.util.Lazy<>(() -> hydra.validate.Core.<T0>findDuplicate_seen(acc));
         return hydra.lib.maybes.Cases.applyLazy(
           hydra.validate.Core.<T0>findDuplicate_dup(acc),
           () -> hydra.lib.logic.IfElse.lazy(
             hydra.lib.sets.Member.apply(
               name,
               seen.get()),
-            () -> (hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>) ((hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>) (new hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>(seen.get(), hydra.util.Maybe.just(name)))),
-            () -> (hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>) ((hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>) (new hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>(hydra.lib.sets.Insert.apply(
+            () -> (hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>) ((hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>) (new hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>(seen.get(), hydra.util.Maybe.just(name)))),
+            () -> (hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>) ((hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>) (new hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>(hydra.lib.sets.Insert.apply(
               name,
               seen.get()), (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()))))),
-          (java.util.function.Function<T0, hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>>) (ignored -> acc));
+          (java.util.function.Function<T0, hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>>) (ignored -> acc));
       })),
-      (hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>) ((hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>) (new hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>>((hydra.util.PersistentSet<T0>) (hydra.lib.sets.Empty.<T0>apply()), (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())))),
+      (hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>) ((hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>) (new hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>>((java.util.Set<T0>) (hydra.lib.sets.Empty.<T0>apply()), (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())))),
       names);
   }
 
-  static <T0> hydra.util.PersistentSet<T0> findDuplicate_seen(hydra.util.Pair<hydra.util.PersistentSet<T0>, hydra.util.Maybe<T0>> acc) {
+  static <T0> java.util.Set<T0> findDuplicate_seen(hydra.util.Pair<java.util.Set<T0>, hydra.util.Maybe<T0>> acc) {
     return hydra.lib.pairs.First.apply(acc);
   }
 
-  static <T0> hydra.util.Maybe<T0> firstError(hydra.util.ConsList<hydra.util.Maybe<T0>> checks) {
+  static <T0> hydra.util.Maybe<T0> firstError(java.util.List<hydra.util.Maybe<T0>> checks) {
     return hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<hydra.util.Maybe<T0>, java.util.function.Function<hydra.util.Maybe<T0>, hydra.util.Maybe<T0>>>) (acc -> (java.util.function.Function<hydra.util.Maybe<T0>, hydra.util.Maybe<T0>>) (check -> hydra.lib.maybes.Cases.applyLazy(
         acc,
@@ -582,7 +582,7 @@ public interface Core {
       checks);
   }
 
-  static <T0> hydra.util.Maybe<T0> firstTypeError(hydra.util.ConsList<hydra.util.Maybe<T0>> checks) {
+  static <T0> hydra.util.Maybe<T0> firstTypeError(java.util.List<hydra.util.Maybe<T0>> checks) {
     return hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<hydra.util.Maybe<T0>, java.util.function.Function<hydra.util.Maybe<T0>, hydra.util.Maybe<T0>>>) (acc -> (java.util.function.Function<hydra.util.Maybe<T0>, hydra.util.Maybe<T0>>) (check -> hydra.lib.maybes.Cases.applyLazy(
         acc,
@@ -600,7 +600,7 @@ public interface Core {
 
   static hydra.util.Maybe<hydra.error.core.InvalidTermError> term(Boolean typed, hydra.graph.Graph g, hydra.core.Term t) {
     return hydra.Rewriting.foldTermWithGraphAndPath(
-      (java.util.function.Function<java.util.function.Function<hydra.util.Maybe<hydra.error.core.InvalidTermError>, java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.error.core.InvalidTermError>>>, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Maybe<hydra.error.core.InvalidTermError>, java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.error.core.InvalidTermError>>>>>>) (recurse -> (java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Maybe<hydra.error.core.InvalidTermError>, java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.error.core.InvalidTermError>>>>>) (path -> (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Maybe<hydra.error.core.InvalidTermError>, java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.error.core.InvalidTermError>>>>) (cx -> (java.util.function.Function<hydra.util.Maybe<hydra.error.core.InvalidTermError>, java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.error.core.InvalidTermError>>>) (acc -> (java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.error.core.InvalidTermError>>) (trm -> hydra.lib.maybes.Cases.applyLazy(
+      (java.util.function.Function<java.util.function.Function<hydra.util.Maybe<hydra.error.core.InvalidTermError>, java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.error.core.InvalidTermError>>>, java.util.function.Function<java.util.List<hydra.paths.SubtermStep>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Maybe<hydra.error.core.InvalidTermError>, java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.error.core.InvalidTermError>>>>>>) (recurse -> (java.util.function.Function<java.util.List<hydra.paths.SubtermStep>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Maybe<hydra.error.core.InvalidTermError>, java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.error.core.InvalidTermError>>>>>) (path -> (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Maybe<hydra.error.core.InvalidTermError>, java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.error.core.InvalidTermError>>>>) (cx -> (java.util.function.Function<hydra.util.Maybe<hydra.error.core.InvalidTermError>, java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.error.core.InvalidTermError>>>) (acc -> (java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.error.core.InvalidTermError>>) (trm -> hydra.lib.maybes.Cases.applyLazy(
         acc,
         () -> ((java.util.function.Supplier<hydra.util.Maybe<hydra.error.core.InvalidTermError>>) (() -> {
           hydra.util.Maybe<hydra.error.core.InvalidTermError> checkResult = hydra.validate.Core.checkTerm(
@@ -619,7 +619,7 @@ public interface Core {
       t);
   }
 
-  static hydra.util.Maybe<hydra.error.core.InvalidTypeError> type(hydra.util.PersistentSet<hydra.core.Name> boundVars, hydra.core.Type typ) {
+  static hydra.util.Maybe<hydra.error.core.InvalidTypeError> type(java.util.Set<hydra.core.Name> boundVars, hydra.core.Type typ) {
     hydra.util.Maybe<hydra.error.core.InvalidTypeError> checkResult = hydra.validate.Core.validateTypeNode(
       boundVars,
       typ);
@@ -633,7 +633,7 @@ public interface Core {
 
         @Override
         public hydra.util.Maybe<hydra.error.core.InvalidTypeError> visit(hydra.core.Type.Forall ft) {
-          hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> newBound = new hydra.util.Lazy<>(() -> hydra.lib.sets.Insert.apply(
+          hydra.util.Lazy<java.util.Set<hydra.core.Name>> newBound = new hydra.util.Lazy<>(() -> hydra.lib.sets.Insert.apply(
             (ft).value.parameter,
             boundVars));
           return hydra.validate.Core.type(
@@ -650,7 +650,7 @@ public interface Core {
 
         @Override
         public hydra.util.Maybe<hydra.error.core.InvalidTypeError> visit(hydra.core.Type.Application at) {
-          return hydra.validate.Core.firstTypeError(hydra.util.ConsList.of(
+          return hydra.validate.Core.firstTypeError(java.util.Arrays.asList(
             hydra.validate.Core.type(
               boundVars,
               (at).value.function),
@@ -661,7 +661,7 @@ public interface Core {
 
         @Override
         public hydra.util.Maybe<hydra.error.core.InvalidTypeError> visit(hydra.core.Type.Either et) {
-          return hydra.validate.Core.firstTypeError(hydra.util.ConsList.of(
+          return hydra.validate.Core.firstTypeError(java.util.Arrays.asList(
             hydra.validate.Core.type(
               boundVars,
               (et).value.left),
@@ -672,7 +672,7 @@ public interface Core {
 
         @Override
         public hydra.util.Maybe<hydra.error.core.InvalidTypeError> visit(hydra.core.Type.Function ft) {
-          return hydra.validate.Core.firstTypeError(hydra.util.ConsList.of(
+          return hydra.validate.Core.firstTypeError(java.util.Arrays.asList(
             hydra.validate.Core.type(
               boundVars,
               (ft).value.domain),
@@ -690,7 +690,7 @@ public interface Core {
 
         @Override
         public hydra.util.Maybe<hydra.error.core.InvalidTypeError> visit(hydra.core.Type.Map mt) {
-          return hydra.validate.Core.firstTypeError(hydra.util.ConsList.of(
+          return hydra.validate.Core.firstTypeError(java.util.Arrays.asList(
             hydra.validate.Core.type(
               boundVars,
               (mt).value.keys),
@@ -708,7 +708,7 @@ public interface Core {
 
         @Override
         public hydra.util.Maybe<hydra.error.core.InvalidTypeError> visit(hydra.core.Type.Pair pt) {
-          return hydra.validate.Core.firstTypeError(hydra.util.ConsList.of(
+          return hydra.validate.Core.firstTypeError(java.util.Arrays.asList(
             hydra.validate.Core.type(
               boundVars,
               (pt).value.first),
@@ -752,7 +752,7 @@ public interface Core {
       (java.util.function.Function<hydra.error.core.InvalidTypeError, hydra.util.Maybe<hydra.error.core.InvalidTypeError>>) (err -> hydra.util.Maybe.just(err)));
   }
 
-  static hydra.util.Maybe<hydra.error.core.InvalidTypeError> validateTypeNode(hydra.util.PersistentSet<hydra.core.Name> boundVars, hydra.core.Type typ) {
+  static hydra.util.Maybe<hydra.error.core.InvalidTypeError> validateTypeNode(java.util.Set<hydra.core.Name> boundVars, hydra.core.Type typ) {
     return (typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Maybe<hydra.error.core.InvalidTypeError> otherwise(hydra.core.Type instance) {
@@ -761,12 +761,12 @@ public interface Core {
 
       @Override
       public hydra.util.Maybe<hydra.error.core.InvalidTypeError> visit(hydra.core.Type.Annotated ann) {
-        hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> annMap = (ann).value.annotation;
+        java.util.Map<hydra.core.Name, hydra.core.Term> annMap = (ann).value.annotation;
         hydra.core.Type body = (ann).value.body;
-        return hydra.validate.Core.firstTypeError(hydra.util.ConsList.of(
+        return hydra.validate.Core.firstTypeError(java.util.Arrays.asList(
           hydra.lib.logic.IfElse.lazy(
             hydra.lib.maps.Null.apply(annMap),
-            () -> hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.EmptyTypeAnnotation(new hydra.error.core.EmptyTypeAnnotationError(new hydra.paths.SubtermPath((hydra.util.ConsList<hydra.paths.SubtermStep>) (hydra.util.ConsList.<hydra.paths.SubtermStep>empty()))))),
+            () -> hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.EmptyTypeAnnotation(new hydra.error.core.EmptyTypeAnnotationError(new hydra.paths.SubtermPath((java.util.List<hydra.paths.SubtermStep>) (java.util.Collections.<hydra.paths.SubtermStep>emptyList()))))),
             () -> (hydra.util.Maybe<hydra.error.core.InvalidTypeError>) (hydra.util.Maybe.<hydra.error.core.InvalidTypeError>nothing())),
           (body).accept(new hydra.core.Type.PartialVisitor<>() {
             @Override
@@ -776,14 +776,14 @@ public interface Core {
 
             @Override
             public hydra.util.Maybe<hydra.error.core.InvalidTypeError> visit(hydra.core.Type.Annotated ignored) {
-              return hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.NestedTypeAnnotation(new hydra.error.core.NestedTypeAnnotationError(new hydra.paths.SubtermPath((hydra.util.ConsList<hydra.paths.SubtermStep>) (hydra.util.ConsList.<hydra.paths.SubtermStep>empty())))));
+              return hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.NestedTypeAnnotation(new hydra.error.core.NestedTypeAnnotationError(new hydra.paths.SubtermPath((java.util.List<hydra.paths.SubtermStep>) (java.util.Collections.<hydra.paths.SubtermStep>emptyList())))));
             }
           })));
       }
 
       @Override
       public hydra.util.Maybe<hydra.error.core.InvalidTypeError> visit(hydra.core.Type.Either et) {
-        return hydra.validate.Core.firstTypeError(hydra.util.ConsList.of(
+        return hydra.validate.Core.firstTypeError(java.util.Arrays.asList(
           hydra.validate.Core.checkVoid((et).value.left),
           hydra.validate.Core.checkVoid((et).value.right)));
       }
@@ -791,17 +791,17 @@ public interface Core {
       @Override
       public hydra.util.Maybe<hydra.error.core.InvalidTypeError> visit(hydra.core.Type.Forall ft) {
         hydra.core.Name paramName = (ft).value.parameter;
-        return hydra.validate.Core.firstTypeError(hydra.util.ConsList.of(
+        return hydra.validate.Core.firstTypeError(java.util.Arrays.asList(
           hydra.lib.logic.IfElse.lazy(
             hydra.lib.sets.Member.apply(
               paramName,
               boundVars),
-            () -> hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.TypeVariableShadowingInForall(new hydra.error.core.TypeVariableShadowingInForallError(new hydra.paths.SubtermPath((hydra.util.ConsList<hydra.paths.SubtermStep>) (hydra.util.ConsList.<hydra.paths.SubtermStep>empty())), paramName))),
+            () -> hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.TypeVariableShadowingInForall(new hydra.error.core.TypeVariableShadowingInForallError(new hydra.paths.SubtermPath((java.util.List<hydra.paths.SubtermStep>) (java.util.Collections.<hydra.paths.SubtermStep>emptyList())), paramName))),
             () -> (hydra.util.Maybe<hydra.error.core.InvalidTypeError>) (hydra.util.Maybe.<hydra.error.core.InvalidTypeError>nothing())),
           hydra.lib.logic.IfElse.lazy(
             hydra.validate.Core.isValidName(paramName),
             () -> (hydra.util.Maybe<hydra.error.core.InvalidTypeError>) (hydra.util.Maybe.<hydra.error.core.InvalidTypeError>nothing()),
-            () -> hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.InvalidForallParameterName(new hydra.error.core.InvalidForallParameterNameError(new hydra.paths.SubtermPath((hydra.util.ConsList<hydra.paths.SubtermStep>) (hydra.util.ConsList.<hydra.paths.SubtermStep>empty())), paramName))))));
+            () -> hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.InvalidForallParameterName(new hydra.error.core.InvalidForallParameterNameError(new hydra.paths.SubtermPath((java.util.List<hydra.paths.SubtermStep>) (java.util.Collections.<hydra.paths.SubtermStep>emptyList())), paramName))))));
       }
 
       @Override
@@ -817,7 +817,7 @@ public interface Core {
       @Override
       public hydra.util.Maybe<hydra.error.core.InvalidTypeError> visit(hydra.core.Type.Map mt) {
         hydra.core.Type keyType = (mt).value.keys;
-        return hydra.validate.Core.firstTypeError(hydra.util.ConsList.of(
+        return hydra.validate.Core.firstTypeError(java.util.Arrays.asList(
           (keyType).accept(new hydra.core.Type.PartialVisitor<>() {
             @Override
             public hydra.util.Maybe<hydra.error.core.InvalidTypeError> otherwise(hydra.core.Type instance) {
@@ -826,7 +826,7 @@ public interface Core {
 
             @Override
             public hydra.util.Maybe<hydra.error.core.InvalidTypeError> visit(hydra.core.Type.Function ignored) {
-              return hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.NonComparableMapKeyType(new hydra.error.core.NonComparableMapKeyTypeError(new hydra.paths.SubtermPath((hydra.util.ConsList<hydra.paths.SubtermStep>) (hydra.util.ConsList.<hydra.paths.SubtermStep>empty())), keyType)));
+              return hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.NonComparableMapKeyType(new hydra.error.core.NonComparableMapKeyTypeError(new hydra.paths.SubtermPath((java.util.List<hydra.paths.SubtermStep>) (java.util.Collections.<hydra.paths.SubtermStep>emptyList())), keyType)));
             }
           }),
           hydra.validate.Core.checkVoid(keyType),
@@ -835,21 +835,21 @@ public interface Core {
 
       @Override
       public hydra.util.Maybe<hydra.error.core.InvalidTypeError> visit(hydra.core.Type.Pair pt) {
-        return hydra.validate.Core.firstTypeError(hydra.util.ConsList.of(
+        return hydra.validate.Core.firstTypeError(java.util.Arrays.asList(
           hydra.validate.Core.checkVoid((pt).value.first),
           hydra.validate.Core.checkVoid((pt).value.second)));
       }
 
       @Override
       public hydra.util.Maybe<hydra.error.core.InvalidTypeError> visit(hydra.core.Type.Record fields) {
-        return hydra.validate.Core.firstTypeError(hydra.util.ConsList.of(
+        return hydra.validate.Core.firstTypeError(java.util.Arrays.asList(
           hydra.lib.logic.IfElse.lazy(
             hydra.lib.lists.Null.apply((fields).value),
-            () -> hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.EmptyRecordType(new hydra.error.core.EmptyRecordTypeError(new hydra.paths.SubtermPath((hydra.util.ConsList<hydra.paths.SubtermStep>) (hydra.util.ConsList.<hydra.paths.SubtermStep>empty()))))),
+            () -> hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.EmptyRecordType(new hydra.error.core.EmptyRecordTypeError(new hydra.paths.SubtermPath((java.util.List<hydra.paths.SubtermStep>) (java.util.Collections.<hydra.paths.SubtermStep>emptyList()))))),
             () -> (hydra.util.Maybe<hydra.error.core.InvalidTypeError>) (hydra.util.Maybe.<hydra.error.core.InvalidTypeError>nothing())),
           hydra.validate.Core.checkDuplicateFieldTypes(
             (fields).value,
-            (java.util.function.Function<hydra.core.Name, hydra.util.Maybe<hydra.error.core.InvalidTypeError>>) (dupName -> hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.DuplicateRecordTypeFieldNames(new hydra.error.core.DuplicateRecordTypeFieldNamesError(new hydra.paths.SubtermPath((hydra.util.ConsList<hydra.paths.SubtermStep>) (hydra.util.ConsList.<hydra.paths.SubtermStep>empty())), dupName))))),
+            (java.util.function.Function<hydra.core.Name, hydra.util.Maybe<hydra.error.core.InvalidTypeError>>) (dupName -> hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.DuplicateRecordTypeFieldNames(new hydra.error.core.DuplicateRecordTypeFieldNamesError(new hydra.paths.SubtermPath((java.util.List<hydra.paths.SubtermStep>) (java.util.Collections.<hydra.paths.SubtermStep>emptyList())), dupName))))),
           hydra.validate.Core.firstTypeError(hydra.lib.lists.Map.apply(
             (java.util.function.Function<hydra.core.FieldType, hydra.util.Maybe<hydra.error.core.InvalidTypeError>>) (f -> hydra.validate.Core.checkVoid((f).type)),
             (fields).value))));
@@ -857,7 +857,7 @@ public interface Core {
 
       @Override
       public hydra.util.Maybe<hydra.error.core.InvalidTypeError> visit(hydra.core.Type.Set elemType) {
-        return hydra.validate.Core.firstTypeError(hydra.util.ConsList.of(
+        return hydra.validate.Core.firstTypeError(java.util.Arrays.asList(
           (elemType).value.accept(new hydra.core.Type.PartialVisitor<>() {
             @Override
             public hydra.util.Maybe<hydra.error.core.InvalidTypeError> otherwise(hydra.core.Type instance) {
@@ -866,7 +866,7 @@ public interface Core {
 
             @Override
             public hydra.util.Maybe<hydra.error.core.InvalidTypeError> visit(hydra.core.Type.Function ignored) {
-              return hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.NonComparableSetElementType(new hydra.error.core.NonComparableSetElementTypeError(new hydra.paths.SubtermPath((hydra.util.ConsList<hydra.paths.SubtermStep>) (hydra.util.ConsList.<hydra.paths.SubtermStep>empty())), (elemType).value)));
+              return hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.NonComparableSetElementType(new hydra.error.core.NonComparableSetElementTypeError(new hydra.paths.SubtermPath((java.util.List<hydra.paths.SubtermStep>) (java.util.Collections.<hydra.paths.SubtermStep>emptyList())), (elemType).value)));
             }
           }),
           hydra.validate.Core.checkVoid((elemType).value)));
@@ -874,10 +874,10 @@ public interface Core {
 
       @Override
       public hydra.util.Maybe<hydra.error.core.InvalidTypeError> visit(hydra.core.Type.Union fields) {
-        return hydra.validate.Core.firstTypeError(hydra.util.ConsList.of(
+        return hydra.validate.Core.firstTypeError(java.util.Arrays.asList(
           hydra.lib.logic.IfElse.lazy(
             hydra.lib.lists.Null.apply((fields).value),
-            () -> hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.EmptyUnionType(new hydra.error.core.EmptyUnionTypeError(new hydra.paths.SubtermPath((hydra.util.ConsList<hydra.paths.SubtermStep>) (hydra.util.ConsList.<hydra.paths.SubtermStep>empty()))))),
+            () -> hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.EmptyUnionType(new hydra.error.core.EmptyUnionTypeError(new hydra.paths.SubtermPath((java.util.List<hydra.paths.SubtermStep>) (java.util.Collections.<hydra.paths.SubtermStep>emptyList()))))),
             () -> (hydra.util.Maybe<hydra.error.core.InvalidTypeError>) (hydra.util.Maybe.<hydra.error.core.InvalidTypeError>nothing())),
           hydra.lib.logic.IfElse.lazy(
             hydra.lib.equality.Equal.apply(
@@ -885,12 +885,12 @@ public interface Core {
               1),
             () -> ((java.util.function.Supplier<hydra.util.Maybe<hydra.error.core.InvalidTypeError>>) (() -> {
               hydra.util.Lazy<hydra.core.FieldType> singleField = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply((fields).value));
-              return hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.SingleVariantUnion(new hydra.error.core.SingleVariantUnionError(new hydra.paths.SubtermPath((hydra.util.ConsList<hydra.paths.SubtermStep>) (hydra.util.ConsList.<hydra.paths.SubtermStep>empty())), singleField.get().name)));
+              return hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.SingleVariantUnion(new hydra.error.core.SingleVariantUnionError(new hydra.paths.SubtermPath((java.util.List<hydra.paths.SubtermStep>) (java.util.Collections.<hydra.paths.SubtermStep>emptyList())), singleField.get().name)));
             })).get(),
             () -> (hydra.util.Maybe<hydra.error.core.InvalidTypeError>) (hydra.util.Maybe.<hydra.error.core.InvalidTypeError>nothing())),
           hydra.validate.Core.checkDuplicateFieldTypes(
             (fields).value,
-            (java.util.function.Function<hydra.core.Name, hydra.util.Maybe<hydra.error.core.InvalidTypeError>>) (dupName -> hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.DuplicateUnionTypeFieldNames(new hydra.error.core.DuplicateUnionTypeFieldNamesError(new hydra.paths.SubtermPath((hydra.util.ConsList<hydra.paths.SubtermStep>) (hydra.util.ConsList.<hydra.paths.SubtermStep>empty())), dupName))))),
+            (java.util.function.Function<hydra.core.Name, hydra.util.Maybe<hydra.error.core.InvalidTypeError>>) (dupName -> hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.DuplicateUnionTypeFieldNames(new hydra.error.core.DuplicateUnionTypeFieldNamesError(new hydra.paths.SubtermPath((java.util.List<hydra.paths.SubtermStep>) (java.util.Collections.<hydra.paths.SubtermStep>emptyList())), dupName))))),
           hydra.validate.Core.firstTypeError(hydra.lib.lists.Map.apply(
             (java.util.function.Function<hydra.core.FieldType, hydra.util.Maybe<hydra.error.core.InvalidTypeError>>) (f -> hydra.validate.Core.checkVoid((f).type)),
             (fields).value))));
@@ -903,7 +903,7 @@ public interface Core {
             (varName).value,
             boundVars),
           () -> (hydra.util.Maybe<hydra.error.core.InvalidTypeError>) (hydra.util.Maybe.<hydra.error.core.InvalidTypeError>nothing()),
-          () -> hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.UndefinedTypeVariable(new hydra.error.core.UndefinedTypeVariableError(new hydra.paths.SubtermPath((hydra.util.ConsList<hydra.paths.SubtermStep>) (hydra.util.ConsList.<hydra.paths.SubtermStep>empty())), (varName).value))));
+          () -> hydra.util.Maybe.just(new hydra.error.core.InvalidTypeError.UndefinedTypeVariable(new hydra.error.core.UndefinedTypeVariableError(new hydra.paths.SubtermPath((java.util.List<hydra.paths.SubtermStep>) (java.util.Collections.<hydra.paths.SubtermStep>emptyList())), (varName).value))));
       }
     });
   }

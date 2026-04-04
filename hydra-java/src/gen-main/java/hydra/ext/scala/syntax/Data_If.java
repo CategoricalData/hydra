@@ -49,15 +49,21 @@ public class Data_If implements Serializable, Comparable<Data_If> {
   @SuppressWarnings("unchecked")
   public int compareTo(Data_If other) {
     int cmp = 0;
-    cmp = ((Comparable) cond).compareTo(other.cond);
+    cmp = hydra.util.Comparing.compare(
+      cond,
+      other.cond);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) thenp).compareTo(other.thenp);
+    cmp = hydra.util.Comparing.compare(
+      thenp,
+      other.thenp);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) elsep).compareTo(other.elsep);
+    return hydra.util.Comparing.compare(
+      elsep,
+      other.elsep);
   }
 
   public Data_If withCond(hydra.ext.scala.syntax.Data cond) {

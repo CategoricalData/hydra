@@ -29,9 +29,9 @@ public class AdapterContext implements Serializable, Comparable<AdapterContext> 
   /**
    * A map of type names to adapters for those types
    */
-  public final hydra.util.PersistentMap<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>> adapters;
+  public final java.util.Map<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>> adapters;
 
-  public AdapterContext (hydra.graph.Graph graph, hydra.coders.Language language, hydra.util.PersistentMap<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>> adapters) {
+  public AdapterContext (hydra.graph.Graph graph, hydra.coders.Language language, java.util.Map<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>> adapters) {
     this.graph = graph;
     this.language = language;
     this.adapters = adapters;
@@ -61,15 +61,21 @@ public class AdapterContext implements Serializable, Comparable<AdapterContext> 
   @SuppressWarnings("unchecked")
   public int compareTo(AdapterContext other) {
     int cmp = 0;
-    cmp = ((Comparable) graph).compareTo(other.graph);
+    cmp = hydra.util.Comparing.compare(
+      graph,
+      other.graph);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) language).compareTo(other.language);
+    cmp = hydra.util.Comparing.compare(
+      language,
+      other.language);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) adapters).compareTo(other.adapters);
+    return hydra.util.Comparing.compare(
+      adapters,
+      other.adapters);
   }
 
   public AdapterContext withGraph(hydra.graph.Graph graph) {
@@ -80,7 +86,7 @@ public class AdapterContext implements Serializable, Comparable<AdapterContext> 
     return new AdapterContext(graph, language, adapters);
   }
 
-  public AdapterContext withAdapters(hydra.util.PersistentMap<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>> adapters) {
+  public AdapterContext withAdapters(java.util.Map<hydra.core.Name, hydra.coders.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>> adapters) {
     return new AdapterContext(graph, language, adapters);
   }
 }

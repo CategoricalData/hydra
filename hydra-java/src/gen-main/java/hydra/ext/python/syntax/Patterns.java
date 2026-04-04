@@ -68,7 +68,9 @@ public abstract class Patterns implements Serializable, Comparable<Patterns> {
         return tagCmp;
       }
       Sequence o = (Sequence) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class Patterns implements Serializable, Comparable<Patterns> {
         return tagCmp;
       }
       Pattern o = (Pattern) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

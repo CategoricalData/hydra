@@ -38,9 +38,9 @@ public abstract class LambdaParameters implements Serializable, Comparable<Lambd
   }
 
   public static final class Tuple extends hydra.ext.java.syntax.LambdaParameters implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.java.syntax.LambdaParameters> value;
+    public final java.util.List<hydra.ext.java.syntax.LambdaParameters> value;
 
-    public Tuple (hydra.util.ConsList<hydra.ext.java.syntax.LambdaParameters> value) {
+    public Tuple (java.util.List<hydra.ext.java.syntax.LambdaParameters> value) {
       this.value = value;
     }
 
@@ -68,7 +68,9 @@ public abstract class LambdaParameters implements Serializable, Comparable<Lambd
         return tagCmp;
       }
       Tuple o = (Tuple) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class LambdaParameters implements Serializable, Comparable<Lambd
         return tagCmp;
       }
       Single o = (Single) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

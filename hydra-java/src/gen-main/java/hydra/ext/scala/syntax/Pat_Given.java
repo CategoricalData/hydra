@@ -34,6 +34,8 @@ public class Pat_Given implements Serializable, Comparable<Pat_Given> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Pat_Given other) {
-    return ((Comparable) tpe).compareTo(other.tpe);
+    return hydra.util.Comparing.compare(
+      tpe,
+      other.tpe);
   }
 }

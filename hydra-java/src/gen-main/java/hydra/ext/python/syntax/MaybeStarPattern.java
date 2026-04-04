@@ -68,7 +68,9 @@ public abstract class MaybeStarPattern implements Serializable, Comparable<Maybe
         return tagCmp;
       }
       Star o = (Star) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class MaybeStarPattern implements Serializable, Comparable<Maybe
         return tagCmp;
       }
       Pattern o = (Pattern) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

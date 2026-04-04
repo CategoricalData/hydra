@@ -13,9 +13,9 @@ public class Data_Apply implements Serializable, Comparable<Data_Apply> {
 
   public final hydra.ext.scala.syntax.Data fun;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Data> args;
+  public final java.util.List<hydra.ext.scala.syntax.Data> args;
 
-  public Data_Apply (hydra.ext.scala.syntax.Data fun, hydra.util.ConsList<hydra.ext.scala.syntax.Data> args) {
+  public Data_Apply (hydra.ext.scala.syntax.Data fun, java.util.List<hydra.ext.scala.syntax.Data> args) {
     this.fun = fun;
     this.args = args;
   }
@@ -42,18 +42,22 @@ public class Data_Apply implements Serializable, Comparable<Data_Apply> {
   @SuppressWarnings("unchecked")
   public int compareTo(Data_Apply other) {
     int cmp = 0;
-    cmp = ((Comparable) fun).compareTo(other.fun);
+    cmp = hydra.util.Comparing.compare(
+      fun,
+      other.fun);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) args).compareTo(other.args);
+    return hydra.util.Comparing.compare(
+      args,
+      other.args);
   }
 
   public Data_Apply withFun(hydra.ext.scala.syntax.Data fun) {
     return new Data_Apply(fun, args);
   }
 
-  public Data_Apply withArgs(hydra.util.ConsList<hydra.ext.scala.syntax.Data> args) {
+  public Data_Apply withArgs(java.util.List<hydra.ext.scala.syntax.Data> args) {
     return new Data_Apply(fun, args);
   }
 }

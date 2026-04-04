@@ -68,7 +68,9 @@ public abstract class SingleQuery implements Serializable, Comparable<SingleQuer
         return tagCmp;
       }
       SinglePart o = (SinglePart) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class SingleQuery implements Serializable, Comparable<SingleQuer
         return tagCmp;
       }
       MultiPart o = (MultiPart) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

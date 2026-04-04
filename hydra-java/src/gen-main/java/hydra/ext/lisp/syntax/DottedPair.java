@@ -51,11 +51,15 @@ public class DottedPair implements Serializable, Comparable<DottedPair> {
   @SuppressWarnings("unchecked")
   public int compareTo(DottedPair other) {
     int cmp = 0;
-    cmp = ((Comparable) car).compareTo(other.car);
+    cmp = hydra.util.Comparing.compare(
+      car,
+      other.car);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) cdr).compareTo(other.cdr);
+    return hydra.util.Comparing.compare(
+      cdr,
+      other.cdr);
   }
 
   public DottedPair withCar(hydra.ext.lisp.syntax.Expression car) {

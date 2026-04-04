@@ -84,7 +84,9 @@ public abstract class ImportDeclaration implements Serializable, Comparable<Impo
         return tagCmp;
       }
       SingleType o = (SingleType) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -124,7 +126,9 @@ public abstract class ImportDeclaration implements Serializable, Comparable<Impo
         return tagCmp;
       }
       TypeImportOnDemand o = (TypeImportOnDemand) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -164,7 +168,9 @@ public abstract class ImportDeclaration implements Serializable, Comparable<Impo
         return tagCmp;
       }
       SingleStaticImport o = (SingleStaticImport) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +210,9 @@ public abstract class ImportDeclaration implements Serializable, Comparable<Impo
         return tagCmp;
       }
       StaticImportOnDemand o = (StaticImportOnDemand) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

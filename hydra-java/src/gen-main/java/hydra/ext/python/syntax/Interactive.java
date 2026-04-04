@@ -34,6 +34,8 @@ public class Interactive implements Serializable, Comparable<Interactive> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Interactive other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

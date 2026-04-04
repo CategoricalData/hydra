@@ -68,7 +68,9 @@ public abstract class VariableAccess implements Serializable, Comparable<Variabl
         return tagCmp;
       }
       ExpressionName o = (ExpressionName) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class VariableAccess implements Serializable, Comparable<Variabl
         return tagCmp;
       }
       FieldAccess o = (FieldAccess) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

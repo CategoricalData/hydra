@@ -13,13 +13,13 @@ public class Defn_ExtensionGroup implements Serializable, Comparable<Defn_Extens
 
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams;
+  public final java.util.List<hydra.ext.scala.syntax.Type_Param> tparams;
 
-  public final hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> parmss;
+  public final java.util.List<java.util.List<hydra.ext.scala.syntax.Data_Param>> parmss;
 
   public final hydra.ext.scala.syntax.Stat body;
 
-  public Defn_ExtensionGroup (hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> parmss, hydra.ext.scala.syntax.Stat body) {
+  public Defn_ExtensionGroup (java.util.List<hydra.ext.scala.syntax.Type_Param> tparams, java.util.List<java.util.List<hydra.ext.scala.syntax.Data_Param>> parmss, hydra.ext.scala.syntax.Stat body) {
     this.tparams = tparams;
     this.parmss = parmss;
     this.body = body;
@@ -49,22 +49,28 @@ public class Defn_ExtensionGroup implements Serializable, Comparable<Defn_Extens
   @SuppressWarnings("unchecked")
   public int compareTo(Defn_ExtensionGroup other) {
     int cmp = 0;
-    cmp = ((Comparable) tparams).compareTo(other.tparams);
+    cmp = hydra.util.Comparing.compare(
+      tparams,
+      other.tparams);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) parmss).compareTo(other.parmss);
+    cmp = hydra.util.Comparing.compare(
+      parmss,
+      other.parmss);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
-  public Defn_ExtensionGroup withTparams(hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams) {
+  public Defn_ExtensionGroup withTparams(java.util.List<hydra.ext.scala.syntax.Type_Param> tparams) {
     return new Defn_ExtensionGroup(tparams, parmss, body);
   }
 
-  public Defn_ExtensionGroup withParmss(hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> parmss) {
+  public Defn_ExtensionGroup withParmss(java.util.List<java.util.List<hydra.ext.scala.syntax.Data_Param>> parmss) {
     return new Defn_ExtensionGroup(tparams, parmss, body);
   }
 

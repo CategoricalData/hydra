@@ -94,39 +94,57 @@ public class Schema<S, T, V> implements Serializable, Comparable<Schema<S, T, V>
   @SuppressWarnings("unchecked")
   public int compareTo(Schema other) {
     int cmp = 0;
-    cmp = ((Comparable) vertexIdTypes).compareTo(other.vertexIdTypes);
+    cmp = hydra.util.Comparing.compare(
+      vertexIdTypes,
+      other.vertexIdTypes);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) vertexIds).compareTo(other.vertexIds);
+    cmp = hydra.util.Comparing.compare(
+      vertexIds,
+      other.vertexIds);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) edgeIdTypes).compareTo(other.edgeIdTypes);
+    cmp = hydra.util.Comparing.compare(
+      edgeIdTypes,
+      other.edgeIdTypes);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) edgeIds).compareTo(other.edgeIds);
+    cmp = hydra.util.Comparing.compare(
+      edgeIds,
+      other.edgeIds);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) propertyTypes).compareTo(other.propertyTypes);
+    cmp = hydra.util.Comparing.compare(
+      propertyTypes,
+      other.propertyTypes);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) propertyValues).compareTo(other.propertyValues);
+    cmp = hydra.util.Comparing.compare(
+      propertyValues,
+      other.propertyValues);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) annotations).compareTo(other.annotations);
+    cmp = hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) defaultVertexId).compareTo(other.defaultVertexId);
+    cmp = hydra.util.Comparing.compare(
+      defaultVertexId,
+      other.defaultVertexId);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) defaultEdgeId).compareTo(other.defaultEdgeId);
+    return hydra.util.Comparing.compare(
+      defaultEdgeId,
+      other.defaultEdgeId);
   }
 
   public Schema withVertexIdTypes(hydra.coders.Coder<hydra.core.Type, T> vertexIdTypes) {

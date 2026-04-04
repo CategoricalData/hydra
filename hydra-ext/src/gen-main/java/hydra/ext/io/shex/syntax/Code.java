@@ -9,9 +9,9 @@ public class Code implements Serializable, Comparable<Code> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.Code_Elmt> value;
+  public final java.util.List<hydra.ext.io.shex.syntax.Code_Elmt> value;
 
-  public Code (hydra.util.ConsList<hydra.ext.io.shex.syntax.Code_Elmt> value) {
+  public Code (java.util.List<hydra.ext.io.shex.syntax.Code_Elmt> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class Code implements Serializable, Comparable<Code> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Code other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

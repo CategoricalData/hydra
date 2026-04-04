@@ -68,7 +68,9 @@ public abstract class Primary implements Serializable, Comparable<Primary> {
         return tagCmp;
       }
       NoNewArray o = (NoNewArray) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class Primary implements Serializable, Comparable<Primary> {
         return tagCmp;
       }
       ArrayCreation o = (ArrayCreation) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

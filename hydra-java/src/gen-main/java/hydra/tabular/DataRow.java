@@ -12,9 +12,9 @@ public class DataRow<V> implements Serializable, Comparable<DataRow<V>> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.util.Maybe<V>> value;
+  public final java.util.List<hydra.util.Maybe<V>> value;
 
-  public DataRow (hydra.util.ConsList<hydra.util.Maybe<V>> value) {
+  public DataRow (java.util.List<hydra.util.Maybe<V>> value) {
     this.value = value;
   }
 
@@ -37,6 +37,8 @@ public class DataRow<V> implements Serializable, Comparable<DataRow<V>> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DataRow other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

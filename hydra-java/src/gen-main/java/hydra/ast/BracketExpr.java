@@ -61,15 +61,21 @@ public class BracketExpr implements Serializable, Comparable<BracketExpr> {
   @SuppressWarnings("unchecked")
   public int compareTo(BracketExpr other) {
     int cmp = 0;
-    cmp = ((Comparable) brackets).compareTo(other.brackets);
+    cmp = hydra.util.Comparing.compare(
+      brackets,
+      other.brackets);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) enclosed).compareTo(other.enclosed);
+    cmp = hydra.util.Comparing.compare(
+      enclosed,
+      other.enclosed);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) style).compareTo(other.style);
+    return hydra.util.Comparing.compare(
+      style,
+      other.style);
   }
 
   public BracketExpr withBrackets(hydra.ast.Brackets brackets) {

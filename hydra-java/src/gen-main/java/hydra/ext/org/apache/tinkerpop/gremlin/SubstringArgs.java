@@ -49,15 +49,21 @@ public class SubstringArgs implements Serializable, Comparable<SubstringArgs> {
   @SuppressWarnings("unchecked")
   public int compareTo(SubstringArgs other) {
     int cmp = 0;
-    cmp = ((Comparable) scope).compareTo(other.scope);
+    cmp = hydra.util.Comparing.compare(
+      scope,
+      other.scope);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) start).compareTo(other.start);
+    cmp = hydra.util.Comparing.compare(
+      start,
+      other.start);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) end).compareTo(other.end);
+    return hydra.util.Comparing.compare(
+      end,
+      other.end);
   }
 
   public SubstringArgs withScope(hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.TraversalScopeArgument> scope) {

@@ -51,11 +51,15 @@ public class Application implements Serializable, Comparable<Application> {
   @SuppressWarnings("unchecked")
   public int compareTo(Application other) {
     int cmp = 0;
-    cmp = ((Comparable) function).compareTo(other.function);
+    cmp = hydra.util.Comparing.compare(
+      function,
+      other.function);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) argument).compareTo(other.argument);
+    return hydra.util.Comparing.compare(
+      argument,
+      other.argument);
   }
 
   public Application withFunction(hydra.core.Term function) {

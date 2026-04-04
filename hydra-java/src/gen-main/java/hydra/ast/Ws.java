@@ -212,7 +212,9 @@ public abstract class Ws implements Serializable, Comparable<Ws> {
         return tagCmp;
       }
       BreakAndIndent o = (BreakAndIndent) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

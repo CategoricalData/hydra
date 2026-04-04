@@ -42,11 +42,15 @@ public class NotStartAction_ShapeExprDecl implements Serializable, Comparable<No
   @SuppressWarnings("unchecked")
   public int compareTo(NotStartAction_ShapeExprDecl other) {
     int cmp = 0;
-    cmp = ((Comparable) ShapeExprLabel).compareTo(other.ShapeExprLabel);
+    cmp = hydra.util.Comparing.compare(
+      ShapeExprLabel,
+      other.ShapeExprLabel);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) alts).compareTo(other.alts);
+    return hydra.util.Comparing.compare(
+      alts,
+      other.alts);
   }
 
   public NotStartAction_ShapeExprDecl withShapeExprLabel(hydra.ext.io.shex.syntax.ShapeExprLabel ShapeExprLabel) {

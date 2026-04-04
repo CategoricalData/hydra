@@ -124,7 +124,9 @@ public abstract class MapKey implements Serializable, Comparable<MapKey> {
         return tagCmp;
       }
       String_ o = (String_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -164,7 +166,9 @@ public abstract class MapKey implements Serializable, Comparable<MapKey> {
         return tagCmp;
       }
       Numeric o = (Numeric) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +208,9 @@ public abstract class MapKey implements Serializable, Comparable<MapKey> {
         return tagCmp;
       }
       TraversalToken o = (TraversalToken) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -244,7 +250,9 @@ public abstract class MapKey implements Serializable, Comparable<MapKey> {
         return tagCmp;
       }
       TraversalDirection o = (TraversalDirection) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -284,7 +292,9 @@ public abstract class MapKey implements Serializable, Comparable<MapKey> {
         return tagCmp;
       }
       Set o = (Set) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -324,7 +334,9 @@ public abstract class MapKey implements Serializable, Comparable<MapKey> {
         return tagCmp;
       }
       Collection o = (Collection) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -364,7 +376,9 @@ public abstract class MapKey implements Serializable, Comparable<MapKey> {
         return tagCmp;
       }
       Map o = (Map) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -404,7 +418,9 @@ public abstract class MapKey implements Serializable, Comparable<MapKey> {
         return tagCmp;
       }
       Keyword o = (Keyword) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -444,7 +460,9 @@ public abstract class MapKey implements Serializable, Comparable<MapKey> {
         return tagCmp;
       }
       Identifier o = (Identifier) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

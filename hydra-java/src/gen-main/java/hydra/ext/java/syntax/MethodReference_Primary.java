@@ -15,11 +15,11 @@ public class MethodReference_Primary implements Serializable, Comparable<MethodR
 
   public final hydra.ext.java.syntax.Primary primary;
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments;
+  public final java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments;
 
   public final hydra.ext.java.syntax.Identifier identifier;
 
-  public MethodReference_Primary (hydra.ext.java.syntax.Primary primary, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.Identifier identifier) {
+  public MethodReference_Primary (hydra.ext.java.syntax.Primary primary, java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.Identifier identifier) {
     this.primary = primary;
     this.typeArguments = typeArguments;
     this.identifier = identifier;
@@ -49,22 +49,28 @@ public class MethodReference_Primary implements Serializable, Comparable<MethodR
   @SuppressWarnings("unchecked")
   public int compareTo(MethodReference_Primary other) {
     int cmp = 0;
-    cmp = ((Comparable) primary).compareTo(other.primary);
+    cmp = hydra.util.Comparing.compare(
+      primary,
+      other.primary);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) typeArguments).compareTo(other.typeArguments);
+    cmp = hydra.util.Comparing.compare(
+      typeArguments,
+      other.typeArguments);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) identifier).compareTo(other.identifier);
+    return hydra.util.Comparing.compare(
+      identifier,
+      other.identifier);
   }
 
   public MethodReference_Primary withPrimary(hydra.ext.java.syntax.Primary primary) {
     return new MethodReference_Primary(primary, typeArguments, identifier);
   }
 
-  public MethodReference_Primary withTypeArguments(hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments) {
+  public MethodReference_Primary withTypeArguments(java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     return new MethodReference_Primary(primary, typeArguments, identifier);
   }
 

@@ -76,7 +76,9 @@ public abstract class TypeExpression implements Serializable, Comparable<TypeExp
         return tagCmp;
       }
       Expression o = (Expression) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class TypeExpression implements Serializable, Comparable<TypeExp
         return tagCmp;
       }
       StarredExpression o = (StarredExpression) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class TypeExpression implements Serializable, Comparable<TypeExp
         return tagCmp;
       }
       DoubleStarredExpression o = (DoubleStarredExpression) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -9,9 +9,9 @@ public class IncludeSet implements Serializable, Comparable<IncludeSet> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.ShapeExprLabel> value;
+  public final java.util.List<hydra.ext.io.shex.syntax.ShapeExprLabel> value;
 
-  public IncludeSet (hydra.util.ConsList<hydra.ext.io.shex.syntax.ShapeExprLabel> value) {
+  public IncludeSet (java.util.List<hydra.ext.io.shex.syntax.ShapeExprLabel> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class IncludeSet implements Serializable, Comparable<IncludeSet> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(IncludeSet other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

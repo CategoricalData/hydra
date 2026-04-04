@@ -15,9 +15,9 @@ public class SetLiteral implements Serializable, Comparable<SetLiteral> {
   /**
    * The set elements
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> elements;
+  public final java.util.List<hydra.ext.lisp.syntax.Expression> elements;
 
-  public SetLiteral (hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> elements) {
+  public SetLiteral (java.util.List<hydra.ext.lisp.syntax.Expression> elements) {
     this.elements = elements;
   }
 
@@ -40,6 +40,8 @@ public class SetLiteral implements Serializable, Comparable<SetLiteral> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(SetLiteral other) {
-    return ((Comparable) elements).compareTo(other.elements);
+    return hydra.util.Comparing.compare(
+      elements,
+      other.elements);
   }
 }

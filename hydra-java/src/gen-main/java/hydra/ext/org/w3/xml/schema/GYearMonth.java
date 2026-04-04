@@ -34,6 +34,8 @@ public class GYearMonth implements Serializable, Comparable<GYearMonth> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(GYearMonth other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

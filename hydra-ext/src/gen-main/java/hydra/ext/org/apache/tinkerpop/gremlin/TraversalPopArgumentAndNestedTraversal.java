@@ -42,11 +42,15 @@ public class TraversalPopArgumentAndNestedTraversal implements Serializable, Com
   @SuppressWarnings("unchecked")
   public int compareTo(TraversalPopArgumentAndNestedTraversal other) {
     int cmp = 0;
-    cmp = ((Comparable) pop).compareTo(other.pop);
+    cmp = hydra.util.Comparing.compare(
+      pop,
+      other.pop);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) traversal).compareTo(other.traversal);
+    return hydra.util.Comparing.compare(
+      traversal,
+      other.traversal);
   }
 
   public TraversalPopArgumentAndNestedTraversal withPop(hydra.ext.org.apache.tinkerpop.gremlin.TraversalPopArgument pop) {

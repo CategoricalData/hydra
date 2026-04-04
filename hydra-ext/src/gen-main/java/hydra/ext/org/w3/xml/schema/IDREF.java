@@ -34,6 +34,8 @@ public class IDREF implements Serializable, Comparable<IDREF> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(IDREF other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

@@ -40,6 +40,8 @@ public class DatabaseFunctionFeatures implements Serializable, Comparable<Databa
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DatabaseFunctionFeatures other) {
-    return ((Comparable) dbNameFromElementId).compareTo(other.dbNameFromElementId);
+    return hydra.util.Comparing.compare(
+      dbNameFromElementId,
+      other.dbNameFromElementId);
   }
 }

@@ -51,11 +51,15 @@ public class InvalidValueError implements Serializable, Comparable<InvalidValueE
   @SuppressWarnings("unchecked")
   public int compareTo(InvalidValueError other) {
     int cmp = 0;
-    cmp = ((Comparable) expectedType).compareTo(other.expectedType);
+    cmp = hydra.util.Comparing.compare(
+      expectedType,
+      other.expectedType);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 
   public InvalidValueError withExpectedType(String expectedType) {

@@ -34,6 +34,8 @@ public class SingleTypeImportDeclaration implements Serializable, Comparable<Sin
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(SingleTypeImportDeclaration other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

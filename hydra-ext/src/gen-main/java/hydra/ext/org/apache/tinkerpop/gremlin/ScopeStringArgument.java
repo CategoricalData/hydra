@@ -13,9 +13,9 @@ public class ScopeStringArgument implements Serializable, Comparable<ScopeString
 
   public final hydra.ext.org.apache.tinkerpop.gremlin.TraversalScopeArgument scope;
 
-  public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> strings;
+  public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> strings;
 
-  public ScopeStringArgument (hydra.ext.org.apache.tinkerpop.gremlin.TraversalScopeArgument scope, hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> strings) {
+  public ScopeStringArgument (hydra.ext.org.apache.tinkerpop.gremlin.TraversalScopeArgument scope, java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> strings) {
     this.scope = scope;
     this.strings = strings;
   }
@@ -42,18 +42,22 @@ public class ScopeStringArgument implements Serializable, Comparable<ScopeString
   @SuppressWarnings("unchecked")
   public int compareTo(ScopeStringArgument other) {
     int cmp = 0;
-    cmp = ((Comparable) scope).compareTo(other.scope);
+    cmp = hydra.util.Comparing.compare(
+      scope,
+      other.scope);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) strings).compareTo(other.strings);
+    return hydra.util.Comparing.compare(
+      strings,
+      other.strings);
   }
 
   public ScopeStringArgument withScope(hydra.ext.org.apache.tinkerpop.gremlin.TraversalScopeArgument scope) {
     return new ScopeStringArgument(scope, strings);
   }
 
-  public ScopeStringArgument withStrings(hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> strings) {
+  public ScopeStringArgument withStrings(java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> strings) {
     return new ScopeStringArgument(scope, strings);
   }
 }

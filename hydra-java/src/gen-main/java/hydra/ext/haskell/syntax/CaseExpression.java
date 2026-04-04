@@ -22,9 +22,9 @@ public class CaseExpression implements Serializable, Comparable<CaseExpression> 
   /**
    * The pattern-matching alternatives
    */
-  public final hydra.util.ConsList<hydra.ext.haskell.syntax.Alternative> alternatives;
+  public final java.util.List<hydra.ext.haskell.syntax.Alternative> alternatives;
 
-  public CaseExpression (hydra.ext.haskell.syntax.Expression case_, hydra.util.ConsList<hydra.ext.haskell.syntax.Alternative> alternatives) {
+  public CaseExpression (hydra.ext.haskell.syntax.Expression case_, java.util.List<hydra.ext.haskell.syntax.Alternative> alternatives) {
     this.case_ = case_;
     this.alternatives = alternatives;
   }
@@ -51,18 +51,22 @@ public class CaseExpression implements Serializable, Comparable<CaseExpression> 
   @SuppressWarnings("unchecked")
   public int compareTo(CaseExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) case_).compareTo(other.case_);
+    cmp = hydra.util.Comparing.compare(
+      case_,
+      other.case_);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) alternatives).compareTo(other.alternatives);
+    return hydra.util.Comparing.compare(
+      alternatives,
+      other.alternatives);
   }
 
   public CaseExpression withCase(hydra.ext.haskell.syntax.Expression case_) {
     return new CaseExpression(case_, alternatives);
   }
 
-  public CaseExpression withAlternatives(hydra.util.ConsList<hydra.ext.haskell.syntax.Alternative> alternatives) {
+  public CaseExpression withAlternatives(java.util.List<hydra.ext.haskell.syntax.Alternative> alternatives) {
     return new CaseExpression(case_, alternatives);
   }
 }

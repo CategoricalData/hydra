@@ -8,8 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.ConsList;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -48,7 +46,11 @@ public class Concat extends PrimitiveFunction {
      * @param sublists the list of lists to concatenate
      * @return a single list containing all elements from all sublists in order
      */
-    public static <X> ConsList<X> apply(ConsList<ConsList<X>> sublists) {
-        return ConsList.concatAll(sublists);
+    public static <X> List<X> apply(List<List<X>> sublists) {
+        ArrayList<X> result = new ArrayList<>();
+        for (List<X> sublist : sublists) {
+            result.addAll(sublist);
+        }
+        return result;
     }
 }

@@ -34,6 +34,8 @@ public class PreDecrementExpression implements Serializable, Comparable<PreDecre
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PreDecrementExpression other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

@@ -8,8 +8,6 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Maybe;
 
-import hydra.util.ConsList;
-
 import java.util.List;
 import java.util.function.Function;
 
@@ -38,7 +36,7 @@ public class MaybeLast extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<ConsList<Term>, Term>) l -> Terms.optional(MaybeLast.apply(l)), hydra.extract.Core.list(cx, graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<List<Term>, Term>) l -> Terms.optional(MaybeLast.apply(l)), hydra.extract.Core.list(cx, graph, args.get(0)));
     }
 
     /**
@@ -47,11 +45,11 @@ public class MaybeLast extends PrimitiveFunction {
      * @param list the list to get the last element from
      * @return a Maybe containing the last element, or empty if the list is empty
      */
-    public static <X> Maybe<X> apply(ConsList<X> list) {
+    public static <X> Maybe<X> apply(List<X> list) {
         if (list.isEmpty()) {
             return Maybe.nothing();
         } else {
-            return Maybe.just(list.last());
+            return Maybe.just(list.get(list.size() - 1));
         }
     }
 }

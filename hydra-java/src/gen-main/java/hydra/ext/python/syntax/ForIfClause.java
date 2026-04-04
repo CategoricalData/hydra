@@ -17,13 +17,13 @@ public class ForIfClause implements Serializable, Comparable<ForIfClause> {
 
   public final Boolean async;
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.StarTarget> targets;
+  public final java.util.List<hydra.ext.python.syntax.StarTarget> targets;
 
   public final hydra.ext.python.syntax.Disjunction in;
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.Disjunction> ifs;
+  public final java.util.List<hydra.ext.python.syntax.Disjunction> ifs;
 
-  public ForIfClause (Boolean async, hydra.util.ConsList<hydra.ext.python.syntax.StarTarget> targets, hydra.ext.python.syntax.Disjunction in, hydra.util.ConsList<hydra.ext.python.syntax.Disjunction> ifs) {
+  public ForIfClause (Boolean async, java.util.List<hydra.ext.python.syntax.StarTarget> targets, hydra.ext.python.syntax.Disjunction in, java.util.List<hydra.ext.python.syntax.Disjunction> ifs) {
     this.async = async;
     this.targets = targets;
     this.in = in;
@@ -56,26 +56,34 @@ public class ForIfClause implements Serializable, Comparable<ForIfClause> {
   @SuppressWarnings("unchecked")
   public int compareTo(ForIfClause other) {
     int cmp = 0;
-    cmp = ((Comparable) async).compareTo(other.async);
+    cmp = hydra.util.Comparing.compare(
+      async,
+      other.async);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) targets).compareTo(other.targets);
+    cmp = hydra.util.Comparing.compare(
+      targets,
+      other.targets);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) in).compareTo(other.in);
+    cmp = hydra.util.Comparing.compare(
+      in,
+      other.in);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) ifs).compareTo(other.ifs);
+    return hydra.util.Comparing.compare(
+      ifs,
+      other.ifs);
   }
 
   public ForIfClause withAsync(Boolean async) {
     return new ForIfClause(async, targets, in, ifs);
   }
 
-  public ForIfClause withTargets(hydra.util.ConsList<hydra.ext.python.syntax.StarTarget> targets) {
+  public ForIfClause withTargets(java.util.List<hydra.ext.python.syntax.StarTarget> targets) {
     return new ForIfClause(async, targets, in, ifs);
   }
 
@@ -83,7 +91,7 @@ public class ForIfClause implements Serializable, Comparable<ForIfClause> {
     return new ForIfClause(async, targets, in, ifs);
   }
 
-  public ForIfClause withIfs(hydra.util.ConsList<hydra.ext.python.syntax.Disjunction> ifs) {
+  public ForIfClause withIfs(java.util.List<hydra.ext.python.syntax.Disjunction> ifs) {
     return new ForIfClause(async, targets, in, ifs);
   }
 }

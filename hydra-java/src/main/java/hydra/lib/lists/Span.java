@@ -9,8 +9,6 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Pair;
 
-import hydra.util.ConsList;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -68,7 +66,7 @@ public class Span extends PrimitiveFunction {
      * @param pred the predicate to test elements
      * @return a function that splits a list when the predicate becomes false
      */
-    public static <X> Function<ConsList<X>, Pair<ConsList<X>, ConsList<X>>> apply(Function<X, Boolean> pred) {
+    public static <X> Function<List<X>, Pair<List<X>, List<X>>> apply(Function<X, Boolean> pred) {
         return lst -> apply(pred, lst);
     }
 
@@ -79,14 +77,13 @@ public class Span extends PrimitiveFunction {
      * @param lst the list to split
      * @return a pair of lists, split at the first element where predicate is false
      */
-    public static <X> Pair<ConsList<X>, ConsList<X>> apply(Function<X, Boolean> pred, ConsList<X> lst) {
-        ArrayList<X> indexed = new ArrayList<>(lst);
+    public static <X> Pair<List<X>, List<X>> apply(Function<X, Boolean> pred, List<X> lst) {
         int i = 0;
-        while (i < indexed.size() && pred.apply(indexed.get(i))) {
+        while (i < lst.size() && pred.apply(lst.get(i))) {
             i++;
         }
         return new Pair<>(
-            ConsList.fromList(indexed.subList(0, i)),
-            ConsList.fromList(indexed.subList(i, indexed.size())));
+            new ArrayList<>(lst.subList(0, i)),
+            new ArrayList<>(lst.subList(i, lst.size())));
     }
 }

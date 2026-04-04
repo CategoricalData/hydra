@@ -40,6 +40,8 @@ public class GenAIFunctionFeatures implements Serializable, Comparable<GenAIFunc
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(GenAIFunctionFeatures other) {
-    return ((Comparable) genaiVectorEncode).compareTo(other.genaiVectorEncode);
+    return hydra.util.Comparing.compare(
+      genaiVectorEncode,
+      other.genaiVectorEncode);
   }
 }

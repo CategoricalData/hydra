@@ -49,15 +49,21 @@ public class CaseBlock implements Serializable, Comparable<CaseBlock> {
   @SuppressWarnings("unchecked")
   public int compareTo(CaseBlock other) {
     int cmp = 0;
-    cmp = ((Comparable) patterns).compareTo(other.patterns);
+    cmp = hydra.util.Comparing.compare(
+      patterns,
+      other.patterns);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) guard).compareTo(other.guard);
+    cmp = hydra.util.Comparing.compare(
+      guard,
+      other.guard);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
   public CaseBlock withPatterns(hydra.ext.python.syntax.Patterns patterns) {

@@ -191,67 +191,99 @@ public class FunctionFeatures implements Serializable, Comparable<FunctionFeatur
   @SuppressWarnings("unchecked")
   public int compareTo(FunctionFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) aggregateFunction).compareTo(other.aggregateFunction);
+    cmp = hydra.util.Comparing.compare(
+      aggregateFunction,
+      other.aggregateFunction);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) databaseFunction).compareTo(other.databaseFunction);
+    cmp = hydra.util.Comparing.compare(
+      databaseFunction,
+      other.databaseFunction);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) genAIFunction).compareTo(other.genAIFunction);
+    cmp = hydra.util.Comparing.compare(
+      genAIFunction,
+      other.genAIFunction);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) graphFunction).compareTo(other.graphFunction);
+    cmp = hydra.util.Comparing.compare(
+      graphFunction,
+      other.graphFunction);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) listFunction).compareTo(other.listFunction);
+    cmp = hydra.util.Comparing.compare(
+      listFunction,
+      other.listFunction);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) loadCSVFunction).compareTo(other.loadCSVFunction);
+    cmp = hydra.util.Comparing.compare(
+      loadCSVFunction,
+      other.loadCSVFunction);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) logarithmicFunction).compareTo(other.logarithmicFunction);
+    cmp = hydra.util.Comparing.compare(
+      logarithmicFunction,
+      other.logarithmicFunction);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) numericFunction).compareTo(other.numericFunction);
+    cmp = hydra.util.Comparing.compare(
+      numericFunction,
+      other.numericFunction);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) predicateFunction).compareTo(other.predicateFunction);
+    cmp = hydra.util.Comparing.compare(
+      predicateFunction,
+      other.predicateFunction);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) scalarFunction).compareTo(other.scalarFunction);
+    cmp = hydra.util.Comparing.compare(
+      scalarFunction,
+      other.scalarFunction);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) spatialFunction).compareTo(other.spatialFunction);
+    cmp = hydra.util.Comparing.compare(
+      spatialFunction,
+      other.spatialFunction);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) stringFunction).compareTo(other.stringFunction);
+    cmp = hydra.util.Comparing.compare(
+      stringFunction,
+      other.stringFunction);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) temporalDurationFunction).compareTo(other.temporalDurationFunction);
+    cmp = hydra.util.Comparing.compare(
+      temporalDurationFunction,
+      other.temporalDurationFunction);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) temporalInstantFunction).compareTo(other.temporalInstantFunction);
+    cmp = hydra.util.Comparing.compare(
+      temporalInstantFunction,
+      other.temporalInstantFunction);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) trigonometricFunction).compareTo(other.trigonometricFunction);
+    cmp = hydra.util.Comparing.compare(
+      trigonometricFunction,
+      other.trigonometricFunction);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) vectorFunction).compareTo(other.vectorFunction);
+    return hydra.util.Comparing.compare(
+      vectorFunction,
+      other.vectorFunction);
   }
 
   public FunctionFeatures withAggregateFunction(hydra.ext.cypher.features.AggregateFunctionFeatures aggregateFunction) {

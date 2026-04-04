@@ -13,13 +13,13 @@ public class SubClassOf implements Serializable, Comparable<SubClassOf> {
 
   public static final hydra.core.Name SUPER_CLASS = new hydra.core.Name("superClass");
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
 
   public final hydra.ext.org.w3.owl.syntax.ClassExpression subClass;
 
   public final hydra.ext.org.w3.owl.syntax.ClassExpression superClass;
 
-  public SubClassOf (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ClassExpression subClass, hydra.ext.org.w3.owl.syntax.ClassExpression superClass) {
+  public SubClassOf (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ClassExpression subClass, hydra.ext.org.w3.owl.syntax.ClassExpression superClass) {
     this.annotations = annotations;
     this.subClass = subClass;
     this.superClass = superClass;
@@ -49,18 +49,24 @@ public class SubClassOf implements Serializable, Comparable<SubClassOf> {
   @SuppressWarnings("unchecked")
   public int compareTo(SubClassOf other) {
     int cmp = 0;
-    cmp = ((Comparable) annotations).compareTo(other.annotations);
+    cmp = hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) subClass).compareTo(other.subClass);
+    cmp = hydra.util.Comparing.compare(
+      subClass,
+      other.subClass);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) superClass).compareTo(other.superClass);
+    return hydra.util.Comparing.compare(
+      superClass,
+      other.superClass);
   }
 
-  public SubClassOf withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public SubClassOf withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new SubClassOf(annotations, subClass, superClass);
   }
 

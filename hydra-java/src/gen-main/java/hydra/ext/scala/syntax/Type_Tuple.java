@@ -9,9 +9,9 @@ public class Type_Tuple implements Serializable, Comparable<Type_Tuple> {
 
   public static final hydra.core.Name ARGS = new hydra.core.Name("args");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Type> args;
+  public final java.util.List<hydra.ext.scala.syntax.Type> args;
 
-  public Type_Tuple (hydra.util.ConsList<hydra.ext.scala.syntax.Type> args) {
+  public Type_Tuple (java.util.List<hydra.ext.scala.syntax.Type> args) {
     this.args = args;
   }
 
@@ -34,6 +34,8 @@ public class Type_Tuple implements Serializable, Comparable<Type_Tuple> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Type_Tuple other) {
-    return ((Comparable) args).compareTo(other.args);
+    return hydra.util.Comparing.compare(
+      args,
+      other.args);
   }
 }

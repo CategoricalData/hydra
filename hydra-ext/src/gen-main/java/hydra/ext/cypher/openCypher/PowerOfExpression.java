@@ -9,9 +9,9 @@ public class PowerOfExpression implements Serializable, Comparable<PowerOfExpres
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.UnaryAddOrSubtractExpression> value;
+  public final java.util.List<hydra.ext.cypher.openCypher.UnaryAddOrSubtractExpression> value;
 
-  public PowerOfExpression (hydra.util.ConsList<hydra.ext.cypher.openCypher.UnaryAddOrSubtractExpression> value) {
+  public PowerOfExpression (java.util.List<hydra.ext.cypher.openCypher.UnaryAddOrSubtractExpression> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class PowerOfExpression implements Serializable, Comparable<PowerOfExpres
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PowerOfExpression other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

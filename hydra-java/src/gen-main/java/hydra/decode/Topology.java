@@ -6,12 +6,12 @@ package hydra.decode;
  * Term decoders for hydra.topology
  */
 public interface Topology {
-  static hydra.util.Either<hydra.errors.DecodingError, hydra.util.PersistentMap<Integer, hydra.util.ConsList<Integer>>> graph(hydra.graph.Graph v1, hydra.core.Term v2) {
+  static hydra.util.Either<hydra.errors.DecodingError, java.util.Map<Integer, java.util.List<Integer>>> graph(hydra.graph.Graph v1, hydra.core.Term v2) {
     return hydra.extract.Core.decodeMap(
       (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, Integer>>>) (p0 -> p1 -> hydra.decode.Topology.vertex(
         p0,
         p1)),
-      (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<Integer>>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<Integer>>>) (v22 -> hydra.extract.Core.decodeList(
+      (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, java.util.List<Integer>>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, java.util.List<Integer>>>) (v22 -> hydra.extract.Core.decodeList(
         (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, Integer>>>) (p0 -> p1 -> hydra.decode.Topology.vertex(
           p0,
           p1)),
@@ -32,7 +32,7 @@ public interface Topology {
 
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.topology.TarjanState> visit(hydra.core.Term.Record record) {
-          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Core.toFieldMap((record).value);
+          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Core.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.Core.requireField(
               "counter",
@@ -77,7 +77,7 @@ public interface Topology {
             (java.util.function.Function<Integer, hydra.util.Either<hydra.errors.DecodingError, hydra.topology.TarjanState>>) (field_counter -> hydra.lib.eithers.Bind.apply(
               hydra.extract.Core.requireField(
                 "indices",
-                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.PersistentMap<Integer, Integer>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.PersistentMap<Integer, Integer>>>) (v2 -> hydra.extract.Core.decodeMap(
+                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, java.util.Map<Integer, Integer>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, java.util.Map<Integer, Integer>>>) (v2 -> hydra.extract.Core.decodeMap(
                   (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, Integer>>>) (p0 -> p1 -> hydra.decode.Topology.vertex(
                     p0,
                     p1)),
@@ -121,10 +121,10 @@ public interface Topology {
                   v2))),
                 fieldMap,
                 cx),
-              (java.util.function.Function<hydra.util.PersistentMap<Integer, Integer>, hydra.util.Either<hydra.errors.DecodingError, hydra.topology.TarjanState>>) (field_indices -> hydra.lib.eithers.Bind.apply(
+              (java.util.function.Function<java.util.Map<Integer, Integer>, hydra.util.Either<hydra.errors.DecodingError, hydra.topology.TarjanState>>) (field_indices -> hydra.lib.eithers.Bind.apply(
                 hydra.extract.Core.requireField(
                   "lowLinks",
-                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.PersistentMap<Integer, Integer>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.PersistentMap<Integer, Integer>>>) (v2 -> hydra.extract.Core.decodeMap(
+                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, java.util.Map<Integer, Integer>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, java.util.Map<Integer, Integer>>>) (v2 -> hydra.extract.Core.decodeMap(
                     (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, Integer>>>) (p0 -> p1 -> hydra.decode.Topology.vertex(
                       p0,
                       p1)),
@@ -168,10 +168,10 @@ public interface Topology {
                     v2))),
                   fieldMap,
                   cx),
-                (java.util.function.Function<hydra.util.PersistentMap<Integer, Integer>, hydra.util.Either<hydra.errors.DecodingError, hydra.topology.TarjanState>>) (field_lowLinks -> hydra.lib.eithers.Bind.apply(
+                (java.util.function.Function<java.util.Map<Integer, Integer>, hydra.util.Either<hydra.errors.DecodingError, hydra.topology.TarjanState>>) (field_lowLinks -> hydra.lib.eithers.Bind.apply(
                   hydra.extract.Core.requireField(
                     "stack",
-                    (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<Integer>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<Integer>>>) (v2 -> hydra.extract.Core.decodeList(
+                    (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, java.util.List<Integer>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, java.util.List<Integer>>>) (v2 -> hydra.extract.Core.decodeList(
                       (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, Integer>>>) (p0 -> p1 -> hydra.decode.Topology.vertex(
                         p0,
                         p1)),
@@ -179,10 +179,10 @@ public interface Topology {
                       v2))),
                     fieldMap,
                     cx),
-                  (java.util.function.Function<hydra.util.ConsList<Integer>, hydra.util.Either<hydra.errors.DecodingError, hydra.topology.TarjanState>>) (field_stack -> hydra.lib.eithers.Bind.apply(
+                  (java.util.function.Function<java.util.List<Integer>, hydra.util.Either<hydra.errors.DecodingError, hydra.topology.TarjanState>>) (field_stack -> hydra.lib.eithers.Bind.apply(
                     hydra.extract.Core.requireField(
                       "onStack",
-                      (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.PersistentSet<Integer>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.PersistentSet<Integer>>>) (v2 -> hydra.extract.Core.decodeSet(
+                      (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, java.util.Set<Integer>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, java.util.Set<Integer>>>) (v2 -> hydra.extract.Core.decodeSet(
                         (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, Integer>>>) (p0 -> p1 -> hydra.decode.Topology.vertex(
                           p0,
                           p1)),
@@ -190,11 +190,11 @@ public interface Topology {
                         v2))),
                       fieldMap,
                       cx),
-                    (java.util.function.Function<hydra.util.PersistentSet<Integer>, hydra.util.Either<hydra.errors.DecodingError, hydra.topology.TarjanState>>) (field_onStack -> hydra.lib.eithers.Bind.apply(
+                    (java.util.function.Function<java.util.Set<Integer>, hydra.util.Either<hydra.errors.DecodingError, hydra.topology.TarjanState>>) (field_onStack -> hydra.lib.eithers.Bind.apply(
                       hydra.extract.Core.requireField(
                         "sccs",
-                        (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<hydra.util.ConsList<Integer>>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<hydra.util.ConsList<Integer>>>>) (v2 -> hydra.extract.Core.decodeList(
-                          (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<Integer>>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<Integer>>>) (v22 -> hydra.extract.Core.decodeList(
+                        (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, java.util.List<java.util.List<Integer>>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, java.util.List<java.util.List<Integer>>>>) (v2 -> hydra.extract.Core.decodeList(
+                          (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, java.util.List<Integer>>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, java.util.List<Integer>>>) (v22 -> hydra.extract.Core.decodeList(
                             (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, Integer>>>) (p0 -> p1 -> hydra.decode.Topology.vertex(
                               p0,
                               p1)),
@@ -204,7 +204,7 @@ public interface Topology {
                           v2))),
                         fieldMap,
                         cx),
-                      (java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<Integer>>, hydra.util.Either<hydra.errors.DecodingError, hydra.topology.TarjanState>>) (field_sccs -> hydra.util.Either.<hydra.errors.DecodingError, hydra.topology.TarjanState>right(new hydra.topology.TarjanState(field_counter, field_indices, field_lowLinks, field_stack, field_onStack, field_sccs))))))))))))));
+                      (java.util.function.Function<java.util.List<java.util.List<Integer>>, hydra.util.Either<hydra.errors.DecodingError, hydra.topology.TarjanState>>) (field_sccs -> hydra.util.Either.<hydra.errors.DecodingError, hydra.topology.TarjanState>right(new hydra.topology.TarjanState(field_counter, field_indices, field_lowLinks, field_stack, field_onStack, field_sccs))))))))))))));
         }
       })),
       hydra.Lexical.stripAndDereferenceTermEither(

@@ -22,9 +22,9 @@ public class SeqExpr implements Serializable, Comparable<SeqExpr> {
   /**
    * The expressions to join
    */
-  public final hydra.util.ConsList<hydra.ast.Expr> elements;
+  public final java.util.List<hydra.ast.Expr> elements;
 
-  public SeqExpr (hydra.ast.Op op, hydra.util.ConsList<hydra.ast.Expr> elements) {
+  public SeqExpr (hydra.ast.Op op, java.util.List<hydra.ast.Expr> elements) {
     this.op = op;
     this.elements = elements;
   }
@@ -51,18 +51,22 @@ public class SeqExpr implements Serializable, Comparable<SeqExpr> {
   @SuppressWarnings("unchecked")
   public int compareTo(SeqExpr other) {
     int cmp = 0;
-    cmp = ((Comparable) op).compareTo(other.op);
+    cmp = hydra.util.Comparing.compare(
+      op,
+      other.op);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) elements).compareTo(other.elements);
+    return hydra.util.Comparing.compare(
+      elements,
+      other.elements);
   }
 
   public SeqExpr withOp(hydra.ast.Op op) {
     return new SeqExpr(op, elements);
   }
 
-  public SeqExpr withElements(hydra.util.ConsList<hydra.ast.Expr> elements) {
+  public SeqExpr withElements(java.util.List<hydra.ast.Expr> elements) {
     return new SeqExpr(op, elements);
   }
 }

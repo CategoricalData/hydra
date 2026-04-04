@@ -61,15 +61,21 @@ public class SubtypeEdge implements Serializable, Comparable<SubtypeEdge> {
   @SuppressWarnings("unchecked")
   public int compareTo(SubtypeEdge other) {
     int cmp = 0;
-    cmp = ((Comparable) source).compareTo(other.source);
+    cmp = hydra.util.Comparing.compare(
+      source,
+      other.source);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) path).compareTo(other.path);
+    cmp = hydra.util.Comparing.compare(
+      path,
+      other.path);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) target).compareTo(other.target);
+    return hydra.util.Comparing.compare(
+      target,
+      other.target);
   }
 
   public SubtypeEdge withSource(hydra.paths.SubtypeNode source) {

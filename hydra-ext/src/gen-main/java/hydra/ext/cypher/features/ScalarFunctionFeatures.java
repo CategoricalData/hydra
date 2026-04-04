@@ -251,91 +251,135 @@ public class ScalarFunctionFeatures implements Serializable, Comparable<ScalarFu
   @SuppressWarnings("unchecked")
   public int compareTo(ScalarFunctionFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) char_length).compareTo(other.char_length);
+    cmp = hydra.util.Comparing.compare(
+      char_length,
+      other.char_length);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) character_length).compareTo(other.character_length);
+    cmp = hydra.util.Comparing.compare(
+      character_length,
+      other.character_length);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) coalesce).compareTo(other.coalesce);
+    cmp = hydra.util.Comparing.compare(
+      coalesce,
+      other.coalesce);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) elementId).compareTo(other.elementId);
+    cmp = hydra.util.Comparing.compare(
+      elementId,
+      other.elementId);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) endNode).compareTo(other.endNode);
+    cmp = hydra.util.Comparing.compare(
+      endNode,
+      other.endNode);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) head).compareTo(other.head);
+    cmp = hydra.util.Comparing.compare(
+      head,
+      other.head);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) id).compareTo(other.id);
+    cmp = hydra.util.Comparing.compare(
+      id,
+      other.id);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) last).compareTo(other.last);
+    cmp = hydra.util.Comparing.compare(
+      last,
+      other.last);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) length).compareTo(other.length);
+    cmp = hydra.util.Comparing.compare(
+      length,
+      other.length);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) nullIf).compareTo(other.nullIf);
+    cmp = hydra.util.Comparing.compare(
+      nullIf,
+      other.nullIf);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) properties).compareTo(other.properties);
+    cmp = hydra.util.Comparing.compare(
+      properties,
+      other.properties);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) randomUUID).compareTo(other.randomUUID);
+    cmp = hydra.util.Comparing.compare(
+      randomUUID,
+      other.randomUUID);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) size).compareTo(other.size);
+    cmp = hydra.util.Comparing.compare(
+      size,
+      other.size);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) startNode).compareTo(other.startNode);
+    cmp = hydra.util.Comparing.compare(
+      startNode,
+      other.startNode);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) toBoolean).compareTo(other.toBoolean);
+    cmp = hydra.util.Comparing.compare(
+      toBoolean,
+      other.toBoolean);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) toBooleanOrNull).compareTo(other.toBooleanOrNull);
+    cmp = hydra.util.Comparing.compare(
+      toBooleanOrNull,
+      other.toBooleanOrNull);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) toFloat).compareTo(other.toFloat);
+    cmp = hydra.util.Comparing.compare(
+      toFloat,
+      other.toFloat);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) toFloatOrNull).compareTo(other.toFloatOrNull);
+    cmp = hydra.util.Comparing.compare(
+      toFloatOrNull,
+      other.toFloatOrNull);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) toInteger).compareTo(other.toInteger);
+    cmp = hydra.util.Comparing.compare(
+      toInteger,
+      other.toInteger);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) toIntegerOrNull).compareTo(other.toIntegerOrNull);
+    cmp = hydra.util.Comparing.compare(
+      toIntegerOrNull,
+      other.toIntegerOrNull);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) type).compareTo(other.type);
+    cmp = hydra.util.Comparing.compare(
+      type,
+      other.type);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) valueType).compareTo(other.valueType);
+    return hydra.util.Comparing.compare(
+      valueType,
+      other.valueType);
   }
 
   public ScalarFunctionFeatures withChar_length(Boolean char_length) {

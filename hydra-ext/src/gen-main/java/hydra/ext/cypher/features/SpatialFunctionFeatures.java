@@ -61,15 +61,21 @@ public class SpatialFunctionFeatures implements Serializable, Comparable<Spatial
   @SuppressWarnings("unchecked")
   public int compareTo(SpatialFunctionFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) pointDistance).compareTo(other.pointDistance);
+    cmp = hydra.util.Comparing.compare(
+      pointDistance,
+      other.pointDistance);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) point).compareTo(other.point);
+    cmp = hydra.util.Comparing.compare(
+      point,
+      other.point);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) pointWithinBBox).compareTo(other.pointWithinBBox);
+    return hydra.util.Comparing.compare(
+      pointWithinBBox,
+      other.pointWithinBBox);
   }
 
   public SpatialFunctionFeatures withPointDistance(Boolean pointDistance) {

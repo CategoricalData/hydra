@@ -17,17 +17,17 @@ public class Decl_Given implements Serializable, Comparable<Decl_Given> {
 
   public static final hydra.core.Name DECLTPE = new hydra.core.Name("decltpe");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods;
+  public final java.util.List<hydra.ext.scala.syntax.Mod> mods;
 
   public final hydra.ext.scala.syntax.Data_Name name;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams;
+  public final java.util.List<hydra.ext.scala.syntax.Type_Param> tparams;
 
-  public final hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> sparams;
+  public final java.util.List<java.util.List<hydra.ext.scala.syntax.Data_Param>> sparams;
 
   public final hydra.ext.scala.syntax.Type decltpe;
 
-  public Decl_Given (hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods, hydra.ext.scala.syntax.Data_Name name, hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> sparams, hydra.ext.scala.syntax.Type decltpe) {
+  public Decl_Given (java.util.List<hydra.ext.scala.syntax.Mod> mods, hydra.ext.scala.syntax.Data_Name name, java.util.List<hydra.ext.scala.syntax.Type_Param> tparams, java.util.List<java.util.List<hydra.ext.scala.syntax.Data_Param>> sparams, hydra.ext.scala.syntax.Type decltpe) {
     this.mods = mods;
     this.name = name;
     this.tparams = tparams;
@@ -63,26 +63,36 @@ public class Decl_Given implements Serializable, Comparable<Decl_Given> {
   @SuppressWarnings("unchecked")
   public int compareTo(Decl_Given other) {
     int cmp = 0;
-    cmp = ((Comparable) mods).compareTo(other.mods);
+    cmp = hydra.util.Comparing.compare(
+      mods,
+      other.mods);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) tparams).compareTo(other.tparams);
+    cmp = hydra.util.Comparing.compare(
+      tparams,
+      other.tparams);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) sparams).compareTo(other.sparams);
+    cmp = hydra.util.Comparing.compare(
+      sparams,
+      other.sparams);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) decltpe).compareTo(other.decltpe);
+    return hydra.util.Comparing.compare(
+      decltpe,
+      other.decltpe);
   }
 
-  public Decl_Given withMods(hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods) {
+  public Decl_Given withMods(java.util.List<hydra.ext.scala.syntax.Mod> mods) {
     return new Decl_Given(mods, name, tparams, sparams, decltpe);
   }
 
@@ -90,11 +100,11 @@ public class Decl_Given implements Serializable, Comparable<Decl_Given> {
     return new Decl_Given(mods, name, tparams, sparams, decltpe);
   }
 
-  public Decl_Given withTparams(hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams) {
+  public Decl_Given withTparams(java.util.List<hydra.ext.scala.syntax.Type_Param> tparams) {
     return new Decl_Given(mods, name, tparams, sparams, decltpe);
   }
 
-  public Decl_Given withSparams(hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> sparams) {
+  public Decl_Given withSparams(java.util.List<java.util.List<hydra.ext.scala.syntax.Data_Param>> sparams) {
     return new Decl_Given(mods, name, tparams, sparams, decltpe);
   }
 

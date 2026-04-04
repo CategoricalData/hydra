@@ -84,7 +84,9 @@ public abstract class StarEtc implements Serializable, Comparable<StarEtc> {
         return tagCmp;
       }
       StarNoDefault o = (StarNoDefault) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -124,7 +126,9 @@ public abstract class StarEtc implements Serializable, Comparable<StarEtc> {
         return tagCmp;
       }
       StarNoDefaultStarAnnotation o = (StarNoDefaultStarAnnotation) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -164,7 +168,9 @@ public abstract class StarEtc implements Serializable, Comparable<StarEtc> {
         return tagCmp;
       }
       StarComma o = (StarComma) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +210,9 @@ public abstract class StarEtc implements Serializable, Comparable<StarEtc> {
         return tagCmp;
       }
       Keywords o = (Keywords) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

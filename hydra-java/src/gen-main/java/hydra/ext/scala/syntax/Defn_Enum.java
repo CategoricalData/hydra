@@ -17,17 +17,17 @@ public class Defn_Enum implements Serializable, Comparable<Defn_Enum> {
 
   public static final hydra.core.Name TEMPLATE = new hydra.core.Name("template");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods;
+  public final java.util.List<hydra.ext.scala.syntax.Mod> mods;
 
   public final hydra.ext.scala.syntax.Type_Name name;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams;
+  public final java.util.List<hydra.ext.scala.syntax.Type_Param> tparams;
 
   public final hydra.ext.scala.syntax.Ctor_Primary ctor;
 
   public final hydra.ext.scala.syntax.Template template;
 
-  public Defn_Enum (hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods, hydra.ext.scala.syntax.Type_Name name, hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams, hydra.ext.scala.syntax.Ctor_Primary ctor, hydra.ext.scala.syntax.Template template) {
+  public Defn_Enum (java.util.List<hydra.ext.scala.syntax.Mod> mods, hydra.ext.scala.syntax.Type_Name name, java.util.List<hydra.ext.scala.syntax.Type_Param> tparams, hydra.ext.scala.syntax.Ctor_Primary ctor, hydra.ext.scala.syntax.Template template) {
     this.mods = mods;
     this.name = name;
     this.tparams = tparams;
@@ -63,26 +63,36 @@ public class Defn_Enum implements Serializable, Comparable<Defn_Enum> {
   @SuppressWarnings("unchecked")
   public int compareTo(Defn_Enum other) {
     int cmp = 0;
-    cmp = ((Comparable) mods).compareTo(other.mods);
+    cmp = hydra.util.Comparing.compare(
+      mods,
+      other.mods);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) tparams).compareTo(other.tparams);
+    cmp = hydra.util.Comparing.compare(
+      tparams,
+      other.tparams);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) ctor).compareTo(other.ctor);
+    cmp = hydra.util.Comparing.compare(
+      ctor,
+      other.ctor);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) template).compareTo(other.template);
+    return hydra.util.Comparing.compare(
+      template,
+      other.template);
   }
 
-  public Defn_Enum withMods(hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods) {
+  public Defn_Enum withMods(java.util.List<hydra.ext.scala.syntax.Mod> mods) {
     return new Defn_Enum(mods, name, tparams, ctor, template);
   }
 
@@ -90,7 +100,7 @@ public class Defn_Enum implements Serializable, Comparable<Defn_Enum> {
     return new Defn_Enum(mods, name, tparams, ctor, template);
   }
 
-  public Defn_Enum withTparams(hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams) {
+  public Defn_Enum withTparams(java.util.List<hydra.ext.scala.syntax.Type_Param> tparams) {
     return new Defn_Enum(mods, name, tparams, ctor, template);
   }
 

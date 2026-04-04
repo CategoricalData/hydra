@@ -92,7 +92,9 @@ public abstract class SelectArgs implements Serializable, Comparable<SelectArgs>
         return tagCmp;
       }
       Column o = (Column) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -132,7 +134,9 @@ public abstract class SelectArgs implements Serializable, Comparable<SelectArgs>
         return tagCmp;
       }
       PopStrings o = (PopStrings) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -172,7 +176,9 @@ public abstract class SelectArgs implements Serializable, Comparable<SelectArgs>
         return tagCmp;
       }
       PopTraversal o = (PopTraversal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -182,9 +188,9 @@ public abstract class SelectArgs implements Serializable, Comparable<SelectArgs>
   }
 
   public static final class Strings extends hydra.ext.org.apache.tinkerpop.gremlin.SelectArgs implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringArgument> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringArgument> value;
 
-    public Strings (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringArgument> value) {
+    public Strings (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringArgument> value) {
       this.value = value;
     }
 
@@ -212,7 +218,9 @@ public abstract class SelectArgs implements Serializable, Comparable<SelectArgs>
         return tagCmp;
       }
       Strings o = (Strings) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -252,7 +260,9 @@ public abstract class SelectArgs implements Serializable, Comparable<SelectArgs>
         return tagCmp;
       }
       Traversal o = (Traversal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

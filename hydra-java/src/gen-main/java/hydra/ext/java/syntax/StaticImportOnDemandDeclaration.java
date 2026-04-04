@@ -34,6 +34,8 @@ public class StaticImportOnDemandDeclaration implements Serializable, Comparable
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(StaticImportOnDemandDeclaration other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

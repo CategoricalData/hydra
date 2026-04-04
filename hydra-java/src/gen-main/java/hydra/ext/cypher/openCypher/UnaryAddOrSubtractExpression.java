@@ -42,11 +42,15 @@ public class UnaryAddOrSubtractExpression implements Serializable, Comparable<Un
   @SuppressWarnings("unchecked")
   public int compareTo(UnaryAddOrSubtractExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) operator).compareTo(other.operator);
+    cmp = hydra.util.Comparing.compare(
+      operator,
+      other.operator);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) expression).compareTo(other.expression);
+    return hydra.util.Comparing.compare(
+      expression,
+      other.expression);
   }
 
   public UnaryAddOrSubtractExpression withOperator(hydra.util.Maybe<hydra.ext.cypher.openCypher.AddOrSubtractOperator> operator) {

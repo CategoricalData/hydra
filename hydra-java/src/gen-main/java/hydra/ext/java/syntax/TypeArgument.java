@@ -68,7 +68,9 @@ public abstract class TypeArgument implements Serializable, Comparable<TypeArgum
         return tagCmp;
       }
       Reference o = (Reference) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class TypeArgument implements Serializable, Comparable<TypeArgum
         return tagCmp;
       }
       Wildcard o = (Wildcard) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

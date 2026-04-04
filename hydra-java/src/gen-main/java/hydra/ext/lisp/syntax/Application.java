@@ -22,9 +22,9 @@ public class Application implements Serializable, Comparable<Application> {
   /**
    * The arguments
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> arguments;
+  public final java.util.List<hydra.ext.lisp.syntax.Expression> arguments;
 
-  public Application (hydra.ext.lisp.syntax.Expression function, hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> arguments) {
+  public Application (hydra.ext.lisp.syntax.Expression function, java.util.List<hydra.ext.lisp.syntax.Expression> arguments) {
     this.function = function;
     this.arguments = arguments;
   }
@@ -51,18 +51,22 @@ public class Application implements Serializable, Comparable<Application> {
   @SuppressWarnings("unchecked")
   public int compareTo(Application other) {
     int cmp = 0;
-    cmp = ((Comparable) function).compareTo(other.function);
+    cmp = hydra.util.Comparing.compare(
+      function,
+      other.function);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) arguments).compareTo(other.arguments);
+    return hydra.util.Comparing.compare(
+      arguments,
+      other.arguments);
   }
 
   public Application withFunction(hydra.ext.lisp.syntax.Expression function) {
     return new Application(function, arguments);
   }
 
-  public Application withArguments(hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> arguments) {
+  public Application withArguments(java.util.List<hydra.ext.lisp.syntax.Expression> arguments) {
     return new Application(function, arguments);
   }
 }

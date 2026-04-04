@@ -13,9 +13,9 @@ public class ShexDoc_Sequence_Option implements Serializable, Comparable<ShexDoc
 
   public final hydra.ext.io.shex.syntax.ShexDoc_Sequence_Option_Alts alts;
 
-  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.Statement> listOfStatement;
+  public final java.util.List<hydra.ext.io.shex.syntax.Statement> listOfStatement;
 
-  public ShexDoc_Sequence_Option (hydra.ext.io.shex.syntax.ShexDoc_Sequence_Option_Alts alts, hydra.util.ConsList<hydra.ext.io.shex.syntax.Statement> listOfStatement) {
+  public ShexDoc_Sequence_Option (hydra.ext.io.shex.syntax.ShexDoc_Sequence_Option_Alts alts, java.util.List<hydra.ext.io.shex.syntax.Statement> listOfStatement) {
     this.alts = alts;
     this.listOfStatement = listOfStatement;
   }
@@ -42,18 +42,22 @@ public class ShexDoc_Sequence_Option implements Serializable, Comparable<ShexDoc
   @SuppressWarnings("unchecked")
   public int compareTo(ShexDoc_Sequence_Option other) {
     int cmp = 0;
-    cmp = ((Comparable) alts).compareTo(other.alts);
+    cmp = hydra.util.Comparing.compare(
+      alts,
+      other.alts);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) listOfStatement).compareTo(other.listOfStatement);
+    return hydra.util.Comparing.compare(
+      listOfStatement,
+      other.listOfStatement);
   }
 
   public ShexDoc_Sequence_Option withAlts(hydra.ext.io.shex.syntax.ShexDoc_Sequence_Option_Alts alts) {
     return new ShexDoc_Sequence_Option(alts, listOfStatement);
   }
 
-  public ShexDoc_Sequence_Option withListOfStatement(hydra.util.ConsList<hydra.ext.io.shex.syntax.Statement> listOfStatement) {
+  public ShexDoc_Sequence_Option withListOfStatement(java.util.List<hydra.ext.io.shex.syntax.Statement> listOfStatement) {
     return new ShexDoc_Sequence_Option(alts, listOfStatement);
   }
 }

@@ -84,7 +84,9 @@ public abstract class Enumerator implements Serializable, Comparable<Enumerator>
         return tagCmp;
       }
       Generator o = (Generator) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -124,7 +126,9 @@ public abstract class Enumerator implements Serializable, Comparable<Enumerator>
         return tagCmp;
       }
       CaseGenerator o = (CaseGenerator) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -164,7 +168,9 @@ public abstract class Enumerator implements Serializable, Comparable<Enumerator>
         return tagCmp;
       }
       Val o = (Val) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +210,9 @@ public abstract class Enumerator implements Serializable, Comparable<Enumerator>
         return tagCmp;
       }
       Guard o = (Guard) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

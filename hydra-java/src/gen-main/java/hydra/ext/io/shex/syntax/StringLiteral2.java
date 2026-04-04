@@ -9,9 +9,9 @@ public class StringLiteral2 implements Serializable, Comparable<StringLiteral2> 
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.StringLiteral2_Elmt> value;
+  public final java.util.List<hydra.ext.io.shex.syntax.StringLiteral2_Elmt> value;
 
-  public StringLiteral2 (hydra.util.ConsList<hydra.ext.io.shex.syntax.StringLiteral2_Elmt> value) {
+  public StringLiteral2 (java.util.List<hydra.ext.io.shex.syntax.StringLiteral2_Elmt> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class StringLiteral2 implements Serializable, Comparable<StringLiteral2> 
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(StringLiteral2 other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

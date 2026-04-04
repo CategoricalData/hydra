@@ -6,8 +6,6 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.ConsList;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -44,17 +42,17 @@ public class Split extends PrimitiveFunction {
                 hydra.extract.Core.string(cx, graph, args.get(1))));
     }
 
-    public static Function<String, ConsList<String>> apply(String pattern) {
+    public static Function<String, List<String>> apply(String pattern) {
         return input -> apply(pattern, input);
     }
 
-    public static ConsList<String> apply(String pattern, String input) {
+    public static List<String> apply(String pattern, String input) {
         // Java's split with -1 preserves trailing empty strings
         String[] parts = Pattern.compile(pattern).split(input, -1);
         ArrayList<String> results = new ArrayList<>();
         for (String part : parts) {
             results.add(part);
         }
-        return ConsList.fromList(results);
+        return results;
     }
 }

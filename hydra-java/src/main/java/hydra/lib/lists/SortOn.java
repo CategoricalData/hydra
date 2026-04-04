@@ -8,8 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.ConsList;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -68,7 +66,7 @@ public class SortOn extends PrimitiveFunction {
      * @return a function that sorts a list by the extracted key
      */
     @SuppressWarnings("unchecked")
-    public static <X, Y> Function<ConsList<X>, ConsList<X>> apply(Function<X, Y> f) {
+    public static <X, Y> Function<List<X>, List<X>> apply(Function<X, Y> f) {
         return lst -> apply(f, lst);
     }
 
@@ -81,9 +79,9 @@ public class SortOn extends PrimitiveFunction {
      * @return the sorted list
      */
     @SuppressWarnings("unchecked")
-    public static <X, Y> ConsList<X> apply(Function<X, Y> f, ConsList<X> lst) {
+    public static <X, Y> List<X> apply(Function<X, Y> f, List<X> lst) {
         ArrayList<X> result = new ArrayList<>(lst);
         result.sort(Comparator.comparing(x -> (Comparable) f.apply(x)));
-        return ConsList.fromList(result);
+        return result;
     }
 }

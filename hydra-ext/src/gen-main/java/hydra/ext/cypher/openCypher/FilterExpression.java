@@ -42,11 +42,15 @@ public class FilterExpression implements Serializable, Comparable<FilterExpressi
   @SuppressWarnings("unchecked")
   public int compareTo(FilterExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) idInColl).compareTo(other.idInColl);
+    cmp = hydra.util.Comparing.compare(
+      idInColl,
+      other.idInColl);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) where).compareTo(other.where);
+    return hydra.util.Comparing.compare(
+      where,
+      other.where);
   }
 
   public FilterExpression withIdInColl(hydra.ext.cypher.openCypher.IdInColl idInColl) {

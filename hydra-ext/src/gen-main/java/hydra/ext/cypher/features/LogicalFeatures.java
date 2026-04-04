@@ -71,19 +71,27 @@ public class LogicalFeatures implements Serializable, Comparable<LogicalFeatures
   @SuppressWarnings("unchecked")
   public int compareTo(LogicalFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) and).compareTo(other.and);
+    cmp = hydra.util.Comparing.compare(
+      and,
+      other.and);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) not).compareTo(other.not);
+    cmp = hydra.util.Comparing.compare(
+      not,
+      other.not);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) or).compareTo(other.or);
+    cmp = hydra.util.Comparing.compare(
+      or,
+      other.or);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) xor).compareTo(other.xor);
+    return hydra.util.Comparing.compare(
+      xor,
+      other.xor);
   }
 
   public LogicalFeatures withAnd(Boolean and) {

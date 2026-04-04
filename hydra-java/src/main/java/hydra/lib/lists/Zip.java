@@ -10,9 +10,8 @@ import hydra.tools.PrimitiveFunction;
 import hydra.util.Maybe;
 import hydra.util.Pair;
 
-import hydra.util.ConsList;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
@@ -35,7 +34,7 @@ public class Zip extends PrimitiveFunction {
     @Override
     public TypeScheme type() {
         return new hydra.core.TypeScheme(
-                ConsList.of(new hydra.core.Name("a"), new hydra.core.Name("b")),
+                Arrays.asList(new hydra.core.Name("a"), new hydra.core.Name("b")),
                 function(list("a"), list("b"), list(Types.pair(Types.variable("a"), Types.variable("b")))),
                 Maybe.nothing());
     }
@@ -43,9 +42,9 @@ public class Zip extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(cx, graph, args.get(0)), lst1 ->
-            hydra.lib.eithers.Map.apply((Function<ConsList<Term>, Term>) lst2 -> {
-                    ArrayList<Term> items1 = lst1.toArrayList();
-                    ArrayList<Term> items2 = lst2.toArrayList();
+            hydra.lib.eithers.Map.apply((Function<List<Term>, Term>) lst2 -> {
+                    ArrayList<Term> items1 = new ArrayList<>(lst1);
+                    ArrayList<Term> items2 = new ArrayList<>(lst2);
                     List<Term> result = new ArrayList<>();
                     int minSize = Math.min(items1.size(), items2.size());
                     for (int i = 0; i < minSize; i++) {
@@ -62,7 +61,7 @@ public class Zip extends PrimitiveFunction {
      * @param lst1 the first list
      * @return a function that zips the first list with a second list
      */
-    public static <X, Y> Function<ConsList<Y>, ConsList<Pair<X, Y>>> apply(ConsList<X> lst1) {
+    public static <X, Y> Function<List<Y>, List<Pair<X, Y>>> apply(List<X> lst1) {
         return lst2 -> apply(lst1, lst2);
     }
 
@@ -74,14 +73,12 @@ public class Zip extends PrimitiveFunction {
      * @param lst2 the second list
      * @return a list of pairs containing elements from both lists
      */
-    public static <X, Y> ConsList<Pair<X, Y>> apply(ConsList<X> lst1, ConsList<Y> lst2) {
-        ArrayList<X> items1 = lst1.toArrayList();
-        ArrayList<Y> items2 = lst2.toArrayList();
+    public static <X, Y> List<Pair<X, Y>> apply(List<X> lst1, List<Y> lst2) {
         ArrayList<Pair<X, Y>> result = new ArrayList<>();
-        int minSize = Math.min(items1.size(), items2.size());
+        int minSize = Math.min(lst1.size(), lst2.size());
         for (int i = 0; i < minSize; i++) {
-            result.add(new Pair<>(items1.get(i), items2.get(i)));
+            result.add(new Pair<>(lst1.get(i), lst2.get(i)));
         }
-        return ConsList.fromList(result);
+        return result;
     }
 }

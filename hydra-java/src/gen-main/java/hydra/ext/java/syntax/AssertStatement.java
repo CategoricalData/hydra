@@ -68,7 +68,9 @@ public abstract class AssertStatement implements Serializable, Comparable<Assert
         return tagCmp;
       }
       Single o = (Single) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class AssertStatement implements Serializable, Comparable<Assert
         return tagCmp;
       }
       Pair o = (Pair) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

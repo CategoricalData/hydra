@@ -76,7 +76,9 @@ public abstract class DelTarget implements Serializable, Comparable<DelTarget> {
         return tagCmp;
       }
       PrimaryAndName o = (PrimaryAndName) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class DelTarget implements Serializable, Comparable<DelTarget> {
         return tagCmp;
       }
       PrimaryAndSlices o = (PrimaryAndSlices) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class DelTarget implements Serializable, Comparable<DelTarget> {
         return tagCmp;
       }
       DelTAtom o = (DelTAtom) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

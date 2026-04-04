@@ -42,11 +42,15 @@ public class Data_Ascribe implements Serializable, Comparable<Data_Ascribe> {
   @SuppressWarnings("unchecked")
   public int compareTo(Data_Ascribe other) {
     int cmp = 0;
-    cmp = ((Comparable) expr).compareTo(other.expr);
+    cmp = hydra.util.Comparing.compare(
+      expr,
+      other.expr);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) tpe).compareTo(other.tpe);
+    return hydra.util.Comparing.compare(
+      tpe,
+      other.tpe);
   }
 
   public Data_Ascribe withExpr(hydra.ext.scala.syntax.Data expr) {

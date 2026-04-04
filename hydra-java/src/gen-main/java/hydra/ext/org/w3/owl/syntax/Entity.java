@@ -100,7 +100,9 @@ public abstract class Entity implements Serializable, Comparable<Entity> {
         return tagCmp;
       }
       AnnotationProperty o = (AnnotationProperty) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -140,7 +142,9 @@ public abstract class Entity implements Serializable, Comparable<Entity> {
         return tagCmp;
       }
       Class_ o = (Class_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -180,7 +184,9 @@ public abstract class Entity implements Serializable, Comparable<Entity> {
         return tagCmp;
       }
       DataProperty o = (DataProperty) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -220,7 +226,9 @@ public abstract class Entity implements Serializable, Comparable<Entity> {
         return tagCmp;
       }
       Datatype o = (Datatype) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -260,7 +268,9 @@ public abstract class Entity implements Serializable, Comparable<Entity> {
         return tagCmp;
       }
       NamedIndividual o = (NamedIndividual) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -300,7 +310,9 @@ public abstract class Entity implements Serializable, Comparable<Entity> {
         return tagCmp;
       }
       ObjectProperty o = (ObjectProperty) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

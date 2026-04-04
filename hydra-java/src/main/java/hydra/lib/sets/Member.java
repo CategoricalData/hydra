@@ -9,9 +9,8 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
-
-import hydra.util.PersistentSet;
 
 import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
@@ -60,7 +59,7 @@ public class Member extends PrimitiveFunction {
      * @param elem the element to check for
      * @return a function that takes a set and returns true if the element is present
      */
-    public static <X> Function<PersistentSet<X>, Boolean> apply(X elem) {
+    public static <X> Function<Set<X>, Boolean> apply(X elem) {
         return (arg) -> apply(elem, arg);
     }
 
@@ -71,7 +70,7 @@ public class Member extends PrimitiveFunction {
      * @param arg the set to check
      * @return true if the element is present in the set, false otherwise
      */
-    public static <X> Boolean apply(X elem, PersistentSet<X> arg) {
-        return arg.member(elem);
+    public static <X> Boolean apply(X elem, Set<X> arg) {
+        return arg.contains(elem);
     }
 }

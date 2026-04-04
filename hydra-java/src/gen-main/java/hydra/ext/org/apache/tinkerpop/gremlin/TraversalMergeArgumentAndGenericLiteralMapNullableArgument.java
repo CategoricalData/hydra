@@ -49,15 +49,21 @@ public class TraversalMergeArgumentAndGenericLiteralMapNullableArgument implemen
   @SuppressWarnings("unchecked")
   public int compareTo(TraversalMergeArgumentAndGenericLiteralMapNullableArgument other) {
     int cmp = 0;
-    cmp = ((Comparable) merge).compareTo(other.merge);
+    cmp = hydra.util.Comparing.compare(
+      merge,
+      other.merge);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) map).compareTo(other.map);
+    cmp = hydra.util.Comparing.compare(
+      map,
+      other.map);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) cardinality).compareTo(other.cardinality);
+    return hydra.util.Comparing.compare(
+      cardinality,
+      other.cardinality);
   }
 
   public TraversalMergeArgumentAndGenericLiteralMapNullableArgument withMerge(hydra.ext.org.apache.tinkerpop.gremlin.TraversalMergeArgument merge) {

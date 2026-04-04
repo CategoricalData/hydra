@@ -51,11 +51,15 @@ public class ApplicationDeclarationHead implements Serializable, Comparable<Appl
   @SuppressWarnings("unchecked")
   public int compareTo(ApplicationDeclarationHead other) {
     int cmp = 0;
-    cmp = ((Comparable) function).compareTo(other.function);
+    cmp = hydra.util.Comparing.compare(
+      function,
+      other.function);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) operand).compareTo(other.operand);
+    return hydra.util.Comparing.compare(
+      operand,
+      other.operand);
   }
 
   public ApplicationDeclarationHead withFunction(hydra.ext.haskell.syntax.DeclarationHead function) {

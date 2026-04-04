@@ -17,14 +17,14 @@ public class UnequalTypesError implements Serializable, Comparable<UnequalTypesE
   /**
    * The list of types that are not all equal
    */
-  public final hydra.util.ConsList<hydra.core.Type> types;
+  public final java.util.List<hydra.core.Type> types;
 
   /**
    * A description of the context in which the types were expected to be equal
    */
   public final String description;
 
-  public UnequalTypesError (hydra.util.ConsList<hydra.core.Type> types, String description) {
+  public UnequalTypesError (java.util.List<hydra.core.Type> types, String description) {
     this.types = types;
     this.description = description;
   }
@@ -51,14 +51,18 @@ public class UnequalTypesError implements Serializable, Comparable<UnequalTypesE
   @SuppressWarnings("unchecked")
   public int compareTo(UnequalTypesError other) {
     int cmp = 0;
-    cmp = ((Comparable) types).compareTo(other.types);
+    cmp = hydra.util.Comparing.compare(
+      types,
+      other.types);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) description).compareTo(other.description);
+    return hydra.util.Comparing.compare(
+      description,
+      other.description);
   }
 
-  public UnequalTypesError withTypes(hydra.util.ConsList<hydra.core.Type> types) {
+  public UnequalTypesError withTypes(java.util.List<hydra.core.Type> types) {
     return new UnequalTypesError(types, description);
   }
 

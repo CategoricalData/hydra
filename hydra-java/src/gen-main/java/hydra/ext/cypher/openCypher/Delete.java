@@ -13,9 +13,9 @@ public class Delete implements Serializable, Comparable<Delete> {
 
   public final Boolean detach;
 
-  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.Expression> expressions;
+  public final java.util.List<hydra.ext.cypher.openCypher.Expression> expressions;
 
-  public Delete (Boolean detach, hydra.util.ConsList<hydra.ext.cypher.openCypher.Expression> expressions) {
+  public Delete (Boolean detach, java.util.List<hydra.ext.cypher.openCypher.Expression> expressions) {
     this.detach = detach;
     this.expressions = expressions;
   }
@@ -42,18 +42,22 @@ public class Delete implements Serializable, Comparable<Delete> {
   @SuppressWarnings("unchecked")
   public int compareTo(Delete other) {
     int cmp = 0;
-    cmp = ((Comparable) detach).compareTo(other.detach);
+    cmp = hydra.util.Comparing.compare(
+      detach,
+      other.detach);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) expressions).compareTo(other.expressions);
+    return hydra.util.Comparing.compare(
+      expressions,
+      other.expressions);
   }
 
   public Delete withDetach(Boolean detach) {
     return new Delete(detach, expressions);
   }
 
-  public Delete withExpressions(hydra.util.ConsList<hydra.ext.cypher.openCypher.Expression> expressions) {
+  public Delete withExpressions(java.util.List<hydra.ext.cypher.openCypher.Expression> expressions) {
     return new Delete(detach, expressions);
   }
 }

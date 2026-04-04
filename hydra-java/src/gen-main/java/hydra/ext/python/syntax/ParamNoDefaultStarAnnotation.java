@@ -42,11 +42,15 @@ public class ParamNoDefaultStarAnnotation implements Serializable, Comparable<Pa
   @SuppressWarnings("unchecked")
   public int compareTo(ParamNoDefaultStarAnnotation other) {
     int cmp = 0;
-    cmp = ((Comparable) paramStarAnnotation).compareTo(other.paramStarAnnotation);
+    cmp = hydra.util.Comparing.compare(
+      paramStarAnnotation,
+      other.paramStarAnnotation);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) typeComment).compareTo(other.typeComment);
+    return hydra.util.Comparing.compare(
+      typeComment,
+      other.typeComment);
   }
 
   public ParamNoDefaultStarAnnotation withParamStarAnnotation(hydra.ext.python.syntax.ParamStarAnnotation paramStarAnnotation) {

@@ -116,7 +116,9 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
         return tagCmp;
       }
       Function o = (Function) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +158,9 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
         return tagCmp;
       }
       If o = (If) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -196,7 +200,9 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
         return tagCmp;
       }
       ClassDef o = (ClassDef) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -236,7 +242,9 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
         return tagCmp;
       }
       With o = (With) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -276,7 +284,9 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
         return tagCmp;
       }
       For o = (For) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -316,7 +326,9 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
         return tagCmp;
       }
       Try o = (Try) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -356,7 +368,9 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
         return tagCmp;
       }
       While o = (While) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -396,7 +410,9 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
         return tagCmp;
       }
       Match o = (Match) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

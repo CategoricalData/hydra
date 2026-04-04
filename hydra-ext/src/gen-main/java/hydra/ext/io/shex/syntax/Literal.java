@@ -76,7 +76,9 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
         return tagCmp;
       }
       RdfLiteral o = (RdfLiteral) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
         return tagCmp;
       }
       NumericLiteral o = (NumericLiteral) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class Literal implements Serializable, Comparable<Literal> {
         return tagCmp;
       }
       BooleanLiteral o = (BooleanLiteral) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

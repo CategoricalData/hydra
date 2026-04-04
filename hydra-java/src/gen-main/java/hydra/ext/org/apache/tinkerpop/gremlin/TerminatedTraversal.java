@@ -42,11 +42,15 @@ public class TerminatedTraversal implements Serializable, Comparable<TerminatedT
   @SuppressWarnings("unchecked")
   public int compareTo(TerminatedTraversal other) {
     int cmp = 0;
-    cmp = ((Comparable) root).compareTo(other.root);
+    cmp = hydra.util.Comparing.compare(
+      root,
+      other.root);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) terminal).compareTo(other.terminal);
+    return hydra.util.Comparing.compare(
+      terminal,
+      other.terminal);
   }
 
   public TerminatedTraversal withRoot(hydra.ext.org.apache.tinkerpop.gremlin.RootTraversal root) {

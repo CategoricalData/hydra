@@ -13,9 +13,9 @@ public class Type_Match implements Serializable, Comparable<Type_Match> {
 
   public final hydra.ext.scala.syntax.Type tpe;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.TypeCase> cases;
+  public final java.util.List<hydra.ext.scala.syntax.TypeCase> cases;
 
-  public Type_Match (hydra.ext.scala.syntax.Type tpe, hydra.util.ConsList<hydra.ext.scala.syntax.TypeCase> cases) {
+  public Type_Match (hydra.ext.scala.syntax.Type tpe, java.util.List<hydra.ext.scala.syntax.TypeCase> cases) {
     this.tpe = tpe;
     this.cases = cases;
   }
@@ -42,18 +42,22 @@ public class Type_Match implements Serializable, Comparable<Type_Match> {
   @SuppressWarnings("unchecked")
   public int compareTo(Type_Match other) {
     int cmp = 0;
-    cmp = ((Comparable) tpe).compareTo(other.tpe);
+    cmp = hydra.util.Comparing.compare(
+      tpe,
+      other.tpe);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) cases).compareTo(other.cases);
+    return hydra.util.Comparing.compare(
+      cases,
+      other.cases);
   }
 
   public Type_Match withTpe(hydra.ext.scala.syntax.Type tpe) {
     return new Type_Match(tpe, cases);
   }
 
-  public Type_Match withCases(hydra.util.ConsList<hydra.ext.scala.syntax.TypeCase> cases) {
+  public Type_Match withCases(java.util.List<hydra.ext.scala.syntax.TypeCase> cases) {
     return new Type_Match(tpe, cases);
   }
 }

@@ -49,15 +49,21 @@ public class TypedAssignment implements Serializable, Comparable<TypedAssignment
   @SuppressWarnings("unchecked")
   public int compareTo(TypedAssignment other) {
     int cmp = 0;
-    cmp = ((Comparable) lhs).compareTo(other.lhs);
+    cmp = hydra.util.Comparing.compare(
+      lhs,
+      other.lhs);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) type).compareTo(other.type);
+    cmp = hydra.util.Comparing.compare(
+      type,
+      other.type);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) rhs).compareTo(other.rhs);
+    return hydra.util.Comparing.compare(
+      rhs,
+      other.rhs);
   }
 
   public TypedAssignment withLhs(hydra.ext.python.syntax.SingleTarget lhs) {

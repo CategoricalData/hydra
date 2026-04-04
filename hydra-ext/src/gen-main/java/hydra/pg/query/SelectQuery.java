@@ -42,11 +42,15 @@ public class SelectQuery implements Serializable, Comparable<SelectQuery> {
   @SuppressWarnings("unchecked")
   public int compareTo(SelectQuery other) {
     int cmp = 0;
-    cmp = ((Comparable) distinct).compareTo(other.distinct);
+    cmp = hydra.util.Comparing.compare(
+      distinct,
+      other.distinct);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) projection).compareTo(other.projection);
+    return hydra.util.Comparing.compare(
+      projection,
+      other.projection);
   }
 
   public SelectQuery withDistinct(Boolean distinct) {

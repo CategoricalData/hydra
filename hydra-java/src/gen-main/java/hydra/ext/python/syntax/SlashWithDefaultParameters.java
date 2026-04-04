@@ -13,13 +13,13 @@ public class SlashWithDefaultParameters implements Serializable, Comparable<Slas
 
   public static final hydra.core.Name STAR_ETC = new hydra.core.Name("starEtc");
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault;
+  public final java.util.List<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault;
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault;
+  public final java.util.List<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault;
 
   public final hydra.util.Maybe<hydra.ext.python.syntax.StarEtc> starEtc;
 
-  public SlashWithDefaultParameters (hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault, hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault, hydra.util.Maybe<hydra.ext.python.syntax.StarEtc> starEtc) {
+  public SlashWithDefaultParameters (java.util.List<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault, java.util.List<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault, hydra.util.Maybe<hydra.ext.python.syntax.StarEtc> starEtc) {
     this.paramNoDefault = paramNoDefault;
     this.paramWithDefault = paramWithDefault;
     this.starEtc = starEtc;
@@ -49,22 +49,28 @@ public class SlashWithDefaultParameters implements Serializable, Comparable<Slas
   @SuppressWarnings("unchecked")
   public int compareTo(SlashWithDefaultParameters other) {
     int cmp = 0;
-    cmp = ((Comparable) paramNoDefault).compareTo(other.paramNoDefault);
+    cmp = hydra.util.Comparing.compare(
+      paramNoDefault,
+      other.paramNoDefault);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) paramWithDefault).compareTo(other.paramWithDefault);
+    cmp = hydra.util.Comparing.compare(
+      paramWithDefault,
+      other.paramWithDefault);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) starEtc).compareTo(other.starEtc);
+    return hydra.util.Comparing.compare(
+      starEtc,
+      other.starEtc);
   }
 
-  public SlashWithDefaultParameters withParamNoDefault(hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault) {
+  public SlashWithDefaultParameters withParamNoDefault(java.util.List<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault) {
     return new SlashWithDefaultParameters(paramNoDefault, paramWithDefault, starEtc);
   }
 
-  public SlashWithDefaultParameters withParamWithDefault(hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault) {
+  public SlashWithDefaultParameters withParamWithDefault(java.util.List<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault) {
     return new SlashWithDefaultParameters(paramNoDefault, paramWithDefault, starEtc);
   }
 

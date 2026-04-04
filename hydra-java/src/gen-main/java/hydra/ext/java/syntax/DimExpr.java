@@ -11,11 +11,11 @@ public class DimExpr implements Serializable, Comparable<DimExpr> {
 
   public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations;
+  public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
 
   public final hydra.util.Maybe<hydra.ext.java.syntax.Expression> expression;
 
-  public DimExpr (hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations, hydra.util.Maybe<hydra.ext.java.syntax.Expression> expression) {
+  public DimExpr (java.util.List<hydra.ext.java.syntax.Annotation> annotations, hydra.util.Maybe<hydra.ext.java.syntax.Expression> expression) {
     this.annotations = annotations;
     this.expression = expression;
   }
@@ -42,14 +42,18 @@ public class DimExpr implements Serializable, Comparable<DimExpr> {
   @SuppressWarnings("unchecked")
   public int compareTo(DimExpr other) {
     int cmp = 0;
-    cmp = ((Comparable) annotations).compareTo(other.annotations);
+    cmp = hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) expression).compareTo(other.expression);
+    return hydra.util.Comparing.compare(
+      expression,
+      other.expression);
   }
 
-  public DimExpr withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {
+  public DimExpr withAnnotations(java.util.List<hydra.ext.java.syntax.Annotation> annotations) {
     return new DimExpr(annotations, expression);
   }
 

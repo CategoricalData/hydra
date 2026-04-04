@@ -17,7 +17,7 @@ public class AnnotationTypeElementDeclaration implements Serializable, Comparabl
 
   public static final hydra.core.Name DEFAULT = new hydra.core.Name("default");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.AnnotationTypeElementModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.AnnotationTypeElementModifier> modifiers;
 
   public final hydra.ext.java.syntax.UnannType type;
 
@@ -27,7 +27,7 @@ public class AnnotationTypeElementDeclaration implements Serializable, Comparabl
 
   public final hydra.util.Maybe<hydra.ext.java.syntax.DefaultValue> default_;
 
-  public AnnotationTypeElementDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.AnnotationTypeElementModifier> modifiers, hydra.ext.java.syntax.UnannType type, hydra.ext.java.syntax.Identifier identifier, hydra.util.Maybe<hydra.ext.java.syntax.Dims> dims, hydra.util.Maybe<hydra.ext.java.syntax.DefaultValue> default_) {
+  public AnnotationTypeElementDeclaration (java.util.List<hydra.ext.java.syntax.AnnotationTypeElementModifier> modifiers, hydra.ext.java.syntax.UnannType type, hydra.ext.java.syntax.Identifier identifier, hydra.util.Maybe<hydra.ext.java.syntax.Dims> dims, hydra.util.Maybe<hydra.ext.java.syntax.DefaultValue> default_) {
     this.modifiers = modifiers;
     this.type = type;
     this.identifier = identifier;
@@ -63,26 +63,36 @@ public class AnnotationTypeElementDeclaration implements Serializable, Comparabl
   @SuppressWarnings("unchecked")
   public int compareTo(AnnotationTypeElementDeclaration other) {
     int cmp = 0;
-    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
+    cmp = hydra.util.Comparing.compare(
+      modifiers,
+      other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) type).compareTo(other.type);
+    cmp = hydra.util.Comparing.compare(
+      type,
+      other.type);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) identifier).compareTo(other.identifier);
+    cmp = hydra.util.Comparing.compare(
+      identifier,
+      other.identifier);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) dims).compareTo(other.dims);
+    cmp = hydra.util.Comparing.compare(
+      dims,
+      other.dims);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) default_).compareTo(other.default_);
+    return hydra.util.Comparing.compare(
+      default_,
+      other.default_);
   }
 
-  public AnnotationTypeElementDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.AnnotationTypeElementModifier> modifiers) {
+  public AnnotationTypeElementDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.AnnotationTypeElementModifier> modifiers) {
     return new AnnotationTypeElementDeclaration(modifiers, type, identifier, dims, default_);
   }
 

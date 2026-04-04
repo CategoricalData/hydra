@@ -8,8 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.PersistentMap;
-
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -52,7 +50,7 @@ public class Member extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply(
-                (Function<PersistentMap<Term, Term>, Term>) mp -> Terms.boolean_(mp.containsKey(args.get(0))),
+                (Function<Map<Term, Term>, Term>) mp -> Terms.boolean_(mp.containsKey(args.get(0))),
                 hydra.extract.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(1)));
     }
 
@@ -63,7 +61,7 @@ public class Member extends PrimitiveFunction {
      * @param key the key to check
      * @return a function that takes a map and returns true if the key is present
      */
-    public static <K, V> Function<PersistentMap<K, V>, Boolean> apply(K key) {
+    public static <K, V> Function<Map<K, V>, Boolean> apply(K key) {
         return mp -> apply(key, mp);
     }
 
@@ -75,7 +73,7 @@ public class Member extends PrimitiveFunction {
      * @param mp the map to search
      * @return true if present, false otherwise
      */
-    public static <K, V> Boolean apply(K key, PersistentMap<K, V> mp) {
+    public static <K, V> Boolean apply(K key, Map<K, V> mp) {
         return mp.containsKey(key);
     }
 }

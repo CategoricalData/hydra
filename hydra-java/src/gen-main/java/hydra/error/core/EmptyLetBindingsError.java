@@ -40,6 +40,8 @@ public class EmptyLetBindingsError implements Serializable, Comparable<EmptyLetB
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(EmptyLetBindingsError other) {
-    return ((Comparable) location).compareTo(other.location);
+    return hydra.util.Comparing.compare(
+      location,
+      other.location);
   }
 }

@@ -34,6 +34,8 @@ public class Enumerator_Guard implements Serializable, Comparable<Enumerator_Gua
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Enumerator_Guard other) {
-    return ((Comparable) cond).compareTo(other.cond);
+    return hydra.util.Comparing.compare(
+      cond,
+      other.cond);
   }
 }

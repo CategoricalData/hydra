@@ -34,6 +34,8 @@ public class LambdaParamNoDefault implements Serializable, Comparable<LambdaPara
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(LambdaParamNoDefault other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

@@ -29,44 +29,44 @@ public class LanguageConstraints implements Serializable, Comparable<LanguageCon
   /**
    * All supported elimination variants
    */
-  public final hydra.util.PersistentSet<hydra.variants.EliminationVariant> eliminationVariants;
+  public final java.util.Set<hydra.variants.EliminationVariant> eliminationVariants;
 
   /**
    * All supported literal variants
    */
-  public final hydra.util.PersistentSet<hydra.variants.LiteralVariant> literalVariants;
+  public final java.util.Set<hydra.variants.LiteralVariant> literalVariants;
 
   /**
    * All supported float types
    */
-  public final hydra.util.PersistentSet<hydra.core.FloatType> floatTypes;
+  public final java.util.Set<hydra.core.FloatType> floatTypes;
 
   /**
    * All supported function variants
    */
-  public final hydra.util.PersistentSet<hydra.variants.FunctionVariant> functionVariants;
+  public final java.util.Set<hydra.variants.FunctionVariant> functionVariants;
 
   /**
    * All supported integer types
    */
-  public final hydra.util.PersistentSet<hydra.core.IntegerType> integerTypes;
+  public final java.util.Set<hydra.core.IntegerType> integerTypes;
 
   /**
    * All supported term variants
    */
-  public final hydra.util.PersistentSet<hydra.variants.TermVariant> termVariants;
+  public final java.util.Set<hydra.variants.TermVariant> termVariants;
 
   /**
    * All supported type variants
    */
-  public final hydra.util.PersistentSet<hydra.variants.TypeVariant> typeVariants;
+  public final java.util.Set<hydra.variants.TypeVariant> typeVariants;
 
   /**
    * A logical set of types, as a predicate which tests a type for inclusion
    */
   public final java.util.function.Function<hydra.core.Type, Boolean> types;
 
-  public LanguageConstraints (hydra.util.PersistentSet<hydra.variants.EliminationVariant> eliminationVariants, hydra.util.PersistentSet<hydra.variants.LiteralVariant> literalVariants, hydra.util.PersistentSet<hydra.core.FloatType> floatTypes, hydra.util.PersistentSet<hydra.variants.FunctionVariant> functionVariants, hydra.util.PersistentSet<hydra.core.IntegerType> integerTypes, hydra.util.PersistentSet<hydra.variants.TermVariant> termVariants, hydra.util.PersistentSet<hydra.variants.TypeVariant> typeVariants, java.util.function.Function<hydra.core.Type, Boolean> types) {
+  public LanguageConstraints (java.util.Set<hydra.variants.EliminationVariant> eliminationVariants, java.util.Set<hydra.variants.LiteralVariant> literalVariants, java.util.Set<hydra.core.FloatType> floatTypes, java.util.Set<hydra.variants.FunctionVariant> functionVariants, java.util.Set<hydra.core.IntegerType> integerTypes, java.util.Set<hydra.variants.TermVariant> termVariants, java.util.Set<hydra.variants.TypeVariant> typeVariants, java.util.function.Function<hydra.core.Type, Boolean> types) {
     this.eliminationVariants = eliminationVariants;
     this.literalVariants = literalVariants;
     this.floatTypes = floatTypes;
@@ -111,31 +111,45 @@ public class LanguageConstraints implements Serializable, Comparable<LanguageCon
   @SuppressWarnings("unchecked")
   public int compareTo(LanguageConstraints other) {
     int cmp = 0;
-    cmp = ((Comparable) eliminationVariants).compareTo(other.eliminationVariants);
+    cmp = hydra.util.Comparing.compare(
+      eliminationVariants,
+      other.eliminationVariants);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) literalVariants).compareTo(other.literalVariants);
+    cmp = hydra.util.Comparing.compare(
+      literalVariants,
+      other.literalVariants);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) floatTypes).compareTo(other.floatTypes);
+    cmp = hydra.util.Comparing.compare(
+      floatTypes,
+      other.floatTypes);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) functionVariants).compareTo(other.functionVariants);
+    cmp = hydra.util.Comparing.compare(
+      functionVariants,
+      other.functionVariants);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) integerTypes).compareTo(other.integerTypes);
+    cmp = hydra.util.Comparing.compare(
+      integerTypes,
+      other.integerTypes);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) termVariants).compareTo(other.termVariants);
+    cmp = hydra.util.Comparing.compare(
+      termVariants,
+      other.termVariants);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) typeVariants).compareTo(other.typeVariants);
+    cmp = hydra.util.Comparing.compare(
+      typeVariants,
+      other.typeVariants);
     if (cmp != 0) {
       return cmp;
     }
@@ -144,31 +158,31 @@ public class LanguageConstraints implements Serializable, Comparable<LanguageCon
       other.types.hashCode());
   }
 
-  public LanguageConstraints withEliminationVariants(hydra.util.PersistentSet<hydra.variants.EliminationVariant> eliminationVariants) {
+  public LanguageConstraints withEliminationVariants(java.util.Set<hydra.variants.EliminationVariant> eliminationVariants) {
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
 
-  public LanguageConstraints withLiteralVariants(hydra.util.PersistentSet<hydra.variants.LiteralVariant> literalVariants) {
+  public LanguageConstraints withLiteralVariants(java.util.Set<hydra.variants.LiteralVariant> literalVariants) {
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
 
-  public LanguageConstraints withFloatTypes(hydra.util.PersistentSet<hydra.core.FloatType> floatTypes) {
+  public LanguageConstraints withFloatTypes(java.util.Set<hydra.core.FloatType> floatTypes) {
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
 
-  public LanguageConstraints withFunctionVariants(hydra.util.PersistentSet<hydra.variants.FunctionVariant> functionVariants) {
+  public LanguageConstraints withFunctionVariants(java.util.Set<hydra.variants.FunctionVariant> functionVariants) {
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
 
-  public LanguageConstraints withIntegerTypes(hydra.util.PersistentSet<hydra.core.IntegerType> integerTypes) {
+  public LanguageConstraints withIntegerTypes(java.util.Set<hydra.core.IntegerType> integerTypes) {
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
 
-  public LanguageConstraints withTermVariants(hydra.util.PersistentSet<hydra.variants.TermVariant> termVariants) {
+  public LanguageConstraints withTermVariants(java.util.Set<hydra.variants.TermVariant> termVariants) {
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
 
-  public LanguageConstraints withTypeVariants(hydra.util.PersistentSet<hydra.variants.TypeVariant> typeVariants) {
+  public LanguageConstraints withTypeVariants(java.util.Set<hydra.variants.TypeVariant> typeVariants) {
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
 

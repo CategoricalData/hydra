@@ -103,7 +103,9 @@ public abstract class TraversalSackMethodArgument implements Serializable, Compa
         return tagCmp;
       }
       Variable o = (Variable) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

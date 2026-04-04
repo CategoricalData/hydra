@@ -30,7 +30,7 @@ public class FunctionDefinition implements Serializable, Comparable<FunctionDefi
   /**
    * The parameter list
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol> params;
+  public final java.util.List<hydra.ext.lisp.syntax.Symbol> params;
 
   /**
    * Optional rest/variadic parameter
@@ -45,14 +45,14 @@ public class FunctionDefinition implements Serializable, Comparable<FunctionDefi
   /**
    * Optional type hints for parameters and return type
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.TypeHint> typeHints;
+  public final java.util.List<hydra.ext.lisp.syntax.TypeHint> typeHints;
 
   /**
    * The function body (one or more expressions)
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> body;
+  public final java.util.List<hydra.ext.lisp.syntax.Expression> body;
 
-  public FunctionDefinition (hydra.ext.lisp.syntax.Symbol name, hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol> params, hydra.util.Maybe<hydra.ext.lisp.syntax.Symbol> restParam, hydra.util.Maybe<hydra.ext.lisp.syntax.Docstring> doc, hydra.util.ConsList<hydra.ext.lisp.syntax.TypeHint> typeHints, hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> body) {
+  public FunctionDefinition (hydra.ext.lisp.syntax.Symbol name, java.util.List<hydra.ext.lisp.syntax.Symbol> params, hydra.util.Maybe<hydra.ext.lisp.syntax.Symbol> restParam, hydra.util.Maybe<hydra.ext.lisp.syntax.Docstring> doc, java.util.List<hydra.ext.lisp.syntax.TypeHint> typeHints, java.util.List<hydra.ext.lisp.syntax.Expression> body) {
     this.name = name;
     this.params = params;
     this.restParam = restParam;
@@ -91,34 +91,46 @@ public class FunctionDefinition implements Serializable, Comparable<FunctionDefi
   @SuppressWarnings("unchecked")
   public int compareTo(FunctionDefinition other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) params).compareTo(other.params);
+    cmp = hydra.util.Comparing.compare(
+      params,
+      other.params);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) restParam).compareTo(other.restParam);
+    cmp = hydra.util.Comparing.compare(
+      restParam,
+      other.restParam);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) doc).compareTo(other.doc);
+    cmp = hydra.util.Comparing.compare(
+      doc,
+      other.doc);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) typeHints).compareTo(other.typeHints);
+    cmp = hydra.util.Comparing.compare(
+      typeHints,
+      other.typeHints);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
   public FunctionDefinition withName(hydra.ext.lisp.syntax.Symbol name) {
     return new FunctionDefinition(name, params, restParam, doc, typeHints, body);
   }
 
-  public FunctionDefinition withParams(hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol> params) {
+  public FunctionDefinition withParams(java.util.List<hydra.ext.lisp.syntax.Symbol> params) {
     return new FunctionDefinition(name, params, restParam, doc, typeHints, body);
   }
 
@@ -130,11 +142,11 @@ public class FunctionDefinition implements Serializable, Comparable<FunctionDefi
     return new FunctionDefinition(name, params, restParam, doc, typeHints, body);
   }
 
-  public FunctionDefinition withTypeHints(hydra.util.ConsList<hydra.ext.lisp.syntax.TypeHint> typeHints) {
+  public FunctionDefinition withTypeHints(java.util.List<hydra.ext.lisp.syntax.TypeHint> typeHints) {
     return new FunctionDefinition(name, params, restParam, doc, typeHints, body);
   }
 
-  public FunctionDefinition withBody(hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> body) {
+  public FunctionDefinition withBody(java.util.List<hydra.ext.lisp.syntax.Expression> body) {
     return new FunctionDefinition(name, params, restParam, doc, typeHints, body);
   }
 }

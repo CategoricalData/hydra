@@ -15,11 +15,11 @@ public class MethodInvocation_Complex implements Serializable, Comparable<Method
 
   public final hydra.ext.java.syntax.MethodInvocation_Variant variant;
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments;
+  public final java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments;
 
   public final hydra.ext.java.syntax.Identifier identifier;
 
-  public MethodInvocation_Complex (hydra.ext.java.syntax.MethodInvocation_Variant variant, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.Identifier identifier) {
+  public MethodInvocation_Complex (hydra.ext.java.syntax.MethodInvocation_Variant variant, java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.Identifier identifier) {
     this.variant = variant;
     this.typeArguments = typeArguments;
     this.identifier = identifier;
@@ -49,22 +49,28 @@ public class MethodInvocation_Complex implements Serializable, Comparable<Method
   @SuppressWarnings("unchecked")
   public int compareTo(MethodInvocation_Complex other) {
     int cmp = 0;
-    cmp = ((Comparable) variant).compareTo(other.variant);
+    cmp = hydra.util.Comparing.compare(
+      variant,
+      other.variant);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) typeArguments).compareTo(other.typeArguments);
+    cmp = hydra.util.Comparing.compare(
+      typeArguments,
+      other.typeArguments);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) identifier).compareTo(other.identifier);
+    return hydra.util.Comparing.compare(
+      identifier,
+      other.identifier);
   }
 
   public MethodInvocation_Complex withVariant(hydra.ext.java.syntax.MethodInvocation_Variant variant) {
     return new MethodInvocation_Complex(variant, typeArguments, identifier);
   }
 
-  public MethodInvocation_Complex withTypeArguments(hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments) {
+  public MethodInvocation_Complex withTypeArguments(java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     return new MethodInvocation_Complex(variant, typeArguments, identifier);
   }
 

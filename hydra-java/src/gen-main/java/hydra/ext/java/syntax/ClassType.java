@@ -15,15 +15,15 @@ public class ClassType implements Serializable, Comparable<ClassType> {
 
   public static final hydra.core.Name ARGUMENTS = new hydra.core.Name("arguments");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations;
+  public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
 
   public final hydra.ext.java.syntax.ClassTypeQualifier qualifier;
 
   public final hydra.ext.java.syntax.TypeIdentifier identifier;
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> arguments;
+  public final java.util.List<hydra.ext.java.syntax.TypeArgument> arguments;
 
-  public ClassType (hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations, hydra.ext.java.syntax.ClassTypeQualifier qualifier, hydra.ext.java.syntax.TypeIdentifier identifier, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> arguments) {
+  public ClassType (java.util.List<hydra.ext.java.syntax.Annotation> annotations, hydra.ext.java.syntax.ClassTypeQualifier qualifier, hydra.ext.java.syntax.TypeIdentifier identifier, java.util.List<hydra.ext.java.syntax.TypeArgument> arguments) {
     this.annotations = annotations;
     this.qualifier = qualifier;
     this.identifier = identifier;
@@ -56,22 +56,30 @@ public class ClassType implements Serializable, Comparable<ClassType> {
   @SuppressWarnings("unchecked")
   public int compareTo(ClassType other) {
     int cmp = 0;
-    cmp = ((Comparable) annotations).compareTo(other.annotations);
+    cmp = hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) qualifier).compareTo(other.qualifier);
+    cmp = hydra.util.Comparing.compare(
+      qualifier,
+      other.qualifier);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) identifier).compareTo(other.identifier);
+    cmp = hydra.util.Comparing.compare(
+      identifier,
+      other.identifier);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) arguments).compareTo(other.arguments);
+    return hydra.util.Comparing.compare(
+      arguments,
+      other.arguments);
   }
 
-  public ClassType withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {
+  public ClassType withAnnotations(java.util.List<hydra.ext.java.syntax.Annotation> annotations) {
     return new ClassType(annotations, qualifier, identifier, arguments);
   }
 
@@ -83,7 +91,7 @@ public class ClassType implements Serializable, Comparable<ClassType> {
     return new ClassType(annotations, qualifier, identifier, arguments);
   }
 
-  public ClassType withArguments(hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> arguments) {
+  public ClassType withArguments(java.util.List<hydra.ext.java.syntax.TypeArgument> arguments) {
     return new ClassType(annotations, qualifier, identifier, arguments);
   }
 }

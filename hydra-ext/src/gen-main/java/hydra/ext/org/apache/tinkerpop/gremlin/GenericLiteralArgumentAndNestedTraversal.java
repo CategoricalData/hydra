@@ -42,11 +42,15 @@ public class GenericLiteralArgumentAndNestedTraversal implements Serializable, C
   @SuppressWarnings("unchecked")
   public int compareTo(GenericLiteralArgumentAndNestedTraversal other) {
     int cmp = 0;
-    cmp = ((Comparable) object).compareTo(other.object);
+    cmp = hydra.util.Comparing.compare(
+      object,
+      other.object);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) traversal).compareTo(other.traversal);
+    return hydra.util.Comparing.compare(
+      traversal,
+      other.traversal);
   }
 
   public GenericLiteralArgumentAndNestedTraversal withObject(hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument object) {

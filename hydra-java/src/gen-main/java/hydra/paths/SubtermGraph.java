@@ -17,14 +17,14 @@ public class SubtermGraph implements Serializable, Comparable<SubtermGraph> {
   /**
    * All nodes in the graph
    */
-  public final hydra.util.ConsList<hydra.paths.SubtermNode> nodes;
+  public final java.util.List<hydra.paths.SubtermNode> nodes;
 
   /**
    * All edges in the graph
    */
-  public final hydra.util.ConsList<hydra.paths.SubtermEdge> edges;
+  public final java.util.List<hydra.paths.SubtermEdge> edges;
 
-  public SubtermGraph (hydra.util.ConsList<hydra.paths.SubtermNode> nodes, hydra.util.ConsList<hydra.paths.SubtermEdge> edges) {
+  public SubtermGraph (java.util.List<hydra.paths.SubtermNode> nodes, java.util.List<hydra.paths.SubtermEdge> edges) {
     this.nodes = nodes;
     this.edges = edges;
   }
@@ -51,18 +51,22 @@ public class SubtermGraph implements Serializable, Comparable<SubtermGraph> {
   @SuppressWarnings("unchecked")
   public int compareTo(SubtermGraph other) {
     int cmp = 0;
-    cmp = ((Comparable) nodes).compareTo(other.nodes);
+    cmp = hydra.util.Comparing.compare(
+      nodes,
+      other.nodes);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) edges).compareTo(other.edges);
+    return hydra.util.Comparing.compare(
+      edges,
+      other.edges);
   }
 
-  public SubtermGraph withNodes(hydra.util.ConsList<hydra.paths.SubtermNode> nodes) {
+  public SubtermGraph withNodes(java.util.List<hydra.paths.SubtermNode> nodes) {
     return new SubtermGraph(nodes, edges);
   }
 
-  public SubtermGraph withEdges(hydra.util.ConsList<hydra.paths.SubtermEdge> edges) {
+  public SubtermGraph withEdges(java.util.List<hydra.paths.SubtermEdge> edges) {
     return new SubtermGraph(nodes, edges);
   }
 }

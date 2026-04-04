@@ -17,9 +17,9 @@ public class TraversalStrategy implements Serializable, Comparable<TraversalStra
 
   public final hydra.ext.org.apache.tinkerpop.gremlin.Identifier class_;
 
-  public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.Configuration> configurations;
+  public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.Configuration> configurations;
 
-  public TraversalStrategy (Boolean new_, hydra.ext.org.apache.tinkerpop.gremlin.Identifier class_, hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.Configuration> configurations) {
+  public TraversalStrategy (Boolean new_, hydra.ext.org.apache.tinkerpop.gremlin.Identifier class_, java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.Configuration> configurations) {
     this.new_ = new_;
     this.class_ = class_;
     this.configurations = configurations;
@@ -49,15 +49,21 @@ public class TraversalStrategy implements Serializable, Comparable<TraversalStra
   @SuppressWarnings("unchecked")
   public int compareTo(TraversalStrategy other) {
     int cmp = 0;
-    cmp = ((Comparable) new_).compareTo(other.new_);
+    cmp = hydra.util.Comparing.compare(
+      new_,
+      other.new_);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) class_).compareTo(other.class_);
+    cmp = hydra.util.Comparing.compare(
+      class_,
+      other.class_);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) configurations).compareTo(other.configurations);
+    return hydra.util.Comparing.compare(
+      configurations,
+      other.configurations);
   }
 
   public TraversalStrategy withNew(Boolean new_) {
@@ -68,7 +74,7 @@ public class TraversalStrategy implements Serializable, Comparable<TraversalStra
     return new TraversalStrategy(new_, class_, configurations);
   }
 
-  public TraversalStrategy withConfigurations(hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.Configuration> configurations) {
+  public TraversalStrategy withConfigurations(java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.Configuration> configurations) {
     return new TraversalStrategy(new_, class_, configurations);
   }
 }

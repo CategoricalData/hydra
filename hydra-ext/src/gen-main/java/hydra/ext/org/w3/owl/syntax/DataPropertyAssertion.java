@@ -15,7 +15,7 @@ public class DataPropertyAssertion implements Serializable, Comparable<DataPrope
 
   public static final hydra.core.Name TARGET = new hydra.core.Name("target");
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
 
   public final hydra.ext.org.w3.owl.syntax.DataPropertyExpression property;
 
@@ -23,7 +23,7 @@ public class DataPropertyAssertion implements Serializable, Comparable<DataPrope
 
   public final hydra.ext.org.w3.owl.syntax.Individual target;
 
-  public DataPropertyAssertion (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.DataPropertyExpression property, hydra.ext.org.w3.owl.syntax.Individual source, hydra.ext.org.w3.owl.syntax.Individual target) {
+  public DataPropertyAssertion (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.DataPropertyExpression property, hydra.ext.org.w3.owl.syntax.Individual source, hydra.ext.org.w3.owl.syntax.Individual target) {
     this.annotations = annotations;
     this.property = property;
     this.source = source;
@@ -56,22 +56,30 @@ public class DataPropertyAssertion implements Serializable, Comparable<DataPrope
   @SuppressWarnings("unchecked")
   public int compareTo(DataPropertyAssertion other) {
     int cmp = 0;
-    cmp = ((Comparable) annotations).compareTo(other.annotations);
+    cmp = hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) property).compareTo(other.property);
+    cmp = hydra.util.Comparing.compare(
+      property,
+      other.property);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) source).compareTo(other.source);
+    cmp = hydra.util.Comparing.compare(
+      source,
+      other.source);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) target).compareTo(other.target);
+    return hydra.util.Comparing.compare(
+      target,
+      other.target);
   }
 
-  public DataPropertyAssertion withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public DataPropertyAssertion withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new DataPropertyAssertion(annotations, property, source, target);
   }
 

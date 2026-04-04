@@ -1078,9 +1078,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
 
   public static final class V extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
 
-    public V (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
+    public V (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
       this.value = value;
     }
 
@@ -1108,7 +1108,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       V o = (V) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1118,9 +1120,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
 
   public static final class E extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
 
-    public E (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
+    public E (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
       this.value = value;
     }
 
@@ -1148,7 +1150,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       E o = (E) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1188,7 +1192,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       AddE o = (AddE) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1228,7 +1234,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       AddV o = (AddV) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1268,7 +1276,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       MergeE o = (MergeE) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1308,7 +1318,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       MergeV o = (MergeV) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1348,7 +1360,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Aggregate o = (Aggregate) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1388,7 +1402,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       All o = (All) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1398,9 +1414,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
 
   public static final class And extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
 
-    public And (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
+    public And (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
       this.value = value;
     }
 
@@ -1428,7 +1444,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       And o = (And) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1468,7 +1486,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Any o = (Any) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1508,7 +1528,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       As o = (As) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1548,7 +1570,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Barrier o = (Barrier) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1558,9 +1582,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
 
   public static final class Both extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
 
-    public Both (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public Both (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
 
@@ -1588,7 +1612,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Both o = (Both) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1598,9 +1624,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
 
   public static final class BothE extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
 
-    public BothE (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public BothE (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
 
@@ -1628,7 +1654,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       BothE o = (BothE) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1703,7 +1731,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Branch o = (Branch) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1743,7 +1773,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       By o = (By) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1783,7 +1815,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Cap o = (Cap) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1823,7 +1857,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Choose o = (Choose) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1833,9 +1869,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
 
   public static final class Coalesce extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
 
-    public Coalesce (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
+    public Coalesce (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
       this.value = value;
     }
 
@@ -1863,7 +1899,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Coalesce o = (Coalesce) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1903,7 +1941,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Coin o = (Coin) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1943,7 +1983,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Conjoin o = (Conjoin) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -2018,7 +2060,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Constant o = (Constant) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -2058,7 +2102,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Count o = (Count) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -2133,7 +2179,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Dedup o = (Dedup) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -2173,7 +2221,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Difference o = (Difference) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -2213,7 +2263,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Disjunct o = (Disjunct) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -2258,9 +2310,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
 
   public static final class ElementMap extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
 
-    public ElementMap (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public ElementMap (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
 
@@ -2288,7 +2340,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       ElementMap o = (ElementMap) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -2328,7 +2382,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Emit o = (Emit) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -2368,7 +2424,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Filter o = (Filter) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -2408,7 +2466,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       FlatMap o = (FlatMap) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -2448,7 +2508,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Fold o = (Fold) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -2488,7 +2550,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       From o = (From) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -2528,7 +2592,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Group o = (Group) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -2568,7 +2634,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       GroupCount o = (GroupCount) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -2608,7 +2676,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Has o = (Has) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -2648,7 +2718,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       HasId o = (HasId) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -2688,7 +2760,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       HasKey o = (HasKey) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -2728,7 +2802,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       HasLabel o = (HasLabel) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -2768,7 +2844,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       HasNot o = (HasNot) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -2808,7 +2886,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       HasValue o = (HasValue) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -2888,9 +2968,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
 
   public static final class In extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
 
-    public In (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public In (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
 
@@ -2918,7 +2998,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       In o = (In) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -2928,9 +3010,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
 
   public static final class InE extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
 
-    public InE (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public InE (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
 
@@ -2958,7 +3040,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       InE o = (InE) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -2998,7 +3082,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Intersect o = (Intersect) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -3078,9 +3164,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
 
   public static final class Inject extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
 
-    public Inject (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
+    public Inject (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
       this.value = value;
     }
 
@@ -3108,7 +3194,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Inject o = (Inject) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -3148,7 +3236,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Is o = (Is) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -3258,7 +3348,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Limit o = (Limit) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -3298,7 +3390,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Local o = (Local) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -3338,7 +3432,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Loops o = (Loops) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -3378,7 +3474,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Map o = (Map) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -3388,9 +3486,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
 
   public static final class Match extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
 
-    public Match (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
+    public Match (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
       this.value = value;
     }
 
@@ -3418,7 +3516,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Match o = (Match) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -3458,7 +3558,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Math_ o = (Math_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -3498,7 +3600,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Max o = (Max) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -3538,7 +3642,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Mean o = (Mean) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -3578,7 +3684,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Min o = (Min) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -3618,7 +3726,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       None o = (None) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -3658,7 +3768,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Not o = (Not) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -3698,7 +3810,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Option o = (Option) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -3738,7 +3852,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Optional o = (Optional) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -3748,9 +3864,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
 
   public static final class Or extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
 
-    public Or (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
+    public Or (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
       this.value = value;
     }
 
@@ -3778,7 +3894,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Or o = (Or) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -3818,7 +3936,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Order o = (Order) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -3863,9 +3983,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
 
   public static final class Out extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
 
-    public Out (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public Out (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
 
@@ -3893,7 +4013,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Out o = (Out) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -3903,9 +4025,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
 
   public static final class OutE extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
 
-    public OutE (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public OutE (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
 
@@ -3933,7 +4055,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       OutE o = (OutE) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -4008,7 +4132,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       PageRank o = (PageRank) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -4118,7 +4244,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Profile o = (Profile) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -4158,7 +4286,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Project o = (Project) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -4168,9 +4298,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
 
   public static final class Properties extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
 
-    public Properties (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public Properties (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
 
@@ -4198,7 +4328,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Properties o = (Properties) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -4238,7 +4370,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Property o = (Property) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -4248,9 +4382,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
 
   public static final class PropertyMap extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
 
-    public PropertyMap (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public PropertyMap (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
 
@@ -4278,7 +4412,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       PropertyMap o = (PropertyMap) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -4318,7 +4454,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Range o = (Range) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -4393,7 +4531,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Repeat o = (Repeat) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -4433,7 +4573,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Sack o = (Sack) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -4473,7 +4615,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Sample o = (Sample) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -4513,7 +4657,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Select o = (Select) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -4553,7 +4699,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Combine o = (Combine) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -4593,7 +4741,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Product o = (Product) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -4633,7 +4783,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Merge o = (Merge) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -4708,7 +4860,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       SideEffect o = (SideEffect) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -4783,7 +4937,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Skip o = (Skip) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -4823,7 +4979,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Store o = (Store) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -4863,7 +5021,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Subgraph o = (Subgraph) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -4903,7 +5063,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Sum o = (Sum) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -4943,7 +5105,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Tail o = (Tail) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -4983,7 +5147,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Fail o = (Fail) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -5023,7 +5189,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Times o = (Times) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -5063,7 +5231,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       To o = (To) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -5103,7 +5273,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       ToE o = (ToE) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -5143,7 +5315,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       ToV o = (ToV) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -5183,7 +5357,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Tree o = (Tree) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -5228,9 +5404,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
 
   public static final class Union extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
 
-    public Union (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
+    public Union (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
       this.value = value;
     }
 
@@ -5258,7 +5434,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Union o = (Union) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -5298,7 +5476,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Until o = (Until) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -5373,7 +5553,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       ValueMap o = (ValueMap) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -5383,9 +5565,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
 
   public static final class Values extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
 
-    public Values (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public Values (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
 
@@ -5413,7 +5595,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Values o = (Values) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -5453,7 +5637,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Where o = (Where) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -5493,7 +5679,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       With o = (With) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -5538,9 +5726,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
 
   public static final class Element extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
 
-    public Element (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public Element (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
 
@@ -5568,7 +5756,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Element o = (Element) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -5608,7 +5798,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Call o = (Call) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -5648,7 +5840,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Concat o = (Concat) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -5688,7 +5882,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       AsString o = (AsString) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -5728,7 +5924,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Format o = (Format) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -5768,7 +5966,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       ToUpper o = (ToUpper) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -5808,7 +6008,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       ToLower o = (ToLower) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -5848,7 +6050,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Length o = (Length) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -5888,7 +6092,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Trim o = (Trim) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -5928,7 +6134,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       LTrim o = (LTrim) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -5968,7 +6176,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       RTrim o = (RTrim) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -6043,7 +6253,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Replace o = (Replace) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -6083,7 +6295,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Split o = (Split) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -6123,7 +6337,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Substring o = (Substring) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -6198,7 +6414,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       DateAdd o = (DateAdd) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -6238,7 +6456,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       DateDiff o = (DateDiff) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

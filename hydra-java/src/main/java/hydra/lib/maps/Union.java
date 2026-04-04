@@ -8,9 +8,7 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.PersistentMap;
-
-import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -55,7 +53,7 @@ public class Union extends PrimitiveFunction {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(0)), mp1 ->
             hydra.lib.eithers.Bind.apply(hydra.extract.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(1)), mp2 -> {
                 // Left-biased union: mp1 values take precedence (matching Haskell's Data.Map.union)
-                Map<Term, Term> result = new HashMap<>(mp2);
+                Map<Term, Term> result = new TreeMap<>(mp2);
                 result.putAll(mp1);
                 return Either.right(Terms.map(result));
             }));
@@ -68,7 +66,7 @@ public class Union extends PrimitiveFunction {
      * @param mp1 the first map
      * @return a function that takes a second map and returns the union
      */
-    public static <K, V> Function<PersistentMap<K, V>, PersistentMap<K, V>> apply(PersistentMap<K, V> mp1) {
+    public static <K, V> Function<Map<K, V>, Map<K, V>> apply(Map<K, V> mp1) {
         return mp2 -> apply(mp1, mp2);
     }
 
@@ -76,11 +74,13 @@ public class Union extends PrimitiveFunction {
      * Combines two maps.
      * @param <K> the key type
      * @param <V> the value type
-     * @param mp1 the first map
+     * @param mp1 the first map (takes precedence)
      * @param mp2 the second map
      * @return the union of the two maps
      */
-    public static <K, V> PersistentMap<K, V> apply(PersistentMap<K, V> mp1, PersistentMap<K, V> mp2) {
-        return mp1.union(mp2);
+    public static <K, V> Map<K, V> apply(Map<K, V> mp1, Map<K, V> mp2) {
+        Map<K, V> result = new TreeMap<>(mp2);
+        result.putAll(mp1);
+        return result;
     }
 }

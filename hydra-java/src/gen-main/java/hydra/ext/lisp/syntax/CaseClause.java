@@ -17,14 +17,14 @@ public class CaseClause implements Serializable, Comparable<CaseClause> {
   /**
    * The matching keys (one or more datum values)
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> keys;
+  public final java.util.List<hydra.ext.lisp.syntax.Expression> keys;
 
   /**
    * The result expression
    */
   public final hydra.ext.lisp.syntax.Expression body;
 
-  public CaseClause (hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> keys, hydra.ext.lisp.syntax.Expression body) {
+  public CaseClause (java.util.List<hydra.ext.lisp.syntax.Expression> keys, hydra.ext.lisp.syntax.Expression body) {
     this.keys = keys;
     this.body = body;
   }
@@ -51,14 +51,18 @@ public class CaseClause implements Serializable, Comparable<CaseClause> {
   @SuppressWarnings("unchecked")
   public int compareTo(CaseClause other) {
     int cmp = 0;
-    cmp = ((Comparable) keys).compareTo(other.keys);
+    cmp = hydra.util.Comparing.compare(
+      keys,
+      other.keys);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
-  public CaseClause withKeys(hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> keys) {
+  public CaseClause withKeys(java.util.List<hydra.ext.lisp.syntax.Expression> keys) {
     return new CaseClause(keys, body);
   }
 

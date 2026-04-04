@@ -49,15 +49,21 @@ public class Conditional implements Serializable, Comparable<Conditional> {
   @SuppressWarnings("unchecked")
   public int compareTo(Conditional other) {
     int cmp = 0;
-    cmp = ((Comparable) body).compareTo(other.body);
+    cmp = hydra.util.Comparing.compare(
+      body,
+      other.body);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) if_).compareTo(other.if_);
+    cmp = hydra.util.Comparing.compare(
+      if_,
+      other.if_);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) else_).compareTo(other.else_);
+    return hydra.util.Comparing.compare(
+      else_,
+      other.else_);
   }
 
   public Conditional withBody(hydra.ext.python.syntax.Disjunction body) {

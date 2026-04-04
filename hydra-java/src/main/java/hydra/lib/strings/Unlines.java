@@ -7,8 +7,6 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.ConsList;
-
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -57,7 +55,7 @@ public class Unlines extends PrimitiveFunction {
      * @param lines the list of strings to join
      * @return the joined string with newlines
      */
-    public static String apply(ConsList<String> lines) {
+    public static String apply(List<String> lines) {
         return lines.stream().collect(Collectors.joining("\n")) + (lines.isEmpty() ? "" : "\n");
     }
 }

@@ -40,6 +40,8 @@ public class UnnecessaryIdentityApplicationError implements Serializable, Compar
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(UnnecessaryIdentityApplicationError other) {
-    return ((Comparable) location).compareTo(other.location);
+    return hydra.util.Comparing.compare(
+      location,
+      other.location);
   }
 }

@@ -92,7 +92,9 @@ public abstract class Decl implements Serializable, Comparable<Decl> {
         return tagCmp;
       }
       Val o = (Val) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -132,7 +134,9 @@ public abstract class Decl implements Serializable, Comparable<Decl> {
         return tagCmp;
       }
       Var o = (Var) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -172,7 +176,9 @@ public abstract class Decl implements Serializable, Comparable<Decl> {
         return tagCmp;
       }
       Def o = (Def) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -212,7 +218,9 @@ public abstract class Decl implements Serializable, Comparable<Decl> {
         return tagCmp;
       }
       Type o = (Type) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -252,7 +260,9 @@ public abstract class Decl implements Serializable, Comparable<Decl> {
         return tagCmp;
       }
       Given o = (Given) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

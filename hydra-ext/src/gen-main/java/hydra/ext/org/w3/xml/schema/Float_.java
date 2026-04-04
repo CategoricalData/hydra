@@ -34,6 +34,8 @@ public class Float_ implements Serializable, Comparable<Float_> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Float_ other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

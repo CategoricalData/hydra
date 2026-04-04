@@ -42,11 +42,15 @@ public class VariableEquals implements Serializable, Comparable<VariableEquals> 
   @SuppressWarnings("unchecked")
   public int compareTo(VariableEquals other) {
     int cmp = 0;
-    cmp = ((Comparable) lhs).compareTo(other.lhs);
+    cmp = hydra.util.Comparing.compare(
+      lhs,
+      other.lhs);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) rhs).compareTo(other.rhs);
+    return hydra.util.Comparing.compare(
+      rhs,
+      other.rhs);
   }
 
   public VariableEquals withLhs(hydra.ext.cypher.openCypher.Variable lhs) {

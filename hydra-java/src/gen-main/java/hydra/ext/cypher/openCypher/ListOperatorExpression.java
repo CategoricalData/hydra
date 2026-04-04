@@ -68,7 +68,9 @@ public abstract class ListOperatorExpression implements Serializable, Comparable
         return tagCmp;
       }
       Single o = (Single) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class ListOperatorExpression implements Serializable, Comparable
         return tagCmp;
       }
       Range o = (Range) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -82,7 +82,9 @@ public abstract class Step implements Serializable, Comparable<Step> {
         return tagCmp;
       }
       Edge o = (Edge) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -125,7 +127,9 @@ public abstract class Step implements Serializable, Comparable<Step> {
         return tagCmp;
       }
       Project o = (Project) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -168,7 +172,9 @@ public abstract class Step implements Serializable, Comparable<Step> {
         return tagCmp;
       }
       Compare o = (Compare) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

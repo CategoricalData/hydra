@@ -49,15 +49,21 @@ public class StructureVertex implements Serializable, Comparable<StructureVertex
   @SuppressWarnings("unchecked")
   public int compareTo(StructureVertex other) {
     int cmp = 0;
-    cmp = ((Comparable) new_).compareTo(other.new_);
+    cmp = hydra.util.Comparing.compare(
+      new_,
+      other.new_);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) id).compareTo(other.id);
+    cmp = hydra.util.Comparing.compare(
+      id,
+      other.id);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) label).compareTo(other.label);
+    return hydra.util.Comparing.compare(
+      label,
+      other.label);
   }
 
   public StructureVertex withNew(Boolean new_) {

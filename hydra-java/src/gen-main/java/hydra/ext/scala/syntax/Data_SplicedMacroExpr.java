@@ -34,6 +34,8 @@ public class Data_SplicedMacroExpr implements Serializable, Comparable<Data_Spli
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Data_SplicedMacroExpr other) {
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 }

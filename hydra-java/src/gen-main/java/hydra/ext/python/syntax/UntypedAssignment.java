@@ -13,13 +13,13 @@ public class UntypedAssignment implements Serializable, Comparable<UntypedAssign
 
   public static final hydra.core.Name TYPE_COMMENT = new hydra.core.Name("typeComment");
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.StarTarget> targets;
+  public final java.util.List<hydra.ext.python.syntax.StarTarget> targets;
 
   public final hydra.ext.python.syntax.AnnotatedRhs rhs;
 
   public final hydra.util.Maybe<hydra.ext.python.syntax.TypeComment> typeComment;
 
-  public UntypedAssignment (hydra.util.ConsList<hydra.ext.python.syntax.StarTarget> targets, hydra.ext.python.syntax.AnnotatedRhs rhs, hydra.util.Maybe<hydra.ext.python.syntax.TypeComment> typeComment) {
+  public UntypedAssignment (java.util.List<hydra.ext.python.syntax.StarTarget> targets, hydra.ext.python.syntax.AnnotatedRhs rhs, hydra.util.Maybe<hydra.ext.python.syntax.TypeComment> typeComment) {
     this.targets = targets;
     this.rhs = rhs;
     this.typeComment = typeComment;
@@ -49,18 +49,24 @@ public class UntypedAssignment implements Serializable, Comparable<UntypedAssign
   @SuppressWarnings("unchecked")
   public int compareTo(UntypedAssignment other) {
     int cmp = 0;
-    cmp = ((Comparable) targets).compareTo(other.targets);
+    cmp = hydra.util.Comparing.compare(
+      targets,
+      other.targets);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) rhs).compareTo(other.rhs);
+    cmp = hydra.util.Comparing.compare(
+      rhs,
+      other.rhs);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) typeComment).compareTo(other.typeComment);
+    return hydra.util.Comparing.compare(
+      typeComment,
+      other.typeComment);
   }
 
-  public UntypedAssignment withTargets(hydra.util.ConsList<hydra.ext.python.syntax.StarTarget> targets) {
+  public UntypedAssignment withTargets(java.util.List<hydra.ext.python.syntax.StarTarget> targets) {
     return new UntypedAssignment(targets, rhs, typeComment);
   }
 

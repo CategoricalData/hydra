@@ -34,6 +34,8 @@ public class Integer_ implements Serializable, Comparable<Integer_> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Integer_ other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

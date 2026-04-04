@@ -67,7 +67,7 @@ public interface Errors {
   }
 
   static hydra.phantoms.TTerm<hydra.errors.UnificationError> unificationError(hydra.phantoms.TTerm<hydra.core.Type> leftType, hydra.phantoms.TTerm<hydra.core.Type> rightType, hydra.phantoms.TTerm<String> message) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.errors.UnificationError"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.errors.UnificationError"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("leftType"), (leftType).value),
       new hydra.core.Field(new hydra.core.Name("rightType"), (rightType).value),
       new hydra.core.Field(new hydra.core.Name("message"), (message).value)))));
@@ -86,21 +86,21 @@ public interface Errors {
   }
 
   static hydra.phantoms.TTerm<hydra.errors.UnificationError> unificationErrorWithLeftType(hydra.phantoms.TTerm<hydra.errors.UnificationError> original, hydra.phantoms.TTerm<hydra.core.Type> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.errors.UnificationError"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.errors.UnificationError"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("leftType"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("rightType"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationError"), new hydra.core.Name("rightType"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("message"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationError"), new hydra.core.Name("message"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.UnificationError> unificationErrorWithMessage(hydra.phantoms.TTerm<hydra.errors.UnificationError> original, hydra.phantoms.TTerm<String> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.errors.UnificationError"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.errors.UnificationError"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("leftType"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationError"), new hydra.core.Name("leftType"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("rightType"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationError"), new hydra.core.Name("rightType"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("message"), (newVal).value)))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.UnificationError> unificationErrorWithRightType(hydra.phantoms.TTerm<hydra.errors.UnificationError> original, hydra.phantoms.TTerm<hydra.core.Type> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.errors.UnificationError"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.errors.UnificationError"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("leftType"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationError"), new hydra.core.Name("leftType"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("rightType"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("message"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.errors.UnificationError"), new hydra.core.Name("message"))))), (original).value)))))));

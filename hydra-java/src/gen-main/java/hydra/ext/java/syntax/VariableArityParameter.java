@@ -19,11 +19,11 @@ public class VariableArityParameter implements Serializable, Comparable<Variable
 
   public final hydra.ext.java.syntax.UnannType type;
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations;
+  public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
 
   public final hydra.ext.java.syntax.Identifier identifier;
 
-  public VariableArityParameter (hydra.ext.java.syntax.VariableModifier modifiers, hydra.ext.java.syntax.UnannType type, hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations, hydra.ext.java.syntax.Identifier identifier) {
+  public VariableArityParameter (hydra.ext.java.syntax.VariableModifier modifiers, hydra.ext.java.syntax.UnannType type, java.util.List<hydra.ext.java.syntax.Annotation> annotations, hydra.ext.java.syntax.Identifier identifier) {
     this.modifiers = modifiers;
     this.type = type;
     this.annotations = annotations;
@@ -56,19 +56,27 @@ public class VariableArityParameter implements Serializable, Comparable<Variable
   @SuppressWarnings("unchecked")
   public int compareTo(VariableArityParameter other) {
     int cmp = 0;
-    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
+    cmp = hydra.util.Comparing.compare(
+      modifiers,
+      other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) type).compareTo(other.type);
+    cmp = hydra.util.Comparing.compare(
+      type,
+      other.type);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) annotations).compareTo(other.annotations);
+    cmp = hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) identifier).compareTo(other.identifier);
+    return hydra.util.Comparing.compare(
+      identifier,
+      other.identifier);
   }
 
   public VariableArityParameter withModifiers(hydra.ext.java.syntax.VariableModifier modifiers) {
@@ -79,7 +87,7 @@ public class VariableArityParameter implements Serializable, Comparable<Variable
     return new VariableArityParameter(modifiers, type, annotations, identifier);
   }
 
-  public VariableArityParameter withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {
+  public VariableArityParameter withAnnotations(java.util.List<hydra.ext.java.syntax.Annotation> annotations) {
     return new VariableArityParameter(modifiers, type, annotations, identifier);
   }
 

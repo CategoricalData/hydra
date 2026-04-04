@@ -17,14 +17,14 @@ public class ListLiteral implements Serializable, Comparable<ListLiteral> {
   /**
    * The list elements
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> elements;
+  public final java.util.List<hydra.ext.lisp.syntax.Expression> elements;
 
   /**
    * Whether to use quote syntax vs constructor syntax
    */
   public final Boolean quoted;
 
-  public ListLiteral (hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> elements, Boolean quoted) {
+  public ListLiteral (java.util.List<hydra.ext.lisp.syntax.Expression> elements, Boolean quoted) {
     this.elements = elements;
     this.quoted = quoted;
   }
@@ -51,14 +51,18 @@ public class ListLiteral implements Serializable, Comparable<ListLiteral> {
   @SuppressWarnings("unchecked")
   public int compareTo(ListLiteral other) {
     int cmp = 0;
-    cmp = ((Comparable) elements).compareTo(other.elements);
+    cmp = hydra.util.Comparing.compare(
+      elements,
+      other.elements);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) quoted).compareTo(other.quoted);
+    return hydra.util.Comparing.compare(
+      quoted,
+      other.quoted);
   }
 
-  public ListLiteral withElements(hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> elements) {
+  public ListLiteral withElements(java.util.List<hydra.ext.lisp.syntax.Expression> elements) {
     return new ListLiteral(elements, quoted);
   }
 

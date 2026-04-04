@@ -7,8 +7,6 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.ConsList;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -62,7 +60,7 @@ public class Range extends PrimitiveFunction {
      * @param start the start
      * @return the list of integers
      */
-    public static Function<Integer, ConsList<Integer>> apply(Integer start) {
+    public static Function<Integer, List<Integer>> apply(Integer start) {
         return (end) -> apply(start, end);
     }
 
@@ -72,12 +70,12 @@ public class Range extends PrimitiveFunction {
      * @param end the end
      * @return the list of integers
      */
-    public static ConsList<Integer> apply(Integer start, Integer end) {
+    public static List<Integer> apply(Integer start, Integer end) {
         if (start > end) {
-            return ConsList.empty();
+            return new ArrayList<>();
         }
-        return ConsList.fromList(IntStream.rangeClosed(start, end)
+        return IntStream.rangeClosed(start, end)
             .boxed()
-            .collect(Collectors.toList()));
+            .collect(Collectors.toList());
     }
 }

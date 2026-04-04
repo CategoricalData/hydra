@@ -68,7 +68,9 @@ public abstract class TraversalSackMethodArgumentOrIntegerArgument implements Se
         return tagCmp;
       }
       Consumer o = (Consumer) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class TraversalSackMethodArgumentOrIntegerArgument implements Se
         return tagCmp;
       }
       Int o = (Int) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

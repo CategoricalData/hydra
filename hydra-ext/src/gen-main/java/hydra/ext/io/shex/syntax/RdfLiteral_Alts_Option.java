@@ -68,7 +68,9 @@ public abstract class RdfLiteral_Alts_Option implements Serializable, Comparable
         return tagCmp;
       }
       LangTag o = (LangTag) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class RdfLiteral_Alts_Option implements Serializable, Comparable
         return tagCmp;
       }
       Sequence o = (Sequence) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

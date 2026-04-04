@@ -8,8 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.ConsList;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -47,10 +45,10 @@ public class Bind extends PrimitiveFunction {
                     Either<InContext<Error_>, Term> r = hydra.Reduction.reduceTerm(
                         hydra.Lexical.emptyContext(), graph, true, Terms.apply(mapping, a));
                     if (r.isLeft()) return (Either) r;
-                    Either<InContext<Error_>, ConsList<Term>> inner = hydra.extract.Core.list(cx, graph,
+                    Either<InContext<Error_>, List<Term>> inner = hydra.extract.Core.list(cx, graph,
                         ((Either.Right<InContext<Error_>, Term>) r).value);
                     if (inner.isLeft()) return (Either) inner;
-                    allResults.addAll(((Either.Right<InContext<Error_>, ConsList<Term>>) inner).value);
+                    allResults.addAll(((Either.Right<InContext<Error_>, List<Term>>) inner).value);
                 }
                 return Either.right(Terms.list(allResults));
             });
@@ -63,7 +61,7 @@ public class Bind extends PrimitiveFunction {
      * @param args the list of input values
      * @return a function that takes a mapping function and returns the result list
      */
-    public static <X, Y> Function<Function<X, ConsList<Y>>, ConsList<Y>> apply(ConsList<X> args) {
+    public static <X, Y> Function<Function<X, List<Y>>, List<Y>> apply(List<X> args) {
         return (mapping) -> apply(args, mapping);
     }
 
@@ -75,13 +73,13 @@ public class Bind extends PrimitiveFunction {
      * @param mapping the function to apply to each element
      * @return the flattened result list
      */
-    public static <X, Y> ConsList<Y> apply(ConsList<X> args, Function<X, ConsList<Y>> mapping) {
+    public static <X, Y> List<Y> apply(List<X> args, Function<X, List<Y>> mapping) {
         ArrayList<Y> all = new ArrayList<>();
         for (X x : args) {
             for (Y y : mapping.apply(x)) {
                 all.add(y);
             }
         }
-        return ConsList.fromList(all);
+        return all;
     }
 }

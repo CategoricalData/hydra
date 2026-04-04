@@ -37,6 +37,8 @@ public class NamespaceName implements Serializable, Comparable<NamespaceName> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(NamespaceName other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

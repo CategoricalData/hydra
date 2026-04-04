@@ -68,7 +68,9 @@ public abstract class ClassOrInterfaceType implements Serializable, Comparable<C
         return tagCmp;
       }
       Class_ o = (Class_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class ClassOrInterfaceType implements Serializable, Comparable<C
         return tagCmp;
       }
       Interface o = (Interface) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

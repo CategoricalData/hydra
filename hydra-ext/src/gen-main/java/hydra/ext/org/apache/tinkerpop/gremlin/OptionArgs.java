@@ -92,7 +92,9 @@ public abstract class OptionArgs implements Serializable, Comparable<OptionArgs>
         return tagCmp;
       }
       PredicateTraversal o = (PredicateTraversal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -132,7 +134,9 @@ public abstract class OptionArgs implements Serializable, Comparable<OptionArgs>
         return tagCmp;
       }
       MergeMap o = (MergeMap) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -172,7 +176,9 @@ public abstract class OptionArgs implements Serializable, Comparable<OptionArgs>
         return tagCmp;
       }
       MergeTraversal o = (MergeTraversal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -212,7 +218,9 @@ public abstract class OptionArgs implements Serializable, Comparable<OptionArgs>
         return tagCmp;
       }
       ObjectTraversal o = (ObjectTraversal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -252,7 +260,9 @@ public abstract class OptionArgs implements Serializable, Comparable<OptionArgs>
         return tagCmp;
       }
       Traversal o = (Traversal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

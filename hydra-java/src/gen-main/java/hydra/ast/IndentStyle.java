@@ -74,7 +74,9 @@ public abstract class IndentStyle implements Serializable, Comparable<IndentStyl
         return tagCmp;
       }
       AllLines o = (AllLines) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -117,7 +119,9 @@ public abstract class IndentStyle implements Serializable, Comparable<IndentStyl
         return tagCmp;
       }
       SubsequentLines o = (SubsequentLines) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

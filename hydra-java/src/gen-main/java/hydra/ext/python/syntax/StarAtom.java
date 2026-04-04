@@ -84,7 +84,9 @@ public abstract class StarAtom implements Serializable, Comparable<StarAtom> {
         return tagCmp;
       }
       Name o = (Name) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -124,7 +126,9 @@ public abstract class StarAtom implements Serializable, Comparable<StarAtom> {
         return tagCmp;
       }
       TargetWithStarAtom o = (TargetWithStarAtom) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -164,7 +168,9 @@ public abstract class StarAtom implements Serializable, Comparable<StarAtom> {
         return tagCmp;
       }
       StarTargetsTupleSeq o = (StarTargetsTupleSeq) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +210,9 @@ public abstract class StarAtom implements Serializable, Comparable<StarAtom> {
         return tagCmp;
       }
       StarTargetsListSeq o = (StarTargetsListSeq) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

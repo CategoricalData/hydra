@@ -68,7 +68,9 @@ public abstract class IriRange implements Serializable, Comparable<IriRange> {
         return tagCmp;
       }
       Sequence o = (Sequence) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -78,9 +80,9 @@ public abstract class IriRange implements Serializable, Comparable<IriRange> {
   }
 
   public static final class Sequence2 extends hydra.ext.io.shex.syntax.IriRange implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.io.shex.syntax.Exclusion> value;
+    public final java.util.List<hydra.ext.io.shex.syntax.Exclusion> value;
 
-    public Sequence2 (hydra.util.ConsList<hydra.ext.io.shex.syntax.Exclusion> value) {
+    public Sequence2 (java.util.List<hydra.ext.io.shex.syntax.Exclusion> value) {
       this.value = value;
     }
 
@@ -108,7 +110,9 @@ public abstract class IriRange implements Serializable, Comparable<IriRange> {
         return tagCmp;
       }
       Sequence2 o = (Sequence2) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

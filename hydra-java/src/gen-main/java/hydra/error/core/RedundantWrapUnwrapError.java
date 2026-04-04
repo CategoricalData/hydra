@@ -51,11 +51,15 @@ public class RedundantWrapUnwrapError implements Serializable, Comparable<Redund
   @SuppressWarnings("unchecked")
   public int compareTo(RedundantWrapUnwrapError other) {
     int cmp = 0;
-    cmp = ((Comparable) location).compareTo(other.location);
+    cmp = hydra.util.Comparing.compare(
+      location,
+      other.location);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) typeName).compareTo(other.typeName);
+    return hydra.util.Comparing.compare(
+      typeName,
+      other.typeName);
   }
 
   public RedundantWrapUnwrapError withLocation(hydra.paths.SubtermPath location) {

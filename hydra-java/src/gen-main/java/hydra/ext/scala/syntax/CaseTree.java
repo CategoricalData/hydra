@@ -68,7 +68,9 @@ public abstract class CaseTree implements Serializable, Comparable<CaseTree> {
         return tagCmp;
       }
       Case o = (Case) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class CaseTree implements Serializable, Comparable<CaseTree> {
         return tagCmp;
       }
       TypeCase o = (TypeCase) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

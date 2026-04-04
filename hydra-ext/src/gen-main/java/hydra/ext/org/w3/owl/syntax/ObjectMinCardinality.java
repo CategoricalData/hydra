@@ -20,9 +20,9 @@ public class ObjectMinCardinality implements Serializable, Comparable<ObjectMinC
 
   public final hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property;
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> class_;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> class_;
 
-  public ObjectMinCardinality (java.math.BigInteger bound, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> class_) {
+  public ObjectMinCardinality (java.math.BigInteger bound, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property, java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> class_) {
     this.bound = bound;
     this.property = property;
     this.class_ = class_;
@@ -50,15 +50,21 @@ public class ObjectMinCardinality implements Serializable, Comparable<ObjectMinC
   @SuppressWarnings("unchecked")
   public int compareTo(ObjectMinCardinality other) {
     int cmp = 0;
-    cmp = ((Comparable) bound).compareTo(other.bound);
+    cmp = hydra.util.Comparing.compare(
+      bound,
+      other.bound);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) property).compareTo(other.property);
+    cmp = hydra.util.Comparing.compare(
+      property,
+      other.property);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) class_).compareTo(other.class_);
+    return hydra.util.Comparing.compare(
+      class_,
+      other.class_);
   }
 
   public ObjectMinCardinality withBound(java.math.BigInteger bound) {
@@ -69,7 +75,7 @@ public class ObjectMinCardinality implements Serializable, Comparable<ObjectMinC
     return new ObjectMinCardinality(bound, property, class_);
   }
 
-  public ObjectMinCardinality withClass(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> class_) {
+  public ObjectMinCardinality withClass(java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> class_) {
     return new ObjectMinCardinality(bound, property, class_);
   }
 }
