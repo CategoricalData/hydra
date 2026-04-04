@@ -38,9 +38,9 @@
 
 (require 'hydra.lib.strings)
 
-(require 'hydra.module)
-
 (require 'hydra.names)
+
+(require 'hydra.packaging)
 
 (defvar hydra_ext_java_utils_add_expressions (lambda (exprs) (let* ((first (list :unary (hydra_lib_lists_head exprs))) (rest (hydra_lib_lists_tail exprs))) (funcall (funcall (hydra_lib_lists_foldl (lambda (ae) (lambda (me) (list :plus (make-hydra_ext_java_syntax_additive_expression_binary ae me))))) first) rest))))
 
@@ -80,7 +80,7 @@
 
 (defvar hydra_ext_java_utils_final_var_declaration_statement (lambda (id) (lambda (rhs) (list :local_variable_declaration (make-hydra_ext_java_syntax_local_variable_declaration (list (list :final nil)) (list :var nil) (list (funcall (hydra_ext_java_utils_java_variable_declarator id) (list :just (list :expression rhs)))))))))
 
-(defvar hydra_ext_java_utils_import_aliases_for_module (lambda (mod) (make-hydra_ext_java_environment_aliases (funcall (lambda (v) (hydra_module_module-namespace v)) mod) hydra_lib_maps_empty hydra_lib_sets_empty hydra_lib_sets_empty hydra_lib_sets_empty hydra_lib_sets_empty hydra_lib_sets_empty hydra_lib_maps_empty hydra_lib_sets_empty hydra_lib_maps_empty hydra_lib_sets_empty (list :nothing) hydra_lib_sets_empty)))
+(defvar hydra_ext_java_utils_import_aliases_for_module (lambda (mod) (make-hydra_ext_java_environment_aliases (funcall (lambda (v) (hydra_packaging_module-namespace v)) mod) hydra_lib_maps_empty hydra_lib_sets_empty hydra_lib_sets_empty hydra_lib_sets_empty hydra_lib_sets_empty hydra_lib_sets_empty hydra_lib_maps_empty hydra_lib_sets_empty hydra_lib_maps_empty hydra_lib_sets_empty (list :nothing) hydra_lib_sets_empty)))
 
 (defvar hydra_ext_java_utils_java_method_body (lambda (mstmts) (funcall (funcall (hydra_lib_maybes_cases mstmts) (lambda () (list :none nil))) (lambda (stmts) (list :block stmts)))))
 
@@ -122,7 +122,7 @@
 
 (defvar hydra_ext_java_utils_java_type_identifier (lambda (s) s))
 
-(defvar hydra_ext_java_utils_name_to_qualified_java_name (lambda (aliases) (lambda (qualify) (lambda (name) (lambda (mlocal) (let* ((qn (hydra_names_qualify_name name)) (ns_ (funcall (lambda (v) (hydra_module_qualified_name-namespace v)) qn)) (alias (funcall (funcall (hydra_lib_maybes_cases ns_) (lambda () (list :nothing))) (lambda (n) (list :just (funcall (funcall (hydra_lib_maybes_cases (funcall (hydra_lib_maps_lookup n) (funcall (lambda (v) (hydra_ext_java_environment_aliases-packages v)) aliases))) (lambda () (hydra_ext_java_names_java_package_name (funcall (hydra_lib_strings_split_on ".") (funcall (lambda (v) v) n))))) (lambda (id) id)))))) (local (funcall (lambda (v) (hydra_module_qualified_name-local v)) qn)) (jid (hydra_ext_java_utils_java_type_identifier (funcall (funcall (hydra_lib_maybes_cases mlocal) (lambda () (hydra_ext_java_utils_sanitize_java_name local))) (lambda (l) (funcall (hydra_lib_strings_cat2 (funcall (hydra_lib_strings_cat2 (hydra_ext_java_utils_sanitize_java_name local)) ".")) (hydra_ext_java_utils_sanitize_java_name l)))))) (pkg (if qualify (funcall (funcall (hydra_lib_maybes_cases alias) (lambda () (list :none nil))) (lambda (p) (list :package p))) (list :none nil)))) (list jid pkg)))))))
+(defvar hydra_ext_java_utils_name_to_qualified_java_name (lambda (aliases) (lambda (qualify) (lambda (name) (lambda (mlocal) (let* ((qn (hydra_names_qualify_name name)) (ns_ (funcall (lambda (v) (hydra_packaging_qualified_name-namespace v)) qn)) (alias (funcall (funcall (hydra_lib_maybes_cases ns_) (lambda () (list :nothing))) (lambda (n) (list :just (funcall (funcall (hydra_lib_maybes_cases (funcall (hydra_lib_maps_lookup n) (funcall (lambda (v) (hydra_ext_java_environment_aliases-packages v)) aliases))) (lambda () (hydra_ext_java_names_java_package_name (funcall (hydra_lib_strings_split_on ".") (funcall (lambda (v) v) n))))) (lambda (id) id)))))) (local (funcall (lambda (v) (hydra_packaging_qualified_name-local v)) qn)) (jid (hydra_ext_java_utils_java_type_identifier (funcall (funcall (hydra_lib_maybes_cases mlocal) (lambda () (hydra_ext_java_utils_sanitize_java_name local))) (lambda (l) (funcall (hydra_lib_strings_cat2 (funcall (hydra_lib_strings_cat2 (hydra_ext_java_utils_sanitize_java_name local)) ".")) (hydra_ext_java_utils_sanitize_java_name l)))))) (pkg (if qualify (funcall (funcall (hydra_lib_maybes_cases alias) (lambda () (list :none nil))) (lambda (p) (list :package p))) (list :none nil)))) (list jid pkg)))))))
 
 (defvar hydra_ext_java_utils_name_to_java_class_type (lambda (aliases) (lambda (qualify) (lambda (args) (lambda (name) (lambda (mlocal) (let* ((result (funcall (funcall (funcall (hydra_ext_java_utils_name_to_qualified_java_name aliases) qualify) name) mlocal)) (id (hydra_lib_pairs_first result)) (pkg (hydra_lib_pairs_second result))) (make-hydra_ext_java_syntax_class_type (list) pkg id args))))))))
 
@@ -278,7 +278,7 @@
 
 (defvar hydra_ext_java_utils_method_invocation_static_with_type_args (lambda (self) (lambda (method_name) (lambda (targs) (lambda (args) (let ((header (list :complex (make-hydra_ext_java_syntax_method_invocation_complex (list :expression (hydra_ext_java_utils_java_identifier_to_java_expression_name self)) targs method_name)))) (make-hydra_ext_java_syntax_method_invocation header args)))))))
 
-(defvar hydra_ext_java_utils_name_to_java_name (lambda (aliases) (lambda (name) (let* ((qn (hydra_names_qualify_name name)) (local (funcall (lambda (v) (hydra_module_qualified_name-local v)) qn)) (ns_ (funcall (lambda (v) (hydra_module_qualified_name-namespace v)) qn))) (if (hydra_ext_java_utils_is_escaped (funcall (lambda (v) v) name)) (hydra_ext_java_utils_sanitize_java_name local) (funcall (funcall (hydra_lib_maybes_cases ns_) (lambda () local)) (lambda (gname) (let* ((parts (funcall (funcall (hydra_lib_maybes_cases (funcall (hydra_lib_maps_lookup gname) (funcall (lambda (v) (hydra_ext_java_environment_aliases-packages v)) aliases))) (lambda () (funcall (hydra_lib_strings_split_on ".") (funcall (lambda (v) v) gname)))) (lambda (pkg_name) (funcall (hydra_lib_lists_map (lambda (i) (funcall (lambda (v) v) i))) (funcall (lambda (v) v) pkg_name))))) (all_parts (funcall (hydra_lib_lists_concat2 parts) (list (hydra_ext_java_utils_sanitize_java_name local))))) (funcall (hydra_lib_strings_intercalate ".") all_parts)))))))))
+(defvar hydra_ext_java_utils_name_to_java_name (lambda (aliases) (lambda (name) (let* ((qn (hydra_names_qualify_name name)) (local (funcall (lambda (v) (hydra_packaging_qualified_name-local v)) qn)) (ns_ (funcall (lambda (v) (hydra_packaging_qualified_name-namespace v)) qn))) (if (hydra_ext_java_utils_is_escaped (funcall (lambda (v) v) name)) (hydra_ext_java_utils_sanitize_java_name local) (funcall (funcall (hydra_lib_maybes_cases ns_) (lambda () local)) (lambda (gname) (let* ((parts (funcall (funcall (hydra_lib_maybes_cases (funcall (hydra_lib_maps_lookup gname) (funcall (lambda (v) (hydra_ext_java_environment_aliases-packages v)) aliases))) (lambda () (funcall (hydra_lib_strings_split_on ".") (funcall (lambda (v) v) gname)))) (lambda (pkg_name) (funcall (hydra_lib_lists_map (lambda (i) (funcall (lambda (v) v) i))) (funcall (lambda (v) v) pkg_name))))) (all_parts (funcall (hydra_lib_lists_concat2 parts) (list (hydra_ext_java_utils_sanitize_java_name local))))) (funcall (hydra_lib_strings_intercalate ".") all_parts)))))))))
 
 (defvar hydra_ext_java_utils_name_to_java_reference_type (lambda (aliases) (lambda (qualify) (lambda (args) (lambda (name) (lambda (mlocal) (list :class_or_interface (list :class (funcall (funcall (funcall (funcall (hydra_ext_java_utils_name_to_java_class_type aliases) qualify) args) name) mlocal)))))))))
 
@@ -310,6 +310,6 @@
 
 (defvar hydra_ext_java_utils_variable_declaration_statement (lambda (aliases) (lambda (jtype) (lambda (id) (lambda (rhs) (let* ((init_ (list :expression rhs)) (vdec (funcall (hydra_ext_java_utils_java_variable_declarator id) (list :just init_)))) (list :local_variable_declaration (make-hydra_ext_java_syntax_local_variable_declaration (list) (list :type jtype) (list vdec)))))))))
 
-(defvar hydra_ext_java_utils_variant_class_name (lambda (qualify) (lambda (el_name) (lambda (fname) (let* ((flocal (hydra_formatting_capitalize (funcall (lambda (v) v) fname))) (qn (hydra_names_qualify_name el_name)) (local (funcall (lambda (v) (hydra_module_qualified_name-local v)) qn)) (local1 (if qualify (funcall (hydra_lib_strings_cat2 (funcall (hydra_lib_strings_cat2 local) ".")) flocal) (if (funcall (hydra_lib_equality_equal flocal) local) (funcall (hydra_lib_strings_cat2 flocal) "_") flocal))) (ns_ (funcall (lambda (v) (hydra_module_qualified_name-namespace v)) qn))) (hydra_names_unqualify_name (make-hydra_module_qualified_name ns_ local1)))))))
+(defvar hydra_ext_java_utils_variant_class_name (lambda (qualify) (lambda (el_name) (lambda (fname) (let* ((flocal (hydra_formatting_capitalize (funcall (lambda (v) v) fname))) (qn (hydra_names_qualify_name el_name)) (local (funcall (lambda (v) (hydra_packaging_qualified_name-local v)) qn)) (local1 (if qualify (funcall (hydra_lib_strings_cat2 (funcall (hydra_lib_strings_cat2 local) ".")) flocal) (if (funcall (hydra_lib_equality_equal flocal) local) (funcall (hydra_lib_strings_cat2 flocal) "_") flocal))) (ns_ (funcall (lambda (v) (hydra_packaging_qualified_name-namespace v)) qn))) (hydra_names_unqualify_name (make-hydra_packaging_qualified_name ns_ local1)))))))
 
 (provide 'hydra.ext.java.utils)

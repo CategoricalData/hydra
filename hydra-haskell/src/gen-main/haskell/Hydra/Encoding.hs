@@ -5,9 +5,11 @@
 module Hydra.Encoding where
 
 import qualified Hydra.Annotations as Annotations
+import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Encode.Core as Core__
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
@@ -18,8 +20,8 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Predicates as Predicates
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
@@ -236,24 +238,37 @@ encodeMapType mt =
             Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}}))}))
 
 -- | Transform a type module into an encoder module
-encodeModule :: Context.Context -> Graph.Graph -> Module.Module -> Either (Context.InContext Errors.Error) (Maybe Module.Module)
+encodeModule :: Context.Context -> Graph.Graph -> Packaging.Module -> Either (Context.InContext Errors.Error) (Maybe Packaging.Module)
 encodeModule cx graph mod =
     Eithers.bind (filterTypeBindings cx graph (Maybes.cat (Lists.map (\d -> case d of
-      Module.DefinitionType v0 -> Just (Annotations.typeElement (Module.typeDefinitionName v0) (Module.typeDefinitionType v0))
-      _ -> Nothing) (Module.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\ic -> Context.InContext {
+      Packaging.DefinitionType v0 -> Just ((\name -> \typ ->
+        let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
+            dataTerm =
+                    Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
+                      Core.annotatedTermBody = (Core__.type_ typ),
+                      Core.annotatedTermAnnotation = (Maps.fromList [
+                        (Constants.key_type, schemaTerm)])}))
+        in Core.Binding {
+          Core.bindingName = name,
+          Core.bindingTerm = dataTerm,
+          Core.bindingType = (Just (Core.TypeScheme {
+            Core.typeSchemeVariables = [],
+            Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+            Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeType (Packaging.typeDefinitionType v0)))
+      _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\ic -> Context.InContext {
       Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError (Context.inContextObject ic)))),
-      Context.inContextContext = (Context.inContextContext ic)}) (\x -> x) (encodeBinding cx graph b)) typeBindings) (\encodedBindings -> Right (Just (Module.Module {
-      Module.moduleNamespace = (encodeNamespace (Module.moduleNamespace mod)),
-      Module.moduleDefinitions = (Lists.map (\b -> Module.DefinitionTerm (Module.TermDefinition {
-        Module.termDefinitionName = (Core.bindingName b),
-        Module.termDefinitionTerm = (Core.bindingTerm b),
-        Module.termDefinitionType = (Core.bindingType b)})) encodedBindings),
-      Module.moduleTermDependencies = (Lists.nub (Lists.concat2 (Lists.map encodeNamespace (Module.moduleTypeDependencies mod)) (Lists.map encodeNamespace (Module.moduleTermDependencies mod)))),
-      Module.moduleTypeDependencies = [
-        Module.moduleNamespace mod],
-      Module.moduleDescription = (Just (Strings.cat [
+      Context.inContextContext = (Context.inContextContext ic)}) (\x -> x) (encodeBinding cx graph b)) typeBindings) (\encodedBindings -> Right (Just (Packaging.Module {
+      Packaging.moduleNamespace = (encodeNamespace (Packaging.moduleNamespace mod)),
+      Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
+        Packaging.termDefinitionName = (Core.bindingName b),
+        Packaging.termDefinitionTerm = (Core.bindingTerm b),
+        Packaging.termDefinitionType = (Core.bindingType b)})) encodedBindings),
+      Packaging.moduleTermDependencies = (Lists.nub (Lists.concat2 (Lists.map encodeNamespace (Packaging.moduleTypeDependencies mod)) (Lists.map encodeNamespace (Packaging.moduleTermDependencies mod)))),
+      Packaging.moduleTypeDependencies = [
+        Packaging.moduleNamespace mod],
+      Packaging.moduleDescription = (Just (Strings.cat [
         "Term encoders for ",
-        (Module.unNamespace (Module.moduleNamespace mod))]))})))))
+        (Packaging.unNamespace (Packaging.moduleNamespace mod))]))})))))
 
 -- | Encode a Name as a term
 encodeName :: Core.Name -> Core.Term
@@ -263,13 +278,13 @@ encodeName n =
       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName n)))})
 
 -- | Generate an encoder module namespace from a source module namespace
-encodeNamespace :: Module.Namespace -> Module.Namespace
+encodeNamespace :: Packaging.Namespace -> Packaging.Namespace
 encodeNamespace ns =
-    Module.Namespace (Strings.cat [
+    Packaging.Namespace (Strings.cat [
       "hydra.encode.",
-      (Strings.intercalate "." (Lists.tail (Strings.splitOn "." (Module.unNamespace ns))))])
+      (Strings.intercalate "." (Lists.tail (Strings.splitOn "." (Packaging.unNamespace ns))))])
 
--- | Generate an encoder for an optional type
+-- | Generate an encoder for a Maybe type
 encodeOptionalType :: Core.Type -> Core.Term
 encodeOptionalType elemType =
     Core.TermFunction (Core.FunctionLambda (Core.Lambda {

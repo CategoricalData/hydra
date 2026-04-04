@@ -501,3 +501,8 @@ def type_lists_effectively_equal(tx: hydra.graph.Graph, tlist1: frozenlist[hydra
     r"""Check whether two lists of types are effectively equal, disregarding type aliases."""
 
     return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(tlist1), hydra.lib.lists.length(tlist2)), (lambda : hydra.lib.lists.foldl(hydra.lib.logic.and_, True, hydra.lib.lists.zip_with((lambda v1, v2: types_effectively_equal(tx, v1, v2)), tlist1, tlist2))), (lambda : False))
+
+def type_of_term(cx: hydra.context.Context, g: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Type]:
+    r"""Check the type of a term."""
+
+    return hydra.lib.eithers.map((lambda x1: hydra.lib.pairs.first(x1)), type_of(cx, g, (), term))

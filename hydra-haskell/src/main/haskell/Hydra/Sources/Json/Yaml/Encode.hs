@@ -29,7 +29,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
 import qualified Hydra.Dsl.Topology                   as Topology
@@ -134,8 +134,8 @@ jsonToYaml = define "jsonToYaml" $
       Yaml.nodeScalar $ Yaml.scalarStr $ var "s"]
 
 -- | Encode a Hydra Term to a YAML Node via JSON.
-toYaml :: TTermDefinition (Term -> Either String YM.Node)
+toYaml :: TTermDefinition (M.Map Name Type -> Name -> Type -> Term -> Either String YM.Node)
 toYaml = define "toYaml" $
   doc "Encode a Hydra term to a YAML node via JSON encoding." $
-  "term" ~>
-  Eithers.map ("v" ~> jsonToYaml @@ var "v") (JsonEncode.toJson @@ var "term")
+  "types" ~> "tname" ~> "typ" ~> "term" ~>
+  Eithers.map ("v" ~> jsonToYaml @@ var "v") (JsonEncode.toJson @@ var "types" @@ var "tname" @@ var "typ" @@ var "term")

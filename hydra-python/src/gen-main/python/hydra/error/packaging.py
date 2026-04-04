@@ -8,14 +8,14 @@ from functools import lru_cache
 from hydra.dsl.python import Node
 from typing import Annotated, TypeAlias, cast
 import hydra.core
-import hydra.module
+import hydra.packaging
 
 @dataclass(frozen=True)
 class ConflictingModuleNamespaceError:
     r"""A module namespace which, when mapped to a target language's directory or package structure, conflicts with another module's mapped namespace. For example, hydra.foo.bar and hydra.fooBar might both map to the same directory in a case-insensitive filesystem."""
 
-    first: Annotated[hydra.module.Namespace, "The first module namespace"]
-    second: Annotated[hydra.module.Namespace, "The second module namespace that conflicts with the first"]
+    first: Annotated[hydra.packaging.Namespace, "The first module namespace"]
+    second: Annotated[hydra.packaging.Namespace, "The second module namespace that conflicts with the first"]
 
     TYPE_ = hydra.core.Name("hydra.error.packaging.ConflictingModuleNamespaceError")
     FIRST = hydra.core.Name("first")
@@ -25,7 +25,7 @@ class ConflictingModuleNamespaceError:
 class ConflictingVariantNameError:
     r"""A union type variant name which, when capitalized and concatenated with its type name, conflicts with another type definition name. For example, a union type Foo with a variant bar produces FooBar, which conflicts with an existing type definition FooBar. This is currently a problem only for the Haskell target."""
 
-    namespace: Annotated[hydra.module.Namespace, "The namespace of the module containing the conflict"]
+    namespace: Annotated[hydra.packaging.Namespace, "The namespace of the module containing the conflict"]
     type_name: Annotated[hydra.core.Name, "The name of the union type"]
     variant_name: Annotated[hydra.core.Name, "The name of the variant field causing the conflict"]
     conflicting_name: Annotated[hydra.core.Name, "The name of the other type definition that conflicts with the generated constructor name"]
@@ -40,7 +40,7 @@ class ConflictingVariantNameError:
 class DefinitionNotInModuleNamespaceError:
     r"""A definition whose name does not have the module's namespace as a prefix. If the module namespace is foo.bar, all definition names must have the form foo.bar.quux."""
 
-    namespace: Annotated[hydra.module.Namespace, "The namespace of the module"]
+    namespace: Annotated[hydra.packaging.Namespace, "The namespace of the module"]
     name: Annotated[hydra.core.Name, "The definition name that does not match the module namespace"]
 
     TYPE_ = hydra.core.Name("hydra.error.packaging.DefinitionNotInModuleNamespaceError")
@@ -51,7 +51,7 @@ class DefinitionNotInModuleNamespaceError:
 class DuplicateDefinitionNameError:
     r"""Two or more definitions in the same module share the same name."""
 
-    namespace: Annotated[hydra.module.Namespace, "The namespace of the module containing the duplicates"]
+    namespace: Annotated[hydra.packaging.Namespace, "The namespace of the module containing the duplicates"]
     name: Annotated[hydra.core.Name, "The duplicated definition name"]
 
     TYPE_ = hydra.core.Name("hydra.error.packaging.DuplicateDefinitionNameError")
@@ -62,7 +62,7 @@ class DuplicateDefinitionNameError:
 class DuplicateModuleNamespaceError:
     r"""Two or more modules in the same package share the same namespace."""
 
-    namespace: Annotated[hydra.module.Namespace, "The duplicated module namespace"]
+    namespace: Annotated[hydra.packaging.Namespace, "The duplicated module namespace"]
 
     TYPE_ = hydra.core.Name("hydra.error.packaging.DuplicateModuleNamespaceError")
     NAMESPACE = hydra.core.Name("namespace")

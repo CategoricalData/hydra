@@ -7,7 +7,7 @@ demonstrating how to use the Hydra Types DSL in Python.
 from hydra.core import Binding, Name, TypeScheme, Type
 from hydra.dsl.annotations import doc
 from hydra.dsl.python import Just, Nothing
-from hydra.module import Module, Namespace
+from hydra.packaging import Module, Namespace
 import hydra.dsl.types as T
 
 

@@ -31,7 +31,7 @@
                                           "function": {
                                             "application": {
                                               "argument": {"variable": "graph"},
-                                              "function": {"variable": "hydra.lexical.dereferenceElement"}}}}},
+                                              "function": {"variable": "hydra.lexical.lookupBinding"}}}}},
                                       "type": [
                                         {
                                           "constraints": null,
@@ -813,7 +813,7 @@
                                                                                     "function": {
                                                                                       "application": {
                                                                                         "argument": {"variable": "cx"},
-                                                                                        "function": {"variable": "hydra.lexical.requireElement"}}}}}}},
+                                                                                        "function": {"variable": "hydra.lexical.requireBinding"}}}}}}},
                                                                             "function": {
                                                                               "typeApplication": {
                                                                                 "body": {
@@ -3384,7 +3384,6 @@
     "hydra.errors",
     "hydra.graph",
     "hydra.json.model",
-    "hydra.module",
     "hydra.packaging",
     "hydra.parsing",
     "hydra.phantoms",

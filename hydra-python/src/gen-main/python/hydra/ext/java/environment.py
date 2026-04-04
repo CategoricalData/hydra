@@ -10,7 +10,7 @@ from typing import Annotated, TypeAlias, cast
 import hydra.core
 import hydra.ext.java.syntax
 import hydra.graph
-import hydra.module
+import hydra.packaging
 
 class JavaSymbolClassConstant:
     r"""A constant value"""
@@ -79,8 +79,8 @@ class JavaFeatures:
 class Aliases:
     r"""Aliases and context for Java code generation."""
 
-    current_namespace: Annotated[hydra.module.Namespace, "Current module namespace context"]
-    packages: Annotated[FrozenDict[hydra.module.Namespace, hydra.ext.java.syntax.PackageName], "Maps namespaces to Java package names"]
+    current_namespace: Annotated[hydra.packaging.Namespace, "Current module namespace context"]
+    packages: Annotated[FrozenDict[hydra.packaging.Namespace, hydra.ext.java.syntax.PackageName], "Maps namespaces to Java package names"]
     branch_vars: Annotated[frozenset[hydra.core.Name], "Variables bound in pattern matching branches"]
     recursive_vars: Annotated[frozenset[hydra.core.Name], "Variables that are self-recursive"]
     in_scope_type_params: Annotated[frozenset[hydra.core.Name], "Type parameters that are in scope (from method-level type parameters)"]

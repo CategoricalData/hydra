@@ -10,7 +10,7 @@ import hydra.ext.java.environment.*
 
 import hydra.ext.java.syntax.*
 
-import hydra.module.*
+import hydra.packaging.*
 
 import hydra.lib.eithers
 
@@ -97,8 +97,8 @@ def finalVarDeclarationStatement(id: hydra.ext.java.syntax.Identifier)(rhs: hydr
   hydra.ext.java.syntax.BlockStatement.localVariableDeclaration(hydra.ext.java.syntax.LocalVariableDeclaration(Seq(hydra.ext.java.syntax.VariableModifier.`final`),
      hydra.ext.java.syntax.LocalVariableType.`var`, Seq(hydra.ext.java.utils.javaVariableDeclarator(id)(Some(hydra.ext.java.syntax.VariableInitializer.expression(rhs))))))
 
-def importAliasesForModule(mod: hydra.module.Module): hydra.ext.java.environment.Aliases =
-  hydra.ext.java.environment.Aliases(mod.namespace, hydra.lib.maps.empty[hydra.module.Namespace, hydra.ext.java.syntax.PackageName],
+def importAliasesForModule(mod: hydra.packaging.Module): hydra.ext.java.environment.Aliases =
+  hydra.ext.java.environment.Aliases(mod.namespace, hydra.lib.maps.empty[hydra.packaging.Namespace, hydra.ext.java.syntax.PackageName],
      hydra.lib.sets.empty[hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name],
      hydra.lib.sets.empty[hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.maps.empty[hydra.core.Name,
      hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.maps.empty[hydra.core.Name, hydra.core.Name],
@@ -333,7 +333,7 @@ def javaMethodInvocationToJavaStatement(mi: hydra.ext.java.syntax.MethodInvocati
 def javaMultiplicativeExpressionToJavaRelationalExpression(me: hydra.ext.java.syntax.MultiplicativeExpression): hydra.ext.java.syntax.RelationalExpression =
   hydra.ext.java.syntax.RelationalExpression.simple(hydra.ext.java.syntax.ShiftExpression.unary(hydra.ext.java.syntax.AdditiveExpression.unary(me)))
 
-def javaPackageDeclaration(ns: hydra.module.Namespace): hydra.ext.java.syntax.PackageDeclaration =
+def javaPackageDeclaration(ns: hydra.packaging.Namespace): hydra.ext.java.syntax.PackageDeclaration =
   hydra.ext.java.syntax.PackageDeclaration(Seq(), hydra.lib.lists.map[scala.Predef.String, hydra.ext.java.syntax.Identifier]((s: scala.Predef.String) => s)(hydra.lib.strings.splitOn(".")(ns)))
 
 def javaPostfixExpressionToJavaEqualityExpression(pe: hydra.ext.java.syntax.PostfixExpression): hydra.ext.java.syntax.EqualityExpression =
@@ -513,14 +513,14 @@ def nameToJavaClassType(aliases: hydra.ext.java.environment.Aliases)(qualify: Bo
 
 def nameToJavaName(aliases: hydra.ext.java.environment.Aliases)(name: hydra.core.Name): hydra.ext.java.syntax.Identifier =
   {
-  lazy val qn: hydra.module.QualifiedName = hydra.names.qualifyName(name)
-  lazy val `ns_`: Option[hydra.module.Namespace] = (qn.namespace)
+  lazy val qn: hydra.packaging.QualifiedName = hydra.names.qualifyName(name)
+  lazy val `ns_`: Option[hydra.packaging.Namespace] = (qn.namespace)
   lazy val local: scala.Predef.String = (qn.local)
-  hydra.lib.logic.ifElse[hydra.ext.java.syntax.Identifier](hydra.ext.java.utils.isEscaped(name))(hydra.ext.java.utils.sanitizeJavaName(local))(hydra.lib.maybes.cases[hydra.module.Namespace,
-     hydra.ext.java.syntax.Identifier](`ns_`)(local)((gname: hydra.module.Namespace) =>
+  hydra.lib.logic.ifElse[hydra.ext.java.syntax.Identifier](hydra.ext.java.utils.isEscaped(name))(hydra.ext.java.utils.sanitizeJavaName(local))(hydra.lib.maybes.cases[hydra.packaging.Namespace,
+     hydra.ext.java.syntax.Identifier](`ns_`)(local)((gname: hydra.packaging.Namespace) =>
     {
     lazy val parts: Seq[scala.Predef.String] = hydra.lib.maybes.cases[hydra.ext.java.syntax.PackageName,
-       Seq[scala.Predef.String]](hydra.lib.maps.lookup[hydra.module.Namespace, hydra.ext.java.syntax.PackageName](gname)(aliases.packages))(hydra.lib.strings.splitOn(".")(gname))((pkgName: hydra.ext.java.syntax.PackageName) =>
+       Seq[scala.Predef.String]](hydra.lib.maps.lookup[hydra.packaging.Namespace, hydra.ext.java.syntax.PackageName](gname)(aliases.packages))(hydra.lib.strings.splitOn(".")(gname))((pkgName: hydra.ext.java.syntax.PackageName) =>
       hydra.lib.lists.map[hydra.ext.java.syntax.Identifier, scala.Predef.String]((i: hydra.ext.java.syntax.Identifier) => i)(pkgName))
     lazy val allParts: Seq[scala.Predef.String] = hydra.lib.lists.concat2[scala.Predef.String](parts)(Seq(hydra.ext.java.utils.sanitizeJavaName(local)))
     hydra.lib.strings.intercalate(".")(allParts)
@@ -536,12 +536,12 @@ def nameToJavaTypeIdentifier(aliases: hydra.ext.java.environment.Aliases)(qualif
 def nameToQualifiedJavaName(aliases: hydra.ext.java.environment.Aliases)(qualify: Boolean)(name: hydra.core.Name)(mlocal: Option[scala.Predef.String]): Tuple2[hydra.ext.java.syntax.TypeIdentifier,
    hydra.ext.java.syntax.ClassTypeQualifier] =
   {
-  lazy val qn: hydra.module.QualifiedName = hydra.names.qualifyName(name)
-  lazy val `ns_`: Option[hydra.module.Namespace] = (qn.namespace)
+  lazy val qn: hydra.packaging.QualifiedName = hydra.names.qualifyName(name)
+  lazy val `ns_`: Option[hydra.packaging.Namespace] = (qn.namespace)
   lazy val local: scala.Predef.String = (qn.local)
-  lazy val alias: Option[hydra.ext.java.syntax.PackageName] = hydra.lib.maybes.cases[hydra.module.Namespace,
-     Option[hydra.ext.java.syntax.PackageName]](`ns_`)(None)((n: hydra.module.Namespace) =>
-    Some(hydra.lib.maybes.cases[hydra.ext.java.syntax.PackageName, hydra.ext.java.syntax.PackageName](hydra.lib.maps.lookup[hydra.module.Namespace,
+  lazy val alias: Option[hydra.ext.java.syntax.PackageName] = hydra.lib.maybes.cases[hydra.packaging.Namespace,
+     Option[hydra.ext.java.syntax.PackageName]](`ns_`)(None)((n: hydra.packaging.Namespace) =>
+    Some(hydra.lib.maybes.cases[hydra.ext.java.syntax.PackageName, hydra.ext.java.syntax.PackageName](hydra.lib.maps.lookup[hydra.packaging.Namespace,
        hydra.ext.java.syntax.PackageName](n)(aliases.packages))(hydra.ext.java.names.javaPackageName(hydra.lib.strings.splitOn(".")(n)))((id: hydra.ext.java.syntax.PackageName) => id)))
   lazy val pkg: hydra.ext.java.syntax.ClassTypeQualifier = hydra.lib.logic.ifElse[hydra.ext.java.syntax.ClassTypeQualifier](qualify)(hydra.lib.maybes.cases[hydra.ext.java.syntax.PackageName,
      hydra.ext.java.syntax.ClassTypeQualifier](alias)(hydra.ext.java.syntax.ClassTypeQualifier.none)((p: hydra.ext.java.syntax.PackageName) => hydra.ext.java.syntax.ClassTypeQualifier.`package`(p)))(hydra.ext.java.syntax.ClassTypeQualifier.none)
@@ -644,12 +644,12 @@ def variableToJavaIdentifier(name: hydra.core.Name): hydra.ext.java.syntax.Ident
 
 def variantClassName(qualify: Boolean)(elName: hydra.core.Name)(fname: hydra.core.Name): hydra.core.Name =
   {
-  lazy val qn: hydra.module.QualifiedName = hydra.names.qualifyName(elName)
-  lazy val `ns_`: Option[hydra.module.Namespace] = (qn.namespace)
+  lazy val qn: hydra.packaging.QualifiedName = hydra.names.qualifyName(elName)
+  lazy val `ns_`: Option[hydra.packaging.Namespace] = (qn.namespace)
   lazy val local: scala.Predef.String = (qn.local)
   lazy val flocal: scala.Predef.String = hydra.formatting.capitalize(fname)
   lazy val local1: scala.Predef.String = hydra.lib.logic.ifElse[scala.Predef.String](qualify)(hydra.lib.strings.cat2(hydra.lib.strings.cat2(local)("."))(flocal))(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](flocal)(local))(hydra.lib.strings.cat2(flocal)("_"))(flocal))
-  hydra.names.unqualifyName(hydra.module.QualifiedName(`ns_`, local1))
+  hydra.names.unqualifyName(hydra.packaging.QualifiedName(`ns_`, local1))
 }
 
 lazy val visitorTypeVariable: hydra.ext.java.syntax.ReferenceType = hydra.ext.java.utils.javaTypeVariable("r")

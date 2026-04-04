@@ -33,7 +33,7 @@ import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
 import qualified Hydra.Dsl.Meta.Terms        as MetaTerms
 import qualified Hydra.Dsl.Meta.Types        as MetaTypes
-import qualified Hydra.Dsl.Module       as Module
+import qualified Hydra.Dsl.Packaging       as Packaging
 import qualified Hydra.Dsl.Parsing      as Parsing
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Prims             as Prims
@@ -65,7 +65,6 @@ module_ = Module ns elements
     Just ("A module for tier-0 constants.")
   where
    elements = [
---     toDefinition tryMe,
      toDefinition debugInference,
      toDefinition ignoredVariable,
      toDefinition key_classes,
@@ -92,16 +91,6 @@ defineAnnotationKey name mdesc = define ("key_" <> name) $ case mdesc of
     Just comment -> doc comment def
   where
     def = wrap _Name $ string name
-
--- 
-
--- An extra definition, normally commented out, for debugging
-tryMe = define "tryMe" $
-  left $ string "foo"
---  Core.termPair $ pair Core.termUnit Core.termUnit
---  Core.termPair $ pair Core.termUnit Core.termUnit
---  pair Core.termUnit Core.termUnit
---  Core.termProduct $ list [Core.termUnit, Core.termUnit]
 
 debugInference :: TTermDefinition Bool
 debugInference = define "debugInference" $

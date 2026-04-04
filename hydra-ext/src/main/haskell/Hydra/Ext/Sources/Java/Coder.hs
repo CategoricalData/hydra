@@ -22,7 +22,7 @@ import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Errors                      as Error
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
@@ -32,8 +32,9 @@ import qualified Hydra.Sources.Kernel.Terms.Variables      as Variables
 import qualified Hydra.Sources.Kernel.Terms.Dependencies   as Dependencies
 import qualified Hydra.Sources.Kernel.Terms.Scoping        as Scoping
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
-import qualified Hydra.Sources.CoderUtils                  as CoderUtils
+import qualified Hydra.Sources.Kernel.Terms.Analysis       as Analysis
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
+import qualified Hydra.Sources.Kernel.Terms.Checking       as Checking
 import qualified Hydra.Sources.Kernel.Terms.Predicates    as Predicates
 import qualified Hydra.Sources.Kernel.Terms.Resolution    as Resolution
 import qualified Hydra.Sources.Kernel.Terms.Environment   as Environment
@@ -45,6 +46,7 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
 import qualified Hydra.Sources.Kernel.Terms.Arity           as Arity
 import qualified Hydra.Dsl.Meta.Graph                       as Graph
+import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import           Prelude hiding ((++))
 
 import qualified Data.Map as M
@@ -84,7 +86,7 @@ ns = Namespace "hydra.ext.java.coder"
 
 module_ :: Module
 module_ = Module ns elements
-    [JavaUtilsSource.ns, JavaNamesSource.ns, JavaSerdeSource.ns, moduleNamespace JavaLanguageSource.module_, Formatting.ns, Names.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, CoderUtils.ns, Lexical.ns, Environment.ns, Predicates.ns, Resolution.ns, ShowCore.ns, Annotations.ns, Constants.ns,
+    [JavaUtilsSource.ns, JavaNamesSource.ns, JavaSerdeSource.ns, moduleNamespace JavaLanguageSource.module_, Analysis.ns, Checking.ns, Formatting.ns, Names.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, Lexical.ns, Environment.ns, Predicates.ns, Resolution.ns, ShowCore.ns, Annotations.ns, Constants.ns,
       Inference.ns, Sorting.ns, Arity.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, SerializationSource.ns]
     (JavaEnvironmentSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Java code generator: converts Hydra modules to Java source code"
@@ -286,14 +288,14 @@ addComment = def "addComment" $
         "cx" ~> "g" ~>
         Eithers.map
           (lambda "c" $ JavaDsl.classBodyDeclarationWithComments (var "decl") (var "c"))
-          (CoderUtils.commentsFromFieldType @@ var "cx" @@ var "g" @@ var "field")
+          (Annotations.commentsFromFieldType @@ var "cx" @@ var "g" @@ var "field")
 
 -- | Analyze a Java function term, collecting lambdas, type lambdas, lets, and type applications
 analyzeJavaFunction :: TTermDefinition (JavaHelpers.JavaEnvironment -> Term -> Context -> Graph -> Either (InContext Error) (FunctionStructure JavaHelpers.JavaEnvironment))
 analyzeJavaFunction = def "analyzeJavaFunction" $
   lambda "env" $ lambda "term" $
     "cx" ~> "g" ~>
-    CoderUtils.analyzeFunctionTerm @@ var "cx" @@ javaEnvGetGraph @@ javaEnvSetGraph @@ var "env" @@ var "term"
+    Analysis.analyzeFunctionTerm @@ var "cx" @@ javaEnvGetGraph @@ javaEnvSetGraph @@ var "env" @@ var "term"
 
 -- | Annotate a term body with the expected codomain type, propagating through
 -- applications so that inner type-applied subterms also get correct annotations.
@@ -333,7 +335,7 @@ annotateLambdaArgs = def "annotateLambdaArgs" $
       (right (var "argTerms"))
       -- Look up the type scheme from either elements or primitives
       ("mts" <<~ (
-        "mel" <<~ right (Lexical.dereferenceElement @@ var "g" @@ var "cname") $
+        "mel" <<~ right (Lexical.lookupBinding @@ var "g" @@ var "cname") $
         Maybes.cases (var "mel")
           (right (Maybes.map
               (lambda "prim" $ Graph.primitiveType (var "prim"))
@@ -599,11 +601,11 @@ bindingNameToFilePath :: TTermDefinition (Name -> String)
 bindingNameToFilePath = def "bindingNameToFilePath" $
   lambda "name" $ lets [
     "qn">: Names.qualifyName @@ var "name",
-    "ns_">: Module.qualifiedNameNamespace (var "qn"),
-    "local">: Module.qualifiedNameLocal (var "qn"),
+    "ns_">: Packaging.qualifiedNameNamespace (var "qn"),
+    "local">: Packaging.qualifiedNameLocal (var "qn"),
     "sanitized">: Formatting.sanitizeWithUnderscores @@ JavaLanguageSource.reservedWords @@ var "local",
-    "unq">: Names.unqualifyName @@ Module.qualifiedName (var "ns_") (var "sanitized")] $
-    CoderUtils.nameToFilePath @@ Util.caseConventionCamel @@ Util.caseConventionPascal
+    "unq">: Names.unqualifyName @@ Packaging.qualifiedName (var "ns_") (var "sanitized")] $
+    Names.nameToFilePath @@ Util.caseConventionCamel @@ Util.caseConventionPascal
       @@ wrap _FileExtension (string "java") @@ var "unq"
 
 -- | Convert let-bindings to Java block statements.
@@ -617,7 +619,7 @@ bindingsToStatements = def "bindingsToStatements" $
     "flatBindings" <~ (dedupBindings @@ (project JavaHelpers._Aliases JavaHelpers._Aliases_inScopeJavaVars @@ var "aliases")
       @@ (flattenBindings @@ var "bindings")) $
     -- Extend Graph with flattened bindings
-    "gExtended" <~ (Scoping.extendGraphForLet @@ CoderUtils.bindingMetadata @@ var "g"
+    "gExtended" <~ (Scoping.extendGraphForLet @@ ("g" ~> "b" ~> Logic.ifElse (Predicates.isComplexBinding @@ var "g" @@ var "b") (just MetaTerms.true) nothing) @@ var "g"
       @@ record _Let [
         _Let_bindings>>: var "flatBindings",
         _Let_body>>: inject _Term _Term_variable (wrap _Name (string "dummy"))]) $
@@ -1036,7 +1038,7 @@ classifyDataReference :: TTermDefinition (Name -> Context -> Graph -> Either (In
 classifyDataReference = def "classifyDataReference" $
   lambda "name" $
     "cx" ~> "g" ~>
-    "mel" <<~ right (Lexical.dereferenceElement @@ var "g" @@ var "name") $
+    "mel" <<~ right (Lexical.lookupBinding @@ var "g" @@ var "name") $
     Maybes.cases (var "mel")
       -- Not found: treat as local variable
       (right $ inject JavaHelpers._JavaSymbolClass JavaHelpers._JavaSymbolClass_localVariable unit)
@@ -1327,7 +1329,7 @@ constantDeclForTypeName = def "constantDeclForTypeName" $
 constructElementsInterface :: TTermDefinition (Module -> [Java.InterfaceMemberDeclaration] -> (Name, Java.CompilationUnit))
 constructElementsInterface = def "constructElementsInterface" $
   lambda "mod" $ lambda "members" $ lets [
-    "ns">: Module.moduleNamespace (var "mod"),
+    "ns">: Packaging.moduleNamespace (var "mod"),
     "parentNs">: namespaceParent @@ var "ns",
     "pkg">: Maybes.cases (var "parentNs")
       (JavaUtilsSource.javaPackageDeclaration @@ var "ns")
@@ -1349,7 +1351,7 @@ constructElementsInterface = def "constructElementsInterface" $
           Java._NormalInterfaceDeclaration_body>>: var "body"])),
     "decl">: record Java._TypeDeclarationWithComments [
       Java._TypeDeclarationWithComments_value>>: var "itf",
-      Java._TypeDeclarationWithComments_comments>>: Module.moduleDescription (var "mod")]] $
+      Java._TypeDeclarationWithComments_comments>>: Packaging.moduleDescription (var "mod")]] $
     pair (var "elName")
       (inject Java._CompilationUnit Java._CompilationUnit_ordinary
         (record Java._OrdinaryCompilationUnit [
@@ -1380,7 +1382,7 @@ correctTypeApps :: TTermDefinition (Graph -> Name -> [Term] -> [Type] -> Context
 correctTypeApps = def "correctTypeApps" $
   lambda "gr" $ lambda "name" $ lambda "args" $ lambda "fallbackTypeApps" $
     "cx" ~> "g" ~>
-    "mel" <<~ right (Lexical.dereferenceElement @@ var "g" @@ var "name") $
+    "mel" <<~ right (Lexical.lookupBinding @@ var "g" @@ var "name") $
     Maybes.cases (var "mel")
       (right (var "fallbackTypeApps"))
       (lambda "el" $
@@ -1820,8 +1822,8 @@ elementJavaIdentifier :: TTermDefinition (Bool -> Bool -> JavaHelpers.Aliases ->
 elementJavaIdentifier = def "elementJavaIdentifier" $
   lambda "isPrim" $ lambda "isMethod" $ lambda "aliases" $ lambda "name" $ lets [
     "qn">: Names.qualifyName @@ var "name",
-    "ns_">: Module.qualifiedNameNamespace (var "qn"),
-    "local">: Module.qualifiedNameLocal (var "qn"),
+    "ns_">: Packaging.qualifiedNameNamespace (var "qn"),
+    "local">: Packaging.qualifiedNameLocal (var "qn"),
     "sep">: Logic.ifElse (var "isMethod") (string "::") (string ".")] $
     Logic.ifElse (var "isPrim")
       (wrap Java._Identifier (Strings.cat2
@@ -1844,7 +1846,7 @@ elementJavaIdentifier_qualify :: TTermDefinition (JavaHelpers.Aliases -> Maybe N
 elementJavaIdentifier_qualify = def "elementJavaIdentifier_qualify" $
   lambda "aliases" $ lambda "mns" $ lambda "s" $
     unwrap Java._Identifier @@ (JavaUtilsSource.nameToJavaName @@ var "aliases"
-      @@ (Names.unqualifyName @@ Module.qualifiedName (var "mns") (var "s")))
+      @@ (Names.unqualifyName @@ Packaging.qualifiedName (var "mns") (var "s")))
 
 -- | Convert a namespace to an elements class name (e.g., "hydra.ext.java.syntax" -> "Syntax")
 elementsClassName :: TTermDefinition (Namespace -> String)
@@ -1860,7 +1862,7 @@ elementsClassName = def "elementsClassName" $
 elementsQualifiedName :: TTermDefinition (Namespace -> Name)
 elementsQualifiedName = def "elementsQualifiedName" $
   lambda "ns" $
-    Names.unqualifyName @@ Module.qualifiedName (namespaceParent @@ var "ns") (elementsClassName @@ var "ns")
+    Names.unqualifyName @@ Packaging.qualifiedName (namespaceParent @@ var "ns") (elementsClassName @@ var "ns")
 
 -- | Encode a function application.
 encodeApplication :: TTermDefinition (JavaHelpers.JavaEnvironment -> Application -> Context -> Graph -> Either (InContext Error) Java.Expression)
@@ -1870,7 +1872,7 @@ encodeApplication = def "encodeApplication" $
     "aliases" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env") $
     "g" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_graph @@ var "env") $
     -- Gather function, args, and type applications
-    "gathered" <~ (CoderUtils.gatherArgsWithTypeApps
+    "gathered" <~ (Analysis.gatherArgsWithTypeApps
       @@ (inject _Term _Term_application (var "app"))
       @@ list ([] :: [TTerm Term])
       @@ list ([] :: [TTerm Type])) $
@@ -1880,7 +1882,7 @@ encodeApplication = def "encodeApplication" $
     -- Get the function's arity from its type
     "mfunTyp" <<~ (getTypeE (var "cx") (var "g") (Annotations.termAnnotationInternal @@ var "fun")) $
     "funTyp" <<~ (Maybes.cases (var "mfunTyp")
-      (CoderUtils.typeOfTerm @@ var "cx" @@ var "g" @@ var "fun")
+      (Checking.typeOfTerm @@ var "cx" @@ var "g" @@ var "fun")
       (lambda "t" $ right (var "t"))) $
     "arity" <~ (Arity.typeArity @@ var "funTyp") $
     -- Determine callee name for type annotation correction
@@ -1957,7 +1959,7 @@ encodeApplication_fallback = def "encodeApplication_fallback" $
     "cx" ~> "g" ~>
     ("mt" <<~ (getTypeE (var "cx") (var "g") (Annotations.termAnnotationInternal @@ var "lhs")) $
     "t" <<~ (Maybes.cases (var "mt")
-      (CoderUtils.typeOfTerm @@ var "cx" @@ var "g" @@ var "lhs")
+      (Checking.typeOfTerm @@ var "cx" @@ var "g" @@ var "lhs")
       (lambda "typ" $ right (var "typ"))) $
     cases _Type (Strip.deannotateTypeParameters @@ (Strip.deannotateType @@ var "t"))
       (Just $
@@ -1989,7 +1991,7 @@ encodeApplication_fallback = def "encodeApplication_fallback" $
                   (right (var "dom"))
                   ("mrt" <<~ (getTypeE (var "cx") (var "g") (Annotations.termAnnotationInternal @@ var "rhs")) $
                     Maybes.cases (var "mrt")
-                      ("rt" <<~ (CoderUtils.typeOfTerm @@ var "cx" @@ var "g" @@ var "rhs") $
+                      ("rt" <<~ (Checking.typeOfTerm @@ var "cx" @@ var "g" @@ var "rhs") $
                         right (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType @@ var "rt")))
                           (var "rt")
                           (var "dom")))
@@ -2008,13 +2010,13 @@ encodeDefinitions = def "encodeDefinitions" $
     "env" <~ (record JavaHelpers._JavaEnvironment [
       JavaHelpers._JavaEnvironment_aliases>>: var "aliases",
       JavaHelpers._JavaEnvironment_graph>>: var "g"]) $
-    "pkg" <~ (JavaUtilsSource.javaPackageDeclaration @@ (Module.moduleNamespace (var "mod"))) $
+    "pkg" <~ (JavaUtilsSource.javaPackageDeclaration @@ (Packaging.moduleNamespace (var "mod"))) $
     "partitioned" <~ (Environment.partitionDefinitions @@ var "defs") $
     "typeDefs" <~ Pairs.first (var "partitioned") $
     "termDefs" <~ Pairs.second (var "partitioned") $
     -- Filter out typedefs (non-record/union/wrap types)
     "nonTypedefDefs" <~ Lists.filter (lambda "td" $
-      "typ" <~ (project _TypeDefinition _TypeDefinition_type @@ var "td") $
+      "typ" <~ (Core.typeSchemeType $ project _TypeDefinition _TypeDefinition_type @@ var "td") $
       isSerializableJavaType @@ (var "typ"))
       (var "typeDefs") $
     "typeUnits" <<~ (Eithers.mapList (lambda "td" $ encodeTypeDefinition @@ var "pkg" @@ var "aliases" @@ var "td" @@ var "cx" @@ var "g") (var "nonTypedefDefs")) $
@@ -2563,7 +2565,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
       -- To re-enable, restore the following:
       --   "isTCO" <~ (Logic.and
       --     (Logic.not $ Lists.null (var "params"))
-      --     (CoderUtils.isSelfTailRecursive @@ var "name" @@ var "body")) $
+      --     (Analysis.isSelfTailRecursive @@ var "name" @@ var "body")) $
       "isTCO" <~ boolean False $
       "methodBody" <<~ (Logic.ifElse (var "isTCO")
         -- TCO path: wrap body in while(true) loop
@@ -2678,7 +2680,7 @@ encodeTermInternal = def "encodeTermInternal" $
         "mt" <<~ (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
         "typ" <<~ (Maybes.cases (var "mt")
           (Maybes.cases (tryInferFunctionType @@ var "f")
-            (CoderUtils.typeOfTerm @@ var "cx" @@ var "g" @@ var "term")
+            (Checking.typeOfTerm @@ var "cx" @@ var "g" @@ var "term")
             (lambda "inferredType" $ right (var "inferredType")))
           (lambda "t" $ right (var "t"))) $
         cases _Type (Strip.deannotateType @@ var "typ")
@@ -2707,7 +2709,7 @@ encodeTermInternal = def "encodeTermInternal" $
             "aliases2" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env2") $
             "mt" <<~ (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
             "letType" <<~ (Maybes.cases (var "mt")
-              (CoderUtils.typeOfTerm @@ var "cx" @@ var "g2" @@ var "body")
+              (Checking.typeOfTerm @@ var "cx" @@ var "g2" @@ var "body")
               (lambda "t" $ right (var "t"))) $
             "jLetType" <<~ (encodeType @@ var "aliases2" @@ Sets.empty @@ var "letType" @@ var "cx" @@ var "g") $
             "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jLetType" @@ var "cx") $
@@ -2961,7 +2963,7 @@ encodeTermInternal = def "encodeTermInternal" $
         "combinedAnns" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
         "mtyp" <<~ (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
         "typ" <<~ (Maybes.cases (var "mtyp")
-          (CoderUtils.typeOfTerm @@ var "cx" @@ var "g" @@ var "term")
+          (Checking.typeOfTerm @@ var "cx" @@ var "g" @@ var "term")
           (lambda "t" $ right (var "t"))) $
         -- Collect all nested type applications (preserving annotations)
         "collected0" <~ (collectTypeApps0 @@ var "body" @@ list [var "atyp"]) $
@@ -3064,7 +3066,7 @@ encodeTermTCO = def "encodeTermTCO" $
         project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_graph @@ var "env0"]) $
     "stripped" <~ (Strip.deannotateAndDetypeTerm @@ var "term") $
     -- Check if this term is a direct self-tail-call: funcName(args...)
-    "gathered" <~ (CoderUtils.gatherApplications @@ var "stripped") $
+    "gathered" <~ (Analysis.gatherApplications @@ var "stripped") $
     "gatherArgs" <~ (Pairs.first $ var "gathered") $
     "gatherFun" <~ (Pairs.second $ var "gathered") $
     "strippedFun" <~ (Strip.deannotateAndDetypeTerm @@ var "gatherFun") $
@@ -3103,7 +3105,7 @@ encodeTermTCO = def "encodeTermTCO" $
       (cases _Term (var "stripped")
         (Just $
           -- Default: check for case statement application
-          "gathered2" <~ (CoderUtils.gatherApplications @@ var "term") $
+          "gathered2" <~ (Analysis.gatherApplications @@ var "term") $
         "args2" <~ (Pairs.first $ var "gathered2") $
         "body2" <~ (Pairs.second $ var "gathered2") $
         Logic.ifElse (Equality.equal (Lists.length $ var "args2") (int32 1))
@@ -3164,7 +3166,7 @@ encodeTermTCO = def "encodeTermTCO" $
                                           @@ (JavaUtilsSource.javaExpressionToJavaUnaryExpression @@ var "jArg"))) $
                                   "localDecl" <~ (JavaUtilsSource.varDeclarationStatement @@ var "varId" @@ var "castExpr") $
                                   -- Check if this branch body is a self-tail-call
-                                  "isBranchTailCall" <~ (CoderUtils.isTailRecursiveInTailPosition @@ var "funcName" @@ var "branchBody") $
+                                  "isBranchTailCall" <~ (Analysis.isTailRecursiveInTailPosition @@ var "funcName" @@ var "branchBody") $
                                   "bodyStmts" <<~ (Logic.ifElse (var "isBranchTailCall")
                                     -- Self-call: emit assignment + continue via encodeTermTCO
                                     (encodeTermTCO @@ var "env3" @@ var "funcName" @@ var "paramNames" @@ var "tcoVarRenames" @@ (Math.add (var "tcoDepth") (int32 1)) @@ var "branchBody" @@ var "cx" @@ var "g")
@@ -3384,7 +3386,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
   lambda "pkg" $ lambda "aliases" $ lambda "tdef" $
     "cx" ~> "g" ~>
     "name" <~ (project _TypeDefinition _TypeDefinition_name @@ var "tdef") $
-    "typ" <~ (project _TypeDefinition _TypeDefinition_type @@ var "tdef") $
+    "typ" <~ (Core.typeSchemeType $ project _TypeDefinition _TypeDefinition_type @@ var "tdef") $
     -- Check if serializable
     "serializable" <~ (isSerializableJavaType @@ var "typ") $
     "imports" <~ Logic.ifElse (var "serializable")
@@ -3498,7 +3500,7 @@ encodeVariable_hoistedLambdaCase = def "encodeVariable_hoistedLambdaCase" $
         var "paramExprs")) $
     "lam" <~ encodeVariable_buildCurried @@ var "paramNames" @@ var "call" $
     -- Try to cast to the function's curried type
-    "mel" <<~ right (Lexical.dereferenceElement @@ var "g" @@ var "name") $
+    "mel" <<~ right (Lexical.lookupBinding @@ var "g" @@ var "name") $
     Maybes.cases (var "mel")
       (right (var "lam"))
       (lambda "el" $
@@ -3663,7 +3665,7 @@ filterPhantomTypeArgs :: TTermDefinition (Name -> [Type] -> Context -> Graph -> 
 filterPhantomTypeArgs = def "filterPhantomTypeArgs" $
   lambda "calleeName" $ lambda "allTypeArgs" $
     "cx" ~> "g" ~>
-    "mel" <<~ right (Lexical.dereferenceElement @@ var "g" @@ var "calleeName") $
+    "mel" <<~ right (Lexical.lookupBinding @@ var "g" @@ var "calleeName") $
     Maybes.cases (var "mel")
       (right (var "allTypeArgs"))
       (lambda "el" $
@@ -3826,8 +3828,8 @@ functionCall = def "functionCall" $
                   (JavaDsl.methodInvocation_ (var "header") (var "jargs"))))
               -- With type applications: need qualified invocation
               ("qn" <~ (Names.qualifyName @@ var "name") $
-                "mns" <~ (Module.qualifiedNameNamespace (var "qn")) $
-                "localName" <~ (Module.qualifiedNameLocal (var "qn")) $
+                "mns" <~ (Packaging.qualifiedNameNamespace (var "qn")) $
+                "localName" <~ (Packaging.qualifiedNameLocal (var "qn")) $
                 Maybes.cases (var "mns")
                   -- No namespace: simple header
                   ("header" <~ JavaDsl.methodInvocationHeaderSimple
@@ -3838,7 +3840,7 @@ functionCall = def "functionCall" $
                     "classId" <~ (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ (elementsQualifiedName @@ var "ns_")) $
                     "methodId" <~ (Logic.ifElse (var "isPrim")
                       (var "overrideMethodName" @@ (JavaDsl.identifier (Strings.cat2
-                        (JavaDsl.unIdentifier (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ (Names.unqualifyName @@ (Module.qualifiedName (just (var "ns_")) (Formatting.capitalize @@ var "localName")))))
+                        (JavaDsl.unIdentifier (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ (Names.unqualifyName @@ (Packaging.qualifiedName (just (var "ns_")) (Formatting.capitalize @@ var "localName")))))
                         (Strings.cat2 (string ".") (asTerm JavaNamesSource.applyMethodName)))))
                       (JavaDsl.identifier (JavaUtilsSource.sanitizeJavaName @@ var "localName"))) $
                     "jTypeArgs" <<~ (Eithers.mapList (lambda "t" $
@@ -4070,7 +4072,7 @@ isLambdaBoundIn = def "isLambdaBoundIn" $
 -- | Helper: check if a name is qualified (has a namespace)
 isLambdaBoundIn_isQualified :: TTermDefinition (Name -> Bool)
 isLambdaBoundIn_isQualified = def "isLambdaBoundIn_isQualified" $
-  lambda "n" $ Maybes.isJust (Module.qualifiedNameNamespace (Names.qualifyName @@ var "n"))
+  lambda "n" $ Maybes.isJust (Packaging.qualifiedNameNamespace (Names.qualifyName @@ var "n"))
 
 -- | Check if a name (possibly qualified) is lambda-bound
 
@@ -4083,7 +4085,7 @@ isLambdaBoundVariable = def "isLambdaBoundVariable" $
 isLocalVariable :: TTermDefinition (Name -> Bool)
 isLocalVariable = def "isLocalVariable" $
   lambda "name" $ Maybes.isNothing
-    (Module.qualifiedNameNamespace (Names.qualifyName @@ var "name"))
+    (Packaging.qualifiedNameNamespace (Names.qualifyName @@ var "name"))
 
 -- | Check whether a Hydra type maps to a Java type that does not implement Comparable
 isNonComparableType :: TTermDefinition (Type -> Bool)
@@ -4895,7 +4897,7 @@ toDeclInit = def "toDeclInit" $
       ("binding" <~ Lists.head (Lists.filter (lambda "b" $ Equality.equal (Core.bindingName (var "b")) (var "name")) (var "flatBindings")) $
         "value" <~ Core.bindingTerm (var "binding") $
         "typ" <<~ Maybes.cases (Core.bindingType (var "binding"))
-          (CoderUtils.typeOfTerm @@ var "cx" @@ var "gExt" @@ var "value")
+          (Checking.typeOfTerm @@ var "cx" @@ var "gExt" @@ var "value")
           (lambda "ts" $ right (Core.typeSchemeType (var "ts"))) $
         "jtype" <<~ (encodeType @@ var "aliasesExt" @@ Sets.empty @@ var "typ" @@ var "cx" @@ var "g") $
         "id" <~ (JavaUtilsSource.variableToJavaIdentifier @@ var "name") $
@@ -4920,7 +4922,7 @@ toDeclStatement = def "toDeclStatement" $
     "binding" <~ Lists.head (Lists.filter (lambda "b" $ Equality.equal (Core.bindingName (var "b")) (var "name")) (var "flatBindings")) $
     "value" <~ Core.bindingTerm (var "binding") $
     "typ" <<~ Maybes.cases (Core.bindingType (var "binding"))
-      (CoderUtils.typeOfTerm @@ var "cx" @@ var "gExt" @@ var "value")
+      (Checking.typeOfTerm @@ var "cx" @@ var "gExt" @@ var "value")
       (lambda "ts" $ right (Core.typeSchemeType (var "ts"))) $
     "jtype" <<~ (encodeType @@ var "aliasesExt" @@ Sets.empty @@ var "typ" @@ var "cx" @@ var "g") $
     "id" <~ (JavaUtilsSource.variableToJavaIdentifier @@ var "name") $
@@ -4996,8 +4998,8 @@ typeAppNullaryOrHoisted = def "typeAppNullaryOrHoisted" $
       lambda "cls" $ lambda "allTypeArgs" $
         "cx" ~> "g" ~>
         "qn" <~ (Names.qualifyName @@ var "varName") $
-        "mns" <~ Module.qualifiedNameNamespace (var "qn") $
-        "localName" <~ Module.qualifiedNameLocal (var "qn") $
+        "mns" <~ Packaging.qualifiedNameNamespace (var "qn") $
+        "localName" <~ Packaging.qualifiedNameLocal (var "qn") $
         cases JavaHelpers._JavaSymbolClass (var "cls")
           (Just $ typeAppFallbackCast @@ var "env" @@ var "aliases" @@ var "anns" @@ var "tyapps"
             @@ var "jatyp" @@ var "body" @@ var "correctedTyp" @@ var "cx" @@ var "g") [

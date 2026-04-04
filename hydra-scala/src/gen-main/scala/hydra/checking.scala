@@ -877,6 +877,10 @@ def typeOfSet(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq[hy
   })
 })
 
+def typeOfTerm(cx: hydra.context.Context)(g: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Type] =
+  hydra.lib.eithers.map[Tuple2[hydra.core.Type, hydra.context.Context], hydra.core.Type, hydra.context.InContext[hydra.errors.Error]](hydra.lib.pairs.first[hydra.core.Type,
+     hydra.context.Context])(hydra.checking.typeOf(cx)(g)(Seq())(term))
+
 def typeOfTypeApplication(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq[hydra.core.Type])(tyapp: hydra.core.TypeApplicationTerm): Either[hydra.context.InContext[hydra.errors.Error],
    Tuple2[hydra.core.Type, hydra.context.Context]] =
   {

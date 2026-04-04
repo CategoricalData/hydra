@@ -28,7 +28,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
 import qualified Hydra.Dsl.Topology                   as Topology
@@ -87,7 +87,6 @@ import qualified Hydra.Ext.Sources.Graphql.Language as GraphqlLanguage
 import qualified Hydra.Ext.Sources.Graphql.Serde as GraphqlSerde
 import qualified Hydra.Dsl.Meta.Context as Ctx
 import qualified Hydra.Dsl.Errors as Error
-import qualified Hydra.Sources.CoderUtils as CoderUtils
 
 
 ns :: Namespace
@@ -127,8 +126,8 @@ moduleToGraphql = define "moduleToGraphql" $
     "cx" ~> "g" ~> lets [
     "partitioned">: Environment.partitionDefinitions @@ var "defs",
     "typeDefs">: Pairs.first (var "partitioned"),
-    "prefixes">: findPrefixes @@ Module.moduleNamespace (var "mod") @@ var "typeDefs",
-    "filePath">: Names.namespaceToFilePath @@ Util.caseConventionCamel @@ (wrap _FileExtension (string "graphql")) @@ Module.moduleNamespace (var "mod")] $
+    "prefixes">: findPrefixes @@ Packaging.moduleNamespace (var "mod") @@ var "typeDefs",
+    "filePath">: Names.namespaceToFilePath @@ Util.caseConventionCamel @@ (wrap _FileExtension (string "graphql")) @@ Packaging.moduleNamespace (var "mod")] $
     "gtdefs" <<~ (Eithers.mapList (lambda "td" $ encodeTypeDefinition @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "td") (var "typeDefs")) $
     right (Maps.fromList $ Lists.pure $ pair (var "filePath")
       (Serialization.printExpr @@ (Serialization.parenthesize @@
@@ -144,13 +143,13 @@ moduleToGraphql = define "moduleToGraphql" $
 findPrefixes :: TTerm (Namespace -> [TypeDefinition] -> M.Map Namespace String)
 findPrefixes = lambda "modNs" $ lambda "tdefs" $ lets [
   "namespaces">: (Lists.nub :: TTerm [Namespace] -> TTerm [Namespace]) $ Maybes.cat $ Lists.map
-    (lambda "td" $ Names.namespaceOf @@ (Module.typeDefinitionName $ var "td"))
+    (lambda "td" $ Names.namespaceOf @@ (Packaging.typeDefinitionName $ var "td"))
     (var "tdefs")] $
   Maps.fromList $ Lists.map
     (lambda "ns_" $ pair (var "ns_")
       (Logic.ifElse (Equality.equal (var "ns_") (var "modNs"))
         (string "")
-        (Strings.cat2 (Formatting.sanitizeWithUnderscores @@ Sets.empty @@ (Module.unNamespace $ var "ns_")) (string "_"))))
+        (Strings.cat2 (Formatting.sanitizeWithUnderscores @@ Sets.empty @@ (Packaging.unNamespace $ var "ns_")) (string "_"))))
     (var "namespaces")
 
 -- | Encode a TypeDefinition to a GraphQL TypeDefinition
@@ -158,8 +157,8 @@ encodeTypeDefinition :: TTermDefinition (Context -> Graph -> M.Map Namespace Str
 encodeTypeDefinition = define "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "tdef" $
     encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes"
-      @@ (Module.typeDefinitionName $ var "tdef")
-      @@ (Module.typeDefinitionType $ var "tdef")
+      @@ (Packaging.typeDefinitionName $ var "tdef")
+      @@ (Core.typeSchemeType $ Packaging.typeDefinitionType $ var "tdef")
 
 -- | Get the description from a type as a GraphQL Description
 descriptionFromType :: TTermDefinition (Context -> Graph -> Type -> Either (InContext Error) (Maybe G.Description))
@@ -391,8 +390,8 @@ encodeTypeName :: TTermDefinition (M.Map Namespace String -> Name -> G.Name)
 encodeTypeName = define "encodeTypeName" $
   lambda "prefixes" $ lambda "name" $ lets [
     "qualName">: Names.qualifyName @@ var "name",
-    "local">: Module.qualifiedNameLocal (var "qualName"),
-    "mns">: Module.qualifiedNameNamespace (var "qualName"),
+    "local">: Packaging.qualifiedNameLocal (var "qualName"),
+    "mns">: Packaging.qualifiedNameNamespace (var "qualName"),
     "prefix">: Maybes.maybe (string "")
       (lambda "ns_" $ Maybes.maybe (string "") ("p" ~> var "p") (Maps.lookup (var "ns_") (var "prefixes")))
       (var "mns")] $

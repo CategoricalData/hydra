@@ -6,7 +6,6 @@ module Hydra.Ext.Scala.Coder where
 
 import qualified Hydra.Analysis as Analysis
 import qualified Hydra.Annotations as Annotations
-import qualified Hydra.CoderUtils as CoderUtils
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Environment as Environment
@@ -28,8 +27,9 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Predicates as Predicates
 import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Serialization as Serialization
@@ -60,13 +60,13 @@ applyVar fterm avar =
           Core.applicationArgument = (Core.TermVariable avar)})
 
 -- | Construct a Scala package from a Hydra module and its definitions
-constructModule :: Context.Context -> Graph.Graph -> Module.Module -> [Module.Definition] -> Either (Context.InContext Errors.Error) Syntax.Pkg
+constructModule :: Context.Context -> Graph.Graph -> Packaging.Module -> [Packaging.Definition] -> Either (Context.InContext Errors.Error) Syntax.Pkg
 constructModule cx g mod defs =
 
       let partitioned = Environment.partitionDefinitions defs
           typeDefs = Pairs.first partitioned
           termDefs = Pairs.second partitioned
-          nsName = Module.unNamespace (Module.moduleNamespace mod)
+          nsName = Packaging.unNamespace (Packaging.moduleNamespace mod)
           pname =
                   Syntax.Data_Name {
                     Syntax.data_NameValue = (Syntax.PredefString (Strings.intercalate "." (Strings.splitOn "." nsName)))}
@@ -170,7 +170,7 @@ encodeComplexTermDef cx g lname term typ =
                     Graph.graphTypeVariables = (Sets.union (Sets.fromList freeTypeVars) (Graph.graphTypeVariables g))}
       in (Eithers.bind (Eithers.mapList (encodeTypedParam cx gWithTypeVars) zippedParams) (\sparams -> Eithers.bind (encodeTerm cx gWithTypeVars (extractBody term)) (\sbody -> Eithers.bind (encodeType cx g cod) (\scod ->
         let gForLets =
-                Logic.ifElse (Lists.null letBindings) gWithTypeVars (Scoping.extendGraphForLet CoderUtils.bindingMetadata gWithTypeVars (Core.Let {
+                Logic.ifElse (Lists.null letBindings) gWithTypeVars (Scoping.extendGraphForLet (\g2 -> \b -> Logic.ifElse (Predicates.isComplexBinding g2 b) (Just (Core.TermLiteral (Core.LiteralBoolean True))) Nothing) gWithTypeVars (Core.Let {
                   Core.letBindings = letBindings,
                   Core.letBody = (Core.TermVariable (Core.Name "dummy"))}))
         in (Eithers.bind (Eithers.mapList (encodeLetBinding cx gForLets (Sets.fromList freeTypeVars)) letBindings) (\sbindings ->
@@ -335,7 +335,7 @@ encodeLocalDef cx g outerTypeVars lname term typ =
                     Graph.graphTypeVariables = (Sets.union allTypeVars (Graph.graphTypeVariables g))}
       in (Eithers.bind (Eithers.mapList (encodeTypedParam cx gWithTypeVars) zippedParams) (\sparams -> Eithers.bind (encodeTerm cx gWithTypeVars (extractBody term)) (\sbody -> Eithers.bind (encodeType cx gWithTypeVars cod) (\scod ->
         let gForLets =
-                Logic.ifElse (Lists.null letBindings) gWithTypeVars (Scoping.extendGraphForLet CoderUtils.bindingMetadata gWithTypeVars (Core.Let {
+                Logic.ifElse (Lists.null letBindings) gWithTypeVars (Scoping.extendGraphForLet (\g2 -> \b -> Logic.ifElse (Predicates.isComplexBinding g2 b) (Just (Core.TermLiteral (Core.LiteralBoolean True))) Nothing) gWithTypeVars (Core.Let {
                   Core.letBindings = letBindings,
                   Core.letBody = (Core.TermVariable (Core.Name "dummy"))}))
         in (Eithers.bind (Eithers.mapList (encodeLetBinding cx gForLets allTypeVars) letBindings) (\sbindings ->
@@ -488,7 +488,8 @@ encodeTerm cx g term0 =
         Core.TermLet v0 ->
           let bindings = Core.letBindings v0
               body = Core.letBody v0
-              gLet = Scoping.extendGraphForLet CoderUtils.bindingMetadata g v0
+              gLet =
+                      Scoping.extendGraphForLet (\g2 -> \b -> Logic.ifElse (Predicates.isComplexBinding g2 b) (Just (Core.TermLiteral (Core.LiteralBoolean True))) Nothing) g v0
           in (Eithers.bind (Eithers.mapList (encodeLetBinding cx gLet (Graph.graphTypeVariables gLet)) bindings) (\sbindings -> Eithers.bind (encodeTerm cx gLet body) (\sbody -> Right (Syntax.DataBlock (Syntax.Data_Block {
             Syntax.data_BlockStats = (Lists.concat2 sbindings [
               Syntax.StatTerm sbody])})))))
@@ -497,13 +498,13 @@ encodeTerm cx g term0 =
           Context.inContextContext = cx})
 
 -- | Encode a term definition as a Scala statement
-encodeTermDefinition :: Context.Context -> Graph.Graph -> Module.TermDefinition -> Either (Context.InContext Errors.Error) Syntax.Stat
+encodeTermDefinition :: Context.Context -> Graph.Graph -> Packaging.TermDefinition -> Either (Context.InContext Errors.Error) Syntax.Stat
 encodeTermDefinition cx g td =
 
-      let name = Module.termDefinitionName td
-          term = Module.termDefinitionTerm td
+      let name = Packaging.termDefinitionName td
+          term = Packaging.termDefinitionTerm td
           lname = Utils.scalaEscapeName (Names.localNameOf name)
-          typ_ = Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeType (Module.termDefinitionType td)
+          typ_ = Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeType (Packaging.termDefinitionType td)
           isFunctionType =
                   case (Strip.deannotateType typ_) of
                     Core.TypeFunction _ -> True
@@ -638,11 +639,11 @@ encodeType cx g t =
         Context.inContextContext = cx})
 
 -- | Encode a type definition as a Scala statement
-encodeTypeDefinition :: Context.Context -> t0 -> Module.TypeDefinition -> Either (Context.InContext Errors.Error) Syntax.Stat
+encodeTypeDefinition :: Context.Context -> t0 -> Packaging.TypeDefinition -> Either (Context.InContext Errors.Error) Syntax.Stat
 encodeTypeDefinition cx g td =
 
-      let name = Module.typeDefinitionName td
-          typ = Module.typeDefinitionType td
+      let name = Packaging.typeDefinitionName td
+          typ = Core.typeSchemeType (Packaging.typeDefinitionType td)
           lname = Names.localNameOf name
           tname = Syntax.Type_Name {
                 Syntax.type_NameValue = lname}
@@ -902,7 +903,7 @@ findDomain cx g meta =
         Context.inContextContext = cx})) r)
 
 -- | Find import statements for the module
-findImports :: Context.Context -> Graph.Graph -> Module.Module -> Either (Context.InContext Errors.Error) [Syntax.Stat]
+findImports :: Context.Context -> Graph.Graph -> Packaging.Module -> Either (Context.InContext Errors.Error) [Syntax.Stat]
 findImports cx g mod =
     Eithers.bind (Analysis.moduleDependencyNamespaces cx g False False True False mod) (\elImps -> Eithers.bind (Analysis.moduleDependencyNamespaces cx g False True False False mod) (\primImps -> Right (Lists.concat [
       Lists.map toElImport (Sets.toList elImps),
@@ -925,11 +926,11 @@ findSdom cx g meta =
       _ -> Eithers.bind (encodeType cx g t) (\st -> Right (Just st))) mtyp)
 
 -- | Convert a Hydra module to Scala source code
-moduleToScala :: Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (M.Map String String)
+moduleToScala :: Packaging.Module -> [Packaging.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (M.Map String String)
 moduleToScala mod defs cx g =
     Eithers.bind (constructModule cx g mod defs) (\pkg ->
       let s = Serialization.printExpr (Serialization.parenthesize (Serde.writePkg pkg))
-      in (Right (Maps.singleton (Names.namespaceToFilePath Util.CaseConventionCamel (Module.FileExtension "scala") (Module.moduleNamespace mod)) s)))
+      in (Right (Maps.singleton (Names.namespaceToFilePath Util.CaseConventionCamel (Packaging.FileExtension "scala") (Packaging.moduleNamespace mod)) s)))
 
 -- | Strip wrap eliminations from terms (newtypes are erased in Scala)
 stripWrapEliminations :: Core.Term -> Core.Term
@@ -960,24 +961,24 @@ stripWrapEliminations t =
       _ -> t
 
 -- | Create an element import statement
-toElImport :: Module.Namespace -> Syntax.Stat
+toElImport :: Packaging.Namespace -> Syntax.Stat
 toElImport ns =
     Syntax.StatImportExport (Syntax.ImportExportStatImport (Syntax.Import {
       Syntax.importImporters = [
         Syntax.Importer {
           Syntax.importerRef = (Syntax.Data_RefName (Syntax.Data_Name {
-            Syntax.data_NameValue = (Syntax.PredefString (Strings.intercalate "." (Strings.splitOn "." (Module.unNamespace ns))))})),
+            Syntax.data_NameValue = (Syntax.PredefString (Strings.intercalate "." (Strings.splitOn "." (Packaging.unNamespace ns))))})),
           Syntax.importerImportees = [
             Syntax.ImporteeWildcard]}]}))
 
 -- | Create a primitive import statement
-toPrimImport :: Module.Namespace -> Syntax.Stat
+toPrimImport :: Packaging.Namespace -> Syntax.Stat
 toPrimImport ns =
     Syntax.StatImportExport (Syntax.ImportExportStatImport (Syntax.Import {
       Syntax.importImporters = [
         Syntax.Importer {
           Syntax.importerRef = (Syntax.Data_RefName (Syntax.Data_Name {
-            Syntax.data_NameValue = (Syntax.PredefString (Strings.intercalate "." (Strings.splitOn "." (Module.unNamespace ns))))})),
+            Syntax.data_NameValue = (Syntax.PredefString (Strings.intercalate "." (Strings.splitOn "." (Packaging.unNamespace ns))))})),
           Syntax.importerImportees = []}]}))
 
 -- | Convert a type parameter to a type variable reference

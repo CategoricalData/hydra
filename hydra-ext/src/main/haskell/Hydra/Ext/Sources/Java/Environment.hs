@@ -12,7 +12,7 @@ import qualified Hydra.Dsl.Types                           as T
 import qualified Hydra.Sources.Kernel.Types.Core           as Core
 -- Additional imports
 import qualified Hydra.Sources.Kernel.Types.Graph as Graph
-import qualified Hydra.Sources.Kernel.Types.Module as Module
+import qualified Hydra.Sources.Kernel.Types.Packaging as Module
 import qualified Hydra.Sources.Kernel.Types.Typing as Typing
 import qualified Hydra.Ext.Sources.Java.Syntax as Syntax
 

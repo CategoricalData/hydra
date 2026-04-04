@@ -29,7 +29,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
 import qualified Hydra.Dsl.Topology                   as Topology
@@ -142,24 +142,35 @@ fromJson = define "fromJson" $
           Eithers.map ("elems" ~> Core.termSet $ Sets.fromList $ var "elems") (var "decoded"))
         (var "arrResult"),
 
-    -- Maybe (null -> Nothing, [v] -> Just v)
+    -- Maybe: decoding depends on whether the inner type is itself Maybe
+    --   Simple Maybe(T): null -> Nothing, any other value -> Just (decoded as T)
+    --   Nested Maybe(Maybe(T)): null -> Nothing, [v] -> Just v (array-wrapped)
     _Type_maybe>>: "innerType" ~>
-      -- Helper to decode Just case (single element array)
-      "decodeJust" <~ ("arr" ~>
-        Eithers.map ("v" ~> Core.termMaybe $ just $ var "v")
-          (fromJson @@ var "types" @@ var "tname" @@ var "innerType" @@ (Lists.head $ var "arr"))) $
-      -- Decode array based on length: 0 -> Nothing, 1 -> Just, else error
-      "decodeMaybeArray" <~ ("arr" ~>
-        "len" <~ (Lists.length $ var "arr") $
-        Logic.ifElse (Equality.equal (var "len") (int32 0))
-          (right $ Core.termMaybe nothing)
-          (Logic.ifElse (Equality.equal (var "len") (int32 1))
-            (var "decodeJust" @@ var "arr")
-            (left $ string "expected single-element array for Just"))) $
-      cases _Value (var "value")
-        (Just $ left $ string "expected null or single-element array for Maybe") [
-        _Value_null>>: constant $ right $ Core.termMaybe nothing,
-        _Value_array>>: "arr" ~> var "decodeMaybeArray" @@ var "arr"],
+      "innerStripped" <~ (Strip.deannotateType @@ var "innerType") $
+      "isNestedMaybe" <~ (cases _Type (var "innerStripped") (Just false) [
+        _Type_maybe>>: constant true]) $
+      Logic.ifElse (var "isNestedMaybe")
+        -- Nested Maybe: use array-wrapped encoding (null -> Nothing, [v] -> Just v)
+        ("decodeJust" <~ ("arr" ~>
+          Eithers.map ("v" ~> Core.termMaybe $ just $ var "v")
+            (fromJson @@ var "types" @@ var "tname" @@ var "innerType" @@ (Lists.head $ var "arr"))) $
+        "decodeMaybeArray" <~ ("arr" ~>
+          "len" <~ (Lists.length $ var "arr") $
+          Logic.ifElse (Equality.equal (var "len") (int32 0))
+            (right $ Core.termMaybe nothing)
+            (Logic.ifElse (Equality.equal (var "len") (int32 1))
+              (var "decodeJust" @@ var "arr")
+              (left $ string "expected single-element array for Just"))) $
+        cases _Value (var "value")
+          (Just $ left $ string "expected null or single-element array for nested Maybe") [
+          _Value_null>>: constant $ right $ Core.termMaybe nothing,
+          _Value_array>>: "arr" ~> var "decodeMaybeArray" @@ var "arr"])
+        -- Simple Maybe: idiomatic encoding (null -> Nothing, value -> Just)
+        (cases _Value (var "value")
+          (Just $
+            Eithers.map ("v" ~> Core.termMaybe $ just $ var "v")
+              (fromJson @@ var "types" @@ var "tname" @@ var "innerType" @@ var "value")) [
+          _Value_null>>: constant $ right $ Core.termMaybe nothing]),
 
     -- Records
     _Type_record>>: "rt" ~>

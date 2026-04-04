@@ -23,8 +23,8 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names_
+import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
 addExpressions :: [Syntax.MultiplicativeExpression] -> Syntax.AdditiveExpression
@@ -134,10 +134,10 @@ finalVarDeclarationStatement id rhs =
       Syntax.localVariableDeclarationDeclarators = [
         javaVariableDeclarator id (Just (Syntax.VariableInitializerExpression rhs))]}))
 
-importAliasesForModule :: Module.Module -> Environment.Aliases
+importAliasesForModule :: Packaging.Module -> Environment.Aliases
 importAliasesForModule mod =
     Environment.Aliases {
-      Environment.aliasesCurrentNamespace = (Module.moduleNamespace mod),
+      Environment.aliasesCurrentNamespace = (Packaging.moduleNamespace mod),
       Environment.aliasesPackages = Maps.empty,
       Environment.aliasesBranchVars = Sets.empty,
       Environment.aliasesRecursiveVars = Sets.empty,
@@ -521,11 +521,11 @@ javaMultiplicativeExpressionToJavaRelationalExpression :: Syntax.MultiplicativeE
 javaMultiplicativeExpressionToJavaRelationalExpression me =
     Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary me))
 
-javaPackageDeclaration :: Module.Namespace -> Syntax.PackageDeclaration
+javaPackageDeclaration :: Packaging.Namespace -> Syntax.PackageDeclaration
 javaPackageDeclaration ns =
     Syntax.PackageDeclaration {
       Syntax.packageDeclarationModifiers = [],
-      Syntax.packageDeclarationIdentifiers = (Lists.map (\s -> Syntax.Identifier s) (Strings.splitOn "." (Module.unNamespace ns)))}
+      Syntax.packageDeclarationIdentifiers = (Lists.map (\s -> Syntax.Identifier s) (Strings.splitOn "." (Packaging.unNamespace ns)))}
 
 javaPostfixExpressionToJavaEqualityExpression :: Syntax.PostfixExpression -> Syntax.EqualityExpression
 javaPostfixExpressionToJavaEqualityExpression pe =
@@ -820,11 +820,11 @@ nameToJavaName :: Environment.Aliases -> Core.Name -> Syntax.Identifier
 nameToJavaName aliases name =
 
       let qn = Names_.qualifyName name
-          ns_ = Module.qualifiedNameNamespace qn
-          local = Module.qualifiedNameLocal qn
+          ns_ = Packaging.qualifiedNameNamespace qn
+          local = Packaging.qualifiedNameLocal qn
       in (Logic.ifElse (isEscaped (Core.unName name)) (Syntax.Identifier (sanitizeJavaName local)) (Maybes.cases ns_ (Syntax.Identifier local) (\gname ->
         let parts =
-                Maybes.cases (Maps.lookup gname (Environment.aliasesPackages aliases)) (Strings.splitOn "." (Module.unNamespace gname)) (\pkgName -> Lists.map (\i -> Syntax.unIdentifier i) (Syntax.unPackageName pkgName))
+                Maybes.cases (Maps.lookup gname (Environment.aliasesPackages aliases)) (Strings.splitOn "." (Packaging.unNamespace gname)) (\pkgName -> Lists.map (\i -> Syntax.unIdentifier i) (Syntax.unPackageName pkgName))
             allParts = Lists.concat2 parts [
                   sanitizeJavaName local]
         in (Syntax.Identifier (Strings.intercalate "." allParts)))))
@@ -840,10 +840,10 @@ nameToQualifiedJavaName :: Environment.Aliases -> Bool -> Core.Name -> Maybe Str
 nameToQualifiedJavaName aliases qualify name mlocal =
 
       let qn = Names_.qualifyName name
-          ns_ = Module.qualifiedNameNamespace qn
-          local = Module.qualifiedNameLocal qn
+          ns_ = Packaging.qualifiedNameNamespace qn
+          local = Packaging.qualifiedNameLocal qn
           alias =
-                  Maybes.cases ns_ Nothing (\n -> Just (Maybes.cases (Maps.lookup n (Environment.aliasesPackages aliases)) (Names.javaPackageName (Strings.splitOn "." (Module.unNamespace n))) (\id -> id)))
+                  Maybes.cases ns_ Nothing (\n -> Just (Maybes.cases (Maps.lookup n (Environment.aliasesPackages aliases)) (Names.javaPackageName (Strings.splitOn "." (Packaging.unNamespace n))) (\id -> id)))
           pkg =
                   Logic.ifElse qualify (Maybes.cases alias Syntax.ClassTypeQualifierNone (\p -> Syntax.ClassTypeQualifierPackage p)) Syntax.ClassTypeQualifierNone
           jid =
@@ -984,14 +984,14 @@ variantClassName :: Bool -> Core.Name -> Core.Name -> Core.Name
 variantClassName qualify elName fname =
 
       let qn = Names_.qualifyName elName
-          ns_ = Module.qualifiedNameNamespace qn
-          local = Module.qualifiedNameLocal qn
+          ns_ = Packaging.qualifiedNameNamespace qn
+          local = Packaging.qualifiedNameLocal qn
           flocal = Formatting.capitalize (Core.unName fname)
           local1 =
                   Logic.ifElse qualify (Strings.cat2 (Strings.cat2 local ".") flocal) (Logic.ifElse (Equality.equal flocal local) (Strings.cat2 flocal "_") flocal)
-      in (Names_.unqualifyName (Module.QualifiedName {
-        Module.qualifiedNameNamespace = ns_,
-        Module.qualifiedNameLocal = local1}))
+      in (Names_.unqualifyName (Packaging.QualifiedName {
+        Packaging.qualifiedNameNamespace = ns_,
+        Packaging.qualifiedNameLocal = local1}))
 
 visitorTypeVariable :: Syntax.ReferenceType
 visitorTypeVariable = javaTypeVariable "r"

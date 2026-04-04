@@ -234,7 +234,7 @@
                         {
                           "application": {
                             "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                            "function": {"variable": "hydra.module.Namespaces"}}}],
+                            "function": {"variable": "hydra.packaging.Namespaces"}}}],
                       "parameter": "namespaces"}}}}},
             "parameter": "t0"}},
         "type": [
@@ -261,7 +261,7 @@
                 "domain": {
                   "application": {
                     "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                    "function": {"variable": "hydra.module.Namespaces"}}}}},
+                    "function": {"variable": "hydra.packaging.Namespaces"}}}}},
             "variables": ["t0"]}]}},
     {
       "term": {
@@ -380,8 +380,8 @@
                                                         "body": {
                                                           "application": {
                                                             "argument": {"variable": "namespace"},
-                                                            "function": {"function": {"elimination": {"wrap": "hydra.module.Namespace"}}}}},
-                                                        "domain": [{"variable": "hydra.module.Namespace"}],
+                                                            "function": {"function": {"elimination": {"wrap": "hydra.packaging.Namespace"}}}}},
+                                                        "domain": [{"variable": "hydra.packaging.Namespace"}],
                                                         "parameter": "namespace"}}},
                                                   "type": [
                                                     {
@@ -389,7 +389,7 @@
                                                       "type": {
                                                         "function": {
                                                           "codomain": {"literal": {"string": {}}},
-                                                          "domain": {"variable": "hydra.module.Namespace"}}},
+                                                          "domain": {"variable": "hydra.packaging.Namespace"}}},
                                                       "variables": []}]},
                                                 {
                                                   "name": "createDeclarations",
@@ -420,7 +420,7 @@
                                                                                           "function": {
                                                                                             "function": {
                                                                                               "elimination": {
-                                                                                                "record": {"field": "name", "typeName": "hydra.module.TypeDefinition"}}}}}},
+                                                                                                "record": {"field": "name", "typeName": "hydra.packaging.TypeDefinition"}}}}}},
                                                                                       "type": [
                                                                                         {
                                                                                           "constraints": null,
@@ -430,11 +430,16 @@
                                                                                       "name": "typ",
                                                                                       "term": {
                                                                                         "application": {
-                                                                                          "argument": {"variable": "type"},
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "argument": {"variable": "type"},
+                                                                                              "function": {
+                                                                                                "function": {
+                                                                                                  "elimination": {
+                                                                                                    "record": {"field": "type", "typeName": "hydra.packaging.TypeDefinition"}}}}}},
                                                                                           "function": {
                                                                                             "function": {
-                                                                                              "elimination": {
-                                                                                                "record": {"field": "type", "typeName": "hydra.module.TypeDefinition"}}}}}},
+                                                                                              "elimination": {"record": {"field": "type", "typeName": "hydra.core.TypeScheme"}}}}}},
                                                                                       "type": [
                                                                                         {
                                                                                           "constraints": null,
@@ -456,7 +461,7 @@
                                                                                                     "application": {
                                                                                                       "argument": {"variable": "namespaces"},
                                                                                                       "function": {"variable": "hydra.ext.haskell.coder.toTypeDeclarationsFrom"}}}}}}}}}}}}},
-                                                                              "domain": [{"variable": "hydra.module.TypeDefinition"}],
+                                                                              "domain": [{"variable": "hydra.packaging.TypeDefinition"}],
                                                                               "parameter": "type"}}}},
                                                                       {
                                                                         "name": "term",
@@ -510,11 +515,11 @@
                                                                                               "type": {"variable": "hydra.ext.haskell.syntax.DeclarationWithComments"}}},
                                                                                           "type": {
                                                                                             "list": {"variable": "hydra.ext.haskell.syntax.DeclarationWithComments"}}}}}}}},
-                                                                              "domain": [{"variable": "hydra.module.TermDefinition"}],
+                                                                              "domain": [{"variable": "hydra.packaging.TermDefinition"}],
                                                                               "parameter": "term"}}}}],
                                                                     "default": null,
-                                                                    "typeName": "hydra.module.Definition"}}}}}},
-                                                        "domain": [{"variable": "hydra.module.Definition"}],
+                                                                    "typeName": "hydra.packaging.Definition"}}}}}},
+                                                        "domain": [{"variable": "hydra.packaging.Definition"}],
                                                         "parameter": "def"}}},
                                                   "type": [
                                                     {
@@ -529,7 +534,7 @@
                                                                   "function": {"variable": "hydra.context.InContext"}}},
                                                               "right": {
                                                                 "list": {"variable": "hydra.ext.haskell.syntax.DeclarationWithComments"}}}},
-                                                          "domain": {"variable": "hydra.module.Definition"}}},
+                                                          "domain": {"variable": "hydra.packaging.Definition"}}},
                                                       "variables": []}]},
                                                 {
                                                   "name": "importName",
@@ -614,12 +619,12 @@
                                                                                 "body": {
                                                                                   "typeApplication": {
                                                                                     "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
-                                                                                    "type": {"variable": "hydra.module.Namespace"}}},
+                                                                                    "type": {"variable": "hydra.packaging.Namespace"}}},
                                                                                 "type": {"variable": "hydra.ext.haskell.syntax.ModuleName"}}}}},
                                                                         "type": [
                                                                           {
                                                                             "constraints": null,
-                                                                            "type": {"variable": "hydra.module.Namespace"},
+                                                                            "type": {"variable": "hydra.packaging.Namespace"},
                                                                             "variables": []}]},
                                                                       {
                                                                         "name": "alias",
@@ -631,7 +636,7 @@
                                                                                 "body": {
                                                                                   "typeApplication": {
                                                                                     "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
-                                                                                    "type": {"variable": "hydra.module.Namespace"}}},
+                                                                                    "type": {"variable": "hydra.packaging.Namespace"}}},
                                                                                 "type": {"variable": "hydra.ext.haskell.syntax.ModuleName"}}}}},
                                                                         "type": [
                                                                           {
@@ -668,7 +673,7 @@
                                                                 "domain": [
                                                                   {
                                                                     "pair": {
-                                                                      "first": {"variable": "hydra.module.Namespace"},
+                                                                      "first": {"variable": "hydra.packaging.Namespace"},
                                                                       "second": {"variable": "hydra.ext.haskell.syntax.ModuleName"}}}],
                                                                 "parameter": "pair"}}},
                                                           "type": [
@@ -679,7 +684,7 @@
                                                                   "codomain": {"variable": "hydra.ext.haskell.syntax.Import"},
                                                                   "domain": {
                                                                     "pair": {
-                                                                      "first": {"variable": "hydra.module.Namespace"},
+                                                                      "first": {"variable": "hydra.packaging.Namespace"},
                                                                       "second": {"variable": "hydra.ext.haskell.syntax.ModuleName"}}}}},
                                                               "variables": []}]}],
                                                       "body": {
@@ -694,14 +699,14 @@
                                                                       "body": {
                                                                         "function": {
                                                                           "elimination": {
-                                                                            "record": {"field": "mapping", "typeName": "hydra.module.Namespaces"}}}},
+                                                                            "record": {"field": "mapping", "typeName": "hydra.packaging.Namespaces"}}}},
                                                                       "type": {"variable": "hydra.ext.haskell.syntax.ModuleName"}}}}},
                                                               "function": {
                                                                 "typeApplication": {
                                                                   "body": {
                                                                     "typeApplication": {
                                                                       "body": {"function": {"primitive": "hydra.lib.maps.toList"}},
-                                                                      "type": {"variable": "hydra.module.Namespace"}}},
+                                                                      "type": {"variable": "hydra.packaging.Namespace"}}},
                                                                   "type": {"variable": "hydra.ext.haskell.syntax.ModuleName"}}}}},
                                                           "function": {
                                                             "application": {
@@ -713,7 +718,7 @@
                                                                       "body": {"function": {"primitive": "hydra.lib.lists.map"}},
                                                                       "type": {
                                                                         "pair": {
-                                                                          "first": {"variable": "hydra.module.Namespace"},
+                                                                          "first": {"variable": "hydra.packaging.Namespace"},
                                                                           "second": {"variable": "hydra.ext.haskell.syntax.ModuleName"}}}}},
                                                                   "type": {"variable": "hydra.ext.haskell.syntax.Import"}}}}}}}}},
                                                   "type": [
@@ -1345,7 +1350,7 @@
                                                                     "function": {
                                                                       "function": {
                                                                         "elimination": {
-                                                                          "record": {"field": "description", "typeName": "hydra.module.Module"}}}}}},
+                                                                          "record": {"field": "description", "typeName": "hydra.packaging.Module"}}}}}},
                                                                 "type": [
                                                                   {
                                                                     "constraints": null,
@@ -1379,7 +1384,8 @@
                                                                                                         "argument": {"variable": "mod"},
                                                                                                         "function": {
                                                                                                           "function": {
-                                                                                                            "elimination": {"record": {"field": "namespace", "typeName": "hydra.module.Module"}}}}}},
+                                                                                                            "elimination": {
+                                                                                                              "record": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}}}},
                                                                                                     "function": {"variable": "h"}}},
                                                                                                 "function": {"variable": "importName"}}}},
                                                                                           {
@@ -1417,7 +1423,7 @@
                                                                       "body": {
                                                                         "typeApplication": {
                                                                           "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
-                                                                          "type": {"variable": "hydra.module.Definition"}}},
+                                                                          "type": {"variable": "hydra.packaging.Definition"}}},
                                                                       "type": {
                                                                         "list": {"variable": "hydra.ext.haskell.syntax.DeclarationWithComments"}}}},
                                                                   "type": {
@@ -1443,15 +1449,15 @@
                                           "parameter": "g"}}},
                                     "domain": [{"variable": "hydra.context.Context"}],
                                     "parameter": "cx"}}},
-                              "domain": [{"list": {"variable": "hydra.module.Definition"}}],
+                              "domain": [{"list": {"variable": "hydra.packaging.Definition"}}],
                               "parameter": "defs"}}},
-                        "domain": [{"variable": "hydra.module.Module"}],
+                        "domain": [{"variable": "hydra.packaging.Module"}],
                         "parameter": "mod"}}},
                   "domain": [
                     {
                       "application": {
                         "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                        "function": {"variable": "hydra.module.Namespaces"}}}],
+                        "function": {"variable": "hydra.packaging.Namespaces"}}}],
                   "parameter": "namespaces"}}}}},
         "type": [
           {
@@ -1475,12 +1481,12 @@
                                     "right": {"variable": "hydra.ext.haskell.syntax.Module"}}},
                                 "domain": {"variable": "hydra.graph.Graph"}}},
                             "domain": {"variable": "hydra.context.Context"}}},
-                        "domain": {"list": {"variable": "hydra.module.Definition"}}}},
-                    "domain": {"variable": "hydra.module.Module"}}},
+                        "domain": {"list": {"variable": "hydra.packaging.Definition"}}}},
+                    "domain": {"variable": "hydra.packaging.Module"}}},
                 "domain": {
                   "application": {
                     "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                    "function": {"variable": "hydra.module.Namespaces"}}}}},
+                    "function": {"variable": "hydra.packaging.Namespaces"}}}}},
             "variables": []}]}},
     {
       "term": {
@@ -2468,7 +2474,7 @@
                           {
                             "application": {
                               "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                              "function": {"variable": "hydra.module.Namespaces"}}}],
+                              "function": {"variable": "hydra.packaging.Namespaces"}}}],
                         "parameter": "namespaces"}}},
                   "domain": [{"literal": {"integer": {"int32": {}}}}],
                   "parameter": "depth"}}}}},
@@ -2501,7 +2507,7 @@
                     "domain": {
                       "application": {
                         "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                        "function": {"variable": "hydra.module.Namespaces"}}}}},
+                        "function": {"variable": "hydra.packaging.Namespaces"}}}}},
                 "domain": {"literal": {"integer": {"int32": {}}}}}},
             "variables": []}]}},
     {
@@ -2584,7 +2590,7 @@
                                                                                                                         "function": {
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {"function": {"primitive": "hydra.lib.maybes.fromJust"}},
-                                                                                                                            "type": {"variable": "hydra.module.Namespace"}}}}},
+                                                                                                                            "type": {"variable": "hydra.packaging.Namespace"}}}}},
                                                                                                                     "function": {"variable": "hydra.names.qname"}}}}},
                                                                                                             "function": {
                                                                                                               "application": {
@@ -2857,7 +2863,7 @@
                           {
                             "application": {
                               "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                              "function": {"variable": "hydra.module.Namespaces"}}}],
+                              "function": {"variable": "hydra.packaging.Namespaces"}}}],
                         "parameter": "namespaces"}}},
                   "domain": [{"literal": {"integer": {"int32": {}}}}],
                   "parameter": "depth"}}}}},
@@ -2887,7 +2893,7 @@
                     "domain": {
                       "application": {
                         "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                        "function": {"variable": "hydra.module.Namespaces"}}}}},
+                        "function": {"variable": "hydra.packaging.Namespaces"}}}}},
                 "domain": {"literal": {"integer": {"int32": {}}}}}},
             "variables": []}]}},
     {
@@ -5889,7 +5895,7 @@
                           {
                             "application": {
                               "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                              "function": {"variable": "hydra.module.Namespaces"}}}],
+                              "function": {"variable": "hydra.packaging.Namespaces"}}}],
                         "parameter": "namespaces"}}},
                   "domain": [{"literal": {"integer": {"int32": {}}}}],
                   "parameter": "depth"}}}}},
@@ -5919,7 +5925,7 @@
                     "domain": {
                       "application": {
                         "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                        "function": {"variable": "hydra.module.Namespaces"}}}}},
+                        "function": {"variable": "hydra.packaging.Namespaces"}}}}},
                 "domain": {"literal": {"integer": {"int32": {}}}}}},
             "variables": []}]}},
     {
@@ -7370,7 +7376,7 @@
                         {
                           "application": {
                             "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                            "function": {"variable": "hydra.module.Namespaces"}}}],
+                            "function": {"variable": "hydra.packaging.Namespaces"}}}],
                       "parameter": "namespaces"}}}}},
             "parameter": "t0"}},
         "type": [
@@ -7397,7 +7403,7 @@
                 "domain": {
                   "application": {
                     "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                    "function": {"variable": "hydra.module.Namespaces"}}}}},
+                    "function": {"variable": "hydra.packaging.Namespaces"}}}}},
             "variables": ["t0"]}]}},
     {
       "term": {
@@ -7936,7 +7942,7 @@
                         {
                           "application": {
                             "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                            "function": {"variable": "hydra.module.Namespaces"}}}],
+                            "function": {"variable": "hydra.packaging.Namespaces"}}}],
                       "parameter": "namespaces"}}}}},
             "parameter": "t0"}},
         "type": [
@@ -7969,7 +7975,7 @@
                 "domain": {
                   "application": {
                     "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                    "function": {"variable": "hydra.module.Namespaces"}}}}},
+                    "function": {"variable": "hydra.packaging.Namespaces"}}}}},
             "variables": ["t0"]}]}},
     {
       "term": {
@@ -8316,7 +8322,7 @@
                                     "function": {
                                       "typeApplication": {
                                         "body": {"function": {"primitive": "hydra.lib.maybes.isNothing"}},
-                                        "type": {"variable": "hydra.module.Namespace"}}}}},
+                                        "type": {"variable": "hydra.packaging.Namespace"}}}}},
                                 "domain": [{"variable": "hydra.core.Name"}],
                                 "parameter": "v"}}},
                           "type": [
@@ -8476,7 +8482,7 @@
                                                                         "function": {
                                                                           "function": {
                                                                             "elimination": {
-                                                                              "record": {"field": "term", "typeName": "hydra.module.TermDefinition"}}}}}},
+                                                                              "record": {"field": "term", "typeName": "hydra.packaging.TermDefinition"}}}}}},
                                                                     "type": [
                                                                       {
                                                                         "constraints": null,
@@ -8535,7 +8541,7 @@
                                                                             "function": {
                                                                               "function": {
                                                                                 "elimination": {
-                                                                                  "record": {"field": "type", "typeName": "hydra.module.TermDefinition"}}}}}},
+                                                                                  "record": {"field": "type", "typeName": "hydra.packaging.TermDefinition"}}}}}},
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {
@@ -8593,7 +8599,7 @@
                                                                                         "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
                                                                                         "type": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}},
                                                                                     "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}}}},
-                                                            "domain": [{"variable": "hydra.module.TermDefinition"}],
+                                                            "domain": [{"variable": "hydra.packaging.TermDefinition"}],
                                                             "parameter": "termDef"}}}},
                                                     {
                                                       "name": "type",
@@ -8607,11 +8613,16 @@
                                                                     "name": "typ",
                                                                     "term": {
                                                                       "application": {
-                                                                        "argument": {"variable": "typeDef"},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "typeDef"},
+                                                                            "function": {
+                                                                              "function": {
+                                                                                "elimination": {
+                                                                                  "record": {"field": "type", "typeName": "hydra.packaging.TypeDefinition"}}}}}},
                                                                         "function": {
                                                                           "function": {
-                                                                            "elimination": {
-                                                                              "record": {"field": "type", "typeName": "hydra.module.TypeDefinition"}}}}}},
+                                                                            "elimination": {"record": {"field": "type", "typeName": "hydra.core.TypeScheme"}}}}}},
                                                                     "type": [
                                                                       {
                                                                         "constraints": null,
@@ -8652,11 +8663,11 @@
                                                                                   "typeApplication": {
                                                                                     "body": {"variable": "hydra.rewriting.foldOverType"},
                                                                                     "type": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}}}}}}}}}}}},
-                                                            "domain": [{"variable": "hydra.module.TypeDefinition"}],
+                                                            "domain": [{"variable": "hydra.packaging.TypeDefinition"}],
                                                             "parameter": "typeDef"}}}}],
                                                   "default": null,
-                                                  "typeName": "hydra.module.Definition"}}}}}},
-                                      "domain": [{"variable": "hydra.module.Definition"}],
+                                                  "typeName": "hydra.packaging.Definition"}}}}}},
+                                      "domain": [{"variable": "hydra.packaging.Definition"}],
                                       "parameter": "def"}}},
                                 "domain": [{"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}],
                                 "parameter": "meta"}}},
@@ -8668,7 +8679,7 @@
                                   "codomain": {
                                     "function": {
                                       "codomain": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"},
-                                      "domain": {"variable": "hydra.module.Definition"}}},
+                                      "domain": {"variable": "hydra.packaging.Definition"}}},
                                   "domain": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}},
                               "variables": []}]}],
                       "body": {
@@ -8686,8 +8697,8 @@
                                         "typeApplication": {
                                           "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
                                           "type": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"}}},
-                                      "type": {"variable": "hydra.module.Definition"}}}}}}}}}}},
-                  "domain": [{"list": {"variable": "hydra.module.Definition"}}],
+                                      "type": {"variable": "hydra.packaging.Definition"}}}}}}}}}}},
+                  "domain": [{"list": {"variable": "hydra.packaging.Definition"}}],
                   "parameter": "defs"}}}}},
         "type": [
           {
@@ -8695,7 +8706,7 @@
             "type": {
               "function": {
                 "codomain": {"variable": "hydra.ext.haskell.environment.HaskellModuleMetadata"},
-                "domain": {"list": {"variable": "hydra.module.Definition"}}}},
+                "domain": {"list": {"variable": "hydra.packaging.Definition"}}}},
             "variables": []}]}},
     {
       "term": {
@@ -8854,7 +8865,7 @@
                                                 {
                                                   "application": {
                                                     "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                                                    "function": {"variable": "hydra.module.Namespaces"}}}],
+                                                    "function": {"variable": "hydra.packaging.Namespaces"}}}],
                                               "parameter": "namespaces"}}},
                                         "function": {
                                           "application": {
@@ -8882,15 +8893,15 @@
                                                     "type": {
                                                       "application": {
                                                         "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                                                        "function": {"variable": "hydra.module.Namespaces"}}}}},
+                                                        "function": {"variable": "hydra.packaging.Namespaces"}}}}},
                                                 "type": {"variable": "hydra.ext.haskell.syntax.Module"}}}}}}},
                                     "domain": [{"variable": "hydra.graph.Graph"}],
                                     "parameter": "g"}}},
                               "domain": [{"variable": "hydra.context.Context"}],
                               "parameter": "cx"}}},
-                        "domain": [{"list": {"variable": "hydra.module.Definition"}}],
+                        "domain": [{"list": {"variable": "hydra.packaging.Definition"}}],
                         "parameter": "defs"}}},
-                  "domain": [{"variable": "hydra.module.Module"}],
+                  "domain": [{"variable": "hydra.packaging.Module"}],
                   "parameter": "mod"}}}}},
         "type": [
           {
@@ -8912,8 +8923,8 @@
                                 "right": {"variable": "hydra.ext.haskell.syntax.Module"}}},
                             "domain": {"variable": "hydra.graph.Graph"}}},
                         "domain": {"variable": "hydra.context.Context"}}},
-                    "domain": {"list": {"variable": "hydra.module.Definition"}}}},
-                "domain": {"variable": "hydra.module.Module"}}},
+                    "domain": {"list": {"variable": "hydra.packaging.Definition"}}}},
+                "domain": {"variable": "hydra.packaging.Module"}}},
             "variables": []}]}},
     {
       "term": {
@@ -8972,13 +8983,14 @@
                                                               "argument": {"variable": "mod"},
                                                               "function": {
                                                                 "function": {
-                                                                  "elimination": {"record": {"field": "namespace", "typeName": "hydra.module.Module"}}}}}},
+                                                                  "elimination": {
+                                                                    "record": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}}}},
                                                           "function": {
                                                             "application": {
                                                               "argument": {
                                                                 "wrap": {
                                                                   "body": {"literal": {"string": "hs"}},
-                                                                  "typeName": "hydra.module.FileExtension"}},
+                                                                  "typeName": "hydra.packaging.FileExtension"}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
@@ -9055,9 +9067,9 @@
                                     "parameter": "g"}}},
                               "domain": [{"variable": "hydra.context.Context"}],
                               "parameter": "cx"}}},
-                        "domain": [{"list": {"variable": "hydra.module.Definition"}}],
+                        "domain": [{"list": {"variable": "hydra.packaging.Definition"}}],
                         "parameter": "defs"}}},
-                  "domain": [{"variable": "hydra.module.Module"}],
+                  "domain": [{"variable": "hydra.packaging.Module"}],
                   "parameter": "mod"}}}}},
         "type": [
           {
@@ -9082,8 +9094,8 @@
                                     "values": {"literal": {"string": {}}}}}}},
                             "domain": {"variable": "hydra.graph.Graph"}}},
                         "domain": {"variable": "hydra.context.Context"}}},
-                    "domain": {"list": {"variable": "hydra.module.Definition"}}}},
-                "domain": {"variable": "hydra.module.Module"}}},
+                    "domain": {"list": {"variable": "hydra.packaging.Definition"}}}},
+                "domain": {"variable": "hydra.packaging.Module"}}},
             "variables": []}]}},
     {
       "term": {
@@ -9446,7 +9458,7 @@
                     {
                       "application": {
                         "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                        "function": {"variable": "hydra.module.Namespaces"}}}],
+                        "function": {"variable": "hydra.packaging.Namespaces"}}}],
                   "parameter": "namespaces"}}}}},
         "type": [
           {
@@ -9464,7 +9476,7 @@
                 "domain": {
                   "application": {
                     "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                    "function": {"variable": "hydra.module.Namespaces"}}}}},
+                    "function": {"variable": "hydra.packaging.Namespaces"}}}}},
             "variables": []}]}},
     {
       "term": {
@@ -9748,7 +9760,7 @@
                                                 "function": {
                                                   "function": {
                                                     "elimination": {
-                                                      "record": {"field": "name", "typeName": "hydra.module.TermDefinition"}}}}}},
+                                                      "record": {"field": "name", "typeName": "hydra.packaging.TermDefinition"}}}}}},
                                             "type": [
                                               {
                                                 "constraints": null,
@@ -9762,7 +9774,7 @@
                                                 "function": {
                                                   "function": {
                                                     "elimination": {
-                                                      "record": {"field": "term", "typeName": "hydra.module.TermDefinition"}}}}}},
+                                                      "record": {"field": "term", "typeName": "hydra.packaging.TermDefinition"}}}}}},
                                             "type": [
                                               {
                                                 "constraints": null,
@@ -9776,7 +9788,7 @@
                                                 "function": {
                                                   "function": {
                                                     "elimination": {
-                                                      "record": {"field": "type", "typeName": "hydra.module.TermDefinition"}}}}}},
+                                                      "record": {"field": "type", "typeName": "hydra.packaging.TermDefinition"}}}}}},
                                             "type": [
                                               {
                                                 "constraints": null,
@@ -10771,13 +10783,13 @@
                                     "parameter": "g"}}},
                               "domain": [{"variable": "hydra.context.Context"}],
                               "parameter": "cx"}}},
-                        "domain": [{"variable": "hydra.module.TermDefinition"}],
+                        "domain": [{"variable": "hydra.packaging.TermDefinition"}],
                         "parameter": "def"}}},
                   "domain": [
                     {
                       "application": {
                         "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                        "function": {"variable": "hydra.module.Namespaces"}}}],
+                        "function": {"variable": "hydra.packaging.Namespaces"}}}],
                   "parameter": "namespaces"}}}}},
         "type": [
           {
@@ -10799,11 +10811,11 @@
                                 "right": {"variable": "hydra.ext.haskell.syntax.DeclarationWithComments"}}},
                             "domain": {"variable": "hydra.graph.Graph"}}},
                         "domain": {"variable": "hydra.context.Context"}}},
-                    "domain": {"variable": "hydra.module.TermDefinition"}}},
+                    "domain": {"variable": "hydra.packaging.TermDefinition"}}},
                 "domain": {
                   "application": {
                     "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                    "function": {"variable": "hydra.module.Namespaces"}}}}},
+                    "function": {"variable": "hydra.packaging.Namespaces"}}}}},
             "variables": []}]}},
     {
       "term": {
@@ -11470,17 +11482,18 @@
                                                                                                                     "typeApplication": {
                                                                                                                       "body": {
                                                                                                                         "function": {
-                                                                                                                          "elimination": {"record": {"field": "focus", "typeName": "hydra.module.Namespaces"}}}},
+                                                                                                                          "elimination": {
+                                                                                                                            "record": {"field": "focus", "typeName": "hydra.packaging.Namespaces"}}}},
                                                                                                                       "type": {"variable": "hydra.ext.haskell.syntax.ModuleName"}}}}},
                                                                                                               "function": {
                                                                                                                 "typeApplication": {
                                                                                                                   "body": {
                                                                                                                     "typeApplication": {
                                                                                                                       "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
-                                                                                                                      "type": {"variable": "hydra.module.Namespace"}}},
+                                                                                                                      "type": {"variable": "hydra.packaging.Namespace"}}},
                                                                                                                   "type": {"variable": "hydra.ext.haskell.syntax.ModuleName"}}}}}]}},
                                                                                                     {"name": "local", "term": {"variable": "name"}}],
-                                                                                                  "typeName": "hydra.module.QualifiedName"}},
+                                                                                                  "typeName": "hydra.packaging.QualifiedName"}},
                                                                                               "function": {"variable": "hydra.names.unqualifyName"}}},
                                                                                           "type": [
                                                                                             {
@@ -12475,7 +12488,7 @@
                     {
                       "application": {
                         "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                        "function": {"variable": "hydra.module.Namespaces"}}}],
+                        "function": {"variable": "hydra.packaging.Namespaces"}}}],
                   "parameter": "namespaces"}}}}},
         "type": [
           {
@@ -12505,7 +12518,7 @@
                 "domain": {
                   "application": {
                     "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                    "function": {"variable": "hydra.module.Namespaces"}}}}},
+                    "function": {"variable": "hydra.packaging.Namespaces"}}}}},
             "variables": []}]}},
     {
       "term": {
@@ -12556,7 +12569,7 @@
                                                                       "function": {"variable": "hydra.names.qname"}}}}},
                                                               "domain": [{"variable": "hydra.core.Name"}],
                                                               "parameter": "name'"}}},
-                                                        "domain": [{"variable": "hydra.module.Namespace"}],
+                                                        "domain": [{"variable": "hydra.packaging.Namespace"}],
                                                         "parameter": "ns"}}},
                                                   "type": [
                                                     {
@@ -12567,7 +12580,7 @@
                                                             "function": {
                                                               "codomain": {"variable": "hydra.core.Name"},
                                                               "domain": {"variable": "hydra.core.Name"}}},
-                                                          "domain": {"variable": "hydra.module.Namespace"}}},
+                                                          "domain": {"variable": "hydra.packaging.Namespace"}}},
                                                       "variables": []}]},
                                                 {
                                                   "name": "typeNameLocal",
@@ -12962,7 +12975,7 @@
                                                                                     "type": [
                                                                                       {
                                                                                         "constraints": null,
-                                                                                        "type": {"variable": "hydra.module.QualifiedName"},
+                                                                                        "type": {"variable": "hydra.packaging.QualifiedName"},
                                                                                         "variables": []}]},
                                                                                   {
                                                                                     "name": "mns",
@@ -12972,11 +12985,11 @@
                                                                                         "function": {
                                                                                           "function": {
                                                                                             "elimination": {
-                                                                                              "record": {"field": "namespace", "typeName": "hydra.module.QualifiedName"}}}}}},
+                                                                                              "record": {"field": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}}}},
                                                                                     "type": [
                                                                                       {
                                                                                         "constraints": null,
-                                                                                        "type": {"maybe": {"variable": "hydra.module.Namespace"}},
+                                                                                        "type": {"maybe": {"variable": "hydra.packaging.Namespace"}},
                                                                                         "variables": []}]},
                                                                                   {
                                                                                     "name": "local",
@@ -12986,7 +12999,7 @@
                                                                                         "function": {
                                                                                           "function": {
                                                                                             "elimination": {
-                                                                                              "record": {"field": "local", "typeName": "hydra.module.QualifiedName"}}}}}},
+                                                                                              "record": {"field": "local", "typeName": "hydra.packaging.QualifiedName"}}}}}},
                                                                                     "type": [
                                                                                       {
                                                                                         "constraints": null,
@@ -13019,14 +13032,14 @@
                                                                                                             "argument": {"variable": "ns"},
                                                                                                             "function": {"variable": "hydra.names.qname"}}}}}},
                                                                                                   "typeName": "hydra.core.Term"}},
-                                                                                              "domain": [{"variable": "hydra.module.Namespace"}],
+                                                                                              "domain": [{"variable": "hydra.packaging.Namespace"}],
                                                                                               "parameter": "ns"}}},
                                                                                         "function": {
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
-                                                                                                "type": {"variable": "hydra.module.Namespace"}}},
+                                                                                                "type": {"variable": "hydra.packaging.Namespace"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}}}}}}}},
                                                                             "domain": [{"variable": "hydra.core.Name"}],
                                                                             "parameter": "vname"}}},
@@ -13243,7 +13256,7 @@
                     {
                       "application": {
                         "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                        "function": {"variable": "hydra.module.Namespaces"}}}],
+                        "function": {"variable": "hydra.packaging.Namespaces"}}}],
                   "parameter": "namespaces"}}}}},
         "type": [
           {
@@ -13272,7 +13285,7 @@
                 "domain": {
                   "application": {
                     "argument": {"variable": "hydra.ext.haskell.syntax.ModuleName"},
-                    "function": {"variable": "hydra.module.Namespaces"}}}}},
+                    "function": {"variable": "hydra.packaging.Namespaces"}}}}},
             "variables": []}]}},
     {
       "term": {
@@ -13553,7 +13566,6 @@
     "hydra.errors",
     "hydra.graph",
     "hydra.json.model",
-    "hydra.module",
     "hydra.packaging",
     "hydra.parsing",
     "hydra.phantoms",

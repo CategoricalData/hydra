@@ -10,7 +10,7 @@ import hydra.ext.scala.syntax.*
 
 import hydra.graph.*
 
-import hydra.module.*
+import hydra.packaging.*
 
 import hydra.typing.*
 
@@ -52,21 +52,23 @@ def applyVar(fterm: hydra.core.Term)(avar: hydra.core.Name): hydra.core.Term =
     case _ => hydra.core.Term.application(hydra.core.Application(fterm, hydra.core.Term.variable(avar)))
 }
 
-def constructModule(cx: hydra.context.Context)(g: hydra.graph.Graph)(mod: hydra.module.Module)(defs: Seq[hydra.module.Definition]): Either[hydra.context.InContext[hydra.errors.Error],
+def constructModule(cx: hydra.context.Context)(g: hydra.graph.Graph)(mod: hydra.packaging.Module)(defs: Seq[hydra.packaging.Definition]): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.ext.scala.syntax.Pkg] =
   {
-  lazy val partitioned: Tuple2[Seq[hydra.module.TypeDefinition], Seq[hydra.module.TermDefinition]] = hydra.environment.partitionDefinitions(defs)
-  lazy val typeDefs: Seq[hydra.module.TypeDefinition] = hydra.lib.pairs.first[Seq[hydra.module.TypeDefinition], Seq[hydra.module.TermDefinition]](partitioned)
-  lazy val termDefs: Seq[hydra.module.TermDefinition] = hydra.lib.pairs.second[Seq[hydra.module.TypeDefinition], Seq[hydra.module.TermDefinition]](partitioned)
+  lazy val partitioned: Tuple2[Seq[hydra.packaging.TypeDefinition], Seq[hydra.packaging.TermDefinition]] = hydra.environment.partitionDefinitions(defs)
+  lazy val typeDefs: Seq[hydra.packaging.TypeDefinition] = hydra.lib.pairs.first[Seq[hydra.packaging.TypeDefinition],
+     Seq[hydra.packaging.TermDefinition]](partitioned)
+  lazy val termDefs: Seq[hydra.packaging.TermDefinition] = hydra.lib.pairs.second[Seq[hydra.packaging.TypeDefinition],
+     Seq[hydra.packaging.TermDefinition]](partitioned)
   lazy val nsName: scala.Predef.String = (mod.namespace)
   lazy val pname: hydra.ext.scala.syntax.Data_Name = hydra.ext.scala.syntax.Data_Name(hydra.lib.strings.intercalate(".")(hydra.lib.strings.splitOn(".")(nsName)))
   lazy val pref: hydra.ext.scala.syntax.Data_Ref = hydra.ext.scala.syntax.Data_Ref.name(pname)
   hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Seq[hydra.ext.scala.syntax.Stat],
-     hydra.ext.scala.syntax.Pkg](hydra.lib.eithers.mapList[hydra.module.TypeDefinition, hydra.ext.scala.syntax.Stat,
-     hydra.context.InContext[hydra.errors.Error]]((td: hydra.module.TypeDefinition) => hydra.ext.scala.coder.encodeTypeDefinition(cx)(g)(td))(typeDefs))((typeDeclStats: Seq[hydra.ext.scala.syntax.Stat]) =>
+     hydra.ext.scala.syntax.Pkg](hydra.lib.eithers.mapList[hydra.packaging.TypeDefinition, hydra.ext.scala.syntax.Stat,
+     hydra.context.InContext[hydra.errors.Error]]((td: hydra.packaging.TypeDefinition) => hydra.ext.scala.coder.encodeTypeDefinition(cx)(g)(td))(typeDefs))((typeDeclStats: Seq[hydra.ext.scala.syntax.Stat]) =>
     hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Seq[hydra.ext.scala.syntax.Stat],
-       hydra.ext.scala.syntax.Pkg](hydra.lib.eithers.mapList[hydra.module.TermDefinition, hydra.ext.scala.syntax.Stat,
-       hydra.context.InContext[hydra.errors.Error]]((td: hydra.module.TermDefinition) => hydra.ext.scala.coder.encodeTermDefinition(cx)(g)(td))(termDefs))((termDeclStats: Seq[hydra.ext.scala.syntax.Stat]) =>
+       hydra.ext.scala.syntax.Pkg](hydra.lib.eithers.mapList[hydra.packaging.TermDefinition, hydra.ext.scala.syntax.Stat,
+       hydra.context.InContext[hydra.errors.Error]]((td: hydra.packaging.TermDefinition) => hydra.ext.scala.coder.encodeTermDefinition(cx)(g)(td))(termDefs))((termDeclStats: Seq[hydra.ext.scala.syntax.Stat]) =>
     hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Seq[hydra.ext.scala.syntax.Stat],
        hydra.ext.scala.syntax.Pkg](hydra.ext.scala.coder.findImports(cx)(g)(mod))((imports: Seq[hydra.ext.scala.syntax.Stat]) =>
     Right(hydra.ext.scala.syntax.Pkg(pname, pref, hydra.lib.lists.concat[hydra.ext.scala.syntax.Stat](Seq(imports, typeDeclStats, termDeclStats)))))))
@@ -151,8 +153,10 @@ def encodeComplexTermDef(cx: hydra.context.Context)(g: hydra.graph.Graph)(lname:
     hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.ext.scala.syntax.Data, hydra.ext.scala.syntax.Stat](hydra.ext.scala.coder.encodeTerm(cx)(gWithTypeVars)(hydra.ext.scala.coder.extractBody(term)))((sbody: hydra.ext.scala.syntax.Data) =>
     hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.ext.scala.syntax.Type, hydra.ext.scala.syntax.Stat](hydra.ext.scala.coder.encodeType(cx)(g)(cod))((scod: hydra.ext.scala.syntax.Type) =>
     {
-    lazy val gForLets: hydra.graph.Graph = hydra.lib.logic.ifElse[hydra.graph.Graph](hydra.lib.lists.`null`[hydra.core.Binding](letBindings))(gWithTypeVars)(hydra.scoping.extendGraphForLet(hydra.coderUtils.bindingMetadata)(gWithTypeVars)(hydra.core.Let(letBindings,
-       hydra.core.Term.variable("dummy"))))
+    lazy val gForLets: hydra.graph.Graph = hydra.lib.logic.ifElse[hydra.graph.Graph](hydra.lib.lists.`null`[hydra.core.Binding](letBindings))(gWithTypeVars)(hydra.scoping.extendGraphForLet((g2: hydra.graph.Graph) =>
+      (b: hydra.core.Binding) =>
+      hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.predicates.isComplexBinding(g2)(b))(Some(hydra.core.Term.literal(hydra.core.Literal.boolean(true))))(None))(gWithTypeVars)(hydra.core.Let(letBindings,
+         hydra.core.Term.variable("dummy"))))
     hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Seq[hydra.ext.scala.syntax.Stat],
        hydra.ext.scala.syntax.Stat](hydra.lib.eithers.mapList[hydra.core.Binding, hydra.ext.scala.syntax.Stat,
        hydra.context.InContext[hydra.errors.Error]]((v1: hydra.core.Binding) =>
@@ -330,8 +334,10 @@ def encodeLocalDef(cx: hydra.context.Context)(g: hydra.graph.Graph)(outerTypeVar
     hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.ext.scala.syntax.Data, hydra.ext.scala.syntax.Stat](hydra.ext.scala.coder.encodeTerm(cx)(gWithTypeVars)(hydra.ext.scala.coder.extractBody(term)))((sbody: hydra.ext.scala.syntax.Data) =>
     hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.ext.scala.syntax.Type, hydra.ext.scala.syntax.Stat](hydra.ext.scala.coder.encodeType(cx)(gWithTypeVars)(cod))((scod: hydra.ext.scala.syntax.Type) =>
     {
-    lazy val gForLets: hydra.graph.Graph = hydra.lib.logic.ifElse[hydra.graph.Graph](hydra.lib.lists.`null`[hydra.core.Binding](letBindings))(gWithTypeVars)(hydra.scoping.extendGraphForLet(hydra.coderUtils.bindingMetadata)(gWithTypeVars)(hydra.core.Let(letBindings,
-       hydra.core.Term.variable("dummy"))))
+    lazy val gForLets: hydra.graph.Graph = hydra.lib.logic.ifElse[hydra.graph.Graph](hydra.lib.lists.`null`[hydra.core.Binding](letBindings))(gWithTypeVars)(hydra.scoping.extendGraphForLet((g2: hydra.graph.Graph) =>
+      (b: hydra.core.Binding) =>
+      hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.predicates.isComplexBinding(g2)(b))(Some(hydra.core.Term.literal(hydra.core.Literal.boolean(true))))(None))(gWithTypeVars)(hydra.core.Let(letBindings,
+         hydra.core.Term.variable("dummy"))))
     hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Seq[hydra.ext.scala.syntax.Stat],
        hydra.ext.scala.syntax.Stat](hydra.lib.eithers.mapList[hydra.core.Binding, hydra.ext.scala.syntax.Stat,
        hydra.context.InContext[hydra.errors.Error]]((v1: hydra.core.Binding) =>
@@ -540,7 +546,9 @@ def encodeTerm(cx: hydra.context.Context)(g: hydra.graph.Graph)(term0: hydra.cor
     case hydra.core.Term.let(v_Term_let_lt) => {
       lazy val bindings: Seq[hydra.core.Binding] = (v_Term_let_lt.bindings)
       lazy val body: hydra.core.Term = (v_Term_let_lt.body)
-      lazy val gLet: hydra.graph.Graph = hydra.scoping.extendGraphForLet(hydra.coderUtils.bindingMetadata)(g)(v_Term_let_lt)
+      lazy val gLet: hydra.graph.Graph = hydra.scoping.extendGraphForLet((g2: hydra.graph.Graph) =>
+        (b: hydra.core.Binding) =>
+        hydra.lib.logic.ifElse[Option[hydra.core.Term]](hydra.predicates.isComplexBinding(g2)(b))(Some(hydra.core.Term.literal(hydra.core.Literal.boolean(true))))(None))(g)(v_Term_let_lt)
       hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Seq[hydra.ext.scala.syntax.Stat],
          hydra.ext.scala.syntax.Data](hydra.lib.eithers.mapList[hydra.core.Binding, hydra.ext.scala.syntax.Stat,
          hydra.context.InContext[hydra.errors.Error]]((v1: hydra.core.Binding) =>
@@ -552,7 +560,7 @@ def encodeTerm(cx: hydra.context.Context)(g: hydra.graph.Graph)(term0: hydra.cor
     case _ => Left(hydra.context.InContext(hydra.errors.Error.other("unexpected term"), cx))
 }
 
-def encodeTermDefinition(cx: hydra.context.Context)(g: hydra.graph.Graph)(td: hydra.module.TermDefinition): Either[hydra.context.InContext[hydra.errors.Error],
+def encodeTermDefinition(cx: hydra.context.Context)(g: hydra.graph.Graph)(td: hydra.packaging.TermDefinition): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.ext.scala.syntax.Stat] =
   {
   lazy val name: hydra.core.Name = (td.name)
@@ -672,11 +680,11 @@ def encodeType[T0](cx: hydra.context.Context)(g: T0)(t: hydra.core.Type): Either
   }
   case _ => Left(hydra.context.InContext(hydra.errors.Error.other("unsupported type"), cx))
 
-def encodeTypeDefinition[T0](cx: hydra.context.Context)(g: T0)(td: hydra.module.TypeDefinition): Either[hydra.context.InContext[hydra.errors.Error],
+def encodeTypeDefinition[T0](cx: hydra.context.Context)(g: T0)(td: hydra.packaging.TypeDefinition): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.ext.scala.syntax.Stat] =
   {
   lazy val name: hydra.core.Name = (td.name)
-  lazy val typ: hydra.core.Type = (td.`type`)
+  lazy val typ: hydra.core.Type = (td.`type`.`type`)
   lazy val lname: scala.Predef.String = hydra.names.localNameOf(name)
   lazy val tname: hydra.ext.scala.syntax.Type_Name = hydra.ext.scala.syntax.Type_Name(lname)
   lazy val dname: hydra.ext.scala.syntax.Data_Name = hydra.ext.scala.syntax.Data_Name(lname)
@@ -851,15 +859,15 @@ def findDomain(cx: hydra.context.Context)(g: hydra.graph.Graph)(meta: Map[hydra.
   case hydra.core.Type.function(v_Type_function_ft) => Right(v_Type_function_ft.domain)
   case _ => Left(hydra.context.InContext(hydra.errors.Error.other("expected a function type"), cx)))(r))
 
-def findImports(cx: hydra.context.Context)(g: hydra.graph.Graph)(mod: hydra.module.Module): Either[hydra.context.InContext[hydra.errors.Error],
+def findImports(cx: hydra.context.Context)(g: hydra.graph.Graph)(mod: hydra.packaging.Module): Either[hydra.context.InContext[hydra.errors.Error],
    Seq[hydra.ext.scala.syntax.Stat]] =
-  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], scala.collection.immutable.Set[hydra.module.Namespace],
-     Seq[hydra.ext.scala.syntax.Stat]](hydra.analysis.moduleDependencyNamespaces(cx)(g)(false)(false)(true)(false)(mod))((elImps: scala.collection.immutable.Set[hydra.module.Namespace]) =>
-  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], scala.collection.immutable.Set[hydra.module.Namespace],
-     Seq[hydra.ext.scala.syntax.Stat]](hydra.analysis.moduleDependencyNamespaces(cx)(g)(false)(true)(false)(false)(mod))((primImps: scala.collection.immutable.Set[hydra.module.Namespace]) =>
-  Right(hydra.lib.lists.concat[hydra.ext.scala.syntax.Stat](Seq(hydra.lib.lists.map[hydra.module.Namespace,
-     hydra.ext.scala.syntax.Stat](hydra.ext.scala.coder.toElImport)(hydra.lib.sets.toList[hydra.module.Namespace](elImps)),
-     hydra.lib.lists.map[hydra.module.Namespace, hydra.ext.scala.syntax.Stat](hydra.ext.scala.coder.toPrimImport)(hydra.lib.sets.toList[hydra.module.Namespace](primImps)))))))
+  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], scala.collection.immutable.Set[hydra.packaging.Namespace],
+     Seq[hydra.ext.scala.syntax.Stat]](hydra.analysis.moduleDependencyNamespaces(cx)(g)(false)(false)(true)(false)(mod))((elImps: scala.collection.immutable.Set[hydra.packaging.Namespace]) =>
+  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], scala.collection.immutable.Set[hydra.packaging.Namespace],
+     Seq[hydra.ext.scala.syntax.Stat]](hydra.analysis.moduleDependencyNamespaces(cx)(g)(false)(true)(false)(false)(mod))((primImps: scala.collection.immutable.Set[hydra.packaging.Namespace]) =>
+  Right(hydra.lib.lists.concat[hydra.ext.scala.syntax.Stat](Seq(hydra.lib.lists.map[hydra.packaging.Namespace,
+     hydra.ext.scala.syntax.Stat](hydra.ext.scala.coder.toElImport)(hydra.lib.sets.toList[hydra.packaging.Namespace](elImps)),
+     hydra.lib.lists.map[hydra.packaging.Namespace, hydra.ext.scala.syntax.Stat](hydra.ext.scala.coder.toPrimImport)(hydra.lib.sets.toList[hydra.packaging.Namespace](primImps)))))))
 
 def findSdom(cx: hydra.context.Context)(g: hydra.graph.Graph)(meta: Map[hydra.core.Name, hydra.core.Term]): Either[hydra.context.InContext[hydra.errors.Error],
    Option[hydra.ext.scala.syntax.Type]] =
@@ -883,7 +891,7 @@ def findSdom(cx: hydra.context.Context)(g: hydra.graph.Graph)(meta: Map[hydra.co
   case _ => hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.ext.scala.syntax.Type,
      Option[hydra.ext.scala.syntax.Type]](hydra.ext.scala.coder.encodeType(cx)(g)(t))((st: hydra.ext.scala.syntax.Type) => Right(Some(st))))(mtyp))
 
-def moduleToScala(mod: hydra.module.Module)(defs: Seq[hydra.module.Definition])(cx: hydra.context.Context)(g: hydra.graph.Graph): Either[hydra.context.InContext[hydra.errors.Error],
+def moduleToScala(mod: hydra.packaging.Module)(defs: Seq[hydra.packaging.Definition])(cx: hydra.context.Context)(g: hydra.graph.Graph): Either[hydra.context.InContext[hydra.errors.Error],
    Map[scala.Predef.String, scala.Predef.String]] =
   hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.ext.scala.syntax.Pkg, Map[scala.Predef.String,
      scala.Predef.String]](hydra.ext.scala.coder.constructModule(cx)(g)(mod)(defs))((pkg: hydra.ext.scala.syntax.Pkg) =>
@@ -919,11 +927,11 @@ def stripWrapEliminations(t: hydra.core.Term): hydra.core.Term =
   }
   case _ => t
 
-def toElImport(ns: hydra.module.Namespace): hydra.ext.scala.syntax.Stat =
+def toElImport(ns: hydra.packaging.Namespace): hydra.ext.scala.syntax.Stat =
   hydra.ext.scala.syntax.Stat.importExport(hydra.ext.scala.syntax.ImportExportStat.`import`(hydra.ext.scala.syntax.Import(Seq(hydra.ext.scala.syntax.Importer(hydra.ext.scala.syntax.Data_Ref.name(hydra.ext.scala.syntax.Data_Name(hydra.lib.strings.intercalate(".")(hydra.lib.strings.splitOn(".")(ns)))),
      Seq(hydra.ext.scala.syntax.Importee.wildcard))))))
 
-def toPrimImport(ns: hydra.module.Namespace): hydra.ext.scala.syntax.Stat =
+def toPrimImport(ns: hydra.packaging.Namespace): hydra.ext.scala.syntax.Stat =
   hydra.ext.scala.syntax.Stat.importExport(hydra.ext.scala.syntax.ImportExportStat.`import`(hydra.ext.scala.syntax.Import(Seq(hydra.ext.scala.syntax.Importer(hydra.ext.scala.syntax.Data_Ref.name(hydra.ext.scala.syntax.Data_Name(hydra.lib.strings.intercalate(".")(hydra.lib.strings.splitOn(".")(ns)))),
      Seq())))))
 

@@ -1,7 +1,7 @@
 module Hydra.Ext.Sources.Protobuf.Proto3 where
 
 -- Standard imports for type-level sources outside of the kernel
-import           Hydra.Kernel
+import           Hydra.Kernel hiding (packageName)
 import           Hydra.Dsl.Annotations
 import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types                 ((>:))

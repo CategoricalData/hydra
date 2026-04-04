@@ -6,7 +6,7 @@ import hydra.core.*
 
 import hydra.errors.*
 
-import hydra.module.*
+import hydra.packaging.*
 
 import hydra.lib.eithers
 
@@ -22,7 +22,9 @@ import hydra.lib.maybes
 
 import hydra.lib.pairs
 
-def elementAsTypeApplicationTerm(cx: hydra.context.Context)(el: hydra.core.Binding): Either[hydra.context.InContext[hydra.errors.Error],
+import hydra.lib.sets
+
+def definitionAsTypeApplicationTerm(cx: hydra.context.Context)(el: hydra.core.Binding): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.core.TypeApplicationTerm] =
   hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error], hydra.core.TypeApplicationTerm],
      hydra.core.TypeScheme](Left(hydra.context.InContext(hydra.errors.Error.other("missing element type"),
@@ -44,19 +46,43 @@ def graphAsTypes(cx: hydra.context.Context)(graph: hydra.graph.Graph)(els: Seq[h
      Tuple2[hydra.core.Name, hydra.core.Type], hydra.context.InContext[hydra.errors.DecodingError]](toPair)(els))
 }
 
-def partitionDefinitions(defs: Seq[hydra.module.Definition]): Tuple2[Seq[hydra.module.TypeDefinition], Seq[hydra.module.TermDefinition]] =
+def partitionDefinitions(defs: Seq[hydra.packaging.Definition]): Tuple2[Seq[hydra.packaging.TypeDefinition], Seq[hydra.packaging.TermDefinition]] =
   {
-  def getType(`def`: hydra.module.Definition): Option[hydra.module.TypeDefinition] =
+  def getType(`def`: hydra.packaging.Definition): Option[hydra.packaging.TypeDefinition] =
     `def` match
-    case hydra.module.Definition.`type`(v_Definition_type_td) => Some(v_Definition_type_td)
-    case hydra.module.Definition.term(v_Definition_term__) => None
-  def getTerm(`def`: hydra.module.Definition): Option[hydra.module.TermDefinition] =
+    case hydra.packaging.Definition.`type`(v_Definition_type_td) => Some(v_Definition_type_td)
+    case hydra.packaging.Definition.term(v_Definition_term__) => None
+  def getTerm(`def`: hydra.packaging.Definition): Option[hydra.packaging.TermDefinition] =
     `def` match
-    case hydra.module.Definition.`type`(v_Definition_type__) => None
-    case hydra.module.Definition.term(v_Definition_term_td) => Some(v_Definition_term_td)
-  Tuple2(hydra.lib.maybes.cat[hydra.module.TypeDefinition](hydra.lib.lists.map[hydra.module.Definition,
-     Option[hydra.module.TypeDefinition]](getType)(defs)), hydra.lib.maybes.cat[hydra.module.TermDefinition](hydra.lib.lists.map[hydra.module.Definition,
-     Option[hydra.module.TermDefinition]](getTerm)(defs)))
+    case hydra.packaging.Definition.`type`(v_Definition_type__) => None
+    case hydra.packaging.Definition.term(v_Definition_term_td) => Some(v_Definition_term_td)
+  Tuple2(hydra.lib.maybes.cat[hydra.packaging.TypeDefinition](hydra.lib.lists.map[hydra.packaging.Definition,
+     Option[hydra.packaging.TypeDefinition]](getType)(defs)), hydra.lib.maybes.cat[hydra.packaging.TermDefinition](hydra.lib.lists.map[hydra.packaging.Definition,
+     Option[hydra.packaging.TermDefinition]](getTerm)(defs)))
+}
+
+def reorderDefs(defs: Seq[hydra.packaging.Definition]): Seq[hydra.packaging.Definition] =
+  {
+  lazy val partitioned: Tuple2[Seq[hydra.packaging.TypeDefinition], Seq[hydra.packaging.TermDefinition]] = hydra.environment.partitionDefinitions(defs)
+  lazy val typeDefsRaw: Seq[hydra.packaging.TypeDefinition] = hydra.lib.pairs.first[Seq[hydra.packaging.TypeDefinition],
+     Seq[hydra.packaging.TermDefinition]](partitioned)
+  lazy val nameFirst: Seq[hydra.packaging.TypeDefinition] = hydra.lib.lists.filter[hydra.packaging.TypeDefinition]((td: hydra.packaging.TypeDefinition) =>
+    hydra.lib.equality.equal[hydra.core.Name](td.name)("hydra.core.Name"))(typeDefsRaw)
+  lazy val nameRest: Seq[hydra.packaging.TypeDefinition] = hydra.lib.lists.filter[hydra.packaging.TypeDefinition]((td: hydra.packaging.TypeDefinition) =>
+    hydra.lib.logic.not(hydra.lib.equality.equal[hydra.core.Name](td.name)("hydra.core.Name")))(typeDefsRaw)
+  lazy val typeDefs: Seq[hydra.packaging.Definition] = hydra.lib.lists.concat[hydra.packaging.Definition](Seq(hydra.lib.lists.map[hydra.packaging.TypeDefinition,
+     hydra.packaging.Definition]((td: hydra.packaging.TypeDefinition) => hydra.packaging.Definition.`type`(td))(nameFirst),
+     hydra.lib.lists.map[hydra.packaging.TypeDefinition, hydra.packaging.Definition]((td: hydra.packaging.TypeDefinition) => hydra.packaging.Definition.`type`(td))(nameRest)))
+  lazy val termDefsWrapped: Seq[hydra.packaging.Definition] = hydra.lib.lists.map[hydra.packaging.TermDefinition,
+     hydra.packaging.Definition]((td: hydra.packaging.TermDefinition) => hydra.packaging.Definition.term(td))(hydra.lib.pairs.second[Seq[hydra.packaging.TypeDefinition],
+     Seq[hydra.packaging.TermDefinition]](partitioned))
+  lazy val sortedTermDefs: Seq[hydra.packaging.Definition] = hydra.lib.lists.concat[hydra.packaging.Definition](hydra.sorting.topologicalSortNodes((d: hydra.packaging.Definition) =>
+    d match
+    case hydra.packaging.Definition.term(v_Definition_term_td) => (v_Definition_term_td.name))((d: hydra.packaging.Definition) =>
+    d match
+    case hydra.packaging.Definition.term(v_Definition_term_td) => hydra.lib.sets.toList[hydra.core.Name](hydra.variables.freeVariablesInTerm(v_Definition_term_td.term))
+    case _ => Seq())(termDefsWrapped))
+  hydra.lib.lists.concat[hydra.packaging.Definition](Seq(typeDefs, sortedTermDefs))
 }
 
 def schemaGraphToTypingEnvironment(cx: hydra.context.Context)(g: hydra.graph.Graph): Either[hydra.context.InContext[hydra.errors.Error],
@@ -111,7 +137,7 @@ def termAsBindings(term: hydra.core.Term): Seq[hydra.core.Binding] =
   case hydra.core.Term.let(v_Term_let_lt) => (v_Term_let_lt.bindings)
   case _ => Seq()
 
-def typesToElements(typeMap: Map[hydra.core.Name, hydra.core.Type]): Seq[hydra.core.Binding] =
+def typesToDefinitions(typeMap: Map[hydra.core.Name, hydra.core.Type]): Seq[hydra.core.Binding] =
   {
   def toElement(pair: Tuple2[hydra.core.Name, hydra.core.Type]): hydra.core.Binding =
     {

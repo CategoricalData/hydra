@@ -11,7 +11,7 @@ import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
@@ -62,7 +62,7 @@ generatePythonTestCase groupPath tcm =
               ")"])])
 
 -- | Generate a Python test file for a test group
-generatePythonTestFile :: Module.Module -> Testing.TestGroup -> t0 -> Either t1 (String, String)
+generatePythonTestFile :: Packaging.Module -> Testing.TestGroup -> t0 -> Either t1 (String, String)
 generatePythonTestFile testModule testGroup _g = generateTestFileWithPythonCodec testModule testGroup
 
 -- | Generate test hierarchy for Python with nested subgroups
@@ -87,12 +87,12 @@ generatePythonTestGroupHierarchy groupPath testGroup =
           subgroupsStr])))))
 
 -- | Generate a complete test file for Python
-generateTestFileWithPythonCodec :: Module.Module -> Testing.TestGroup -> Either t0 (String, String)
+generateTestFileWithPythonCodec :: Packaging.Module -> Testing.TestGroup -> Either t0 (String, String)
 generateTestFileWithPythonCodec testModule testGroup =
     Eithers.map (\testBody ->
       let testModuleContent = buildPythonTestModule testModule testGroup testBody
-          ns_ = Module.moduleNamespace testModule
-          parts = Strings.splitOn "." (Module.unNamespace ns_)
+          ns_ = Packaging.moduleNamespace testModule
+          parts = Strings.splitOn "." (Packaging.unNamespace ns_)
           dirParts = Lists.init parts
           fileName =
                   Strings.cat [

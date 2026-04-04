@@ -15,7 +15,6 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging_
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -29,8 +28,8 @@ checkConflictingModuleNamespaces pkg =
                 let seen = Pairs.first acc
                     err = Pairs.second acc
                 in (Maybes.cases err (
-                  let ns = Module.moduleNamespace mod
-                      key = Strings.toLower (Module.unNamespace ns)
+                  let ns = Packaging_.moduleNamespace mod
+                      key = Strings.toLower (Packaging_.unNamespace ns)
                       existing = Maps.lookup key seen
                   in (Maybes.cases existing (Maps.insert key ns seen, Nothing) (\first -> (seen, (Just (Packaging.InvalidPackageErrorConflictingModuleNamespace (Packaging.ConflictingModuleNamespaceError {
                     Packaging.conflictingModuleNamespaceErrorFirst = first,
@@ -38,17 +37,17 @@ checkConflictingModuleNamespaces pkg =
       in (Pairs.second result)
 
 -- | Check for union variant names that, when mapped to constructor names, conflict with other type definitions
-checkConflictingVariantNames :: Module.Module -> Maybe Packaging.InvalidModuleError
+checkConflictingVariantNames :: Packaging_.Module -> Maybe Packaging.InvalidModuleError
 checkConflictingVariantNames mod =
 
-      let ns = Module.moduleNamespace mod
-          defs = Module.moduleDefinitions mod
+      let ns = Packaging_.moduleNamespace mod
+          defs = Packaging_.moduleDefinitions mod
           defNames = Lists.foldl (\acc -> \def -> Sets.insert (Names.localNameOf (definitionName def)) acc) Sets.empty defs
       in (Lists.foldl (\acc -> \def -> Maybes.cases acc (case def of
-        Module.DefinitionType v0 ->
-          let typeName = Module.typeDefinitionName v0
+        Packaging_.DefinitionType v0 ->
+          let typeName = Packaging_.typeDefinitionName v0
               localTypeName = Names.localNameOf typeName
-              typ = Module.typeDefinitionType v0
+              typ = Core.typeSchemeType (Packaging_.typeDefinitionType v0)
           in case typ of
             Core.TypeUnion v1 -> Lists.foldl (\innerAcc -> \field -> Maybes.cases innerAcc (
               let fieldName = Core.fieldTypeName field
@@ -63,11 +62,11 @@ checkConflictingVariantNames mod =
         _ -> Nothing) (\_ -> acc)) Nothing defs)
 
 -- | Check that all definition names in a module have the module's namespace as a prefix
-checkDefinitionNamespaces :: Module.Module -> Maybe Packaging.InvalidModuleError
+checkDefinitionNamespaces :: Packaging_.Module -> Maybe Packaging.InvalidModuleError
 checkDefinitionNamespaces mod =
 
-      let ns = Module.moduleNamespace mod
-          prefix = Strings.cat2 (Module.unNamespace ns) "."
+      let ns = Packaging_.moduleNamespace mod
+          prefix = Strings.cat2 (Packaging_.unNamespace ns) "."
           prefixLen = Strings.length prefix
       in (Lists.foldl (\acc -> \def -> Maybes.cases acc (
         let name = definitionName def
@@ -75,13 +74,13 @@ checkDefinitionNamespaces mod =
             namePrefix = Lists.take prefixLen (Strings.toList nameStr)
         in (Logic.ifElse (Equality.equal (Strings.fromList namePrefix) prefix) Nothing (Just (Packaging.InvalidModuleErrorDefinitionNotInModuleNamespace (Packaging.DefinitionNotInModuleNamespaceError {
           Packaging.definitionNotInModuleNamespaceErrorNamespace = ns,
-          Packaging.definitionNotInModuleNamespaceErrorName = name}))))) (\_ -> acc)) Nothing (Module.moduleDefinitions mod))
+          Packaging.definitionNotInModuleNamespaceErrorName = name}))))) (\_ -> acc)) Nothing (Packaging_.moduleDefinitions mod))
 
 -- | Check for duplicate definition names in a module
-checkDuplicateDefinitionNames :: Module.Module -> Maybe Packaging.InvalidModuleError
+checkDuplicateDefinitionNames :: Packaging_.Module -> Maybe Packaging.InvalidModuleError
 checkDuplicateDefinitionNames mod =
 
-      let ns = Module.moduleNamespace mod
+      let ns = Packaging_.moduleNamespace mod
           result =
                   Lists.foldl (\acc -> \def ->
                     let seen = Pairs.first acc
@@ -90,7 +89,7 @@ checkDuplicateDefinitionNames mod =
                       let name = definitionName def
                       in (Logic.ifElse (Sets.member name seen) (seen, (Just (Packaging.InvalidModuleErrorDuplicateDefinitionName (Packaging.DuplicateDefinitionNameError {
                         Packaging.duplicateDefinitionNameErrorNamespace = ns,
-                        Packaging.duplicateDefinitionNameErrorName = name})))) (Sets.insert name seen, Nothing))) (\_ -> acc))) (Sets.empty, Nothing) (Module.moduleDefinitions mod)
+                        Packaging.duplicateDefinitionNameErrorName = name})))) (Sets.insert name seen, Nothing))) (\_ -> acc))) (Sets.empty, Nothing) (Packaging_.moduleDefinitions mod)
       in (Pairs.second result)
 
 -- | Check for duplicate module namespaces in a package
@@ -102,20 +101,20 @@ checkDuplicateModuleNamespaces pkg =
                 let seen = Pairs.first acc
                     err = Pairs.second acc
                 in (Maybes.cases err (
-                  let ns = Module.moduleNamespace mod
+                  let ns = Packaging_.moduleNamespace mod
                   in (Logic.ifElse (Sets.member ns seen) (seen, (Just (Packaging.InvalidPackageErrorDuplicateModuleNamespace (Packaging.DuplicateModuleNamespaceError {
                     Packaging.duplicateModuleNamespaceErrorNamespace = ns})))) (Sets.insert ns seen, Nothing))) (\_ -> acc))) (Sets.empty, Nothing) (Packaging_.packageModules pkg)
       in (Pairs.second result)
 
 -- | Extract the name from a definition
-definitionName :: Module.Definition -> Core.Name
+definitionName :: Packaging_.Definition -> Core.Name
 definitionName def =
     case def of
-      Module.DefinitionTerm v0 -> Module.termDefinitionName v0
-      Module.DefinitionType v0 -> Module.typeDefinitionName v0
+      Packaging_.DefinitionTerm v0 -> Packaging_.termDefinitionName v0
+      Packaging_.DefinitionType v0 -> Packaging_.typeDefinitionName v0
 
 -- | Validate a module, returning the first error found or nothing if valid
-module_ :: Module.Module -> Maybe Packaging.InvalidModuleError
+module_ :: Packaging_.Module -> Maybe Packaging.InvalidModuleError
 module_ mod =
 
       let r1 = checkDefinitionNamespaces mod

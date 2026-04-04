@@ -1,5 +1,5 @@
 (ns hydra.test.testGraph
-  (:require [hydra.core :refer :all] [hydra.lexical :refer :all] [hydra.lib.libraries :refer :all] [hydra.rewriting :refer :all] [hydra.scoping :refer :all] [hydra.json.bootstrap :refer :all] [hydra.graph :refer :all] [hydra.context :refer :all] [hydra.annotation-bindings :refer [annotation-bindings]] [hydra.lib.maps :refer :all] [hydra.module :refer :all] [hydra.test.testTerms :refer :all] [hydra.test.testTypes :refer :all]
+  (:require [hydra.core :refer :all] [hydra.lexical :refer :all] [hydra.lib.libraries :refer :all] [hydra.rewriting :refer :all] [hydra.scoping :refer :all] [hydra.json.bootstrap :refer :all] [hydra.graph :refer :all] [hydra.context :refer :all] [hydra.annotation-bindings :refer [annotation-bindings]] [hydra.lib.maps :refer :all] [hydra.packaging :refer :all] [hydra.test.testTerms :refer :all] [hydra.test.testTypes :refer :all]
 ))
 
 (declare hydra_test_test_graph_test_context hydra_test_test_graph_test_graph hydra_test_test_graph_test_namespace hydra_test_test_graph_test_schema_namespace hydra_test_test_graph_test_terms hydra_test_test_graph_test_types)

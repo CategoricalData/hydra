@@ -21,14 +21,13 @@ import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Errors                      as Error
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Dependencies   as Dependencies
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
-import qualified Hydra.Sources.CoderUtils                  as CoderUtils
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Predicates    as Predicates
 import qualified Hydra.Sources.Kernel.Terms.Resolution    as Resolution
@@ -397,7 +396,7 @@ encodeNamespace = def "encodeNamespace" $
     Strings.intercalate (string "::")
       (Lists.map
         (lambda "seg" $ Formatting.convertCaseCamelToLowerSnake @@ var "seg")
-        (Strings.splitOn (string ".") (Module.unNamespace (var "ns"))))
+        (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))))
 
 -- | Encode a field name in lower_snake_case
 encodeFieldName :: TTermDefinition (Name -> String)
@@ -1092,7 +1091,7 @@ serializeHeaderFile = def "serializeHeaderFile" $
 bindingNameToFilePath :: TTermDefinition (Name -> FilePath)
 bindingNameToFilePath = def "bindingNameToFilePath" $
   lambda "name" $
-    CoderUtils.nameToFilePath
+    Names.nameToFilePath
       @@ (inject _CaseConvention _CaseConvention_lowerSnake unit)
       @@ (inject _CaseConvention _CaseConvention_lowerSnake unit)
       @@ wrap _FileExtension (string "h")
@@ -1132,11 +1131,11 @@ findTypeDependencies = def "findTypeDependencies" $
     Lists.filter
       (lambda "n" $
         Logic.not (Equality.equal
-          (Maybes.map (unaryFunction Module.unNamespace) (Names.namespaceOf @@ var "n"))
-          (just (Module.unNamespace (var "ns")))))
+          (Maybes.map (unaryFunction Packaging.unNamespace) (Names.namespaceOf @@ var "n"))
+          (just (Packaging.unNamespace (var "ns")))))
       (Sets.toList (Lists.foldl
         (lambda "acc" $ lambda "d" $
-          Sets.union (var "acc") (Dependencies.typeDependencyNames @@ boolean True @@ Module.typeDefinitionType (var "d")))
+          Sets.union (var "acc") (Dependencies.typeDependencyNames @@ boolean True @@ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "d"))))
         (Sets.empty)
         (var "defs")))
 
@@ -1190,8 +1189,8 @@ isTemplateType = def "isTemplateType" $
 generateTypeFile :: TTermDefinition (Namespace -> TypeDefinition -> Context -> Graph -> Either (InContext Error) (FilePath, String))
 generateTypeFile = def "generateTypeFile" $
   lambda "ns" $ lambda "def_" $ "cx" ~> lambda "g" $
-    "name" <~ Module.typeDefinitionName (var "def_") $
-    "typ" <~ Module.typeDefinitionType (var "def_") $
+    "name" <~ Packaging.typeDefinitionName (var "def_") $
+    "typ" <~ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "def_")) $
     "decls" <<~ (encodeTypeDefinition @@ var "cx" @@ var "g" @@ var "name" @@ var "typ") $
     "includes" <~ (findIncludes @@ boolean True @@ var "ns" @@ list [var "def_"]) $
       right (serializeHeaderFile @@ var "name" @@ var "includes"
@@ -1210,7 +1209,7 @@ generateTypeFiles = def "generateTypeFiles" $
 moduleToCpp :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either (InContext Error) (M.Map FilePath String))
 moduleToCpp = def "moduleToCpp" $
   lambda "mod" $ lambda "defs" $ "cx" ~> lambda "g" $
-    "ns" <~ Module.moduleNamespace (var "mod") $
+    "ns" <~ Packaging.moduleNamespace (var "mod") $
     "typeDefs" <~ Pairs.first (Environment.partitionDefinitions @@ var "defs") $
     "typeFiles" <<~ (generateTypeFiles @@ var "ns" @@ var "typeDefs" @@ var "cx" @@ var "g") $
       right (Maps.fromList (var "typeFiles"))

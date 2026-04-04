@@ -23,7 +23,7 @@ import qualified Hydra.Ext.Org.W3.Shacl.Model as Shacl
 import qualified Hydra.Ext.Rdf.Utils as RdfUtils
 import qualified Hydra.Ext.Rdf.Serde as Serde
 import qualified Hydra.Decode.Core as DecodeCore
-import qualified Hydra.Encode.Module as EncodeModule
+import qualified Hydra.Encode.Packaging as EncodePackaging
 import qualified Hydra.Context as Context
 import qualified Hydra.Lexical as Lexical
 
@@ -79,7 +79,7 @@ runDemo jsonDir outDir = do
   kernelNamespaces <- readManifestField jsonDir "kernelModules"
   -- Load the first type-defining modules (those whose types we encoded as shapes)
   let typeNs = take 15 kernelNamespaces
-  loadedModules <- loadModulesFromJson True jsonDir kernelModules typeNs
+  loadedModules <- loadModulesFromJson jsonDir kernelModules typeNs
 
   -- Encode each loaded module *as a Module term* into RDF
   (allDataDescs, nDataSkipped) <- encodeModulesAsRdf cx graph loadedModules
@@ -142,7 +142,7 @@ encodeModulesAsRdf cx graph mods = go cx mods [] 0
       let ns = unNamespace (moduleNamespace m)
           subject = Rdf.ResourceIri $ Rdf.Iri ("urn:hydra:module:" ++ ns)
           simplified = simplifyModule m
-          moduleTerm = EncodeModule.module_ simplified
+          moduleTerm = EncodePackaging.module_ simplified
       result <- tryEncode subject moduleTerm cx' graph
       case result of
         Nothing -> do

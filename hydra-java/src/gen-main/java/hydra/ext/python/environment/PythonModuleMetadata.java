@@ -57,7 +57,7 @@ public class PythonModuleMetadata implements Serializable, Comparable<PythonModu
   /**
    * Namespace mapping for imports
    */
-  public final hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces;
+  public final hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName> namespaces;
 
   /**
    * Type variables used in the module
@@ -104,7 +104,7 @@ public class PythonModuleMetadata implements Serializable, Comparable<PythonModu
 
   public final Boolean usesTypeVar;
 
-  public PythonModuleMetadata (hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces, hydra.util.PersistentSet<hydra.core.Name> typeVariables, Boolean usesAnnotated, Boolean usesCallable, Boolean usesCast, Boolean usesLruCache, Boolean usesTypeAlias, Boolean usesDataclass, Boolean usesDecimal, Boolean usesEither, Boolean usesEnum, Boolean usesFrozenDict, Boolean usesFrozenList, Boolean usesGeneric, Boolean usesJust, Boolean usesLeft, Boolean usesMaybe, Boolean usesName, Boolean usesNode, Boolean usesNothing, Boolean usesRight, Boolean usesTypeVar) {
+  public PythonModuleMetadata (hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName> namespaces, hydra.util.PersistentSet<hydra.core.Name> typeVariables, Boolean usesAnnotated, Boolean usesCallable, Boolean usesCast, Boolean usesLruCache, Boolean usesTypeAlias, Boolean usesDataclass, Boolean usesDecimal, Boolean usesEither, Boolean usesEnum, Boolean usesFrozenDict, Boolean usesFrozenList, Boolean usesGeneric, Boolean usesJust, Boolean usesLeft, Boolean usesMaybe, Boolean usesName, Boolean usesNode, Boolean usesNothing, Boolean usesRight, Boolean usesTypeVar) {
     this.namespaces = namespaces;
     this.typeVariables = typeVariables;
     this.usesAnnotated = usesAnnotated;
@@ -278,7 +278,7 @@ public class PythonModuleMetadata implements Serializable, Comparable<PythonModu
     return ((Comparable) usesTypeVar).compareTo(other.usesTypeVar);
   }
 
-  public PythonModuleMetadata withNamespaces(hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces) {
+  public PythonModuleMetadata withNamespaces(hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName> namespaces) {
     return new PythonModuleMetadata(namespaces, typeVariables, usesAnnotated, usesCallable, usesCast, usesLruCache, usesTypeAlias, usesDataclass, usesDecimal, usesEither, usesEnum, usesFrozenDict, usesFrozenList, usesGeneric, usesJust, usesLeft, usesMaybe, usesName, usesNode, usesNothing, usesRight, usesTypeVar);
   }
 

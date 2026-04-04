@@ -31,7 +31,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
 import qualified Hydra.Dsl.Topology                   as Topology
@@ -857,14 +857,14 @@ findNamespaces :: TTermDefinition (Namespace -> [Definition] -> Namespaces Py.Do
 findNamespaces = def "findNamespaces" $
   doc "Find all namespaces referenced by a list of definitions, plus the core namespace" $
   lambdas ["focusNs", "defs"] $ lets [
-    "coreNs">: Module.namespace $ string "hydra.core",
+    "coreNs">: Packaging.namespace $ string "hydra.core",
     "namespaces">: Analysis.namespacesForDefinitions @@ PyNames.encodeNamespace @@ var "focusNs" @@ var "defs"] $
     Logic.ifElse (Equality.equal
-      (Module.unNamespace $ Pairs.first $ Module.namespacesFocus $ var "namespaces")
-      (Module.unNamespace $ var "coreNs"))
+      (Packaging.unNamespace $ Pairs.first $ Packaging.namespacesFocus $ var "namespaces")
+      (Packaging.unNamespace $ var "coreNs"))
       (var "namespaces")
-      (Module.namespaces
-        (Module.namespacesFocus $ var "namespaces")
+      (Packaging.namespaces
+        (Packaging.namespacesFocus $ var "namespaces")
         (Maps.insert (var "coreNs")
           (PyNames.encodeNamespace @@ var "coreNs")
-          (Module.namespacesMapping $ var "namespaces")))
+          (Packaging.namespacesMapping $ var "namespaces")))

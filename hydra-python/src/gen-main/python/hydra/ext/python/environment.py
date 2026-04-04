@@ -11,7 +11,7 @@ from typing import Annotated, TypeAlias, cast
 import hydra.core
 import hydra.ext.python.syntax
 import hydra.graph
-import hydra.module
+import hydra.packaging
 
 class PythonVersion(Enum):
     r"""Target Python version for code generation."""
@@ -26,7 +26,7 @@ PythonVersion.TYPE_ = hydra.core.Name("hydra.ext.python.environment.PythonVersio
 class PythonEnvironment:
     r"""Environment for Python code generation."""
 
-    namespaces: Annotated[hydra.module.Namespaces[hydra.ext.python.syntax.DottedName], "Namespace mapping for imports"]
+    namespaces: Annotated[hydra.packaging.Namespaces[hydra.ext.python.syntax.DottedName], "Namespace mapping for imports"]
     bound_type_variables: Annotated[tuple[frozenlist[hydra.core.Name], FrozenDict[hydra.core.Name, hydra.ext.python.syntax.Name]], "Type variables in scope, with their Python names"]
     graph: Annotated[hydra.graph.Graph, "Graph context for type inference"]
     nullary_bindings: Annotated[frozenset[hydra.core.Name], "Set of nullary bindings (need call syntax)"]
@@ -47,7 +47,7 @@ class PythonEnvironment:
 class PythonModuleMetadata:
     r"""Temporary metadata used to create the header section of a Python file."""
 
-    namespaces: Annotated[hydra.module.Namespaces[hydra.ext.python.syntax.DottedName], "Namespace mapping for imports"]
+    namespaces: Annotated[hydra.packaging.Namespaces[hydra.ext.python.syntax.DottedName], "Namespace mapping for imports"]
     type_variables: Annotated[frozenset[hydra.core.Name], "Type variables used in the module"]
     uses_annotated: bool
     uses_callable: bool

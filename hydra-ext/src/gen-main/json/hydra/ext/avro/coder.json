@@ -10144,7 +10144,7 @@
                                             "function": {
                                               "lambda": {
                                                 "body": {
-                                                  "wrap": {"body": {"variable": "s"}, "typeName": "hydra.module.Namespace"}},
+                                                  "wrap": {"body": {"variable": "s"}, "typeName": "hydra.packaging.Namespace"}},
                                                 "domain": [{"literal": {"string": {}}}],
                                                 "parameter": "s"}}},
                                           "function": {
@@ -10153,9 +10153,9 @@
                                                 "typeApplication": {
                                                   "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
                                                   "type": {"literal": {"string": {}}}}},
-                                              "type": {"variable": "hydra.module.Namespace"}}}}}}}},
+                                              "type": {"variable": "hydra.packaging.Namespace"}}}}}}}},
                                 {"name": "local", "term": {"variable": "local"}}],
-                              "typeName": "hydra.module.QualifiedName"}},
+                              "typeName": "hydra.packaging.QualifiedName"}},
                           "function": {"variable": "hydra.names.unqualifyName"}}}}},
                   "domain": [{"variable": "hydra.ext.avro.environment.AvroQualifiedName"}],
                   "parameter": "qname"}}}}},
@@ -13861,7 +13861,6 @@
     "hydra.errors",
     "hydra.graph",
     "hydra.json.model",
-    "hydra.module",
     "hydra.packaging",
     "hydra.parsing",
     "hydra.phantoms",

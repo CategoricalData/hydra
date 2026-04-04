@@ -20,8 +20,8 @@ import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
-import hydra.module
 import hydra.names
+import hydra.packaging
 
 def triples_of(descs: frozenlist[hydra.ext.org.w3.rdf.syntax.Description]) -> frozenlist[hydra.ext.org.w3.rdf.syntax.Triple]:
     r"""Extract all triples from a list of descriptions."""
@@ -165,7 +165,7 @@ def property_iri(rname: hydra.core.Name, fname: hydra.core.Name) -> hydra.ext.or
     r"""Construct a property IRI from a record name and field name."""
 
     @lru_cache(1)
-    def qual_name() -> hydra.module.QualifiedName:
+    def qual_name() -> hydra.packaging.QualifiedName:
         return hydra.names.qualify_name(rname)
     gname = qual_name().namespace
     local_ = qual_name().local

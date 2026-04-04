@@ -44,5 +44,5 @@ demoMeteredEvaluation = do
     graph = modulesToGraph [testModule] [testModule]
     cx = emptyContext
     result = do
-      original <- bindingTerm <$> requireElement cx graph (unqualifyName $ QualifiedName (Just testNs) "catStrings")
+      original <- bindingTerm <$> requireBinding cx graph (unqualifyName $ QualifiedName (Just testNs) "catStrings")
       reduceTerm cx graph False original

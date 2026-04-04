@@ -20,7 +20,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Constants      as Constants
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
@@ -101,8 +101,8 @@ buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
           _Binding_type>>: nothing])
       (var "testTerms"),
     "tempModule">: record _Module [
-      _Module_namespace>>: Module.moduleNamespace (var "mod"),
-      _Module_definitions>>: Lists.map ("b" ~> Module.definitionTerm (Module.termDefinition
+      _Module_namespace>>: Packaging.moduleNamespace (var "mod"),
+      _Module_definitions>>: Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
         (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
         (Core.bindingType $ var "b")))
         (var "testBindings"),
@@ -124,7 +124,7 @@ buildTestModule :: TTermDefinition (Module -> TestGroup -> String -> Namespaces 
 buildTestModule = define "buildTestModule" $
   doc "Build the complete test module for Haskell HSpec" $
   lambda "testModule" $ lambda "testGroup" $ lambda "testBody" $ lambda "namespaces" $ lets [
-    "ns_">: Module.moduleNamespace (var "testModule"),
+    "ns_">: Packaging.moduleNamespace (var "testModule"),
     "specNs">: wrap _Namespace (Strings.cat2 (unwrap _Namespace @@ var "ns_") (string "Spec")),
     "moduleNameString">: namespaceToModuleName @@ var "specNs",
     "groupName_">: project _TestGroup _TestGroup_name @@ var "testGroup",
@@ -252,7 +252,7 @@ generateTestFile = define "generateTestFile" $
     Eithers.map
       (lambda "testBody" $ lets [
         "testModuleContent">: buildTestModule @@ var "testModule" @@ var "testGroup" @@ var "testBody" @@ var "namespaces",
-        "ns_">: Module.moduleNamespace (var "testModule"),
+        "ns_">: Packaging.moduleNamespace (var "testModule"),
         "specNs">: wrap _Namespace (Strings.cat2 (unwrap _Namespace @@ var "ns_") (string "Spec")),
         "filePath">: Names.namespaceToFilePath @@ Util.caseConventionPascal @@ (wrap _FileExtension (string "hs")) @@ var "specNs"] $
         pair (var "filePath") (var "testModuleContent"))

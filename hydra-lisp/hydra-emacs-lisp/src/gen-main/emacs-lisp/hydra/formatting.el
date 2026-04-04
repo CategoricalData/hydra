@@ -10,6 +10,8 @@
 
 (require 'hydra.lib.maps)
 
+(require 'hydra.lib.math)
+
 (require 'hydra.lib.maybes)
 
 (require 'hydra.lib.pairs)
@@ -44,11 +46,13 @@
 
 (defvar hydra_formatting_non_alnum_to_underscores (lambda (input) (let ((is_alnum (lambda (c) (funcall (hydra_lib_logic_or (funcall (hydra_lib_logic_and (funcall (hydra_lib_equality_gte c) 65)) (funcall (hydra_lib_equality_lte c) 90))) (funcall (hydra_lib_logic_or (funcall (hydra_lib_logic_and (funcall (hydra_lib_equality_gte c) 97)) (funcall (hydra_lib_equality_lte c) 122))) (funcall (hydra_lib_logic_and (funcall (hydra_lib_equality_gte c) 48)) (funcall (hydra_lib_equality_lte c) 57))))))) (let ((replace (lambda (p) (lambda (c) (let ((s (hydra_lib_pairs_first p))) (let ((b (hydra_lib_pairs_second p))) (if (is_alnum c) (list (funcall (hydra_lib_lists_cons c) s) nil) (if b (list s t) (list (funcall (hydra_lib_lists_cons 95) s) t))))))))) (let ((result (funcall (funcall (hydra_lib_lists_foldl replace) (list (list) nil)) (hydra_lib_strings_to_list input)))) (hydra_lib_strings_from_list (hydra_lib_lists_reverse (hydra_lib_pairs_first result))))))))
 
+(defvar hydra_formatting_strip_leading_and_trailing_whitespace (lambda (s) (hydra_lib_strings_from_list (funcall (hydra_lib_lists_drop_while hydra_lib_chars_is_space) (hydra_lib_lists_reverse (funcall (hydra_lib_lists_drop_while hydra_lib_chars_is_space) (hydra_lib_lists_reverse (hydra_lib_strings_to_list s))))))))
+
+(defvar hydra_formatting_normalize_comment (lambda (s) (let ((stripped (hydra_formatting_strip_leading_and_trailing_whitespace s))) (if (hydra_lib_strings_null stripped) "" (let ((last_idx (funcall (hydra_lib_math_sub (hydra_lib_strings_length stripped)) 1))) (let ((last_char (funcall (hydra_lib_strings_char_at last_idx) stripped))) (if (funcall (hydra_lib_equality_equal last_char) 46) stripped (funcall (hydra_lib_strings_cat2 stripped) "."))))))))
+
 (defvar hydra_formatting_sanitize_with_underscores (lambda (reserved) (lambda (s) (funcall (hydra_formatting_escape_with_underscore reserved) (hydra_formatting_non_alnum_to_underscores s)))))
 
 (defvar hydra_formatting_show_list (lambda (f) (lambda (els) (hydra_lib_strings_cat (list "[" (funcall (hydra_lib_strings_intercalate ", ") (funcall (hydra_lib_lists_map f) els)) "]")))))
-
-(defvar hydra_formatting_strip_leading_and_trailing_whitespace (lambda (s) (hydra_lib_strings_from_list (funcall (hydra_lib_lists_drop_while hydra_lib_chars_is_space) (hydra_lib_lists_reverse (funcall (hydra_lib_lists_drop_while hydra_lib_chars_is_space) (hydra_lib_lists_reverse (hydra_lib_strings_to_list s))))))))
 
 (defvar hydra_formatting_with_character_aliases (lambda (original) (let* ((aliases (hydra_lib_maps_from_list (list (list 32 "sp") (list 33 "excl") (list 34 "quot") (list 35 "num") (list 36 "dollar") (list 37 "percnt") (list 38 "amp") (list 39 "apos") (list 40 "lpar") (list 41 "rpar") (list 42 "ast") (list 43 "plus") (list 44 "comma") (list 45 "minus") (list 46 "period") (list 47 "sol") (list 58 "colon") (list 59 "semi") (list 60 "lt") (list 61 "equals") (list 62 "gt") (list 63 "quest") (list 64 "commat") (list 91 "lsqb") (list 92 "bsol") (list 93 "rsqb") (list 94 "circ") (list 95 "lowbar") (list 96 "grave") (list 123 "lcub") (list 124 "verbar") (list 125 "rcub") (list 126 "tilde")))) (alias (lambda (c) (funcall (hydra_lib_maybes_from_maybe (lambda () (hydra_lib_lists_pure c))) (funcall (hydra_lib_maybes_map hydra_lib_strings_to_list) (funcall (hydra_lib_maps_lookup c) aliases)))))) (hydra_lib_strings_from_list (funcall (hydra_lib_lists_filter hydra_lib_chars_is_alpha_num) (hydra_lib_lists_concat (funcall (hydra_lib_lists_map alias) (hydra_lib_strings_to_list original))))))))
 

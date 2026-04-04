@@ -3,162 +3,207 @@
     {
       "type": {
         "name": "hydra.ext.org.graphviz.dot.Id",
-        "type": {"wrap": {"literal": {"string": {}}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"literal": {"string": {}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphviz.dot.Graph",
         "type": {
-          "record": [
-            {"name": "strict", "type": {"literal": {"boolean": {}}}},
-            {"name": "directed", "type": {"literal": {"boolean": {}}}},
-            {
-              "name": "id",
-              "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.Id"}}},
-            {
-              "name": "statements",
-              "type": {"list": {"variable": "hydra.ext.org.graphviz.dot.Stmt"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {"name": "strict", "type": {"literal": {"boolean": {}}}},
+              {"name": "directed", "type": {"literal": {"boolean": {}}}},
+              {
+                "name": "id",
+                "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.Id"}}},
+              {
+                "name": "statements",
+                "type": {"list": {"variable": "hydra.ext.org.graphviz.dot.Stmt"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphviz.dot.Stmt",
         "type": {
-          "union": [
-            {
-              "name": "node",
-              "type": {"variable": "hydra.ext.org.graphviz.dot.NodeStmt"}},
-            {
-              "name": "edge",
-              "type": {"variable": "hydra.ext.org.graphviz.dot.EdgeStmt"}},
-            {
-              "name": "attr",
-              "type": {"variable": "hydra.ext.org.graphviz.dot.AttrStmt"}},
-            {
-              "name": "equals",
-              "type": {"variable": "hydra.ext.org.graphviz.dot.EqualityPair"}},
-            {
-              "name": "subgraph",
-              "type": {"variable": "hydra.ext.org.graphviz.dot.Subgraph"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "node",
+                "type": {"variable": "hydra.ext.org.graphviz.dot.NodeStmt"}},
+              {
+                "name": "edge",
+                "type": {"variable": "hydra.ext.org.graphviz.dot.EdgeStmt"}},
+              {
+                "name": "attr",
+                "type": {"variable": "hydra.ext.org.graphviz.dot.AttrStmt"}},
+              {
+                "name": "equals",
+                "type": {"variable": "hydra.ext.org.graphviz.dot.EqualityPair"}},
+              {
+                "name": "subgraph",
+                "type": {"variable": "hydra.ext.org.graphviz.dot.Subgraph"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphviz.dot.EqualityPair",
         "type": {
-          "record": [
-            {
-              "name": "left",
-              "type": {"variable": "hydra.ext.org.graphviz.dot.Id"}},
-            {
-              "name": "right",
-              "type": {"variable": "hydra.ext.org.graphviz.dot.Id"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "left",
+                "type": {"variable": "hydra.ext.org.graphviz.dot.Id"}},
+              {
+                "name": "right",
+                "type": {"variable": "hydra.ext.org.graphviz.dot.Id"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphviz.dot.AttrStmt",
         "type": {
-          "record": [
-            {
-              "name": "type",
-              "type": {"variable": "hydra.ext.org.graphviz.dot.AttrType"}},
-            {
-              "name": "attributes",
-              "type": {"variable": "hydra.ext.org.graphviz.dot.AttrList"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "type",
+                "type": {"variable": "hydra.ext.org.graphviz.dot.AttrType"}},
+              {
+                "name": "attributes",
+                "type": {"variable": "hydra.ext.org.graphviz.dot.AttrList"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphviz.dot.AttrType",
         "type": {
-          "union": [
-            {"name": "graph", "type": {"unit": {}}},
-            {"name": "node", "type": {"unit": {}}},
-            {"name": "edge", "type": {"unit": {}}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {"name": "graph", "type": {"unit": {}}},
+              {"name": "node", "type": {"unit": {}}},
+              {"name": "edge", "type": {"unit": {}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphviz.dot.AttrList",
         "type": {
-          "wrap": {
-            "list": {"list": {"variable": "hydra.ext.org.graphviz.dot.EqualityPair"}}}}}},
+          "constraints": null,
+          "type": {
+            "wrap": {
+              "list": {"list": {"variable": "hydra.ext.org.graphviz.dot.EqualityPair"}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphviz.dot.EdgeStmt",
         "type": {
-          "record": [
-            {
-              "name": "left",
-              "type": {"variable": "hydra.ext.org.graphviz.dot.NodeOrSubgraph"}},
-            {
-              "name": "right",
-              "type": {"list": {"variable": "hydra.ext.org.graphviz.dot.NodeOrSubgraph"}}},
-            {
-              "name": "attributes",
-              "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.AttrList"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "left",
+                "type": {"variable": "hydra.ext.org.graphviz.dot.NodeOrSubgraph"}},
+              {
+                "name": "right",
+                "type": {"list": {"variable": "hydra.ext.org.graphviz.dot.NodeOrSubgraph"}}},
+              {
+                "name": "attributes",
+                "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.AttrList"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphviz.dot.NodeOrSubgraph",
         "type": {
-          "union": [
-            {
-              "name": "node",
-              "type": {"variable": "hydra.ext.org.graphviz.dot.NodeId"}},
-            {
-              "name": "subgraph",
-              "type": {"variable": "hydra.ext.org.graphviz.dot.Subgraph"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "node",
+                "type": {"variable": "hydra.ext.org.graphviz.dot.NodeId"}},
+              {
+                "name": "subgraph",
+                "type": {"variable": "hydra.ext.org.graphviz.dot.Subgraph"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphviz.dot.NodeStmt",
         "type": {
-          "record": [
-            {
-              "name": "id",
-              "type": {"variable": "hydra.ext.org.graphviz.dot.NodeId"}},
-            {
-              "name": "attributes",
-              "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.AttrList"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "id",
+                "type": {"variable": "hydra.ext.org.graphviz.dot.NodeId"}},
+              {
+                "name": "attributes",
+                "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.AttrList"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphviz.dot.NodeId",
         "type": {
-          "record": [
-            {"name": "id", "type": {"variable": "hydra.ext.org.graphviz.dot.Id"}},
-            {
-              "name": "port",
-              "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.Port"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {"name": "id", "type": {"variable": "hydra.ext.org.graphviz.dot.Id"}},
+              {
+                "name": "port",
+                "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.Port"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphviz.dot.Port",
         "type": {
-          "record": [
-            {
-              "name": "id",
-              "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.Id"}}},
-            {
-              "name": "position",
-              "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.CompassPt"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "id",
+                "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.Id"}}},
+              {
+                "name": "position",
+                "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.CompassPt"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphviz.dot.Subgraph",
         "type": {
-          "record": [
-            {
-              "name": "subgraphId",
-              "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.SubgraphId"}}},
-            {
-              "name": "statements",
-              "type": {"list": {"variable": "hydra.ext.org.graphviz.dot.Stmt"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "subgraphId",
+                "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.SubgraphId"}}},
+              {
+                "name": "statements",
+                "type": {"list": {"variable": "hydra.ext.org.graphviz.dot.Stmt"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphviz.dot.SubgraphId",
-        "type": {"wrap": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.Id"}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.Id"}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.graphviz.dot.CompassPt",
         "type": {
-          "union": [
-            {"name": "n", "type": {"unit": {}}},
-            {"name": "ne", "type": {"unit": {}}},
-            {"name": "e", "type": {"unit": {}}},
-            {"name": "se", "type": {"unit": {}}},
-            {"name": "s", "type": {"unit": {}}},
-            {"name": "sw", "type": {"unit": {}}},
-            {"name": "w", "type": {"unit": {}}},
-            {"name": "nw", "type": {"unit": {}}},
-            {"name": "c", "type": {"unit": {}}},
-            {"name": "none", "type": {"unit": {}}}]}}}],
+          "constraints": null,
+          "type": {
+            "union": [
+              {"name": "n", "type": {"unit": {}}},
+              {"name": "ne", "type": {"unit": {}}},
+              {"name": "e", "type": {"unit": {}}},
+              {"name": "se", "type": {"unit": {}}},
+              {"name": "s", "type": {"unit": {}}},
+              {"name": "sw", "type": {"unit": {}}},
+              {"name": "w", "type": {"unit": {}}},
+              {"name": "nw", "type": {"unit": {}}},
+              {"name": "c", "type": {"unit": {}}},
+              {"name": "none", "type": {"unit": {}}}]},
+          "variables": []}}}],
   "description": [
     "A model from the Graphviz DOT graph description language. Based on the grammar at https://graphviz.org/doc/info/lang.html"],
   "namespace": "hydra.ext.org.graphviz.dot",

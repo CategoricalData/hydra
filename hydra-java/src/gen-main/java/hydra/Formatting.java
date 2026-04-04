@@ -218,6 +218,31 @@ public interface Formatting {
     return hydra.lib.strings.FromList.apply(hydra.lib.lists.Reverse.apply(hydra.lib.pairs.First.apply(result.get())));
   }
 
+  static String normalizeComment(String s) {
+    String stripped = hydra.Formatting.stripLeadingAndTrailingWhitespace(s);
+    return hydra.lib.logic.IfElse.lazy(
+      hydra.lib.strings.Null.apply(stripped),
+      () -> "",
+      () -> ((java.util.function.Supplier<String>) (() -> {
+        Integer lastIdx = hydra.lib.math.Sub.apply(
+          hydra.lib.strings.Length.apply(stripped),
+          1);
+        return ((java.util.function.Supplier<String>) (() -> {
+          Integer lastChar = hydra.lib.strings.CharAt.apply(
+            lastIdx,
+            stripped);
+          return hydra.lib.logic.IfElse.lazy(
+            hydra.lib.equality.Equal.apply(
+              lastChar,
+              46),
+            () -> stripped,
+            () -> hydra.lib.strings.Cat2.apply(
+              stripped,
+              "."));
+        })).get();
+      })).get());
+  }
+
   static String sanitizeWithUnderscores(hydra.util.PersistentSet<String> reserved, String s) {
     return hydra.Formatting.escapeWithUnderscore(
       reserved,

@@ -32,7 +32,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
 import qualified Hydra.Dsl.Topology                   as Topology
@@ -154,7 +154,7 @@ transformModule :: TTermDefinition (Module -> Module)
 transformModule = define "transformModule" $
   doc "Transform module with generation namespace" $
   lambda "m" $
-    Module.module_
+    Packaging.module_
       (addGenerationPrefix @@ (project _Module _Module_namespace @@ var "m"))
       (project _Module _Module_definitions @@ var "m")
       (project _Module _Module_termDependencies @@ var "m")

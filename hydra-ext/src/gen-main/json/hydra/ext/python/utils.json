@@ -1179,11 +1179,11 @@
                                 "term": {
                                   "wrap": {
                                     "body": {"literal": {"string": "hydra.core"}},
-                                    "typeName": "hydra.module.Namespace"}},
+                                    "typeName": "hydra.packaging.Namespace"}},
                                 "type": [
                                   {
                                     "constraints": null,
-                                    "type": {"variable": "hydra.module.Namespace"},
+                                    "type": {"variable": "hydra.packaging.Namespace"},
                                     "variables": []}]},
                               {
                                 "name": "namespaces",
@@ -1206,7 +1206,7 @@
                                     "type": {
                                       "application": {
                                         "argument": {"variable": "hydra.ext.python.syntax.DottedName"},
-                                        "function": {"variable": "hydra.module.Namespaces"}}},
+                                        "function": {"variable": "hydra.packaging.Namespaces"}}},
                                     "variables": []}]}],
                             "body": {
                               "application": {
@@ -1224,7 +1224,8 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "function": {
-                                                        "elimination": {"record": {"field": "focus", "typeName": "hydra.module.Namespaces"}}}},
+                                                        "elimination": {
+                                                          "record": {"field": "focus", "typeName": "hydra.packaging.Namespaces"}}}},
                                                     "type": {"variable": "hydra.ext.python.syntax.DottedName"}}}}}},
                                           {
                                             "name": "mapping",
@@ -1238,7 +1239,7 @@
                                                         "body": {
                                                           "function": {
                                                             "elimination": {
-                                                              "record": {"field": "mapping", "typeName": "hydra.module.Namespaces"}}}},
+                                                              "record": {"field": "mapping", "typeName": "hydra.packaging.Namespaces"}}}},
                                                         "type": {"variable": "hydra.ext.python.syntax.DottedName"}}}}},
                                                 "function": {
                                                   "application": {
@@ -1254,9 +1255,9 @@
                                                             "body": {
                                                               "typeApplication": {
                                                                 "body": {"function": {"primitive": "hydra.lib.maps.insert"}},
-                                                                "type": {"variable": "hydra.module.Namespace"}}},
+                                                                "type": {"variable": "hydra.packaging.Namespace"}}},
                                                             "type": {"variable": "hydra.ext.python.syntax.DottedName"}}}}}}}}}}],
-                                        "typeName": "hydra.module.Namespaces"}},
+                                        "typeName": "hydra.packaging.Namespaces"}},
                                     "type": {"variable": "hydra.ext.python.syntax.DottedName"}}},
                                 "function": {
                                   "application": {
@@ -1268,7 +1269,7 @@
                                             "argument": {
                                               "application": {
                                                 "argument": {"variable": "coreNs"},
-                                                "function": {"function": {"elimination": {"wrap": "hydra.module.Namespace"}}}}},
+                                                "function": {"function": {"elimination": {"wrap": "hydra.packaging.Namespace"}}}}},
                                             "function": {
                                               "application": {
                                                 "argument": {
@@ -1282,16 +1283,17 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "function": {
-                                                                    "elimination": {"record": {"field": "focus", "typeName": "hydra.module.Namespaces"}}}},
+                                                                    "elimination": {
+                                                                      "record": {"field": "focus", "typeName": "hydra.packaging.Namespaces"}}}},
                                                                 "type": {"variable": "hydra.ext.python.syntax.DottedName"}}}}},
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {
                                                               "typeApplication": {
                                                                 "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
-                                                                "type": {"variable": "hydra.module.Namespace"}}},
+                                                                "type": {"variable": "hydra.packaging.Namespace"}}},
                                                             "type": {"variable": "hydra.ext.python.syntax.DottedName"}}}}},
-                                                    "function": {"function": {"elimination": {"wrap": "hydra.module.Namespace"}}}}},
+                                                    "function": {"function": {"elimination": {"wrap": "hydra.packaging.Namespace"}}}}},
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
@@ -1302,10 +1304,10 @@
                                             "type": {
                                               "application": {
                                                 "argument": {"variable": "hydra.ext.python.syntax.DottedName"},
-                                                "function": {"variable": "hydra.module.Namespaces"}}}}}}}}}}}}},
-                        "domain": [{"list": {"variable": "hydra.module.Definition"}}],
+                                                "function": {"variable": "hydra.packaging.Namespaces"}}}}}}}}}}}}},
+                        "domain": [{"list": {"variable": "hydra.packaging.Definition"}}],
                         "parameter": "defs"}}},
-                  "domain": [{"variable": "hydra.module.Namespace"}],
+                  "domain": [{"variable": "hydra.packaging.Namespace"}],
                   "parameter": "focusNs"}}}}},
         "type": [
           {
@@ -1317,9 +1319,9 @@
                     "codomain": {
                       "application": {
                         "argument": {"variable": "hydra.ext.python.syntax.DottedName"},
-                        "function": {"variable": "hydra.module.Namespaces"}}},
-                    "domain": {"list": {"variable": "hydra.module.Definition"}}}},
-                "domain": {"variable": "hydra.module.Namespace"}}},
+                        "function": {"variable": "hydra.packaging.Namespaces"}}},
+                    "domain": {"list": {"variable": "hydra.packaging.Definition"}}}},
+                "domain": {"variable": "hydra.packaging.Namespace"}}},
             "variables": []}]}},
     {
       "term": {
@@ -5707,7 +5709,6 @@
     "hydra.errors",
     "hydra.graph",
     "hydra.json.model",
-    "hydra.module",
     "hydra.packaging",
     "hydra.parsing",
     "hydra.phantoms",

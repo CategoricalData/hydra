@@ -9,15 +9,15 @@ from typing import cast
 import hydra.core
 import hydra.lexical
 import hydra.lib.maps
-import hydra.module
+import hydra.packaging
 import hydra.test.test_terms
 import hydra.test.test_types
 
 
 
-test_namespace = hydra.module.Namespace("testGraph")
+test_namespace = hydra.packaging.Namespace("testGraph")
 
-test_schema_namespace = hydra.module.Namespace("testSchemaGraph")
+test_schema_namespace = hydra.packaging.Namespace("testSchemaGraph")
 
 @lru_cache(1)
 def test_terms() -> FrozenDict[hydra.core.Name, hydra.core.Term]:

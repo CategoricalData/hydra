@@ -1,5 +1,5 @@
 (ns hydra.error.packaging
-  (:require [hydra.core :refer :all] [hydra.module :refer :all]
+  (:require [hydra.core :refer :all] [hydra.packaging :refer :all]
 ))
 
 (declare hydra_error_packaging_invalid_module_error-variants hydra_error_packaging_invalid_package_error-variants)

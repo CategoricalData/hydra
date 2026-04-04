@@ -3,7 +3,7 @@ package hydra
 import hydra.core.*
 import hydra.graph.{Graph, Primitive}
 import hydra.json.model.Value
-import hydra.module.{Module, Namespace, Definition}
+import hydra.packaging.{Module, Namespace, Definition}
 
 import java.io.File
 import java.nio.charset.StandardCharsets
@@ -81,17 +81,17 @@ object Generation:
   private def decodeBinaryInModule(mod: Module): Module =
     Module(mod.namespace, mod.definitions.map {
       case Definition.term(td) =>
-        Definition.term(hydra.module.TermDefinition(td.name, decodeBinaryLiterals(td.term), td.`type`))
+        Definition.term(hydra.packaging.TermDefinition(td.name, decodeBinaryLiterals(td.term), td.`type`))
       case other => other
     }, mod.termDependencies, mod.typeDependencies, mod.description)
 
   def decodeModuleFromJson(bsGraph: Graph, schemaMap: Map[String, Type], jsonVal: Value): Module =
-    val modName: String = "hydra.module.Module"
+    val modName: String = "hydra.packaging.Module"
     val modType: Type = Type.variable(modName)
     hydra.json.decode.fromJson(schemaMap)(modName)(modType)(jsonVal) match
       case Left(err) => throw new RuntimeException(s"JSON decode error: $err")
       case Right(term) =>
-        hydra.decode.module.module(bsGraph)(term) match
+        hydra.decode.packaging.module(bsGraph)(term) match
           case Left(err) => throw new RuntimeException(s"Module decode error: $err")
           case Right(mod) => mod
 

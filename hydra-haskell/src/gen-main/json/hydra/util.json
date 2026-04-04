@@ -4,66 +4,75 @@
       "type": {
         "name": "hydra.util.CaseConvention",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "A naming convention for symbols, such as camelCase or snake_case"}}}],
-            "body": {
-              "union": [
-                {"name": "camel", "type": {"unit": {}}},
-                {"name": "pascal", "type": {"unit": {}}},
-                {"name": "lowerSnake", "type": {"unit": {}}},
-                {"name": "upperSnake", "type": {"unit": {}}}]}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A naming convention for symbols, such as camelCase or snake_case"}}}],
+              "body": {
+                "union": [
+                  {"name": "camel", "type": {"unit": {}}},
+                  {"name": "pascal", "type": {"unit": {}}},
+                  {"name": "lowerSnake", "type": {"unit": {}}},
+                  {"name": "upperSnake", "type": {"unit": {}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.util.Comparison",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "An equality judgement: less than, equal to, or greater than"}}}],
-            "body": {
-              "union": [
-                {"name": "lessThan", "type": {"unit": {}}},
-                {"name": "equalTo", "type": {"unit": {}}},
-                {"name": "greaterThan", "type": {"unit": {}}}]}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "An equality judgement: less than, equal to, or greater than"}}}],
+              "body": {
+                "union": [
+                  {"name": "lessThan", "type": {"unit": {}}},
+                  {"name": "equalTo", "type": {"unit": {}}},
+                  {"name": "greaterThan", "type": {"unit": {}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.util.Precision",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "Numeric precision: arbitrary precision, or precision to a specified number of bits"}}}],
-            "body": {
-              "union": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "arbitrary",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "Arbitrary precision"}}}],
-                      "body": {"unit": {}}}}},
-                {
-                  "name": "bits",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "Precision to a specified number of bits"}}}],
-                      "body": {"literal": {"integer": {"int32": {}}}}}}}]}}}}}],
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "Numeric precision: arbitrary precision, or precision to a specified number of bits"}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "arbitrary",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "Arbitrary precision"}}}],
+                        "body": {"unit": {}}}}},
+                  {
+                    "name": "bits",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "Precision to a specified number of bits"}}}],
+                        "body": {"literal": {"integer": {"int32": {}}}}}}}]}}},
+          "variables": []}}}],
   "description": ["General-purpose utility types used across Hydra."],
   "namespace": "hydra.util",
   "termDependencies": ["hydra.core"],

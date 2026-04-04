@@ -11,8 +11,8 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Rewriting as Rewriting
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -47,7 +47,7 @@ subtermStep step =
         Paths.SubtermStepWrappedTerm -> Nothing
 
 -- | Build a subterm graph from a term
-termToSubtermGraph :: M.Map Module.Namespace String -> Core.Term -> Paths.SubtermGraph
+termToSubtermGraph :: M.Map Packaging.Namespace String -> Core.Term -> Paths.SubtermGraph
 termToSubtermGraph namespaces term =
 
       let dontCareStep = Paths.SubtermStepAnnotatedBody

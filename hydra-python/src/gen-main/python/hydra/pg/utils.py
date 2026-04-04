@@ -7,6 +7,7 @@ from collections.abc import Callable
 from functools import lru_cache
 from hydra.dsl.python import Either, Just, Maybe, Nothing, Right, frozenlist
 from typing import TypeVar, cast
+import hydra.coders
 import hydra.core
 import hydra.extract.core
 import hydra.graph
@@ -22,7 +23,6 @@ import hydra.pg.coder
 import hydra.pg.mapping
 import hydra.pg.model
 import hydra.show.core
-import hydra.util
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
@@ -41,7 +41,7 @@ def exp_string(cx: hydra.context.Context, term: hydra.core.Term) -> Either[hydra
 def example_pg_schema() -> hydra.pg.mapping.Schema[T0, None, str]:
     r"""Example property graph schema with string values."""
 
-    return hydra.pg.mapping.Schema(hydra.util.Coder((lambda _, _2: Right(None)), (lambda _, _2: Right(cast(hydra.core.Type, hydra.core.TypeUnit())))), hydra.util.Coder((lambda cx, t: exp_string(cx, t)), (lambda _cx, s: Right(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(s))))))), hydra.util.Coder((lambda _, _2: Right(None)), (lambda _, _2: Right(cast(hydra.core.Type, hydra.core.TypeUnit())))), hydra.util.Coder((lambda cx, t: exp_string(cx, t)), (lambda _cx, s: Right(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(s))))))), hydra.util.Coder((lambda _, _2: Right(None)), (lambda _, _2: Right(cast(hydra.core.Type, hydra.core.TypeUnit())))), hydra.util.Coder((lambda cx, t: exp_string(cx, t)), (lambda _cx, s: Right(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(s))))))), default_tinkerpop_annotations, "defaultVertexId", "defaultEdgeId")
+    return hydra.pg.mapping.Schema(hydra.coders.Coder((lambda _, _2: Right(None)), (lambda _, _2: Right(cast(hydra.core.Type, hydra.core.TypeUnit())))), hydra.coders.Coder((lambda cx, t: exp_string(cx, t)), (lambda _cx, s: Right(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(s))))))), hydra.coders.Coder((lambda _, _2: Right(None)), (lambda _, _2: Right(cast(hydra.core.Type, hydra.core.TypeUnit())))), hydra.coders.Coder((lambda cx, t: exp_string(cx, t)), (lambda _cx, s: Right(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(s))))))), hydra.coders.Coder((lambda _, _2: Right(None)), (lambda _, _2: Right(cast(hydra.core.Type, hydra.core.TypeUnit())))), hydra.coders.Coder((lambda cx, t: exp_string(cx, t)), (lambda _cx, s: Right(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(s))))))), default_tinkerpop_annotations, "defaultVertexId", "defaultEdgeId")
 
 def lazy_graph_to_elements(lg: hydra.pg.model.LazyGraph[T0]) -> frozenlist[hydra.pg.model.Element[T0]]:
     r"""Get all elements from a lazy graph."""

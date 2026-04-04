@@ -15,8 +15,8 @@ import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Set as S
@@ -113,8 +113,8 @@ sprim :: Core.Name -> Syntax.Data
 sprim name =
 
       let qname = Names.qualifyName name
-          prefix = Module.unNamespace (Maybes.fromJust (Module.qualifiedNameNamespace qname))
-          local = scalaEscapeName (Module.qualifiedNameLocal qname)
+          prefix = Packaging.unNamespace (Maybes.fromJust (Packaging.qualifiedNameNamespace qname))
+          local = scalaEscapeName (Packaging.qualifiedNameLocal qname)
       in (sname (Strings.cat2 (Strings.cat2 prefix ".") local))
 
 -- | Apply a Scala type to a list of type arguments

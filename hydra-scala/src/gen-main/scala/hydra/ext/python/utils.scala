@@ -4,7 +4,7 @@ import hydra.ext.python.environment.*
 
 import hydra.ext.python.syntax.*
 
-import hydra.module.*
+import hydra.packaging.*
 
 import hydra.lib.equality
 
@@ -101,13 +101,13 @@ def dottedAssignmentStatement(obj: hydra.ext.python.syntax.Name)(attr: hydra.ext
 def doubleQuotedString(s: scala.Predef.String): hydra.ext.python.syntax.Expression =
   hydra.ext.python.utils.stringToPyExpression(hydra.ext.python.syntax.QuoteStyle.double)(s)
 
-def findNamespaces(focusNs: hydra.module.Namespace)(defs: Seq[hydra.module.Definition]): hydra.module.Namespaces[hydra.ext.python.syntax.DottedName] =
+def findNamespaces(focusNs: hydra.packaging.Namespace)(defs: Seq[hydra.packaging.Definition]): hydra.packaging.Namespaces[hydra.ext.python.syntax.DottedName] =
   {
-  lazy val coreNs: hydra.module.Namespace = "hydra.core"
-  lazy val namespaces: hydra.module.Namespaces[hydra.ext.python.syntax.DottedName] = hydra.analysis.namespacesForDefinitions(hydra.ext.python.names.encodeNamespace)(focusNs)(defs)
-  hydra.lib.logic.ifElse[hydra.module.Namespaces[hydra.ext.python.syntax.DottedName]](hydra.lib.equality.equal[scala.Predef.String](hydra.lib.pairs.first[hydra.module.Namespace,
-     hydra.ext.python.syntax.DottedName](namespaces.focus))(coreNs))(namespaces)(hydra.module.Namespaces(namespaces.focus,
-     hydra.lib.maps.insert[hydra.module.Namespace, hydra.ext.python.syntax.DottedName](coreNs)(hydra.ext.python.names.encodeNamespace(coreNs))(namespaces.mapping)))
+  lazy val coreNs: hydra.packaging.Namespace = "hydra.core"
+  lazy val namespaces: hydra.packaging.Namespaces[hydra.ext.python.syntax.DottedName] = hydra.analysis.namespacesForDefinitions(hydra.ext.python.names.encodeNamespace)(focusNs)(defs)
+  hydra.lib.logic.ifElse[hydra.packaging.Namespaces[hydra.ext.python.syntax.DottedName]](hydra.lib.equality.equal[scala.Predef.String](hydra.lib.pairs.first[hydra.packaging.Namespace,
+     hydra.ext.python.syntax.DottedName](namespaces.focus))(coreNs))(namespaces)(hydra.packaging.Namespaces(namespaces.focus,
+     hydra.lib.maps.insert[hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName](coreNs)(hydra.ext.python.names.encodeNamespace(coreNs))(namespaces.mapping)))
 }
 
 def functionCall(func: hydra.ext.python.syntax.Primary)(args: Seq[hydra.ext.python.syntax.Expression]): hydra.ext.python.syntax.Expression =

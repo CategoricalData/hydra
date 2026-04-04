@@ -867,7 +867,7 @@
                           "type": [
                             {
                               "constraints": null,
-                              "type": {"variable": "hydra.module.QualifiedName"},
+                              "type": {"variable": "hydra.packaging.QualifiedName"},
                               "variables": []}]},
                         {
                           "name": "prefix",
@@ -881,12 +881,12 @@
                                       "function": {
                                         "function": {
                                           "elimination": {
-                                            "record": {"field": "namespace", "typeName": "hydra.module.QualifiedName"}}}}}},
+                                            "record": {"field": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}}}},
                                   "function": {
                                     "typeApplication": {
                                       "body": {"function": {"primitive": "hydra.lib.maybes.fromJust"}},
-                                      "type": {"variable": "hydra.module.Namespace"}}}}},
-                              "function": {"function": {"elimination": {"wrap": "hydra.module.Namespace"}}}}},
+                                      "type": {"variable": "hydra.packaging.Namespace"}}}}},
+                              "function": {"function": {"elimination": {"wrap": "hydra.packaging.Namespace"}}}}},
                           "type": [
                             {
                               "constraints": null,
@@ -902,7 +902,7 @@
                                   "function": {
                                     "function": {
                                       "elimination": {
-                                        "record": {"field": "local", "typeName": "hydra.module.QualifiedName"}}}}}},
+                                        "record": {"field": "local", "typeName": "hydra.packaging.QualifiedName"}}}}}},
                               "function": {"variable": "hydra.ext.scala.utils.scalaEscapeName"}}},
                           "type": [
                             {
@@ -1490,7 +1490,6 @@
     "hydra.errors",
     "hydra.graph",
     "hydra.json.model",
-    "hydra.module",
     "hydra.packaging",
     "hydra.parsing",
     "hydra.phantoms",

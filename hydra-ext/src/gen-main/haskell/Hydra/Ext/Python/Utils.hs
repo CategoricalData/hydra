@@ -16,7 +16,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Serialization as Serialization
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
@@ -131,14 +131,14 @@ doubleQuotedString :: String -> Syntax.Expression
 doubleQuotedString s = stringToPyExpression Syntax.QuoteStyleDouble s
 
 -- | Find all namespaces referenced by a list of definitions, plus the core namespace
-findNamespaces :: Module.Namespace -> [Module.Definition] -> Module.Namespaces Syntax.DottedName
+findNamespaces :: Packaging.Namespace -> [Packaging.Definition] -> Packaging.Namespaces Syntax.DottedName
 findNamespaces focusNs defs =
 
-      let coreNs = Module.Namespace "hydra.core"
+      let coreNs = Packaging.Namespace "hydra.core"
           namespaces = Analysis.namespacesForDefinitions Names.encodeNamespace focusNs defs
-      in (Logic.ifElse (Equality.equal (Module.unNamespace (Pairs.first (Module.namespacesFocus namespaces))) (Module.unNamespace coreNs)) namespaces (Module.Namespaces {
-        Module.namespacesFocus = (Module.namespacesFocus namespaces),
-        Module.namespacesMapping = (Maps.insert coreNs (Names.encodeNamespace coreNs) (Module.namespacesMapping namespaces))}))
+      in (Logic.ifElse (Equality.equal (Packaging.unNamespace (Pairs.first (Packaging.namespacesFocus namespaces))) (Packaging.unNamespace coreNs)) namespaces (Packaging.Namespaces {
+        Packaging.namespacesFocus = (Packaging.namespacesFocus namespaces),
+        Packaging.namespacesMapping = (Maps.insert coreNs (Names.encodeNamespace coreNs) (Packaging.namespacesMapping namespaces))}))
 
 -- | Create a function call expression
 functionCall :: Syntax.Primary -> [Syntax.Expression] -> Syntax.Expression

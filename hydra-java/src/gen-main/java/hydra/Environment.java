@@ -6,7 +6,7 @@ package hydra;
  * Graph to type environment conversions
  */
 public interface Environment {
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.TypeApplicationTerm> elementAsTypeApplicationTerm(hydra.context.Context cx, hydra.core.Binding el) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.TypeApplicationTerm> definitionAsTypeApplicationTerm(hydra.context.Context cx, hydra.core.Binding el) {
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.TypeApplicationTerm>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError("missing element type")), cx))),
       (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.TypeApplicationTerm>>) (ts -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.TypeApplicationTerm>right(new hydra.core.TypeApplicationTerm((el).term, (ts).type))),
@@ -39,34 +39,81 @@ public interface Environment {
         els));
   }
 
-  static hydra.util.Pair<hydra.util.ConsList<hydra.module.TypeDefinition>, hydra.util.ConsList<hydra.module.TermDefinition>> partitionDefinitions(hydra.util.ConsList<hydra.module.Definition> defs) {
-    java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.module.TermDefinition>> getTerm = (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.module.TermDefinition>>) (def -> (def).accept(new hydra.module.Definition.PartialVisitor<>() {
+  static hydra.util.Pair<hydra.util.ConsList<hydra.packaging.TypeDefinition>, hydra.util.ConsList<hydra.packaging.TermDefinition>> partitionDefinitions(hydra.util.ConsList<hydra.packaging.Definition> defs) {
+    java.util.function.Function<hydra.packaging.Definition, hydra.util.Maybe<hydra.packaging.TermDefinition>> getTerm = (java.util.function.Function<hydra.packaging.Definition, hydra.util.Maybe<hydra.packaging.TermDefinition>>) (def -> (def).accept(new hydra.packaging.Definition.PartialVisitor<>() {
       @Override
-      public hydra.util.Maybe<hydra.module.TermDefinition> visit(hydra.module.Definition.Type ignored) {
-        return (hydra.util.Maybe<hydra.module.TermDefinition>) (hydra.util.Maybe.<hydra.module.TermDefinition>nothing());
+      public hydra.util.Maybe<hydra.packaging.TermDefinition> visit(hydra.packaging.Definition.Type ignored) {
+        return (hydra.util.Maybe<hydra.packaging.TermDefinition>) (hydra.util.Maybe.<hydra.packaging.TermDefinition>nothing());
       }
 
       @Override
-      public hydra.util.Maybe<hydra.module.TermDefinition> visit(hydra.module.Definition.Term td) {
+      public hydra.util.Maybe<hydra.packaging.TermDefinition> visit(hydra.packaging.Definition.Term td) {
         return hydra.util.Maybe.just((td).value);
       }
     }));
-    java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.module.TypeDefinition>> getType = (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.module.TypeDefinition>>) (def -> (def).accept(new hydra.module.Definition.PartialVisitor<>() {
+    java.util.function.Function<hydra.packaging.Definition, hydra.util.Maybe<hydra.packaging.TypeDefinition>> getType = (java.util.function.Function<hydra.packaging.Definition, hydra.util.Maybe<hydra.packaging.TypeDefinition>>) (def -> (def).accept(new hydra.packaging.Definition.PartialVisitor<>() {
       @Override
-      public hydra.util.Maybe<hydra.module.TypeDefinition> visit(hydra.module.Definition.Type td) {
+      public hydra.util.Maybe<hydra.packaging.TypeDefinition> visit(hydra.packaging.Definition.Type td) {
         return hydra.util.Maybe.just((td).value);
       }
 
       @Override
-      public hydra.util.Maybe<hydra.module.TypeDefinition> visit(hydra.module.Definition.Term ignored) {
-        return (hydra.util.Maybe<hydra.module.TypeDefinition>) (hydra.util.Maybe.<hydra.module.TypeDefinition>nothing());
+      public hydra.util.Maybe<hydra.packaging.TypeDefinition> visit(hydra.packaging.Definition.Term ignored) {
+        return (hydra.util.Maybe<hydra.packaging.TypeDefinition>) (hydra.util.Maybe.<hydra.packaging.TypeDefinition>nothing());
       }
     }));
-    return (hydra.util.Pair<hydra.util.ConsList<hydra.module.TypeDefinition>, hydra.util.ConsList<hydra.module.TermDefinition>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.module.TypeDefinition>, hydra.util.ConsList<hydra.module.TermDefinition>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.module.TypeDefinition>, hydra.util.ConsList<hydra.module.TermDefinition>>(hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+    return (hydra.util.Pair<hydra.util.ConsList<hydra.packaging.TypeDefinition>, hydra.util.ConsList<hydra.packaging.TermDefinition>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.packaging.TypeDefinition>, hydra.util.ConsList<hydra.packaging.TermDefinition>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.packaging.TypeDefinition>, hydra.util.ConsList<hydra.packaging.TermDefinition>>(hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
       getType,
       defs)), hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
       getTerm,
       defs)))));
+  }
+
+  static hydra.util.ConsList<hydra.packaging.Definition> reorderDefs(hydra.util.ConsList<hydra.packaging.Definition> defs) {
+    hydra.util.Pair<hydra.util.ConsList<hydra.packaging.TypeDefinition>, hydra.util.ConsList<hydra.packaging.TermDefinition>> partitioned = hydra.Environment.partitionDefinitions(defs);
+    hydra.util.Lazy<hydra.util.ConsList<hydra.packaging.TypeDefinition>> typeDefsRaw = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(partitioned));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.packaging.TypeDefinition>> nameFirst = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+      (java.util.function.Function<hydra.packaging.TypeDefinition, Boolean>) (td -> hydra.lib.equality.Equal.apply(
+        (td).name,
+        new hydra.core.Name("hydra.core.Name"))),
+      typeDefsRaw.get()));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.packaging.TypeDefinition>> nameRest = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+      (java.util.function.Function<hydra.packaging.TypeDefinition, Boolean>) (td -> hydra.lib.logic.Not.apply(hydra.lib.equality.Equal.apply(
+        (td).name,
+        new hydra.core.Name("hydra.core.Name")))),
+      typeDefsRaw.get()));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.packaging.Definition>> termDefsWrapped = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.packaging.TermDefinition, hydra.packaging.Definition>) (td -> new hydra.packaging.Definition.Term(td)),
+      hydra.lib.pairs.Second.apply(partitioned)));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.packaging.Definition>> sortedTermDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.Sorting.topologicalSortNodes(
+      (java.util.function.Function<hydra.packaging.Definition, hydra.core.Name>) (d -> (d).accept(new hydra.packaging.Definition.PartialVisitor<>() {
+        @Override
+        public hydra.core.Name visit(hydra.packaging.Definition.Term td) {
+          return (td).value.name;
+        }
+      })),
+      (java.util.function.Function<hydra.packaging.Definition, hydra.util.ConsList<hydra.core.Name>>) (d -> (d).accept(new hydra.packaging.Definition.PartialVisitor<>() {
+        @Override
+        public hydra.util.ConsList<hydra.core.Name> otherwise(hydra.packaging.Definition instance) {
+          return (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty());
+        }
+
+        @Override
+        public hydra.util.ConsList<hydra.core.Name> visit(hydra.packaging.Definition.Term td) {
+          return hydra.lib.sets.ToList.apply(hydra.Variables.freeVariablesInTerm((td).value.term));
+        }
+      })),
+      termDefsWrapped.get())));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.packaging.Definition>> typeDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
+      hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.packaging.TypeDefinition, hydra.packaging.Definition>) (td -> new hydra.packaging.Definition.Type(td)),
+        nameFirst.get()),
+      hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.packaging.TypeDefinition, hydra.packaging.Definition>) (td -> new hydra.packaging.Definition.Type(td)),
+        nameRest.get()))));
+    return hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
+      typeDefs.get(),
+      sortedTermDefs.get()));
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>> schemaGraphToTypingEnvironment(hydra.context.Context cx, hydra.graph.Graph g) {
@@ -179,7 +226,7 @@ public interface Environment {
     });
   }
 
-  static hydra.util.ConsList<hydra.core.Binding> typesToElements(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> typeMap) {
+  static hydra.util.ConsList<hydra.core.Binding> typesToDefinitions(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> typeMap) {
     java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Type>, hydra.core.Binding> toElement = (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Type>, hydra.core.Binding>) (pair -> {
       hydra.util.Lazy<hydra.core.Name> name = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pair));
       return new hydra.core.Binding(name.get(), hydra.encode.Core.type(hydra.lib.pairs.Second.apply(pair)), (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing()));

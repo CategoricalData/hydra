@@ -20,8 +20,8 @@ import hydra.lib.maps
 import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.strings
-import hydra.module
 import hydra.names
+import hydra.packaging
 import hydra.util
 
 T0 = TypeVar("T0")
@@ -50,23 +50,23 @@ def encode_name(is_qualified: bool, conv: hydra.util.CaseConvention, env: hydra.
 
     namespaces = env.namespaces
     @lru_cache(1)
-    def focus_pair() -> tuple[hydra.module.Namespace, hydra.ext.python.syntax.DottedName]:
+    def focus_pair() -> tuple[hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName]:
         return namespaces.focus
     @lru_cache(1)
-    def focus_ns() -> hydra.module.Namespace:
+    def focus_ns() -> hydra.packaging.Namespace:
         return hydra.lib.pairs.first(focus_pair())
     @lru_cache(1)
     def bound_vars() -> FrozenDict[hydra.core.Name, hydra.ext.python.syntax.Name]:
         return hydra.lib.pairs.second(env.bound_type_variables)
     @lru_cache(1)
-    def qual_name() -> hydra.module.QualifiedName:
+    def qual_name() -> hydra.packaging.QualifiedName:
         return hydra.names.qualify_name(name)
     mns = qual_name().namespace
     local = qual_name().local
     @lru_cache(1)
     def py_local() -> str:
         return sanitize_python_name(hydra.formatting.convert_case(hydra.util.CaseConvention.CAMEL, conv, local))
-    def py_ns(ns_val: hydra.module.Namespace) -> str:
+    def py_ns(ns_val: hydra.packaging.Namespace) -> str:
         return hydra.lib.strings.intercalate(".", hydra.lib.lists.map((lambda v1: hydra.formatting.convert_case(hydra.util.CaseConvention.CAMEL, hydra.util.CaseConvention.LOWER_SNAKE, v1)), hydra.lib.strings.split_on(".", ns_val.value)))
     return hydra.lib.logic.if_else(is_qualified, (lambda : hydra.lib.maybes.maybe((lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(mns, Just(focus_ns())), (lambda : hydra.ext.python.syntax.Name(hydra.lib.logic.if_else(use_future_annotations, (lambda : py_local()), (lambda : hydra.ext.python.serde.escape_python_string(True, py_local()))))), (lambda : hydra.lib.maybes.maybe((lambda : hydra.ext.python.syntax.Name(py_local())), (lambda ns_val: hydra.ext.python.syntax.Name(hydra.lib.strings.cat2(py_ns(ns_val), hydra.lib.strings.cat2(".", py_local())))), mns)))), (lambda n: n), hydra.lib.maps.lookup(name, bound_vars()))), (lambda : hydra.ext.python.syntax.Name(py_local())))
 
@@ -85,22 +85,22 @@ def encode_name_qualified(env: hydra.ext.python.environment.PythonEnvironment, n
 
     namespaces = env.namespaces
     @lru_cache(1)
-    def focus_pair() -> tuple[hydra.module.Namespace, hydra.ext.python.syntax.DottedName]:
+    def focus_pair() -> tuple[hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName]:
         return namespaces.focus
     @lru_cache(1)
-    def focus_ns() -> hydra.module.Namespace:
+    def focus_ns() -> hydra.packaging.Namespace:
         return hydra.lib.pairs.first(focus_pair())
     @lru_cache(1)
     def bound_vars() -> FrozenDict[hydra.core.Name, hydra.ext.python.syntax.Name]:
         return hydra.lib.pairs.second(env.bound_type_variables)
     @lru_cache(1)
-    def qual_name() -> hydra.module.QualifiedName:
+    def qual_name() -> hydra.packaging.QualifiedName:
         return hydra.names.qualify_name(name)
     mns = qual_name().namespace
     local = qual_name().local
     return hydra.lib.maybes.maybe((lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(mns, Just(focus_ns())), (lambda : hydra.ext.python.syntax.Name(hydra.lib.logic.if_else(use_future_annotations, (lambda : local), (lambda : hydra.ext.python.serde.escape_python_string(True, local))))), (lambda : hydra.ext.python.syntax.Name(hydra.lib.strings.intercalate(".", hydra.lib.lists.map(sanitize_python_name, hydra.lib.strings.split_on(".", name.value))))))), (lambda n: n), hydra.lib.maps.lookup(name, bound_vars()))
 
-def encode_namespace(ns_val: hydra.module.Namespace) -> hydra.ext.python.syntax.DottedName:
+def encode_namespace(ns_val: hydra.packaging.Namespace) -> hydra.ext.python.syntax.DottedName:
     r"""Encode a namespace as a Python dotted name."""
 
     return hydra.ext.python.syntax.DottedName(hydra.lib.lists.map((lambda part: hydra.ext.python.syntax.Name(hydra.formatting.convert_case(hydra.util.CaseConvention.CAMEL, hydra.util.CaseConvention.LOWER_SNAKE, part))), hydra.lib.strings.split_on(".", ns_val.value)))
@@ -121,13 +121,13 @@ def variable_reference(conv: hydra.util.CaseConvention, quoted: bool, env: hydra
         return cast(hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.ExpressionSimple(hydra.ext.python.syntax.Disjunction((hydra.ext.python.syntax.Conjunction((cast(hydra.ext.python.syntax.Inversion, hydra.ext.python.syntax.InversionSimple(hydra.ext.python.syntax.Comparison(hydra.ext.python.syntax.BitwiseOr(Nothing(), hydra.ext.python.syntax.BitwiseXor(Nothing(), hydra.ext.python.syntax.BitwiseAnd(Nothing(), hydra.ext.python.syntax.ShiftExpression(Nothing(), hydra.ext.python.syntax.Sum(Nothing(), hydra.ext.python.syntax.Term(Nothing(), cast(hydra.ext.python.syntax.Factor, hydra.ext.python.syntax.FactorSimple(hydra.ext.python.syntax.Power(hydra.ext.python.syntax.AwaitPrimary(False, cast(hydra.ext.python.syntax.Primary, hydra.ext.python.syntax.PrimarySimple(cast(hydra.ext.python.syntax.Atom, hydra.ext.python.syntax.AtomName(py_name()))))), Nothing()))))))))), ()))),)),))))
     namespaces = env.namespaces
     @lru_cache(1)
-    def focus_pair() -> tuple[hydra.module.Namespace, hydra.ext.python.syntax.DottedName]:
+    def focus_pair() -> tuple[hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName]:
         return namespaces.focus
     @lru_cache(1)
-    def focus_ns() -> hydra.module.Namespace:
+    def focus_ns() -> hydra.packaging.Namespace:
         return hydra.lib.pairs.first(focus_pair())
     @lru_cache(1)
-    def mns() -> Maybe[hydra.module.Namespace]:
+    def mns() -> Maybe[hydra.packaging.Namespace]:
         return hydra.names.namespace_of(name)
     @lru_cache(1)
     def same_namespace() -> bool:

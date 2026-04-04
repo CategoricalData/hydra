@@ -6,7 +6,7 @@
 
 (require 'hydra.graph)
 
-(require 'hydra.module)
+(require 'hydra.packaging)
 
 (defvar hydra_ext_python_environment_python_version-variants (list :python310 :python312))
 

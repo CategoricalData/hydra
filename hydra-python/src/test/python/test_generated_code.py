@@ -136,7 +136,7 @@ from hydra.coders import *
 from hydra.core import *
 from hydra.graph import *
 from hydra.util import *
-from hydra.module import *
+from hydra.packaging import *
 from hydra.phantoms import *
 from hydra.query import *
 from hydra.relational import *

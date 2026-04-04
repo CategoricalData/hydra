@@ -1,6 +1,6 @@
 package hydra.ext.python.testing
 
-import hydra.module.*
+import hydra.packaging.*
 
 import hydra.testing.*
 
@@ -42,7 +42,7 @@ def generatePythonTestCase[T0](groupPath: Seq[scala.Predef.String])(tcm: hydra.t
     }
 }
 
-def generatePythonTestFile[T0, T1](testModule: hydra.module.Module)(testGroup: hydra.testing.TestGroup)(_g: T0): Either[T1,
+def generatePythonTestFile[T0, T1](testModule: hydra.packaging.Module)(testGroup: hydra.testing.TestGroup)(_g: T0): Either[T1,
    Tuple2[scala.Predef.String, scala.Predef.String]] = hydra.ext.python.testing.generateTestFileWithPythonCodec(testModule)(testGroup)
 
 def generatePythonTestGroupHierarchy[T0](groupPath: Seq[scala.Predef.String])(testGroup: hydra.testing.TestGroup): Either[T0, scala.Predef.String] =
@@ -68,12 +68,12 @@ def generatePythonTestGroupHierarchy[T0](groupPath: Seq[scala.Predef.String])(te
   }))
 }
 
-def generateTestFileWithPythonCodec[T0](testModule: hydra.module.Module)(testGroup: hydra.testing.TestGroup): Either[T0,
+def generateTestFileWithPythonCodec[T0](testModule: hydra.packaging.Module)(testGroup: hydra.testing.TestGroup): Either[T0,
    Tuple2[scala.Predef.String, scala.Predef.String]] =
   hydra.lib.eithers.map[scala.Predef.String, Tuple2[scala.Predef.String, scala.Predef.String], T0]((testBody: scala.Predef.String) =>
   {
   lazy val testModuleContent: scala.Predef.String = hydra.ext.python.testing.buildPythonTestModule(testModule)(testGroup)(testBody)
-  lazy val `ns_`: hydra.module.Namespace = (testModule.namespace)
+  lazy val `ns_`: hydra.packaging.Namespace = (testModule.namespace)
   lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(`ns_`)
   lazy val dirParts: Seq[scala.Predef.String] = hydra.lib.lists.init[scala.Predef.String](parts)
   lazy val fileName: scala.Predef.String = hydra.lib.strings.cat(Seq("test_", hydra.lib.lists.last[scala.Predef.String](parts), ".py"))
