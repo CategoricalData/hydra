@@ -26,19 +26,19 @@ public class Package_ implements Serializable, Comparable<Package_> {
   /**
    * The modules in this package
    */
-  public final java.util.List<hydra.module.Module> modules;
+  public final hydra.util.ConsList<hydra.packaging.Module> modules;
 
   /**
    * The packages which this package depends on
    */
-  public final java.util.List<hydra.packaging.PackageName> dependencies;
+  public final hydra.util.ConsList<hydra.packaging.PackageName> dependencies;
 
   /**
    * An optional human-readable description of the package
    */
   public final hydra.util.Maybe<String> description;
 
-  public Package_ (hydra.packaging.PackageName name, java.util.List<hydra.module.Module> modules, java.util.List<hydra.packaging.PackageName> dependencies, hydra.util.Maybe<String> description) {
+  public Package_ (hydra.packaging.PackageName name, hydra.util.ConsList<hydra.packaging.Module> modules, hydra.util.ConsList<hydra.packaging.PackageName> dependencies, hydra.util.Maybe<String> description) {
     this.name = name;
     this.modules = modules;
     this.dependencies = dependencies;
@@ -71,38 +71,30 @@ public class Package_ implements Serializable, Comparable<Package_> {
   @SuppressWarnings("unchecked")
   public int compareTo(Package_ other) {
     int cmp = 0;
-    cmp = hydra.util.Comparing.compare(
-      name,
-      other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = hydra.util.Comparing.compare(
-      modules,
-      other.modules);
+    cmp = ((Comparable) modules).compareTo(other.modules);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = hydra.util.Comparing.compare(
-      dependencies,
-      other.dependencies);
+    cmp = ((Comparable) dependencies).compareTo(other.dependencies);
     if (cmp != 0) {
       return cmp;
     }
-    return hydra.util.Comparing.compare(
-      description,
-      other.description);
+    return ((Comparable) description).compareTo(other.description);
   }
 
   public Package_ withName(hydra.packaging.PackageName name) {
     return new Package_(name, modules, dependencies, description);
   }
 
-  public Package_ withModules(java.util.List<hydra.module.Module> modules) {
+  public Package_ withModules(hydra.util.ConsList<hydra.packaging.Module> modules) {
     return new Package_(name, modules, dependencies, description);
   }
 
-  public Package_ withDependencies(java.util.List<hydra.packaging.PackageName> dependencies) {
+  public Package_ withDependencies(hydra.util.ConsList<hydra.packaging.PackageName> dependencies) {
     return new Package_(name, modules, dependencies, description);
   }
 

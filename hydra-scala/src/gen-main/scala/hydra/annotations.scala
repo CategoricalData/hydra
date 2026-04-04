@@ -38,6 +38,12 @@ def aggregateAnnotations[T0, T1, T2, T3](getValue: (T0 => Option[T1]))(getX: (T1
   hydra.lib.maps.fromList[T2, T3](hydra.lib.lists.concat[Tuple2[T2, T3]](toPairs(Seq())(t)))
 }
 
+def commentsFromBinding(cx: hydra.context.Context)(g: hydra.graph.Graph)(b: hydra.core.Binding): Either[hydra.context.InContext[hydra.errors.Error],
+   Option[scala.Predef.String]] = hydra.annotations.getTermDescription(cx)(g)(b.term)
+
+def commentsFromFieldType(cx: hydra.context.Context)(g: hydra.graph.Graph)(ft: hydra.core.FieldType): Either[hydra.context.InContext[hydra.errors.Error],
+   Option[scala.Predef.String]] = hydra.annotations.getTypeDescription(cx)(g)(ft.`type`)
+
 def debugIf(cx: hydra.context.Context)(debugId: scala.Predef.String)(message: scala.Predef.String): Either[hydra.context.InContext[hydra.errors.Error], Unit] =
   hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Option[scala.Predef.String], Unit](hydra.annotations.getDebugId(cx))((mid: Option[scala.Predef.String]) =>
   hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], Unit]](hydra.lib.equality.equal[Option[scala.Predef.String]](mid)(Some(debugId)))(Left(hydra.context.InContext(hydra.errors.Error.other(message),
@@ -253,14 +259,6 @@ def typeAnnotationInternal(typ: hydra.core.Type): Map[hydra.core.Name, hydra.cor
     case hydra.core.Type.annotated(v_Type_annotated_a) => Some(v_Type_annotated_a)
     case _ => None
   hydra.annotations.aggregateAnnotations(getAnn)((at: hydra.core.AnnotatedType) => (at.body))((at: hydra.core.AnnotatedType) => (at.annotation))(typ)
-}
-
-def typeElement(name: hydra.core.Name)(typ: hydra.core.Type): hydra.core.Binding =
-  {
-  lazy val schemaTerm: hydra.core.Term = hydra.core.Term.variable("hydra.core.Type")
-  lazy val dataTerm: hydra.core.Term = hydra.annotations.normalizeTermAnnotations(hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.encode.core.`type`(typ),
-     hydra.lib.maps.fromList[hydra.core.Name, hydra.core.Term](Seq(Tuple2(hydra.constants.key_type, schemaTerm))))))
-  hydra.core.Binding(name, dataTerm, Some(hydra.core.TypeScheme(Seq(), hydra.core.Type.variable("hydra.core.Type"), None)))
 }
 
 def whenFlag[T0](cx: hydra.context.Context)(flag: hydra.core.Name)(ethen: Either[hydra.context.InContext[hydra.errors.Error],

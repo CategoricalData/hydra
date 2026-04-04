@@ -6,8 +6,8 @@ package hydra.lib;
  * Namespaces and primitive names for the Hydra standard library
  */
 public interface Names {
-  static hydra.module.Namespace chars() {
-    return new hydra.module.Namespace("hydra.lib.chars");
+  static hydra.packaging.Namespace chars() {
+    return new hydra.packaging.Namespace("hydra.lib.chars");
   }
 
   static hydra.core.Name charsIsAlphaNum() {
@@ -34,8 +34,8 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.chars.toUpper");
   }
 
-  static hydra.module.Namespace eithers() {
-    return new hydra.module.Namespace("hydra.lib.eithers");
+  static hydra.packaging.Namespace eithers() {
+    return new hydra.packaging.Namespace("hydra.lib.eithers");
   }
 
   static hydra.core.Name eithersBimap() {
@@ -98,8 +98,8 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.eithers.rights");
   }
 
-  static hydra.module.Namespace equality() {
-    return new hydra.module.Namespace("hydra.lib.equality");
+  static hydra.packaging.Namespace equality() {
+    return new hydra.packaging.Namespace("hydra.lib.equality");
   }
 
   static hydra.core.Name equalityCompare() {
@@ -138,8 +138,8 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.equality.min");
   }
 
-  static hydra.module.Namespace lists() {
-    return new hydra.module.Namespace("hydra.lib.lists");
+  static hydra.packaging.Namespace lists() {
+    return new hydra.packaging.Namespace("hydra.lib.lists");
   }
 
   static hydra.core.Name listsApply() {
@@ -226,6 +226,26 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.lists.map");
   }
 
+  static hydra.core.Name listsMaybeAt() {
+    return new hydra.core.Name("hydra.lib.lists.maybeAt");
+  }
+
+  static hydra.core.Name listsMaybeHead() {
+    return new hydra.core.Name("hydra.lib.lists.maybeHead");
+  }
+
+  static hydra.core.Name listsMaybeInit() {
+    return new hydra.core.Name("hydra.lib.lists.maybeInit");
+  }
+
+  static hydra.core.Name listsMaybeLast() {
+    return new hydra.core.Name("hydra.lib.lists.maybeLast");
+  }
+
+  static hydra.core.Name listsMaybeTail() {
+    return new hydra.core.Name("hydra.lib.lists.maybeTail");
+  }
+
   static hydra.core.Name listsNub() {
     return new hydra.core.Name("hydra.lib.lists.nub");
   }
@@ -290,8 +310,8 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.lists.zipWith");
   }
 
-  static hydra.module.Namespace literals() {
-    return new hydra.module.Namespace("hydra.lib.literals");
+  static hydra.packaging.Namespace literals() {
+    return new hydra.packaging.Namespace("hydra.lib.literals");
   }
 
   static hydra.core.Name literalsBigfloatToBigint() {
@@ -506,8 +526,8 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.literals.uint8ToBigint");
   }
 
-  static hydra.module.Namespace logic() {
-    return new hydra.module.Namespace("hydra.lib.logic");
+  static hydra.packaging.Namespace logic() {
+    return new hydra.packaging.Namespace("hydra.lib.logic");
   }
 
   static hydra.core.Name logicAnd() {
@@ -526,8 +546,8 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.logic.or");
   }
 
-  static hydra.module.Namespace maps() {
-    return new hydra.module.Namespace("hydra.lib.maps");
+  static hydra.packaging.Namespace maps() {
+    return new hydra.packaging.Namespace("hydra.lib.maps");
   }
 
   static hydra.core.Name mapsAlter() {
@@ -610,8 +630,8 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.maps.union");
   }
 
-  static hydra.module.Namespace math() {
-    return new hydra.module.Namespace("hydra.lib.math");
+  static hydra.packaging.Namespace math() {
+    return new hydra.packaging.Namespace("hydra.lib.math");
   }
 
   static hydra.core.Name mathAbs() {
@@ -692,6 +712,26 @@ public interface Names {
 
   static hydra.core.Name mathMax() {
     return new hydra.core.Name("hydra.lib.math.max");
+  }
+
+  static hydra.core.Name mathMaybeDiv() {
+    return new hydra.core.Name("hydra.lib.math.maybeDiv");
+  }
+
+  static hydra.core.Name mathMaybeMod() {
+    return new hydra.core.Name("hydra.lib.math.maybeMod");
+  }
+
+  static hydra.core.Name mathMaybePred() {
+    return new hydra.core.Name("hydra.lib.math.maybePred");
+  }
+
+  static hydra.core.Name mathMaybeRem() {
+    return new hydra.core.Name("hydra.lib.math.maybeRem");
+  }
+
+  static hydra.core.Name mathMaybeSucc() {
+    return new hydra.core.Name("hydra.lib.math.maybeSucc");
   }
 
   static hydra.core.Name mathMin() {
@@ -786,8 +826,8 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.math.truncate");
   }
 
-  static hydra.module.Namespace maybes() {
-    return new hydra.module.Namespace("hydra.lib.maybes");
+  static hydra.packaging.Namespace maybes() {
+    return new hydra.packaging.Namespace("hydra.lib.maybes");
   }
 
   static hydra.core.Name maybesApply() {
@@ -846,8 +886,8 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.maybes.toList");
   }
 
-  static hydra.module.Namespace pairs() {
-    return new hydra.module.Namespace("hydra.lib.pairs");
+  static hydra.packaging.Namespace pairs() {
+    return new hydra.packaging.Namespace("hydra.lib.pairs");
   }
 
   static hydra.core.Name pairsBimap() {
@@ -862,8 +902,8 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.pairs.second");
   }
 
-  static hydra.module.Namespace regex() {
-    return new hydra.module.Namespace("hydra.lib.regex");
+  static hydra.packaging.Namespace regex() {
+    return new hydra.packaging.Namespace("hydra.lib.regex");
   }
 
   static hydra.core.Name regexFind() {
@@ -890,8 +930,8 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.regex.split");
   }
 
-  static hydra.module.Namespace sets() {
-    return new hydra.module.Namespace("hydra.lib.sets");
+  static hydra.packaging.Namespace sets() {
+    return new hydra.packaging.Namespace("hydra.lib.sets");
   }
 
   static hydra.core.Name setsDelete() {
@@ -950,8 +990,8 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.sets.unions");
   }
 
-  static hydra.module.Namespace strings() {
-    return new hydra.module.Namespace("hydra.lib.strings");
+  static hydra.packaging.Namespace strings() {
+    return new hydra.packaging.Namespace("hydra.lib.strings");
   }
 
   static hydra.core.Name stringsCat() {
@@ -982,6 +1022,10 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.strings.lines");
   }
 
+  static hydra.core.Name stringsMaybeCharAt() {
+    return new hydra.core.Name("hydra.lib.strings.maybeCharAt");
+  }
+
   static hydra.core.Name stringsNull() {
     return new hydra.core.Name("hydra.lib.strings.null");
   }
@@ -1006,8 +1050,8 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.strings.unlines");
   }
 
-  static hydra.module.Namespace typeclass() {
-    return new hydra.module.Namespace("hydra.typeclass");
+  static hydra.packaging.Namespace typeclass() {
+    return new hydra.packaging.Namespace("hydra.typeclass");
   }
 
   static hydra.core.Name typeclassEq() {

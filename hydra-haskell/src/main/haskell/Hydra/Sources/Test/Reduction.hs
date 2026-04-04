@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 -- | Test cases for term reduction/evaluation mechanics
 module Hydra.Sources.Test.Reduction where
 
@@ -18,6 +20,10 @@ import qualified Data.Map                     as M
 import Hydra.Testing
 import Hydra.Sources.Libraries
 
+import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Reduction as ReductionModule
+import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
+
 
 ns :: Namespace
 ns = Namespace "hydra.test.reduction"
@@ -27,6 +33,28 @@ module_ = Module ns elements [Namespace "hydra.reduction", Namespace "hydra.infe
     Just "Test cases for term reduction/evaluation mechanics"
   where
     elements = [Phantoms.toDefinition allTests]
+
+-- Local alias for polymorphic application (Phantoms.@@ applies TBindings; Terms.@@ only works on TTerm Term)
+(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
+(#) = (Phantoms.@@)
+infixl 1 #
+
+-- Field constructor for cases/match (uses Phantoms.>>: to create Field, since the unqualified >>: from Testing creates tuples)
+(~>:) :: AsTerm t a => Name -> t -> Field
+(~>:) = (Phantoms.>>:)
+infixr 0 ~>:
+
+-- | Show a term as a string using ShowCore.term
+showTerm :: TTerm Term -> TTerm String
+showTerm t = ShowCore.term # t
+
+-- Helper to build names
+nm :: String -> TTerm Name
+nm s = Core.name $ Phantoms.string s
+
+-- Helper for single-binding let
+letExpr :: String -> TTerm Term -> TTerm Term -> TTerm Term
+letExpr varName value body = lets [(nm varName, value)] body
 
 -- | Test cases for beta reduction (lambda application)
 betaReductionTests :: TTerm TestGroup
@@ -315,6 +343,82 @@ typeReductionTests = subgroup "type reduction" [
     (T.forAll "a" (T.optional (T.var "a")) T.@@ T.string)
     (T.optional T.string)]
 
+-- | Universal eta expansion test case: applies etaExpandTypedTerm with testContext and testGraph
+etaCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+etaCase cname input output = universalCase cname
+  (Eithers.either_
+    (Phantoms.lambda "_" $ Phantoms.string "eta expansion failed")
+    (Phantoms.lambda "t" $ ShowCore.term # Phantoms.var "t")
+    (ReductionModule.etaExpandTypedTerm # TestGraph.testContext # TestGraph.testGraph # input))
+  (showTerm output)
+
+-- | Test cases for eta expansion of terms
+-- Eta expansion adds explicit lambda wrappers to partially applied functions
+etaExpandTermGroup :: TTerm TestGroup
+etaExpandTermGroup = subgroup "etaExpandTerm" [
+    -- Terms that don't expand (already saturated or not functions)
+    etaCase "integer literal unchanged"
+      (int32 42)
+      (int32 42),
+
+    etaCase "string list unchanged"
+      (list [string "foo", string "bar"])
+      (list [string "foo", string "bar"]),
+
+    etaCase "fully applied binary function unchanged"
+      (apply (apply (primitive _strings_splitOn) (string "foo")) (string "bar"))
+      (apply (apply (primitive _strings_splitOn) (string "foo")) (string "bar")),
+
+    -- Lambda with fully applied primitive using a string literal (matches EtaExpansion.hs pattern)
+    etaCase "lambda with fully applied primitive unchanged"
+      (lambda "x" (apply (apply (primitive _strings_splitOn) (string ",")) (var "x")))
+      (lambda "x" (apply (apply (primitive _strings_splitOn) (string ",")) (var "x"))),
+
+    etaCase "lambda returning constant unchanged"
+      (lambda "x" (int32 42))
+      (lambda "x" (int32 42)),
+
+    -- Bare primitives are NOT expanded (they stay as-is)
+    etaCase "bare unary primitive unchanged"
+      (primitive _strings_toLower)
+      (primitive _strings_toLower),
+
+    etaCase "bare binary primitive unchanged"
+      (primitive _strings_splitOn)
+      (primitive _strings_splitOn),
+
+    etaCase "partially applied binary primitive expands to one lambda"
+      (apply (primitive _strings_splitOn) (var "foo"))
+      (lambda "v1" (apply (apply (primitive _strings_splitOn) (var "foo")) (var "v1"))),
+
+    etaCase "projection expands to lambda"
+      (project (nm "Person") (nm "firstName"))
+      (lambda "v1" (apply (project (nm "Person") (nm "firstName")) (var "v1"))),
+
+    -- Subterms within applications
+    etaCase "partial application inside lambda expands"
+      (lambda "x" (apply (primitive _strings_splitOn) (var "x")))
+      (lambda "x" (lambda "v1" (apply (apply (primitive _strings_splitOn) (var "x")) (var "v1")))),
+
+    -- Let bindings
+    etaCase "let with constant body unchanged"
+      (letExpr "foo" (int32 137) (int32 42))
+      (letExpr "foo" (int32 137) (int32 42)),
+
+    etaCase "let with bare primitive value unchanged"
+      (letExpr "foo" (primitive _strings_splitOn) (var "foo"))
+      (letExpr "foo" (primitive _strings_splitOn) (var "foo")),
+
+    -- Complete applications are no-ops
+    etaCase "fully applied unary unchanged"
+      (apply (primitive _strings_toLower) (string "FOO"))
+      (apply (primitive _strings_toLower) (string "FOO")),
+
+    -- Subterms
+    etaCase "partial application in list expands"
+      (list [lambda "x" (list [string "foo"]), apply (primitive _strings_splitOn) (string "bar")])
+      (list [lambda "x" (list [string "foo"]), lambda "v1" (apply (apply (primitive _strings_splitOn) (string "bar")) (var "v1"))])]
+
 allTests :: TTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for term reduction mechanics" $
@@ -327,4 +431,5 @@ allTests = definitionInModule module_ "allTests" $
       listReductionTests,
       optionalReductionTests,
       alphaConversionTests,
-      typeReductionTests]
+      typeReductionTests,
+      etaExpandTermGroup]

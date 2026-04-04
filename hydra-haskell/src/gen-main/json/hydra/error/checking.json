@@ -4,384 +4,417 @@
       "type": {
         "name": "hydra.error.checking.CheckingError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {"literal": {"string": "An error that occurred during type checking"}}}],
-            "body": {
-              "union": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "incorrectUnification",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "A post-unification consistency check failure"}}}],
-                      "body": {"variable": "hydra.error.checking.IncorrectUnificationError"}}}},
-                {
-                  "name": "notAForallType",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "A type that is not a forall type when one was expected"}}}],
-                      "body": {"variable": "hydra.error.checking.NotAForallTypeError"}}}},
-                {
-                  "name": "notAFunctionType",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "A type that is not a function type when one was expected"}}}],
-                      "body": {"variable": "hydra.error.checking.NotAFunctionTypeError"}}}},
-                {
-                  "name": "typeArityMismatch",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "A type constructor applied to the wrong number of arguments"}}}],
-                      "body": {"variable": "hydra.error.checking.TypeArityMismatchError"}}}},
-                {
-                  "name": "typeMismatch",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "A type mismatch between expected and actual types"}}}],
-                      "body": {"variable": "hydra.error.checking.TypeMismatchError"}}}},
-                {
-                  "name": "unboundTypeVariables",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "Type variables that are not bound in scope"}}}],
-                      "body": {"variable": "hydra.error.checking.UnboundTypeVariablesError"}}}},
-                {
-                  "name": "unequalTypes",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "Multiple types that should be equal but are not"}}}],
-                      "body": {"variable": "hydra.error.checking.UnequalTypesError"}}}},
-                {
-                  "name": "unsupportedTermVariant",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "A term variant that the type checker does not support"}}}],
-                      "body": {"variable": "hydra.error.checking.UnsupportedTermVariantError"}}}},
-                {
-                  "name": "untypedLambda",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "A lambda expression without a type annotation on its parameter"}}}],
-                      "body": {"variable": "hydra.error.checking.UntypedLambdaError"}}}},
-                {
-                  "name": "untypedLetBinding",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "A let binding without a type annotation"}}}],
-                      "body": {"variable": "hydra.error.checking.UntypedLetBindingError"}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {"literal": {"string": "An error that occurred during type checking"}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "incorrectUnification",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "A post-unification consistency check failure"}}}],
+                        "body": {"variable": "hydra.error.checking.IncorrectUnificationError"}}}},
+                  {
+                    "name": "notAForallType",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "A type that is not a forall type when one was expected"}}}],
+                        "body": {"variable": "hydra.error.checking.NotAForallTypeError"}}}},
+                  {
+                    "name": "notAFunctionType",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "A type that is not a function type when one was expected"}}}],
+                        "body": {"variable": "hydra.error.checking.NotAFunctionTypeError"}}}},
+                  {
+                    "name": "typeArityMismatch",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "A type constructor applied to the wrong number of arguments"}}}],
+                        "body": {"variable": "hydra.error.checking.TypeArityMismatchError"}}}},
+                  {
+                    "name": "typeMismatch",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "A type mismatch between expected and actual types"}}}],
+                        "body": {"variable": "hydra.error.checking.TypeMismatchError"}}}},
+                  {
+                    "name": "unboundTypeVariables",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "Type variables that are not bound in scope"}}}],
+                        "body": {"variable": "hydra.error.checking.UnboundTypeVariablesError"}}}},
+                  {
+                    "name": "unequalTypes",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "Multiple types that should be equal but are not"}}}],
+                        "body": {"variable": "hydra.error.checking.UnequalTypesError"}}}},
+                  {
+                    "name": "unsupportedTermVariant",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "A term variant that the type checker does not support"}}}],
+                        "body": {"variable": "hydra.error.checking.UnsupportedTermVariantError"}}}},
+                  {
+                    "name": "untypedLambda",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "A lambda expression without a type annotation on its parameter"}}}],
+                        "body": {"variable": "hydra.error.checking.UntypedLambdaError"}}}},
+                  {
+                    "name": "untypedLetBinding",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "A let binding without a type annotation"}}}],
+                        "body": {"variable": "hydra.error.checking.UntypedLetBindingError"}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.error.checking.IncorrectUnificationError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "A post-unification consistency check failure"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "substitution",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "The substitution that failed the consistency check"}}}],
-                      "body": {"variable": "hydra.typing.TypeSubst"}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "A post-unification consistency check failure"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "substitution",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "The substitution that failed the consistency check"}}}],
+                        "body": {"variable": "hydra.typing.TypeSubst"}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.error.checking.NotAForallTypeError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "A type that is not a forall type when type arguments are being applied"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "type",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The actual type encountered"}}}],
-                      "body": {"variable": "hydra.core.Type"}}}},
-                {
-                  "name": "typeArguments",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The type arguments that were being applied"}}}],
-                      "body": {"list": {"variable": "hydra.core.Type"}}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A type that is not a forall type when type arguments are being applied"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The actual type encountered"}}}],
+                        "body": {"variable": "hydra.core.Type"}}}},
+                  {
+                    "name": "typeArguments",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The type arguments that were being applied"}}}],
+                        "body": {"list": {"variable": "hydra.core.Type"}}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.error.checking.NotAFunctionTypeError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "A type that is not a function type when one was expected in an application"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "type",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The actual type encountered"}}}],
-                      "body": {"variable": "hydra.core.Type"}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A type that is not a function type when one was expected in an application"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The actual type encountered"}}}],
+                        "body": {"variable": "hydra.core.Type"}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.error.checking.TypeArityMismatchError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "A type constructor applied to the wrong number of type arguments"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "type",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The type being checked"}}}],
-                      "body": {"variable": "hydra.core.Type"}}}},
-                {
-                  "name": "expectedArity",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The expected number of type arguments"}}}],
-                      "body": {"literal": {"integer": {"int32": {}}}}}}},
-                {
-                  "name": "actualArity",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {"string": "The actual number of type arguments provided"}}}],
-                      "body": {"literal": {"integer": {"int32": {}}}}}}},
-                {
-                  "name": "typeArguments",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The type arguments that were provided"}}}],
-                      "body": {"list": {"variable": "hydra.core.Type"}}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A type constructor applied to the wrong number of type arguments"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The type being checked"}}}],
+                        "body": {"variable": "hydra.core.Type"}}}},
+                  {
+                    "name": "expectedArity",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The expected number of type arguments"}}}],
+                        "body": {"literal": {"integer": {"int32": {}}}}}}},
+                  {
+                    "name": "actualArity",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {"string": "The actual number of type arguments provided"}}}],
+                        "body": {"literal": {"integer": {"int32": {}}}}}}},
+                  {
+                    "name": "typeArguments",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The type arguments that were provided"}}}],
+                        "body": {"list": {"variable": "hydra.core.Type"}}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.error.checking.TypeMismatchError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "A type mismatch between expected and actual types"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "expectedType",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The expected type"}}}],
-                      "body": {"variable": "hydra.core.Type"}}}},
-                {
-                  "name": "actualType",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The actual type encountered"}}}],
-                      "body": {"variable": "hydra.core.Type"}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "A type mismatch between expected and actual types"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "expectedType",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The expected type"}}}],
+                        "body": {"variable": "hydra.core.Type"}}}},
+                  {
+                    "name": "actualType",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The actual type encountered"}}}],
+                        "body": {"variable": "hydra.core.Type"}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.error.checking.UnboundTypeVariablesError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "Type variables that appear free in a type but are not bound in scope"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "variables",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The set of unbound type variable names"}}}],
-                      "body": {"set": {"variable": "hydra.core.Name"}}}}},
-                {
-                  "name": "type",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The type containing the unbound variables"}}}],
-                      "body": {"variable": "hydra.core.Type"}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "Type variables that appear free in a type but are not bound in scope"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "variables",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The set of unbound type variable names"}}}],
+                        "body": {"set": {"variable": "hydra.core.Name"}}}}},
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The type containing the unbound variables"}}}],
+                        "body": {"variable": "hydra.core.Type"}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.error.checking.UnequalTypesError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "Multiple types that should all be equal but are not"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "types",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The list of types that are not all equal"}}}],
-                      "body": {"list": {"variable": "hydra.core.Type"}}}}},
-                {
-                  "name": "description",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {
-                            "literal": {
-                              "string": "A description of the context in which the types were expected to be equal"}}}],
-                      "body": {"literal": {"string": {}}}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "Multiple types that should all be equal but are not"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "types",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The list of types that are not all equal"}}}],
+                        "body": {"list": {"variable": "hydra.core.Type"}}}}},
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {
+                              "literal": {
+                                "string": "A description of the context in which the types were expected to be equal"}}}],
+                        "body": {"literal": {"string": {}}}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.error.checking.UnsupportedTermVariantError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "A term variant that the type checker does not support"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "termVariant",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The unsupported term variant"}}}],
-                      "body": {"variable": "hydra.variants.TermVariant"}}}}]}}}}},
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "A term variant that the type checker does not support"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "termVariant",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The unsupported term variant"}}}],
+                        "body": {"variable": "hydra.variants.TermVariant"}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.error.checking.UntypedLambdaError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {
-                    "string": "A lambda expression without a type annotation on its parameter"}}}],
-            "body": {"record": []}}}}},
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "A lambda expression without a type annotation on its parameter"}}}],
+              "body": {"record": []}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.error.checking.UntypedLetBindingError",
         "type": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {"literal": {"string": "A let binding without a type annotation"}}}],
-            "body": {
-              "record": [
+          "constraints": null,
+          "type": {
+            "annotated": {
+              "annotation": [
                 {
-                  "name": "binding",
-                  "type": {
-                    "annotated": {
-                      "annotation": [
-                        {
-                          "@key": "description",
-                          "@value": {"literal": {"string": "The untyped binding"}}}],
-                      "body": {"variable": "hydra.core.Binding"}}}}]}}}}}],
+                  "@key": "description",
+                  "@value": {"literal": {"string": "A let binding without a type annotation"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "binding",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "@key": "description",
+                            "@value": {"literal": {"string": "The untyped binding"}}}],
+                        "body": {"variable": "hydra.core.Binding"}}}}]}}},
+          "variables": []}}}],
   "description": ["Error types for type checking"],
   "namespace": "hydra.error.checking",
   "termDependencies": ["hydra.core", "hydra.typing", "hydra.variants"],

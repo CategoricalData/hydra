@@ -29,7 +29,7 @@ import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
 import qualified Hydra.Dsl.Topology                   as Topology
@@ -245,8 +245,8 @@ sprim = def "sprim" $
   doc "Create a Scala primitive reference from a Hydra name" $
   lambda "name" $ lets [
     "qname">: Names.qualifyName @@ var "name",
-    "prefix">: Module.unNamespace (Maybes.fromJust (Module.qualifiedNameNamespace $ var "qname")),
-    "local">: scalaEscapeName @@ (Module.qualifiedNameLocal $ var "qname")] $
+    "prefix">: Packaging.unNamespace (Maybes.fromJust (Packaging.qualifiedNameNamespace $ var "qname")),
+    "local">: scalaEscapeName @@ (Packaging.qualifiedNameLocal $ var "qname")] $
     sname @@ (var "prefix" ++ string "." ++ var "local")
 
 stapply :: TTermDefinition (Scala.Type -> [Scala.Type] -> Scala.Type)

@@ -12932,8 +12932,7 @@
             "annotation": [
               {
                 "@key": "description",
-                "@value": {
-                  "literal": {"string": "Infer the type of an optional (Either version)"}}}],
+                "@value": {"literal": {"string": "Infer the type of a Maybe value"}}}],
             "body": {
               "function": {
                 "lambda": {
@@ -19386,7 +19385,6 @@
     "hydra.errors",
     "hydra.graph",
     "hydra.json.model",
-    "hydra.module",
     "hydra.packaging",
     "hydra.parsing",
     "hydra.phantoms",

@@ -28,8 +28,8 @@ import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
-import hydra.module
 import hydra.names
+import hydra.packaging
 import hydra.predicates
 import hydra.rewriting
 import hydra.show.errors
@@ -40,18 +40,18 @@ import hydra.util
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
 
-def add_namespaces_to_namespaces(ns0: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName], names: frozenset[hydra.core.Name]) -> hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]:
+def add_namespaces_to_namespaces(ns0: hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName], names: frozenset[hydra.core.Name]) -> hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName]:
     r"""Add namespaces from a set of names to existing namespaces."""
 
     @lru_cache(1)
-    def new_namespaces() -> frozenset[hydra.module.Namespace]:
+    def new_namespaces() -> frozenset[hydra.packaging.Namespace]:
         return hydra.lib.sets.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda x1: hydra.names.namespace_of(x1)), hydra.lib.sets.to_list(names))))
-    def to_module_name(namespace: hydra.module.Namespace) -> hydra.ext.haskell.syntax.ModuleName:
+    def to_module_name(namespace: hydra.packaging.Namespace) -> hydra.ext.haskell.syntax.ModuleName:
         return hydra.ext.haskell.syntax.ModuleName(hydra.formatting.capitalize(hydra.lib.lists.last(hydra.lib.strings.split_on(".", namespace.value))))
     @lru_cache(1)
-    def new_mappings() -> FrozenDict[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName]:
+    def new_mappings() -> FrozenDict[hydra.packaging.Namespace, hydra.ext.haskell.syntax.ModuleName]:
         return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda ns_: (ns_, to_module_name(ns_))), hydra.lib.sets.to_list(new_namespaces())))
-    return hydra.module.Namespaces(ns0.focus, hydra.lib.maps.union(ns0.mapping, new_mappings()))
+    return hydra.packaging.Namespaces(ns0.focus, hydra.lib.maps.union(ns0.mapping, new_mappings()))
 
 def collect_test_cases(tg: hydra.testing.TestGroup) -> frozenlist[hydra.testing.TestCaseWithMetadata]:
     r"""Collect all test cases from a test group recursively."""
@@ -73,7 +73,7 @@ def extract_test_terms(tcm: T0) -> frozenlist[T1]:
 
     return ()
 
-def build_namespaces_for_test_group(mod: hydra.module.Module, tgroup: hydra.testing.TestGroup, graph_: hydra.graph.Graph) -> Either[str, hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]]:
+def build_namespaces_for_test_group(mod: hydra.packaging.Module, tgroup: hydra.testing.TestGroup, graph_: hydra.graph.Graph) -> Either[str, hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName]]:
     r"""Build namespaces for a test group including encoded term references."""
 
     @lru_cache(1)
@@ -86,31 +86,31 @@ def build_namespaces_for_test_group(mod: hydra.module.Module, tgroup: hydra.test
     def test_bindings() -> frozenlist[hydra.core.Binding]:
         return hydra.lib.lists.map((lambda term: hydra.core.Binding(hydra.core.Name("_test_"), term, Nothing())), test_terms())
     @lru_cache(1)
-    def temp_module() -> hydra.module.Module:
-        return hydra.module.Module(mod.namespace, hydra.lib.lists.map((lambda b: cast(hydra.module.Definition, hydra.module.DefinitionTerm(hydra.module.TermDefinition(b.name, b.term, b.type)))), test_bindings()), mod.term_dependencies, mod.type_dependencies, mod.description)
+    def temp_module() -> hydra.packaging.Module:
+        return hydra.packaging.Module(mod.namespace, hydra.lib.lists.map((lambda b: cast(hydra.packaging.Definition, hydra.packaging.DefinitionTerm(hydra.packaging.TermDefinition(b.name, b.term, b.type)))), test_bindings()), mod.term_dependencies, mod.type_dependencies, mod.description)
     return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda ic: hydra.show.errors.error(ic.object)), (lambda a: a), hydra.ext.haskell.utils.namespaces_for_module(temp_module(), hydra.lexical.empty_context(), graph_)), (lambda base_namespaces: (encoded_names := hydra.lib.sets.unions(hydra.lib.lists.map((lambda t: extract_encoded_term_variable_names(graph_, t)), test_terms())), Right(add_namespaces_to_namespaces(base_namespaces, encoded_names)))[1]))
 
-def find_haskell_imports(namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName], names_: T0) -> frozenlist[str]:
+def find_haskell_imports(namespaces: hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName], names_: T0) -> frozenlist[str]:
     r"""Find necessary imports for Haskell based on referenced names."""
 
     @lru_cache(1)
-    def mapping_() -> FrozenDict[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName]:
+    def mapping_() -> FrozenDict[hydra.packaging.Namespace, hydra.ext.haskell.syntax.ModuleName]:
         return namespaces.mapping
     @lru_cache(1)
-    def filtered() -> FrozenDict[hydra.module.Namespace, hydra.ext.haskell.syntax.ModuleName]:
+    def filtered() -> FrozenDict[hydra.packaging.Namespace, hydra.ext.haskell.syntax.ModuleName]:
         return hydra.lib.maps.filter_with_key((lambda ns_, _v: hydra.lib.logic.not_(hydra.lib.equality.equal(hydra.lib.lists.head(hydra.lib.strings.split_on("hydra.test.", ns_.value)), ""))), mapping_())
     return hydra.lib.lists.map((lambda entry: hydra.lib.strings.cat(("import qualified ", hydra.lib.strings.intercalate(".", hydra.lib.lists.map(hydra.formatting.capitalize, hydra.lib.strings.split_on(".", hydra.lib.pairs.first(entry).value))), " as ", hydra.lib.pairs.second(entry).value))), hydra.lib.maps.to_list(filtered()))
 
-def namespace_to_module_name(ns_: hydra.module.Namespace) -> str:
+def namespace_to_module_name(ns_: hydra.packaging.Namespace) -> str:
     r"""Convert namespace to Haskell module name."""
 
     return hydra.lib.strings.intercalate(".", hydra.lib.lists.map(hydra.formatting.capitalize, hydra.lib.strings.split_on(".", ns_.value)))
 
-def build_test_module(test_module: hydra.module.Module, test_group: hydra.testing.TestGroup, test_body: str, namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]) -> str:
+def build_test_module(test_module: hydra.packaging.Module, test_group: hydra.testing.TestGroup, test_body: str, namespaces: hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName]) -> str:
     r"""Build the complete test module for Haskell HSpec."""
 
     ns_ = test_module.namespace
-    spec_ns = hydra.module.Namespace(hydra.lib.strings.cat2(ns_.value, "Spec"))
+    spec_ns = hydra.packaging.Namespace(hydra.lib.strings.cat2(ns_.value, "Spec"))
     @lru_cache(1)
     def module_name_string() -> str:
         return namespace_to_module_name(spec_ns)
@@ -154,12 +154,12 @@ def generate_test_group_hierarchy(depth: int, test_group: hydra.testing.TestGrou
         return hydra.lib.strings.from_list(hydra.lib.lists.replicate(hydra.lib.math.mul(depth, 2), 32))
     return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda tc: generate_test_case(depth, tc)), cases_), (lambda test_case_lines_raw: (test_case_lines := hydra.lib.lists.map((lambda lines_: hydra.lib.lists.map((lambda line: hydra.lib.strings.cat2(indent(), line)), lines_)), test_case_lines_raw), test_cases_str := hydra.lib.strings.intercalate("\n", hydra.lib.lists.concat(test_case_lines)), hydra.lib.eithers.map((lambda subgroups_str: hydra.lib.strings.cat((test_cases_str, hydra.lib.logic.if_else(hydra.lib.logic.or_(hydra.lib.equality.equal(test_cases_str, ""), hydra.lib.equality.equal(subgroups_str, "")), (lambda : ""), (lambda : "\n")), subgroups_str))), hydra.lib.eithers.map((lambda blocks: hydra.lib.strings.intercalate("\n", blocks)), hydra.lib.eithers.map_list((lambda subgroup: (group_name_ := subgroup.name, hydra.lib.eithers.map((lambda content: hydra.lib.strings.cat((indent(), "H.describe ", hydra.lib.literals.show_string(group_name_), " $ do\n", content))), generate_test_group_hierarchy(hydra.lib.math.add(depth, 1), subgroup)))[1]), subgroups))))[2]))
 
-def generate_test_file(test_module: hydra.module.Module, test_group: hydra.testing.TestGroup, namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.ModuleName]) -> Either[T0, tuple[str, str]]:
+def generate_test_file(test_module: hydra.packaging.Module, test_group: hydra.testing.TestGroup, namespaces: hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName]) -> Either[T0, tuple[str, str]]:
     r"""Generate a complete Haskell test file."""
 
-    return hydra.lib.eithers.map((lambda test_body: (test_module_content := build_test_module(test_module, test_group, test_body, namespaces), ns_ := test_module.namespace, spec_ns := hydra.module.Namespace(hydra.lib.strings.cat2(ns_.value, "Spec")), file_path := hydra.names.namespace_to_file_path(hydra.util.CaseConvention.PASCAL, hydra.module.FileExtension("hs"), spec_ns), (file_path, test_module_content))[4]), generate_test_group_hierarchy(1, test_group))
+    return hydra.lib.eithers.map((lambda test_body: (test_module_content := build_test_module(test_module, test_group, test_body, namespaces), ns_ := test_module.namespace, spec_ns := hydra.packaging.Namespace(hydra.lib.strings.cat2(ns_.value, "Spec")), file_path := hydra.names.namespace_to_file_path(hydra.util.CaseConvention.PASCAL, hydra.packaging.FileExtension("hs"), spec_ns), (file_path, test_module_content))[4]), generate_test_group_hierarchy(1, test_group))
 
-def generate_haskell_test_file(test_module: hydra.module.Module, test_group: hydra.testing.TestGroup, g: hydra.graph.Graph) -> Either[str, tuple[str, str]]:
+def generate_haskell_test_file(test_module: hydra.packaging.Module, test_group: hydra.testing.TestGroup, g: hydra.graph.Graph) -> Either[str, tuple[str, str]]:
     r"""Generate a Haskell test file for a test group, with type inference and namespace building."""
 
     return hydra.lib.eithers.bind(build_namespaces_for_test_group(test_module, test_group, g), (lambda namespaces: generate_test_file(test_module, test_group, namespaces)))

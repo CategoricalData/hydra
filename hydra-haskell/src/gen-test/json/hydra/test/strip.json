@@ -1,0 +1,1378 @@
+{
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.test.strip.allTests",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {"string": "Test cases for annotation and type stripping operations"}}}],
+            "body": {
+              "record": {
+                "fields": [
+                  {"name": "name", "term": {"literal": {"string": "strip"}}},
+                  {
+                    "name": "description",
+                    "term": {
+                      "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "subgroups",
+                    "term": {
+                      "list": [
+                        {
+                          "record": {
+                            "fields": [
+                              {"name": "name", "term": {"literal": {"string": "deannotateTerm"}}},
+                              {
+                                "name": "description",
+                                "term": {
+                                  "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                              {
+                                "name": "subgroups",
+                                "term": {
+                                  "typeApplication": {
+                                    "body": {"list": []},
+                                    "type": {"variable": "hydra.testing.TestGroup"}}}},
+                              {
+                                "name": "cases",
+                                "term": {
+                                  "list": [
+                                    {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "name",
+                                            "term": {"literal": {"string": "unannotated literal unchanged"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "literal",
+                                                                        "term": {
+                                                                          "union": {
+                                                                            "field": {
+                                                                              "name": "integer",
+                                                                              "term": {
+                                                                                "union": {
+                                                                                  "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 42}}}},
+                                                                                  "typeName": "hydra.core.IntegerValue"}}},
+                                                                            "typeName": "hydra.core.Literal"}}},
+                                                                      "typeName": "hydra.core.Term"}},
+                                                                  "function": {"variable": "hydra.strip.deannotateTerm"}}},
+                                                              "function": {"variable": "hydra.show.core.term"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "integer",
+                                                                          "term": {
+                                                                            "union": {
+                                                                              "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 42}}}},
+                                                                              "typeName": "hydra.core.IntegerValue"}}},
+                                                                        "typeName": "hydra.core.Literal"}}},
+                                                                  "typeName": "hydra.core.Term"}},
+                                                              "function": {"variable": "hydra.show.core.term"}}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                    {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "name",
+                                            "term": {"literal": {"string": "unannotated variable unchanged"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "variable",
+                                                                        "term": {
+                                                                          "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                                      "typeName": "hydra.core.Term"}},
+                                                                  "function": {"variable": "hydra.strip.deannotateTerm"}}},
+                                                              "function": {"variable": "hydra.show.core.term"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "variable",
+                                                                    "term": {
+                                                                      "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                                  "typeName": "hydra.core.Term"}},
+                                                              "function": {"variable": "hydra.show.core.term"}}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                    {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "name",
+                                            "term": {"literal": {"string": "unannotated lambda unchanged"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "function",
+                                                                        "term": {
+                                                                          "union": {
+                                                                            "field": {
+                                                                              "name": "lambda",
+                                                                              "term": {
+                                                                                "record": {
+                                                                                  "fields": [
+                                                                                    {
+                                                                                      "name": "parameter",
+                                                                                      "term": {
+                                                                                        "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                                                    {
+                                                                                      "name": "domain",
+                                                                                      "term": {
+                                                                                        "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                                    {
+                                                                                      "name": "body",
+                                                                                      "term": {
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "variable",
+                                                                                            "term": {
+                                                                                              "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                                                          "typeName": "hydra.core.Term"}}}],
+                                                                                  "typeName": "hydra.core.Lambda"}}},
+                                                                            "typeName": "hydra.core.Function"}}},
+                                                                      "typeName": "hydra.core.Term"}},
+                                                                  "function": {"variable": "hydra.strip.deannotateTerm"}}},
+                                                              "function": {"variable": "hydra.show.core.term"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "function",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "lambda",
+                                                                          "term": {
+                                                                            "record": {
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "parameter",
+                                                                                  "term": {
+                                                                                    "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                                                {
+                                                                                  "name": "domain",
+                                                                                  "term": {
+                                                                                    "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                                {
+                                                                                  "name": "body",
+                                                                                  "term": {
+                                                                                    "union": {
+                                                                                      "field": {
+                                                                                        "name": "variable",
+                                                                                        "term": {
+                                                                                          "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                                                      "typeName": "hydra.core.Term"}}}],
+                                                                              "typeName": "hydra.core.Lambda"}}},
+                                                                        "typeName": "hydra.core.Function"}}},
+                                                                  "typeName": "hydra.core.Term"}},
+                                                              "function": {"variable": "hydra.show.core.term"}}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                    {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "name",
+                                            "term": {"literal": {"string": "single annotation stripped"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "annotated",
+                                                                        "term": {
+                                                                          "record": {
+                                                                            "fields": [
+                                                                              {
+                                                                                "name": "body",
+                                                                                "term": {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "integer",
+                                                                                            "term": {
+                                                                                              "union": {
+                                                                                                "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 42}}}},
+                                                                                                "typeName": "hydra.core.IntegerValue"}}},
+                                                                                          "typeName": "hydra.core.Literal"}}},
+                                                                                    "typeName": "hydra.core.Term"}}},
+                                                                              {
+                                                                                "name": "annotation",
+                                                                                "term": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                    "type": {"variable": "hydra.core.Term"}}}}],
+                                                                            "typeName": "hydra.core.AnnotatedTerm"}}},
+                                                                      "typeName": "hydra.core.Term"}},
+                                                                  "function": {"variable": "hydra.strip.deannotateTerm"}}},
+                                                              "function": {"variable": "hydra.show.core.term"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "integer",
+                                                                          "term": {
+                                                                            "union": {
+                                                                              "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 42}}}},
+                                                                              "typeName": "hydra.core.IntegerValue"}}},
+                                                                        "typeName": "hydra.core.Literal"}}},
+                                                                  "typeName": "hydra.core.Term"}},
+                                                              "function": {"variable": "hydra.show.core.term"}}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                    {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "name",
+                                            "term": {"literal": {"string": "nested annotations stripped"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "annotated",
+                                                                        "term": {
+                                                                          "record": {
+                                                                            "fields": [
+                                                                              {
+                                                                                "name": "body",
+                                                                                "term": {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "annotated",
+                                                                                      "term": {
+                                                                                        "record": {
+                                                                                          "fields": [
+                                                                                            {
+                                                                                              "name": "body",
+                                                                                              "term": {
+                                                                                                "union": {
+                                                                                                  "field": {
+                                                                                                    "name": "literal",
+                                                                                                    "term": {
+                                                                                                      "union": {
+                                                                                                        "field": {
+                                                                                                          "name": "integer",
+                                                                                                          "term": {
+                                                                                                            "union": {
+                                                                                                              "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 42}}}},
+                                                                                                              "typeName": "hydra.core.IntegerValue"}}},
+                                                                                                        "typeName": "hydra.core.Literal"}}},
+                                                                                                  "typeName": "hydra.core.Term"}}},
+                                                                                            {
+                                                                                              "name": "annotation",
+                                                                                              "term": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {
+                                                                                                    "typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                  "type": {"variable": "hydra.core.Term"}}}}],
+                                                                                          "typeName": "hydra.core.AnnotatedTerm"}}},
+                                                                                    "typeName": "hydra.core.Term"}}},
+                                                                              {
+                                                                                "name": "annotation",
+                                                                                "term": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                    "type": {"variable": "hydra.core.Term"}}}}],
+                                                                            "typeName": "hydra.core.AnnotatedTerm"}}},
+                                                                      "typeName": "hydra.core.Term"}},
+                                                                  "function": {"variable": "hydra.strip.deannotateTerm"}}},
+                                                              "function": {"variable": "hydra.show.core.term"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "integer",
+                                                                          "term": {
+                                                                            "union": {
+                                                                              "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 42}}}},
+                                                                              "typeName": "hydra.core.IntegerValue"}}},
+                                                                        "typeName": "hydra.core.Literal"}}},
+                                                                  "typeName": "hydra.core.Term"}},
+                                                              "function": {"variable": "hydra.show.core.term"}}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                    {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "name",
+                                            "term": {"literal": {"string": "annotated lambda stripped"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "annotated",
+                                                                        "term": {
+                                                                          "record": {
+                                                                            "fields": [
+                                                                              {
+                                                                                "name": "body",
+                                                                                "term": {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "function",
+                                                                                      "term": {
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "lambda",
+                                                                                            "term": {
+                                                                                              "record": {
+                                                                                                "fields": [
+                                                                                                  {
+                                                                                                    "name": "parameter",
+                                                                                                    "term": {
+                                                                                                      "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                  {
+                                                                                                    "name": "domain",
+                                                                                                    "term": {
+                                                                                                      "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                                                  {
+                                                                                                    "name": "body",
+                                                                                                    "term": {
+                                                                                                      "union": {
+                                                                                                        "field": {
+                                                                                                          "name": "variable",
+                                                                                                          "term": {
+                                                                                                            "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                        "typeName": "hydra.core.Term"}}}],
+                                                                                                "typeName": "hydra.core.Lambda"}}},
+                                                                                          "typeName": "hydra.core.Function"}}},
+                                                                                    "typeName": "hydra.core.Term"}}},
+                                                                              {
+                                                                                "name": "annotation",
+                                                                                "term": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                    "type": {"variable": "hydra.core.Term"}}}}],
+                                                                            "typeName": "hydra.core.AnnotatedTerm"}}},
+                                                                      "typeName": "hydra.core.Term"}},
+                                                                  "function": {"variable": "hydra.strip.deannotateTerm"}}},
+                                                              "function": {"variable": "hydra.show.core.term"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "function",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "lambda",
+                                                                          "term": {
+                                                                            "record": {
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "parameter",
+                                                                                  "term": {
+                                                                                    "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                                                {
+                                                                                  "name": "domain",
+                                                                                  "term": {
+                                                                                    "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                                {
+                                                                                  "name": "body",
+                                                                                  "term": {
+                                                                                    "union": {
+                                                                                      "field": {
+                                                                                        "name": "variable",
+                                                                                        "term": {
+                                                                                          "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                                                      "typeName": "hydra.core.Term"}}}],
+                                                                              "typeName": "hydra.core.Lambda"}}},
+                                                                        "typeName": "hydra.core.Function"}}},
+                                                                  "typeName": "hydra.core.Term"}},
+                                                              "function": {"variable": "hydra.show.core.term"}}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                    {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "name",
+                                            "term": {"literal": {"string": "annotated application stripped"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "annotated",
+                                                                        "term": {
+                                                                          "record": {
+                                                                            "fields": [
+                                                                              {
+                                                                                "name": "body",
+                                                                                "term": {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "application",
+                                                                                      "term": {
+                                                                                        "record": {
+                                                                                          "fields": [
+                                                                                            {
+                                                                                              "name": "function",
+                                                                                              "term": {
+                                                                                                "union": {
+                                                                                                  "field": {
+                                                                                                    "name": "variable",
+                                                                                                    "term": {
+                                                                                                      "wrap": {"body": {"literal": {"string": "f"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                  "typeName": "hydra.core.Term"}}},
+                                                                                            {
+                                                                                              "name": "argument",
+                                                                                              "term": {
+                                                                                                "union": {
+                                                                                                  "field": {
+                                                                                                    "name": "variable",
+                                                                                                    "term": {
+                                                                                                      "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                  "typeName": "hydra.core.Term"}}}],
+                                                                                          "typeName": "hydra.core.Application"}}},
+                                                                                    "typeName": "hydra.core.Term"}}},
+                                                                              {
+                                                                                "name": "annotation",
+                                                                                "term": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                    "type": {"variable": "hydra.core.Term"}}}}],
+                                                                            "typeName": "hydra.core.AnnotatedTerm"}}},
+                                                                      "typeName": "hydra.core.Term"}},
+                                                                  "function": {"variable": "hydra.strip.deannotateTerm"}}},
+                                                              "function": {"variable": "hydra.show.core.term"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "application",
+                                                                    "term": {
+                                                                      "record": {
+                                                                        "fields": [
+                                                                          {
+                                                                            "name": "function",
+                                                                            "term": {
+                                                                              "union": {
+                                                                                "field": {
+                                                                                  "name": "variable",
+                                                                                  "term": {
+                                                                                    "wrap": {"body": {"literal": {"string": "f"}}, "typeName": "hydra.core.Name"}}},
+                                                                                "typeName": "hydra.core.Term"}}},
+                                                                          {
+                                                                            "name": "argument",
+                                                                            "term": {
+                                                                              "union": {
+                                                                                "field": {
+                                                                                  "name": "variable",
+                                                                                  "term": {
+                                                                                    "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
+                                                                                "typeName": "hydra.core.Term"}}}],
+                                                                        "typeName": "hydra.core.Application"}}},
+                                                                  "typeName": "hydra.core.Term"}},
+                                                              "function": {"variable": "hydra.show.core.term"}}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
+                            "typeName": "hydra.testing.TestGroup"}},
+                        {
+                          "record": {
+                            "fields": [
+                              {"name": "name", "term": {"literal": {"string": "deannotateType"}}},
+                              {
+                                "name": "description",
+                                "term": {
+                                  "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                              {
+                                "name": "subgroups",
+                                "term": {
+                                  "typeApplication": {
+                                    "body": {"list": []},
+                                    "type": {"variable": "hydra.testing.TestGroup"}}}},
+                              {
+                                "name": "cases",
+                                "term": {
+                                  "list": [
+                                    {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "name",
+                                            "term": {"literal": {"string": "unannotated primitive type unchanged"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "literal",
+                                                                        "term": {
+                                                                          "union": {
+                                                                            "field": {
+                                                                              "name": "integer",
+                                                                              "term": {
+                                                                                "union": {
+                                                                                  "field": {"name": "int32", "term": {"unit": {}}},
+                                                                                  "typeName": "hydra.core.IntegerType"}}},
+                                                                            "typeName": "hydra.core.LiteralType"}}},
+                                                                      "typeName": "hydra.core.Type"}},
+                                                                  "function": {"variable": "hydra.strip.deannotateType"}}},
+                                                              "function": {"variable": "hydra.show.core.type"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "integer",
+                                                                          "term": {
+                                                                            "union": {
+                                                                              "field": {"name": "int32", "term": {"unit": {}}},
+                                                                              "typeName": "hydra.core.IntegerType"}}},
+                                                                        "typeName": "hydra.core.LiteralType"}}},
+                                                                  "typeName": "hydra.core.Type"}},
+                                                              "function": {"variable": "hydra.show.core.type"}}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                    {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "name",
+                                            "term": {"literal": {"string": "unannotated string type unchanged"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "literal",
+                                                                        "term": {
+                                                                          "union": {
+                                                                            "field": {"name": "string", "term": {"unit": {}}},
+                                                                            "typeName": "hydra.core.LiteralType"}}},
+                                                                      "typeName": "hydra.core.Type"}},
+                                                                  "function": {"variable": "hydra.strip.deannotateType"}}},
+                                                              "function": {"variable": "hydra.show.core.type"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "string", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.LiteralType"}}},
+                                                                  "typeName": "hydra.core.Type"}},
+                                                              "function": {"variable": "hydra.show.core.type"}}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                    {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "name",
+                                            "term": {"literal": {"string": "unannotated function type unchanged"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "function",
+                                                                        "term": {
+                                                                          "record": {
+                                                                            "fields": [
+                                                                              {
+                                                                                "name": "domain",
+                                                                                "term": {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "integer",
+                                                                                            "term": {
+                                                                                              "union": {
+                                                                                                "field": {"name": "int32", "term": {"unit": {}}},
+                                                                                                "typeName": "hydra.core.IntegerType"}}},
+                                                                                          "typeName": "hydra.core.LiteralType"}}},
+                                                                                    "typeName": "hydra.core.Type"}}},
+                                                                              {
+                                                                                "name": "codomain",
+                                                                                "term": {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "union": {
+                                                                                          "field": {"name": "string", "term": {"unit": {}}},
+                                                                                          "typeName": "hydra.core.LiteralType"}}},
+                                                                                    "typeName": "hydra.core.Type"}}}],
+                                                                            "typeName": "hydra.core.FunctionType"}}},
+                                                                      "typeName": "hydra.core.Type"}},
+                                                                  "function": {"variable": "hydra.strip.deannotateType"}}},
+                                                              "function": {"variable": "hydra.show.core.type"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "function",
+                                                                    "term": {
+                                                                      "record": {
+                                                                        "fields": [
+                                                                          {
+                                                                            "name": "domain",
+                                                                            "term": {
+                                                                              "union": {
+                                                                                "field": {
+                                                                                  "name": "literal",
+                                                                                  "term": {
+                                                                                    "union": {
+                                                                                      "field": {
+                                                                                        "name": "integer",
+                                                                                        "term": {
+                                                                                          "union": {
+                                                                                            "field": {"name": "int32", "term": {"unit": {}}},
+                                                                                            "typeName": "hydra.core.IntegerType"}}},
+                                                                                      "typeName": "hydra.core.LiteralType"}}},
+                                                                                "typeName": "hydra.core.Type"}}},
+                                                                          {
+                                                                            "name": "codomain",
+                                                                            "term": {
+                                                                              "union": {
+                                                                                "field": {
+                                                                                  "name": "literal",
+                                                                                  "term": {
+                                                                                    "union": {
+                                                                                      "field": {"name": "string", "term": {"unit": {}}},
+                                                                                      "typeName": "hydra.core.LiteralType"}}},
+                                                                                "typeName": "hydra.core.Type"}}}],
+                                                                        "typeName": "hydra.core.FunctionType"}}},
+                                                                  "typeName": "hydra.core.Type"}},
+                                                              "function": {"variable": "hydra.show.core.type"}}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                    {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "name",
+                                            "term": {"literal": {"string": "single annotation stripped"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "annotated",
+                                                                        "term": {
+                                                                          "record": {
+                                                                            "fields": [
+                                                                              {
+                                                                                "name": "body",
+                                                                                "term": {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "integer",
+                                                                                            "term": {
+                                                                                              "union": {
+                                                                                                "field": {"name": "int32", "term": {"unit": {}}},
+                                                                                                "typeName": "hydra.core.IntegerType"}}},
+                                                                                          "typeName": "hydra.core.LiteralType"}}},
+                                                                                    "typeName": "hydra.core.Type"}}},
+                                                                              {
+                                                                                "name": "annotation",
+                                                                                "term": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                    "type": {"variable": "hydra.core.Term"}}}}],
+                                                                            "typeName": "hydra.core.AnnotatedType"}}},
+                                                                      "typeName": "hydra.core.Type"}},
+                                                                  "function": {"variable": "hydra.strip.deannotateType"}}},
+                                                              "function": {"variable": "hydra.show.core.type"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "integer",
+                                                                          "term": {
+                                                                            "union": {
+                                                                              "field": {"name": "int32", "term": {"unit": {}}},
+                                                                              "typeName": "hydra.core.IntegerType"}}},
+                                                                        "typeName": "hydra.core.LiteralType"}}},
+                                                                  "typeName": "hydra.core.Type"}},
+                                                              "function": {"variable": "hydra.show.core.type"}}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                    {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "name",
+                                            "term": {"literal": {"string": "nested annotations stripped"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "annotated",
+                                                                        "term": {
+                                                                          "record": {
+                                                                            "fields": [
+                                                                              {
+                                                                                "name": "body",
+                                                                                "term": {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "annotated",
+                                                                                      "term": {
+                                                                                        "record": {
+                                                                                          "fields": [
+                                                                                            {
+                                                                                              "name": "body",
+                                                                                              "term": {
+                                                                                                "union": {
+                                                                                                  "field": {
+                                                                                                    "name": "literal",
+                                                                                                    "term": {
+                                                                                                      "union": {
+                                                                                                        "field": {"name": "string", "term": {"unit": {}}},
+                                                                                                        "typeName": "hydra.core.LiteralType"}}},
+                                                                                                  "typeName": "hydra.core.Type"}}},
+                                                                                            {
+                                                                                              "name": "annotation",
+                                                                                              "term": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {
+                                                                                                    "typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                  "type": {"variable": "hydra.core.Term"}}}}],
+                                                                                          "typeName": "hydra.core.AnnotatedType"}}},
+                                                                                    "typeName": "hydra.core.Type"}}},
+                                                                              {
+                                                                                "name": "annotation",
+                                                                                "term": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                    "type": {"variable": "hydra.core.Term"}}}}],
+                                                                            "typeName": "hydra.core.AnnotatedType"}}},
+                                                                      "typeName": "hydra.core.Type"}},
+                                                                  "function": {"variable": "hydra.strip.deannotateType"}}},
+                                                              "function": {"variable": "hydra.show.core.type"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "string", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.LiteralType"}}},
+                                                                  "typeName": "hydra.core.Type"}},
+                                                              "function": {"variable": "hydra.show.core.type"}}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                    {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "name",
+                                            "term": {"literal": {"string": "annotated list type stripped"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "annotated",
+                                                                        "term": {
+                                                                          "record": {
+                                                                            "fields": [
+                                                                              {
+                                                                                "name": "body",
+                                                                                "term": {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "list",
+                                                                                      "term": {
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "literal",
+                                                                                            "term": {
+                                                                                              "union": {
+                                                                                                "field": {
+                                                                                                  "name": "integer",
+                                                                                                  "term": {
+                                                                                                    "union": {
+                                                                                                      "field": {"name": "int32", "term": {"unit": {}}},
+                                                                                                      "typeName": "hydra.core.IntegerType"}}},
+                                                                                                "typeName": "hydra.core.LiteralType"}}},
+                                                                                          "typeName": "hydra.core.Type"}}},
+                                                                                    "typeName": "hydra.core.Type"}}},
+                                                                              {
+                                                                                "name": "annotation",
+                                                                                "term": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                    "type": {"variable": "hydra.core.Term"}}}}],
+                                                                            "typeName": "hydra.core.AnnotatedType"}}},
+                                                                      "typeName": "hydra.core.Type"}},
+                                                                  "function": {"variable": "hydra.strip.deannotateType"}}},
+                                                              "function": {"variable": "hydra.show.core.type"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "list",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "literal",
+                                                                          "term": {
+                                                                            "union": {
+                                                                              "field": {
+                                                                                "name": "integer",
+                                                                                "term": {
+                                                                                  "union": {
+                                                                                    "field": {"name": "int32", "term": {"unit": {}}},
+                                                                                    "typeName": "hydra.core.IntegerType"}}},
+                                                                              "typeName": "hydra.core.LiteralType"}}},
+                                                                        "typeName": "hydra.core.Type"}}},
+                                                                  "typeName": "hydra.core.Type"}},
+                                                              "function": {"variable": "hydra.show.core.type"}}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                    {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "name",
+                                            "term": {"literal": {"string": "annotated function type stripped"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "annotated",
+                                                                        "term": {
+                                                                          "record": {
+                                                                            "fields": [
+                                                                              {
+                                                                                "name": "body",
+                                                                                "term": {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "function",
+                                                                                      "term": {
+                                                                                        "record": {
+                                                                                          "fields": [
+                                                                                            {
+                                                                                              "name": "domain",
+                                                                                              "term": {
+                                                                                                "union": {
+                                                                                                  "field": {
+                                                                                                    "name": "literal",
+                                                                                                    "term": {
+                                                                                                      "union": {
+                                                                                                        "field": {
+                                                                                                          "name": "integer",
+                                                                                                          "term": {
+                                                                                                            "union": {
+                                                                                                              "field": {"name": "int32", "term": {"unit": {}}},
+                                                                                                              "typeName": "hydra.core.IntegerType"}}},
+                                                                                                        "typeName": "hydra.core.LiteralType"}}},
+                                                                                                  "typeName": "hydra.core.Type"}}},
+                                                                                            {
+                                                                                              "name": "codomain",
+                                                                                              "term": {
+                                                                                                "union": {
+                                                                                                  "field": {
+                                                                                                    "name": "literal",
+                                                                                                    "term": {
+                                                                                                      "union": {
+                                                                                                        "field": {"name": "string", "term": {"unit": {}}},
+                                                                                                        "typeName": "hydra.core.LiteralType"}}},
+                                                                                                  "typeName": "hydra.core.Type"}}}],
+                                                                                          "typeName": "hydra.core.FunctionType"}}},
+                                                                                    "typeName": "hydra.core.Type"}}},
+                                                                              {
+                                                                                "name": "annotation",
+                                                                                "term": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                    "type": {"variable": "hydra.core.Term"}}}}],
+                                                                            "typeName": "hydra.core.AnnotatedType"}}},
+                                                                      "typeName": "hydra.core.Type"}},
+                                                                  "function": {"variable": "hydra.strip.deannotateType"}}},
+                                                              "function": {"variable": "hydra.show.core.type"}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "function",
+                                                                    "term": {
+                                                                      "record": {
+                                                                        "fields": [
+                                                                          {
+                                                                            "name": "domain",
+                                                                            "term": {
+                                                                              "union": {
+                                                                                "field": {
+                                                                                  "name": "literal",
+                                                                                  "term": {
+                                                                                    "union": {
+                                                                                      "field": {
+                                                                                        "name": "integer",
+                                                                                        "term": {
+                                                                                          "union": {
+                                                                                            "field": {"name": "int32", "term": {"unit": {}}},
+                                                                                            "typeName": "hydra.core.IntegerType"}}},
+                                                                                      "typeName": "hydra.core.LiteralType"}}},
+                                                                                "typeName": "hydra.core.Type"}}},
+                                                                          {
+                                                                            "name": "codomain",
+                                                                            "term": {
+                                                                              "union": {
+                                                                                "field": {
+                                                                                  "name": "literal",
+                                                                                  "term": {
+                                                                                    "union": {
+                                                                                      "field": {"name": "string", "term": {"unit": {}}},
+                                                                                      "typeName": "hydra.core.LiteralType"}}},
+                                                                                "typeName": "hydra.core.Type"}}}],
+                                                                        "typeName": "hydra.core.FunctionType"}}},
+                                                                  "typeName": "hydra.core.Type"}},
+                                                              "function": {"variable": "hydra.show.core.type"}}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
+                            "typeName": "hydra.testing.TestGroup"}}]}},
+                  {
+                    "name": "cases",
+                    "term": {
+                      "typeApplication": {
+                        "body": {"list": []},
+                        "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
+                "typeName": "hydra.testing.TestGroup"}}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"variable": "hydra.testing.TestGroup"},
+            "variables": []}]}}],
+  "description": ["Test cases for annotation and type stripping operations"],
+  "namespace": "hydra.test.strip",
+  "termDependencies": ["hydra.show.core", "hydra.strip", "hydra.test.testGraph"],
+  "typeDependencies": [
+    "hydra.paths",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.context",
+    "hydra.core",
+    "hydra.error.checking",
+    "hydra.error.core",
+    "hydra.error.module",
+    "hydra.error.packaging",
+    "hydra.errors",
+    "hydra.graph",
+    "hydra.json.model",
+    "hydra.packaging",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants"]}

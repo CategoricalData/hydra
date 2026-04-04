@@ -29,6 +29,10 @@ Step-by-step guides for common Hydra development tasks. These recipes provide pr
 
 - **[Generating code with Hydra](code-generation.md)** - End-to-end guide to generating source code from Hydra modules: DSL vs JSON paths, the writeXxx functions, bootstrap CLI, sync scripts, and troubleshooting
 
+### Maintenance
+
+- **[Repository maintenance](maintenance.md)** - Periodic checks: non-source files, stale generated artifacts, definition ordering
+
 ### Development Workflow
 
 - **[LLM-assisted development](llm-assisted-development.md)** - Best practices for using AI assistants when working with Hydra

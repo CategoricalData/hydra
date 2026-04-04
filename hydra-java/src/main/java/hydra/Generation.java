@@ -11,10 +11,10 @@ import hydra.graph.Graph;
 import hydra.graph.Primitive;
 import hydra.json.model.Value;
 import hydra.lib.Libraries;
-import hydra.module.Definition;
-import hydra.module.Module;
-import hydra.module.TermDefinition;
-import hydra.module.Namespace;
+import hydra.packaging.Definition;
+import hydra.packaging.Module;
+import hydra.packaging.TermDefinition;
+import hydra.packaging.Namespace;
 import hydra.Rewriting;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Either;
@@ -237,9 +237,9 @@ public class Generation {
      * Requires a non-empty universe of modules for type resolution.
      */
     public static Module decodeModuleFromJson(Graph bsGraph, List<Module> universeModules,
-            boolean stripTypeSchemes, Value jsonVal) {
+            Value jsonVal) {
         Either<String, Module> result = Codegen.decodeModuleFromJson(
-                bsGraph, universeModules, stripTypeSchemes, jsonVal);
+                bsGraph, universeModules, jsonVal);
         return result.accept(new Either.Visitor<String, Module, Module>() {
             @Override
             public Module visit(Either.Left<String, Module> instance) {
@@ -258,8 +258,8 @@ public class Generation {
      * This avoids the Module → Graph → SchemaMap roundtrip, using the bootstrap type map directly.
      */
     public static Module decodeModuleFromJson(Graph bsGraph, Map<Name, hydra.core.Type> schemaMap,
-            boolean stripTypeSchemes, Value jsonVal) {
-        Name modName = new Name("hydra.module.Module");
+            Value jsonVal) {
+        Name modName = new Name("hydra.packaging.Module");
         hydra.core.Type modType = new hydra.core.Type.Variable(modName);
         Either<String, hydra.core.Term> jsonResult = hydra.json.Decode.fromJson(schemaMap, modName, modType, jsonVal);
         return jsonResult.accept(new Either.Visitor<String, hydra.core.Term, Module>() {
@@ -272,7 +272,7 @@ public class Generation {
             public Module visit(Either.Right<String, hydra.core.Term> instance) {
                 hydra.core.Term term = instance.value;
                 Either<hydra.errors.DecodingError, Module> modResult =
-                    hydra.decode.Module.module(bsGraph, term);
+                    hydra.decode.Packaging.module(bsGraph, term);
                 return modResult.accept(new Either.Visitor<hydra.errors.DecodingError, Module, Module>() {
                     @Override
                     public Module visit(Either.Left<hydra.errors.DecodingError, Module> left) {
@@ -281,10 +281,7 @@ public class Generation {
 
                     @Override
                     public Module visit(Either.Right<hydra.errors.DecodingError, Module> right) {
-                        Module mod = right.value;
-                        return stripTypeSchemes
-                            ? Codegen.stripModuleTypeSchemes(mod)
-                            : mod;
+                        return right.value;
                     }
                 });
             }
@@ -322,7 +319,7 @@ public class Generation {
     /**
      * Load modules from JSON files using a pre-built schema map (from Bootstrap.typesByName()).
      */
-    public static List<Module> loadModulesFromJson(boolean stripTypeSchemes, String basePath,
+    public static List<Module> loadModulesFromJson(String basePath,
             Map<Name, hydra.core.Type> schemaMap, List<Namespace> namespaces) throws IOException {
         Graph bsGraph = bootstrapGraph();
         List<Module> modules = new ArrayList<>();
@@ -330,7 +327,7 @@ public class Generation {
             String filePath = basePath + File.separator
                     + Codegen.namespaceToPath(ns) + ".json";
             Value jsonVal = parseJsonFile(filePath);
-            Module mod = decodeModuleFromJson(bsGraph, schemaMap, stripTypeSchemes, jsonVal);
+            Module mod = decodeModuleFromJson(bsGraph, schemaMap, jsonVal);
             System.out.println("  Loaded: " + ns.value);
             modules.add(mod);
         }
@@ -492,8 +489,8 @@ public class Generation {
                             hydra.Serialization.parenthesize(
                                     hydra.ext.lisp.Serde.programToExpr(program)));
                     String filePath = hydra.Names.namespaceToFilePath(
-                            cc, new hydra.module.FileExtension(fileExt), mod.namespace);
-                    Map<String, String> fileMap = new HashMap<>();
+                            cc, new hydra.packaging.FileExtension(fileExt), mod.namespace);
+                    Map<String, String> fileMap = new java.util.TreeMap<>();
                     fileMap.put(filePath, code);
                     return new hydra.util.Either.Right(fileMap);
                 },

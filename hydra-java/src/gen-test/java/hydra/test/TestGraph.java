@@ -14,12 +14,12 @@ public interface TestGraph {
     return hydra.TestEnv.testGraph();
   }
 
-  static hydra.module.Namespace testNamespace() {
-    return new hydra.module.Namespace("testGraph");
+  static hydra.packaging.Namespace testNamespace() {
+    return new hydra.packaging.Namespace("testGraph");
   }
 
-  static hydra.module.Namespace testSchemaNamespace() {
-    return new hydra.module.Namespace("testSchemaGraph");
+  static hydra.packaging.Namespace testSchemaNamespace() {
+    return new hydra.packaging.Namespace("testSchemaGraph");
   }
 
   static java.util.Map<hydra.core.Name, hydra.core.Term> testTerms() {

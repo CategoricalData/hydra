@@ -8,7 +8,7 @@
 module Hydra.Dsl.AsTerm where
 
 import Hydra.Core
-import Hydra.Module
+import Hydra.Packaging
 import Hydra.Phantoms
 
 

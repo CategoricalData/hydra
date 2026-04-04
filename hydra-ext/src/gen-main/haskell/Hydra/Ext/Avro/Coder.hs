@@ -24,8 +24,8 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Map as M
@@ -321,9 +321,9 @@ avroNameToHydraName qname =
 
       let mns = Environment.avroQualifiedNameNamespace qname
           local = Environment.avroQualifiedNameName qname
-      in (Names.unqualifyName (Module.QualifiedName {
-        Module.qualifiedNameNamespace = (Maybes.map (\s -> Module.Namespace s) mns),
-        Module.qualifiedNameLocal = local}))
+      in (Names.unqualifyName (Packaging.QualifiedName {
+        Packaging.qualifiedNameNamespace = (Maybes.map (\s -> Packaging.Namespace s) mns),
+        Packaging.qualifiedNameLocal = local}))
 
 avro_foreignKey :: String
 avro_foreignKey = "@foreignKey"

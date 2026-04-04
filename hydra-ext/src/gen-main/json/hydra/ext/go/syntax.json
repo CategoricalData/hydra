@@ -4,1243 +4,1624 @@
       "type": {
         "name": "hydra.ext.go.syntax.AnnotatedDeclaration",
         "type": {
-          "record": [
-            {"name": "comment", "type": {"literal": {"string": {}}}},
-            {
-              "name": "declaration",
-              "type": {"variable": "hydra.ext.go.syntax.TopLevelDecl"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {"name": "comment", "type": {"literal": {"string": {}}}},
+              {
+                "name": "declaration",
+                "type": {"variable": "hydra.ext.go.syntax.TopLevelDecl"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.Module",
         "type": {
-          "record": [
-            {
-              "name": "package",
-              "type": {"variable": "hydra.ext.go.syntax.PackageClause"}},
-            {
-              "name": "imports",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.ImportDecl"}}},
-            {
-              "name": "declarations",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.TopLevelDecl"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "package",
+                "type": {"variable": "hydra.ext.go.syntax.PackageClause"}},
+              {
+                "name": "imports",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.ImportDecl"}}},
+              {
+                "name": "declarations",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.TopLevelDecl"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.Identifier",
-        "type": {"wrap": {"literal": {"string": {}}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"literal": {"string": {}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.IntLit",
-        "type": {"wrap": {"literal": {"integer": {"bigint": {}}}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"literal": {"integer": {"bigint": {}}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.FloatLit",
-        "type": {"wrap": {"literal": {"float": {"float64": {}}}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"literal": {"float": {"float64": {}}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.ImaginaryLit",
-        "type": {"wrap": {"literal": {"float": {"float64": {}}}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"literal": {"float": {"float64": {}}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.RuneLit",
-        "type": {"wrap": {"literal": {"integer": {"int32": {}}}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"literal": {"integer": {"int32": {}}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.StringLit",
         "type": {
-          "union": [
-            {
-              "name": "raw",
-              "type": {"variable": "hydra.ext.go.syntax.RawStringLit"}},
-            {
-              "name": "interpreted",
-              "type": {"variable": "hydra.ext.go.syntax.InterpretedStringLit"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "raw",
+                "type": {"variable": "hydra.ext.go.syntax.RawStringLit"}},
+              {
+                "name": "interpreted",
+                "type": {"variable": "hydra.ext.go.syntax.InterpretedStringLit"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.RawStringLit",
-        "type": {"wrap": {"literal": {"string": {}}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"literal": {"string": {}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.InterpretedStringLit",
-        "type": {"wrap": {"literal": {"string": {}}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"literal": {"string": {}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.SourceFile",
         "type": {
-          "record": [
-            {
-              "name": "package",
-              "type": {"variable": "hydra.ext.go.syntax.PackageClause"}},
-            {
-              "name": "imports",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.ImportDecl"}}},
-            {
-              "name": "declarations",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.TopLevelDecl"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "package",
+                "type": {"variable": "hydra.ext.go.syntax.PackageClause"}},
+              {
+                "name": "imports",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.ImportDecl"}}},
+              {
+                "name": "declarations",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.TopLevelDecl"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.PackageClause",
-        "type": {"wrap": {"variable": "hydra.ext.go.syntax.Identifier"}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"variable": "hydra.ext.go.syntax.Identifier"}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.ImportDecl",
-        "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.ImportSpec"}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.ImportSpec"}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.ImportSpec",
         "type": {
-          "record": [
-            {
-              "name": "alias",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.ImportAlias"}}},
-            {
-              "name": "path",
-              "type": {"variable": "hydra.ext.go.syntax.ImportPath"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "alias",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.ImportAlias"}}},
+              {
+                "name": "path",
+                "type": {"variable": "hydra.ext.go.syntax.ImportPath"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.ImportAlias",
         "type": {
-          "union": [
-            {"name": "dot", "type": {"unit": {}}},
-            {
-              "name": "name",
-              "type": {"variable": "hydra.ext.go.syntax.Identifier"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {"name": "dot", "type": {"unit": {}}},
+              {
+                "name": "name",
+                "type": {"variable": "hydra.ext.go.syntax.Identifier"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.ImportPath",
-        "type": {"wrap": {"variable": "hydra.ext.go.syntax.StringLit"}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"variable": "hydra.ext.go.syntax.StringLit"}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.Declaration",
         "type": {
-          "union": [
-            {
-              "name": "const",
-              "type": {"variable": "hydra.ext.go.syntax.ConstDecl"}},
-            {"name": "type", "type": {"variable": "hydra.ext.go.syntax.TypeDecl"}},
-            {"name": "var", "type": {"variable": "hydra.ext.go.syntax.VarDecl"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "const",
+                "type": {"variable": "hydra.ext.go.syntax.ConstDecl"}},
+              {"name": "type", "type": {"variable": "hydra.ext.go.syntax.TypeDecl"}},
+              {"name": "var", "type": {"variable": "hydra.ext.go.syntax.VarDecl"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.TopLevelDecl",
         "type": {
-          "union": [
-            {
-              "name": "declaration",
-              "type": {"variable": "hydra.ext.go.syntax.Declaration"}},
-            {
-              "name": "function",
-              "type": {"variable": "hydra.ext.go.syntax.FunctionDecl"}},
-            {
-              "name": "method",
-              "type": {"variable": "hydra.ext.go.syntax.MethodDecl"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "declaration",
+                "type": {"variable": "hydra.ext.go.syntax.Declaration"}},
+              {
+                "name": "function",
+                "type": {"variable": "hydra.ext.go.syntax.FunctionDecl"}},
+              {
+                "name": "method",
+                "type": {"variable": "hydra.ext.go.syntax.MethodDecl"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.ConstDecl",
-        "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.ConstSpec"}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.ConstSpec"}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.ConstSpec",
         "type": {
-          "record": [
-            {
-              "name": "names",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.Identifier"}}},
-            {
-              "name": "type",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.Type"}}},
-            {
-              "name": "values",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.Expression"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "names",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.Identifier"}}},
+              {
+                "name": "type",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.Type"}}},
+              {
+                "name": "values",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.Expression"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.VarDecl",
-        "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.VarSpec"}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.VarSpec"}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.VarSpec",
         "type": {
-          "record": [
-            {
-              "name": "names",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.Identifier"}}},
-            {
-              "name": "type",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.Type"}}},
-            {
-              "name": "values",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.Expression"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "names",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.Identifier"}}},
+              {
+                "name": "type",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.Type"}}},
+              {
+                "name": "values",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.Expression"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.ShortVarDecl",
         "type": {
-          "record": [
-            {
-              "name": "names",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.Identifier"}}},
-            {
-              "name": "values",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.Expression"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "names",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.Identifier"}}},
+              {
+                "name": "values",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.Expression"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.TypeDecl",
-        "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.TypeSpec"}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.TypeSpec"}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.TypeSpec",
         "type": {
-          "union": [
-            {
-              "name": "alias",
-              "type": {"variable": "hydra.ext.go.syntax.AliasDecl"}},
-            {
-              "name": "definition",
-              "type": {"variable": "hydra.ext.go.syntax.TypeDef"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "alias",
+                "type": {"variable": "hydra.ext.go.syntax.AliasDecl"}},
+              {
+                "name": "definition",
+                "type": {"variable": "hydra.ext.go.syntax.TypeDef"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.AliasDecl",
         "type": {
-          "record": [
-            {
-              "name": "name",
-              "type": {"variable": "hydra.ext.go.syntax.Identifier"}},
-            {"name": "type", "type": {"variable": "hydra.ext.go.syntax.Type"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "name",
+                "type": {"variable": "hydra.ext.go.syntax.Identifier"}},
+              {"name": "type", "type": {"variable": "hydra.ext.go.syntax.Type"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.TypeDef",
         "type": {
-          "record": [
-            {
-              "name": "name",
-              "type": {"variable": "hydra.ext.go.syntax.Identifier"}},
-            {
-              "name": "typeParams",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.TypeParameters"}}},
-            {"name": "type", "type": {"variable": "hydra.ext.go.syntax.Type"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "name",
+                "type": {"variable": "hydra.ext.go.syntax.Identifier"}},
+              {
+                "name": "typeParams",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.TypeParameters"}}},
+              {"name": "type", "type": {"variable": "hydra.ext.go.syntax.Type"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.TypeParameters",
-        "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.TypeParamDecl"}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.TypeParamDecl"}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.TypeParamDecl",
         "type": {
-          "record": [
-            {
-              "name": "names",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.Identifier"}}},
-            {
-              "name": "constraint",
-              "type": {"variable": "hydra.ext.go.syntax.TypeConstraint"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "names",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.Identifier"}}},
+              {
+                "name": "constraint",
+                "type": {"variable": "hydra.ext.go.syntax.TypeConstraint"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.TypeConstraint",
-        "type": {"wrap": {"variable": "hydra.ext.go.syntax.TypeElem"}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"variable": "hydra.ext.go.syntax.TypeElem"}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.FunctionDecl",
         "type": {
-          "record": [
-            {
-              "name": "name",
-              "type": {"variable": "hydra.ext.go.syntax.Identifier"}},
-            {
-              "name": "typeParams",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.TypeParameters"}}},
-            {
-              "name": "signature",
-              "type": {"variable": "hydra.ext.go.syntax.Signature"}},
-            {
-              "name": "body",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.FunctionBody"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "name",
+                "type": {"variable": "hydra.ext.go.syntax.Identifier"}},
+              {
+                "name": "typeParams",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.TypeParameters"}}},
+              {
+                "name": "signature",
+                "type": {"variable": "hydra.ext.go.syntax.Signature"}},
+              {
+                "name": "body",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.FunctionBody"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.FunctionBody",
-        "type": {"wrap": {"variable": "hydra.ext.go.syntax.Block"}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"variable": "hydra.ext.go.syntax.Block"}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.MethodDecl",
         "type": {
-          "record": [
-            {
-              "name": "receiver",
-              "type": {"variable": "hydra.ext.go.syntax.Receiver"}},
-            {
-              "name": "name",
-              "type": {"variable": "hydra.ext.go.syntax.Identifier"}},
-            {
-              "name": "signature",
-              "type": {"variable": "hydra.ext.go.syntax.Signature"}},
-            {
-              "name": "body",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.FunctionBody"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "receiver",
+                "type": {"variable": "hydra.ext.go.syntax.Receiver"}},
+              {
+                "name": "name",
+                "type": {"variable": "hydra.ext.go.syntax.Identifier"}},
+              {
+                "name": "signature",
+                "type": {"variable": "hydra.ext.go.syntax.Signature"}},
+              {
+                "name": "body",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.FunctionBody"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.Receiver",
         "type": {
-          "record": [
-            {
-              "name": "name",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.Identifier"}}},
-            {"name": "type", "type": {"variable": "hydra.ext.go.syntax.Type"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "name",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.Identifier"}}},
+              {"name": "type", "type": {"variable": "hydra.ext.go.syntax.Type"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.Type",
         "type": {
-          "union": [
-            {"name": "name", "type": {"variable": "hydra.ext.go.syntax.TypeName"}},
-            {
-              "name": "literal",
-              "type": {"variable": "hydra.ext.go.syntax.TypeLit"}},
-            {"name": "paren", "type": {"variable": "hydra.ext.go.syntax.Type"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {"name": "name", "type": {"variable": "hydra.ext.go.syntax.TypeName"}},
+              {
+                "name": "literal",
+                "type": {"variable": "hydra.ext.go.syntax.TypeLit"}},
+              {"name": "paren", "type": {"variable": "hydra.ext.go.syntax.Type"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.TypeName",
         "type": {
-          "record": [
-            {
-              "name": "name",
-              "type": {"variable": "hydra.ext.go.syntax.QualifiedIdent"}},
-            {
-              "name": "typeArgs",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.Type"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "name",
+                "type": {"variable": "hydra.ext.go.syntax.QualifiedIdent"}},
+              {
+                "name": "typeArgs",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.Type"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.QualifiedIdent",
         "type": {
-          "record": [
-            {
-              "name": "package",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.Identifier"}}},
-            {
-              "name": "name",
-              "type": {"variable": "hydra.ext.go.syntax.Identifier"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "package",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.Identifier"}}},
+              {
+                "name": "name",
+                "type": {"variable": "hydra.ext.go.syntax.Identifier"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.TypeLit",
         "type": {
-          "union": [
-            {
-              "name": "array",
-              "type": {"variable": "hydra.ext.go.syntax.ArrayType"}},
-            {
-              "name": "struct",
-              "type": {"variable": "hydra.ext.go.syntax.StructType"}},
-            {
-              "name": "pointer",
-              "type": {"variable": "hydra.ext.go.syntax.PointerType"}},
-            {
-              "name": "function",
-              "type": {"variable": "hydra.ext.go.syntax.FunctionType"}},
-            {
-              "name": "interface",
-              "type": {"variable": "hydra.ext.go.syntax.InterfaceType"}},
-            {
-              "name": "slice",
-              "type": {"variable": "hydra.ext.go.syntax.SliceType"}},
-            {"name": "map", "type": {"variable": "hydra.ext.go.syntax.MapType"}},
-            {
-              "name": "channel",
-              "type": {"variable": "hydra.ext.go.syntax.ChannelType"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "array",
+                "type": {"variable": "hydra.ext.go.syntax.ArrayType"}},
+              {
+                "name": "struct",
+                "type": {"variable": "hydra.ext.go.syntax.StructType"}},
+              {
+                "name": "pointer",
+                "type": {"variable": "hydra.ext.go.syntax.PointerType"}},
+              {
+                "name": "function",
+                "type": {"variable": "hydra.ext.go.syntax.FunctionType"}},
+              {
+                "name": "interface",
+                "type": {"variable": "hydra.ext.go.syntax.InterfaceType"}},
+              {
+                "name": "slice",
+                "type": {"variable": "hydra.ext.go.syntax.SliceType"}},
+              {"name": "map", "type": {"variable": "hydra.ext.go.syntax.MapType"}},
+              {
+                "name": "channel",
+                "type": {"variable": "hydra.ext.go.syntax.ChannelType"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.ArrayType",
         "type": {
-          "record": [
-            {
-              "name": "length",
-              "type": {"variable": "hydra.ext.go.syntax.Expression"}},
-            {"name": "element", "type": {"variable": "hydra.ext.go.syntax.Type"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "length",
+                "type": {"variable": "hydra.ext.go.syntax.Expression"}},
+              {"name": "element", "type": {"variable": "hydra.ext.go.syntax.Type"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.SliceType",
-        "type": {"wrap": {"variable": "hydra.ext.go.syntax.Type"}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"variable": "hydra.ext.go.syntax.Type"}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.StructType",
-        "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.FieldDecl"}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.FieldDecl"}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.FieldDecl",
         "type": {
-          "union": [
-            {
-              "name": "named",
-              "type": {"variable": "hydra.ext.go.syntax.NamedField"}},
-            {
-              "name": "embedded",
-              "type": {"variable": "hydra.ext.go.syntax.EmbeddedField"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "named",
+                "type": {"variable": "hydra.ext.go.syntax.NamedField"}},
+              {
+                "name": "embedded",
+                "type": {"variable": "hydra.ext.go.syntax.EmbeddedField"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.NamedField",
         "type": {
-          "record": [
-            {
-              "name": "names",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.Identifier"}}},
-            {"name": "type", "type": {"variable": "hydra.ext.go.syntax.Type"}},
-            {
-              "name": "tag",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.Tag"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "names",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.Identifier"}}},
+              {"name": "type", "type": {"variable": "hydra.ext.go.syntax.Type"}},
+              {
+                "name": "tag",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.Tag"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.EmbeddedField",
         "type": {
-          "record": [
-            {"name": "pointer", "type": {"literal": {"boolean": {}}}},
-            {"name": "type", "type": {"variable": "hydra.ext.go.syntax.TypeName"}},
-            {
-              "name": "tag",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.Tag"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {"name": "pointer", "type": {"literal": {"boolean": {}}}},
+              {"name": "type", "type": {"variable": "hydra.ext.go.syntax.TypeName"}},
+              {
+                "name": "tag",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.Tag"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.Tag",
-        "type": {"wrap": {"variable": "hydra.ext.go.syntax.StringLit"}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"variable": "hydra.ext.go.syntax.StringLit"}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.PointerType",
-        "type": {"wrap": {"variable": "hydra.ext.go.syntax.Type"}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"variable": "hydra.ext.go.syntax.Type"}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.FunctionType",
-        "type": {"wrap": {"variable": "hydra.ext.go.syntax.Signature"}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"variable": "hydra.ext.go.syntax.Signature"}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.Signature",
         "type": {
-          "record": [
-            {
-              "name": "parameters",
-              "type": {"variable": "hydra.ext.go.syntax.Parameters"}},
-            {
-              "name": "result",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.Result"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "parameters",
+                "type": {"variable": "hydra.ext.go.syntax.Parameters"}},
+              {
+                "name": "result",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.Result"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.Result",
         "type": {
-          "union": [
-            {
-              "name": "parameters",
-              "type": {"variable": "hydra.ext.go.syntax.Parameters"}},
-            {"name": "type", "type": {"variable": "hydra.ext.go.syntax.Type"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "parameters",
+                "type": {"variable": "hydra.ext.go.syntax.Parameters"}},
+              {"name": "type", "type": {"variable": "hydra.ext.go.syntax.Type"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.Parameters",
-        "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.ParameterDecl"}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.ParameterDecl"}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.ParameterDecl",
         "type": {
-          "record": [
-            {
-              "name": "names",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.Identifier"}}},
-            {"name": "variadic", "type": {"literal": {"boolean": {}}}},
-            {"name": "type", "type": {"variable": "hydra.ext.go.syntax.Type"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "names",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.Identifier"}}},
+              {"name": "variadic", "type": {"literal": {"boolean": {}}}},
+              {"name": "type", "type": {"variable": "hydra.ext.go.syntax.Type"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.InterfaceType",
-        "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.InterfaceElem"}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.InterfaceElem"}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.InterfaceElem",
         "type": {
-          "union": [
-            {
-              "name": "method",
-              "type": {"variable": "hydra.ext.go.syntax.MethodElem"}},
-            {"name": "type", "type": {"variable": "hydra.ext.go.syntax.TypeElem"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "method",
+                "type": {"variable": "hydra.ext.go.syntax.MethodElem"}},
+              {"name": "type", "type": {"variable": "hydra.ext.go.syntax.TypeElem"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.MethodElem",
         "type": {
-          "record": [
-            {
-              "name": "name",
-              "type": {"variable": "hydra.ext.go.syntax.Identifier"}},
-            {
-              "name": "signature",
-              "type": {"variable": "hydra.ext.go.syntax.Signature"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "name",
+                "type": {"variable": "hydra.ext.go.syntax.Identifier"}},
+              {
+                "name": "signature",
+                "type": {"variable": "hydra.ext.go.syntax.Signature"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.TypeElem",
-        "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.TypeTerm"}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.TypeTerm"}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.TypeTerm",
         "type": {
-          "record": [
-            {"name": "underlying", "type": {"literal": {"boolean": {}}}},
-            {"name": "type", "type": {"variable": "hydra.ext.go.syntax.Type"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {"name": "underlying", "type": {"literal": {"boolean": {}}}},
+              {"name": "type", "type": {"variable": "hydra.ext.go.syntax.Type"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.MapType",
         "type": {
-          "record": [
-            {"name": "key", "type": {"variable": "hydra.ext.go.syntax.Type"}},
-            {"name": "value", "type": {"variable": "hydra.ext.go.syntax.Type"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {"name": "key", "type": {"variable": "hydra.ext.go.syntax.Type"}},
+              {"name": "value", "type": {"variable": "hydra.ext.go.syntax.Type"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.ChannelType",
         "type": {
-          "record": [
-            {
-              "name": "direction",
-              "type": {"variable": "hydra.ext.go.syntax.ChannelDirection"}},
-            {"name": "element", "type": {"variable": "hydra.ext.go.syntax.Type"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "direction",
+                "type": {"variable": "hydra.ext.go.syntax.ChannelDirection"}},
+              {"name": "element", "type": {"variable": "hydra.ext.go.syntax.Type"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.ChannelDirection",
         "type": {
-          "union": [
-            {"name": "bidirectional", "type": {"unit": {}}},
-            {"name": "send", "type": {"unit": {}}},
-            {"name": "receive", "type": {"unit": {}}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {"name": "bidirectional", "type": {"unit": {}}},
+              {"name": "send", "type": {"unit": {}}},
+              {"name": "receive", "type": {"unit": {}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.Expression",
         "type": {
-          "union": [
-            {
-              "name": "unary",
-              "type": {"variable": "hydra.ext.go.syntax.UnaryExpr"}},
-            {
-              "name": "binary",
-              "type": {"variable": "hydra.ext.go.syntax.BinaryExpr"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "unary",
+                "type": {"variable": "hydra.ext.go.syntax.UnaryExpr"}},
+              {
+                "name": "binary",
+                "type": {"variable": "hydra.ext.go.syntax.BinaryExpr"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.UnaryExpr",
         "type": {
-          "union": [
-            {
-              "name": "primary",
-              "type": {"variable": "hydra.ext.go.syntax.PrimaryExpr"}},
-            {
-              "name": "op",
-              "type": {"variable": "hydra.ext.go.syntax.UnaryOperation"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "primary",
+                "type": {"variable": "hydra.ext.go.syntax.PrimaryExpr"}},
+              {
+                "name": "op",
+                "type": {"variable": "hydra.ext.go.syntax.UnaryOperation"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.UnaryOperation",
         "type": {
-          "record": [
-            {"name": "op", "type": {"variable": "hydra.ext.go.syntax.UnaryOp"}},
-            {
-              "name": "operand",
-              "type": {"variable": "hydra.ext.go.syntax.UnaryExpr"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {"name": "op", "type": {"variable": "hydra.ext.go.syntax.UnaryOp"}},
+              {
+                "name": "operand",
+                "type": {"variable": "hydra.ext.go.syntax.UnaryExpr"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.BinaryExpr",
         "type": {
-          "record": [
-            {
-              "name": "left",
-              "type": {"variable": "hydra.ext.go.syntax.Expression"}},
-            {"name": "op", "type": {"variable": "hydra.ext.go.syntax.BinaryOp"}},
-            {
-              "name": "right",
-              "type": {"variable": "hydra.ext.go.syntax.Expression"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "left",
+                "type": {"variable": "hydra.ext.go.syntax.Expression"}},
+              {"name": "op", "type": {"variable": "hydra.ext.go.syntax.BinaryOp"}},
+              {
+                "name": "right",
+                "type": {"variable": "hydra.ext.go.syntax.Expression"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.BinaryOp",
         "type": {
-          "union": [
-            {"name": "or", "type": {"unit": {}}},
-            {"name": "and", "type": {"unit": {}}},
-            {"name": "equal", "type": {"unit": {}}},
-            {"name": "notEqual", "type": {"unit": {}}},
-            {"name": "less", "type": {"unit": {}}},
-            {"name": "lessEqual", "type": {"unit": {}}},
-            {"name": "greater", "type": {"unit": {}}},
-            {"name": "greaterEqual", "type": {"unit": {}}},
-            {"name": "add", "type": {"unit": {}}},
-            {"name": "subtract", "type": {"unit": {}}},
-            {"name": "bitwiseOr", "type": {"unit": {}}},
-            {"name": "bitwiseXor", "type": {"unit": {}}},
-            {"name": "multiply", "type": {"unit": {}}},
-            {"name": "divide", "type": {"unit": {}}},
-            {"name": "remainder", "type": {"unit": {}}},
-            {"name": "leftShift", "type": {"unit": {}}},
-            {"name": "rightShift", "type": {"unit": {}}},
-            {"name": "bitwiseAnd", "type": {"unit": {}}},
-            {"name": "bitClear", "type": {"unit": {}}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {"name": "or", "type": {"unit": {}}},
+              {"name": "and", "type": {"unit": {}}},
+              {"name": "equal", "type": {"unit": {}}},
+              {"name": "notEqual", "type": {"unit": {}}},
+              {"name": "less", "type": {"unit": {}}},
+              {"name": "lessEqual", "type": {"unit": {}}},
+              {"name": "greater", "type": {"unit": {}}},
+              {"name": "greaterEqual", "type": {"unit": {}}},
+              {"name": "add", "type": {"unit": {}}},
+              {"name": "subtract", "type": {"unit": {}}},
+              {"name": "bitwiseOr", "type": {"unit": {}}},
+              {"name": "bitwiseXor", "type": {"unit": {}}},
+              {"name": "multiply", "type": {"unit": {}}},
+              {"name": "divide", "type": {"unit": {}}},
+              {"name": "remainder", "type": {"unit": {}}},
+              {"name": "leftShift", "type": {"unit": {}}},
+              {"name": "rightShift", "type": {"unit": {}}},
+              {"name": "bitwiseAnd", "type": {"unit": {}}},
+              {"name": "bitClear", "type": {"unit": {}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.PrimaryExpr",
         "type": {
-          "union": [
-            {
-              "name": "operand",
-              "type": {"variable": "hydra.ext.go.syntax.Operand"}},
-            {
-              "name": "conversion",
-              "type": {"variable": "hydra.ext.go.syntax.Conversion"}},
-            {
-              "name": "methodExpr",
-              "type": {"variable": "hydra.ext.go.syntax.MethodExpr"}},
-            {
-              "name": "selector",
-              "type": {"variable": "hydra.ext.go.syntax.SelectorExpr"}},
-            {
-              "name": "index",
-              "type": {"variable": "hydra.ext.go.syntax.IndexExpr"}},
-            {
-              "name": "slice",
-              "type": {"variable": "hydra.ext.go.syntax.SliceExpr"}},
-            {
-              "name": "typeAssertion",
-              "type": {"variable": "hydra.ext.go.syntax.TypeAssertionExpr"}},
-            {"name": "call", "type": {"variable": "hydra.ext.go.syntax.CallExpr"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "operand",
+                "type": {"variable": "hydra.ext.go.syntax.Operand"}},
+              {
+                "name": "conversion",
+                "type": {"variable": "hydra.ext.go.syntax.Conversion"}},
+              {
+                "name": "methodExpr",
+                "type": {"variable": "hydra.ext.go.syntax.MethodExpr"}},
+              {
+                "name": "selector",
+                "type": {"variable": "hydra.ext.go.syntax.SelectorExpr"}},
+              {
+                "name": "index",
+                "type": {"variable": "hydra.ext.go.syntax.IndexExpr"}},
+              {
+                "name": "slice",
+                "type": {"variable": "hydra.ext.go.syntax.SliceExpr"}},
+              {
+                "name": "typeAssertion",
+                "type": {"variable": "hydra.ext.go.syntax.TypeAssertionExpr"}},
+              {"name": "call", "type": {"variable": "hydra.ext.go.syntax.CallExpr"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.SelectorExpr",
         "type": {
-          "record": [
-            {
-              "name": "expr",
-              "type": {"variable": "hydra.ext.go.syntax.PrimaryExpr"}},
-            {
-              "name": "selector",
-              "type": {"variable": "hydra.ext.go.syntax.Identifier"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "expr",
+                "type": {"variable": "hydra.ext.go.syntax.PrimaryExpr"}},
+              {
+                "name": "selector",
+                "type": {"variable": "hydra.ext.go.syntax.Identifier"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.IndexExpr",
         "type": {
-          "record": [
-            {
-              "name": "expr",
-              "type": {"variable": "hydra.ext.go.syntax.PrimaryExpr"}},
-            {
-              "name": "index",
-              "type": {"variable": "hydra.ext.go.syntax.Expression"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "expr",
+                "type": {"variable": "hydra.ext.go.syntax.PrimaryExpr"}},
+              {
+                "name": "index",
+                "type": {"variable": "hydra.ext.go.syntax.Expression"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.SliceExpr",
         "type": {
-          "record": [
-            {
-              "name": "expr",
-              "type": {"variable": "hydra.ext.go.syntax.PrimaryExpr"}},
-            {"name": "slice", "type": {"variable": "hydra.ext.go.syntax.Slice"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "expr",
+                "type": {"variable": "hydra.ext.go.syntax.PrimaryExpr"}},
+              {"name": "slice", "type": {"variable": "hydra.ext.go.syntax.Slice"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.TypeAssertionExpr",
         "type": {
-          "record": [
-            {
-              "name": "expr",
-              "type": {"variable": "hydra.ext.go.syntax.PrimaryExpr"}},
-            {"name": "type", "type": {"variable": "hydra.ext.go.syntax.Type"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "expr",
+                "type": {"variable": "hydra.ext.go.syntax.PrimaryExpr"}},
+              {"name": "type", "type": {"variable": "hydra.ext.go.syntax.Type"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.CallExpr",
         "type": {
-          "record": [
-            {
-              "name": "function",
-              "type": {"variable": "hydra.ext.go.syntax.PrimaryExpr"}},
-            {
-              "name": "arguments",
-              "type": {"variable": "hydra.ext.go.syntax.Arguments"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "function",
+                "type": {"variable": "hydra.ext.go.syntax.PrimaryExpr"}},
+              {
+                "name": "arguments",
+                "type": {"variable": "hydra.ext.go.syntax.Arguments"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.Operand",
         "type": {
-          "union": [
-            {
-              "name": "literal",
-              "type": {"variable": "hydra.ext.go.syntax.Literal"}},
-            {
-              "name": "name",
-              "type": {"variable": "hydra.ext.go.syntax.OperandName"}},
-            {
-              "name": "paren",
-              "type": {"variable": "hydra.ext.go.syntax.Expression"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "literal",
+                "type": {"variable": "hydra.ext.go.syntax.Literal"}},
+              {
+                "name": "name",
+                "type": {"variable": "hydra.ext.go.syntax.OperandName"}},
+              {
+                "name": "paren",
+                "type": {"variable": "hydra.ext.go.syntax.Expression"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.OperandName",
         "type": {
-          "record": [
-            {
-              "name": "name",
-              "type": {"variable": "hydra.ext.go.syntax.QualifiedIdent"}},
-            {
-              "name": "typeArgs",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.Type"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "name",
+                "type": {"variable": "hydra.ext.go.syntax.QualifiedIdent"}},
+              {
+                "name": "typeArgs",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.Type"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.Literal",
         "type": {
-          "union": [
-            {
-              "name": "basic",
-              "type": {"variable": "hydra.ext.go.syntax.BasicLit"}},
-            {
-              "name": "composite",
-              "type": {"variable": "hydra.ext.go.syntax.CompositeLit"}},
-            {
-              "name": "function",
-              "type": {"variable": "hydra.ext.go.syntax.FunctionLit"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "basic",
+                "type": {"variable": "hydra.ext.go.syntax.BasicLit"}},
+              {
+                "name": "composite",
+                "type": {"variable": "hydra.ext.go.syntax.CompositeLit"}},
+              {
+                "name": "function",
+                "type": {"variable": "hydra.ext.go.syntax.FunctionLit"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.BasicLit",
         "type": {
-          "union": [
-            {"name": "int", "type": {"variable": "hydra.ext.go.syntax.IntLit"}},
-            {
-              "name": "float",
-              "type": {"variable": "hydra.ext.go.syntax.FloatLit"}},
-            {
-              "name": "imaginary",
-              "type": {"variable": "hydra.ext.go.syntax.ImaginaryLit"}},
-            {"name": "rune", "type": {"variable": "hydra.ext.go.syntax.RuneLit"}},
-            {
-              "name": "string",
-              "type": {"variable": "hydra.ext.go.syntax.StringLit"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {"name": "int", "type": {"variable": "hydra.ext.go.syntax.IntLit"}},
+              {
+                "name": "float",
+                "type": {"variable": "hydra.ext.go.syntax.FloatLit"}},
+              {
+                "name": "imaginary",
+                "type": {"variable": "hydra.ext.go.syntax.ImaginaryLit"}},
+              {"name": "rune", "type": {"variable": "hydra.ext.go.syntax.RuneLit"}},
+              {
+                "name": "string",
+                "type": {"variable": "hydra.ext.go.syntax.StringLit"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.CompositeLit",
         "type": {
-          "record": [
-            {
-              "name": "type",
-              "type": {"variable": "hydra.ext.go.syntax.LiteralType"}},
-            {
-              "name": "value",
-              "type": {"variable": "hydra.ext.go.syntax.LiteralValue"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "type",
+                "type": {"variable": "hydra.ext.go.syntax.LiteralType"}},
+              {
+                "name": "value",
+                "type": {"variable": "hydra.ext.go.syntax.LiteralValue"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.LiteralType",
         "type": {
-          "union": [
-            {
-              "name": "struct",
-              "type": {"variable": "hydra.ext.go.syntax.StructType"}},
-            {
-              "name": "array",
-              "type": {"variable": "hydra.ext.go.syntax.ArrayType"}},
-            {
-              "name": "inferredArray",
-              "type": {"variable": "hydra.ext.go.syntax.Type"}},
-            {
-              "name": "slice",
-              "type": {"variable": "hydra.ext.go.syntax.SliceType"}},
-            {"name": "map", "type": {"variable": "hydra.ext.go.syntax.MapType"}},
-            {"name": "name", "type": {"variable": "hydra.ext.go.syntax.TypeName"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "struct",
+                "type": {"variable": "hydra.ext.go.syntax.StructType"}},
+              {
+                "name": "array",
+                "type": {"variable": "hydra.ext.go.syntax.ArrayType"}},
+              {
+                "name": "inferredArray",
+                "type": {"variable": "hydra.ext.go.syntax.Type"}},
+              {
+                "name": "slice",
+                "type": {"variable": "hydra.ext.go.syntax.SliceType"}},
+              {"name": "map", "type": {"variable": "hydra.ext.go.syntax.MapType"}},
+              {"name": "name", "type": {"variable": "hydra.ext.go.syntax.TypeName"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.LiteralValue",
-        "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.KeyedElement"}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.KeyedElement"}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.ElementList",
-        "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.KeyedElement"}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.KeyedElement"}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.KeyedElement",
         "type": {
-          "record": [
-            {
-              "name": "key",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.Key"}}},
-            {
-              "name": "element",
-              "type": {"variable": "hydra.ext.go.syntax.Element"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "key",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.Key"}}},
+              {
+                "name": "element",
+                "type": {"variable": "hydra.ext.go.syntax.Element"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.Key",
         "type": {
-          "union": [
-            {
-              "name": "field",
-              "type": {"variable": "hydra.ext.go.syntax.Identifier"}},
-            {
-              "name": "expression",
-              "type": {"variable": "hydra.ext.go.syntax.Expression"}},
-            {
-              "name": "literal",
-              "type": {"variable": "hydra.ext.go.syntax.LiteralValue"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "field",
+                "type": {"variable": "hydra.ext.go.syntax.Identifier"}},
+              {
+                "name": "expression",
+                "type": {"variable": "hydra.ext.go.syntax.Expression"}},
+              {
+                "name": "literal",
+                "type": {"variable": "hydra.ext.go.syntax.LiteralValue"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.Element",
         "type": {
-          "union": [
-            {
-              "name": "expression",
-              "type": {"variable": "hydra.ext.go.syntax.Expression"}},
-            {
-              "name": "literal",
-              "type": {"variable": "hydra.ext.go.syntax.LiteralValue"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "expression",
+                "type": {"variable": "hydra.ext.go.syntax.Expression"}},
+              {
+                "name": "literal",
+                "type": {"variable": "hydra.ext.go.syntax.LiteralValue"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.FunctionLit",
         "type": {
-          "record": [
-            {
-              "name": "signature",
-              "type": {"variable": "hydra.ext.go.syntax.Signature"}},
-            {
-              "name": "body",
-              "type": {"variable": "hydra.ext.go.syntax.FunctionBody"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "signature",
+                "type": {"variable": "hydra.ext.go.syntax.Signature"}},
+              {
+                "name": "body",
+                "type": {"variable": "hydra.ext.go.syntax.FunctionBody"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.Selector",
-        "type": {"wrap": {"variable": "hydra.ext.go.syntax.Identifier"}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"variable": "hydra.ext.go.syntax.Identifier"}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.Index",
-        "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.Expression"}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.Expression"}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.Slice",
         "type": {
-          "union": [
-            {
-              "name": "simple",
-              "type": {"variable": "hydra.ext.go.syntax.SimpleSlice"}},
-            {
-              "name": "full",
-              "type": {"variable": "hydra.ext.go.syntax.FullSlice"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "simple",
+                "type": {"variable": "hydra.ext.go.syntax.SimpleSlice"}},
+              {
+                "name": "full",
+                "type": {"variable": "hydra.ext.go.syntax.FullSlice"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.SimpleSlice",
         "type": {
-          "record": [
-            {
-              "name": "low",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.Expression"}}},
-            {
-              "name": "high",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.Expression"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "low",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.Expression"}}},
+              {
+                "name": "high",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.Expression"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.FullSlice",
         "type": {
-          "record": [
-            {
-              "name": "low",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.Expression"}}},
-            {
-              "name": "high",
-              "type": {"variable": "hydra.ext.go.syntax.Expression"}},
-            {
-              "name": "max",
-              "type": {"variable": "hydra.ext.go.syntax.Expression"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "low",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.Expression"}}},
+              {
+                "name": "high",
+                "type": {"variable": "hydra.ext.go.syntax.Expression"}},
+              {
+                "name": "max",
+                "type": {"variable": "hydra.ext.go.syntax.Expression"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.TypeAssertion",
-        "type": {"wrap": {"variable": "hydra.ext.go.syntax.Type"}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"variable": "hydra.ext.go.syntax.Type"}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.Arguments",
         "type": {
-          "record": [
-            {
-              "name": "typeArg",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.Type"}}},
-            {
-              "name": "expressions",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.Expression"}}},
-            {"name": "ellipsis", "type": {"literal": {"boolean": {}}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "typeArg",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.Type"}}},
+              {
+                "name": "expressions",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.Expression"}}},
+              {"name": "ellipsis", "type": {"literal": {"boolean": {}}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.MethodExpr",
         "type": {
-          "record": [
-            {"name": "receiver", "type": {"variable": "hydra.ext.go.syntax.Type"}},
-            {
-              "name": "method",
-              "type": {"variable": "hydra.ext.go.syntax.Identifier"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {"name": "receiver", "type": {"variable": "hydra.ext.go.syntax.Type"}},
+              {
+                "name": "method",
+                "type": {"variable": "hydra.ext.go.syntax.Identifier"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.Conversion",
         "type": {
-          "record": [
-            {"name": "type", "type": {"variable": "hydra.ext.go.syntax.Type"}},
-            {
-              "name": "expression",
-              "type": {"variable": "hydra.ext.go.syntax.Expression"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {"name": "type", "type": {"variable": "hydra.ext.go.syntax.Type"}},
+              {
+                "name": "expression",
+                "type": {"variable": "hydra.ext.go.syntax.Expression"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.Statement",
         "type": {
-          "union": [
-            {
-              "name": "declaration",
-              "type": {"variable": "hydra.ext.go.syntax.Declaration"}},
-            {
-              "name": "labeled",
-              "type": {"variable": "hydra.ext.go.syntax.LabeledStmt"}},
-            {
-              "name": "simple",
-              "type": {"variable": "hydra.ext.go.syntax.SimpleStmt"}},
-            {"name": "go", "type": {"variable": "hydra.ext.go.syntax.GoStmt"}},
-            {
-              "name": "return",
-              "type": {"variable": "hydra.ext.go.syntax.ReturnStmt"}},
-            {
-              "name": "break",
-              "type": {"variable": "hydra.ext.go.syntax.BreakStmt"}},
-            {
-              "name": "continue",
-              "type": {"variable": "hydra.ext.go.syntax.ContinueStmt"}},
-            {"name": "goto", "type": {"variable": "hydra.ext.go.syntax.GotoStmt"}},
-            {
-              "name": "fallthrough",
-              "type": {"variable": "hydra.ext.go.syntax.FallthroughStmt"}},
-            {"name": "block", "type": {"variable": "hydra.ext.go.syntax.Block"}},
-            {"name": "if", "type": {"variable": "hydra.ext.go.syntax.IfStmt"}},
-            {
-              "name": "switch",
-              "type": {"variable": "hydra.ext.go.syntax.SwitchStmt"}},
-            {
-              "name": "select",
-              "type": {"variable": "hydra.ext.go.syntax.SelectStmt"}},
-            {"name": "for", "type": {"variable": "hydra.ext.go.syntax.ForStmt"}},
-            {
-              "name": "defer",
-              "type": {"variable": "hydra.ext.go.syntax.DeferStmt"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "declaration",
+                "type": {"variable": "hydra.ext.go.syntax.Declaration"}},
+              {
+                "name": "labeled",
+                "type": {"variable": "hydra.ext.go.syntax.LabeledStmt"}},
+              {
+                "name": "simple",
+                "type": {"variable": "hydra.ext.go.syntax.SimpleStmt"}},
+              {"name": "go", "type": {"variable": "hydra.ext.go.syntax.GoStmt"}},
+              {
+                "name": "return",
+                "type": {"variable": "hydra.ext.go.syntax.ReturnStmt"}},
+              {
+                "name": "break",
+                "type": {"variable": "hydra.ext.go.syntax.BreakStmt"}},
+              {
+                "name": "continue",
+                "type": {"variable": "hydra.ext.go.syntax.ContinueStmt"}},
+              {"name": "goto", "type": {"variable": "hydra.ext.go.syntax.GotoStmt"}},
+              {
+                "name": "fallthrough",
+                "type": {"variable": "hydra.ext.go.syntax.FallthroughStmt"}},
+              {"name": "block", "type": {"variable": "hydra.ext.go.syntax.Block"}},
+              {"name": "if", "type": {"variable": "hydra.ext.go.syntax.IfStmt"}},
+              {
+                "name": "switch",
+                "type": {"variable": "hydra.ext.go.syntax.SwitchStmt"}},
+              {
+                "name": "select",
+                "type": {"variable": "hydra.ext.go.syntax.SelectStmt"}},
+              {"name": "for", "type": {"variable": "hydra.ext.go.syntax.ForStmt"}},
+              {
+                "name": "defer",
+                "type": {"variable": "hydra.ext.go.syntax.DeferStmt"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.SimpleStmt",
         "type": {
-          "union": [
-            {
-              "name": "empty",
-              "type": {"variable": "hydra.ext.go.syntax.EmptyStmt"}},
-            {
-              "name": "expression",
-              "type": {"variable": "hydra.ext.go.syntax.ExpressionStmt"}},
-            {"name": "send", "type": {"variable": "hydra.ext.go.syntax.SendStmt"}},
-            {
-              "name": "incDec",
-              "type": {"variable": "hydra.ext.go.syntax.IncDecStmt"}},
-            {
-              "name": "assignment",
-              "type": {"variable": "hydra.ext.go.syntax.Assignment"}},
-            {
-              "name": "shortVarDecl",
-              "type": {"variable": "hydra.ext.go.syntax.ShortVarDecl"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "empty",
+                "type": {"variable": "hydra.ext.go.syntax.EmptyStmt"}},
+              {
+                "name": "expression",
+                "type": {"variable": "hydra.ext.go.syntax.ExpressionStmt"}},
+              {"name": "send", "type": {"variable": "hydra.ext.go.syntax.SendStmt"}},
+              {
+                "name": "incDec",
+                "type": {"variable": "hydra.ext.go.syntax.IncDecStmt"}},
+              {
+                "name": "assignment",
+                "type": {"variable": "hydra.ext.go.syntax.Assignment"}},
+              {
+                "name": "shortVarDecl",
+                "type": {"variable": "hydra.ext.go.syntax.ShortVarDecl"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.EmptyStmt",
-        "type": {"wrap": {"unit": {}}}}},
+        "type": {"constraints": null, "type": {"wrap": {"unit": {}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.LabeledStmt",
         "type": {
-          "record": [
-            {
-              "name": "label",
-              "type": {"variable": "hydra.ext.go.syntax.Identifier"}},
-            {
-              "name": "statement",
-              "type": {"variable": "hydra.ext.go.syntax.Statement"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "label",
+                "type": {"variable": "hydra.ext.go.syntax.Identifier"}},
+              {
+                "name": "statement",
+                "type": {"variable": "hydra.ext.go.syntax.Statement"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.ExpressionStmt",
-        "type": {"wrap": {"variable": "hydra.ext.go.syntax.Expression"}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"variable": "hydra.ext.go.syntax.Expression"}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.SendStmt",
         "type": {
-          "record": [
-            {
-              "name": "channel",
-              "type": {"variable": "hydra.ext.go.syntax.Expression"}},
-            {
-              "name": "value",
-              "type": {"variable": "hydra.ext.go.syntax.Expression"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "channel",
+                "type": {"variable": "hydra.ext.go.syntax.Expression"}},
+              {
+                "name": "value",
+                "type": {"variable": "hydra.ext.go.syntax.Expression"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.IncDecStmt",
         "type": {
-          "record": [
-            {
-              "name": "expression",
-              "type": {"variable": "hydra.ext.go.syntax.Expression"}},
-            {"name": "increment", "type": {"literal": {"boolean": {}}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "expression",
+                "type": {"variable": "hydra.ext.go.syntax.Expression"}},
+              {"name": "increment", "type": {"literal": {"boolean": {}}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.Assignment",
         "type": {
-          "record": [
-            {
-              "name": "lhs",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.Expression"}}},
-            {"name": "op", "type": {"variable": "hydra.ext.go.syntax.AssignOp"}},
-            {
-              "name": "rhs",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.Expression"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "lhs",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.Expression"}}},
+              {"name": "op", "type": {"variable": "hydra.ext.go.syntax.AssignOp"}},
+              {
+                "name": "rhs",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.Expression"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.AssignOp",
         "type": {
-          "union": [
-            {"name": "simple", "type": {"unit": {}}},
-            {"name": "add", "type": {"variable": "hydra.ext.go.syntax.AddOp"}},
-            {"name": "mul", "type": {"variable": "hydra.ext.go.syntax.MulOp"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {"name": "simple", "type": {"unit": {}}},
+              {"name": "add", "type": {"variable": "hydra.ext.go.syntax.AddOp"}},
+              {"name": "mul", "type": {"variable": "hydra.ext.go.syntax.MulOp"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.IfStmt",
         "type": {
-          "record": [
-            {
-              "name": "init",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.SimpleStmt"}}},
-            {
-              "name": "condition",
-              "type": {"variable": "hydra.ext.go.syntax.Expression"}},
-            {"name": "then", "type": {"variable": "hydra.ext.go.syntax.Block"}},
-            {
-              "name": "else",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.ElseClause"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "init",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.SimpleStmt"}}},
+              {
+                "name": "condition",
+                "type": {"variable": "hydra.ext.go.syntax.Expression"}},
+              {"name": "then", "type": {"variable": "hydra.ext.go.syntax.Block"}},
+              {
+                "name": "else",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.ElseClause"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.ElseClause",
         "type": {
-          "union": [
-            {"name": "if", "type": {"variable": "hydra.ext.go.syntax.IfStmt"}},
-            {"name": "block", "type": {"variable": "hydra.ext.go.syntax.Block"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {"name": "if", "type": {"variable": "hydra.ext.go.syntax.IfStmt"}},
+              {"name": "block", "type": {"variable": "hydra.ext.go.syntax.Block"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.SwitchStmt",
         "type": {
-          "union": [
-            {
-              "name": "expression",
-              "type": {"variable": "hydra.ext.go.syntax.ExprSwitchStmt"}},
-            {
-              "name": "type",
-              "type": {"variable": "hydra.ext.go.syntax.TypeSwitchStmt"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "expression",
+                "type": {"variable": "hydra.ext.go.syntax.ExprSwitchStmt"}},
+              {
+                "name": "type",
+                "type": {"variable": "hydra.ext.go.syntax.TypeSwitchStmt"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.ExprSwitchStmt",
         "type": {
-          "record": [
-            {
-              "name": "init",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.SimpleStmt"}}},
-            {
-              "name": "expression",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.Expression"}}},
-            {
-              "name": "cases",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.ExprCaseClause"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "init",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.SimpleStmt"}}},
+              {
+                "name": "expression",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.Expression"}}},
+              {
+                "name": "cases",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.ExprCaseClause"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.ExprCaseClause",
         "type": {
-          "record": [
-            {
-              "name": "case",
-              "type": {"maybe": {"list": {"variable": "hydra.ext.go.syntax.Expression"}}}},
-            {
-              "name": "statements",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.Statement"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "case",
+                "type": {"maybe": {"list": {"variable": "hydra.ext.go.syntax.Expression"}}}},
+              {
+                "name": "statements",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.Statement"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.TypeSwitchStmt",
         "type": {
-          "record": [
-            {
-              "name": "init",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.SimpleStmt"}}},
-            {
-              "name": "guard",
-              "type": {"variable": "hydra.ext.go.syntax.TypeSwitchGuard"}},
-            {
-              "name": "cases",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.TypeCaseClause"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "init",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.SimpleStmt"}}},
+              {
+                "name": "guard",
+                "type": {"variable": "hydra.ext.go.syntax.TypeSwitchGuard"}},
+              {
+                "name": "cases",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.TypeCaseClause"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.TypeSwitchGuard",
         "type": {
-          "record": [
-            {
-              "name": "name",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.Identifier"}}},
-            {
-              "name": "expression",
-              "type": {"variable": "hydra.ext.go.syntax.PrimaryExpr"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "name",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.Identifier"}}},
+              {
+                "name": "expression",
+                "type": {"variable": "hydra.ext.go.syntax.PrimaryExpr"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.TypeCaseClause",
         "type": {
-          "record": [
-            {
-              "name": "case",
-              "type": {"maybe": {"list": {"variable": "hydra.ext.go.syntax.Type"}}}},
-            {
-              "name": "statements",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.Statement"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "case",
+                "type": {"maybe": {"list": {"variable": "hydra.ext.go.syntax.Type"}}}},
+              {
+                "name": "statements",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.Statement"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.ForStmt",
         "type": {
-          "record": [
-            {
-              "name": "clause",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.ForClauseOrRange"}}},
-            {"name": "body", "type": {"variable": "hydra.ext.go.syntax.Block"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "clause",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.ForClauseOrRange"}}},
+              {"name": "body", "type": {"variable": "hydra.ext.go.syntax.Block"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.ForClauseOrRange",
         "type": {
-          "union": [
-            {
-              "name": "condition",
-              "type": {"variable": "hydra.ext.go.syntax.Expression"}},
-            {
-              "name": "clause",
-              "type": {"variable": "hydra.ext.go.syntax.ForClause"}},
-            {
-              "name": "range",
-              "type": {"variable": "hydra.ext.go.syntax.RangeClause"}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "condition",
+                "type": {"variable": "hydra.ext.go.syntax.Expression"}},
+              {
+                "name": "clause",
+                "type": {"variable": "hydra.ext.go.syntax.ForClause"}},
+              {
+                "name": "range",
+                "type": {"variable": "hydra.ext.go.syntax.RangeClause"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.ForClause",
         "type": {
-          "record": [
-            {
-              "name": "init",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.SimpleStmt"}}},
-            {
-              "name": "condition",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.Expression"}}},
-            {
-              "name": "post",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.SimpleStmt"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "init",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.SimpleStmt"}}},
+              {
+                "name": "condition",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.Expression"}}},
+              {
+                "name": "post",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.SimpleStmt"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.RangeClause",
         "type": {
-          "record": [
-            {
-              "name": "vars",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.RangeVars"}}},
-            {
-              "name": "expression",
-              "type": {"variable": "hydra.ext.go.syntax.Expression"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "vars",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.RangeVars"}}},
+              {
+                "name": "expression",
+                "type": {"variable": "hydra.ext.go.syntax.Expression"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.RangeVars",
         "type": {
-          "union": [
-            {
-              "name": "assign",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.Expression"}}},
-            {
-              "name": "declare",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.Identifier"}}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {
+                "name": "assign",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.Expression"}}},
+              {
+                "name": "declare",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.Identifier"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.GoStmt",
-        "type": {"wrap": {"variable": "hydra.ext.go.syntax.Expression"}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"variable": "hydra.ext.go.syntax.Expression"}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.SelectStmt",
-        "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.CommClause"}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.CommClause"}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.CommClause",
         "type": {
-          "record": [
-            {"name": "case", "type": {"variable": "hydra.ext.go.syntax.CommCase"}},
-            {
-              "name": "statements",
-              "type": {"list": {"variable": "hydra.ext.go.syntax.Statement"}}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {"name": "case", "type": {"variable": "hydra.ext.go.syntax.CommCase"}},
+              {
+                "name": "statements",
+                "type": {"list": {"variable": "hydra.ext.go.syntax.Statement"}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.CommCase",
         "type": {
-          "union": [
-            {"name": "send", "type": {"variable": "hydra.ext.go.syntax.SendStmt"}},
-            {
-              "name": "receive",
-              "type": {"variable": "hydra.ext.go.syntax.ReceiveCase"}},
-            {"name": "default", "type": {"unit": {}}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {"name": "send", "type": {"variable": "hydra.ext.go.syntax.SendStmt"}},
+              {
+                "name": "receive",
+                "type": {"variable": "hydra.ext.go.syntax.ReceiveCase"}},
+              {"name": "default", "type": {"unit": {}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.ReceiveCase",
         "type": {
-          "record": [
-            {
-              "name": "vars",
-              "type": {"maybe": {"variable": "hydra.ext.go.syntax.RangeVars"}}},
-            {
-              "name": "expression",
-              "type": {"variable": "hydra.ext.go.syntax.Expression"}}]}}},
+          "constraints": null,
+          "type": {
+            "record": [
+              {
+                "name": "vars",
+                "type": {"maybe": {"variable": "hydra.ext.go.syntax.RangeVars"}}},
+              {
+                "name": "expression",
+                "type": {"variable": "hydra.ext.go.syntax.Expression"}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.ReturnStmt",
-        "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.Expression"}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.Expression"}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.BreakStmt",
-        "type": {"wrap": {"maybe": {"variable": "hydra.ext.go.syntax.Identifier"}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"maybe": {"variable": "hydra.ext.go.syntax.Identifier"}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.ContinueStmt",
-        "type": {"wrap": {"maybe": {"variable": "hydra.ext.go.syntax.Identifier"}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"maybe": {"variable": "hydra.ext.go.syntax.Identifier"}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.GotoStmt",
-        "type": {"wrap": {"variable": "hydra.ext.go.syntax.Identifier"}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"variable": "hydra.ext.go.syntax.Identifier"}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.FallthroughStmt",
-        "type": {"wrap": {"unit": {}}}}},
+        "type": {"constraints": null, "type": {"wrap": {"unit": {}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.DeferStmt",
-        "type": {"wrap": {"variable": "hydra.ext.go.syntax.Expression"}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"variable": "hydra.ext.go.syntax.Expression"}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.Block",
-        "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.Statement"}}}}},
+        "type": {
+          "constraints": null,
+          "type": {"wrap": {"list": {"variable": "hydra.ext.go.syntax.Statement"}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.UnaryOp",
         "type": {
-          "union": [
-            {"name": "plus", "type": {"unit": {}}},
-            {"name": "minus", "type": {"unit": {}}},
-            {"name": "not", "type": {"unit": {}}},
-            {"name": "xor", "type": {"unit": {}}},
-            {"name": "deref", "type": {"unit": {}}},
-            {"name": "addressOf", "type": {"unit": {}}},
-            {"name": "receive", "type": {"unit": {}}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {"name": "plus", "type": {"unit": {}}},
+              {"name": "minus", "type": {"unit": {}}},
+              {"name": "not", "type": {"unit": {}}},
+              {"name": "xor", "type": {"unit": {}}},
+              {"name": "deref", "type": {"unit": {}}},
+              {"name": "addressOf", "type": {"unit": {}}},
+              {"name": "receive", "type": {"unit": {}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.MulOp",
         "type": {
-          "union": [
-            {"name": "multiply", "type": {"unit": {}}},
-            {"name": "divide", "type": {"unit": {}}},
-            {"name": "remainder", "type": {"unit": {}}},
-            {"name": "leftShift", "type": {"unit": {}}},
-            {"name": "rightShift", "type": {"unit": {}}},
-            {"name": "bitwiseAnd", "type": {"unit": {}}},
-            {"name": "bitClear", "type": {"unit": {}}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {"name": "multiply", "type": {"unit": {}}},
+              {"name": "divide", "type": {"unit": {}}},
+              {"name": "remainder", "type": {"unit": {}}},
+              {"name": "leftShift", "type": {"unit": {}}},
+              {"name": "rightShift", "type": {"unit": {}}},
+              {"name": "bitwiseAnd", "type": {"unit": {}}},
+              {"name": "bitClear", "type": {"unit": {}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.AddOp",
         "type": {
-          "union": [
-            {"name": "add", "type": {"unit": {}}},
-            {"name": "subtract", "type": {"unit": {}}},
-            {"name": "bitwiseOr", "type": {"unit": {}}},
-            {"name": "bitwiseXor", "type": {"unit": {}}}]}}},
+          "constraints": null,
+          "type": {
+            "union": [
+              {"name": "add", "type": {"unit": {}}},
+              {"name": "subtract", "type": {"unit": {}}},
+              {"name": "bitwiseOr", "type": {"unit": {}}},
+              {"name": "bitwiseXor", "type": {"unit": {}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.go.syntax.RelOp",
         "type": {
-          "union": [
-            {"name": "equal", "type": {"unit": {}}},
-            {"name": "notEqual", "type": {"unit": {}}},
-            {"name": "less", "type": {"unit": {}}},
-            {"name": "lessEqual", "type": {"unit": {}}},
-            {"name": "greater", "type": {"unit": {}}},
-            {"name": "greaterEqual", "type": {"unit": {}}}]}}}],
+          "constraints": null,
+          "type": {
+            "union": [
+              {"name": "equal", "type": {"unit": {}}},
+              {"name": "notEqual", "type": {"unit": {}}},
+              {"name": "less", "type": {"unit": {}}},
+              {"name": "lessEqual", "type": {"unit": {}}},
+              {"name": "greater", "type": {"unit": {}}},
+              {"name": "greaterEqual", "type": {"unit": {}}}]},
+          "variables": []}}}],
   "description": [
     "A Go syntax model, based on the Go Language Specification retrieved on 2025-02-05 from https://go.dev/ref/spec"],
   "namespace": "hydra.ext.go.syntax",

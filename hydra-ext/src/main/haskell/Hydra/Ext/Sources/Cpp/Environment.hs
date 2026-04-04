@@ -8,7 +8,7 @@ import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types                 ((>:))
 import qualified Hydra.Dsl.Types                 as T
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
-import qualified Hydra.Sources.Kernel.Types.Module as ModuleTypes
+import qualified Hydra.Sources.Kernel.Types.Packaging as ModuleTypes
 import qualified Hydra.Ext.Sources.Cpp.Syntax as CppSyntax
 
 ns :: Namespace

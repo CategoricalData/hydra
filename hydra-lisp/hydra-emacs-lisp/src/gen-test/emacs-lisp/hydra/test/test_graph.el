@@ -6,7 +6,7 @@
 
 (require 'hydra.lib.maps)
 
-(require 'hydra.module)
+(require 'hydra.packaging)
 
 (require 'hydra.test.testTerms)
 

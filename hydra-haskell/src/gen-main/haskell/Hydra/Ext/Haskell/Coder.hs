@@ -34,8 +34,8 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Predicates as Predicates
 import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Rewriting as Rewriting
@@ -49,7 +49,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Adapt a Hydra type to Haskell's type system and encode it
-adaptTypeToHaskellAndEncode :: Module.Namespaces Syntax.ModuleName -> Core.Type -> Context.Context -> t0 -> Either (Context.InContext Errors.Error) Syntax.Type
+adaptTypeToHaskellAndEncode :: Packaging.Namespaces Syntax.ModuleName -> Core.Type -> Context.Context -> t0 -> Either (Context.InContext Errors.Error) Syntax.Type
 adaptTypeToHaskellAndEncode namespaces typ cx g =
 
       let enc = \t -> encodeType namespaces t cx g
@@ -73,17 +73,17 @@ constantForTypeName :: Core.Name -> String
 constantForTypeName tname = Strings.cat2 "_" (Names.localNameOf tname)
 
 -- | Construct a Haskell module from a Hydra module and its definitions
-constructModule :: Module.Namespaces Syntax.ModuleName -> Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Module
+constructModule :: Packaging.Namespaces Syntax.ModuleName -> Packaging.Module -> [Packaging.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Module
 constructModule namespaces mod defs cx g =
 
-      let h = \namespace -> Module.unNamespace namespace
+      let h = \namespace -> Packaging.unNamespace namespace
           createDeclarations =
                   \def -> case def of
-                    Module.DefinitionType v0 ->
-                      let name = Module.typeDefinitionName v0
-                          typ = Module.typeDefinitionType v0
+                    Packaging.DefinitionType v0 ->
+                      let name = Packaging.typeDefinitionName v0
+                          typ = Core.typeSchemeType (Packaging.typeDefinitionType v0)
                       in (toTypeDeclarationsFrom namespaces name typ cx g)
-                    Module.DefinitionTerm v0 -> Eithers.bind (toDataDeclaration namespaces v0 cx g) (\d -> Right [
+                    Packaging.DefinitionTerm v0 -> Eithers.bind (toDataDeclaration namespaces v0 cx g) (\d -> Right [
                       d])
           importName =
                   \name -> Syntax.ModuleName (Strings.intercalate "." (Lists.map Formatting.capitalize (Strings.splitOn "." name)))
@@ -100,7 +100,7 @@ constructModule namespaces mod defs cx g =
                                 Syntax.importModule = (importName name),
                                 Syntax.importAs = (Just alias),
                                 Syntax.importSpec = Nothing}
-                    in (Lists.map toImport (Maps.toList (Module.namespacesMapping namespaces)))
+                    in (Lists.map toImport (Maps.toList (Packaging.namespacesMapping namespaces)))
           meta = gatherMetadata defs
           condImport = \flag -> \triple -> Logic.ifElse flag [
                 triple] []
@@ -140,11 +140,11 @@ constructModule namespaces mod defs cx g =
                         (("Hydra.Lib.Literals", (Just "Literals")), [])] [])]))
       in (Eithers.bind (Eithers.mapList createDeclarations defs) (\declLists ->
         let decls = Lists.concat declLists
-            mc = Module.moduleDescription mod
+            mc = Packaging.moduleDescription mod
         in (Right (Syntax.Module {
           Syntax.moduleHead = (Just (Syntax.ModuleHead {
             Syntax.moduleHeadComments = mc,
-            Syntax.moduleHeadName = (importName (h (Module.moduleNamespace mod))),
+            Syntax.moduleHeadName = (importName (h (Packaging.moduleNamespace mod))),
             Syntax.moduleHeadExports = []})),
           Syntax.moduleImports = imports,
           Syntax.moduleDeclarations = decls}))))
@@ -159,7 +159,7 @@ emptyMetadata =
       Environment.haskellModuleMetadataUsesSet = False}
 
 -- | Encode a Hydra case statement as a Haskell case expression with a given scrutinee
-encodeCaseExpression :: Int -> Module.Namespaces Syntax.ModuleName -> Core.CaseStatement -> Syntax.Expression -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeCaseExpression :: Int -> Packaging.Namespaces Syntax.ModuleName -> Core.CaseStatement -> Syntax.Expression -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeCaseExpression depth namespaces stmt scrutinee cx g =
 
       let dn = Core.caseStatementTypeName stmt
@@ -213,7 +213,7 @@ encodeCaseExpression depth namespaces stmt scrutinee cx g =
           Syntax.caseExpressionAlternatives = (Lists.concat2 ecases dcases)})))))))
 
 -- | Encode a Hydra function as a Haskell expression
-encodeFunction :: Int -> Module.Namespaces Syntax.ModuleName -> Core.Function -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeFunction :: Int -> Packaging.Namespaces Syntax.ModuleName -> Core.Function -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeFunction depth namespaces fun cx g =
     case fun of
       Core.FunctionElimination v0 -> case v0 of
@@ -255,7 +255,7 @@ encodeLiteral l cx =
         Context.inContextContext = cx})
 
 -- | Encode a Hydra term as a Haskell expression
-encodeTerm :: Int -> Module.Namespaces Syntax.ModuleName -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeTerm :: Int -> Packaging.Namespaces Syntax.ModuleName -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeTerm depth namespaces term cx g =
 
       let encode = \t -> encodeTerm depth namespaces t cx g
@@ -362,7 +362,7 @@ encodeTerm depth namespaces term cx g =
           Context.inContextContext = cx})
 
 -- | Encode a Hydra type as a Haskell type
-encodeType :: Module.Namespaces Syntax.ModuleName -> Core.Type -> Context.Context -> t0 -> Either (Context.InContext Errors.Error) Syntax.Type
+encodeType :: Packaging.Namespaces Syntax.ModuleName -> Core.Type -> Context.Context -> t0 -> Either (Context.InContext Errors.Error) Syntax.Type
 encodeType namespaces typ cx g =
 
       let encode = \t -> encodeType namespaces t cx g
@@ -440,7 +440,7 @@ encodeType namespaces typ cx g =
           Context.inContextContext = cx})
 
 -- | Encode a Hydra type as a Haskell type with typeclass assertions
-encodeTypeWithClassAssertions :: Module.Namespaces Syntax.ModuleName -> M.Map Core.Name (S.Set Classes.TypeClass) -> Core.Type -> Context.Context -> t0 -> Either (Context.InContext Errors.Error) Syntax.Type
+encodeTypeWithClassAssertions :: Packaging.Namespaces Syntax.ModuleName -> M.Map Core.Name (S.Set Classes.TypeClass) -> Core.Type -> Context.Context -> t0 -> Either (Context.InContext Errors.Error) Syntax.Type
 encodeTypeWithClassAssertions namespaces explicitClasses typ cx g =
 
       let classes = Maps.union explicitClasses (getImplicitTypeClasses typ)
@@ -515,17 +515,17 @@ findOrdVariables typ =
       in (Rewriting.foldOverType Coders.TraversalOrderPre fold Sets.empty typ)
 
 -- | Gather metadata from definitions by bottom-up traversal of all terms and types
-gatherMetadata :: [Module.Definition] -> Environment.HaskellModuleMetadata
+gatherMetadata :: [Packaging.Definition] -> Environment.HaskellModuleMetadata
 gatherMetadata defs =
 
       let addDef =
               \meta -> \def -> case def of
-                Module.DefinitionTerm v0 ->
-                  let term = Module.termDefinitionTerm v0
+                Packaging.DefinitionTerm v0 ->
+                  let term = Packaging.termDefinitionTerm v0
                       metaWithTerm = Rewriting.foldOverTerm Coders.TraversalOrderPre (\m -> \t -> extendMetaForTerm m t) meta term
-                  in (Maybes.maybe metaWithTerm (\ts -> Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) metaWithTerm (Core.typeSchemeType ts)) (Module.termDefinitionType v0))
-                Module.DefinitionType v0 ->
-                  let typ = Module.typeDefinitionType v0
+                  in (Maybes.maybe metaWithTerm (\ts -> Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) metaWithTerm (Core.typeSchemeType ts)) (Packaging.termDefinitionType v0))
+                Packaging.DefinitionType v0 ->
+                  let typ = Core.typeSchemeType (Packaging.typeDefinitionType v0)
                   in (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> extendMetaForType m t) meta typ)
       in (Lists.foldl addDef emptyMetadata defs)
 
@@ -546,20 +546,21 @@ keyHaskellVar :: Core.Name
 keyHaskellVar = Core.Name "haskellVar"
 
 -- | Convert a Hydra module to Haskell source code as a filepath-to-content map
-moduleToHaskell :: Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (M.Map String String)
+moduleToHaskell :: Packaging.Module -> [Packaging.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (M.Map String String)
 moduleToHaskell mod defs cx g =
     Eithers.bind (moduleToHaskellModule mod defs cx g) (\hsmod ->
       let s = Serialization.printExpr (Serialization.parenthesize (Serde.moduleToExpr hsmod))
-          filepath = Names.namespaceToFilePath Util.CaseConventionPascal (Module.FileExtension "hs") (Module.moduleNamespace mod)
+          filepath =
+                  Names.namespaceToFilePath Util.CaseConventionPascal (Packaging.FileExtension "hs") (Packaging.moduleNamespace mod)
       in (Right (Maps.singleton filepath s)))
 
 -- | Convert a Hydra module and definitions to a Haskell module AST
-moduleToHaskellModule :: Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Module
+moduleToHaskellModule :: Packaging.Module -> [Packaging.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Module
 moduleToHaskellModule mod defs cx g =
     Eithers.bind (Utils.namespacesForModule mod cx g) (\namespaces -> constructModule namespaces mod defs cx g)
 
 -- | Generate Haskell declarations for type and field name constants
-nameDecls :: Module.Namespaces Syntax.ModuleName -> Core.Name -> Core.Type -> [Syntax.DeclarationWithComments]
+nameDecls :: Packaging.Namespaces Syntax.ModuleName -> Core.Name -> Core.Type -> [Syntax.DeclarationWithComments]
 nameDecls namespaces name typ =
 
       let nm = Core.unName name
@@ -618,12 +619,12 @@ setMetaUsesSet b m =
       Environment.haskellModuleMetadataUsesSet = b}
 
 -- | Convert a Hydra term definition to a Haskell declaration with comments
-toDataDeclaration :: Module.Namespaces Syntax.ModuleName -> Module.TermDefinition -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.DeclarationWithComments
+toDataDeclaration :: Packaging.Namespaces Syntax.ModuleName -> Packaging.TermDefinition -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.DeclarationWithComments
 toDataDeclaration namespaces def cx g =
 
-      let name = Module.termDefinitionName def
-          term = Module.termDefinitionTerm def
-          typ = Module.termDefinitionType def
+      let name = Packaging.termDefinitionName def
+          term = Packaging.termDefinitionTerm def
+          typ = Packaging.termDefinitionType def
           hname = Utils.simpleName (Names.localNameOf name)
           rewriteValueBinding =
                   \vb -> case vb of
@@ -681,7 +682,7 @@ toDataDeclaration namespaces def cx g =
       in (Eithers.bind (Annotations.getTermDescription cx g term) (\comments -> toDecl comments hname term Nothing))
 
 -- | Convert a Hydra type definition to Haskell declarations
-toTypeDeclarationsFrom :: Module.Namespaces Syntax.ModuleName -> Core.Name -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) [Syntax.DeclarationWithComments]
+toTypeDeclarationsFrom :: Packaging.Namespaces Syntax.ModuleName -> Core.Name -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) [Syntax.DeclarationWithComments]
 toTypeDeclarationsFrom namespaces elementName typ cx g =
 
       let lname = Names.localNameOf elementName
@@ -735,9 +736,9 @@ toTypeDeclarationsFrom namespaces elementName typ cx g =
                         deconflict =
                                 \name ->
                                   let tname =
-                                          Names.unqualifyName (Module.QualifiedName {
-                                            Module.qualifiedNameNamespace = (Just (Pairs.first (Module.namespacesFocus namespaces))),
-                                            Module.qualifiedNameLocal = name})
+                                          Names.unqualifyName (Packaging.QualifiedName {
+                                            Packaging.qualifiedNameNamespace = (Just (Pairs.first (Packaging.namespacesFocus namespaces))),
+                                            Packaging.qualifiedNameLocal = name})
                                   in (Logic.ifElse (Sets.member tname boundNames_) (deconflict (Strings.cat2 name "_")) name)
                     in (Eithers.bind (Annotations.getTypeDescription cx g ftype) (\comments ->
                       let nm = deconflict (Strings.cat2 (Formatting.capitalize lname_) (Formatting.capitalize (Core.unName fname)))
@@ -798,7 +799,7 @@ toTypeDeclarationsFrom namespaces elementName typ cx g =
             tdecls]))))))))
 
 -- | Generate a Haskell declaration for a type definition constant
-typeDecl :: Module.Namespaces Syntax.ModuleName -> Core.Name -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.DeclarationWithComments
+typeDecl :: Packaging.Namespaces Syntax.ModuleName -> Core.Name -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.DeclarationWithComments
 typeDecl namespaces name typ cx g =
 
       let typeName = \ns -> \name_ -> Names.qname ns (typeNameLocal name_)
@@ -832,8 +833,8 @@ typeDecl namespaces name typ cx g =
                         forVariableType =
                                 \vname ->
                                   let qname = Names.qualifyName vname
-                                      mns = Module.qualifiedNameNamespace qname
-                                      local = Module.qualifiedNameLocal qname
+                                      mns = Packaging.qualifiedNameNamespace qname
+                                      local = Packaging.qualifiedNameLocal qname
                                   in (Maybes.map (\ns -> Core.TermVariable (Names.qname ns (Strings.cat [
                                     "_",
                                     local,

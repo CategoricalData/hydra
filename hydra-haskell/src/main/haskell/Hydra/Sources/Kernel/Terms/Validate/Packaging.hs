@@ -15,7 +15,7 @@ import qualified Hydra.Dsl.Meta.Lib.Maybes       as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs        as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets         as Sets
 import qualified Hydra.Dsl.Meta.Lib.Strings      as Strings
-import qualified Hydra.Dsl.Module                as Module
+import qualified Hydra.Dsl.Packaging                as Packaging
 import qualified Hydra.Dsl.Packaging             as Packaging
 import           Hydra.Dsl.Meta.Phantoms         as Phantoms
 import           Hydra.Sources.Kernel.Types.All
@@ -53,8 +53,8 @@ definitionName = define "definitionName" $
   doc "Extract the name from a definition" $
   "def" ~>
   cases _Definition (var "def") Nothing [
-    _Definition_term>>: "td" ~> Module.termDefinitionName (var "td"),
-    _Definition_type>>: "td" ~> Module.typeDefinitionName (var "td")]
+    _Definition_term>>: "td" ~> Packaging.termDefinitionName (var "td"),
+    _Definition_type>>: "td" ~> Packaging.typeDefinitionName (var "td")]
 
 -- | Check for module namespaces that would conflict when mapped to a target language's
 -- directory structure. Two namespaces conflict if they are identical when lowercased,
@@ -71,8 +71,8 @@ checkConflictingModuleNamespaces = define "checkConflictingModuleNamespaces" $
       "seen" <~ Pairs.first (var "acc") $
       "err" <~ Pairs.second (var "acc") $
       Maybes.cases (var "err")
-        ("ns" <~ Module.moduleNamespace (var "mod") $
-          "key" <~ Strings.toLower (Module.unNamespace $ var "ns") $
+        ("ns" <~ Packaging.moduleNamespace (var "mod") $
+          "key" <~ Strings.toLower (Packaging.unNamespace $ var "ns") $
           "existing" <~ Maps.lookup (var "key") (var "seen") $
           Maybes.cases (var "existing")
             -- No conflict: add to map
@@ -95,8 +95,8 @@ checkConflictingVariantNames :: TTermDefinition (Module -> Maybe InvalidModuleEr
 checkConflictingVariantNames = define "checkConflictingVariantNames" $
   doc "Check for union variant names that, when mapped to constructor names, conflict with other type definitions" $
   "mod" ~>
-  "ns" <~ Module.moduleNamespace (var "mod") $
-  "defs" <~ Module.moduleDefinitions (var "mod") $
+  "ns" <~ Packaging.moduleNamespace (var "mod") $
+  "defs" <~ Packaging.moduleDefinitions (var "mod") $
   -- Collect all definition local names into a set
   "defNames" <~ Lists.foldl
     ("acc" ~> "def" ~>
@@ -109,9 +109,9 @@ checkConflictingVariantNames = define "checkConflictingVariantNames" $
       Maybes.cases (var "acc")
         (cases _Definition (var "def") (Just nothing) [
           _Definition_type>>: "td" ~>
-            "typeName" <~ Module.typeDefinitionName (var "td") $
+            "typeName" <~ Packaging.typeDefinitionName (var "td") $
             "localTypeName" <~ (Names.localNameOf @@ var "typeName") $
-            "typ" <~ Module.typeDefinitionType (var "td") $
+            "typ" <~ (Core.typeSchemeType $ Packaging.typeDefinitionType (var "td")) $
             cases _Type (var "typ") (Just nothing) [
               _Type_union>>: "fields" ~>
                 -- Check each field of the union
@@ -145,8 +145,8 @@ checkDefinitionNamespaces :: TTermDefinition (Module -> Maybe InvalidModuleError
 checkDefinitionNamespaces = define "checkDefinitionNamespaces" $
   doc "Check that all definition names in a module have the module's namespace as a prefix" $
   "mod" ~>
-  "ns" <~ Module.moduleNamespace (var "mod") $
-  "prefix" <~ (Strings.cat2 (Module.unNamespace $ var "ns") (string ".")) $
+  "ns" <~ Packaging.moduleNamespace (var "mod") $
+  "prefix" <~ (Strings.cat2 (Packaging.unNamespace $ var "ns") (string ".")) $
   "prefixLen" <~ Strings.length (var "prefix") $
   Lists.foldl
     ("acc" ~> "def" ~>
@@ -162,7 +162,7 @@ checkDefinitionNamespaces = define "checkDefinitionNamespaces" $
         -- Already have an error: stop
         (constant $ var "acc"))
     nothing
-    (Module.moduleDefinitions $ var "mod")
+    (Packaging.moduleDefinitions $ var "mod")
 
 -- | Check for duplicate definition names in a module.
 -- Fails on the first duplicate found.
@@ -170,7 +170,7 @@ checkDuplicateDefinitionNames :: TTermDefinition (Module -> Maybe InvalidModuleE
 checkDuplicateDefinitionNames = define "checkDuplicateDefinitionNames" $
   doc "Check for duplicate definition names in a module" $
   "mod" ~>
-  "ns" <~ Module.moduleNamespace (var "mod") $
+  "ns" <~ Packaging.moduleNamespace (var "mod") $
   -- Fold through definitions tracking seen names in a set.
   -- Accumulator is (Set Name, Maybe InvalidModuleError).
   "result" <~ Lists.foldl
@@ -188,7 +188,7 @@ checkDuplicateDefinitionNames = define "checkDuplicateDefinitionNames" $
         -- Already have an error: stop
         (constant $ var "acc"))
     (pair Sets.empty nothing)
-    (Module.moduleDefinitions $ var "mod") $
+    (Packaging.moduleDefinitions $ var "mod") $
   Pairs.second (var "result")
 
 -- | Check for duplicate module namespaces in a package.
@@ -202,7 +202,7 @@ checkDuplicateModuleNamespaces = define "checkDuplicateModuleNamespaces" $
       "seen" <~ Pairs.first (var "acc") $
       "err" <~ Pairs.second (var "acc") $
       Maybes.cases (var "err")
-        ("ns" <~ Module.moduleNamespace (var "mod") $
+        ("ns" <~ Packaging.moduleNamespace (var "mod") $
           Logic.ifElse (Sets.member (var "ns") (var "seen"))
             (pair (var "seen") (just $
               ErrorPackaging.invalidPackageErrorDuplicateModuleNamespace $

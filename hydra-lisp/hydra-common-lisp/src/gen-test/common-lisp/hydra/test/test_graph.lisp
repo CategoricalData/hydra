@@ -1,5 +1,5 @@
 (defpackage :hydra.test.testGraph
-(:use :cl :hydra.core :hydra.lexical :hydra.lib.maps :hydra.module :hydra.test.testTerms :hydra.test.testTypes)
+(:use :cl :hydra.core :hydra.lexical :hydra.lib.maps :hydra.packaging :hydra.test.testTerms :hydra.test.testTypes)
 (:export :hydra_test_test_graph_test_context :hydra_test_test_graph_test_graph :hydra_test_test_graph_test_namespace :hydra_test_test_graph_test_schema_namespace :hydra_test_test_graph_test_terms :hydra_test_test_graph_test_types))
 
 (in-package :hydra.test.testGraph)

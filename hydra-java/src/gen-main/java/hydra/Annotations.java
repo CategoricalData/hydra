@@ -6,19 +6,19 @@ package hydra;
  * Utilities for reading and writing type and term annotations
  */
 public interface Annotations {
-  static <T0, T1, T2, T3> java.util.Map<T2, T3> aggregateAnnotations(java.util.function.Function<T0, hydra.util.Maybe<T1>> getValue, java.util.function.Function<T1, T0> getX, java.util.function.Function<T1, java.util.Map<T2, T3>> getAnns, T0 t) {
+  static <T0, T1, T2, T3> hydra.util.PersistentMap<T2, T3> aggregateAnnotations(java.util.function.Function<T0, hydra.util.Maybe<T1>> getValue, java.util.function.Function<T1, T0> getX, java.util.function.Function<T1, hydra.util.PersistentMap<T2, T3>> getAnns, T0 t) {
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Concat.apply(hydra.Annotations.<T0, T1, T2, T3>aggregateAnnotations_toPairs(
       getAnns,
       getValue,
       getX,
-      (java.util.List<java.util.List<hydra.util.Pair<T2, T3>>>) (java.util.Collections.<java.util.List<hydra.util.Pair<T2, T3>>>emptyList()),
+      (hydra.util.ConsList<hydra.util.ConsList<hydra.util.Pair<T2, T3>>>) (hydra.util.ConsList.<hydra.util.ConsList<hydra.util.Pair<T2, T3>>>empty()),
       t)));
   }
 
-  static <T0, T1, T2, T3> java.util.List<java.util.List<hydra.util.Pair<T2, T3>>> aggregateAnnotations_toPairs(java.util.function.Function<T1, java.util.Map<T2, T3>> getAnns, java.util.function.Function<T0, hydra.util.Maybe<T1>> getValue, java.util.function.Function<T1, T0> getX, java.util.List<java.util.List<hydra.util.Pair<T2, T3>>> rest, T0 t) {
+  static <T0, T1, T2, T3> hydra.util.ConsList<hydra.util.ConsList<hydra.util.Pair<T2, T3>>> aggregateAnnotations_toPairs(java.util.function.Function<T1, hydra.util.PersistentMap<T2, T3>> getAnns, java.util.function.Function<T0, hydra.util.Maybe<T1>> getValue, java.util.function.Function<T1, T0> getX, hydra.util.ConsList<hydra.util.ConsList<hydra.util.Pair<T2, T3>>> rest, T0 t) {
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> rest,
-      (java.util.function.Function<T1, java.util.List<java.util.List<hydra.util.Pair<T2, T3>>>>) (yy -> hydra.Annotations.<T0, T1, T2, T3>aggregateAnnotations_toPairs(
+      (java.util.function.Function<T1, hydra.util.ConsList<hydra.util.ConsList<hydra.util.Pair<T2, T3>>>>) (yy -> hydra.Annotations.<T0, T1, T2, T3>aggregateAnnotations_toPairs(
         getAnns,
         getValue,
         getX,
@@ -27,6 +27,20 @@ public interface Annotations {
           rest),
         (getX).apply(yy))),
       (getValue).apply(t));
+  }
+
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<String>> commentsFromBinding(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Binding b) {
+    return hydra.Annotations.getTermDescription(
+      cx,
+      g,
+      (b).term);
+  }
+
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<String>> commentsFromFieldType(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.FieldType ft) {
+    return hydra.Annotations.getTypeDescription(
+      cx,
+      g,
+      (ft).type);
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.lang.Void> debugIf(hydra.context.Context cx, String debugId, String message) {
@@ -111,14 +125,14 @@ public interface Annotations {
         (java.util.function.Function<String, hydra.util.Maybe<String>>) (hydra.lib.maybes.Pure::apply),
         hydra.extract.Core.string(
           cx,
-          new hydra.graph.Graph((java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (java.util.Map<hydra.core.Name, hydra.graph.Primitive>) ((java.util.Map<hydra.core.Name, hydra.graph.Primitive>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.graph.Primitive>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())),
+          new hydra.graph.Graph((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.graph.Primitive>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.graph.Primitive>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.graph.Primitive>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())),
           term))),
       hydra.Annotations.getAttr(
         hydra.Constants.key_debugId(),
         cx));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<String>> getDescription(hydra.context.Context cx, hydra.graph.Graph graph, java.util.Map<hydra.core.Name, hydra.core.Term> anns) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<String>> getDescription(hydra.context.Context cx, hydra.graph.Graph graph, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> anns) {
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<String>>right((hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<String>>>) (term -> hydra.lib.eithers.Map.apply(
@@ -162,7 +176,7 @@ public interface Annotations {
       hydra.Annotations.termAnnotationInternal(peel.get().apply(term)));
   }
 
-  static hydra.util.Either<hydra.errors.DecodingError, hydra.util.Maybe<hydra.core.Type>> getType(hydra.graph.Graph graph, java.util.Map<hydra.core.Name, hydra.core.Term> anns) {
+  static hydra.util.Either<hydra.errors.DecodingError, hydra.util.Maybe<hydra.core.Type>> getType(hydra.graph.Graph graph, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> anns) {
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> hydra.util.Either.<hydra.errors.DecodingError, hydra.util.Maybe<hydra.core.Type>>right((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing())),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.Maybe<hydra.core.Type>>>) (dat -> hydra.lib.eithers.Map.apply(
@@ -181,9 +195,9 @@ public interface Annotations {
       hydra.Annotations.typeAnnotationInternal(typ));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.Map<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>>> getTypeClasses(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term term) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.util.PersistentSet<hydra.classes.TypeClass>>> getTypeClasses(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term term) {
     java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.classes.TypeClass>> decodeClass = (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.classes.TypeClass>>) (term2 -> {
-      hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.classes.TypeClass>> byName = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.Arrays.asList(
+      hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.classes.TypeClass>> byName = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
         (hydra.util.Pair<hydra.core.Name, hydra.classes.TypeClass>) ((hydra.util.Pair<hydra.core.Name, hydra.classes.TypeClass>) (new hydra.util.Pair<hydra.core.Name, hydra.classes.TypeClass>(new hydra.core.Name("equality"), new hydra.classes.TypeClass.Equality()))),
         (hydra.util.Pair<hydra.core.Name, hydra.classes.TypeClass>) ((hydra.util.Pair<hydra.core.Name, hydra.classes.TypeClass>) (new hydra.util.Pair<hydra.core.Name, hydra.classes.TypeClass>(new hydra.core.Name("ordering"), new hydra.classes.TypeClass.Ordering()))))));
       return hydra.lib.eithers.Bind.apply(
@@ -202,8 +216,8 @@ public interface Annotations {
             byName.get()))));
     });
     return hydra.lib.maybes.Maybe.applyLazy(
-      () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.util.Map<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>>>right((java.util.Map<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>>) ((java.util.Map<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>>) (hydra.lib.maps.Empty.<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>>apply()))),
-      (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.Map<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>>>>) (term2 -> hydra.extract.Core.map(
+      () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.util.PersistentSet<hydra.classes.TypeClass>>>right((hydra.util.PersistentMap<hydra.core.Name, hydra.util.PersistentSet<hydra.classes.TypeClass>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.PersistentSet<hydra.classes.TypeClass>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.PersistentSet<hydra.classes.TypeClass>>apply()))),
+      (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.util.PersistentSet<hydra.classes.TypeClass>>>>) (term2 -> hydra.extract.Core.map(
         cx,
         (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Name>>) (t -> hydra.lib.eithers.Bimap.apply(
           (java.util.function.Function<hydra.errors.DecodingError, hydra.context.InContext<hydra.errors.Error_>>) (de -> (hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError((de).value)), cx))),
@@ -211,7 +225,7 @@ public interface Annotations {
           hydra.decode.Core.name(
             graph,
             t))),
-        (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.Set<hydra.classes.TypeClass>>>) (v1 -> hydra.extract.Core.setOf(
+        (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentSet<hydra.classes.TypeClass>>>) (v1 -> hydra.extract.Core.setOf(
           cx,
           decodeClass,
           graph,
@@ -230,7 +244,7 @@ public interface Annotations {
       hydra.Annotations.typeAnnotationInternal(typ));
   }
 
-  static <T0> Boolean hasDescription(java.util.Map<hydra.core.Name, T0> anns) {
+  static <T0> Boolean hasDescription(hydra.util.PersistentMap<hydra.core.Name, T0> anns) {
     return hydra.lib.maybes.IsJust.apply(hydra.lib.maps.Lookup.apply(
       hydra.Constants.key_description(),
       anns));
@@ -243,7 +257,7 @@ public interface Annotations {
       cx);
     return hydra.extract.Core.boolean_(
       cx,
-      new hydra.graph.Graph((java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (java.util.Map<hydra.core.Name, hydra.graph.Primitive>) ((java.util.Map<hydra.core.Name, hydra.graph.Primitive>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.graph.Primitive>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())),
+      new hydra.graph.Graph((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.graph.Primitive>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.graph.Primitive>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.graph.Primitive>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())),
       term);
   }
 
@@ -264,7 +278,7 @@ public interface Annotations {
       (java.util.function.Function<hydra.core.TypeScheme, Boolean>) (ts -> hydra.lib.logic.And.apply(
         hydra.lib.equality.Equal.apply(
           ts,
-          new hydra.core.TypeScheme((java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))),
+          new hydra.core.TypeScheme((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), (hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))),
         hydra.lib.logic.Not.apply(isFlaggedAsFirstClassType.get()))),
       (el).type);
   }
@@ -282,7 +296,7 @@ public interface Annotations {
   }
 
   static hydra.core.Term normalizeTermAnnotations(hydra.core.Term term) {
-    java.util.Map<hydra.core.Name, hydra.core.Term> anns = hydra.Annotations.termAnnotationInternal(term);
+    hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> anns = hydra.Annotations.termAnnotationInternal(term);
     hydra.core.Term stripped = hydra.Strip.deannotateTerm(term);
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.maps.Null.apply(anns),
@@ -291,7 +305,7 @@ public interface Annotations {
   }
 
   static hydra.core.Type normalizeTypeAnnotations(hydra.core.Type typ) {
-    java.util.Map<hydra.core.Name, hydra.core.Term> anns = hydra.Annotations.typeAnnotationInternal(typ);
+    hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> anns = hydra.Annotations.typeAnnotationInternal(typ);
     hydra.core.Type stripped = hydra.Strip.deannotateType(typ);
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.maps.Null.apply(anns),
@@ -320,14 +334,14 @@ public interface Annotations {
       cx);
   }
 
-  static <T0, T1> java.util.Map<T0, T1> setAnnotation(T0 key, hydra.util.Maybe<T1> val, java.util.Map<T0, T1> m) {
+  static <T0, T1> hydra.util.PersistentMap<T0, T1> setAnnotation(T0 key, hydra.util.Maybe<T1> val, hydra.util.PersistentMap<T0, T1> m) {
     return hydra.lib.maps.Alter.apply(
       (java.util.function.Function<hydra.util.Maybe<T1>, hydra.util.Maybe<T1>>) (ignored -> val),
       key,
       m);
   }
 
-  static java.util.Map<hydra.core.Name, hydra.core.Term> setDescription(hydra.util.Maybe<String> d, java.util.Map<hydra.core.Name, hydra.core.Term> v1) {
+  static hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> setDescription(hydra.util.Maybe<String> d, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> v1) {
     return hydra.Annotations.setAnnotation(
       hydra.Constants.key_description(),
       hydra.lib.maybes.Map.apply(
@@ -337,7 +351,7 @@ public interface Annotations {
   }
 
   static hydra.core.Term setTermAnnotation(hydra.core.Name key, hydra.util.Maybe<hydra.core.Term> val, hydra.core.Term term) {
-    hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Term>> anns = new hydra.util.Lazy<>(() -> hydra.Annotations.setAnnotation(
+    hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>> anns = new hydra.util.Lazy<>(() -> hydra.Annotations.setAnnotation(
       key,
       val,
       hydra.Annotations.termAnnotationInternal(term)));
@@ -357,7 +371,7 @@ public interface Annotations {
       v1);
   }
 
-  static java.util.Map<hydra.core.Name, hydra.core.Term> setType(hydra.util.Maybe<hydra.core.Type> mt, java.util.Map<hydra.core.Name, hydra.core.Term> v1) {
+  static hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> setType(hydra.util.Maybe<hydra.core.Type> mt, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> v1) {
     return hydra.Annotations.setAnnotation(
       hydra.Constants.key_type(),
       hydra.lib.maybes.Map.apply(
@@ -367,7 +381,7 @@ public interface Annotations {
   }
 
   static hydra.core.Type setTypeAnnotation(hydra.core.Name key, hydra.util.Maybe<hydra.core.Term> val, hydra.core.Type typ) {
-    hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Term>> anns = new hydra.util.Lazy<>(() -> hydra.Annotations.setAnnotation(
+    hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>> anns = new hydra.util.Lazy<>(() -> hydra.Annotations.setAnnotation(
       key,
       val,
       hydra.Annotations.typeAnnotationInternal(typ)));
@@ -378,7 +392,7 @@ public interface Annotations {
       () -> new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(typ_, anns.get())));
   }
 
-  static hydra.core.Term setTypeClasses(java.util.Map<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>> m, hydra.core.Term term) {
+  static hydra.core.Term setTypeClasses(hydra.util.PersistentMap<hydra.core.Name, hydra.util.PersistentSet<hydra.classes.TypeClass>> m, hydra.core.Term term) {
     java.util.function.Function<hydra.classes.TypeClass, hydra.core.Term> encodeClass = (java.util.function.Function<hydra.classes.TypeClass, hydra.core.Term>) (tc -> (tc).accept(new hydra.classes.TypeClass.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.classes.TypeClass.Equality ignored) {
@@ -390,8 +404,8 @@ public interface Annotations {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.classes.TypeClass"), new hydra.core.Field(new hydra.core.Name("ordering"), new hydra.core.Term.Unit())));
       }
     }));
-    java.util.function.Function<hydra.util.Pair<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>>, hydra.util.Pair<hydra.core.Term, hydra.core.Term>> encodePair = (java.util.function.Function<hydra.util.Pair<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>>, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>) (nameClasses -> {
-      hydra.util.Lazy<java.util.Set<hydra.classes.TypeClass>> classes = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(nameClasses));
+    java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.util.PersistentSet<hydra.classes.TypeClass>>, hydra.util.Pair<hydra.core.Term, hydra.core.Term>> encodePair = (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.util.PersistentSet<hydra.classes.TypeClass>>, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>) (nameClasses -> {
+      hydra.util.Lazy<hydra.util.PersistentSet<hydra.classes.TypeClass>> classes = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(nameClasses));
       hydra.util.Lazy<hydra.core.Name> name = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(nameClasses));
       return (hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(hydra.encode.Core.name(name.get()), new hydra.core.Term.Set(hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
         encodeClass,
@@ -418,7 +432,7 @@ public interface Annotations {
       v1);
   }
 
-  static java.util.Map<hydra.core.Name, hydra.core.Term> termAnnotationInternal(hydra.core.Term term) {
+  static hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> termAnnotationInternal(hydra.core.Term term) {
     java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.AnnotatedTerm>> getAnn = (java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.AnnotatedTerm>>) (t -> (t).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Maybe<hydra.core.AnnotatedTerm> otherwise(hydra.core.Term instance) {
@@ -433,11 +447,11 @@ public interface Annotations {
     return hydra.Annotations.aggregateAnnotations(
       getAnn,
       (java.util.function.Function<hydra.core.AnnotatedTerm, hydra.core.Term>) (at -> (at).body),
-      (java.util.function.Function<hydra.core.AnnotatedTerm, java.util.Map<hydra.core.Name, hydra.core.Term>>) (at -> (at).annotation),
+      (java.util.function.Function<hydra.core.AnnotatedTerm, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>>) (at -> (at).annotation),
       term);
   }
 
-  static java.util.Map<hydra.core.Name, hydra.core.Term> typeAnnotationInternal(hydra.core.Type typ) {
+  static hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> typeAnnotationInternal(hydra.core.Type typ) {
     java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.AnnotatedType>> getAnn = (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.AnnotatedType>>) (t -> (t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Maybe<hydra.core.AnnotatedType> otherwise(hydra.core.Type instance) {
@@ -452,14 +466,8 @@ public interface Annotations {
     return hydra.Annotations.aggregateAnnotations(
       getAnn,
       (java.util.function.Function<hydra.core.AnnotatedType, hydra.core.Type>) (at -> (at).body),
-      (java.util.function.Function<hydra.core.AnnotatedType, java.util.Map<hydra.core.Name, hydra.core.Term>>) (at -> (at).annotation),
+      (java.util.function.Function<hydra.core.AnnotatedType, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>>) (at -> (at).annotation),
       typ);
-  }
-
-  static hydra.core.Binding typeElement(hydra.core.Name name, hydra.core.Type typ) {
-    hydra.core.Term schemaTerm = new hydra.core.Term.Variable(new hydra.core.Name("hydra.core.Type"));
-    hydra.util.Lazy<hydra.core.Term> dataTerm = new hydra.util.Lazy<>(() -> hydra.Annotations.normalizeTermAnnotations(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(hydra.encode.Core.type(typ), hydra.lib.maps.FromList.apply(java.util.Arrays.asList((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Term>(hydra.Constants.key_type(), schemaTerm)))))))));
-    return new hydra.core.Binding(name, dataTerm.get(), hydra.util.Maybe.just(new hydra.core.TypeScheme((java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))));
   }
 
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T0> whenFlag(hydra.context.Context cx, hydra.core.Name flag, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T0> ethen, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T0> eelse) {

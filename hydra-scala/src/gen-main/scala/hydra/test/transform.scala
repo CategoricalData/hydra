@@ -2,7 +2,7 @@ package hydra.test.transform
 
 import hydra.core.*
 
-import hydra.module.*
+import hydra.packaging.*
 
 import hydra.testing.*
 
@@ -20,7 +20,7 @@ import hydra.lib.pairs
 
 import hydra.lib.strings
 
-def addGenerationPrefix(`ns_`: hydra.module.Namespace): hydra.module.Namespace = hydra.lib.strings.cat2("generation.")(`ns_`)
+def addGenerationPrefix(`ns_`: hydra.packaging.Namespace): hydra.packaging.Namespace = hydra.lib.strings.cat2("generation.")(`ns_`)
 
 def buildConvertCaseCall(fromConv: hydra.util.CaseConvention)(toConv: hydra.util.CaseConvention)(`input_`: scala.Predef.String): hydra.core.Term =
   hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.formatting.convertCase"),
@@ -64,8 +64,8 @@ def encodeIntList(ints: Seq[Int]): hydra.core.Term =
 def encodeListList(lists: Seq[Seq[Int]]): hydra.core.Term =
   hydra.core.Term.list(hydra.lib.lists.map[Seq[Int], hydra.core.Term]((l: Seq[Int]) => hydra.test.transform.encodeIntList(l))(lists))
 
-def transformModule(m: hydra.module.Module): hydra.module.Module =
-  hydra.module.Module(hydra.test.transform.addGenerationPrefix(m.namespace), (m.definitions), (m.termDependencies), (m.typeDependencies), (m.description))
+def transformModule(m: hydra.packaging.Module): hydra.packaging.Module =
+  hydra.packaging.Module(hydra.test.transform.addGenerationPrefix(m.namespace), (m.definitions), (m.termDependencies), (m.typeDependencies), (m.description))
 
 def transformTestCase[T0](tcm: T0): Option[T0] = Some(tcm)
 

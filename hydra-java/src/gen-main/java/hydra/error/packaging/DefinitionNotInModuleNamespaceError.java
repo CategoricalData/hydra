@@ -17,14 +17,14 @@ public class DefinitionNotInModuleNamespaceError implements Serializable, Compar
   /**
    * The namespace of the module
    */
-  public final hydra.module.Namespace namespace;
+  public final hydra.packaging.Namespace namespace;
 
   /**
    * The definition name that does not match the module namespace
    */
   public final hydra.core.Name name;
 
-  public DefinitionNotInModuleNamespaceError (hydra.module.Namespace namespace, hydra.core.Name name) {
+  public DefinitionNotInModuleNamespaceError (hydra.packaging.Namespace namespace, hydra.core.Name name) {
     this.namespace = namespace;
     this.name = name;
   }
@@ -62,7 +62,7 @@ public class DefinitionNotInModuleNamespaceError implements Serializable, Compar
       other.name);
   }
 
-  public DefinitionNotInModuleNamespaceError withNamespace(hydra.module.Namespace namespace) {
+  public DefinitionNotInModuleNamespaceError withNamespace(hydra.packaging.Namespace namespace) {
     return new DefinitionNotInModuleNamespaceError(namespace, name);
   }
 

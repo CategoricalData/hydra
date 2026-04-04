@@ -8,13 +8,13 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Java.Environment as Environment
 import qualified Hydra.Ext.Java.Syntax as Syntax
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Module as Module
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-aliases :: Phantoms.TTerm Module.Namespace -> Phantoms.TTerm (M.Map Module.Namespace Syntax.PackageName) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm (M.Map Core.Name Core.Name) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm (M.Map Core.Name Core.Name) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm (Maybe Core.Type) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Environment.Aliases
+aliases :: Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm (M.Map Packaging.Namespace Syntax.PackageName) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm (M.Map Core.Name Core.Name) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm (M.Map Core.Name Core.Name) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm (Maybe Core.Type) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Environment.Aliases
 aliases currentNamespace packages branchVars recursiveVars inScopeTypeParams polymorphicLocals inScopeJavaVars varRenames lambdaVars typeVarSubst trustedTypeVars methodCodomain thunkedVars =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.ext.java.environment.Aliases"),
@@ -67,7 +67,7 @@ aliasesBranchVars x =
         Core.projectionField = (Core.Name "branchVars")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-aliasesCurrentNamespace :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm Module.Namespace
+aliasesCurrentNamespace :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm Packaging.Namespace
 aliasesCurrentNamespace x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -107,7 +107,7 @@ aliasesMethodCodomain x =
         Core.projectionField = (Core.Name "methodCodomain")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-aliasesPackages :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (M.Map Module.Namespace Syntax.PackageName)
+aliasesPackages :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (M.Map Packaging.Namespace Syntax.PackageName)
 aliasesPackages x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -256,7 +256,7 @@ aliasesWithBranchVars original newVal =
               Core.projectionField = (Core.Name "thunkedVars")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-aliasesWithCurrentNamespace :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm Module.Namespace -> Phantoms.TTerm Environment.Aliases
+aliasesWithCurrentNamespace :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm Environment.Aliases
 aliasesWithCurrentNamespace original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.ext.java.environment.Aliases"),
@@ -721,7 +721,7 @@ aliasesWithMethodCodomain original newVal =
               Core.projectionField = (Core.Name "thunkedVars")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-aliasesWithPackages :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (M.Map Module.Namespace Syntax.PackageName) -> Phantoms.TTerm Environment.Aliases
+aliasesWithPackages :: Phantoms.TTerm Environment.Aliases -> Phantoms.TTerm (M.Map Packaging.Namespace Syntax.PackageName) -> Phantoms.TTerm Environment.Aliases
 aliasesWithPackages original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.ext.java.environment.Aliases"),

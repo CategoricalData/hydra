@@ -4,7 +4,7 @@ import hydra.core.*
 
 import hydra.ext.lisp.syntax.*
 
-import hydra.module.*
+import hydra.packaging.*
 
 import hydra.lib.eithers
 
@@ -396,7 +396,7 @@ def encodeTerm[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0)(g: T1
   case hydra.core.Term.typeLambda(v_Term_typeLambda_tl) => hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(v_Term_typeLambda_tl.body)
   case hydra.core.Term.wrap(v_Term_wrap_wt) => hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(v_Term_wrap_wt.body)
 
-def encodeTermDefinition[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0)(g: T1)(tdef: hydra.module.TermDefinition): Either[T2,
+def encodeTermDefinition[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0)(g: T1)(tdef: hydra.packaging.TermDefinition): Either[T2,
    hydra.ext.lisp.syntax.TopLevelFormWithComments] =
   {
   lazy val name: hydra.core.Name = (tdef.name)
@@ -467,10 +467,10 @@ def encodeTypeBody[T0](lname: scala.Predef.String)(origTyp: hydra.core.Type)(typ
      hydra.lib.strings.cat2(hydra.lib.strings.cat2(lname)(" = "))(hydra.show.core.`type`(origTyp)))),
      hydra.ext.lisp.syntax.TopLevelForm.expression(hydra.ext.lisp.syntax.Expression.literal(hydra.ext.lisp.syntax.Literal.nil))))
 
-def encodeTypeDefinition[T0, T1, T2](cx: T0)(g: T1)(tdef: hydra.module.TypeDefinition): Either[T2, hydra.ext.lisp.syntax.TopLevelFormWithComments] =
+def encodeTypeDefinition[T0, T1, T2](cx: T0)(g: T1)(tdef: hydra.packaging.TypeDefinition): Either[T2, hydra.ext.lisp.syntax.TopLevelFormWithComments] =
   {
   lazy val name: hydra.core.Name = (tdef.name)
-  lazy val typ: hydra.core.Type = (tdef.`type`)
+  lazy val typ: hydra.core.Type = (tdef.`type`.`type`)
   lazy val lname: scala.Predef.String = hydra.ext.lisp.coder.qualifiedSnakeName(name)
   lazy val dtyp: hydra.core.Type = hydra.strip.deannotateType(typ)
   hydra.ext.lisp.coder.encodeTypeBody(lname)(typ)(dtyp)
@@ -556,33 +556,34 @@ def moduleExports(forms: Seq[hydra.ext.lisp.syntax.TopLevelFormWithComments]): S
   hydra.lib.logic.ifElse[Seq[hydra.ext.lisp.syntax.ExportDeclaration]](hydra.lib.lists.`null`[hydra.ext.lisp.syntax.Symbol](symbols))(Seq())(Seq(hydra.ext.lisp.syntax.ExportDeclaration(symbols)))
 }
 
-def moduleImports(focusNs: hydra.module.Namespace)(defs: Seq[hydra.module.Definition]): Seq[hydra.ext.lisp.syntax.ImportDeclaration] =
+def moduleImports(focusNs: hydra.packaging.Namespace)(defs: Seq[hydra.packaging.Definition]): Seq[hydra.ext.lisp.syntax.ImportDeclaration] =
   {
-  lazy val depNss: Seq[hydra.module.Namespace] = hydra.lib.sets.toList[hydra.module.Namespace](hydra.lib.sets.delete[hydra.module.Namespace](focusNs)(hydra.analysis.definitionDependencyNamespaces(defs)))
-  hydra.lib.lists.map[hydra.module.Namespace, hydra.ext.lisp.syntax.ImportDeclaration]((ns: hydra.module.Namespace) =>
+  lazy val depNss: Seq[hydra.packaging.Namespace] = hydra.lib.sets.toList[hydra.packaging.Namespace](hydra.lib.sets.delete[hydra.packaging.Namespace](focusNs)(hydra.analysis.definitionDependencyNamespaces(defs)))
+  hydra.lib.lists.map[hydra.packaging.Namespace, hydra.ext.lisp.syntax.ImportDeclaration]((ns: hydra.packaging.Namespace) =>
     hydra.ext.lisp.syntax.ImportDeclaration(ns, hydra.ext.lisp.syntax.ImportSpec.all))(depNss)
 }
 
-def moduleToLisp[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(mod: hydra.module.Module)(defs0: Seq[hydra.module.Definition])(cx: T0)(g: T1): Either[T2,
+def moduleToLisp[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(mod: hydra.packaging.Module)(defs0: Seq[hydra.packaging.Definition])(cx: T0)(g: T1): Either[T2,
    hydra.ext.lisp.syntax.Program] =
   {
-  lazy val defs: Seq[hydra.module.Definition] = hydra.coderUtils.reorderDefs(defs0)
-  lazy val partitioned: Tuple2[Seq[hydra.module.TypeDefinition], Seq[hydra.module.TermDefinition]] = hydra.environment.partitionDefinitions(defs)
-  lazy val allTypeDefs: Seq[hydra.module.TypeDefinition] = hydra.lib.pairs.first[Seq[hydra.module.TypeDefinition],
-     Seq[hydra.module.TermDefinition]](partitioned)
-  lazy val termDefs: Seq[hydra.module.TermDefinition] = hydra.lib.pairs.second[Seq[hydra.module.TypeDefinition], Seq[hydra.module.TermDefinition]](partitioned)
-  lazy val typeDefs: Seq[hydra.module.TypeDefinition] = hydra.lib.lists.filter[hydra.module.TypeDefinition]((td: hydra.module.TypeDefinition) => hydra.predicates.isNominalType(td.`type`))(allTypeDefs)
-  hydra.lib.eithers.bind[T2, Seq[hydra.ext.lisp.syntax.TopLevelFormWithComments], hydra.ext.lisp.syntax.Program](hydra.lib.eithers.mapList[hydra.module.TypeDefinition,
-     hydra.ext.lisp.syntax.TopLevelFormWithComments, T2]((v1: hydra.module.TypeDefinition) => hydra.ext.lisp.coder.encodeTypeDefinition(cx)(g)(v1))(typeDefs))((typeItems: Seq[hydra.ext.lisp.syntax.TopLevelFormWithComments]) =>
-    hydra.lib.eithers.bind[T2, Seq[hydra.ext.lisp.syntax.TopLevelFormWithComments], hydra.ext.lisp.syntax.Program](hydra.lib.eithers.mapList[hydra.module.TermDefinition,
-       hydra.ext.lisp.syntax.TopLevelFormWithComments, T2]((v1: hydra.module.TermDefinition) =>
+  lazy val defs: Seq[hydra.packaging.Definition] = hydra.environment.reorderDefs(defs0)
+  lazy val partitioned: Tuple2[Seq[hydra.packaging.TypeDefinition], Seq[hydra.packaging.TermDefinition]] = hydra.environment.partitionDefinitions(defs)
+  lazy val allTypeDefs: Seq[hydra.packaging.TypeDefinition] = hydra.lib.pairs.first[Seq[hydra.packaging.TypeDefinition],
+     Seq[hydra.packaging.TermDefinition]](partitioned)
+  lazy val termDefs: Seq[hydra.packaging.TermDefinition] = hydra.lib.pairs.second[Seq[hydra.packaging.TypeDefinition],
+     Seq[hydra.packaging.TermDefinition]](partitioned)
+  lazy val typeDefs: Seq[hydra.packaging.TypeDefinition] = hydra.lib.lists.filter[hydra.packaging.TypeDefinition]((td: hydra.packaging.TypeDefinition) => hydra.predicates.isNominalType(td.`type`.`type`))(allTypeDefs)
+  hydra.lib.eithers.bind[T2, Seq[hydra.ext.lisp.syntax.TopLevelFormWithComments], hydra.ext.lisp.syntax.Program](hydra.lib.eithers.mapList[hydra.packaging.TypeDefinition,
+     hydra.ext.lisp.syntax.TopLevelFormWithComments, T2]((v1: hydra.packaging.TypeDefinition) => hydra.ext.lisp.coder.encodeTypeDefinition(cx)(g)(v1))(typeDefs))((typeItems: Seq[hydra.ext.lisp.syntax.TopLevelFormWithComments]) =>
+    hydra.lib.eithers.bind[T2, Seq[hydra.ext.lisp.syntax.TopLevelFormWithComments], hydra.ext.lisp.syntax.Program](hydra.lib.eithers.mapList[hydra.packaging.TermDefinition,
+       hydra.ext.lisp.syntax.TopLevelFormWithComments, T2]((v1: hydra.packaging.TermDefinition) =>
     hydra.ext.lisp.coder.encodeTermDefinition(dialect)(cx)(g)(v1))(termDefs))((termItems: Seq[hydra.ext.lisp.syntax.TopLevelFormWithComments]) =>
     {
     lazy val allItems: Seq[hydra.ext.lisp.syntax.TopLevelFormWithComments] = hydra.lib.lists.concat2[hydra.ext.lisp.syntax.TopLevelFormWithComments](typeItems)(termItems)
     {
       lazy val nsName: scala.Predef.String = (mod.namespace)
       {
-        lazy val focusNs: hydra.module.Namespace = (mod.namespace)
+        lazy val focusNs: hydra.packaging.Namespace = (mod.namespace)
         {
           lazy val imports: Seq[hydra.ext.lisp.syntax.ImportDeclaration] = hydra.ext.lisp.coder.moduleImports(focusNs)(defs)
           {

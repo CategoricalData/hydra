@@ -33,7 +33,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
 import qualified Hydra.Dsl.Topology                   as Topology
@@ -215,7 +215,7 @@ generateTestFileWithPythonCodec = define "generateTestFileWithPythonCodec" $
     Eithers.map
       (lambda "testBody" $ lets [
         "testModuleContent">: buildPythonTestModule @@ var "testModule" @@ var "testGroup" @@ var "testBody",
-        "ns_">: Module.moduleNamespace (var "testModule"),
+        "ns_">: Packaging.moduleNamespace (var "testModule"),
         "parts">: Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns_"),
         "dirParts">: Lists.init (var "parts"),
         "fileName">: Strings.cat (list [string "test_", Lists.last (var "parts"), string ".py"]),

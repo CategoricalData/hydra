@@ -7,7 +7,7 @@ module Hydra.Ext.Java.Environment where
 import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Java.Syntax as Syntax
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Module as Module
+import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Map as M
 import qualified Data.Set as S
@@ -53,9 +53,9 @@ _JavaFeatures_supportsDiamondOperator = Core.Name "supportsDiamondOperator"
 data Aliases =
   Aliases {
     -- | Current module namespace context
-    aliasesCurrentNamespace :: Module.Namespace,
+    aliasesCurrentNamespace :: Packaging.Namespace,
     -- | Maps namespaces to Java package names
-    aliasesPackages :: (M.Map Module.Namespace Syntax.PackageName),
+    aliasesPackages :: (M.Map Packaging.Namespace Syntax.PackageName),
     -- | Variables bound in pattern matching branches
     aliasesBranchVars :: (S.Set Core.Name),
     -- | Variables that are self-recursive
