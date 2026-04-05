@@ -10,28 +10,6 @@ import hydra.graph.*
 
 import hydra.typing.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.math
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def bindConstraints(flowCx: hydra.context.Context)(cx: hydra.graph.Graph)(constraints: Seq[hydra.typing.TypeConstraint]): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.typing.TypeSubst] =
   hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.typing.TypeSubst, hydra.typing.TypeSubst](hydra.lib.eithers.bimap[hydra.context.InContext[hydra.errors.UnificationError],
@@ -1407,8 +1385,24 @@ def inferTypeOfUnwrap(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(tname: 
 def inferTypeOfVariable(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.typing.InferenceResult] =
   hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error], hydra.typing.InferenceResult],
-     hydra.core.TypeScheme](Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2("Variable not bound to type: ")(name)),
+     hydra.core.TypeScheme](hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error],
+     hydra.typing.InferenceResult], hydra.core.TypeScheme](Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2("Variable not bound to type: ")(name)),
      fcx)))((scheme: hydra.core.TypeScheme) =>
+  {
+  lazy val tsResult: Tuple2[hydra.core.TypeScheme, hydra.context.Context] = hydra.resolution.instantiateTypeScheme(fcx)(scheme)
+  {
+    lazy val ts: hydra.core.TypeScheme = hydra.lib.pairs.first[hydra.core.TypeScheme, hydra.context.Context](tsResult)
+    {
+      lazy val fcx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.TypeScheme, hydra.context.Context](tsResult)
+      {
+        lazy val constraints: Map[hydra.core.Name, hydra.core.TypeVariableMetadata] = hydra.lib.maybes.fromMaybe[Map[hydra.core.Name,
+           hydra.core.TypeVariableMetadata]](hydra.lib.maps.empty[hydra.core.Name, hydra.core.TypeVariableMetadata])(ts.constraints)
+        Right(hydra.inference.yieldCheckedWithConstraints(fcx2)(hydra.inference.buildTypeApplicationTerm(ts.variables)(hydra.core.Term.variable(name)))(ts.`type`)(hydra.substitution.idTypeSubst)(constraints))
+      }
+    }
+  }
+})(hydra.lib.maybes.map[hydra.graph.Primitive, hydra.core.TypeScheme]((x: hydra.graph.Primitive) => (x.`type`))(hydra.lib.maps.lookup[hydra.core.Name,
+   hydra.graph.Primitive](name)(cx.primitives))))((scheme: hydra.core.TypeScheme) =>
   {
   lazy val tsResult: Tuple2[hydra.core.TypeScheme, hydra.context.Context] = hydra.resolution.instantiateTypeScheme(fcx)(scheme)
   {

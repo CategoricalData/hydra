@@ -21,7 +21,7 @@
                         "argument": {"variable": "hydra.reflect.eliminationVariants"},
                         "function": {
                           "typeApplication": {
-                            "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                            "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.EliminationVariant"}}}}},
                     "type": {
                       "type": {"set": {"variable": "hydra.variants.EliminationVariant"}},
@@ -33,7 +33,7 @@
                         "argument": {"variable": "hydra.reflect.literalVariants"},
                         "function": {
                           "typeApplication": {
-                            "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                            "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.LiteralVariant"}}}}},
                     "type": {
                       "type": {"set": {"variable": "hydra.variants.LiteralVariant"}},
@@ -45,7 +45,7 @@
                         "argument": {"variable": "hydra.reflect.floatTypes"},
                         "function": {
                           "typeApplication": {
-                            "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                            "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.FloatType"}}}}},
                     "type": {
                       "type": {"set": {"variable": "hydra.core.FloatType"}},
@@ -57,7 +57,7 @@
                         "argument": {"variable": "hydra.reflect.functionVariants"},
                         "function": {
                           "typeApplication": {
-                            "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                            "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.FunctionVariant"}}}}},
                     "type": {
                       "type": {"set": {"variable": "hydra.variants.FunctionVariant"}},
@@ -69,7 +69,7 @@
                         "argument": {"variable": "hydra.reflect.integerTypes"},
                         "function": {
                           "typeApplication": {
-                            "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                            "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.core.IntegerType"}}}}},
                     "type": {
                       "type": {"set": {"variable": "hydra.core.IntegerType"}},
@@ -81,7 +81,7 @@
                         "argument": {"variable": "hydra.reflect.termVariants"},
                         "function": {
                           "typeApplication": {
-                            "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                            "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TermVariant"}}}}},
                     "type": {
                       "type": {"set": {"variable": "hydra.variants.TermVariant"}},
@@ -93,7 +93,7 @@
                         "argument": {"variable": "hydra.reflect.typeVariants"},
                         "function": {
                           "typeApplication": {
-                            "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                            "body": {"variable": "hydra.lib.sets.fromList"},
                             "type": {"variable": "hydra.variants.TypeVariant"}}}}},
                     "type": {
                       "type": {"set": {"variable": "hydra.variants.TypeVariant"}},

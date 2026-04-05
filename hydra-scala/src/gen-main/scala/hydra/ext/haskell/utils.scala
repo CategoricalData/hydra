@@ -6,24 +6,6 @@ import hydra.ext.haskell.syntax.*
 
 import hydra.packaging.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def applicationPattern(name: hydra.ext.haskell.syntax.Name)(args: Seq[hydra.ext.haskell.syntax.Pattern]): hydra.ext.haskell.syntax.Pattern =
   hydra.ext.haskell.syntax.Pattern.application(hydra.ext.haskell.syntax.ApplicationPattern(name, args))
 

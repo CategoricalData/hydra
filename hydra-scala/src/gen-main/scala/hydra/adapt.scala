@@ -12,26 +12,6 @@ import hydra.graph.*
 
 import hydra.packaging.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def adaptDataGraph(constraints: hydra.coders.LanguageConstraints)(doExpand: Boolean)(els0: Seq[hydra.core.Binding])(cx: hydra.context.Context)(graph0: hydra.graph.Graph): Either[scala.Predef.String,
    Tuple2[hydra.graph.Graph, Seq[hydra.core.Binding]]] =
   {

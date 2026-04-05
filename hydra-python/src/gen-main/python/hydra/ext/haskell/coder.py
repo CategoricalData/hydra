@@ -646,7 +646,7 @@ def encode_type_with_class_assertions(namespaces: hydra.packaging.Namespaces[hyd
         return hydra.lib.lists.concat(hydra.lib.lists.map((lambda x1: to_pairs(x1)), hydra.lib.maps.to_list(classes())))
     def to_pairs(map_entry: tuple[T1, frozenset[T2]]) -> frozenlist[tuple[T1, T2]]:
         @lru_cache(1)
-        def name() -> frozenset[T2]:
+        def name() -> T1:
             return hydra.lib.pairs.first(map_entry)
         @lru_cache(1)
         def cls_set() -> frozenset[T2]:

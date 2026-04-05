@@ -939,9 +939,14 @@ inferTypeOfUnwrap fcx cx tname =
 -- | Infer the type of a variable (Either version)
 inferTypeOfVariable :: Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Errors.Error) Typing_.InferenceResult
 inferTypeOfVariable fcx cx name =
-    Maybes.maybe (Left (Context.InContext {
+    Maybes.maybe (Maybes.maybe (Left (Context.InContext {
       Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Variable not bound to type: " (Core.unName name)))),
       Context.inContextContext = fcx})) (\scheme ->
+      let tsResult = Resolution.instantiateTypeScheme fcx scheme
+          ts = Pairs.first tsResult
+          fcx2 = Pairs.second tsResult
+          constraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints ts)
+      in (Right (yieldCheckedWithConstraints fcx2 (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermVariable name)) (Core.typeSchemeType ts) Substitution.idTypeSubst constraints))) (Maybes.map Graph.primitiveType (Maps.lookup name (Graph.graphPrimitives cx)))) (\scheme ->
       let tsResult = Resolution.instantiateTypeScheme fcx scheme
           ts = Pairs.first tsResult
           fcx2 = Pairs.second tsResult

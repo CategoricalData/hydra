@@ -4,8 +4,6 @@ import hydra.core.*
 
 import hydra.paths.*
 
-import hydra.lib.lists
-
 def subtermEdge(x: hydra.paths.SubtermEdge): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.paths.SubtermEdge", Seq(hydra.core.Field("source", hydra.encode.paths.subtermNode(x.source)),
      hydra.core.Field("path", hydra.encode.paths.subtermPath(x.path)), hydra.core.Field("target", hydra.encode.paths.subtermNode(x.target)))))

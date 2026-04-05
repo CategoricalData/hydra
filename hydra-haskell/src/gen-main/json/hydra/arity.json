@@ -57,7 +57,7 @@
                                             "function": {
                                               "application": {
                                                 "argument": {"literal": {"integer": {"int32": 1}}},
-                                                "function": {"function": {"primitive": "hydra.lib.math.add"}}}}}},
+                                                "function": {"variable": "hydra.lib.math.add"}}}}},
                                         "domain": {"literal": {"integer": {"int32": {}}}},
                                         "parameter": "i"}}}}},
                               "domain": {"variable": "hydra.core.Lambda"},
@@ -176,7 +176,7 @@
                                                       "function": {
                                                         "application": {
                                                           "argument": {"variable": "xapp"},
-                                                          "function": {"function": {"primitive": "hydra.lib.math.sub"}}}}}},
+                                                          "function": {"variable": "hydra.lib.math.sub"}}}}},
                                                   "domain": {"literal": {"integer": {"int32": {}}}},
                                                   "parameter": "xapp"}}}}},
                                         "domain": {"variable": "hydra.core.Term"},
@@ -286,7 +286,7 @@
                                   "function": {
                                     "application": {
                                       "argument": {"literal": {"integer": {"int32": 1}}},
-                                      "function": {"function": {"primitive": "hydra.lib.math.add"}}}}}},
+                                      "function": {"variable": "hydra.lib.math.add"}}}}},
                               "domain": {"variable": "hydra.core.FunctionType"},
                               "parameter": "f"}}}}],
                     "default": {"literal": {"integer": {"int32": 0}}},
@@ -434,7 +434,7 @@
                                                         "elimination": {"record": {"field": "domain", "typeName": "hydra.core.FunctionType"}}}}}},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
+                                                    "body": {"variable": "hydra.lib.lists.cons"},
                                                     "type": {"variable": "hydra.core.Type"}}}}}}},
                                         "domain": {"variable": "hydra.core.FunctionType"},
                                         "parameter": "ft"}}}}],

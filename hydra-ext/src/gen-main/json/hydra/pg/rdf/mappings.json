@@ -68,7 +68,7 @@
                                                                                   "function": {"function": {"elimination": {"wrap": "hydra.pg.model.VertexLabel"}}}}},
                                                                               "function": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                                                  "body": {"variable": "hydra.lib.equality.equal"},
                                                                                   "type": {"literal": {"string": {}}}}}}}}},
                                                                       "type": {"type": {"literal": {"boolean": {}}}, "variables": []}}],
                                                                   "body": {
@@ -112,12 +112,12 @@
                                                                                                                                 "typeName": "hydra.ext.org.w3.rdf.syntax.RdfsClass"}},
                                                                                                                             "function": {
                                                                                                                               "typeApplication": {
-                                                                                                                                "body": {"function": {"primitive": "hydra.lib.sets.singleton"}},
+                                                                                                                                "body": {"variable": "hydra.lib.sets.singleton"},
                                                                                                                                 "type": {"variable": "hydra.ext.org.w3.rdf.syntax.RdfsClass"}}}}}},
                                                                                                                       "typeName": "hydra.ext.org.w3.shacl.model.CommonConstraint"}},
                                                                                                                   "function": {
                                                                                                                     "typeApplication": {
-                                                                                                                      "body": {"function": {"primitive": "hydra.lib.sets.singleton"}},
+                                                                                                                      "body": {"variable": "hydra.lib.sets.singleton"},
                                                                                                                       "type": {"variable": "hydra.ext.org.w3.shacl.model.CommonConstraint"}}}}}},
                                                                                                             {
                                                                                                               "name": "deactivated",
@@ -136,32 +136,32 @@
                                                                                                               "name": "targetClass",
                                                                                                               "term": {
                                                                                                                 "typeApplication": {
-                                                                                                                  "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                                                                                  "body": {"variable": "hydra.lib.sets.empty"},
                                                                                                                   "type": {"variable": "hydra.ext.org.w3.rdf.syntax.RdfsClass"}}}},
                                                                                                             {
                                                                                                               "name": "targetNode",
                                                                                                               "term": {
                                                                                                                 "typeApplication": {
-                                                                                                                  "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                                                                                  "body": {"variable": "hydra.lib.sets.empty"},
                                                                                                                   "type": {"variable": "hydra.ext.org.w3.rdf.syntax.IriOrLiteral"}}}},
                                                                                                             {
                                                                                                               "name": "targetObjectsOf",
                                                                                                               "term": {
                                                                                                                 "typeApplication": {
-                                                                                                                  "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                                                                                  "body": {"variable": "hydra.lib.sets.empty"},
                                                                                                                   "type": {"variable": "hydra.ext.org.w3.rdf.syntax.Property"}}}},
                                                                                                             {
                                                                                                               "name": "targetSubjectsOf",
                                                                                                               "term": {
                                                                                                                 "typeApplication": {
-                                                                                                                  "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                                                                                  "body": {"variable": "hydra.lib.sets.empty"},
                                                                                                                   "type": {"variable": "hydra.ext.org.w3.rdf.syntax.Property"}}}}],
                                                                                                           "typeName": "hydra.ext.org.w3.shacl.model.CommonProperties"}}},
                                                                                                     {
                                                                                                       "name": "constraints",
                                                                                                       "term": {
                                                                                                         "typeApplication": {
-                                                                                                          "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                                                                          "body": {"variable": "hydra.lib.sets.empty"},
                                                                                                           "type": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShapeConstraint"}}}},
                                                                                                     {
                                                                                                       "name": "defaultValue",
@@ -200,7 +200,7 @@
                                                                                         "type": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"}}},
                                                                                     "function": {
                                                                                       "typeApplication": {
-                                                                                        "body": {"function": {"primitive": "hydra.lib.sets.singleton"}},
+                                                                                        "body": {"variable": "hydra.lib.sets.singleton"},
                                                                                         "type": {
                                                                                           "application": {
                                                                                             "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
@@ -223,7 +223,7 @@
                                                                                   "argument": {"variable": "matchesVertex"},
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                                      "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                                       "type": {
                                                                                         "list": {"variable": "hydra.ext.org.w3.shacl.model.CommonConstraint"}}}}}}}}}}}}}},
                                                               "domain": {
@@ -235,7 +235,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "typeApplication": {
-                                                                "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                "body": {"variable": "hydra.lib.lists.map"},
                                                                 "type": {
                                                                   "application": {
                                                                     "argument": {"variable": "t1"},
@@ -244,7 +244,7 @@
                                                               "list": {"variable": "hydra.ext.org.w3.shacl.model.CommonConstraint"}}}}}}}},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                                    "body": {"variable": "hydra.lib.lists.concat"},
                                                     "type": {"variable": "hydra.ext.org.w3.shacl.model.CommonConstraint"}}}}},
                                             "domain": {
                                               "list": {
@@ -437,7 +437,7 @@
                                                     "typeName": "hydra.ext.org.w3.rdf.syntax.Triple"}},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"function": {"primitive": "hydra.lib.sets.singleton"}},
+                                                    "body": {"variable": "hydra.lib.sets.singleton"},
                                                     "type": {"variable": "hydra.ext.org.w3.rdf.syntax.Triple"}}}}},
                                             "typeName": "hydra.ext.org.w3.rdf.syntax.Graph"}}}],
                                     "typeName": "hydra.ext.org.w3.rdf.syntax.Description"}}}},
@@ -515,7 +515,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                    "body": {"variable": "hydra.lib.lists.map"},
                                                     "type": {
                                                       "application": {
                                                         "argument": {"variable": "t0"},
@@ -550,7 +550,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                    "body": {"variable": "hydra.lib.lists.map"},
                                                     "type": {
                                                       "application": {
                                                         "argument": {"variable": "t0"},
@@ -566,7 +566,7 @@
                                         "argument": {"list": [{"variable": "vertexDescs"}, {"variable": "edgeDescs"}]},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                            "body": {"variable": "hydra.lib.lists.concat"},
                                             "type": {"variable": "hydra.ext.org.w3.rdf.syntax.Description"}}}}},
                                     "type": {
                                       "type": {"list": {"variable": "hydra.ext.org.w3.rdf.syntax.Description"}},
@@ -742,7 +742,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {"function": {"primitive": "hydra.lib.maps.toList"}},
+                                                    "body": {"variable": "hydra.lib.maps.toList"},
                                                     "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                 "type": {"variable": "t0"}}}}},
                                         "function": {
@@ -762,7 +762,7 @@
                                                                 "typeApplication": {
                                                                   "body": {
                                                                     "typeApplication": {
-                                                                      "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                      "body": {"variable": "hydra.lib.pairs.first"},
                                                                       "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                   "type": {"variable": "t0"}}}}},
                                                           "type": {"type": {"variable": "hydra.pg.model.PropertyKey"}, "variables": []}},
@@ -775,7 +775,7 @@
                                                                 "typeApplication": {
                                                                   "body": {
                                                                     "typeApplication": {
-                                                                      "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                      "body": {"variable": "hydra.lib.pairs.second"},
                                                                       "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                   "type": {"variable": "t0"}}}}},
                                                           "type": {"type": {"variable": "t0"}, "variables": []}},
@@ -840,7 +840,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                    "body": {"variable": "hydra.lib.lists.map"},
                                                     "type": {
                                                       "pair": {
                                                         "first": {"variable": "hydra.pg.model.PropertyKey"},
@@ -859,7 +859,7 @@
                                             "argument": {"variable": "typeTriple"},
                                             "function": {
                                               "typeApplication": {
-                                                "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
+                                                "body": {"variable": "hydra.lib.lists.cons"},
                                                 "type": {"variable": "hydra.ext.org.w3.rdf.syntax.Triple"}}}}}}},
                                     "type": {
                                       "type": {"list": {"variable": "hydra.ext.org.w3.rdf.syntax.Triple"}},
@@ -882,7 +882,7 @@
                                                 "argument": {"variable": "allTriples"},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                                                    "body": {"variable": "hydra.lib.sets.fromList"},
                                                     "type": {"variable": "hydra.ext.org.w3.rdf.syntax.Triple"}}}}},
                                             "typeName": "hydra.ext.org.w3.rdf.syntax.Graph"}}}],
                                     "typeName": "hydra.ext.org.w3.rdf.syntax.Description"}}}},
@@ -960,7 +960,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.maps.elems"}},
+                                                                  "body": {"variable": "hydra.lib.maps.elems"},
                                                                   "type": {"variable": "hydra.pg.model.VertexLabel"}}},
                                                               "type": {
                                                                 "application": {
@@ -991,7 +991,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.maps.elems"}},
+                                                                  "body": {"variable": "hydra.lib.maps.elems"},
                                                                   "type": {"variable": "hydra.pg.model.EdgeLabel"}}},
                                                               "type": {
                                                                 "application": {
@@ -1130,7 +1130,7 @@
                                                                                                                   "name": "constraints",
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {
-                                                                                                                      "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                                                                                      "body": {"variable": "hydra.lib.sets.empty"},
                                                                                                                       "type": {"variable": "hydra.ext.org.w3.shacl.model.CommonConstraint"}}}},
                                                                                                                 {
                                                                                                                   "name": "deactivated",
@@ -1149,25 +1149,25 @@
                                                                                                                   "name": "targetClass",
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {
-                                                                                                                      "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                                                                                      "body": {"variable": "hydra.lib.sets.empty"},
                                                                                                                       "type": {"variable": "hydra.ext.org.w3.rdf.syntax.RdfsClass"}}}},
                                                                                                                 {
                                                                                                                   "name": "targetNode",
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {
-                                                                                                                      "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                                                                                      "body": {"variable": "hydra.lib.sets.empty"},
                                                                                                                       "type": {"variable": "hydra.ext.org.w3.rdf.syntax.IriOrLiteral"}}}},
                                                                                                                 {
                                                                                                                   "name": "targetObjectsOf",
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {
-                                                                                                                      "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                                                                                      "body": {"variable": "hydra.lib.sets.empty"},
                                                                                                                       "type": {"variable": "hydra.ext.org.w3.rdf.syntax.Property"}}}},
                                                                                                                 {
                                                                                                                   "name": "targetSubjectsOf",
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {
-                                                                                                                      "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                                                                                      "body": {"variable": "hydra.lib.sets.empty"},
                                                                                                                       "type": {"variable": "hydra.ext.org.w3.rdf.syntax.Property"}}}}],
                                                                                                               "typeName": "hydra.ext.org.w3.shacl.model.CommonProperties"}}}],
                                                                                                       "typeName": "hydra.ext.org.w3.shacl.model.NodeShape"}},
@@ -1200,7 +1200,7 @@
                                                                                     "argument": {"variable": "edgeShapes"},
                                                                                     "function": {
                                                                                       "typeApplication": {
-                                                                                        "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                                                                                        "body": {"variable": "hydra.lib.sets.fromList"},
                                                                                         "type": {"variable": "hydra.ext.org.w3.shacl.model.CommonConstraint"}}}}},
                                                                                 "function": {
                                                                                   "application": {
@@ -1215,7 +1215,7 @@
                                                                                                 "typeName": "hydra.ext.org.w3.shacl.model.CommonProperties"}}}}}},
                                                                                     "function": {
                                                                                       "typeApplication": {
-                                                                                        "body": {"function": {"primitive": "hydra.lib.sets.union"}},
+                                                                                        "body": {"variable": "hydra.lib.sets.union"},
                                                                                         "type": {"variable": "hydra.ext.org.w3.shacl.model.CommonConstraint"}}}}}}},
                                                                             "type": {
                                                                               "type": {"set": {"variable": "hydra.ext.org.w3.shacl.model.CommonConstraint"}},
@@ -1352,7 +1352,7 @@
                                                                 "typeApplication": {
                                                                   "body": {
                                                                     "typeApplication": {
-                                                                      "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                      "body": {"variable": "hydra.lib.lists.map"},
                                                                       "type": {
                                                                         "application": {
                                                                           "argument": {"variable": "t0"},
@@ -1375,7 +1375,7 @@
                                                           "argument": {"variable": "defs"},
                                                           "function": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                                                              "body": {"variable": "hydra.lib.sets.fromList"},
                                                               "type": {
                                                                 "application": {
                                                                   "argument": {"variable": "hydra.ext.org.w3.shacl.model.Shape"},
@@ -1527,7 +1527,7 @@
                                                   "typeName": "hydra.ext.org.w3.shacl.model.CommonConstraint"}},
                                               "function": {
                                                 "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.sets.singleton"}},
+                                                  "body": {"variable": "hydra.lib.sets.singleton"},
                                                   "type": {"variable": "hydra.ext.org.w3.shacl.model.CommonConstraint"}}}}},
                                           "type": {
                                             "type": {"set": {"variable": "hydra.ext.org.w3.shacl.model.CommonConstraint"}},
@@ -1538,7 +1538,7 @@
                                             "application": {
                                               "argument": {
                                                 "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                  "body": {"variable": "hydra.lib.sets.empty"},
                                                   "type": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShapeConstraint"}}},
                                               "function": {
                                                 "application": {
@@ -1552,14 +1552,14 @@
                                                           "typeName": "hydra.ext.org.w3.shacl.model.PropertyShapeConstraint"}},
                                                       "function": {
                                                         "typeApplication": {
-                                                          "body": {"function": {"primitive": "hydra.lib.sets.singleton"}},
+                                                          "body": {"variable": "hydra.lib.sets.singleton"},
                                                           "type": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShapeConstraint"}}}}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {"variable": "required_"},
                                                       "function": {
                                                         "typeApplication": {
-                                                          "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                          "body": {"variable": "hydra.lib.logic.ifElse"},
                                                           "type": {
                                                             "set": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShapeConstraint"}}}}}}}}}},
                                           "type": {
@@ -1592,25 +1592,25 @@
                                                       "name": "targetClass",
                                                       "term": {
                                                         "typeApplication": {
-                                                          "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                          "body": {"variable": "hydra.lib.sets.empty"},
                                                           "type": {"variable": "hydra.ext.org.w3.rdf.syntax.RdfsClass"}}}},
                                                     {
                                                       "name": "targetNode",
                                                       "term": {
                                                         "typeApplication": {
-                                                          "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                          "body": {"variable": "hydra.lib.sets.empty"},
                                                           "type": {"variable": "hydra.ext.org.w3.rdf.syntax.IriOrLiteral"}}}},
                                                     {
                                                       "name": "targetObjectsOf",
                                                       "term": {
                                                         "typeApplication": {
-                                                          "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                          "body": {"variable": "hydra.lib.sets.empty"},
                                                           "type": {"variable": "hydra.ext.org.w3.rdf.syntax.Property"}}}},
                                                     {
                                                       "name": "targetSubjectsOf",
                                                       "term": {
                                                         "typeApplication": {
-                                                          "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                          "body": {"variable": "hydra.lib.sets.empty"},
                                                           "type": {"variable": "hydra.ext.org.w3.rdf.syntax.Property"}}}}],
                                                   "typeName": "hydra.ext.org.w3.shacl.model.CommonProperties"}}},
                                             {"name": "constraints", "term": {"variable": "propConstraints"}},
@@ -1778,7 +1778,7 @@
                                                                             "type": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"}}},
                                                                         "function": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.sets.singleton"}},
+                                                                            "body": {"variable": "hydra.lib.sets.singleton"},
                                                                             "type": {
                                                                               "application": {
                                                                                 "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
@@ -1793,7 +1793,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "typeApplication": {
-                                                                "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                "body": {"variable": "hydra.lib.lists.map"},
                                                                 "type": {
                                                                   "application": {
                                                                     "argument": {"variable": "t0"},
@@ -1815,7 +1815,7 @@
                                                             "argument": {"variable": "propShapes"},
                                                             "function": {
                                                               "typeApplication": {
-                                                                "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                                                                "body": {"variable": "hydra.lib.sets.fromList"},
                                                                 "type": {"variable": "hydra.ext.org.w3.shacl.model.CommonConstraint"}}}}}},
                                                       {
                                                         "name": "deactivated",
@@ -1840,25 +1840,25 @@
                                                                 "typeName": "hydra.ext.org.w3.rdf.syntax.RdfsClass"}},
                                                             "function": {
                                                               "typeApplication": {
-                                                                "body": {"function": {"primitive": "hydra.lib.sets.singleton"}},
+                                                                "body": {"variable": "hydra.lib.sets.singleton"},
                                                                 "type": {"variable": "hydra.ext.org.w3.rdf.syntax.RdfsClass"}}}}}},
                                                       {
                                                         "name": "targetNode",
                                                         "term": {
                                                           "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                            "body": {"variable": "hydra.lib.sets.empty"},
                                                             "type": {"variable": "hydra.ext.org.w3.rdf.syntax.IriOrLiteral"}}}},
                                                       {
                                                         "name": "targetObjectsOf",
                                                         "term": {
                                                           "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                            "body": {"variable": "hydra.lib.sets.empty"},
                                                             "type": {"variable": "hydra.ext.org.w3.rdf.syntax.Property"}}}},
                                                       {
                                                         "name": "targetSubjectsOf",
                                                         "term": {
                                                           "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                            "body": {"variable": "hydra.lib.sets.empty"},
                                                             "type": {"variable": "hydra.ext.org.w3.rdf.syntax.Property"}}}}],
                                                     "typeName": "hydra.ext.org.w3.shacl.model.CommonProperties"}},
                                                 "type": {

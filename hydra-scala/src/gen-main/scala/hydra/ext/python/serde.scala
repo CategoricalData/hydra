@@ -2,18 +2,6 @@ package hydra.ext.python.serde
 
 import hydra.ext.python.syntax.*
 
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maybes
-
-import hydra.lib.strings
-
 def encodeAnnotatedRhs(arhs: hydra.ext.python.syntax.AnnotatedRhs): hydra.ast.Expr =
   hydra.serialization.spaceSep(Seq(hydra.serialization.cst("="), arhs match
   case hydra.ext.python.syntax.AnnotatedRhs.star(v_AnnotatedRhs_star_ses) => hydra.serialization.commaSep(hydra.serialization.inlineStyle)(hydra.lib.lists.map[hydra.ext.python.syntax.StarExpression,

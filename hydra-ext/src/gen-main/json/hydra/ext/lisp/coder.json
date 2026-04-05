@@ -240,7 +240,7 @@
                                                                                       "typeApplication": {
                                                                                         "body": {
                                                                                           "typeApplication": {
-                                                                                            "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                            "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                             "type": {"variable": "t2"}}},
                                                                                         "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                     "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -276,7 +276,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                  "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                   "type": {"variable": "t2"}}},
                                                                               "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                           "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -401,7 +401,7 @@
                                                                                                                           "application": {
                                                                                                                             "argument": {"literal": {"string": "hydra.lib.eithers.fromRight"}},
                                                                                                                             "function": {"variable": "hydra.ext.lisp.coder.isPrimitiveRef"}}}}},
-                                                                                                                    "function": {"function": {"primitive": "hydra.lib.logic.or"}}}}}},
+                                                                                                                    "function": {"variable": "hydra.lib.logic.or"}}}}},
                                                                                                             "function": {
                                                                                                               "application": {
                                                                                                                 "argument": {
@@ -411,7 +411,7 @@
                                                                                                                       "application": {
                                                                                                                         "argument": {"literal": {"string": "hydra.lib.eithers.fromLeft"}},
                                                                                                                         "function": {"variable": "hydra.ext.lisp.coder.isPrimitiveRef"}}}}},
-                                                                                                                "function": {"function": {"primitive": "hydra.lib.logic.or"}}}}}},
+                                                                                                                "function": {"variable": "hydra.lib.logic.or"}}}}},
                                                                                                         "type": {"type": {"literal": {"boolean": {}}}, "variables": []}}],
                                                                                                     "body": {
                                                                                                       "application": {
@@ -537,7 +537,7 @@
                                                                                                                                                                                                       "typeApplication": {
                                                                                                                                                                                                         "body": {
                                                                                                                                                                                                           "typeApplication": {
-                                                                                                                                                                                                            "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                                                                                                                            "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                                                                                                                             "type": {"variable": "t2"}}},
                                                                                                                                                                                                         "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                                                                                                                     "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -553,7 +553,7 @@
                                                                                                                                                                                             "typeApplication": {
                                                                                                                                                                                               "body": {
                                                                                                                                                                                                 "typeApplication": {
-                                                                                                                                                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                                                                                                                  "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                                                                                                                   "type": {"variable": "t2"}}},
                                                                                                                                                                                               "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                                                                                                           "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -571,7 +571,7 @@
                                                                                                                                                                                   "typeApplication": {
                                                                                                                                                                                     "body": {
                                                                                                                                                                                       "typeApplication": {
-                                                                                                                                                                                        "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                                                                                                        "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                                                                                                         "type": {"variable": "t2"}}},
                                                                                                                                                                                     "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                                                                                                 "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -589,7 +589,7 @@
                                                                                                                                                                         "typeApplication": {
                                                                                                                                                                           "body": {
                                                                                                                                                                             "typeApplication": {
-                                                                                                                                                                              "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                                                                                              "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                                                                                               "type": {"variable": "t2"}}},
                                                                                                                                                                           "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                                                                                       "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -604,7 +604,7 @@
                                                                                                                                                                       "function": {"variable": "hydra.ext.lisp.coder.isPrimitiveRef"}}}}},
                                                                                                                                                               "function": {
                                                                                                                                                                 "typeApplication": {
-                                                                                                                                                                  "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                                                                                                                  "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                                                                                                                   "type": {
                                                                                                                                                                     "either": {
                                                                                                                                                                       "left": {"variable": "t2"},
@@ -675,7 +675,7 @@
                                                                                                                                                                                                   "typeApplication": {
                                                                                                                                                                                                     "body": {
                                                                                                                                                                                                       "typeApplication": {
-                                                                                                                                                                                                        "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                                                                                                                        "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                                                                                                                         "type": {"variable": "t2"}}},
                                                                                                                                                                                                     "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                                                                                                                 "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -691,7 +691,7 @@
                                                                                                                                                                                         "typeApplication": {
                                                                                                                                                                                           "body": {
                                                                                                                                                                                             "typeApplication": {
-                                                                                                                                                                                              "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                                                                                                              "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                                                                                                               "type": {"variable": "t2"}}},
                                                                                                                                                                                           "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                                                                                                       "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -709,7 +709,7 @@
                                                                                                                                                                               "typeApplication": {
                                                                                                                                                                                 "body": {
                                                                                                                                                                                   "typeApplication": {
-                                                                                                                                                                                    "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                                                                                                    "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                                                                                                     "type": {"variable": "t2"}}},
                                                                                                                                                                                 "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                                                                                             "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -727,7 +727,7 @@
                                                                                                                                                                     "typeApplication": {
                                                                                                                                                                       "body": {
                                                                                                                                                                         "typeApplication": {
-                                                                                                                                                                          "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                                                                                          "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                                                                                           "type": {"variable": "t2"}}},
                                                                                                                                                                       "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                                                                                   "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -742,7 +742,7 @@
                                                                                                                                                                   "function": {"variable": "hydra.ext.lisp.coder.isPrimitiveRef"}}}}},
                                                                                                                                                           "function": {
                                                                                                                                                             "typeApplication": {
-                                                                                                                                                              "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                                                                                                              "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                                                                                                               "type": {
                                                                                                                                                                 "either": {
                                                                                                                                                                   "left": {"variable": "t2"},
@@ -796,7 +796,7 @@
                                                                                                                                                                                     "typeApplication": {
                                                                                                                                                                                       "body": {
                                                                                                                                                                                         "typeApplication": {
-                                                                                                                                                                                          "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                                                                                                          "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                                                                                                           "type": {"variable": "t2"}}},
                                                                                                                                                                                       "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                                                                                                   "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -812,7 +812,7 @@
                                                                                                                                                                           "typeApplication": {
                                                                                                                                                                             "body": {
                                                                                                                                                                               "typeApplication": {
-                                                                                                                                                                                "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                                                                                                "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                                                                                                 "type": {"variable": "t2"}}},
                                                                                                                                                                             "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                                                                                         "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -830,7 +830,7 @@
                                                                                                                                                                 "typeApplication": {
                                                                                                                                                                   "body": {
                                                                                                                                                                     "typeApplication": {
-                                                                                                                                                                      "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                                                                                      "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                                                                                       "type": {"variable": "t2"}}},
                                                                                                                                                                   "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                                                                               "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -845,7 +845,7 @@
                                                                                                                                                               "function": {"variable": "hydra.ext.lisp.coder.isPrimitiveRef"}}}}},
                                                                                                                                                       "function": {
                                                                                                                                                         "typeApplication": {
-                                                                                                                                                          "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                                                                                                          "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                                                                                                           "type": {
                                                                                                                                                             "either": {
                                                                                                                                                               "left": {"variable": "t2"},
@@ -909,7 +909,7 @@
                                                                                                                                               "typeApplication": {
                                                                                                                                                 "body": {
                                                                                                                                                   "typeApplication": {
-                                                                                                                                                    "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                                                                    "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                                                                     "type": {"variable": "t2"}}},
                                                                                                                                                 "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                                                             "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -925,7 +925,7 @@
                                                                                                                                     "typeApplication": {
                                                                                                                                       "body": {
                                                                                                                                         "typeApplication": {
-                                                                                                                                          "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                                                          "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                                                           "type": {"variable": "t2"}}},
                                                                                                                                       "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                                                   "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -941,7 +941,7 @@
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {
                                                                                                                               "typeApplication": {
-                                                                                                                                "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                                                "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                                                 "type": {"variable": "t2"}}},
                                                                                                                             "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                                         "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -950,7 +950,7 @@
                                                                                                                 "argument": {"variable": "isLazy2"},
                                                                                                                 "function": {
                                                                                                                   "typeApplication": {
-                                                                                                                    "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                                                                     "type": {
                                                                                                                       "either": {
                                                                                                                         "left": {"variable": "t2"},
@@ -1135,7 +1135,7 @@
                                                                                                         "typeApplication": {
                                                                                                           "body": {
                                                                                                             "typeApplication": {
-                                                                                                              "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                              "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                               "type": {"variable": "t2"}}},
                                                                                                           "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                       "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -1191,7 +1191,7 @@
                                                                                               "typeApplication": {
                                                                                                 "body": {
                                                                                                   "typeApplication": {
-                                                                                                    "body": {"function": {"primitive": "hydra.lib.maybes.cases"}},
+                                                                                                    "body": {"variable": "hydra.lib.maybes.cases"},
                                                                                                     "type": {"variable": "hydra.core.Term"}}},
                                                                                                 "type": {
                                                                                                   "either": {
@@ -1377,7 +1377,7 @@
                                                                                                                                         "typeApplication": {
                                                                                                                                           "body": {
                                                                                                                                             "typeApplication": {
-                                                                                                                                              "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                                                              "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                                                               "type": {"variable": "t2"}}},
                                                                                                                                           "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                                                       "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -1407,7 +1407,7 @@
                                                                                                                               "typeApplication": {
                                                                                                                                 "body": {
                                                                                                                                   "typeApplication": {
-                                                                                                                                    "body": {"function": {"primitive": "hydra.lib.maybes.cases"}},
+                                                                                                                                    "body": {"variable": "hydra.lib.maybes.cases"},
                                                                                                                                     "type": {"variable": "hydra.core.Term"}}},
                                                                                                                                 "type": {
                                                                                                                                   "either": {
@@ -1466,7 +1466,7 @@
                                                                                                                               "typeApplication": {
                                                                                                                                 "body": {
                                                                                                                                   "typeApplication": {
-                                                                                                                                    "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                                                    "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                                                     "type": {"variable": "t2"}}},
                                                                                                                                 "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                                             "type": {"maybe": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}}},
@@ -1493,7 +1493,7 @@
                                                                                                                     "typeApplication": {
                                                                                                                       "body": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"function": {"primitive": "hydra.lib.maybes.cases"}},
+                                                                                                                          "body": {"variable": "hydra.lib.maybes.cases"},
                                                                                                                           "type": {"variable": "hydra.core.Term"}}},
                                                                                                                       "type": {
                                                                                                                         "either": {
@@ -1505,7 +1505,7 @@
                                                                                                             "typeApplication": {
                                                                                                               "body": {
                                                                                                                 "typeApplication": {
-                                                                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                                  "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                                   "type": {"variable": "t2"}}},
                                                                                                               "type": {"maybe": {"variable": "hydra.ext.lisp.syntax.Expression"}}}},
                                                                                                           "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -1666,7 +1666,7 @@
                                                                                                                                     "typeApplication": {
                                                                                                                                       "body": {
                                                                                                                                         "typeApplication": {
-                                                                                                                                          "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                                                          "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                                                           "type": {"variable": "t2"}}},
                                                                                                                                       "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                                                   "type": {"variable": "hydra.ext.lisp.syntax.CondClause"}}}}}}}}}}}}},
@@ -1678,7 +1678,7 @@
                                                                                                           "typeApplication": {
                                                                                                             "body": {
                                                                                                               "typeApplication": {
-                                                                                                                "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
+                                                                                                                "body": {"variable": "hydra.lib.eithers.mapList"},
                                                                                                                 "type": {"variable": "hydra.core.Field"}}},
                                                                                                             "type": {"variable": "hydra.ext.lisp.syntax.CondClause"}}},
                                                                                                         "type": {"variable": "t2"}}}}}}},
@@ -1688,7 +1688,7 @@
                                                                                                   "typeApplication": {
                                                                                                     "body": {
                                                                                                       "typeApplication": {
-                                                                                                        "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                        "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                         "type": {"variable": "t2"}}},
                                                                                                     "type": {"list": {"variable": "hydra.ext.lisp.syntax.CondClause"}}}},
                                                                                                 "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}}}}}}}},
@@ -1755,7 +1755,7 @@
                                                                                       "typeApplication": {
                                                                                         "body": {
                                                                                           "typeApplication": {
-                                                                                            "body": {"function": {"primitive": "hydra.lib.maybes.cases"}},
+                                                                                            "body": {"variable": "hydra.lib.maybes.cases"},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                                         "type": {
                                                                                           "either": {
@@ -1962,7 +1962,7 @@
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "typeApplication": {
-                                                                                          "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                          "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                           "type": {"variable": "t2"}}},
                                                                                       "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                   "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}}}},
@@ -2099,7 +2099,7 @@
                                                                     "argument": {"variable": "bindings"},
                                                                     "function": {
                                                                       "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.lists.reverse"}},
+                                                                        "body": {"variable": "hydra.lib.lists.reverse"},
                                                                         "type": {"variable": "hydra.core.Binding"}}}}},
                                                                 "function": {
                                                                   "application": {
@@ -2200,7 +2200,7 @@
                                                                                                       "typeApplication": {
                                                                                                         "body": {
                                                                                                           "typeApplication": {
-                                                                                                            "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                            "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                             "type": {"variable": "t2"}}},
                                                                                                         "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                     "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}}}},
@@ -2214,7 +2214,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {
                                                                                   "typeApplication": {
-                                                                                    "body": {"function": {"primitive": "hydra.lib.eithers.foldl"}},
+                                                                                    "body": {"variable": "hydra.lib.eithers.foldl"},
                                                                                     "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                 "type": {"variable": "hydra.core.Binding"}}},
                                                                             "type": {"variable": "t2"}}}}}}}}},
@@ -2250,7 +2250,7 @@
                                                                 "typeApplication": {
                                                                   "body": {
                                                                     "typeApplication": {
-                                                                      "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                      "body": {"variable": "hydra.lib.eithers.bind"},
                                                                       "type": {"variable": "t2"}}},
                                                                   "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                               "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -2378,12 +2378,12 @@
                                                                                                       "typeApplication": {
                                                                                                         "body": {
                                                                                                           "typeApplication": {
-                                                                                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                                            "body": {"variable": "hydra.lib.lists.map"},
                                                                                                             "type": {"variable": "hydra.core.Binding"}}},
                                                                                                         "type": {"variable": "hydra.core.Name"}}}}}}},
                                                                                             "function": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                                                                                                "body": {"variable": "hydra.lib.sets.fromList"},
                                                                                                 "type": {"variable": "hydra.core.Name"}}}}},
                                                                                         "type": {"type": {"set": {"variable": "hydra.core.Name"}}, "variables": []}},
                                                                                       {
@@ -2426,11 +2426,11 @@
                                                                                                                               "argument": {"variable": "allNames"},
                                                                                                                               "function": {
                                                                                                                                 "typeApplication": {
-                                                                                                                                  "body": {"function": {"primitive": "hydra.lib.sets.intersection"}},
+                                                                                                                                  "body": {"variable": "hydra.lib.sets.intersection"},
                                                                                                                                   "type": {"variable": "hydra.core.Name"}}}}}}},
                                                                                                                       "function": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"function": {"primitive": "hydra.lib.sets.toList"}},
+                                                                                                                          "body": {"variable": "hydra.lib.sets.toList"},
                                                                                                                           "type": {"variable": "hydra.core.Name"}}}}}}},
                                                                                                               "type": {"variable": "hydra.core.Name"}}},
                                                                                                           "type": {"list": {"variable": "hydra.core.Name"}}}},
@@ -2440,7 +2440,7 @@
                                                                                                   "typeApplication": {
                                                                                                     "body": {
                                                                                                       "typeApplication": {
-                                                                                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                                        "body": {"variable": "hydra.lib.lists.map"},
                                                                                                         "type": {"variable": "hydra.core.Binding"}}},
                                                                                                     "type": {
                                                                                                       "pair": {
@@ -2501,7 +2501,7 @@
                                                                                                       "typeApplication": {
                                                                                                         "body": {
                                                                                                           "typeApplication": {
-                                                                                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                                            "body": {"variable": "hydra.lib.lists.map"},
                                                                                                             "type": {"variable": "hydra.core.Binding"}}},
                                                                                                         "type": {
                                                                                                           "pair": {
@@ -2511,7 +2511,7 @@
                                                                                               "typeApplication": {
                                                                                                 "body": {
                                                                                                   "typeApplication": {
-                                                                                                    "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
+                                                                                                    "body": {"variable": "hydra.lib.maps.fromList"},
                                                                                                     "type": {"variable": "hydra.core.Name"}}},
                                                                                                 "type": {"variable": "hydra.core.Binding"}}}}},
                                                                                         "type": {
@@ -2548,7 +2548,7 @@
                                                                                                                               "typeApplication": {
                                                                                                                                 "body": {
                                                                                                                                   "typeApplication": {
-                                                                                                                                    "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                                                                                    "body": {"variable": "hydra.lib.maps.lookup"},
                                                                                                                                     "type": {"variable": "hydra.core.Name"}}},
                                                                                                                                 "type": {"variable": "hydra.core.Binding"}}}}}}},
                                                                                                                     "function": {
@@ -2558,11 +2558,11 @@
                                                                                                                             "argument": {"variable": "bindings"},
                                                                                                                             "function": {
                                                                                                                               "typeApplication": {
-                                                                                                                                "body": {"function": {"primitive": "hydra.lib.lists.head"}},
+                                                                                                                                "body": {"variable": "hydra.lib.lists.head"},
                                                                                                                                 "type": {"variable": "hydra.core.Binding"}}}}},
                                                                                                                         "function": {
                                                                                                                           "typeApplication": {
-                                                                                                                            "body": {"function": {"primitive": "hydra.lib.maybes.fromMaybe"}},
+                                                                                                                            "body": {"variable": "hydra.lib.maybes.fromMaybe"},
                                                                                                                             "type": {"variable": "hydra.core.Binding"}}}}}}},
                                                                                                                 "domain": {"variable": "hydra.core.Name"},
                                                                                                                 "parameter": "name"}}},
@@ -2570,7 +2570,7 @@
                                                                                                             "typeApplication": {
                                                                                                               "body": {
                                                                                                                 "typeApplication": {
-                                                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                                                                   "type": {"variable": "hydra.core.Name"}}},
                                                                                                               "type": {"variable": "hydra.core.Binding"}}}}}}},
                                                                                                   "domain": {"list": {"variable": "hydra.core.Name"}},
@@ -2589,7 +2589,7 @@
                                                                                                       "typeApplication": {
                                                                                                         "body": {
                                                                                                           "typeApplication": {
-                                                                                                            "body": {"function": {"primitive": "hydra.lib.eithers.either"}},
+                                                                                                            "body": {"variable": "hydra.lib.eithers.either"},
                                                                                                             "type": {"list": {"list": {"variable": "hydra.core.Name"}}}}},
                                                                                                         "type": {"list": {"variable": "hydra.core.Name"}}}},
                                                                                                     "type": {"list": {"variable": "hydra.core.Binding"}}}}}}}}}}}},
@@ -2598,7 +2598,7 @@
                                                                                     "argument": {"literal": {"boolean": true}},
                                                                                     "function": {
                                                                                       "typeApplication": {
-                                                                                        "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                                        "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                                         "type": {"list": {"variable": "hydra.core.Binding"}}}}}}}}}},
                                                                         "type": {
                                                                           "type": {"list": {"variable": "hydra.core.Binding"}},
@@ -2635,12 +2635,12 @@
                                                                                                     "typeApplication": {
                                                                                                       "body": {
                                                                                                         "typeApplication": {
-                                                                                                          "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                                          "body": {"variable": "hydra.lib.lists.map"},
                                                                                                           "type": {"variable": "hydra.core.Binding"}}},
                                                                                                       "type": {"variable": "hydra.core.Name"}}}}}}},
                                                                                           "function": {
                                                                                             "typeApplication": {
-                                                                                              "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                                                                                              "body": {"variable": "hydra.lib.sets.fromList"},
                                                                                               "type": {"variable": "hydra.core.Name"}}}}},
                                                                                       "type": {"type": {"set": {"variable": "hydra.core.Name"}}, "variables": []}}],
                                                                                   "body": {
@@ -2684,17 +2684,17 @@
                                                                                                                                       "argument": {"variable": "allBindingNames"},
                                                                                                                                       "function": {
                                                                                                                                         "typeApplication": {
-                                                                                                                                          "body": {"function": {"primitive": "hydra.lib.sets.intersection"}},
+                                                                                                                                          "body": {"variable": "hydra.lib.sets.intersection"},
                                                                                                                                           "type": {"variable": "hydra.core.Name"}}}}}}},
                                                                                                                               "function": {
                                                                                                                                 "typeApplication": {
-                                                                                                                                  "body": {"function": {"primitive": "hydra.lib.sets.null"}},
+                                                                                                                                  "body": {"variable": "hydra.lib.sets.null"},
                                                                                                                                   "type": {"variable": "hydra.core.Name"}}}}},
-                                                                                                                          "function": {"function": {"primitive": "hydra.lib.logic.not"}}}},
+                                                                                                                          "function": {"variable": "hydra.lib.logic.not"}}},
                                                                                                                       "function": {
                                                                                                                         "application": {
                                                                                                                           "argument": {"variable": "acc"},
-                                                                                                                          "function": {"function": {"primitive": "hydra.lib.logic.or"}}}}}},
+                                                                                                                          "function": {"variable": "hydra.lib.logic.or"}}}}},
                                                                                                                   "domain": {"variable": "hydra.core.Binding"},
                                                                                                                   "parameter": "b"}}},
                                                                                                             "domain": {"literal": {"boolean": {}}},
@@ -2703,7 +2703,7 @@
                                                                                                         "typeApplication": {
                                                                                                           "body": {
                                                                                                             "typeApplication": {
-                                                                                                              "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
+                                                                                                              "body": {"variable": "hydra.lib.lists.foldl"},
                                                                                                               "type": {"literal": {"boolean": {}}}}},
                                                                                                           "type": {"variable": "hydra.core.Binding"}}}}}}}}},
                                                                                           "type": {"type": {"literal": {"boolean": {}}}, "variables": []}}],
@@ -2749,12 +2749,12 @@
                                                                                                                                           "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}}}},
                                                                                                                                   "function": {
                                                                                                                                     "typeApplication": {
-                                                                                                                                      "body": {"function": {"primitive": "hydra.lib.sets.member"}},
+                                                                                                                                      "body": {"variable": "hydra.lib.sets.member"},
                                                                                                                                       "type": {"variable": "hydra.core.Name"}}}}}}},
                                                                                                                           "function": {
                                                                                                                             "application": {
                                                                                                                               "argument": {"variable": "acc"},
-                                                                                                                              "function": {"function": {"primitive": "hydra.lib.logic.or"}}}}}},
+                                                                                                                              "function": {"variable": "hydra.lib.logic.or"}}}}},
                                                                                                                       "domain": {"variable": "hydra.core.Binding"},
                                                                                                                       "parameter": "b"}}},
                                                                                                                 "domain": {"literal": {"boolean": {}}},
@@ -2763,7 +2763,7 @@
                                                                                                             "typeApplication": {
                                                                                                               "body": {
                                                                                                                 "typeApplication": {
-                                                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
+                                                                                                                  "body": {"variable": "hydra.lib.lists.foldl"},
                                                                                                                   "type": {"literal": {"boolean": {}}}}},
                                                                                                               "type": {"variable": "hydra.core.Binding"}}}}}}}}},
                                                                                               "type": {"type": {"literal": {"boolean": {}}}, "variables": []}}],
@@ -2802,15 +2802,15 @@
                                                                                                                               "argument": {"variable": "bindings"},
                                                                                                                               "function": {
                                                                                                                                 "typeApplication": {
-                                                                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.tail"}},
+                                                                                                                                  "body": {"variable": "hydra.lib.lists.tail"},
                                                                                                                                   "type": {"variable": "hydra.core.Binding"}}}}},
                                                                                                                           "function": {
                                                                                                                             "typeApplication": {
-                                                                                                                              "body": {"function": {"primitive": "hydra.lib.lists.null"}},
+                                                                                                                              "body": {"variable": "hydra.lib.lists.null"},
                                                                                                                               "type": {"variable": "hydra.core.Binding"}}}}},
                                                                                                                       "function": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                                                                          "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                                                                           "type": {"variable": "hydra.ext.lisp.syntax.LetKind"}}}}}}}}},
                                                                                                           "function": {
                                                                                                             "application": {
@@ -2823,7 +2823,7 @@
                                                                                                                   "argument": {"variable": "isRecursive"},
                                                                                                                   "function": {
                                                                                                                     "typeApplication": {
-                                                                                                                      "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                                                                      "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                                                                       "type": {"variable": "hydra.ext.lisp.syntax.LetKind"}}}}}}}}},
                                                                                                       "type": {
                                                                                                         "type": {"variable": "hydra.ext.lisp.syntax.LetKind"},
@@ -2859,7 +2859,7 @@
                                                                                                                                                 "typeApplication": {
                                                                                                                                                   "body": {
                                                                                                                                                     "typeApplication": {
-                                                                                                                                                      "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                                                                                      "body": {"variable": "hydra.lib.pairs.first"},
                                                                                                                                                       "type": {"literal": {"string": {}}}}},
                                                                                                                                                   "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}},
                                                                                                                                           "typeName": "hydra.ext.lisp.syntax.Symbol"}}},
@@ -2872,7 +2872,7 @@
                                                                                                                                             "typeApplication": {
                                                                                                                                               "body": {
                                                                                                                                                 "typeApplication": {
-                                                                                                                                                  "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                                                                  "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                                                                   "type": {"literal": {"string": {}}}}},
                                                                                                                                               "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}],
                                                                                                                                   "typeName": "hydra.ext.lisp.syntax.SimpleBinding"}}},
@@ -2886,7 +2886,7 @@
                                                                                                                     "typeApplication": {
                                                                                                                       "body": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                                                          "body": {"variable": "hydra.lib.lists.map"},
                                                                                                                           "type": {
                                                                                                                             "pair": {
                                                                                                                               "first": {"literal": {"string": {}}},
@@ -2982,7 +2982,7 @@
                                                                                                                       "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}}}},
                                                                                                               "function": {
                                                                                                                 "typeApplication": {
-                                                                                                                  "body": {"function": {"primitive": "hydra.lib.sets.member"}},
+                                                                                                                  "body": {"variable": "hydra.lib.sets.member"},
                                                                                                                   "type": {"variable": "hydra.core.Name"}}}}}}},
                                                                                                       "type": {"type": {"literal": {"boolean": {}}}, "variables": []}}],
                                                                                                   "body": {
@@ -3100,14 +3100,14 @@
                                                                                                                                                 "argument": {
                                                                                                                                                   "application": {
                                                                                                                                                     "argument": {"variable": "isLambda"},
-                                                                                                                                                    "function": {"function": {"primitive": "hydra.lib.logic.not"}}}},
+                                                                                                                                                    "function": {"variable": "hydra.lib.logic.not"}}},
                                                                                                                                                 "function": {
                                                                                                                                                   "application": {
                                                                                                                                                     "argument": {"variable": "isSelfRef"},
-                                                                                                                                                    "function": {"function": {"primitive": "hydra.lib.logic.and"}}}}}},
+                                                                                                                                                    "function": {"variable": "hydra.lib.logic.and"}}}}},
                                                                                                                                             "function": {
                                                                                                                                               "typeApplication": {
-                                                                                                                                                "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                                                                                                "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                                                                                                 "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}}}},
                                                                                                                                 "function": {
                                                                                                                                   "application": {
@@ -3206,21 +3206,21 @@
                                                                                                                                                         "argument": {"variable": "isLambda"},
                                                                                                                                                         "function": {
                                                                                                                                                           "typeApplication": {
-                                                                                                                                                            "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                                                                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                                                                                                             "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}}}},
                                                                                                                                             "function": {
                                                                                                                                               "application": {
                                                                                                                                                 "argument": {"variable": "isSelfRef"},
                                                                                                                                                 "function": {
                                                                                                                                                   "typeApplication": {
-                                                                                                                                                    "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                                                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                                                                                                     "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}}}},
                                                                                                                                     "function": {
                                                                                                                                       "application": {
                                                                                                                                         "argument": {"variable": "isClojure"},
                                                                                                                                         "function": {
                                                                                                                                           "typeApplication": {
-                                                                                                                                            "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                                                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                                                                                             "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}}}},
                                                                                                                             "type": {
                                                                                                                               "type": {"variable": "hydra.ext.lisp.syntax.Expression"},
@@ -3283,7 +3283,7 @@
                                                                                                                     "typeApplication": {
                                                                                                                       "body": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                                          "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                                           "type": {"variable": "t2"}}},
                                                                                                                       "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                                   "type": {
@@ -3298,7 +3298,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
+                                                                                                "body": {"variable": "hydra.lib.eithers.mapList"},
                                                                                                 "type": {"variable": "hydra.core.Binding"}}},
                                                                                             "type": {
                                                                                               "pair": {
@@ -3311,7 +3311,7 @@
                                                                                   "typeApplication": {
                                                                                     "body": {
                                                                                       "typeApplication": {
-                                                                                        "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                        "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                         "type": {"variable": "t2"}}},
                                                                                     "type": {
                                                                                       "list": {
@@ -3351,7 +3351,7 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "typeApplication": {
-                                                                          "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                          "body": {"variable": "hydra.lib.eithers.bind"},
                                                                           "type": {"variable": "t2"}}},
                                                                       "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                   "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}}}},
@@ -3469,7 +3469,7 @@
                                                                               "term": {
                                                                                 "application": {
                                                                                   "argument": {"variable": "f"},
-                                                                                  "function": {"function": {"primitive": "hydra.lib.literals.float32ToBigfloat"}}}}},
+                                                                                  "function": {"variable": "hydra.lib.literals.float32ToBigfloat"}}}},
                                                                             {
                                                                               "name": "precision",
                                                                               "term": {
@@ -3500,7 +3500,7 @@
                                                                               "term": {
                                                                                 "application": {
                                                                                   "argument": {"variable": "f"},
-                                                                                  "function": {"function": {"primitive": "hydra.lib.literals.float64ToBigfloat"}}}}},
+                                                                                  "function": {"variable": "hydra.lib.literals.float64ToBigfloat"}}}},
                                                                             {
                                                                               "name": "precision",
                                                                               "term": {
@@ -3573,7 +3573,7 @@
                                                                               "term": {
                                                                                 "application": {
                                                                                   "argument": {"variable": "i"},
-                                                                                  "function": {"function": {"primitive": "hydra.lib.literals.int8ToBigint"}}}}},
+                                                                                  "function": {"variable": "hydra.lib.literals.int8ToBigint"}}}},
                                                                             {"name": "bigint", "term": {"literal": {"boolean": false}}}],
                                                                           "typeName": "hydra.ext.lisp.syntax.IntegerLiteral"}}},
                                                                     "typeName": "hydra.ext.lisp.syntax.Literal"}}},
@@ -3601,7 +3601,7 @@
                                                                               "term": {
                                                                                 "application": {
                                                                                   "argument": {"variable": "i"},
-                                                                                  "function": {"function": {"primitive": "hydra.lib.literals.int16ToBigint"}}}}},
+                                                                                  "function": {"variable": "hydra.lib.literals.int16ToBigint"}}}},
                                                                             {"name": "bigint", "term": {"literal": {"boolean": false}}}],
                                                                           "typeName": "hydra.ext.lisp.syntax.IntegerLiteral"}}},
                                                                     "typeName": "hydra.ext.lisp.syntax.Literal"}}},
@@ -3629,7 +3629,7 @@
                                                                               "term": {
                                                                                 "application": {
                                                                                   "argument": {"variable": "i"},
-                                                                                  "function": {"function": {"primitive": "hydra.lib.literals.int32ToBigint"}}}}},
+                                                                                  "function": {"variable": "hydra.lib.literals.int32ToBigint"}}}},
                                                                             {"name": "bigint", "term": {"literal": {"boolean": false}}}],
                                                                           "typeName": "hydra.ext.lisp.syntax.IntegerLiteral"}}},
                                                                     "typeName": "hydra.ext.lisp.syntax.Literal"}}},
@@ -3657,7 +3657,7 @@
                                                                               "term": {
                                                                                 "application": {
                                                                                   "argument": {"variable": "i"},
-                                                                                  "function": {"function": {"primitive": "hydra.lib.literals.int64ToBigint"}}}}},
+                                                                                  "function": {"variable": "hydra.lib.literals.int64ToBigint"}}}},
                                                                             {"name": "bigint", "term": {"literal": {"boolean": false}}}],
                                                                           "typeName": "hydra.ext.lisp.syntax.IntegerLiteral"}}},
                                                                     "typeName": "hydra.ext.lisp.syntax.Literal"}}},
@@ -3685,7 +3685,7 @@
                                                                               "term": {
                                                                                 "application": {
                                                                                   "argument": {"variable": "i"},
-                                                                                  "function": {"function": {"primitive": "hydra.lib.literals.uint8ToBigint"}}}}},
+                                                                                  "function": {"variable": "hydra.lib.literals.uint8ToBigint"}}}},
                                                                             {"name": "bigint", "term": {"literal": {"boolean": false}}}],
                                                                           "typeName": "hydra.ext.lisp.syntax.IntegerLiteral"}}},
                                                                     "typeName": "hydra.ext.lisp.syntax.Literal"}}},
@@ -3713,7 +3713,7 @@
                                                                               "term": {
                                                                                 "application": {
                                                                                   "argument": {"variable": "i"},
-                                                                                  "function": {"function": {"primitive": "hydra.lib.literals.uint16ToBigint"}}}}},
+                                                                                  "function": {"variable": "hydra.lib.literals.uint16ToBigint"}}}},
                                                                             {"name": "bigint", "term": {"literal": {"boolean": false}}}],
                                                                           "typeName": "hydra.ext.lisp.syntax.IntegerLiteral"}}},
                                                                     "typeName": "hydra.ext.lisp.syntax.Literal"}}},
@@ -3741,7 +3741,7 @@
                                                                               "term": {
                                                                                 "application": {
                                                                                   "argument": {"variable": "i"},
-                                                                                  "function": {"function": {"primitive": "hydra.lib.literals.uint32ToBigint"}}}}},
+                                                                                  "function": {"variable": "hydra.lib.literals.uint32ToBigint"}}}},
                                                                             {"name": "bigint", "term": {"literal": {"boolean": false}}}],
                                                                           "typeName": "hydra.ext.lisp.syntax.IntegerLiteral"}}},
                                                                     "typeName": "hydra.ext.lisp.syntax.Literal"}}},
@@ -3769,7 +3769,7 @@
                                                                               "term": {
                                                                                 "application": {
                                                                                   "argument": {"variable": "i"},
-                                                                                  "function": {"function": {"primitive": "hydra.lib.literals.uint64ToBigint"}}}}},
+                                                                                  "function": {"variable": "hydra.lib.literals.uint64ToBigint"}}}},
                                                                             {"name": "bigint", "term": {"literal": {"boolean": false}}}],
                                                                           "typeName": "hydra.ext.lisp.syntax.IntegerLiteral"}}},
                                                                     "typeName": "hydra.ext.lisp.syntax.Literal"}}},
@@ -3815,7 +3815,7 @@
                                             "term": {
                                               "application": {
                                                 "argument": {"variable": "b"},
-                                                "function": {"function": {"primitive": "hydra.lib.literals.binaryToBytes"}}}},
+                                                "function": {"variable": "hydra.lib.literals.binaryToBytes"}}},
                                             "type": {
                                               "type": {"list": {"literal": {"integer": {"int32": {}}}}},
                                               "variables": []}}],
@@ -3852,7 +3852,7 @@
                                                                                         "term": {
                                                                                           "application": {
                                                                                             "argument": {"variable": "bv"},
-                                                                                            "function": {"function": {"primitive": "hydra.lib.literals.int32ToBigint"}}}}},
+                                                                                            "function": {"variable": "hydra.lib.literals.int32ToBigint"}}}},
                                                                                       {"name": "bigint", "term": {"literal": {"boolean": false}}}],
                                                                                     "typeName": "hydra.ext.lisp.syntax.IntegerLiteral"}}},
                                                                               "typeName": "hydra.ext.lisp.syntax.Literal"}}},
@@ -3863,7 +3863,7 @@
                                                                 "typeApplication": {
                                                                   "body": {
                                                                     "typeApplication": {
-                                                                      "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                      "body": {"variable": "hydra.lib.lists.map"},
                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                   "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}}}],
                                                   "typeName": "hydra.ext.lisp.syntax.VectorLiteral"}}},
@@ -4074,7 +4074,7 @@
                                                                                               "typeApplication": {
                                                                                                 "body": {
                                                                                                   "typeApplication": {
-                                                                                                    "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                    "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                     "type": {"variable": "t2"}}},
                                                                                                 "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                             "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -4146,7 +4146,7 @@
                                                                                                   "typeApplication": {
                                                                                                     "body": {
                                                                                                       "typeApplication": {
-                                                                                                        "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                        "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                         "type": {"variable": "t2"}}},
                                                                                                     "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                 "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -4158,7 +4158,7 @@
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "typeApplication": {
-                                                                                          "body": {"function": {"primitive": "hydra.lib.eithers.either"}},
+                                                                                          "body": {"variable": "hydra.lib.eithers.either"},
                                                                                           "type": {"variable": "hydra.core.Term"}}},
                                                                                       "type": {"variable": "hydra.core.Term"}}},
                                                                                   "type": {
@@ -4313,7 +4313,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "typeApplication": {
-                                                                                              "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
+                                                                                              "body": {"variable": "hydra.lib.eithers.mapList"},
                                                                                               "type": {"variable": "hydra.core.Term"}}},
                                                                                           "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                       "type": {"variable": "t2"}}}}}}},
@@ -4323,7 +4323,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                      "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                       "type": {"variable": "t2"}}},
                                                                                   "type": {"list": {"variable": "hydra.ext.lisp.syntax.Expression"}}}},
                                                                               "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -4388,7 +4388,7 @@
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "typeApplication": {
-                                                                                          "body": {"function": {"primitive": "hydra.lib.maps.toList"}},
+                                                                                          "body": {"variable": "hydra.lib.maps.toList"},
                                                                                           "type": {"variable": "hydra.core.Term"}}},
                                                                                       "type": {"variable": "hydra.core.Term"}}}}},
                                                                               "function": {
@@ -4433,7 +4433,7 @@
                                                                                                                     "typeApplication": {
                                                                                                                       "body": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                                          "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                                           "type": {"variable": "hydra.core.Term"}}},
                                                                                                                       "type": {"variable": "hydra.core.Term"}}}}},
                                                                                                               "function": {
@@ -4461,7 +4461,7 @@
                                                                                                                 "typeApplication": {
                                                                                                                   "body": {
                                                                                                                     "typeApplication": {
-                                                                                                                      "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                                      "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                                       "type": {"variable": "t2"}}},
                                                                                                                   "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                               "type": {"variable": "hydra.ext.lisp.syntax.MapEntry"}}}}}}},
@@ -4478,7 +4478,7 @@
                                                                                                           "typeApplication": {
                                                                                                             "body": {
                                                                                                               "typeApplication": {
-                                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                                                "body": {"variable": "hydra.lib.pairs.first"},
                                                                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                                                                             "type": {"variable": "hydra.core.Term"}}}}},
                                                                                                     "function": {
@@ -4506,7 +4506,7 @@
                                                                                                       "typeApplication": {
                                                                                                         "body": {
                                                                                                           "typeApplication": {
-                                                                                                            "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                            "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                             "type": {"variable": "t2"}}},
                                                                                                         "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                     "type": {"variable": "hydra.ext.lisp.syntax.MapEntry"}}}}}}},
@@ -4521,7 +4521,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "typeApplication": {
-                                                                                              "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
+                                                                                              "body": {"variable": "hydra.lib.eithers.mapList"},
                                                                                               "type": {
                                                                                                 "pair": {
                                                                                                   "first": {"variable": "hydra.core.Term"},
@@ -4534,7 +4534,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                      "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                       "type": {"variable": "t2"}}},
                                                                                   "type": {"list": {"variable": "hydra.ext.lisp.syntax.MapEntry"}}}},
                                                                               "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -4614,7 +4614,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                 "type": {"variable": "t2"}}},
                                                                                             "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                         "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -4652,7 +4652,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"function": {"primitive": "hydra.lib.maybes.cases"}},
+                                                                                      "body": {"variable": "hydra.lib.maybes.cases"},
                                                                                       "type": {"variable": "hydra.core.Term"}}},
                                                                                   "type": {
                                                                                     "either": {
@@ -4700,7 +4700,7 @@
                                                                                               "typeApplication": {
                                                                                                 "body": {
                                                                                                   "typeApplication": {
-                                                                                                    "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                    "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                     "type": {"variable": "hydra.core.Term"}}},
                                                                                                 "type": {"variable": "hydra.core.Term"}}}}},
                                                                                         "function": {
@@ -4728,7 +4728,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                 "type": {"variable": "t2"}}},
                                                                                             "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                         "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -4745,7 +4745,7 @@
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "typeApplication": {
-                                                                                          "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                          "body": {"variable": "hydra.lib.pairs.first"},
                                                                                           "type": {"variable": "hydra.core.Term"}}},
                                                                                       "type": {"variable": "hydra.core.Term"}}}}},
                                                                               "function": {
@@ -4773,7 +4773,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                      "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                       "type": {"variable": "t2"}}},
                                                                                   "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                               "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -4833,7 +4833,7 @@
                                                                                                       "application": {
                                                                                                         "argument": {"variable": "dialect"},
                                                                                                         "function": {"variable": "hydra.ext.lisp.coder.dialectConstructorPrefix"}}},
-                                                                                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                                                                             "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
                                                                                         "body": {
                                                                                           "typeApplication": {
@@ -4900,7 +4900,7 @@
                                                                                                 "typeApplication": {
                                                                                                   "body": {
                                                                                                     "typeApplication": {
-                                                                                                      "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
+                                                                                                      "body": {"variable": "hydra.lib.eithers.mapList"},
                                                                                                       "type": {"variable": "hydra.core.Field"}}},
                                                                                                   "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                               "type": {"variable": "t2"}}}}}}},
@@ -4910,7 +4910,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "typeApplication": {
-                                                                                              "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                              "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                               "type": {"variable": "t2"}}},
                                                                                           "type": {"list": {"variable": "hydra.ext.lisp.syntax.Expression"}}}},
                                                                                       "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}}}}}},
@@ -4954,7 +4954,7 @@
                                                                                   "argument": {"variable": "s"},
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"function": {"primitive": "hydra.lib.sets.toList"}},
+                                                                                      "body": {"variable": "hydra.lib.sets.toList"},
                                                                                       "type": {"variable": "hydra.core.Term"}}}}},
                                                                               "function": {
                                                                                 "application": {
@@ -4983,7 +4983,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "typeApplication": {
-                                                                                              "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
+                                                                                              "body": {"variable": "hydra.lib.eithers.mapList"},
                                                                                               "type": {"variable": "hydra.core.Term"}}},
                                                                                           "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                       "type": {"variable": "t2"}}}}}}},
@@ -4993,7 +4993,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                      "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                       "type": {"variable": "t2"}}},
                                                                                   "type": {"list": {"variable": "hydra.ext.lisp.syntax.Expression"}}}},
                                                                               "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -5104,7 +5104,7 @@
                                                                                                                                 "elimination": {"record": {"field": "fields", "typeName": "hydra.core.Record"}}}}}},
                                                                                                                         "function": {
                                                                                                                           "typeApplication": {
-                                                                                                                            "body": {"function": {"primitive": "hydra.lib.lists.null"}},
+                                                                                                                            "body": {"variable": "hydra.lib.lists.null"},
                                                                                                                             "type": {"variable": "hydra.core.Field"}}}}},
                                                                                                                     "domain": {"variable": "hydra.core.Record"},
                                                                                                                     "parameter": "rt"}}}}],
@@ -5177,7 +5177,7 @@
                                                                                                             "typeApplication": {
                                                                                                               "body": {
                                                                                                                 "typeApplication": {
-                                                                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                                  "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                                   "type": {"variable": "t2"}}},
                                                                                                               "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                           "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
@@ -5215,7 +5215,7 @@
                                                                                                       "argument": {"variable": "isUnit"},
                                                                                                       "function": {
                                                                                                         "typeApplication": {
-                                                                                                          "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                                                          "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                                                           "type": {
                                                                                                             "either": {
                                                                                                               "left": {"variable": "t2"},
@@ -5565,7 +5565,7 @@
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {
                                                                                                                           "typeApplication": {
-                                                                                                                            "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                                            "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                                             "type": {"variable": "t2"}}},
                                                                                                                         "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                                     "type": {"variable": "hydra.ext.lisp.syntax.TopLevelFormWithComments"}}}}}}},
@@ -5641,7 +5641,7 @@
                                                                                                             "typeApplication": {
                                                                                                               "body": {
                                                                                                                 "typeApplication": {
-                                                                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                                  "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                                   "type": {"variable": "t2"}}},
                                                                                                               "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                                           "type": {"variable": "hydra.ext.lisp.syntax.TopLevelFormWithComments"}}}}}}},
@@ -5718,7 +5718,7 @@
                                                                                       "typeApplication": {
                                                                                         "body": {
                                                                                           "typeApplication": {
-                                                                                            "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                            "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                             "type": {"variable": "t2"}}},
                                                                                         "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                                     "type": {"variable": "hydra.ext.lisp.syntax.TopLevelFormWithComments"}}}}}}},
@@ -6017,7 +6017,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {
                                                                                   "typeApplication": {
-                                                                                    "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
+                                                                                    "body": {"variable": "hydra.lib.eithers.map"},
                                                                                     "type": {"variable": "hydra.ext.lisp.syntax.TypeSpecifier"}}},
                                                                                 "type": {"variable": "hydra.ext.lisp.syntax.TypeSpecifier"}}},
                                                                             "type": {"variable": "t2"}}}}}}},
@@ -6066,7 +6066,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {
                                                                                   "typeApplication": {
-                                                                                    "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
+                                                                                    "body": {"variable": "hydra.lib.eithers.map"},
                                                                                     "type": {"variable": "hydra.ext.lisp.syntax.TypeSpecifier"}}},
                                                                                 "type": {"variable": "hydra.ext.lisp.syntax.TypeSpecifier"}}},
                                                                             "type": {"variable": "t2"}}}}}}},
@@ -6139,7 +6139,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {
                                                                                   "typeApplication": {
-                                                                                    "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
+                                                                                    "body": {"variable": "hydra.lib.eithers.map"},
                                                                                     "type": {"variable": "hydra.ext.lisp.syntax.TypeSpecifier"}}},
                                                                                 "type": {"variable": "hydra.ext.lisp.syntax.TypeSpecifier"}}},
                                                                             "type": {"variable": "t2"}}}}}}},
@@ -6456,7 +6456,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                            "body": {"variable": "hydra.lib.lists.map"},
                                                                             "type": {"variable": "hydra.core.FieldType"}}},
                                                                         "type": {"variable": "hydra.ext.lisp.syntax.FieldDefinition"}}}}}}},
                                                             "type": {
@@ -6553,7 +6553,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                            "body": {"variable": "hydra.lib.lists.map"},
                                                                             "type": {"variable": "hydra.core.FieldType"}}},
                                                                         "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
                                                             "type": {
@@ -6584,7 +6584,7 @@
                                                                                               "function": {
                                                                                                 "application": {
                                                                                                   "argument": {"variable": "lname"},
-                                                                                                  "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                                                                                  "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                                                                           "typeName": "hydra.ext.lisp.syntax.Symbol"}}},
                                                                                     {
                                                                                       "name": "value",
@@ -6603,7 +6603,7 @@
                                                                                                 "function": {
                                                                                                   "application": {
                                                                                                     "argument": {"literal": {"string": "Variants of the "}},
-                                                                                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                                                                             "typeName": "hydra.ext.lisp.syntax.Docstring"}}}}],
                                                                                   "typeName": "hydra.ext.lisp.syntax.VariableDefinition"}}},
                                                                             "typeName": "hydra.ext.lisp.syntax.TopLevelForm"}},
@@ -6714,8 +6714,8 @@
                                                                                     "function": {
                                                                                       "application": {
                                                                                         "argument": {"variable": "lname"},
-                                                                                        "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                                                "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}}}],
+                                                                                        "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                                                "function": {"variable": "hydra.lib.strings.cat2"}}}}}}],
                                                                     "typeName": "hydra.ext.lisp.syntax.Comment"}}}},
                                                             {
                                                               "name": "form",
@@ -6882,7 +6882,7 @@
                       "argument": {"variable": "name"},
                       "function": {
                         "typeApplication": {
-                          "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                          "body": {"variable": "hydra.lib.equality.equal"},
                           "type": {"variable": "hydra.core.Name"}}}}}}},
               "domain": {"variable": "hydra.core.Name"},
               "parameter": "name"}}},
@@ -6913,7 +6913,7 @@
                               "argument": {"variable": "name"},
                               "function": {
                                 "typeApplication": {
-                                  "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                  "body": {"variable": "hydra.lib.equality.equal"},
                                   "type": {"variable": "hydra.core.Name"}}}}}}},
                       "function": {
                         "application": {
@@ -6928,9 +6928,9 @@
                                   "argument": {"variable": "name"},
                                   "function": {
                                     "typeApplication": {
-                                      "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                      "body": {"variable": "hydra.lib.equality.equal"},
                                       "type": {"variable": "hydra.core.Name"}}}}}}},
-                          "function": {"function": {"primitive": "hydra.lib.logic.or"}}}}}},
+                          "function": {"variable": "hydra.lib.logic.or"}}}}},
                   "function": {
                     "application": {
                       "argument": {
@@ -6944,9 +6944,9 @@
                               "argument": {"variable": "name"},
                               "function": {
                                 "typeApplication": {
-                                  "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                  "body": {"variable": "hydra.lib.equality.equal"},
                                   "type": {"variable": "hydra.core.Name"}}}}}}},
-                      "function": {"function": {"primitive": "hydra.lib.logic.or"}}}}}},
+                      "function": {"variable": "hydra.lib.logic.or"}}}}},
               "domain": {"variable": "hydra.core.Name"},
               "parameter": "name"}}},
         "type": {
@@ -6972,7 +6972,7 @@
                       "argument": {"variable": "name"},
                       "function": {
                         "typeApplication": {
-                          "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                          "body": {"variable": "hydra.lib.equality.equal"},
                           "type": {"variable": "hydra.core.Name"}}}}}}},
               "domain": {"variable": "hydra.core.Name"},
               "parameter": "name"}}},
@@ -7028,7 +7028,7 @@
                                                                             "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
                                                                         "function": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                                            "body": {"variable": "hydra.lib.equality.equal"},
                                                                             "type": {"literal": {"string": {}}}}}}}}},
                                                                 "domain": {"variable": "hydra.core.Name"},
                                                                 "parameter": "name"}}}}],
@@ -7052,7 +7052,7 @@
                                                       "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
                                                   "function": {
                                                     "typeApplication": {
-                                                      "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                      "body": {"variable": "hydra.lib.equality.equal"},
                                                       "type": {"literal": {"string": {}}}}}}}}},
                                           "domain": {"variable": "hydra.core.Name"},
                                           "parameter": "name"}}}},
@@ -7237,7 +7237,7 @@
                                             "typeApplication": {
                                               "body": {
                                                 "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                   "type": {"literal": {"string": {}}}}},
                                               "type": {"variable": "hydra.ext.lisp.syntax.Symbol"}}}}}}}},
                                 {
@@ -7351,7 +7351,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                        "body": {"variable": "hydra.lib.lists.map"},
                                                         "type": {"literal": {"string": {}}}}},
                                                     "type": {"variable": "hydra.ext.lisp.syntax.Symbol"}}}}}}}},
                                       {
@@ -7477,7 +7477,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "typeApplication": {
-                                            "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                            "body": {"variable": "hydra.lib.maybes.map"},
                                             "type": {"literal": {"string": {}}}}},
                                         "type": {"variable": "hydra.ext.lisp.syntax.Docstring"}}}}}}}},
                           {
@@ -7675,7 +7675,7 @@
                                                                                                                 {"variable": "rname"},
                                                                                                                 {"literal": {"string": "-"}},
                                                                                                                 {"variable": "fn"}]},
-                                                                                                            "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                                                                                                            "function": {"variable": "hydra.lib.strings.cat"}}},
                                                                                                         "typeName": "hydra.ext.lisp.syntax.Symbol"}}}},
                                                                                                 "domain": {"variable": "hydra.ext.lisp.syntax.FieldDefinition"},
                                                                                                 "parameter": "f"}}},
@@ -7683,7 +7683,7 @@
                                                                                             "typeApplication": {
                                                                                               "body": {
                                                                                                 "typeApplication": {
-                                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                                                   "type": {"variable": "hydra.ext.lisp.syntax.FieldDefinition"}}},
                                                                                               "type": {"variable": "hydra.ext.lisp.syntax.Symbol"}}}}}}},
                                                                                   "type": {
@@ -7703,7 +7703,7 @@
                                                                                                   "function": {
                                                                                                     "application": {
                                                                                                       "argument": {"literal": {"string": "make-"}},
-                                                                                                      "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                                                                                      "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                                                                               "typeName": "hydra.ext.lisp.syntax.Symbol"}},
                                                                                           {
                                                                                             "wrap": {
@@ -7713,12 +7713,12 @@
                                                                                                   "function": {
                                                                                                     "application": {
                                                                                                       "argument": {"variable": "rname"},
-                                                                                                      "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                                                                                      "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                                                                               "typeName": "hydra.ext.lisp.syntax.Symbol"}}]},
                                                                                       {"variable": "fieldSyms"}]},
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                                                                      "body": {"variable": "hydra.lib.lists.concat"},
                                                                                       "type": {"variable": "hydra.ext.lisp.syntax.Symbol"}}}}}}}}}}},
                                                                   "domain": {"variable": "hydra.ext.lisp.syntax.RecordTypeDefinition"},
                                                                   "parameter": "rdef"}}}}],
@@ -7733,12 +7733,12 @@
                                     "typeApplication": {
                                       "body": {
                                         "typeApplication": {
-                                          "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                          "body": {"variable": "hydra.lib.lists.map"},
                                           "type": {"variable": "hydra.ext.lisp.syntax.TopLevelFormWithComments"}}},
                                       "type": {"list": {"variable": "hydra.ext.lisp.syntax.Symbol"}}}}}}}},
                           "function": {
                             "typeApplication": {
-                              "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                              "body": {"variable": "hydra.lib.lists.concat"},
                               "type": {"variable": "hydra.ext.lisp.syntax.Symbol"}}}}},
                       "type": {
                         "type": {"list": {"variable": "hydra.ext.lisp.syntax.Symbol"}},
@@ -7764,11 +7764,11 @@
                                   "argument": {"variable": "symbols"},
                                   "function": {
                                     "typeApplication": {
-                                      "body": {"function": {"primitive": "hydra.lib.lists.null"}},
+                                      "body": {"variable": "hydra.lib.lists.null"},
                                       "type": {"variable": "hydra.ext.lisp.syntax.Symbol"}}}}},
                               "function": {
                                 "typeApplication": {
-                                  "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                  "body": {"variable": "hydra.lib.logic.ifElse"},
                                   "type": {"list": {"variable": "hydra.ext.lisp.syntax.ExportDeclaration"}}}}}}}}}}}},
               "domain": {
                 "list": {"variable": "hydra.ext.lisp.syntax.TopLevelFormWithComments"}},
@@ -7807,11 +7807,11 @@
                                         "argument": {"variable": "focusNs"},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"function": {"primitive": "hydra.lib.sets.delete"}},
+                                            "body": {"variable": "hydra.lib.sets.delete"},
                                             "type": {"variable": "hydra.packaging.Namespace"}}}}}}},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"function": {"primitive": "hydra.lib.sets.toList"}},
+                                    "body": {"variable": "hydra.lib.sets.toList"},
                                     "type": {"variable": "hydra.packaging.Namespace"}}}}},
                             "type": {
                               "type": {"list": {"variable": "hydra.packaging.Namespace"}},
@@ -7849,7 +7849,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                        "body": {"variable": "hydra.lib.lists.map"},
                                         "type": {"variable": "hydra.packaging.Namespace"}}},
                                     "type": {"variable": "hydra.ext.lisp.syntax.ImportDeclaration"}}}}}}}}},
                     "domain": {"list": {"variable": "hydra.packaging.Definition"}},
@@ -7928,7 +7928,7 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                              "body": {"variable": "hydra.lib.pairs.first"},
                                                                               "type": {"list": {"variable": "hydra.packaging.TypeDefinition"}}}},
                                                                           "type": {"list": {"variable": "hydra.packaging.TermDefinition"}}}}}},
                                                                   "type": {
@@ -7946,7 +7946,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                  "body": {"variable": "hydra.lib.pairs.second"},
                                                                                   "type": {"list": {"variable": "hydra.packaging.TypeDefinition"}}}},
                                                                               "type": {"list": {"variable": "hydra.packaging.TermDefinition"}}}}}},
                                                                       "type": {
@@ -7984,7 +7984,7 @@
                                                                                         "parameter": "td"}}},
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"function": {"primitive": "hydra.lib.lists.filter"}},
+                                                                                      "body": {"variable": "hydra.lib.lists.filter"},
                                                                                       "type": {"variable": "hydra.packaging.TypeDefinition"}}}}}}},
                                                                           "type": {
                                                                             "type": {"list": {"variable": "hydra.packaging.TypeDefinition"}},
@@ -8012,7 +8012,7 @@
                                                                                                           "argument": {"variable": "typeItems"},
                                                                                                           "function": {
                                                                                                             "typeApplication": {
-                                                                                                              "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
+                                                                                                              "body": {"variable": "hydra.lib.lists.concat2"},
                                                                                                               "type": {"variable": "hydra.ext.lisp.syntax.TopLevelFormWithComments"}}}}}}},
                                                                                                   "type": {
                                                                                                     "type": {
@@ -8144,7 +8144,7 @@
                                                                                                       "typeApplication": {
                                                                                                         "body": {
                                                                                                           "typeApplication": {
-                                                                                                            "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
+                                                                                                            "body": {"variable": "hydra.lib.eithers.mapList"},
                                                                                                             "type": {"variable": "hydra.packaging.TermDefinition"}}},
                                                                                                         "type": {"variable": "hydra.ext.lisp.syntax.TopLevelFormWithComments"}}},
                                                                                                     "type": {"variable": "t2"}}}}}}},
@@ -8154,7 +8154,7 @@
                                                                                               "typeApplication": {
                                                                                                 "body": {
                                                                                                   "typeApplication": {
-                                                                                                    "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                    "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                                     "type": {"variable": "t2"}}},
                                                                                                 "type": {
                                                                                                   "list": {"variable": "hydra.ext.lisp.syntax.TopLevelFormWithComments"}}}},
@@ -8191,7 +8191,7 @@
                                                                                             "typeApplication": {
                                                                                               "body": {
                                                                                                 "typeApplication": {
-                                                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
+                                                                                                  "body": {"variable": "hydra.lib.eithers.mapList"},
                                                                                                   "type": {"variable": "hydra.packaging.TypeDefinition"}}},
                                                                                               "type": {"variable": "hydra.ext.lisp.syntax.TopLevelFormWithComments"}}},
                                                                                           "type": {"variable": "t2"}}}}}}},
@@ -8201,7 +8201,7 @@
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "typeApplication": {
-                                                                                          "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                          "body": {"variable": "hydra.lib.eithers.bind"},
                                                                                           "type": {"variable": "t2"}}},
                                                                                       "type": {
                                                                                         "list": {"variable": "hydra.ext.lisp.syntax.TopLevelFormWithComments"}}}},
@@ -8267,7 +8267,7 @@
                               "function": {
                                 "application": {
                                   "argument": {"literal": {"string": "."}},
-                                  "function": {"function": {"primitive": "hydra.lib.strings.splitOn"}}}}}},
+                                  "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
                           "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
                       "body": {
                         "let": {
@@ -8293,7 +8293,7 @@
                                         "typeApplication": {
                                           "body": {
                                             "typeApplication": {
-                                              "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                              "body": {"variable": "hydra.lib.lists.map"},
                                               "type": {"literal": {"string": {}}}}},
                                           "type": {"literal": {"string": {}}}}}}}}},
                               "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
@@ -8308,7 +8308,7 @@
                                       "function": {
                                         "application": {
                                           "argument": {"literal": {"string": "_"}},
-                                          "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}},
+                                          "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
                                   "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
                               "body": {
                                 "application": {
@@ -8387,7 +8387,7 @@
                                     "typeApplication": {
                                       "body": {
                                         "typeApplication": {
-                                          "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                          "body": {"variable": "hydra.lib.pairs.first"},
                                           "type": {"list": {"variable": "hydra.packaging.TypeDefinition"}}}},
                                       "type": {"list": {"variable": "hydra.packaging.TermDefinition"}}}}}},
                               "type": {
@@ -8423,13 +8423,13 @@
                                                                   "record": {"field": "name", "typeName": "hydra.packaging.TypeDefinition"}}}}}},
                                                         "function": {
                                                           "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                            "body": {"variable": "hydra.lib.equality.equal"},
                                                             "type": {"variable": "hydra.core.Name"}}}}}}},
                                                 "domain": {"variable": "hydra.packaging.TypeDefinition"},
                                                 "parameter": "td"}}},
                                           "function": {
                                             "typeApplication": {
-                                              "body": {"function": {"primitive": "hydra.lib.lists.filter"}},
+                                              "body": {"variable": "hydra.lib.lists.filter"},
                                               "type": {"variable": "hydra.packaging.TypeDefinition"}}}}}}},
                                   "type": {
                                     "type": {"list": {"variable": "hydra.packaging.TypeDefinition"}},
@@ -8466,14 +8466,14 @@
                                                                           "record": {"field": "name", "typeName": "hydra.packaging.TypeDefinition"}}}}}},
                                                                 "function": {
                                                                   "typeApplication": {
-                                                                    "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                                    "body": {"variable": "hydra.lib.equality.equal"},
                                                                     "type": {"variable": "hydra.core.Name"}}}}}}},
-                                                        "function": {"function": {"primitive": "hydra.lib.logic.not"}}}},
+                                                        "function": {"variable": "hydra.lib.logic.not"}}},
                                                     "domain": {"variable": "hydra.packaging.TypeDefinition"},
                                                     "parameter": "td"}}},
                                               "function": {
                                                 "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.lists.filter"}},
+                                                  "body": {"variable": "hydra.lib.lists.filter"},
                                                   "type": {"variable": "hydra.packaging.TypeDefinition"}}}}}}},
                                       "type": {
                                         "type": {"list": {"variable": "hydra.packaging.TypeDefinition"}},
@@ -8505,7 +8505,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                   "type": {"variable": "hydra.packaging.TypeDefinition"}}},
                                                               "type": {"variable": "hydra.packaging.Definition"}}}}}}},
                                                   {
@@ -8526,12 +8526,12 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                   "type": {"variable": "hydra.packaging.TypeDefinition"}}},
                                                               "type": {"variable": "hydra.packaging.Definition"}}}}}}}]},
                                               "function": {
                                                 "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                                  "body": {"variable": "hydra.lib.lists.concat"},
                                                   "type": {"variable": "hydra.packaging.Definition"}}}}},
                                           "type": {
                                             "type": {"list": {"variable": "hydra.packaging.Definition"}},
@@ -8550,7 +8550,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                              "body": {"variable": "hydra.lib.pairs.second"},
                                                               "type": {"list": {"variable": "hydra.packaging.TypeDefinition"}}}},
                                                           "type": {"list": {"variable": "hydra.packaging.TermDefinition"}}}}}},
                                                   "function": {
@@ -8568,7 +8568,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                              "body": {"variable": "hydra.lib.lists.map"},
                                                               "type": {"variable": "hydra.packaging.TermDefinition"}}},
                                                           "type": {"variable": "hydra.packaging.Definition"}}}}}}},
                                               "type": {
@@ -8616,7 +8616,7 @@
                                                                                                   "function": {"variable": "hydra.variables.freeVariablesInTerm"}}},
                                                                                               "function": {
                                                                                                 "typeApplication": {
-                                                                                                  "body": {"function": {"primitive": "hydra.lib.sets.toList"}},
+                                                                                                  "body": {"variable": "hydra.lib.sets.toList"},
                                                                                                   "type": {"variable": "hydra.core.Name"}}}}},
                                                                                           "domain": {"variable": "hydra.packaging.TermDefinition"},
                                                                                           "parameter": "td"}}}}],
@@ -8664,7 +8664,7 @@
                                                                       "type": {"variable": "hydra.core.Name"}}}}}}}}},
                                                       "function": {
                                                         "typeApplication": {
-                                                          "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                                          "body": {"variable": "hydra.lib.lists.concat"},
                                                           "type": {"variable": "hydra.packaging.Definition"}}}}},
                                                   "type": {
                                                     "type": {"list": {"variable": "hydra.packaging.Definition"}},
@@ -8674,7 +8674,7 @@
                                                   "argument": {"list": [{"variable": "typeDefs"}, {"variable": "sortedTermDefs"}]},
                                                   "function": {
                                                     "typeApplication": {
-                                                      "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                                      "body": {"variable": "hydra.lib.lists.concat"},
                                                       "type": {"variable": "hydra.packaging.Definition"}}}}}}}}}}}}}}}}}}},
                   "domain": {"list": {"variable": "hydra.packaging.Definition"}},
                   "parameter": "defs"}}}}},

@@ -120,7 +120,7 @@ public interface Maybes {
   }
 
   static <T0, T1, T2> hydra.util.Either<T2, hydra.core.Term> compose(T0 cx, T1 g, hydra.core.Term funF, hydra.core.Term funG, hydra.core.Term xTerm) {
-    return hydra.util.Either.<T2, hydra.core.Term>right(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.maybes.bind"))), new hydra.core.Term.Application(new hydra.core.Application(funF, xTerm)))), funG)));
+    return hydra.util.Either.<T2, hydra.core.Term>right(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.maybes.bind")), new hydra.core.Term.Application(new hydra.core.Application(funF, xTerm)))), funG)));
   }
 
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> fromJust(hydra.context.Context cx, T0 g, hydra.core.Term optTerm) {
@@ -249,7 +249,7 @@ public interface Maybes {
         cx,
         g,
         listTerm),
-      (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (elements -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.maybes.cat"))), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (elements -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.lib.maybes.cat")), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
         (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (el -> new hydra.core.Term.Application(new hydra.core.Application(funTerm, el))),
         elements)))))));
   }

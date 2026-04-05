@@ -4,10 +4,6 @@ import hydra.core.*
 
 import hydra.error.checking.*
 
-import hydra.lib.lists
-
-import hydra.lib.sets
-
 def checkingError(v1: hydra.error.checking.CheckingError): hydra.core.Term =
   v1 match
   case hydra.error.checking.CheckingError.incorrectUnification(v_CheckingError_incorrectUnification_y) => hydra.core.Term.union(hydra.core.Injection("hydra.error.checking.CheckingError",

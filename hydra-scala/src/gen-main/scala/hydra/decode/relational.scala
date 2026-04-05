@@ -6,8 +6,6 @@ import hydra.errors.*
 
 import hydra.relational.*
 
-import hydra.lib.eithers
-
 def columnName(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.relational.ColumnName] =
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.relational.ColumnName]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match

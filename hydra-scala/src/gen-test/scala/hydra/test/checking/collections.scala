@@ -4,10 +4,6 @@ import hydra.core.*
 
 import hydra.testing.*
 
-import hydra.lib.eithers
-
-import hydra.lib.pairs
-
 lazy val allTests: hydra.testing.TestGroup = hydra.testing.TestGroup("Collections", None, Seq(hydra.test.checking.collections.listsTests, hydra.test.checking.collections.setsTests, hydra.test.checking.collections.mapsTests), Seq())
 
 lazy val emptyListsTests: hydra.testing.TestGroup = hydra.testing.TestGroup("Empty lists", None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("empty list", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[hydra.context.InContext[hydra.errors.Error], Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context], scala.Predef.String]((e: hydra.context.InContext[hydra.errors.Error]) => "<<inference error>>")((result: Tuple2[Tuple2[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context]) =>

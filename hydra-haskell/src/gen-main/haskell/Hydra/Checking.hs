@@ -670,16 +670,18 @@ typeOfVariable :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.Name -> 
 typeOfVariable cx tx typeArgs name =
 
       let rawTypeScheme = Maps.lookup name (Graph.graphBoundTypes tx)
-      in (Maybes.maybe (Left (Context.InContext {
+          forScheme =
+                  \ts ->
+                    let tResult =
+                            Logic.ifElse (Lists.null typeArgs) (Resolution.instantiateType cx (Scoping.typeSchemeToFType ts)) (Scoping.typeSchemeToFType ts, cx)
+                        t = Pairs.first tResult
+                        cx2 = Pairs.second tResult
+                    in (Eithers.bind (applyTypeArgumentsToType cx2 tx typeArgs t) (\applied -> Right (applied, cx2)))
+      in (Maybes.maybe (Maybes.maybe (Left (Context.InContext {
         Context.inContextObject = (Errors.ErrorUntypedTermVariable (Core_.UntypedTermVariableError {
           Core_.untypedTermVariableErrorLocation = (Paths.SubtermPath []),
           Core_.untypedTermVariableErrorName = name})),
-        Context.inContextContext = cx})) (\ts ->
-        let tResult =
-                Logic.ifElse (Lists.null typeArgs) (Resolution.instantiateType cx (Scoping.typeSchemeToFType ts)) (Scoping.typeSchemeToFType ts, cx)
-            t = Pairs.first tResult
-            cx2 = Pairs.second tResult
-        in (Eithers.bind (applyTypeArgumentsToType cx2 tx typeArgs t) (\applied -> Right (applied, cx2)))) rawTypeScheme)
+        Context.inContextContext = cx})) forScheme (Maybes.map (\_p -> Graph.primitiveType _p) (Maps.lookup name (Graph.graphPrimitives tx)))) forScheme rawTypeScheme)
 
 -- | Reconstruct the type of a wrapped term (Either/Context version)
 typeOfWrappedTerm :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.WrappedTerm -> Either (Context.InContext Errors.Error) (Core.Type, Context.Context)

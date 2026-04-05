@@ -12,22 +12,6 @@ import hydra.packaging.*
 
 import hydra.typing.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
 def addNamesToNamespaces[T0](encodeNamespace: (hydra.packaging.Namespace => T0))(names: scala.collection.immutable.Set[hydra.core.Name])(ns0: hydra.packaging.Namespaces[T0]): hydra.packaging.Namespaces[T0] =
   {
   lazy val nss: scala.collection.immutable.Set[hydra.packaging.Namespace] = hydra.lib.sets.fromList[hydra.packaging.Namespace](hydra.lib.maybes.cat[hydra.packaging.Namespace](hydra.lib.lists.map[hydra.core.Name,

@@ -30,7 +30,7 @@ apply cx g funsTerm argsTerm =
 bind :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 bind cx g listTerm funTerm =
     Eithers.bind (Core_.list cx g listTerm) (\elements -> Right (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.concat")),
       Core.applicationArgument = (Core.TermList (Lists.map (\el -> Core.TermApplication (Core.Application {
         Core.applicationFunction = funTerm,
         Core.applicationArgument = el})) elements))})))
@@ -39,7 +39,7 @@ bind cx g listTerm funTerm =
 concat2 :: t0 -> t1 -> Core.Term -> Core.Term -> Either t2 Core.Term
 concat2 cx g list1 list2 =
     Right (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.concat")),
       Core.applicationArgument = (Core.TermList [
         list1,
         list2])}))
@@ -48,10 +48,10 @@ concat2 cx g list1 list2 =
 dropWhile :: t0 -> t1 -> Core.Term -> Core.Term -> Either t2 Core.Term
 dropWhile cx g predTerm listTerm =
     Right (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
       Core.applicationArgument = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
-          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.span"))),
+          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.span")),
           Core.applicationArgument = predTerm})),
         Core.applicationArgument = listTerm}))}))
 
@@ -59,12 +59,12 @@ dropWhile cx g predTerm listTerm =
 elem :: t0 -> t1 -> Core.Term -> Core.Term -> Either t2 Core.Term
 elem cx g x listTerm =
     Right (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maybes.isJust"))),
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.isJust")),
       Core.applicationArgument = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
-          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.find"))),
+          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.find")),
           Core.applicationArgument = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.equal"))),
+            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.equal")),
             Core.applicationArgument = x}))})),
         Core.applicationArgument = listTerm}))}))
 
@@ -72,11 +72,11 @@ elem cx g x listTerm =
 filter :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 filter cx g predTerm listTerm =
     Eithers.bind (Core_.list cx g listTerm) (\elements -> Right (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.concat")),
       Core.applicationArgument = (Core.TermList (Lists.map (\el -> Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
           Core.applicationFunction = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
+            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
             Core.applicationArgument = (Core.TermApplication (Core.Application {
               Core.applicationFunction = predTerm,
               Core.applicationArgument = el}))})),
@@ -87,10 +87,10 @@ filter cx g predTerm listTerm =
 find :: t0 -> t1 -> Core.Term -> Core.Term -> Either t2 Core.Term
 find cx g predTerm listTerm =
     Right (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.safeHead"))),
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.safeHead")),
       Core.applicationArgument = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
-          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.filter"))),
+          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.filter")),
           Core.applicationArgument = predTerm})),
         Core.applicationArgument = listTerm}))}))
 
@@ -122,29 +122,29 @@ group cx g listTerm =
         Core.lambdaBody = (Core.TermApplication (Core.Application {
           Core.applicationFunction = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
+              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
               Core.applicationArgument = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.null"))),
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.null")),
                 Core.applicationArgument = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.first"))),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "foldResult"))}))}))})),
             Core.applicationArgument = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
+              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
               Core.applicationArgument = (Core.TermVariable (Core.Name "foldResult"))}))})),
           Core.applicationArgument = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat2"))),
+              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.concat2")),
               Core.applicationArgument = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "foldResult"))}))})),
             Core.applicationArgument = (Core.TermList [
               Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.first"))),
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "foldResult"))})])}))}))}))),
       Core.applicationArgument = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
           Core.applicationFunction = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.foldl"))),
+            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.foldl")),
             Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "acc"),
               Core.lambdaDomain = Nothing,
@@ -154,10 +154,10 @@ group cx g listTerm =
                 Core.lambdaBody = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maybes.maybe"))),
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.maybe")),
                       Core.applicationArgument = (Core.TermPair (Core.TermList [
                         Core.TermVariable (Core.Name "el")], (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))}))))})),
                     Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.Name "h"),
@@ -165,37 +165,37 @@ group cx g listTerm =
                       Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
                             Core.applicationArgument = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.equal"))),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.equal")),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "el"))})),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "h"))}))})),
                           Core.applicationArgument = (Core.TermPair (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat2"))),
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.concat2")),
                               Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.first"))),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))}))})),
                             Core.applicationArgument = (Core.TermList [
                               Core.TermVariable (Core.Name "el")])}), (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))}))))})),
                         Core.applicationArgument = (Core.TermPair (Core.TermList [
                           Core.TermVariable (Core.Name "el")], (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat2"))),
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.concat2")),
                             Core.applicationArgument = (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))}))})),
                           Core.applicationArgument = (Core.TermList [
                             Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.first"))),
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))})])}))))}))})))})),
                   Core.applicationArgument = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.safeHead"))),
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.safeHead")),
                     Core.applicationArgument = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.first"))),
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))}))}))}))})))})))})),
           Core.applicationArgument = (Core.TermPair (Core.TermList [], (Core.TermList [])))})),
         Core.applicationArgument = listTerm}))}))
@@ -204,10 +204,10 @@ group cx g listTerm =
 intercalate :: t0 -> t1 -> Core.Term -> Core.Term -> Either t2 Core.Term
 intercalate cx g sep listsTerm =
     Right (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.concat")),
       Core.applicationArgument = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
-          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.intersperse"))),
+          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.intersperse")),
           Core.applicationArgument = sep})),
         Core.applicationArgument = listsTerm}))}))
 
@@ -236,7 +236,7 @@ nub cx g listTerm =
     Eithers.bind (Core_.list cx g listTerm) (\elements -> Right (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
-          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.foldl"))),
+          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.foldl")),
           Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "acc"),
             Core.lambdaDomain = Nothing,
@@ -246,16 +246,16 @@ nub cx g listTerm =
               Core.lambdaBody = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.elem"))),
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.elem")),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))}))})),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))})),
                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat2"))),
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.concat2")),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))})),
                   Core.applicationArgument = (Core.TermList [
                     Core.TermVariable (Core.Name "x")])}))}))})))})))})),
@@ -271,28 +271,28 @@ partition cx g predTerm listTerm =
                   Lists.foldl (\acc -> \el ->
                     let yeses =
                             Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.first"))),
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
                               Core.applicationArgument = acc})
                         nos =
                                 Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
                                   Core.applicationArgument = acc})
                     in (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
                           Core.applicationArgument = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = predTerm,
                             Core.applicationArgument = el}))})),
                         Core.applicationArgument = (Core.TermPair (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat2"))),
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.concat2")),
                             Core.applicationArgument = yeses})),
                           Core.applicationArgument = (Core.TermList [
                             el])}), nos))})),
                       Core.applicationArgument = (Core.TermPair (yeses, (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat2"))),
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.concat2")),
                           Core.applicationArgument = nos})),
                         Core.applicationArgument = (Core.TermList [
                           el])}))))}))) initialState elements
@@ -308,14 +308,14 @@ replicate :: t0 -> t1 -> Core.Term -> Core.Term -> Either t2 Core.Term
 replicate cx g n x =
     Right (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.map"))),
+        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.map")),
         Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
           Core.lambdaParameter = (Core.Name "_"),
           Core.lambdaDomain = Nothing,
           Core.lambdaBody = x})))})),
       Core.applicationArgument = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
-          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.range"))),
+          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.range")),
           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
         Core.applicationArgument = n}))}))
 
@@ -334,8 +334,8 @@ sort :: t0 -> t1 -> Core.Term -> Either t2 Core.Term
 sort cx g listTerm =
     Right (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.sortOn"))),
-        Core.applicationArgument = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.identity")))})),
+        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.sortOn")),
+        Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lib.equality.identity"))})),
       Core.applicationArgument = listTerm}))
 
 -- | Interpreter-friendly sortOn for List terms.
@@ -345,13 +345,13 @@ sortOn cx g projTerm listTerm =
       let splitResult =
               Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.span"))),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.span")),
                   Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.lte"))),
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.lte")),
                         Core.applicationArgument = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = projTerm,
                           Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))})),
@@ -361,19 +361,19 @@ sortOn cx g projTerm listTerm =
                 Core.applicationArgument = sorted})
           before =
                   Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.first"))),
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
                     Core.applicationArgument = splitResult})
           after =
                   Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
                     Core.applicationArgument = splitResult})
       in (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
-          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat2"))),
+          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.concat2")),
           Core.applicationArgument = before})),
         Core.applicationArgument = (Core.TermApplication (Core.Application {
           Core.applicationFunction = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.cons"))),
+            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.cons")),
             Core.applicationArgument = x})),
           Core.applicationArgument = after}))}))) (Core.TermList []) elements))
 
@@ -387,49 +387,49 @@ span cx g predTerm listTerm =
                   Lists.foldl (\acc -> \el ->
                     let takingLeft =
                             Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.first"))),
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
                               Core.applicationArgument = acc})
                         right =
                                 Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
                                   Core.applicationArgument = acc})
                         taking =
                                 Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.first"))),
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
                                   Core.applicationArgument = takingLeft})
                         left =
                                 Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
                                   Core.applicationArgument = takingLeft})
                     in (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
                           Core.applicationArgument = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.and"))),
+                              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.and")),
                               Core.applicationArgument = taking})),
                             Core.applicationArgument = (Core.TermApplication (Core.Application {
                               Core.applicationFunction = predTerm,
                               Core.applicationArgument = el}))}))})),
                         Core.applicationArgument = (Core.TermPair (Core.TermPair (Core.TermLiteral (Core.LiteralBoolean True), (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat2"))),
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.concat2")),
                             Core.applicationArgument = left})),
                           Core.applicationArgument = (Core.TermList [
                             el])}))), right))})),
                       Core.applicationArgument = (Core.TermPair (Core.TermPair (Core.TermLiteral (Core.LiteralBoolean False), left), (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat2"))),
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.concat2")),
                           Core.applicationArgument = right})),
                         Core.applicationArgument = (Core.TermList [
                           el])}))))}))) initialState elements
       in (Right (Core.TermPair (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
+        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
         Core.applicationArgument = (Core.TermApplication (Core.Application {
-          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.first"))),
+          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
           Core.applicationArgument = finalState}))}), (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
+        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
         Core.applicationArgument = finalState}))))))
 
 -- | Interpreter-friendly zipWith for List terms.

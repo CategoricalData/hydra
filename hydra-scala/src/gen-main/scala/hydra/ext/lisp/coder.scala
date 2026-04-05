@@ -6,26 +6,6 @@ import hydra.ext.lisp.syntax.*
 
 import hydra.packaging.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def dialectCadr(d: hydra.ext.lisp.syntax.Dialect): scala.Predef.String =
   d match
   case hydra.ext.lisp.syntax.Dialect.clojure => "second"

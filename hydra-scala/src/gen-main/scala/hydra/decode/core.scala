@@ -4,14 +4,6 @@ import hydra.core.*
 
 import hydra.errors.*
 
-import hydra.lib.eithers
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.strings
-
 def annotatedTerm(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.core.AnnotatedTerm] =
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.core.AnnotatedTerm]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match

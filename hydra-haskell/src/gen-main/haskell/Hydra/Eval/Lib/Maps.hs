@@ -27,10 +27,10 @@ alter cx g funTerm keyTerm mapTerm =
         in (Right (Core.TermApplication (Core.Application {
           Core.applicationFunction = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maybes.maybe"))),
+              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.maybe")),
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maps.delete"))),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.delete")),
                   Core.applicationArgument = keyTerm})),
                 Core.applicationArgument = mapTerm}))})),
             Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -39,7 +39,7 @@ alter cx g funTerm keyTerm mapTerm =
               Core.lambdaBody = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maps.insert"))),
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.insert")),
                     Core.applicationArgument = keyTerm})),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "newV"))})),
                 Core.applicationArgument = mapTerm}))})))})),
@@ -73,15 +73,15 @@ filter cx g valPred mapTerm =
       Core.TermMap v0 ->
         let pairs = Maps.toList v0
         in (Right (Core.TermApplication (Core.Application {
-          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maps.fromList"))),
+          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.fromList")),
           Core.applicationArgument = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
+            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.concat")),
             Core.applicationArgument = (Core.TermList (Lists.map (\p ->
               let v = Pairs.second p
               in (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = valPred,
                       Core.applicationArgument = v}))})),
@@ -98,16 +98,16 @@ filterWithKey cx g pred mapTerm =
       Core.TermMap v0 ->
         let pairs = Maps.toList v0
         in (Right (Core.TermApplication (Core.Application {
-          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maps.fromList"))),
+          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.fromList")),
           Core.applicationArgument = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
+            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.concat")),
             Core.applicationArgument = (Core.TermList (Lists.map (\p ->
               let k = Pairs.first p
                   v = Pairs.second p
               in (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = pred,
@@ -124,11 +124,11 @@ findWithDefault :: t0 -> t1 -> Core.Term -> Core.Term -> Core.Term -> Either t2 
 findWithDefault cx g defaultTerm keyTerm mapTerm =
     Right (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maybes.fromMaybe"))),
+        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.fromMaybe")),
         Core.applicationArgument = defaultTerm})),
       Core.applicationArgument = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
-          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maps.lookup"))),
+          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.lookup")),
           Core.applicationArgument = keyTerm})),
         Core.applicationArgument = mapTerm}))}))
 

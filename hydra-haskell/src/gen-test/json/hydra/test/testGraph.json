@@ -24,7 +24,7 @@
               "typeApplication": {
                 "body": {
                   "typeApplication": {
-                    "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
+                    "body": {"variable": "hydra.lib.maps.fromList"},
                     "type": {"variable": "hydra.core.Name"}}},
                 "type": {"variable": "hydra.core.Term"}}}}},
         "type": {
@@ -265,7 +265,7 @@
               "typeApplication": {
                 "body": {
                   "typeApplication": {
-                    "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
+                    "body": {"variable": "hydra.lib.maps.fromList"},
                     "type": {"variable": "hydra.core.Name"}}},
                 "type": {"variable": "hydra.core.Type"}}}}},
         "type": {

@@ -6,20 +6,6 @@ import hydra.ext.scala.syntax.*
 
 import hydra.packaging.*
 
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.logic
-
-import hydra.lib.math
-
-import hydra.lib.maybes
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def nameOfType[T0](cx: T0)(t: hydra.core.Type): Option[hydra.core.Name] =
   hydra.strip.deannotateType(t) match
   case hydra.core.Type.variable(v_Type_variable_name) => Some(v_Type_variable_name)
