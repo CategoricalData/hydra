@@ -868,16 +868,22 @@ typeOfVariable = define "typeOfVariable" $
   doc "Reconstruct the type of a variable (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "name" ~>
   "rawTypeScheme" <~ Maps.lookup (var "name") (Graph.graphBoundTypes $ var "tx") $
-  Maybes.maybe
-    (Ctx.failInContext (Error.errorUntypedTermVariable $ ErrorsCore.untypedTermVariableError (Paths.subtermPath $ list ([] :: [TTerm SubtermStep])) (var "name")) (var "cx"))
-    ("ts" ~>
+  "forScheme" <~ ("ts" ~>
       "tResult" <~ Logic.ifElse (Lists.null $ var "typeArgs")
         (Resolution.instantiateType @@ var "cx" @@ (Scoping.typeSchemeToFType @@ var "ts"))
         (pair (Scoping.typeSchemeToFType @@ var "ts") (var "cx")) $
       "t" <~ Pairs.first (var "tResult") $
       "cx2" <~ Pairs.second (var "tResult") $
       "applied" <<~ applyTypeArgumentsToType @@ var "cx2" @@ var "tx" @@ var "typeArgs" @@ var "t" $
-      right $ pair (var "applied") (var "cx2"))
+      right $ pair (var "applied") (var "cx2")) $
+  Maybes.maybe
+    -- Not found in graphBoundTypes: fall through to graphPrimitives
+    (Maybes.maybe
+      (Ctx.failInContext (Error.errorUntypedTermVariable $ ErrorsCore.untypedTermVariableError (Paths.subtermPath $ list ([] :: [TTerm SubtermStep])) (var "name")) (var "cx"))
+      (var "forScheme")
+      (Maybes.map ("_p" ~> Graph.primitiveType (var "_p"))
+        (Maps.lookup (var "name") (Graph.graphPrimitives $ var "tx"))))
+    (var "forScheme")
     (var "rawTypeScheme")
 
 typeOfWrappedTerm :: TTermDefinition (Context -> Graph -> [Type] -> WrappedTerm -> Prelude.Either (InContext Error) (Type, Context))

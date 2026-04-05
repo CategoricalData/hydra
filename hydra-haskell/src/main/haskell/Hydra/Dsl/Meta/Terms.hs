@@ -255,13 +255,11 @@ optional = Core.termMaybe
 pair :: TTerm Term -> TTerm Term -> TTerm Term
 pair t1 t2 = Core.termPair $ Phantoms.pair t1 t2
 
--- | Create a term-encoded primitive function reference
+-- | Create a term-encoded reference to a primitive function.
+-- Uses termVariable; the name resolves via graphPrimitives fallthrough.
 -- Example: primitive (Name "hydra.lib.strings.length")
 primitive :: Name -> TTerm Term
-primitive = primitiveLift . TTerm . EncodeCore.name
-
-primitiveLift :: TTerm Name -> TTerm Term
-primitiveLift = Core.termFunction . Core.functionPrimitive
+primitive = Core.termVariable . TTerm . EncodeCore.name
 
 -- | Create a term-encoded field projection function
 -- Example: project (name "Person") (name "firstName")
