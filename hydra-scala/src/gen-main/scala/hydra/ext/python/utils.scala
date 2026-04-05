@@ -6,20 +6,6 @@ import hydra.ext.python.syntax.*
 
 import hydra.packaging.*
 
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.strings
-
 def annotatedExpression(mcomment: Option[scala.Predef.String])(expr: hydra.ext.python.syntax.Expression): hydra.ext.python.syntax.Expression =
   hydra.lib.maybes.maybe[hydra.ext.python.syntax.Expression, scala.Predef.String](expr)((c: scala.Predef.String) =>
   hydra.ext.python.utils.pyPrimaryToPyExpression(hydra.ext.python.utils.primaryWithExpressionSlices(hydra.ext.python.utils.pyNameToPyPrimary("Annotated"))(Seq(expr,

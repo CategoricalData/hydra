@@ -367,7 +367,12 @@ public interface Reduction {
       @Override
       public Integer visit(hydra.core.Term.Variable name) {
         return hydra.lib.maybes.Maybe.applyLazy(
-          () -> 0,
+          () -> hydra.lib.maybes.Maybe.applyLazy(
+            () -> 0,
+            hydra.Arity::typeSchemeArity,
+            hydra.lib.maps.Lookup.apply(
+              (name).value,
+              primTypes.get())),
           hydra.Arity::typeArity,
           hydra.lib.maybes.Map.apply(
             hydra.Scoping::typeSchemeToFType,
@@ -1306,7 +1311,23 @@ public interface Reduction {
             graph,
             (v).value);
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(applyToArguments.get().apply(original).apply(args)),
+            () -> ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (() -> {
+              hydra.util.Maybe<hydra.graph.Primitive> mPrim = hydra.Lexical.lookupPrimitive(
+                graph,
+                (v).value);
+              return hydra.lib.maybes.Maybe.applyLazy(
+                () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(applyToArguments.get().apply(original).apply(args)),
+                (java.util.function.Function<hydra.graph.Primitive, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (prim -> {
+                  Integer arity = hydra.Arity.primitiveArity(prim);
+                  return hydra.lib.logic.IfElse.lazy(
+                    hydra.lib.equality.Gt.apply(
+                      arity,
+                      hydra.lib.lists.Length.apply(args)),
+                    () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(applyToArguments.get().apply(original).apply(args)),
+                    () -> (forPrimitive).apply(prim).apply(arity).apply(args));
+                }),
+                mPrim);
+            })).get(),
             (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (binding -> applyIfNullary.get().apply(eager2).apply((binding).term).apply(args)),
             mBinding);
         }

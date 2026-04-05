@@ -6,8 +6,6 @@ import hydra.core.*
 
 import hydra.errors.*
 
-import hydra.lib.eithers
-
 def context(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.context.Context] =
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.context.Context]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match

@@ -317,7 +317,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
+                                                                  "body": {"variable": "hydra.lib.eithers.map"},
                                                                   "type": {"list": {"variable": "hydra.ext.org.json.schema.Restriction"}}}},
                                                               "type": {
                                                                 "pair": {
@@ -468,7 +468,7 @@
                                                                       {"variable": "res"}]},
                                                                   "function": {
                                                                     "typeApplication": {
-                                                                      "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                                                      "body": {"variable": "hydra.lib.lists.concat"},
                                                                       "type": {"variable": "hydra.ext.org.json.schema.Restriction"}}}}},
                                                               "domain": {"list": {"variable": "hydra.ext.org.json.schema.Restriction"}},
                                                               "parameter": "res"}}},
@@ -478,7 +478,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "typeApplication": {
-                                                                    "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
+                                                                    "body": {"variable": "hydra.lib.eithers.map"},
                                                                     "type": {"list": {"variable": "hydra.ext.org.json.schema.Restriction"}}}},
                                                                 "type": {"list": {"variable": "hydra.ext.org.json.schema.Restriction"}}}},
                                                             "type": {"variable": "t2"}}}}}}},
@@ -682,7 +682,7 @@
                                       "application": {
                                         "argument": {"variable": "name"},
                                         "function": {"variable": "hydra.ext.json.schema.coder.encodeName"}}}]},
-                                "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                                "function": {"variable": "hydra.lib.strings.cat"}}},
                             "typeName": "hydra.ext.org.json.schema.SchemaReference"}}},
                       "typeName": "hydra.ext.org.json.schema.Restriction"}},
                   "domain": {"variable": "hydra.core.Name"},

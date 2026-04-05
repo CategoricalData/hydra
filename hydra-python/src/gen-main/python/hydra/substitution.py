@@ -64,7 +64,7 @@ def id_type_subst() -> hydra.typing.TypeSubst:
 
     return hydra.typing.TypeSubst(hydra.lib.maps.empty())
 
-def compose_type_subst_list(v1: frozenlist[hydra.typing.TypeSubst]) -> hydra.typing.TypeSubst:
+def compose_type_subst_list(v1: _):
     r"""Compose a list of type substitutions."""
 
     return hydra.lib.lists.foldl((lambda x1, x2: compose_type_subst(x1, x2)), id_type_subst(), v1)

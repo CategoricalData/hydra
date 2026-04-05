@@ -14,7 +14,7 @@
                 "argument": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 1}}},
-                    "function": {"function": {"primitive": "hydra.lib.math.negate"}}}},
+                    "function": {"variable": "hydra.lib.math.negate"}}},
                 "function": {
                   "application": {
                     "argument": {"literal": {"string": "->"}},
@@ -85,7 +85,7 @@
                 "argument": {
                   "application": {
                     "argument": {"literal": {"integer": {"int32": 1}}},
-                    "function": {"function": {"primitive": "hydra.lib.math.negate"}}}},
+                    "function": {"variable": "hydra.lib.math.negate"}}},
                 "function": {
                   "application": {
                     "argument": {"literal": {"string": "->"}},

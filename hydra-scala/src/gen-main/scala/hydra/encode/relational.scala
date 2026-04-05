@@ -4,12 +4,6 @@ import hydra.core.*
 
 import hydra.relational.*
 
-import hydra.lib.lists
-
-import hydra.lib.maps
-
-import hydra.lib.sets
-
 def columnName(x: hydra.relational.ColumnName): hydra.core.Term =
   hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.relational.ColumnName", hydra.core.Term.literal(hydra.core.Literal.string(x))))
 

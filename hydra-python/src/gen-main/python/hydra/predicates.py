@@ -36,7 +36,7 @@ def is_complex_variable(tc: hydra.graph.Graph, name: hydra.core.Name) -> bool:
     @lru_cache(1)
     def meta_lookup() -> Maybe[hydra.core.Term]:
         return hydra.lib.maps.lookup(name, tc.metadata)
-    return hydra.lib.logic.if_else(hydra.lib.maybes.is_just(meta_lookup()), (lambda : True), (lambda : hydra.lib.logic.if_else(hydra.lib.sets.member(name, tc.lambda_variables), (lambda : True), (lambda : (type_lookup := hydra.lib.maps.lookup(name, tc.bound_types), hydra.lib.maybes.maybe((lambda : True), (lambda ts: hydra.lib.equality.gt(hydra.arity.type_scheme_arity(ts), 0)), type_lookup))[1]))))
+    return hydra.lib.logic.if_else(hydra.lib.maybes.is_just(meta_lookup()), (lambda : True), (lambda : hydra.lib.logic.if_else(hydra.lib.sets.member(name, tc.lambda_variables), (lambda : True), (lambda : (type_lookup := hydra.lib.maps.lookup(name, tc.bound_types), hydra.lib.maybes.maybe((lambda : (prim_lookup := hydra.lib.maps.lookup(name, tc.primitives), hydra.lib.maybes.maybe((lambda : True), (lambda prim: hydra.lib.equality.gt(hydra.arity.type_scheme_arity(prim.type), 0)), prim_lookup))[1]), (lambda ts: hydra.lib.equality.gt(hydra.arity.type_scheme_arity(ts), 0)), type_lookup))[1]))))
 
 def is_complex_term(tc: hydra.graph.Graph, t: hydra.core.Term) -> bool:
     r"""Check if a term needs to be treated as a function rather than a simple value."""
@@ -181,8 +181,8 @@ def is_trivial_term(t: hydra.core.Term):
         case hydra.core.TermLiteral():
             return True
 
-        case hydra.core.TermVariable():
-            return True
+        case hydra.core.TermVariable(value=nm):
+            return hydra.lib.equality.equal(hydra.lib.lists.length(hydra.lib.strings.split_on(".", nm.value)), 1)
 
         case hydra.core.TermUnit():
             return True

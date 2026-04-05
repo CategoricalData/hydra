@@ -10,26 +10,6 @@ import hydra.errors.*
 
 import hydra.graph.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.math
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def aggregateAnnotations[T0, T1, T2, T3](getValue: (T0 => Option[T1]))(getX: (T1 => T0))(getAnns: (T1 => Map[T2, T3]))(t: T0): Map[T2, T3] =
   {
   def toPairs(rest: Seq[Seq[Tuple2[T2, T3]]])(t2: T0): Seq[Seq[Tuple2[T2, T3]]] =

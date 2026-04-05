@@ -6,8 +6,6 @@ import hydra.errors.*
 
 import hydra.typing.*
 
-import hydra.lib.eithers
-
 def functionStructure[T0](env: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError,
    T0]))(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.typing.FunctionStructure[T0]] =
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.typing.FunctionStructure[T0]]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>

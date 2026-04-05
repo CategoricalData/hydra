@@ -28,8 +28,8 @@
                                         "record": {
                                           "field": "value",
                                           "typeName": "hydra.error.core.ConstantConditionError"}}}}}},
-                              "function": {"function": {"primitive": "hydra.lib.literals.showBoolean"}}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                              "function": {"variable": "hydra.lib.literals.showBoolean"}}}]},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {"variable": "hydra.error.core.ConstantConditionError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -67,7 +67,7 @@
                                           "field": "name",
                                           "typeName": "hydra.error.core.DuplicateBindingError"}}}}}},
                               "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {"variable": "hydra.error.core.DuplicateBindingError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -103,7 +103,7 @@
                                       "elimination": {
                                         "record": {"field": "name", "typeName": "hydra.error.core.DuplicateFieldError"}}}}}},
                               "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {"variable": "hydra.error.core.DuplicateFieldError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -143,7 +143,7 @@
                                           "field": "name",
                                           "typeName": "hydra.error.core.DuplicateRecordTypeFieldNamesError"}}}}}},
                               "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {"variable": "hydra.error.core.DuplicateRecordTypeFieldNamesError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -183,7 +183,7 @@
                                           "field": "name",
                                           "typeName": "hydra.error.core.DuplicateUnionTypeFieldNamesError"}}}}}},
                               "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {"variable": "hydra.error.core.DuplicateUnionTypeFieldNamesError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -222,7 +222,7 @@
                                           "field": "typeName",
                                           "typeName": "hydra.error.core.EmptyCaseStatementError"}}}}}},
                               "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {"variable": "hydra.error.core.EmptyCaseStatementError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -411,7 +411,7 @@
                                           "field": "name",
                                           "typeName": "hydra.error.core.InvalidForallParameterNameError"}}}}}},
                               "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {"variable": "hydra.error.core.InvalidForallParameterNameError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -450,7 +450,7 @@
                                           "field": "name",
                                           "typeName": "hydra.error.core.InvalidLambdaParameterNameError"}}}}}},
                               "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {"variable": "hydra.error.core.InvalidLambdaParameterNameError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -489,7 +489,7 @@
                                           "field": "name",
                                           "typeName": "hydra.error.core.InvalidLetBindingNameError"}}}}}},
                               "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {"variable": "hydra.error.core.InvalidLetBindingNameError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -611,7 +611,7 @@
                       "function": {
                         "application": {
                           "argument": {"literal": {"string": "invalid term: "}},
-                          "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                          "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                   "domain": {"variable": "hydra.error.core.InvalidTermError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -707,7 +707,7 @@
                       "function": {
                         "application": {
                           "argument": {"literal": {"string": "invalid type: "}},
-                          "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                          "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                   "domain": {"variable": "hydra.error.core.InvalidTypeError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -747,7 +747,7 @@
                                           "field": "name",
                                           "typeName": "hydra.error.core.InvalidTypeLambdaParameterNameError"}}}}}},
                               "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {"variable": "hydra.error.core.InvalidTypeLambdaParameterNameError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -787,7 +787,7 @@
                                           "field": "name",
                                           "typeName": "hydra.error.core.InvalidTypeSchemeVariableNameError"}}}}}},
                               "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {"variable": "hydra.error.core.InvalidTypeSchemeVariableNameError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -876,7 +876,7 @@
                                           "field": "keyType",
                                           "typeName": "hydra.error.core.NonComparableMapKeyTypeError"}}}}}},
                               "function": {"variable": "hydra.show.core.type"}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {"variable": "hydra.error.core.NonComparableMapKeyTypeError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -915,7 +915,7 @@
                                           "field": "elementType",
                                           "typeName": "hydra.error.core.NonComparableSetElementTypeError"}}}}}},
                               "function": {"variable": "hydra.show.core.type"}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {"variable": "hydra.error.core.NonComparableSetElementTypeError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -954,7 +954,7 @@
                                           "field": "typeName",
                                           "typeName": "hydra.error.core.RedundantWrapUnwrapError"}}}}}},
                               "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {"variable": "hydra.error.core.RedundantWrapUnwrapError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -990,7 +990,7 @@
                                       "elimination": {
                                         "record": {"field": "name", "typeName": "hydra.error.core.SelfApplicationError"}}}}}},
                               "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {"variable": "hydra.error.core.SelfApplicationError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -1029,7 +1029,7 @@
                                           "field": "fieldName",
                                           "typeName": "hydra.error.core.SingleVariantUnionError"}}}}}},
                               "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {"variable": "hydra.error.core.SingleVariantUnionError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -1068,7 +1068,7 @@
                                           "field": "name",
                                           "typeName": "hydra.error.core.TermVariableShadowingError"}}}}}},
                               "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {"variable": "hydra.error.core.TermVariableShadowingError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -1108,7 +1108,7 @@
                                           "field": "name",
                                           "typeName": "hydra.error.core.TypeVariableShadowingInForallError"}}}}}},
                               "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {"variable": "hydra.error.core.TypeVariableShadowingInForallError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -1148,7 +1148,7 @@
                                           "field": "name",
                                           "typeName": "hydra.error.core.TypeVariableShadowingInTypeLambdaError"}}}}}},
                               "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {
                     "variable": "hydra.error.core.TypeVariableShadowingInTypeLambdaError"},
                   "parameter": "e"}}}}},
@@ -1216,7 +1216,7 @@
                                       "argument": {"variable": "tname"},
                                       "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
                                   {"literal": {"string": "\""}}]},
-                              "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}}}}}},
+                              "function": {"variable": "hydra.lib.strings.cat"}}}}}}},
                   "domain": {"variable": "hydra.error.core.UndefinedFieldError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -1255,7 +1255,7 @@
                                           "field": "name",
                                           "typeName": "hydra.error.core.UndefinedTermVariableError"}}}}}},
                               "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {"variable": "hydra.error.core.UndefinedTermVariableError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -1294,7 +1294,7 @@
                                           "field": "name",
                                           "typeName": "hydra.error.core.UndefinedTypeVariableError"}}}}}},
                               "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {"variable": "hydra.error.core.UndefinedTypeVariableError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -1334,7 +1334,7 @@
                                           "field": "name",
                                           "typeName": "hydra.error.core.UndefinedTypeVariableInBindingTypeError"}}}}}},
                               "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {
                     "variable": "hydra.error.core.UndefinedTypeVariableInBindingTypeError"},
                   "parameter": "e"}}}}},
@@ -1376,7 +1376,7 @@
                                           "field": "name",
                                           "typeName": "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"}}}}}},
                               "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {
                     "variable": "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"},
                   "parameter": "e"}}}}},
@@ -1419,7 +1419,7 @@
                                           "field": "name",
                                           "typeName": "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"}}}}}},
                               "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {
                     "variable": "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"},
                   "parameter": "e"}}}}},
@@ -1487,7 +1487,7 @@
                                     "application": {
                                       "argument": {"variable": "actual"},
                                       "function": {"variable": "hydra.show.core.term"}}}]},
-                              "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}}}}}},
+                              "function": {"variable": "hydra.lib.strings.cat"}}}}}}},
                   "domain": {"variable": "hydra.error.core.UnexpectedTermVariantError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -1553,7 +1553,7 @@
                                     "application": {
                                       "argument": {"variable": "actual"},
                                       "function": {"variable": "hydra.show.core.type"}}}]},
-                              "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}}}}}},
+                              "function": {"variable": "hydra.lib.strings.cat"}}}}}}},
                   "domain": {"variable": "hydra.error.core.UnexpectedTypeVariantError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -1592,7 +1592,7 @@
                                           "field": "name",
                                           "typeName": "hydra.error.core.UnknownPrimitiveNameError"}}}}}},
                               "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {"variable": "hydra.error.core.UnknownPrimitiveNameError"},
                   "parameter": "e"}}}}},
         "type": {
@@ -1657,7 +1657,7 @@
                                           "field": "name",
                                           "typeName": "hydra.error.core.UntypedTermVariableError"}}}}}},
                               "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}}]},
-                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                      "function": {"variable": "hydra.lib.strings.cat"}}},
                   "domain": {"variable": "hydra.error.core.UntypedTermVariableError"},
                   "parameter": "e"}}}}},
         "type": {

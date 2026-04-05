@@ -4,24 +4,6 @@ import hydra.core.*
 
 import hydra.json.model.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def decodeFloat(ft: hydra.core.FloatType)(value: hydra.json.model.Value): Either[scala.Predef.String, hydra.core.Term] =
   ft match
   case hydra.core.FloatType.bigfloat => {

@@ -4,20 +4,6 @@ import hydra.ast.*
 
 import hydra.ext.scala.syntax.*
 
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.math
-
-import hydra.lib.maybes
-
-import hydra.lib.strings
-
 lazy val dotOp: hydra.ast.Op = hydra.ast.Op(".", hydra.ast.Padding(hydra.ast.Ws.none, hydra.ast.Ws.none), 0, hydra.ast.Associativity.left)
 
 lazy val functionArrowOp: hydra.ast.Op = hydra.serialization.op("=>")(hydra.lib.math.negate(1))(hydra.ast.Associativity.right)

@@ -390,6 +390,16 @@ encodeTerm cx g term0 =
                 in (Logic.ifElse hasForallResidual (Right (Utils.sprim v2)) (Right (Utils.sapplyTypes (Utils.sprim v2) stypeArgs))))
               Core.FunctionElimination _ -> encodeTerm cx g substitutedBody
               _ -> encodeTerm cx g substitutedBody
+            Core.TermVariable v1 -> Maybes.cases (Maps.lookup v1 (Graph.graphPrimitives g)) (encodeTerm cx g substitutedBody) (\_prim -> Eithers.bind (Eithers.mapList (\targ -> encodeType cx g targ) typeArgs) (\stypeArgs ->
+              let inScopeTypeVarNames =
+                      Sets.fromList (Lists.map (\n -> Formatting.capitalize (Core.unName n)) (Sets.toList (Graph.graphTypeVariables g)))
+                  hasForallResidual =
+                          Logic.not (Lists.null (Lists.filter (\st -> case st of
+                            Syntax.TypeVar v2 ->
+                              let tvName = Syntax.type_NameValue (Syntax.type_VarName v2)
+                              in (Logic.and (Logic.not (Lists.elem 46 (Strings.toList tvName))) (Logic.not (Sets.member tvName inScopeTypeVarNames)))
+                            _ -> False) stypeArgs))
+              in (Logic.ifElse hasForallResidual (Right (Utils.sprim v1)) (Right (Utils.sapplyTypes (Utils.sprim v1) stypeArgs)))))
             _ -> encodeTerm cx g substitutedBody
         Core.TermTypeLambda v0 -> encodeTerm cx (Scoping.extendGraphForTypeLambda g v0) (Core.typeLambdaBody v0)
         Core.TermApplication v0 ->

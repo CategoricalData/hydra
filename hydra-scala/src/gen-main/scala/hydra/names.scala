@@ -6,26 +6,6 @@ import hydra.packaging.*
 
 import hydra.util.*
 
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.math
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def compactName(namespaces: Map[hydra.packaging.Namespace, scala.Predef.String])(name: hydra.core.Name): scala.Predef.String =
   {
   lazy val qualName: hydra.packaging.QualifiedName = hydra.names.qualifyName(name)

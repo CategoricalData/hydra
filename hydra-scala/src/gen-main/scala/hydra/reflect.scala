@@ -6,8 +6,6 @@ import hydra.util.*
 
 import hydra.variants.*
 
-import hydra.lib.lists
-
 def eliminationVariant(v1: hydra.core.Elimination): hydra.variants.EliminationVariant =
   v1 match
   case hydra.core.Elimination.record(v_Elimination_record__) => hydra.variants.EliminationVariant.record

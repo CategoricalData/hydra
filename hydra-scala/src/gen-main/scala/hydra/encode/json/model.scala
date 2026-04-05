@@ -4,10 +4,6 @@ import hydra.core.*
 
 import hydra.json.model.*
 
-import hydra.lib.lists
-
-import hydra.lib.maps
-
 def value(v1: hydra.json.model.Value): hydra.core.Term =
   v1 match
   case hydra.json.model.Value.array(v_Value_array_y) => hydra.core.Term.union(hydra.core.Injection("hydra.json.model.Value",

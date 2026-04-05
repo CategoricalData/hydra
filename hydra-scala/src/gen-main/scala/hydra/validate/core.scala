@@ -8,20 +8,6 @@ import hydra.graph.*
 
 import hydra.paths.*
 
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
 def checkDuplicateBindings(path: hydra.paths.SubtermPath)(bindings: Seq[hydra.core.Binding]): Option[hydra.error.core.InvalidTermError] =
   {
   lazy val names: Seq[hydra.core.Name] = hydra.lib.lists.map[hydra.core.Binding, hydra.core.Name]((x: hydra.core.Binding) => (x.name))(bindings)

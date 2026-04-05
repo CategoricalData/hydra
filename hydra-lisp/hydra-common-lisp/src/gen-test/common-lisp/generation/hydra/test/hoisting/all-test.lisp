@@ -257,11 +257,11 @@
 
 (defun test-all-neghoistlet-neghoistletbindings-negnested-let-inside-lambda-binding-hoisted-with-lambda-capture ()
 
-  (assert (equal let f = λa.(hydra.lib.math.mul! @ (f_g @ a) @ 2:int32), f_g = λa.(hydra.lib.math.add! @ a @ 1:int32) in (f @ 10:int32) let f = λa.(hydra.lib.math.mul! @ (f_g @ a) @ 2:int32), f_g = λa.(hydra.lib.math.add! @ a @ 1:int32) in (f @ 10:int32))))
+  (assert (equal let f = λa.(hydra.lib.math.mul @ (f_g @ a) @ 2:int32), f_g = λa.(hydra.lib.math.add @ a @ 1:int32) in (f @ 10:int32) let f = λa.(hydra.lib.math.mul @ (f_g @ a) @ 2:int32), f_g = λa.(hydra.lib.math.add @ a @ 1:int32) in (f @ 10:int32))))
 
 (defun test-all-neghoistlet-neghoistletbindings-negtype-application-nested-let-outside-lambda-can-be-hoisted ()
 
-  (assert (equal let f = λx.(hydra.lib.math.add! @ x @ f_y)⟨int32⟩, f_y = 1:int32 in (f @ 10:int32) let f = λx.(hydra.lib.math.add! @ x @ f_y)⟨int32⟩, f_y = 1:int32 in (f @ 10:int32))))
+  (assert (equal let f = λx.(hydra.lib.math.add @ x @ f_y)⟨int32⟩, f_y = 1:int32 in (f @ 10:int32) let f = λx.(hydra.lib.math.add @ x @ f_y)⟨int32⟩, f_y = 1:int32 in (f @ 10:int32))))
 
 ;; hoistPolymorphicLetBindings
 
@@ -295,19 +295,19 @@
 
 (defun test-all-neghoistlet-neghoistpolymorphicletbindings-negpolymorphic-binding-captures-both-lambda-negbound-and-let-negbound-variables ()
 
-  (assert (equal let f:(((int32 → int32))) = λa:int32.let x:((int32)) = 1:int32 in (f_g @ a @ x @ 42:int32), f_g:((forall b. (int32 → int32 → b → b))) = Λb.λa:int32.λx:int32.λy.(hydra.lib.math.add! @ (hydra.lib.math.add! @ a @ x) @ y) in (f @ 10:int32) let f:(((int32 → int32))) = λa:int32.let x:((int32)) = 1:int32 in (f_g @ a @ x @ 42:int32), f_g:((forall b. (int32 → int32 → b → b))) = Λb.λa:int32.λx:int32.λy.(hydra.lib.math.add! @ (hydra.lib.math.add! @ a @ x) @ y) in (f @ 10:int32))))
+  (assert (equal let f:(((int32 → int32))) = λa:int32.let x:((int32)) = 1:int32 in (f_g @ a @ x @ 42:int32), f_g:((forall b. (int32 → int32 → b → b))) = Λb.λa:int32.λx:int32.λy.(hydra.lib.math.add @ (hydra.lib.math.add @ a @ x) @ y) in (f @ 10:int32) let f:(((int32 → int32))) = λa:int32.let x:((int32)) = 1:int32 in (f_g @ a @ x @ 42:int32), f_g:((forall b. (int32 → int32 → b → b))) = Λb.λa:int32.λx:int32.λy.(hydra.lib.math.add @ (hydra.lib.math.add @ a @ x) @ y) in (f @ 10:int32))))
 
 (defun test-all-neghoistlet-neghoistpolymorphicletbindings-negsibling-polymorphic-bindings-inside-lambda-one-calls-the-other ()
 
-  (assert (equal let wrapper:(((int32 → int32))) = λouter:int32.(wrapper_h @ outer @ 42:int32), wrapper_g:((forall a. (int32 → a → a))) = Λa.λouter:int32.λy.(hydra.lib.math.add! @ outer @ y), wrapper_h:((forall b. (int32 → b → b))) = Λb.λouter:int32.λz.(wrapper_g @ outer @ z) in (wrapper @ 10:int32) let wrapper:(((int32 → int32))) = λouter:int32.(wrapper_h @ outer @ 42:int32), wrapper_g:((forall a. (int32 → a → a))) = Λa.λouter:int32.λy.(hydra.lib.math.add! @ outer @ y), wrapper_h:((forall b. (int32 → b → b))) = Λb.λouter:int32.λz.(wrapper_g @ outer @ z) in (wrapper @ 10:int32))))
+  (assert (equal let wrapper:(((int32 → int32))) = λouter:int32.(wrapper_h @ outer @ 42:int32), wrapper_g:((forall a. (int32 → a → a))) = Λa.λouter:int32.λy.(hydra.lib.math.add @ outer @ y), wrapper_h:((forall b. (int32 → b → b))) = Λb.λouter:int32.λz.(wrapper_g @ outer @ z) in (wrapper @ 10:int32) let wrapper:(((int32 → int32))) = λouter:int32.(wrapper_h @ outer @ 42:int32), wrapper_g:((forall a. (int32 → a → a))) = Λa.λouter:int32.λy.(hydra.lib.math.add @ outer @ y), wrapper_h:((forall b. (int32 → b → b))) = Λb.λouter:int32.λz.(wrapper_g @ outer @ z) in (wrapper @ 10:int32))))
 
 (defun test-all-neghoistlet-neghoistpolymorphicletbindings-negsibling-polymorphic-bindings-inside-lambda-h-passes-its-own-args-to-g ()
 
-  (assert (equal let wrapper:(((int32 → int32))) = λouter:int32.(wrapper_h @ outer @ 1:int32 @ 2:int32), wrapper_g:((forall a. (int32 → a → a → a))) = Λa.λouter:int32.λv.λt.(hydra.lib.math.add! @ outer @ (hydra.lib.math.add! @ v @ t)), wrapper_h:((forall b. (int32 → b → b → b))) = Λb.λouter:int32.λv.λt.(wrapper_g @ outer @ v @ t) in (wrapper @ 10:int32) let wrapper:(((int32 → int32))) = λouter:int32.(wrapper_h @ outer @ 1:int32 @ 2:int32), wrapper_g:((forall a. (int32 → a → a → a))) = Λa.λouter:int32.λv.λt.(hydra.lib.math.add! @ outer @ (hydra.lib.math.add! @ v @ t)), wrapper_h:((forall b. (int32 → b → b → b))) = Λb.λouter:int32.λv.λt.(wrapper_g @ outer @ v @ t) in (wrapper @ 10:int32))))
+  (assert (equal let wrapper:(((int32 → int32))) = λouter:int32.(wrapper_h @ outer @ 1:int32 @ 2:int32), wrapper_g:((forall a. (int32 → a → a → a))) = Λa.λouter:int32.λv.λt.(hydra.lib.math.add @ outer @ (hydra.lib.math.add @ v @ t)), wrapper_h:((forall b. (int32 → b → b → b))) = Λb.λouter:int32.λv.λt.(wrapper_g @ outer @ v @ t) in (wrapper @ 10:int32) let wrapper:(((int32 → int32))) = λouter:int32.(wrapper_h @ outer @ 1:int32 @ 2:int32), wrapper_g:((forall a. (int32 → a → a → a))) = Λa.λouter:int32.λv.λt.(hydra.lib.math.add @ outer @ (hydra.lib.math.add @ v @ t)), wrapper_h:((forall b. (int32 → b → b → b))) = Λb.λouter:int32.λv.λt.(wrapper_g @ outer @ v @ t) in (wrapper @ 10:int32))))
 
 (defun test-all-neghoistlet-neghoistpolymorphicletbindings-neguntyped-binding-not-hoisted ()
 
-  (assert (equal let x = 1:int32 in let y = 2:int32 in (hydra.lib.math.add! @ x @ y) let x = 1:int32 in let y = 2:int32 in (hydra.lib.math.add! @ x @ y))))
+  (assert (equal let x = 1:int32 in let y = 2:int32 in (hydra.lib.math.add @ x @ y) let x = 1:int32 in let y = 2:int32 in (hydra.lib.math.add @ x @ y))))
 
 (defun test-all-neghoistlet-neghoistpolymorphicletbindings-negno-name-collision-distinct-names-after-unshadowing ()
 
@@ -319,11 +319,11 @@
 
 (defun test-all-neghoistlet-neghoistpolymorphicletbindings-negpolymorphic-binding-captures-monomorphic-sibling-in-same-let ()
 
-  (assert (equal let wrapper:(((int32 → int32 → int32))) = λleft:int32.λright:int32.let sleft:((int32)) = (f @ left), sright:((int32)) = (f @ right) in (wrapper_cannotUnify @ sleft @ sright @ 42:int32), wrapper_cannotUnify:((forall a. (int32 → int32 → a → a))) = Λa.λsleft:int32.λsright:int32.λx.(hydra.lib.math.add! @ sleft @ (hydra.lib.math.add! @ sright @ x)) in (wrapper @ 1:int32 @ 2:int32) let wrapper:(((int32 → int32 → int32))) = λleft:int32.λright:int32.let sleft:((int32)) = (f @ left), sright:((int32)) = (f @ right) in (wrapper_cannotUnify @ sleft @ sright @ 42:int32), wrapper_cannotUnify:((forall a. (int32 → int32 → a → a))) = Λa.λsleft:int32.λsright:int32.λx.(hydra.lib.math.add! @ sleft @ (hydra.lib.math.add! @ sright @ x)) in (wrapper @ 1:int32 @ 2:int32))))
+  (assert (equal let wrapper:(((int32 → int32 → int32))) = λleft:int32.λright:int32.let sleft:((int32)) = (f @ left), sright:((int32)) = (f @ right) in (wrapper_cannotUnify @ sleft @ sright @ 42:int32), wrapper_cannotUnify:((forall a. (int32 → int32 → a → a))) = Λa.λsleft:int32.λsright:int32.λx.(hydra.lib.math.add @ sleft @ (hydra.lib.math.add @ sright @ x)) in (wrapper @ 1:int32 @ 2:int32) let wrapper:(((int32 → int32 → int32))) = λleft:int32.λright:int32.let sleft:((int32)) = (f @ left), sright:((int32)) = (f @ right) in (wrapper_cannotUnify @ sleft @ sright @ 42:int32), wrapper_cannotUnify:((forall a. (int32 → int32 → a → a))) = Λa.λsleft:int32.λsright:int32.λx.(hydra.lib.math.add @ sleft @ (hydra.lib.math.add @ sright @ x)) in (wrapper @ 1:int32 @ 2:int32))))
 
 (defun test-all-neghoistlet-neghoistpolymorphicletbindings-negnested-lets-poly-binding-references-poly-sibling-from-outer-let ()
 
-  (assert (equal let wrapper:(((int32 → int32))) = λleft:int32.let sleft:((int32)) = left in (wrapper_joinList @ sleft @ 42:int32), wrapper_cannotUnify:((forall a. (int32 → a → a))) = Λa.λsleft:int32.λx.(hydra.lib.math.add! @ sleft @ x), wrapper_joinList:((forall b. (int32 → b → b))) = Λb.λsleft:int32.λy.(wrapper_cannotUnify @ sleft @ y) in (wrapper @ 1:int32) let wrapper:(((int32 → int32))) = λleft:int32.let sleft:((int32)) = left in (wrapper_joinList @ sleft @ 42:int32), wrapper_cannotUnify:((forall a. (int32 → a → a))) = Λa.λsleft:int32.λx.(hydra.lib.math.add! @ sleft @ x), wrapper_joinList:((forall b. (int32 → b → b))) = Λb.λsleft:int32.λy.(wrapper_cannotUnify @ sleft @ y) in (wrapper @ 1:int32))))
+  (assert (equal let wrapper:(((int32 → int32))) = λleft:int32.let sleft:((int32)) = left in (wrapper_joinList @ sleft @ 42:int32), wrapper_cannotUnify:((forall a. (int32 → a → a))) = Λa.λsleft:int32.λx.(hydra.lib.math.add @ sleft @ x), wrapper_joinList:((forall b. (int32 → b → b))) = Λb.λsleft:int32.λy.(wrapper_cannotUnify @ sleft @ y) in (wrapper @ 1:int32) let wrapper:(((int32 → int32))) = λleft:int32.let sleft:((int32)) = left in (wrapper_joinList @ sleft @ 42:int32), wrapper_cannotUnify:((forall a. (int32 → a → a))) = Λa.λsleft:int32.λx.(hydra.lib.math.add @ sleft @ x), wrapper_joinList:((forall b. (int32 → b → b))) = Λb.λsleft:int32.λy.(wrapper_cannotUnify @ sleft @ y) in (wrapper @ 1:int32))))
 
 (defun test-all-neghoistlet-neghoistpolymorphicletbindings-negpolymorphic-binding-with-pair-type-applications-preserved ()
 

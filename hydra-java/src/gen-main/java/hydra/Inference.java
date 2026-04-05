@@ -1589,9 +1589,33 @@ public interface Inference {
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.typing.InferenceResult> inferTypeOfVariable(hydra.context.Context fcx, hydra.graph.Graph cx, hydra.core.Name name) {
     return hydra.lib.maybes.Maybe.applyLazy(
-      () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.typing.InferenceResult>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
-        "Variable not bound to type: ",
-        (name).value))), fcx))),
+      () -> hydra.lib.maybes.Maybe.applyLazy(
+        () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.typing.InferenceResult>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
+          "Variable not bound to type: ",
+          (name).value))), fcx))),
+        (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.typing.InferenceResult>>) (scheme -> {
+          hydra.util.Pair<hydra.core.TypeScheme, hydra.context.Context> tsResult = hydra.Resolution.instantiateTypeScheme(
+            fcx,
+            scheme);
+          hydra.util.Lazy<hydra.core.TypeScheme> ts = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(tsResult));
+          hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>> constraints = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+            () -> (java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())),
+            ts.get().constraints));
+          hydra.util.Lazy<hydra.context.Context> fcx2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(tsResult));
+          return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.typing.InferenceResult>right(hydra.Inference.yieldCheckedWithConstraints(
+            fcx2.get(),
+            hydra.Inference.buildTypeApplicationTerm(
+              ts.get().variables,
+              new hydra.core.Term.Variable(name)),
+            ts.get().type,
+            hydra.Substitution.idTypeSubst(),
+            constraints.get()));
+        }),
+        hydra.lib.maybes.Map.apply(
+          projected -> projected.type,
+          hydra.lib.maps.Lookup.apply(
+            name,
+            (cx).primitives))),
       (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.typing.InferenceResult>>) (scheme -> {
         hydra.util.Pair<hydra.core.TypeScheme, hydra.context.Context> tsResult = hydra.Resolution.instantiateTypeScheme(
           fcx,

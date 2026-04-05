@@ -2,8 +2,6 @@ package hydra.literals
 
 import hydra.core.*
 
-import hydra.lib.literals
-
 def bigfloatToFloatValue(ft: hydra.core.FloatType)(bf: BigDecimal): hydra.core.FloatValue =
   ft match
   case hydra.core.FloatType.bigfloat => hydra.core.FloatValue.bigfloat(bf)

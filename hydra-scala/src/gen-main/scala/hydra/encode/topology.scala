@@ -4,12 +4,6 @@ import hydra.core.*
 
 import hydra.topology.*
 
-import hydra.lib.lists
-
-import hydra.lib.maps
-
-import hydra.lib.sets
-
 def graph(m: Map[Int, Seq[Int]]): hydra.core.Term =
   hydra.core.Term.map(hydra.lib.maps.bimap[Int, hydra.core.Term, Seq[Int], hydra.core.Term](hydra.encode.topology.vertex)((xs: Seq[Int]) =>
   hydra.core.Term.list(hydra.lib.lists.map[Int, hydra.core.Term](hydra.encode.topology.vertex)(xs)))(m))

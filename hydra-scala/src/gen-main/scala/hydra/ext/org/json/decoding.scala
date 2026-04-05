@@ -2,14 +2,6 @@ package hydra.ext.org.json.decoding
 
 import hydra.json.model.*
 
-import hydra.lib.eithers
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.strings
-
 def decodeArray[T0](decodeElem: (hydra.json.model.Value => Either[scala.Predef.String, T0]))(v1: hydra.json.model.Value): Either[scala.Predef.String, Seq[T0]] =
   v1 match
   case hydra.json.model.Value.array(v_Value_array_a) => hydra.lib.eithers.mapList[hydra.json.model.Value, T0, scala.Predef.String](decodeElem)(v_Value_array_a)
@@ -22,7 +14,7 @@ def decodeBoolean(v1: hydra.json.model.Value): Either[scala.Predef.String, Boole
 
 def decodeField[T0, T1](decodeValue: (T0 => Either[scala.Predef.String, T1]))(name: scala.Predef.String)(m: Map[scala.Predef.String,
    T0]): Either[scala.Predef.String, T1] =
-  hydra.lib.eithers.bind[scala.Predef.String, Option[T1], T1](hydra.ext.org.json.decoding.decodeOptionalField(decodeValue)(name)(m))((v1: Option[T1]) =>
+  hydra.lib.eithers.bind[scala.Predef.String, Option[T1], T1](hydra.ext.org.json.decoding.decodeOptionalField(decodeValue)(name)(m))((v1) =>
   hydra.lib.maybes.maybe[Either[scala.Predef.String, T1], T1](Left(hydra.lib.strings.cat2("missing field: ")(name)))((f: T1) => Right(f))(v1))
 
 def decodeObject(v1: hydra.json.model.Value): Either[scala.Predef.String, Map[scala.Predef.String, hydra.json.model.Value]] =

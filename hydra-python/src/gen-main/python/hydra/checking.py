@@ -214,7 +214,18 @@ def type_of_variable(cx: hydra.context.Context, tx: hydra.graph.Graph, type_args
     @lru_cache(1)
     def raw_type_scheme() -> Maybe[hydra.core.TypeScheme]:
         return hydra.lib.maps.lookup(name, tx.bound_types)
-    return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorUntypedTermVariable(hydra.error.core.UntypedTermVariableError(hydra.paths.SubtermPath(()), name))), cx))), (lambda ts: (t_result := hydra.lib.logic.if_else(hydra.lib.lists.null(type_args), (lambda : hydra.resolution.instantiate_type(cx, hydra.scoping.type_scheme_to_f_type(ts))), (lambda : (hydra.scoping.type_scheme_to_f_type(ts), cx))), t := hydra.lib.pairs.first(t_result), cx2 := hydra.lib.pairs.second(t_result), hydra.lib.eithers.bind(apply_type_arguments_to_type(cx2, tx, type_args, t), (lambda applied: Right((applied, cx2)))))[3]), raw_type_scheme())
+    def for_scheme(ts: hydra.core.TypeScheme) -> Either[hydra.context.InContext[hydra.errors.Error], tuple[hydra.core.Type, hydra.context.Context]]:
+        @lru_cache(1)
+        def t_result() -> tuple[hydra.core.Type, hydra.context.Context]:
+            return hydra.lib.logic.if_else(hydra.lib.lists.null(type_args), (lambda : hydra.resolution.instantiate_type(cx, hydra.scoping.type_scheme_to_f_type(ts))), (lambda : (hydra.scoping.type_scheme_to_f_type(ts), cx)))
+        @lru_cache(1)
+        def t() -> hydra.core.Type:
+            return hydra.lib.pairs.first(t_result())
+        @lru_cache(1)
+        def cx2() -> hydra.context.Context:
+            return hydra.lib.pairs.second(t_result())
+        return hydra.lib.eithers.bind(apply_type_arguments_to_type(cx2(), tx, type_args, t()), (lambda applied: Right((applied, cx2()))))
+    return hydra.lib.maybes.maybe((lambda : hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorUntypedTermVariable(hydra.error.core.UntypedTermVariableError(hydra.paths.SubtermPath(()), name))), cx))), (lambda x1: for_scheme(x1)), hydra.lib.maybes.map((lambda _p: _p.type), hydra.lib.maps.lookup(name, tx.primitives)))), (lambda x1: for_scheme(x1)), raw_type_scheme())
 
 def type_of(cx: hydra.context.Context, tx: hydra.graph.Graph, type_args: frozenlist[hydra.core.Type], term: hydra.core.Term):
     r"""Given a type context, reconstruct the type of a System F term."""

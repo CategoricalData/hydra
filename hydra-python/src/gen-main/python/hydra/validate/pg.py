@@ -94,12 +94,12 @@ def validate_vertex(check_value: Callable[[T0, T1], Maybe[hydra.error.pg.Invalid
 def validate_graph(check_value: Callable[[T0, T1], Maybe[hydra.error.pg.InvalidValueError]], schema: hydra.pg.model.GraphSchema[T0], graph: hydra.pg.model.Graph[T1]) -> Maybe[hydra.error.pg.InvalidGraphError[T1]]:
     @lru_cache(1)
     def check_vertices() -> Maybe[hydra.error.pg.InvalidGraphError[T1]]:
-        def check_vertex(el: hydra.pg.model.Vertex[T1]) -> Maybe[hydra.error.pg.InvalidGraphError[hydra.pg.model.VertexType[T0]]]:
+        def check_vertex(el: hydra.pg.model.Vertex[T1]) -> Maybe[hydra.error.pg.InvalidGraphError[T1]]:
             return hydra.lib.maybes.maybe((lambda : Just(cast(hydra.error.pg.InvalidGraphError, hydra.error.pg.InvalidGraphErrorVertex(hydra.error.pg.InvalidGraphVertexError(el.id, cast(hydra.error.pg.InvalidVertexError, hydra.error.pg.InvalidVertexErrorLabel(hydra.error.pg.NoSuchVertexLabelError(el.label)))))))), (lambda t: hydra.lib.maybes.map((lambda err: cast(hydra.error.pg.InvalidGraphError, hydra.error.pg.InvalidGraphErrorVertex(hydra.error.pg.InvalidGraphVertexError(el.id, err)))), validate_vertex(check_value, t, el))), hydra.lib.maps.lookup(el.label, schema.vertices))
         return check_all(hydra.lib.lists.map((lambda x1: check_vertex(x1)), hydra.lib.maps.elems(graph.vertices)))
     @lru_cache(1)
     def check_edges() -> Maybe[hydra.error.pg.InvalidGraphError[T1]]:
-        def check_edge(el: hydra.pg.model.Edge[T1]) -> Maybe[hydra.error.pg.InvalidGraphError[hydra.pg.model.EdgeType[T0]]]:
+        def check_edge(el: hydra.pg.model.Edge[T1]) -> Maybe[hydra.error.pg.InvalidGraphError[T1]]:
             return hydra.lib.maybes.maybe((lambda : Just(cast(hydra.error.pg.InvalidGraphError, hydra.error.pg.InvalidGraphErrorEdge(hydra.error.pg.InvalidGraphEdgeError(el.id, cast(hydra.error.pg.InvalidEdgeError, hydra.error.pg.InvalidEdgeErrorLabel(hydra.error.pg.NoSuchEdgeLabelError(el.label)))))))), (lambda t: hydra.lib.maybes.map((lambda err: cast(hydra.error.pg.InvalidGraphError, hydra.error.pg.InvalidGraphErrorEdge(hydra.error.pg.InvalidGraphEdgeError(el.id, err)))), validate_edge(check_value, label_for_vertex_id(), t, el))), hydra.lib.maps.lookup(el.label, schema.edges))
         @lru_cache(1)
         def label_for_vertex_id() -> Maybe[Callable[[T1], Maybe[hydra.pg.model.VertexLabel]]]:

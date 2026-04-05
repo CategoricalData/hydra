@@ -909,7 +909,7 @@
                               "typeApplication": {
                                 "body": {
                                   "typeApplication": {
-                                    "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                    "body": {"variable": "hydra.lib.lists.map"},
                                     "type": {"variable": "hydra.core.FloatType"}}},
                                 "type": {"variable": "hydra.core.LiteralType"}}}}}}},
                     {
@@ -930,7 +930,7 @@
                               "typeApplication": {
                                 "body": {
                                   "typeApplication": {
-                                    "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                    "body": {"variable": "hydra.lib.lists.map"},
                                     "type": {"variable": "hydra.core.IntegerType"}}},
                                 "type": {"variable": "hydra.core.LiteralType"}}}}}}},
                     {
@@ -941,7 +941,7 @@
                             "typeName": "hydra.core.LiteralType"}}]}]},
                 "function": {
                   "typeApplication": {
-                    "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                    "body": {"variable": "hydra.lib.lists.concat"},
                     "type": {"variable": "hydra.core.LiteralType"}}}}}}},
         "type": {
           "type": {"list": {"variable": "hydra.core.LiteralType"}},

@@ -25,8 +25,10 @@ def build_python_test_module(test_module: T0, test_group: hydra.testing.TestGrou
     r"""Build the complete Python test module content."""
 
     group_name_ = test_group.name
-    header = hydra.lib.strings.cat((hydra.lib.strings.cat2("# ", hydra.constants.warning_auto_generated_file), "\n", hydra.lib.strings.cat2("# ", group_name_), "\n\n"))
-    return hydra.lib.strings.cat((header, test_body, "\n"))
+    @lru_cache(1)
+    def header() -> str:
+        return hydra.lib.strings.cat((hydra.lib.strings.cat2("# ", hydra.constants.warning_auto_generated_file), "\n", hydra.lib.strings.cat2("# ", group_name_), "\n\n"))
+    return hydra.lib.strings.cat((header(), test_body, "\n"))
 
 def format_python_test_name(name: str) -> str:
     r"""Format a test name for Python (snake_case with test_ prefix)."""

@@ -6,14 +6,6 @@ import hydra.errors.*
 
 import hydra.query.*
 
-import hydra.lib.eithers
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.strings
-
 def comparisonConstraint(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.query.ComparisonConstraint] =
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.query.ComparisonConstraint]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match

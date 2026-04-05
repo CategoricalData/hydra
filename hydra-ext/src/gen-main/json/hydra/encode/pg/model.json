@@ -147,7 +147,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "typeApplication": {
-                                                                                              "body": {"function": {"primitive": "hydra.lib.maps.bimap"}},
+                                                                                              "body": {"variable": "hydra.lib.maps.bimap"},
                                                                                               "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                                           "type": {"variable": "hydra.core.Term"}}},
                                                                                       "type": {"variable": "t0"}}},
@@ -558,7 +558,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "typeApplication": {
-                                                                                              "body": {"function": {"primitive": "hydra.lib.maps.bimap"}},
+                                                                                              "body": {"variable": "hydra.lib.maps.bimap"},
                                                                                               "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                                           "type": {"variable": "hydra.core.Term"}}},
                                                                                       "type": {"variable": "t0"}}},
@@ -815,7 +815,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                                   "type": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "t0"},
@@ -1209,7 +1209,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                                   "type": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "t0"},
@@ -1494,7 +1494,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                                   "type": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "t0"},
@@ -1616,7 +1616,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "typeApplication": {
-                                                                                              "body": {"function": {"primitive": "hydra.lib.maps.bimap"}},
+                                                                                              "body": {"variable": "hydra.lib.maps.bimap"},
                                                                                               "type": {"variable": "t0"}}},
                                                                                           "type": {"variable": "hydra.core.Term"}}},
                                                                                       "type": {
@@ -1686,7 +1686,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "typeApplication": {
-                                                                                              "body": {"function": {"primitive": "hydra.lib.maps.bimap"}},
+                                                                                              "body": {"variable": "hydra.lib.maps.bimap"},
                                                                                               "type": {"variable": "t0"}}},
                                                                                           "type": {"variable": "hydra.core.Term"}}},
                                                                                       "type": {
@@ -1814,7 +1814,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "typeApplication": {
-                                                                                              "body": {"function": {"primitive": "hydra.lib.maps.bimap"}},
+                                                                                              "body": {"variable": "hydra.lib.maps.bimap"},
                                                                                               "type": {"variable": "hydra.pg.model.VertexLabel"}}},
                                                                                           "type": {"variable": "hydra.core.Term"}}},
                                                                                       "type": {
@@ -1885,7 +1885,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "typeApplication": {
-                                                                                              "body": {"function": {"primitive": "hydra.lib.maps.bimap"}},
+                                                                                              "body": {"variable": "hydra.lib.maps.bimap"},
                                                                                               "type": {"variable": "hydra.pg.model.EdgeLabel"}}},
                                                                                           "type": {"variable": "hydra.core.Term"}}},
                                                                                       "type": {
@@ -2100,7 +2100,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                                   "type": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "t0"},
@@ -2159,7 +2159,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                                   "type": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "t0"},
@@ -2621,7 +2621,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "typeApplication": {
-                                                                                              "body": {"function": {"primitive": "hydra.lib.maps.bimap"}},
+                                                                                              "body": {"variable": "hydra.lib.maps.bimap"},
                                                                                               "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                                           "type": {"variable": "hydra.core.Term"}}},
                                                                                       "type": {"variable": "t0"}}},
@@ -2833,7 +2833,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                                   "type": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "t0"},
@@ -2982,7 +2982,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                                   "type": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "t0"},
@@ -3044,7 +3044,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                                   "type": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "t0"},

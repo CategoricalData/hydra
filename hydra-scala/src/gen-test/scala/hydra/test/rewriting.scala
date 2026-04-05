@@ -6,16 +6,6 @@ import hydra.core.*
 
 import hydra.testing.*
 
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.logic
-
-import hydra.lib.math
-
-import hydra.lib.pairs
-
 lazy val allTests: hydra.testing.TestGroup = hydra.testing.TestGroup("rewriting", None, Seq(hydra.testing.TestGroup("foldOverTerm", None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("collect labels from single node - pre-order", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.show.core.term(hydra.core.Term.list(hydra.lib.lists.map[hydra.core.Literal, hydra.core.Term]((lit: hydra.core.Literal) => hydra.core.Term.literal(lit))(hydra.rewriting.foldOverTerm(hydra.coders.TraversalOrder.pre)((acc: Seq[hydra.core.Literal]) =>
   (term: hydra.core.Term) =>
   hydra.lib.lists.concat[hydra.core.Literal](Seq(acc, term match

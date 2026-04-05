@@ -6,14 +6,6 @@ import hydra.core.*
 
 import hydra.errors.*
 
-import hydra.lib.eithers
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.strings
-
 def associativity(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.ast.Associativity] =
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.ast.Associativity]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match

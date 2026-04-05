@@ -6,18 +6,6 @@ import hydra.core.*
 
 import hydra.errors.*
 
-import hydra.lib.eithers
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def graphToSchema(cx: hydra.context.Context)(graph: hydra.graph.Graph)(els: Seq[hydra.core.Binding]): Either[hydra.context.InContext[hydra.errors.DecodingError],
    Map[hydra.core.Name, hydra.core.Type]] =
   {
