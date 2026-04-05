@@ -155,7 +155,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                        "body": {"variable": "hydra.lib.lists.map"},
                                                                         "type": {"variable": "hydra.paths.SubtermNode"}}},
                                                                     "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                       "typeName": "hydra.core.Term"}},
@@ -198,7 +198,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                        "body": {"variable": "hydra.lib.lists.map"},
                                                                         "type": {"variable": "hydra.paths.SubtermEdge"}}},
                                                                     "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                       "typeName": "hydra.core.Term"}},
@@ -379,7 +379,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                            "body": {"variable": "hydra.lib.lists.map"},
                                                             "type": {"variable": "hydra.paths.SubtermStep"}}},
                                                         "type": {"variable": "hydra.core.Term"}}}}}}}},
                                           "typeName": "hydra.core.Term"}},
@@ -1551,7 +1551,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                        "body": {"variable": "hydra.lib.lists.map"},
                                                                         "type": {"variable": "hydra.paths.SubtypeNode"}}},
                                                                     "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                       "typeName": "hydra.core.Term"}},
@@ -1594,7 +1594,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                        "body": {"variable": "hydra.lib.lists.map"},
                                                                         "type": {"variable": "hydra.paths.SubtypeEdge"}}},
                                                                     "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                       "typeName": "hydra.core.Term"}},
@@ -1775,7 +1775,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                            "body": {"variable": "hydra.lib.lists.map"},
                                                             "type": {"variable": "hydra.paths.SubtypeStep"}}},
                                                         "type": {"variable": "hydra.core.Term"}}}}}}}},
                                           "typeName": "hydra.core.Term"}},

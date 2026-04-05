@@ -291,11 +291,11 @@
 
 (defun test-reduction-negetaexpandterm-negfully-applied-binary-function-unchanged ()
 
-  (assert (equal (hydra.lib.strings.splitOn! @ "foo" @ "bar") (hydra.lib.strings.splitOn! @ "foo" @ "bar"))))
+  (assert (equal (hydra.lib.strings.splitOn @ "foo" @ "bar") (hydra.lib.strings.splitOn @ "foo" @ "bar"))))
 
 (defun test-reduction-negetaexpandterm-neglambda-with-fully-applied-primitive-unchanged ()
 
-  (assert (equal λx.(hydra.lib.strings.splitOn! @ "," @ x) λx.(hydra.lib.strings.splitOn! @ "," @ x))))
+  (assert (equal λx.(hydra.lib.strings.splitOn @ "," @ x) λx.(hydra.lib.strings.splitOn @ "," @ x))))
 
 (defun test-reduction-negetaexpandterm-neglambda-returning-constant-unchanged ()
 
@@ -303,15 +303,15 @@
 
 (defun test-reduction-negetaexpandterm-negbare-unary-primitive-unchanged ()
 
-  (assert (equal hydra.lib.strings.toLower! hydra.lib.strings.toLower!)))
+  (assert (equal hydra.lib.strings.toLower hydra.lib.strings.toLower)))
 
 (defun test-reduction-negetaexpandterm-negbare-binary-primitive-unchanged ()
 
-  (assert (equal hydra.lib.strings.splitOn! hydra.lib.strings.splitOn!)))
+  (assert (equal hydra.lib.strings.splitOn hydra.lib.strings.splitOn)))
 
 (defun test-reduction-negetaexpandterm-negpartially-applied-binary-primitive-expands-to-one-lambda ()
 
-  (assert (equal λv1.(hydra.lib.strings.splitOn! @ foo @ v1) λv1.(hydra.lib.strings.splitOn! @ foo @ v1))))
+  (assert (equal λv1.(hydra.lib.strings.splitOn @ foo @ v1) λv1.(hydra.lib.strings.splitOn @ foo @ v1))))
 
 (defun test-reduction-negetaexpandterm-negprojection-expands-to-lambda ()
 
@@ -319,7 +319,7 @@
 
 (defun test-reduction-negetaexpandterm-negpartial-application-inside-lambda-expands ()
 
-  (assert (equal λx.λv1.(hydra.lib.strings.splitOn! @ x @ v1) λx.λv1.(hydra.lib.strings.splitOn! @ x @ v1))))
+  (assert (equal λx.λv1.(hydra.lib.strings.splitOn @ x @ v1) λx.λv1.(hydra.lib.strings.splitOn @ x @ v1))))
 
 (defun test-reduction-negetaexpandterm-neglet-with-constant-body-unchanged ()
 
@@ -327,12 +327,12 @@
 
 (defun test-reduction-negetaexpandterm-neglet-with-bare-primitive-value-unchanged ()
 
-  (assert (equal let foo = hydra.lib.strings.splitOn! in foo let foo = hydra.lib.strings.splitOn! in foo)))
+  (assert (equal let foo = hydra.lib.strings.splitOn in foo let foo = hydra.lib.strings.splitOn in foo)))
 
 (defun test-reduction-negetaexpandterm-negfully-applied-unary-unchanged ()
 
-  (assert (equal (hydra.lib.strings.toLower! @ "FOO") (hydra.lib.strings.toLower! @ "FOO"))))
+  (assert (equal (hydra.lib.strings.toLower @ "FOO") (hydra.lib.strings.toLower @ "FOO"))))
 
 (defun test-reduction-negetaexpandterm-negpartial-application-in-list-expands ()
 
-  (assert (equal [λx.["foo"], λv1.(hydra.lib.strings.splitOn! @ "bar" @ v1)] [λx.["foo"], λv1.(hydra.lib.strings.splitOn! @ "bar" @ v1)])))
+  (assert (equal [λx.["foo"], λv1.(hydra.lib.strings.splitOn @ "bar" @ v1)] [λx.["foo"], λv1.(hydra.lib.strings.splitOn @ "bar" @ v1)])))

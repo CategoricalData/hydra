@@ -110,10 +110,12 @@ def build_test_module(test_module: hydra.packaging.Module, test_group: hydra.tes
     r"""Build the complete test module for Haskell HSpec."""
 
     ns_ = test_module.namespace
-    spec_ns = hydra.packaging.Namespace(hydra.lib.strings.cat2(ns_.value, "Spec"))
+    @lru_cache(1)
+    def spec_ns() -> hydra.packaging.Namespace:
+        return hydra.packaging.Namespace(hydra.lib.strings.cat2(ns_.value, "Spec"))
     @lru_cache(1)
     def module_name_string() -> str:
-        return namespace_to_module_name(spec_ns)
+        return namespace_to_module_name(spec_ns())
     group_name_ = test_group.name
     @lru_cache(1)
     def domain_imports() -> frozenlist[str]:

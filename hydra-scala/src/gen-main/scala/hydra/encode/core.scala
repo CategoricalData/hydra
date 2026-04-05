@@ -2,18 +2,6 @@ package hydra.encode.core
 
 import hydra.core.*
 
-import hydra.lib.eithers
-
-import hydra.lib.lists
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
 def annotatedTerm(x: hydra.core.AnnotatedTerm): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.core.AnnotatedTerm", Seq(hydra.core.Field("body", hydra.encode.core.term(x.body)),
      hydra.core.Field("annotation", hydra.core.Term.map(hydra.lib.maps.bimap[hydra.core.Name, hydra.core.Term,

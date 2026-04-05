@@ -248,7 +248,7 @@ def reset_count(key: hydra.core.Name, cx: hydra.context.Context) -> hydra.contex
 
     return put_attr(key, cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(0)))))), cx)
 
-def set_annotation(key: T0, val: Maybe[T1], m: FrozenDict[T0, T1]) -> FrozenDict[T0, T0]:
+def set_annotation(key: T0, val: Maybe[T1], m: FrozenDict[T0, T1]) -> FrozenDict[T0, T1]:
     r"""Set annotation in map."""
 
     return hydra.lib.maps.alter((lambda _: val), key, m)

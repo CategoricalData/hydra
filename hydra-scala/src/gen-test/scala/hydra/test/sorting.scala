@@ -2,12 +2,6 @@ package hydra.test.sorting
 
 import hydra.testing.*
 
-import hydra.lib.eithers
-
-import hydra.lib.literals
-
-import hydra.lib.strings
-
 lazy val allTests: hydra.testing.TestGroup = hydra.testing.TestGroup("sorting", None, Seq(hydra.testing.TestGroup("topological sort", None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("empty set", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.lib.eithers.either[Seq[Seq[Int]], Seq[Int], scala.Predef.String]((cs: Seq[Seq[Int]]) =>
   hydra.lib.strings.cat2("left(")(hydra.lib.strings.cat2(hydra.show.core.list((v1: Seq[Int]) => hydra.show.core.list(hydra.lib.literals.showInt32)(v1))(cs))(")")))((xs: Seq[Int]) =>
   hydra.lib.strings.cat2("right(")(hydra.lib.strings.cat2(hydra.show.core.list(hydra.lib.literals.showInt32)(xs))(")")))(hydra.sorting.topologicalSort(Seq())), hydra.lib.eithers.either[Seq[Seq[Int]], Seq[Int], scala.Predef.String]((cs: Seq[Seq[Int]]) =>

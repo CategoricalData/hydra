@@ -4,14 +4,6 @@ import hydra.core.*
 
 import hydra.typing.*
 
-import hydra.lib.lists
-
-import hydra.lib.maps
-
-import hydra.lib.pairs
-
-import hydra.lib.strings
-
 def typeConstraint(tc: hydra.typing.TypeConstraint): scala.Predef.String =
   {
   lazy val ltyp: hydra.core.Type = (tc.left)

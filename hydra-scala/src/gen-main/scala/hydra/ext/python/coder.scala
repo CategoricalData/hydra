@@ -20,28 +20,6 @@ import hydra.typing.*
 
 import hydra.util.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.math
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def analyzePythonFunction[T0](cx: hydra.context.Context)(env: hydra.ext.python.environment.PythonEnvironment)(term: hydra.core.Term): Either[T0,
    hydra.typing.FunctionStructure[hydra.ext.python.environment.PythonEnvironment]] =
   hydra.analysis.analyzeFunctionTermWith(cx)(hydra.ext.python.coder.pythonBindingMetadata)(hydra.ext.python.coder.pythonEnvironmentGetGraph)(hydra.ext.python.coder.pythonEnvironmentSetGraph)(env)(term)
@@ -292,8 +270,10 @@ def encodeApplicationInner(cx: hydra.context.Context)(env: hydra.ext.python.envi
       lazy val g: hydra.graph.Graph = hydra.ext.python.coder.pythonEnvironmentGetGraph(env)
       {
         lazy val allArgs: Seq[hydra.ext.python.syntax.Expression] = hydra.lib.lists.concat2[hydra.ext.python.syntax.Expression](hargs)(rargs)
-        hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error], Tuple2[hydra.ext.python.syntax.Expression,
-           Seq[hydra.ext.python.syntax.Expression]]], hydra.core.Binding](hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error],
+        hydra.lib.maybes.cases[hydra.graph.Primitive, Either[hydra.context.InContext[hydra.errors.Error],
+           Tuple2[hydra.ext.python.syntax.Expression, Seq[hydra.ext.python.syntax.Expression]]]](hydra.lib.maps.lookup[hydra.core.Name,
+           hydra.graph.Primitive](v_Term_variable_name)(g.primitives))(hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error],
+           Tuple2[hydra.ext.python.syntax.Expression, Seq[hydra.ext.python.syntax.Expression]]], hydra.core.Binding](hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error],
            hydra.ext.python.syntax.Expression, Tuple2[hydra.ext.python.syntax.Expression, Seq[hydra.ext.python.syntax.Expression]]](hydra.ext.python.coder.encodeVariable(cx)(env)(v_Term_variable_name)(hargs))((expr: hydra.ext.python.syntax.Expression) => Right(Tuple2(expr,
            rargs))))((el: hydra.core.Binding) =>
           hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error], Tuple2[hydra.ext.python.syntax.Expression,
@@ -316,7 +296,13 @@ def encodeApplicationInner(cx: hydra.context.Context)(env: hydra.ext.python.envi
               }
             }
           }
-        })(el.`type`))(hydra.lexical.lookupBinding(g)(v_Term_variable_name))
+        })(el.`type`))(hydra.lexical.lookupBinding(g)(v_Term_variable_name)))((_prim: hydra.graph.Primitive) =>
+          {
+          lazy val wrappedArgs: Seq[hydra.ext.python.syntax.Expression] = hydra.ext.python.coder.wrapLazyArguments(v_Term_variable_name)(hargs)
+          hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.ext.python.syntax.Expression,
+             Tuple2[hydra.ext.python.syntax.Expression, Seq[hydra.ext.python.syntax.Expression]]](hydra.ext.python.coder.encodeVariable(cx)(env)(v_Term_variable_name)(wrappedArgs))((expr: hydra.ext.python.syntax.Expression) => Right(Tuple2(expr,
+             rargs)))
+        })
       }
     }
     case _ => defaultCase

@@ -2,18 +2,6 @@ package hydra.ext.lisp.serde
 
 import hydra.ext.lisp.syntax.*
 
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.strings
-
 def andExpressionToExpr(d: hydra.ext.lisp.syntax.Dialect)(andExpr: hydra.ext.lisp.syntax.AndExpression): hydra.ast.Expr =
   hydra.serialization.parens(hydra.serialization.spaceSep(hydra.lib.lists.concat2[hydra.ast.Expr](Seq(hydra.serialization.cst("and")))(hydra.lib.lists.map[hydra.ext.lisp.syntax.Expression,
      hydra.ast.Expr]((v1: hydra.ext.lisp.syntax.Expression) => hydra.ext.lisp.serde.expressionToExpr(d)(v1))(andExpr.expressions))))

@@ -118,7 +118,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
                                         {
@@ -147,7 +147,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
@@ -257,7 +257,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
                                         {
@@ -286,7 +286,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
@@ -426,7 +426,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
                                         {
@@ -455,7 +455,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
@@ -597,7 +597,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
                                         {
@@ -645,7 +645,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
@@ -811,7 +811,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
                                         {
@@ -861,7 +861,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
@@ -1048,7 +1048,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
                                         {
@@ -1098,7 +1098,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
@@ -1278,7 +1278,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
                                         {
@@ -1331,7 +1331,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
@@ -1488,7 +1488,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
                                         {
@@ -1517,7 +1517,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
@@ -1614,7 +1614,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
                                         {
@@ -1643,7 +1643,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
@@ -1770,7 +1770,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
                                         {
@@ -1799,7 +1799,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
@@ -1926,7 +1926,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
                                         {
@@ -1974,7 +1974,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
@@ -2125,7 +2125,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
                                         {
@@ -2175,7 +2175,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
@@ -2347,7 +2347,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
                                         {
@@ -2397,7 +2397,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
@@ -2534,7 +2534,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
                                         {
@@ -2563,7 +2563,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
@@ -2652,7 +2652,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
                                         {
@@ -2696,7 +2696,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
@@ -2846,7 +2846,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
                                         {
@@ -2875,7 +2875,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
@@ -2993,7 +2993,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
                                         {
@@ -3037,7 +3037,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
@@ -3153,7 +3153,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
                                         {
@@ -3182,7 +3182,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
@@ -3297,7 +3297,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
                                         {
@@ -3326,7 +3326,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},
@@ -3462,7 +3462,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
                                         {
@@ -3491,7 +3491,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}],
                                       "typeName": "hydra.testing.UniversalTestCase"}}},

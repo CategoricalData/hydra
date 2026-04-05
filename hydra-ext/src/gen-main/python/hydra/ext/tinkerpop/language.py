@@ -25,7 +25,9 @@ def tinkerpop_language(name: hydra.coders.LanguageName, features: hydra.ext.org.
     vp_features = features.vertex.properties.data_type_features
     def cond(v: T1, b: bool) -> Maybe[T1]:
         return hydra.lib.logic.if_else(b, (lambda : hydra.lib.maybes.pure(v)), (lambda : Nothing()))
-    supports_lists = hydra.lib.logic.or_(vp_features.supports_boolean_array_values, hydra.lib.logic.or_(vp_features.supports_byte_array_values, hydra.lib.logic.or_(vp_features.supports_double_array_values, hydra.lib.logic.or_(vp_features.supports_float_array_values, hydra.lib.logic.or_(vp_features.supports_integer_array_values, hydra.lib.logic.or_(vp_features.supports_long_array_values, vp_features.supports_string_array_values))))))
+    @lru_cache(1)
+    def supports_lists() -> bool:
+        return hydra.lib.logic.or_(vp_features.supports_boolean_array_values, hydra.lib.logic.or_(vp_features.supports_byte_array_values, hydra.lib.logic.or_(vp_features.supports_double_array_values, hydra.lib.logic.or_(vp_features.supports_float_array_values, hydra.lib.logic.or_(vp_features.supports_integer_array_values, hydra.lib.logic.or_(vp_features.supports_long_array_values, vp_features.supports_string_array_values))))))
     supports_literals = True
     supports_maps = vp_features.supports_map_values
     @lru_cache(1)
@@ -45,10 +47,10 @@ def tinkerpop_language(name: hydra.coders.LanguageName, features: hydra.ext.org.
         return hydra.lib.sets.from_list(hydra.lib.maybes.cat((cond(hydra.core.IntegerType.INT32, vp_features.supports_integer_values), cond(hydra.core.IntegerType.INT64, vp_features.supports_long_values))))
     @lru_cache(1)
     def term_variants() -> frozenset[hydra.variants.TermVariant]:
-        return hydra.lib.sets.from_list(hydra.lib.maybes.cat((cond(hydra.variants.TermVariant.LIST, supports_lists), cond(hydra.variants.TermVariant.LITERAL, supports_literals), cond(hydra.variants.TermVariant.MAP, supports_maps), hydra.lib.maybes.pure(hydra.variants.TermVariant.MAYBE))))
+        return hydra.lib.sets.from_list(hydra.lib.maybes.cat((cond(hydra.variants.TermVariant.LIST, supports_lists()), cond(hydra.variants.TermVariant.LITERAL, supports_literals), cond(hydra.variants.TermVariant.MAP, supports_maps), hydra.lib.maybes.pure(hydra.variants.TermVariant.MAYBE))))
     @lru_cache(1)
     def type_variants() -> frozenset[hydra.variants.TypeVariant]:
-        return hydra.lib.sets.from_list(hydra.lib.maybes.cat((cond(hydra.variants.TypeVariant.LIST, supports_lists), cond(hydra.variants.TypeVariant.LITERAL, supports_literals), cond(hydra.variants.TypeVariant.MAP, supports_maps), hydra.lib.maybes.pure(hydra.variants.TypeVariant.MAYBE), hydra.lib.maybes.pure(hydra.variants.TypeVariant.WRAP))))
+        return hydra.lib.sets.from_list(hydra.lib.maybes.cat((cond(hydra.variants.TypeVariant.LIST, supports_lists()), cond(hydra.variants.TypeVariant.LITERAL, supports_literals), cond(hydra.variants.TypeVariant.MAP, supports_maps), hydra.lib.maybes.pure(hydra.variants.TypeVariant.MAYBE), hydra.lib.maybes.pure(hydra.variants.TypeVariant.WRAP))))
     def type_predicate(typ: hydra.core.Type):
         @lru_cache(1)
         def dt() -> hydra.core.Type:

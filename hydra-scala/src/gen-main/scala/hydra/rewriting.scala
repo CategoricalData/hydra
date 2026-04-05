@@ -6,20 +6,6 @@ import hydra.core.*
 
 import hydra.paths.*
 
-import hydra.lib.eithers
-
-import hydra.lib.lists
-
-import hydra.lib.maps
-
-import hydra.lib.math
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
 def applyInsideTypeLambdasAndAnnotations(f: (hydra.core.Term => hydra.core.Term))(term0: hydra.core.Term): hydra.core.Term =
   term0 match
   case hydra.core.Term.annotated(v_Term_annotated_at) => hydra.core.Term.annotated(hydra.core.AnnotatedTerm(hydra.rewriting.applyInsideTypeLambdasAndAnnotations(f)(v_Term_annotated_at.body),

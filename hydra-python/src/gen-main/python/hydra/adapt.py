@@ -119,7 +119,7 @@ def adapt_graph_schema(constraints: hydra.coders.LanguageConstraints, litmap: Fr
 
     def map_pair(pair: tuple[T1, hydra.core.Type]) -> Either[str, tuple[T1, hydra.core.Type]]:
         @lru_cache(1)
-        def name() -> hydra.core.Type:
+        def name() -> T1:
             return hydra.lib.pairs.first(pair)
         @lru_cache(1)
         def typ() -> hydra.core.Type:

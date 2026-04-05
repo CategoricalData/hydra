@@ -4,10 +4,6 @@ import hydra.core.*
 
 import hydra.query.*
 
-import hydra.lib.lists
-
-import hydra.lib.maybes
-
 def comparisonConstraint(v1: hydra.query.ComparisonConstraint): hydra.core.Term =
   v1 match
   case hydra.query.ComparisonConstraint.equal => hydra.core.Term.union(hydra.core.Injection("hydra.query.ComparisonConstraint",

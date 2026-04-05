@@ -74,9 +74,13 @@ def check_definition_namespaces(mod: hydra.packaging.Module) -> Maybe[hydra.erro
     r"""Check that all definition names in a module have the module's namespace as a prefix."""
 
     ns = mod.namespace
-    prefix = hydra.lib.strings.cat2(ns.value, ".")
-    prefix_len = hydra.lib.strings.length(prefix)
-    return hydra.lib.lists.foldl((lambda acc, def_: hydra.lib.maybes.cases(acc, (lambda : (name := definition_name(def_), (name_str := name.value, (name_prefix := hydra.lib.lists.take(prefix_len, hydra.lib.strings.to_list(name_str)), hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.strings.from_list(name_prefix), prefix), (lambda : Nothing()), (lambda : Just(cast(hydra.error.packaging.InvalidModuleError, hydra.error.packaging.InvalidModuleErrorDefinitionNotInModuleNamespace(hydra.error.packaging.DefinitionNotInModuleNamespaceError(ns, name)))))))[1])[1])[1]), (lambda _: acc))), Nothing(), mod.definitions)
+    @lru_cache(1)
+    def prefix() -> str:
+        return hydra.lib.strings.cat2(ns.value, ".")
+    @lru_cache(1)
+    def prefix_len() -> int:
+        return hydra.lib.strings.length(prefix())
+    return hydra.lib.lists.foldl((lambda acc, def_: hydra.lib.maybes.cases(acc, (lambda : (name := definition_name(def_), (name_str := name.value, (name_prefix := hydra.lib.lists.take(prefix_len(), hydra.lib.strings.to_list(name_str)), hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.strings.from_list(name_prefix), prefix()), (lambda : Nothing()), (lambda : Just(cast(hydra.error.packaging.InvalidModuleError, hydra.error.packaging.InvalidModuleErrorDefinitionNotInModuleNamespace(hydra.error.packaging.DefinitionNotInModuleNamespaceError(ns, name)))))))[1])[1])[1]), (lambda _: acc))), Nothing(), mod.definitions)
 
 def check_duplicate_definition_names(mod: hydra.packaging.Module) -> Maybe[hydra.error.packaging.InvalidModuleError]:
     r"""Check for duplicate definition names in a module."""

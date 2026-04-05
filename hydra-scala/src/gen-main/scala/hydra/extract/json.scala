@@ -2,14 +2,6 @@ package hydra.extract.json
 
 import hydra.json.model.*
 
-import hydra.lib.eithers
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.strings
-
 def expectArray(value: hydra.json.model.Value): Either[scala.Predef.String, Seq[hydra.json.model.Value]] =
   value match
   case hydra.json.model.Value.array(v_Value_array_els) => Right(v_Value_array_els)

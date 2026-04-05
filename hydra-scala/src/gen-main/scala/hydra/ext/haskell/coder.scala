@@ -20,28 +20,6 @@ import hydra.packaging.*
 
 import hydra.util.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.math
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def adaptTypeToHaskellAndEncode[T0](namespaces: hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName])(typ: hydra.core.Type)(cx: hydra.context.Context)(g: T0): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.ext.haskell.syntax.Type] =
   {

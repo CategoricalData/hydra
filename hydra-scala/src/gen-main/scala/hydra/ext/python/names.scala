@@ -10,20 +10,6 @@ import hydra.packaging.*
 
 import hydra.util.*
 
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.strings
-
 def encodeConstantForFieldName[T0, T1](env: T0)(tname: T1)(fname: hydra.core.Name): hydra.ext.python.syntax.Name =
   hydra.formatting.convertCase(hydra.util.CaseConvention.camel)(hydra.util.CaseConvention.upperSnake)(fname)
 

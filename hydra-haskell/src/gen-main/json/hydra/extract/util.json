@@ -57,7 +57,7 @@
                                                                                           "function": {
                                                                                             "application": {
                                                                                               "argument": {"literal": {"string": "expected comparison but found "}},
-                                                                                              "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                                                                              "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                                                                       "typeName": "hydra.errors.OtherError"}}},
                                                                                 "typeName": "hydra.errors.Error"}}},
                                                                           {"name": "context", "term": {"variable": "cx"}}],
@@ -98,11 +98,11 @@
                                                                         "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                                        "body": {"variable": "hydra.lib.equality.equal"},
                                                                         "type": {"literal": {"string": {}}}}}}}}},
                                                             "function": {
                                                               "typeApplication": {
-                                                                "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                 "type": {
                                                                   "either": {
                                                                     "left": {
@@ -140,11 +140,11 @@
                                                                     "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
                                                                 "function": {
                                                                   "typeApplication": {
-                                                                    "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                                    "body": {"variable": "hydra.lib.equality.equal"},
                                                                     "type": {"literal": {"string": {}}}}}}}}},
                                                         "function": {
                                                           "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
                                                             "type": {
                                                               "either": {
                                                                 "left": {
@@ -182,11 +182,11 @@
                                                                 "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
                                                             "function": {
                                                               "typeApplication": {
-                                                                "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                                "body": {"variable": "hydra.lib.equality.equal"},
                                                                 "type": {"literal": {"string": {}}}}}}}}},
                                                     "function": {
                                                       "typeApplication": {
-                                                        "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                        "body": {"variable": "hydra.lib.logic.ifElse"},
                                                         "type": {
                                                           "either": {
                                                             "left": {
@@ -220,7 +220,7 @@
                                             "typeApplication": {
                                               "body": {
                                                 "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                  "body": {"variable": "hydra.lib.eithers.bind"},
                                                   "type": {
                                                     "application": {
                                                       "argument": {"variable": "hydra.errors.Error"},

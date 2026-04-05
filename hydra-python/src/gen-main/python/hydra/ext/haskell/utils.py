@@ -108,8 +108,10 @@ def type_name_for_record(sname: hydra.core.Name) -> str:
     r"""Extract the local type name from a fully qualified record type name."""
 
     sname_str = sname.value
-    parts = hydra.lib.strings.split_on(".", sname_str)
-    return hydra.lib.lists.last(parts)
+    @lru_cache(1)
+    def parts() -> frozenlist[str]:
+        return hydra.lib.strings.split_on(".", sname_str)
+    return hydra.lib.lists.last(parts())
 
 def record_field_reference(namespaces: hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName], sname: hydra.core.Name, fname: hydra.core.Name) -> hydra.ext.haskell.syntax.Name:
     r"""Generate a Haskell name for a record field accessor."""

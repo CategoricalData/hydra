@@ -59,7 +59,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                "body": {"variable": "hydra.lib.lists.map"},
                                                                                 "type": {"variable": "hydra.json.model.Value"}}},
                                                                             "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                               "typeName": "hydra.core.Term"}},
@@ -300,7 +300,7 @@
                                                                                       "typeApplication": {
                                                                                         "body": {
                                                                                           "typeApplication": {
-                                                                                            "body": {"function": {"primitive": "hydra.lib.maps.bimap"}},
+                                                                                            "body": {"variable": "hydra.lib.maps.bimap"},
                                                                                             "type": {"literal": {"string": {}}}}},
                                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                                     "type": {"variable": "hydra.json.model.Value"}}},

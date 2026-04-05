@@ -6,18 +6,6 @@ import hydra.graph.*
 
 import hydra.typing.*
 
-import hydra.lib.lists
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
 def composeTypeSubst(s1: hydra.typing.TypeSubst)(s2: hydra.typing.TypeSubst): hydra.typing.TypeSubst =
   hydra.lib.logic.ifElse[hydra.typing.TypeSubst](hydra.lib.maps.`null`[hydra.core.Name, hydra.core.Type](s1))(s2)(hydra.lib.logic.ifElse[hydra.typing.TypeSubst](hydra.lib.maps.`null`[hydra.core.Name,
      hydra.core.Type](s2))(s1)(hydra.substitution.composeTypeSubstNonEmpty(s1)(s2)))

@@ -18,7 +18,7 @@
                               "argument": {"variable": "checks"},
                               "function": {
                                 "typeApplication": {
-                                  "body": {"function": {"primitive": "hydra.lib.maybes.cat"}},
+                                  "body": {"variable": "hydra.lib.maybes.cat"},
                                   "type": {"variable": "t0"}}}}},
                           "type": {"type": {"list": {"variable": "t0"}}, "variables": []}}],
                       "body": {
@@ -26,7 +26,7 @@
                           "argument": {"variable": "errors"},
                           "function": {
                             "typeApplication": {
-                              "body": {"function": {"primitive": "hydra.lib.lists.safeHead"}},
+                              "body": {"variable": "hydra.lib.lists.safeHead"},
                               "type": {"variable": "t0"}}}}}}},
                   "domain": {"list": {"maybe": {"variable": "t0"}}},
                   "parameter": "checks"}}},
@@ -122,11 +122,11 @@
                                                                             "function": {"function": {"elimination": {"wrap": "hydra.pg.model.EdgeLabel"}}}}},
                                                                         "function": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                                            "body": {"variable": "hydra.lib.equality.equal"},
                                                                             "type": {"literal": {"string": {}}}}}}}}},
                                                                 "function": {
                                                                   "typeApplication": {
-                                                                    "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                     "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}}}}}}}}}}}},
                                                 "type": {
                                                   "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}},
@@ -173,7 +173,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "typeApplication": {
-                                                                "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                                "body": {"variable": "hydra.lib.maybes.map"},
                                                                 "type": {"variable": "hydra.error.pg.InvalidValueError"}}},
                                                             "type": {"variable": "hydra.error.pg.InvalidEdgeError"}}}}}}},
                                                 "type": {
@@ -231,7 +231,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "typeApplication": {
-                                                                "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                                "body": {"variable": "hydra.lib.maybes.map"},
                                                                 "type": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}},
                                                             "type": {"variable": "hydra.error.pg.InvalidEdgeError"}}}}}}},
                                                 "type": {
@@ -320,11 +320,11 @@
                                                                                                     "function": {"function": {"elimination": {"wrap": "hydra.pg.model.VertexLabel"}}}}},
                                                                                                 "function": {
                                                                                                   "typeApplication": {
-                                                                                                    "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                                                                    "body": {"variable": "hydra.lib.equality.equal"},
                                                                                                     "type": {"literal": {"string": {}}}}}}}}},
                                                                                         "function": {
                                                                                           "typeApplication": {
-                                                                                            "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                                             "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}}}}}}}}}},
                                                                             "domain": {"variable": "hydra.pg.model.VertexLabel"},
                                                                             "parameter": "label"}}},
@@ -339,7 +339,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                  "body": {"variable": "hydra.lib.maybes.maybe"},
                                                                                   "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}}}},
                                                                               "type": {"variable": "hydra.pg.model.VertexLabel"}}}}}}}}},
                                                               "domain": {
@@ -357,7 +357,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "typeApplication": {
-                                                                    "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                    "body": {"variable": "hydra.lib.maybes.maybe"},
                                                                     "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}}}},
                                                                 "type": {
                                                                   "function": {
@@ -449,11 +449,11 @@
                                                                                                     "function": {"function": {"elimination": {"wrap": "hydra.pg.model.VertexLabel"}}}}},
                                                                                                 "function": {
                                                                                                   "typeApplication": {
-                                                                                                    "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                                                                    "body": {"variable": "hydra.lib.equality.equal"},
                                                                                                     "type": {"literal": {"string": {}}}}}}}}},
                                                                                         "function": {
                                                                                           "typeApplication": {
-                                                                                            "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                                             "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}}}}}}}}}},
                                                                             "domain": {"variable": "hydra.pg.model.VertexLabel"},
                                                                             "parameter": "label"}}},
@@ -468,7 +468,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                  "body": {"variable": "hydra.lib.maybes.maybe"},
                                                                                   "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}}}},
                                                                               "type": {"variable": "hydra.pg.model.VertexLabel"}}}}}}}}},
                                                               "domain": {
@@ -486,7 +486,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "typeApplication": {
-                                                                    "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                    "body": {"variable": "hydra.lib.maybes.maybe"},
                                                                     "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}}}},
                                                                 "type": {
                                                                   "function": {
@@ -623,7 +623,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                            "body": {"variable": "hydra.lib.maps.lookup"},
                                                                             "type": {"variable": "hydra.pg.model.VertexLabel"}}},
                                                                         "type": {
                                                                           "application": {
@@ -690,7 +690,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                                                      "body": {"variable": "hydra.lib.maybes.map"},
                                                                                       "type": {"variable": "hydra.error.pg.InvalidVertexError"}}},
                                                                                   "type": {
                                                                                     "application": {
@@ -756,7 +756,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                            "body": {"variable": "hydra.lib.maybes.maybe"},
                                                                             "type": {
                                                                               "maybe": {
                                                                                 "application": {
@@ -803,7 +803,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.maps.elems"}},
+                                                                  "body": {"variable": "hydra.lib.maps.elems"},
                                                                   "type": {"variable": "t1"}}},
                                                               "type": {
                                                                 "application": {
@@ -816,7 +816,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                   "type": {
                                                                     "application": {
                                                                       "argument": {"variable": "t1"},
@@ -879,7 +879,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                            "body": {"variable": "hydra.lib.maps.lookup"},
                                                                             "type": {"variable": "hydra.pg.model.EdgeLabel"}}},
                                                                         "type": {
                                                                           "application": {
@@ -949,7 +949,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                                                      "body": {"variable": "hydra.lib.maybes.map"},
                                                                                       "type": {"variable": "hydra.error.pg.InvalidEdgeError"}}},
                                                                                   "type": {
                                                                                     "application": {
@@ -1015,7 +1015,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                            "body": {"variable": "hydra.lib.maybes.maybe"},
                                                                             "type": {
                                                                               "maybe": {
                                                                                 "application": {
@@ -1069,7 +1069,7 @@
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                              "body": {"variable": "hydra.lib.maps.lookup"},
                                                                               "type": {"variable": "t1"}}},
                                                                           "type": {
                                                                             "application": {
@@ -1087,7 +1087,7 @@
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "typeApplication": {
-                                                                          "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                                          "body": {"variable": "hydra.lib.maybes.map"},
                                                                           "type": {
                                                                             "application": {
                                                                               "argument": {"variable": "t1"},
@@ -1121,7 +1121,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.maps.elems"}},
+                                                                  "body": {"variable": "hydra.lib.maps.elems"},
                                                                   "type": {"variable": "t1"}}},
                                                               "type": {
                                                                 "application": {
@@ -1134,7 +1134,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                   "type": {
                                                                     "application": {
                                                                       "argument": {"variable": "t1"},
@@ -1251,7 +1251,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                              "body": {"variable": "hydra.lib.lists.map"},
                                                               "type": {
                                                                 "application": {
                                                                   "argument": {"variable": "t0"},
@@ -1300,7 +1300,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                                "body": {"variable": "hydra.lib.maps.lookup"},
                                                                                 "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                             "type": {"variable": "t1"}}}}}}},
                                                                 "function": {
@@ -1354,7 +1354,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                "body": {"variable": "hydra.lib.maybes.maybe"},
                                                                                 "type": {"maybe": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}}},
                                                                             "type": {"variable": "t1"}}}}}}}}},
                                                             "function": {
@@ -1371,7 +1371,7 @@
                                                                         "type": {"variable": "t2"}}}}},
                                                                 "function": {
                                                                   "typeApplication": {
-                                                                    "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                     "type": {"maybe": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}}}}}}}}},
                                                     "domain": {
                                                       "application": {
@@ -1442,7 +1442,7 @@
                                                                 "typeApplication": {
                                                                   "body": {
                                                                     "typeApplication": {
-                                                                      "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                      "body": {"variable": "hydra.lib.lists.map"},
                                                                       "type": {
                                                                         "application": {
                                                                           "argument": {"variable": "t0"},
@@ -1455,7 +1455,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
+                                                              "body": {"variable": "hydra.lib.maps.fromList"},
                                                               "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                           "type": {"variable": "t0"}}}}},
                                                   "type": {
@@ -1481,7 +1481,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                            "body": {"variable": "hydra.lib.pairs.first"},
                                                                             "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                         "type": {"variable": "t1"}}}}},
                                                                 "type": {"type": {"variable": "hydra.pg.model.PropertyKey"}, "variables": []}},
@@ -1494,7 +1494,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                            "body": {"variable": "hydra.lib.pairs.second"},
                                                                             "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                         "type": {"variable": "t1"}}}}},
                                                                 "type": {"type": {"variable": "t1"}, "variables": []}}],
@@ -1510,7 +1510,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                                "body": {"variable": "hydra.lib.maps.lookup"},
                                                                                 "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                             "type": {"variable": "t0"}}}}}}},
                                                                 "function": {
@@ -1549,7 +1549,7 @@
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "typeApplication": {
-                                                                                          "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                                                          "body": {"variable": "hydra.lib.maybes.map"},
                                                                                           "type": {"variable": "hydra.error.pg.InvalidValueError"}}},
                                                                                       "type": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}}}}}},
                                                                           "domain": {"variable": "t0"},
@@ -1572,7 +1572,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                "body": {"variable": "hydra.lib.maybes.maybe"},
                                                                                 "type": {"maybe": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}}},
                                                                             "type": {"variable": "t0"}}}}}}}}}}},
                                                         "domain": {
@@ -1600,7 +1600,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.maps.toList"}},
+                                                                  "body": {"variable": "hydra.lib.maps.toList"},
                                                                   "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                               "type": {"variable": "t1"}}}}},
                                                       "function": {
@@ -1610,7 +1610,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                   "type": {
                                                                     "pair": {
                                                                       "first": {"variable": "hydra.pg.model.PropertyKey"},
@@ -1759,11 +1759,11 @@
                                                                       "function": {"function": {"elimination": {"wrap": "hydra.pg.model.VertexLabel"}}}}},
                                                                   "function": {
                                                                     "typeApplication": {
-                                                                      "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                                      "body": {"variable": "hydra.lib.equality.equal"},
                                                                       "type": {"literal": {"string": {}}}}}}}}},
                                                           "function": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                              "body": {"variable": "hydra.lib.logic.ifElse"},
                                                               "type": {"maybe": {"variable": "hydra.error.pg.InvalidVertexError"}}}}}}}}}}}},
                                           "type": {
                                             "type": {"maybe": {"variable": "hydra.error.pg.InvalidVertexError"}},
@@ -1810,7 +1810,7 @@
                                                     "typeApplication": {
                                                       "body": {
                                                         "typeApplication": {
-                                                          "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                          "body": {"variable": "hydra.lib.maybes.map"},
                                                           "type": {"variable": "hydra.error.pg.InvalidValueError"}}},
                                                       "type": {"variable": "hydra.error.pg.InvalidVertexError"}}}}}}},
                                           "type": {
@@ -1869,7 +1869,7 @@
                                                     "typeApplication": {
                                                       "body": {
                                                         "typeApplication": {
-                                                          "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                          "body": {"variable": "hydra.lib.maybes.map"},
                                                           "type": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}},
                                                       "type": {"variable": "hydra.error.pg.InvalidVertexError"}}}}}}},
                                           "type": {

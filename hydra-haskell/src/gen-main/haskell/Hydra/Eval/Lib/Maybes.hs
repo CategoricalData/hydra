@@ -65,7 +65,7 @@ compose :: t0 -> t1 -> Core.Term -> Core.Term -> Core.Term -> Either t2 Core.Ter
 compose cx g funF funG xTerm =
     Right (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maybes.bind"))),
+        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.bind")),
         Core.applicationArgument = (Core.TermApplication (Core.Application {
           Core.applicationFunction = funF,
           Core.applicationArgument = xTerm}))})),
@@ -124,7 +124,7 @@ map cx g funTerm optTerm =
 mapMaybe :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 mapMaybe cx g funTerm listTerm =
     Eithers.bind (Core_.list cx g listTerm) (\elements -> Right (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maybes.cat"))),
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maybes.cat")),
       Core.applicationArgument = (Core.TermList (Lists.map (\el -> Core.TermApplication (Core.Application {
         Core.applicationFunction = funTerm,
         Core.applicationArgument = el})) elements))})))

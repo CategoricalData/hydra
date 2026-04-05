@@ -4,10 +4,6 @@ import hydra.core.*
 
 import hydra.tabular.*
 
-import hydra.lib.lists
-
-import hydra.lib.maybes
-
 def columnType(x: hydra.tabular.ColumnType): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.tabular.ColumnType", Seq(hydra.core.Field("name", hydra.encode.relational.columnName(x.name)),
      hydra.core.Field("type", hydra.encode.core.`type`(x.`type`)))))

@@ -16,28 +16,6 @@ import hydra.typing.*
 
 import hydra.util.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.math
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def applyVar(fterm: hydra.core.Term)(avar: hydra.core.Name): hydra.core.Term =
   {
   lazy val v: scala.Predef.String = avar
@@ -392,6 +370,24 @@ def encodeTerm(cx: hydra.context.Context)(g: hydra.graph.Graph)(term0: hydra.cor
           })
           case hydra.core.Function.elimination(v_Function_elimination__) => hydra.ext.scala.coder.encodeTerm(cx)(g)(substitutedBody)
           case _ => hydra.ext.scala.coder.encodeTerm(cx)(g)(substitutedBody)
+        case hydra.core.Term.variable(v_Term_variable_pname) => hydra.lib.maybes.cases[hydra.graph.Primitive,
+           Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.scala.syntax.Data]](hydra.lib.maps.lookup[hydra.core.Name,
+           hydra.graph.Primitive](v_Term_variable_pname)(g.primitives))(hydra.ext.scala.coder.encodeTerm(cx)(g)(substitutedBody))((_prim: hydra.graph.Primitive) =>
+          hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Seq[hydra.ext.scala.syntax.Type],
+             hydra.ext.scala.syntax.Data](hydra.lib.eithers.mapList[hydra.core.Type, hydra.ext.scala.syntax.Type,
+             hydra.context.InContext[hydra.errors.Error]]((targ: hydra.core.Type) => hydra.ext.scala.coder.encodeType(cx)(g)(targ))(typeArgs))((stypeArgs: Seq[hydra.ext.scala.syntax.Type]) =>
+          {
+          lazy val inScopeTypeVarNames: scala.collection.immutable.Set[scala.Predef.String] = hydra.lib.sets.fromList[scala.Predef.String](hydra.lib.lists.map[hydra.core.Name,
+             scala.Predef.String]((n: hydra.core.Name) => hydra.formatting.capitalize(n))(hydra.lib.sets.toList[hydra.core.Name](g.typeVariables)))
+          lazy val hasForallResidual: Boolean = hydra.lib.logic.not(hydra.lib.lists.`null`[hydra.ext.scala.syntax.Type](hydra.lib.lists.filter[hydra.ext.scala.syntax.Type]((st: hydra.ext.scala.syntax.Type) =>
+            st match
+            case hydra.ext.scala.syntax.Type.`var`(v_Type_var_tv) => {
+              lazy val tvName: scala.Predef.String = (v_Type_var_tv.name.value)
+              hydra.lib.logic.and(hydra.lib.logic.not(hydra.lib.lists.elem[Int](46)(hydra.lib.strings.toList(tvName))))(hydra.lib.logic.not(hydra.lib.sets.member[scala.Predef.String](tvName)(inScopeTypeVarNames)))
+            }
+            case _ => false)(stypeArgs)))
+          hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.scala.syntax.Data]](hasForallResidual)(Right(hydra.ext.scala.utils.sprim(v_Term_variable_pname)))(Right(hydra.ext.scala.utils.sapplyTypes(hydra.ext.scala.utils.sprim(v_Term_variable_pname))(stypeArgs)))
+        }))
         case _ => hydra.ext.scala.coder.encodeTerm(cx)(g)(substitutedBody)
     }
     case hydra.core.Term.typeLambda(v_Term_typeLambda_tl) => hydra.ext.scala.coder.encodeTerm(cx)(hydra.scoping.extendGraphForTypeLambda(g)(v_Term_typeLambda_tl))(v_Term_typeLambda_tl.body)
