@@ -1,5 +1,5 @@
-#!/bin/bash
-set -eo pipefail
+#!/usr/bin/env bash
+set -euo pipefail
 
 # Script to synchronize Hydra-Python with the source of truth in Hydra-Haskell/Hydra-Ext.
 #
@@ -16,6 +16,13 @@ set -eo pipefail
 #   ./bin/sync-python.sh          # Full sync (all steps)
 #   ./bin/sync-python.sh --quick  # Skip tests (for faster iteration)
 #   ./bin/sync-python.sh --help   # Show this help
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+HYDRA_EXT_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
+HYDRA_ROOT_DIR="$( cd "$HYDRA_EXT_DIR/.." && pwd )"
+HYDRA_PYTHON_DIR="$HYDRA_ROOT_DIR/hydra-python"
+
+source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 
 QUICK_MODE=false
 
@@ -36,47 +43,42 @@ for arg in "$@"; do
             echo ""
             echo "Steps performed:"
             echo "  1. Build executable"
-            echo "  2. Generate Python modules and tests from JSON"
-            echo "  3. Run Python tests (unless --quick)"
-            echo "  4. Report new files to git add"
+            echo "  2. Generate Python main modules and tests from JSON"
+            echo "  3. Generate ext Python modules into hydra-ext"
+            echo "  4. Generate ext Python modules into hydra-python"
+            echo "  5. Run Python tests (unless --quick)"
+            echo "  6. Report new files to git add"
             exit 0
+            ;;
+        *)
+            die "Unknown argument: $arg (try --help)"
             ;;
     esac
 done
 
-echo "=========================================="
-echo "Synchronizing Hydra-Python"
-echo "=========================================="
+banner2 "Synchronizing Hydra-Python"
 echo ""
-
-# Get the directory where this script is located
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-HYDRA_EXT_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
-HYDRA_PYTHON_DIR="$( cd "$HYDRA_EXT_DIR/../hydra-python" && pwd )"
 
 cd "$HYDRA_EXT_DIR"
 
-# RTS flags to avoid stack overflow during generation
-RTS_FLAGS="+RTS -K256M -A32M -RTS"
+TOTAL_STEPS=6
 
-echo "Step 1/5: Building executable..."
+step 1 $TOTAL_STEPS "Building executable"
 echo ""
 stack build hydra-ext:exe:bootstrap-from-json
 
+step 2 $TOTAL_STEPS "Generating Python main modules and tests from JSON"
 echo ""
-echo "Step 2/5: Generating Python main modules and tests from JSON..."
-echo ""
-stack exec bootstrap-from-json -- --target python --include-coders --include-dsls --include-tests $RTS_FLAGS || {
-    echo "WARNING: Python test generation had errors (some polymorphic types not supported). Continuing..."
-}
+stack exec bootstrap-from-json -- --target python --include-coders --include-dsls --include-tests $RTS_FLAGS || \
+    warn "Python test generation had errors (some polymorphic types not supported). Continuing..."
 
 # Patch test_graph.py to replace empty test_graph/test_context with lazy versions via test_env
-echo "Patching test_graph.py..."
 TESTGRAPH="../hydra-python/src/gen-test/python/hydra/test/test_graph.py"
 if [ -f "$TESTGRAPH" ]; then
+    echo "  Post-processing: patching test_graph.py..."
     # Remove the module-level test_context and test_graph assignments so __getattr__ can intercept
-    sed -i '' '/^test_context = /d' "$TESTGRAPH"
-    sed -i '' '/^test_graph = /d' "$TESTGRAPH"
+    sed_inplace '/^test_context = /d' "$TESTGRAPH"
+    sed_inplace '/^test_graph = /d' "$TESTGRAPH"
     cat >> "$TESTGRAPH" << 'PYEOF'
 
 _test_graph_cache = None
@@ -98,24 +100,16 @@ def __getattr__(name):
 PYEOF
 fi
 
-echo ""
-echo "Step 3/5: Generating ext Python modules into hydra-ext from JSON..."
+step 3 $TOTAL_STEPS "Generating ext Python modules into hydra-ext from JSON"
 echo ""
 stack exec bootstrap-from-json -- --target python --output . --include-coders --ext-only $RTS_FLAGS
 
-echo ""
-echo "Step 4/5: Generating ext Python modules into hydra-python from JSON..."
+step 4 $TOTAL_STEPS "Generating ext Python modules into hydra-python from JSON"
 echo ""
 stack exec bootstrap-from-json -- --target python --output "$HYDRA_PYTHON_DIR" --include-coders --ext-only $RTS_FLAGS
 
-echo ""
-echo "=========================================="
-echo "Generation complete!"
-echo "=========================================="
-
 if [ "$QUICK_MODE" = false ]; then
-    echo ""
-    echo "Step 5/5: Running Python tests..."
+    step 5 $TOTAL_STEPS "Running Python tests"
     echo ""
 
     cd "$HYDRA_PYTHON_DIR"
@@ -130,19 +124,14 @@ if [ "$QUICK_MODE" = false ]; then
 
     cd "$HYDRA_EXT_DIR"
 else
-    echo ""
-    echo "Step 5/5: Skipped (--quick mode)"
+    step 5 $TOTAL_STEPS "Skipped (--quick mode)"
 fi
 
-echo ""
-echo "=========================================="
-echo "Checking for new files..."
-echo "=========================================="
+step 6 $TOTAL_STEPS "Checking for new files"
 echo ""
 
 cd "$HYDRA_PYTHON_DIR"
 
-# Find untracked Python files in gen directories
 NEW_FILES=$(git status --porcelain src/main/python src/gen-main/python src/gen-test/python 2>/dev/null | grep "^??" | awk '{print $2}' || true)
 
 if [ -n "$NEW_FILES" ]; then
@@ -161,7 +150,4 @@ else
     echo "No new files created."
 fi
 
-echo ""
-echo "=========================================="
-echo "Sync complete!"
-echo "=========================================="
+banner2_done "Hydra-Python sync complete!"
