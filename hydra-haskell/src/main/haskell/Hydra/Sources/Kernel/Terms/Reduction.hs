@@ -214,7 +214,10 @@ etaExpandTerm = define "etaExpandTerm" $
         var "termArityWithContext" @@ var "tx" @@ Core.typeApplicationTermBody (var "tat"),
       _Term_variable>>: "name" ~>
         optCases (Maybes.map (Scoping.typeSchemeToFType) $ Maps.lookup (var "name") (Graph.graphBoundTypes $ var "tx"))
-          (int32 0) Arity.typeArity]) $
+          -- Not found in graphBoundTypes: fall through to graphPrimitives
+          (optCases (Maps.lookup (var "name") (var "primTypes"))
+            (int32 0) Arity.typeSchemeArity)
+          Arity.typeArity]) $
 
   -- domainTypes: extract domain types from a function type, returning a list of Maybe Type
   -- For a type A -> B -> C with n=2, returns [Just A, Just B]
@@ -828,8 +831,18 @@ reduceTerm = define "reduceTerm" $
         -- Look up the variable in the graph; if found, reduce its definition
         "mBinding" <~ Lexical.lookupBinding @@ var "graph" @@ var "v" $
         Maybes.maybe
-          -- Not found: lambda-bound variable, return with args applied
-          (right $ var "applyToArguments" @@ var "original" @@ var "args")
+          -- Not found in graphBoundTerms: fall through to graphPrimitives
+          ("mPrim" <~ Lexical.lookupPrimitive @@ var "graph" @@ var "v" $
+           Maybes.maybe
+             -- Not found in either: lambda-bound variable, return with args applied
+             (right $ var "applyToArguments" @@ var "original" @@ var "args")
+             -- Found primitive: apply with arity-based argument collection
+             ("prim" ~>
+               "arity" <~ Arity.primitiveArity @@ var "prim" $
+               Logic.ifElse (Equality.gt (var "arity") (Lists.length $ var "args"))
+                 (right $ var "applyToArguments" @@ var "original" @@ var "args")
+                 (var "forPrimitive" @@ var "prim" @@ var "arity" @@ var "args"))
+             (var "mPrim"))
           -- Found: reduce the element's term with the accumulated args
           ("binding" ~> var "applyIfNullary" @@ var "eager" @@ (Core.bindingTerm $ var "binding") @@ var "args")
           (var "mBinding"),

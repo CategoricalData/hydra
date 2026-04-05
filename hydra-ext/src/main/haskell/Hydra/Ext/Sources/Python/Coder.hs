@@ -614,34 +614,41 @@ encodeApplicationInner = def "encodeApplicationInner" $
           _Function_lambda>>: constant $
             "pfun" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "fun") $
             right $ pair (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pfun") @@ var "hargs") (var "rargs")],
-      -- Variable: encode and apply
+      -- Variable: encode and apply. If variable resolves to a primitive, wrap lazy args.
       _Term_variable>>: "name" ~>
         "g" <~ (pythonEnvironmentGetGraph @@ var "env") $
         "allArgs" <~ (Lists.concat2 (var "hargs") (var "rargs")) $
-        Maybes.maybe
-          -- Not in graph elements: use encodeVariable
-          ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "hargs") $
-            right $ pair (var "expr") (var "rargs"))
-          -- In graph elements: check arity
-          ("el" ~>
-            Maybes.maybe
-              -- No type: use encodeVariable
-              ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "hargs") $
-                right $ pair (var "expr") (var "rargs"))
-              -- Has type: use arity
-              ("ts" ~>
-                "elArity" <~ (Arity.typeSchemeArity @@ var "ts") $
-                "consumeCount" <~ (Math.min (var "elArity") (Lists.length $ var "allArgs")) $
-                "consumedArgs" <~ (Lists.take (var "consumeCount") (var "allArgs")) $
-                "remainingArgs" <~ (Lists.drop (var "consumeCount") (var "allArgs")) $
-                Logic.ifElse (Lists.null $ var "consumedArgs")
-                  ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ (list ([] :: [TTerm Py.Expression]))) $
-                    right $ pair (var "expr") (var "rargs"))
-                  (right $ pair
-                    (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name")) @@ var "consumedArgs")
-                    (var "remainingArgs")))
-              (Core.bindingType $ var "el"))
-          (Lexical.lookupBinding @@ var "g" @@ var "name")]
+        Maybes.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
+          -- Not a primitive: use original logic
+          (Maybes.maybe
+            -- Not in graph elements: use encodeVariable
+            ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "hargs") $
+              right $ pair (var "expr") (var "rargs"))
+            -- In graph elements: check arity
+            ("el" ~>
+              Maybes.maybe
+                -- No type: use encodeVariable
+                ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "hargs") $
+                  right $ pair (var "expr") (var "rargs"))
+                -- Has type: use arity
+                ("ts" ~>
+                  "elArity" <~ (Arity.typeSchemeArity @@ var "ts") $
+                  "consumeCount" <~ (Math.min (var "elArity") (Lists.length $ var "allArgs")) $
+                  "consumedArgs" <~ (Lists.take (var "consumeCount") (var "allArgs")) $
+                  "remainingArgs" <~ (Lists.drop (var "consumeCount") (var "allArgs")) $
+                  Logic.ifElse (Lists.null $ var "consumedArgs")
+                    ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ (list ([] :: [TTerm Py.Expression]))) $
+                      right $ pair (var "expr") (var "rargs"))
+                    (right $ pair
+                      (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name")) @@ var "consumedArgs")
+                      (var "remainingArgs")))
+                (Core.bindingType $ var "el"))
+            (Lexical.lookupBinding @@ var "g" @@ var "name"))
+          -- Is a primitive: wrap lazy arguments and encode
+          (lambda "_prim" $
+            "wrappedArgs" <~ (wrapLazyArguments @@ var "name" @@ var "hargs") $
+            "expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "wrappedArgs") $
+            right $ pair (var "expr") (var "rargs"))]
 
 -- | Encode an application type to Python expression.
 --   Gathers all type arguments and encodes as primary[args].

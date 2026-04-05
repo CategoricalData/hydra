@@ -222,7 +222,7 @@ compose_ = define "compose" $
   -- This builds the term: bind @ (funF @ xTerm) @ funG
   right $ Core.termApplication $ Core.application
     (Core.termApplication $ Core.application
-      (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.maybes.bind")
+      (Core.termVariable $ wrap _Name $ string "hydra.lib.maybes.bind")
       (Core.termApplication $ Core.application (var "funF") (var "xTerm")))
     (var "funG")
 
@@ -248,7 +248,7 @@ mapMaybe_ = define "mapMaybe" $
   "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
   -- Build: cat (map funTerm elements) - cat filters out Nothings and unwraps Justs
   right $ Core.termApplication $ Core.application
-    (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.maybes.cat")
+    (Core.termVariable $ wrap _Name $ string "hydra.lib.maybes.cat")
     (Core.termList $ Lists.map
       ("el" ~> Core.termApplication $ Core.application (var "funTerm") (var "el"))
       (var "elements"))

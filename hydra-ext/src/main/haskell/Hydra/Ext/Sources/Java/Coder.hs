@@ -1913,8 +1913,17 @@ encodeApplication = def "encodeApplication" $
               right (applyJavaArg @@ var "acc" @@ var "jarg"))
               (var "initialCall") (var "rargs")],
       _Term_variable>>: lambda "name" $
+        -- If the variable resolves to a primitive, handle it like FunctionPrimitive
+        Logic.ifElse (Maybes.isJust (Maps.lookup (var "name") (Graph.graphPrimitives (var "g"))))
+          ("hargs" <~ Lists.take (var "arity") (var "annotatedArgs") $
+           "rargs" <~ Lists.drop (var "arity") (var "annotatedArgs") $
+           "initialCall" <<~ (functionCall @@ var "env" @@ true @@ var "name" @@ var "hargs" @@ (list ([] :: [TTerm Type])) @@ var "cx" @@ var "g") $
+           Eithers.foldl (lambda "acc" $ lambda "h" $
+             "jarg" <<~ (encodeTerm @@ var "env" @@ var "h" @@ var "cx" @@ var "g") $
+             right (applyJavaArg @@ var "acc" @@ var "jarg"))
+             (var "initialCall") (var "rargs"))
         -- Check if this is a recursive let-bound variable (not shadowed by lambda parameter)
-        Logic.ifElse (Logic.and (isRecursiveVariable @@ var "aliases" @@ var "name")
+        (Logic.ifElse (Logic.and (isRecursiveVariable @@ var "aliases" @@ var "name")
             (Logic.not (isLambdaBoundIn @@ var "name"
               @@ (project JavaHelpers._Aliases JavaHelpers._Aliases_lambdaVars @@ var "aliases"))))
           -- Use curried construction for recursive bindings
@@ -1948,7 +1957,7 @@ encodeApplication = def "encodeApplication" $
             Eithers.foldl (lambda "acc" $ lambda "h" $
               "jarg" <<~ (encodeTerm @@ var "env" @@ var "h" @@ var "cx" @@ var "g") $
               right (applyJavaArg @@ var "acc" @@ var "jarg"))
-              (var "initialCall") (var "rargs"))]
+              (var "initialCall") (var "rargs")))]
 
 -- | Fallback path for encodeApplication — used for eliminations and default expressions.
 encodeApplication_fallback :: TTermDefinition (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> Graph -> [Type] -> Term -> Term -> Context -> Graph -> Either (InContext Error) Java.Expression)
@@ -2944,9 +2953,21 @@ encodeTermInternal = def "encodeTermInternal" $
           @@ (JavaUtilsSource.javaConstructorName @@ var "consId" @@ nothing)
           @@ var "args" @@ nothing),
 
-      -- TermVariable: encode variable reference
+      -- TermVariable: encode variable reference, or handle as primitive if it resolves to one
       _Term_variable>>: lambda "name" $
-        encodeVariable @@ var "env" @@ var "name" @@ var "cx" @@ var "g",
+        Maybes.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
+          (encodeVariable @@ var "env" @@ var "name" @@ var "cx" @@ var "g")
+          (lambda "_prim" $
+            "combinedAnns" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
+            "mt" <<~ (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
+            "typ" <<~ (Maybes.cases (var "mt")
+              (Checking.typeOfTerm @@ var "cx" @@ var "g" @@ var "term")
+              (lambda "t" $ right (var "t"))) $
+            "primFun" <~ inject _Function _Function_primitive (var "name") $
+            cases _Type (Strip.deannotateType @@ var "typ")
+              (Just $ encodeNullaryConstant @@ var "env" @@ var "typ" @@ var "primFun" @@ var "cx" @@ var "g") [
+              _Type_function>>: lambda "ft" $
+                encodeFunction @@ var "env" @@ (Core.functionTypeDomain (var "ft")) @@ (Core.functionTypeCodomain (var "ft")) @@ var "primFun" @@ var "cx" @@ var "g"]),
 
       -- TermUnit: emit null
       _Term_unit>>: lambda "_" $

@@ -237,10 +237,11 @@ optional = TermMaybe
 pair :: Term -> Term -> Term
 pair a b = TermPair (a, b)
 
--- | Create a primitive function
+-- | Create a reference to a primitive function.
+-- Uses TermVariable; the name resolves via graphPrimitives fallthrough.
 -- Example: primitive (Name "hydra.lib.strings.length")
 primitive :: Name -> Term
-primitive = TermFunction . FunctionPrimitive
+primitive = TermVariable
 
 -- | Create a field projection function
 -- Example: project (Name "Person") (Name "firstName")

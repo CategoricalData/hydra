@@ -1011,9 +1011,26 @@ inferTypeOfVariable = define "inferTypeOfVariable" $
   doc "Infer the type of a variable (Either version)" $
   "fcx" ~> "cx" ~> "name" ~>
   Maybes.maybe
-    (Ctx.failInContext
-      (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Variable not bound to type: ") (Core.unName $ var "name"))
-      (var "fcx"))
+    -- Not found in graphBoundTypes: fall through to graphPrimitives
+    (Maybes.maybe
+      (Ctx.failInContext
+        (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Variable not bound to type: ") (Core.unName $ var "name"))
+        (var "fcx"))
+      ("scheme" ~>
+        "tsResult" <~ Resolution.instantiateTypeScheme @@ var "fcx" @@ var "scheme" $
+        "ts" <~ Pairs.first (var "tsResult") $
+        "fcx2" <~ Pairs.second (var "tsResult") $
+        "constraints" <~ Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints $ var "ts") $
+        right (yieldCheckedWithConstraints
+          @@ var "fcx2"
+          @@ (buildTypeApplicationTerm
+            @@ Core.typeSchemeVariables (var "ts")
+            @@ Core.termVariable (var "name"))
+          @@ Core.typeSchemeType (var "ts")
+          @@ Substitution.idTypeSubst
+          @@ var "constraints"))
+      (Maybes.map (unaryFunction Graph.primitiveType) $ Maps.lookup (var "name") (Graph.graphPrimitives $ var "cx")))
+    -- Found in graphBoundTypes: use the type scheme directly
     ("scheme" ~>
       "tsResult" <~ Resolution.instantiateTypeScheme @@ var "fcx" @@ var "scheme" $
       "ts" <~ Pairs.first (var "tsResult") $

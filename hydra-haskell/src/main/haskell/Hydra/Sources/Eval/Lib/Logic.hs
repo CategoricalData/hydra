@@ -79,7 +79,7 @@ and_ = define "and" $
   right $ Core.termApplication $ Core.application
     (Core.termApplication $ Core.application
       (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+        (Core.termVariable $ encodedName _logic_ifElse)
         (var "a"))
       (var "b"))
     (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean False)
@@ -94,7 +94,7 @@ not_ = define "not" $
   right $ Core.termApplication $ Core.application
     (Core.termApplication $ Core.application
       (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+        (Core.termVariable $ encodedName _logic_ifElse)
         (var "a"))
       (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean False))
     (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean True)
@@ -109,7 +109,7 @@ or_ = define "or" $
   right $ Core.termApplication $ Core.application
     (Core.termApplication $ Core.application
       (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+        (Core.termVariable $ encodedName _logic_ifElse)
         (var "a"))
       (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean True))
     (var "b")
