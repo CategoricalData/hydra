@@ -1,5 +1,5 @@
-#!/bin/bash
-set -eo pipefail
+#!/usr/bin/env bash
+set -euo pipefail
 
 # Script to synchronize Hydra-Scala with the source of truth in Hydra-Haskell/Hydra-Ext.
 #
@@ -18,6 +18,13 @@ set -eo pipefail
 #   ./bin/sync-scala.sh          # Full sync (all steps)
 #   ./bin/sync-scala.sh --quick  # Skip Scala compilation
 
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+HYDRA_EXT_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
+HYDRA_ROOT_DIR="$( cd "$HYDRA_EXT_DIR/.." && pwd )"
+HYDRA_SCALA_DIR="$HYDRA_ROOT_DIR/hydra-scala"
+
+source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
+
 QUICK_MODE=false
 
 for arg in "$@"; do
@@ -34,53 +41,52 @@ for arg in "$@"; do
             echo "Options:"
             echo "  --quick    Skip Scala compilation after generation"
             echo "  --help     Show this help message"
+            echo ""
+            echo "Steps performed:"
+            echo "  1. Build hydra-ext"
+            echo "  2. Generate Scala source modules"
+            echo "  3. Generate Scala generation tests"
+            echo "  4. Compile and test Scala (unless --quick)"
             exit 0
+            ;;
+        *)
+            die "Unknown argument: $arg (try --help)"
             ;;
     esac
 done
 
-echo "=========================================="
-echo "Synchronizing Hydra-Scala"
-echo "=========================================="
+banner2 "Synchronizing Hydra-Scala"
 echo ""
-
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-HYDRA_EXT_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
-HYDRA_ROOT_DIR="$( cd "$HYDRA_EXT_DIR/.." && pwd )"
-HYDRA_SCALA_DIR="$HYDRA_ROOT_DIR/hydra-scala"
 
 cd "$HYDRA_EXT_DIR"
 
-RTS_FLAGS="+RTS -K256M -A32M -RTS"
 TOTAL_STEPS=4
-if [ "$QUICK_MODE" = true ]; then
-    TOTAL_STEPS=3
-fi
 
-echo "Step 1/$TOTAL_STEPS: Building hydra-ext..."
+step 1 $TOTAL_STEPS "Building hydra-ext"
 echo ""
 stack build
 
-echo ""
-echo "Step 2/$TOTAL_STEPS: Generating Scala source modules..."
+step 2 $TOTAL_STEPS "Generating Scala source modules"
 echo ""
 stack exec update-scala -- $RTS_FLAGS
 python3 "$HYDRA_SCALA_DIR/bin/break-long-lines.py"
 
 # Fix Scala 3 reserved word 'macro' in generated enum cases and pattern matches
-echo "  Post-processing: escaping 'macro' keyword..."
-find "$HYDRA_SCALA_DIR/src/gen-main/scala" -name "*.scala" -exec \
-    sed -i '' -e 's/case macro(/case `macro`(/g' -e 's/\.macro(/.`macro`(/g' {} +
+if [ -d "$HYDRA_SCALA_DIR/src/gen-main/scala" ]; then
+    echo "  Post-processing: escaping 'macro' keyword..."
+    sed_inplace_find "$HYDRA_SCALA_DIR/src/gen-main/scala" -name '*.scala' -- 's/case macro(/case `macro`(/g'
+    sed_inplace_find "$HYDRA_SCALA_DIR/src/gen-main/scala" -name '*.scala' -- 's/\.macro(/.`macro`(/g'
+fi
 
-echo ""
-echo "Step 3/$TOTAL_STEPS: Generating Scala generation tests..."
+step 3 $TOTAL_STEPS "Generating Scala generation tests"
 echo ""
 stack exec update-scala-tests -- $RTS_FLAGS
 
 # Post-process generated test files (break long lines, fix escapes)
 if [ -d "$HYDRA_SCALA_DIR/src/gen-test/scala" ]; then
-    find "$HYDRA_SCALA_DIR/src/gen-test/scala" -name "*.scala" -exec \
-        sed -i '' -e 's/case macro(/case `macro`(/g' -e 's/\.macro(/.`macro`(/g' {} +
+    echo "  Post-processing: escaping 'macro' keyword in tests..."
+    sed_inplace_find "$HYDRA_SCALA_DIR/src/gen-test/scala" -name '*.scala' -- 's/case macro(/case `macro`(/g'
+    sed_inplace_find "$HYDRA_SCALA_DIR/src/gen-test/scala" -name '*.scala' -- 's/\.macro(/.`macro`(/g'
     # Replace unresolved inference type variables (T0-T99) with Any.
     # These appear in type parameter positions like [T0], [Int, T1], [T2, String].
     echo "  Post-processing: replacing inference type variables with Any..."
@@ -93,22 +99,17 @@ fi
 TESTGRAPH_FILE="$HYDRA_SCALA_DIR/src/gen-test/scala/hydra/test/testGraph.scala"
 if [ -f "$TESTGRAPH_FILE" ]; then
     echo "  Post-processing: patching testGraph.scala to use buildTestGraph..."
-    sed -i '' 's/hydra\.lexical\.emptyGraph/hydra.TestSuiteRunner.buildTestGraph()/g' "$TESTGRAPH_FILE"
+    sed_inplace 's/hydra\.lexical\.emptyGraph/hydra.TestSuiteRunner.buildTestGraph()/g' "$TESTGRAPH_FILE"
 fi
 
 if [ "$QUICK_MODE" = false ]; then
-    echo ""
-    echo "Step 4/$TOTAL_STEPS: Compiling and testing Scala..."
+    step 4 $TOTAL_STEPS "Compiling and testing Scala"
     echo ""
     cd "$HYDRA_SCALA_DIR"
     sbt test
     cd "$HYDRA_EXT_DIR"
 else
-    echo ""
-    echo "Step 4/$TOTAL_STEPS: Skipped (--quick mode)"
+    step 4 $TOTAL_STEPS "Skipped (--quick mode)"
 fi
 
-echo ""
-echo "=========================================="
-echo "Hydra-Scala sync complete!"
-echo "=========================================="
+banner2_done "Hydra-Scala sync complete!"

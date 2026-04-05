@@ -1,5 +1,5 @@
-#!/bin/bash
-set -eo pipefail
+#!/usr/bin/env bash
+set -euo pipefail
 
 # Top-level synchronization script for Hydra.
 #
@@ -14,8 +14,8 @@ set -eo pipefail
 #     - Ext Haskell modules (Java/Python coders, language syntaxes, etc.)
 #     - Export ext modules to JSON
 #
-#   Phases 3-4: Generate target languages from JSON (hydra-ext)
-#     - Java, Python (from JSON via bootstrap-from-json)
+#   Phases 3+: Generate target languages from JSON (hydra-ext)
+#     - Java, Python, Scala, Lisp (from JSON via bootstrap-from-json)
 #     - Haskell is already fully synced by Phases 1-2
 #
 # Stops at the first error. Times the entire operation.
@@ -25,24 +25,19 @@ set -eo pipefail
 #   - Run from the repo root (or the script will cd there)
 #
 # Usage:
-#   ./bin/sync-all.sh                              # Full sync (default targets: hydra,java,python)
-#   ./bin/sync-all.sh --quick                      # Skip tests in each phase
-#   ./bin/sync-all.sh --targets all                          # All 7 implementations
+#   ./bin/sync-all.sh                                        # Default targets: hydra,java,python
+#   ./bin/sync-all.sh --quick                                # Skip tests in each phase
+#   ./bin/sync-all.sh --targets all                          # All implementations
 #   ./bin/sync-all.sh --targets hydra,java,python,lisp       # Include Lisp dialects
-#   ./bin/sync-all.sh --targets clojure,scheme               # Only specific Lisp dialects (skips hydra/java/python)
-#   ./bin/sync-all.sh --help                       # Show this help
-#
-# Valid targets:
-#   hydra    - Haskell kernel regeneration (Phase 1)
-#   java     - Java code generation (Phase 3)
-#   python   - Python code generation (Phase 4)
-#   lisp        - All four Lisp dialects (expands to clojure,common-lisp,emacs-lisp,scheme)
-#   clojure     - Clojure code generation
-#   common-lisp - Common Lisp code generation
-#   emacs-lisp  - Emacs Lisp code generation
-#   scheme      - Scheme code generation
-#
-# Note: Phase 2 (hydra-ext sync) runs whenever hydra, java, python, or any Lisp target is selected.
+#   ./bin/sync-all.sh --targets clojure,scheme               # Only specific Lisp dialects
+#   ./bin/sync-all.sh --help                                 # Show this help
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
+HYDRA_HASKELL_DIR="$HYDRA_ROOT/hydra-haskell"
+HYDRA_EXT_DIR="$HYDRA_ROOT/hydra-ext"
+
+source "$HYDRA_ROOT/bin/lib/common.sh"
 
 QUICK_MODE=false
 TARGETS="hydra,java,python"
@@ -70,12 +65,13 @@ while [ $# -gt 0 ]; do
             echo "  hydra       Haskell kernel regeneration"
             echo "  java        Java code generation"
             echo "  python      Python code generation"
+            echo "  scala       Scala code generation"
             echo "  clojure     Clojure code generation"
             echo "  common-lisp Common Lisp code generation"
             echo "  emacs-lisp  Emacs Lisp code generation"
             echo "  scheme      Scheme code generation"
             echo "  lisp        All four Lisp dialects"
-            echo "  all         All 7 implementations (hydra,java,python + all Lisp)"
+            echo "  all         All implementations"
             echo ""
             echo "Default phases (with --targets hydra,java,python):"
             echo "  1. Generate Haskell from DSL (kernel, tests, eval lib, sources, JSON)"
@@ -85,6 +81,9 @@ while [ $# -gt 0 ]; do
             echo ""
             echo "Stops at the first error. Reports total elapsed time."
             exit 0
+            ;;
+        *)
+            die "Unknown argument: $1 (try --help)"
             ;;
     esac
     shift
@@ -115,9 +114,7 @@ for t in "${TARGET_LIST[@]}"; do
         emacs-lisp)  LISP_DIALECTS+=(emacs-lisp) ;;
         scheme)      LISP_DIALECTS+=(scheme) ;;
         *)
-            echo "Error: Unknown target '$t'"
-            echo "Valid targets: hydra, java, python, scala, lisp, clojure, common-lisp, emacs-lisp, scheme, all"
-            exit 1
+            die "Unknown target '$t'. Valid targets: hydra, java, python, scala, lisp, clojure, common-lisp, emacs-lisp, scheme, all"
             ;;
     esac
 done
@@ -138,21 +135,16 @@ if $TARGET_HYDRA || $TARGET_JAVA || $TARGET_PYTHON || $TARGET_SCALA || $HAS_LISP
     NEED_EXT=true
 fi
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
-HYDRA_HASKELL_DIR="$HYDRA_ROOT/hydra-haskell"
-HYDRA_EXT_DIR="$HYDRA_ROOT/hydra-ext"
-
 # Ensure JAVA_HOME is set to a JDK 11+ (required for Gradle builds)
 if $TARGET_JAVA; then
-    if [ -z "$JAVA_HOME" ]; then
+    if [ -z "${JAVA_HOME:-}" ]; then
         if command -v /usr/libexec/java_home &>/dev/null; then
             export JAVA_HOME="$(/usr/libexec/java_home 2>/dev/null || true)"
         fi
     fi
-    if [ -z "$JAVA_HOME" ]; then
-        echo "Warning: JAVA_HOME is not set. Java compilation steps may fail."
-        echo "Set JAVA_HOME to a JDK 11+ installation before running this script."
+    if [ -z "${JAVA_HOME:-}" ]; then
+        warn "JAVA_HOME is not set. Java compilation steps may fail."
+        warn "Set JAVA_HOME to a JDK 11+ installation before running this script."
     else
         echo "Using JAVA_HOME=$JAVA_HOME"
     fi
@@ -161,10 +153,8 @@ if $TARGET_JAVA; then
     if [ "$(uname -s)" = "Darwin" ] && [ "$(uname -m)" = "arm64" ]; then
         JAVA_CMD="${JAVA_HOME:+$JAVA_HOME/bin/}java"
         if command -v "$JAVA_CMD" > /dev/null 2>&1 && file "$(command -v "$JAVA_CMD")" | grep -q x86_64; then
-            echo "WARNING: x86_64 JDK detected on Apple Silicon. This runs under Rosetta 2"
-            echo "  and will be ~20x slower than a native arm64 JDK."
-            echo "  Current JDK: $("$JAVA_CMD" -version 2>&1 | head -1)"
-            echo ""
+            warn "x86_64 JDK detected on Apple Silicon. This runs under Rosetta 2 and will be ~20x slower than a native arm64 JDK."
+            warn "Current JDK: $("$JAVA_CMD" -version 2>&1 | head -1)"
         fi
     fi
 fi
@@ -182,9 +172,6 @@ print_elapsed() {
 # Trap to print elapsed time on exit (success or failure)
 trap print_elapsed EXIT
 
-# RTS flags to avoid stack overflow during generation
-RTS_FLAGS="+RTS -K256M -A32M -RTS"
-
 # Count total phases for display
 TOTAL_PHASES=0
 if $TARGET_HYDRA; then TOTAL_PHASES=$((TOTAL_PHASES + 1)); fi
@@ -195,9 +182,7 @@ if $TARGET_SCALA; then TOTAL_PHASES=$((TOTAL_PHASES + 1)); fi
 if $HAS_LISP; then TOTAL_PHASES=$((TOTAL_PHASES + 1)); fi
 CURRENT_PHASE=0
 
-echo "============================================"
-echo "Hydra full sync (targets: $TARGETS)"
-echo "============================================"
+banner1 "Hydra full sync (targets: $TARGETS)"
 echo ""
 
 QUICK_FLAG=""
@@ -205,17 +190,19 @@ if [ "$QUICK_MODE" = true ]; then
     QUICK_FLAG="--quick"
 fi
 
+phase_banner() {
+    CURRENT_PHASE=$((CURRENT_PHASE + 1))
+    echo ""
+    banner1 "Phase ${CURRENT_PHASE}/${TOTAL_PHASES}: $1"
+    echo ""
+}
+
 # ──────────────────────────────────────────────────
 # Phase: Generate Haskell from DSL (hydra-haskell)
 # ──────────────────────────────────────────────────
 
 if $TARGET_HYDRA; then
-    CURRENT_PHASE=$((CURRENT_PHASE + 1))
-
-    echo "============================================"
-    echo "Phase ${CURRENT_PHASE}/${TOTAL_PHASES}: Generating Haskell from DSL"
-    echo "============================================"
-    echo ""
+    phase_banner "Generating Haskell from DSL"
 
     cd "$HYDRA_HASKELL_DIR"
 
@@ -224,7 +211,7 @@ if $TARGET_HYDRA; then
     stack build hydra:exe:update-haskell-kernel
     stack exec update-haskell-kernel -- $RTS_FLAGS
     echo ""
-    echo "Rebuilding..."
+    echo "  Rebuilding..."
     stack build
 
     echo ""
@@ -234,14 +221,16 @@ if $TARGET_HYDRA; then
     stack exec update-kernel-tests -- $RTS_FLAGS
 
     # Patch TestGraph.hs to use TestEnv (real graph with primitives) instead of emptyGraph
-    echo "Patching TestGraph.hs..."
     TESTGRAPH="src/gen-test/haskell/Hydra/Test/TestGraph.hs"
-    sed -i '' 's/import qualified Hydra.Lexical as Lexical$/import qualified Hydra.Lexical as Lexical\nimport qualified Hydra.Test.TestEnv as TestEnv/' "$TESTGRAPH"
-    sed -i '' 's/testGraph = Lexical.emptyGraph/testGraph = TestEnv.testGraph testTypes/' "$TESTGRAPH"
-    sed -i '' 's/testContext = Lexical.emptyContext/testContext = TestEnv.testContext/' "$TESTGRAPH"
+    if [ -f "$TESTGRAPH" ]; then
+        echo "  Post-processing: patching TestGraph.hs..."
+        sed_inplace 's/import qualified Hydra.Lexical as Lexical$/import qualified Hydra.Lexical as Lexical\nimport qualified Hydra.Test.TestEnv as TestEnv/' "$TESTGRAPH"
+        sed_inplace 's/testGraph = Lexical.emptyGraph/testGraph = TestEnv.testGraph testTypes/' "$TESTGRAPH"
+        sed_inplace 's/testContext = Lexical.emptyContext/testContext = TestEnv.testContext/' "$TESTGRAPH"
+    fi
 
     echo ""
-    echo "Rebuilding..."
+    echo "  Rebuilding..."
     stack build
 
     echo ""
@@ -250,7 +239,7 @@ if $TARGET_HYDRA; then
     stack build hydra:exe:update-haskell-eval-lib
     stack exec update-haskell-eval-lib -- $RTS_FLAGS
     echo ""
-    echo "Rebuilding..."
+    echo "  Rebuilding..."
     stack build
 
     echo ""
@@ -259,7 +248,7 @@ if $TARGET_HYDRA; then
     stack build hydra:exe:update-haskell-sources
     stack exec update-haskell-sources -- $RTS_FLAGS
     echo ""
-    echo "Rebuilding..."
+    echo "  Rebuilding..."
     stack build
 
     echo ""
@@ -267,20 +256,18 @@ if $TARGET_HYDRA; then
     echo ""
     stack exec update-haskell-kernel -- $RTS_FLAGS
     echo ""
-    echo "Rebuilding..."
+    echo "  Rebuilding..."
     stack build
-
-    # Note: generation tests removed in favor of universal test cases
 
     if [ "$QUICK_MODE" = false ]; then
         echo ""
-        echo "Step 1g: Running Haskell tests..."
+        echo "Step 1f: Running Haskell tests..."
         echo ""
         stack test 2>&1
     fi
 
     echo ""
-    echo "Step 1h: Exporting and verifying JSON..."
+    echo "Step 1g: Exporting and verifying JSON..."
     echo ""
     stack build hydra:exe:update-json-main hydra:exe:verify-json-kernel hydra:exe:update-json-test
     stack exec update-json-main -- $RTS_FLAGS
@@ -288,14 +275,10 @@ if $TARGET_HYDRA; then
     stack exec verify-json-kernel -- $RTS_FLAGS
 
     echo ""
-    echo "Step 1i: Generating JSON manifest..."
+    echo "Step 1h: Generating JSON manifest..."
     echo ""
     stack build hydra:exe:update-json-manifest
     stack exec update-json-manifest
-
-    echo ""
-    echo "Phase ${CURRENT_PHASE} complete."
-    echo ""
 fi
 
 # ──────────────────────────────────────────────────
@@ -303,16 +286,8 @@ fi
 # ──────────────────────────────────────────────────
 
 if $NEED_EXT; then
-    CURRENT_PHASE=$((CURRENT_PHASE + 1))
-
-    echo "============================================"
-    echo "Phase ${CURRENT_PHASE}/${TOTAL_PHASES}: Synchronizing Hydra-Ext"
-    echo "============================================"
-    echo ""
-
+    phase_banner "Synchronizing Hydra-Ext"
     "$HYDRA_EXT_DIR/bin/sync-ext.sh"
-
-    echo ""
 fi
 
 # ──────────────────────────────────────────────────
@@ -320,16 +295,8 @@ fi
 # ──────────────────────────────────────────────────
 
 if $TARGET_JAVA; then
-    CURRENT_PHASE=$((CURRENT_PHASE + 1))
-
-    echo "============================================"
-    echo "Phase ${CURRENT_PHASE}/${TOTAL_PHASES}: Synchronizing Java (from JSON)"
-    echo "============================================"
-    echo ""
-
+    phase_banner "Synchronizing Java (from JSON)"
     "$HYDRA_EXT_DIR/bin/sync-java.sh" $QUICK_FLAG
-
-    echo ""
 fi
 
 # ──────────────────────────────────────────────────
@@ -337,16 +304,8 @@ fi
 # ──────────────────────────────────────────────────
 
 if $TARGET_PYTHON; then
-    CURRENT_PHASE=$((CURRENT_PHASE + 1))
-
-    echo "============================================"
-    echo "Phase ${CURRENT_PHASE}/${TOTAL_PHASES}: Synchronizing Python (from JSON)"
-    echo "============================================"
-    echo ""
-
+    phase_banner "Synchronizing Python (from JSON)"
     "$HYDRA_EXT_DIR/bin/sync-python.sh" $QUICK_FLAG
-
-    echo ""
 fi
 
 # ──────────────────────────────────────────────────
@@ -354,16 +313,8 @@ fi
 # ──────────────────────────────────────────────────
 
 if $TARGET_SCALA; then
-    CURRENT_PHASE=$((CURRENT_PHASE + 1))
-
-    echo "============================================"
-    echo "Phase ${CURRENT_PHASE}/${TOTAL_PHASES}: Synchronizing Scala"
-    echo "============================================"
-    echo ""
-
+    phase_banner "Synchronizing Scala"
     "$HYDRA_EXT_DIR/bin/sync-scala.sh" $QUICK_FLAG
-
-    echo ""
 fi
 
 # ──────────────────────────────────────────────────
@@ -371,20 +322,9 @@ fi
 # ──────────────────────────────────────────────────
 
 if $HAS_LISP; then
-    CURRENT_PHASE=$((CURRENT_PHASE + 1))
-
     LISP_CSV=$(IFS=,; echo "${LISP_DIALECTS[*]}")
-
-    echo "============================================"
-    echo "Phase ${CURRENT_PHASE}/${TOTAL_PHASES}: Synchronizing Lisp (${LISP_CSV})"
-    echo "============================================"
-    echo ""
-
+    phase_banner "Synchronizing Lisp (${LISP_CSV})"
     "$HYDRA_EXT_DIR/bin/sync-lisp.sh" --dialects "$LISP_CSV" $QUICK_FLAG
-
-    echo ""
 fi
 
-echo "============================================"
-echo "Full sync complete!"
-echo "============================================"
+banner1_done "Full sync complete!"

@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 #
 # Orchestrator script for the ValidatePG translingual demo.
 #
@@ -10,9 +11,8 @@
 #
 #   --hosts LANG,...     Run only specified hosts (default: haskell,java,python)
 #   --tag TAG            Append a tag to the run directory name
-#   --data-dir <path>   Use existing data directory instead of generating fresh data.
-
-set -euo pipefail
+#   --data-dir <path>    Use existing data directory instead of generating fresh data
+#   --help               Show this help message
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HYDRA_EXT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
@@ -31,27 +31,15 @@ while [ $# -gt 0 ]; do
     --tag) TAG="$2"; shift 2 ;;
     --tag=*) TAG="${1#--tag=}"; shift ;;
     --data-dir) DATA_DIR="$2"; shift 2 ;;
+    --help|-h)
+      sed -n '4,15p' "$0" | sed 's/^# //; s/^#//'
+      exit 0
+      ;;
     *)
-      echo "Unknown argument: $1" >&2
-      echo "Usage: $0 [--hosts LANG,...] [--tag TAG] [--data-dir <path>]" >&2
-      exit 1
+      die "Unknown argument: $1 (try --help)"
       ;;
   esac
 done
-
-# Colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-CYAN='\033[0;36m'
-BOLD='\033[1m'
-NC='\033[0m'
-
-header() { echo ""; echo -e "${BOLD}${CYAN}=== $1 ===${NC}"; }
-
-extract_time() {
-  grep 'HYDRA_TIME_MS=' "$1" 2>/dev/null | sed 's/.*HYDRA_TIME_MS=//' || echo "?"
-}
 
 IFS=',' read -ra ENABLED_HOSTS <<< "$HOSTS"
 
@@ -62,7 +50,7 @@ RUN_DIR=$(create_run_dir /tmp/hydra-validatepg "$TAG")
 # Build
 # ============================================================================
 
-header "Building Java"
+demo_header "Building Java"
 cd "$REPO_ROOT"
 ./gradlew :hydra-ext:compileJava :hydra-java:compileJava --quiet 2>&1
 
@@ -74,11 +62,11 @@ JAVA_CP="$REPO_ROOT/hydra-ext/build/classes/java/main:$REPO_ROOT/hydra-java/buil
 
 if [ -z "$DATA_DIR" ]; then
   DATA_DIR="$RUN_DIR/data"
-  header "Generating data to $DATA_DIR"
+  demo_header "Generating data to $DATA_DIR"
   mkdir -p "$DATA_DIR"
   java -cp "$JAVA_CP" hydra.demos.validatepg.GenerateData "$DATA_DIR"
 else
-  header "Using existing data from $DATA_DIR"
+  demo_header "Using existing data from $DATA_DIR"
 fi
 
 echo ""
@@ -95,7 +83,7 @@ run_host() {
   echo "skipped" > "$RUN_DIR/$host/_status"
   echo "—" > "$RUN_DIR/$host/_time"
 
-  header "Running $host driver"
+  demo_header "Running $host driver"
 
   case "$host" in
     java)
@@ -156,7 +144,7 @@ done
 # Compare
 # ============================================================================
 
-header "Comparison"
+demo_header "Comparison"
 
 MATCH=true
 NUM_HOSTS=${#ENABLED_HOSTS[@]}
@@ -188,15 +176,7 @@ done
 # Summary
 # ============================================================================
 
-header "Summary"
-
-format_status() {
-  case "$1" in
-    ok)      printf "${GREEN}OK${NC}";;
-    error)   printf "${RED}FAIL${NC}";;
-    skipped) printf "${YELLOW}SKIP${NC}";;
-  esac
-}
+demo_header "Summary"
 
 printf "  %-12s %-14s %-12s\n" "Host" "Status" "Time (ms)"
 printf "  %-12s %-14s %-12s\n" "----" "------" "---------"
