@@ -41,9 +41,9 @@ This is the recommended workflow:
    replace complex pattern matching with simpler case expressions,
    and eliminate syntax features that have no DSL equivalent. Test the refactored code to verify it still works.
 2. **Create the DSL module structure** —
-   set up the source module file with standard imports, namespace, module definition, and an empty elements list.
+   set up the source module file with standard imports, namespace, module definition, and an empty `definitions` list.
    Build to verify it compiles.
-3. **Promote one function** — translate it into the Hydra DSL and add it to the module's elements list.
+3. **Promote one function** — translate it into the Hydra DSL and add it to the module's `definitions` list.
 4. **Regenerate** — generate the promoted function into `gen-main` (e.g., `writeHaskell`).
 5. **Comment out the original** — in the staging module,
    comment out the original function definition but **preserve it as a comment**.
@@ -138,18 +138,18 @@ ns :: Namespace
 ns = Namespace "hydra.pg.graphson.coder"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Reduction.ns, Rewriting.ns]  -- term dependencies (other term modules you call)
     (kernelTypesNamespaces L.++ [GraphsonSyntax.ns, JsonModel.ns]) $  -- type dependencies
     Just "Description of the module."
   where
-    elements = [
-      toBinding function1,
-      toBinding function2,
+    definitions = [
+      toDefinition function1,
+      toDefinition function2,
       -- ... more bindings
       ]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 ```
 
@@ -181,14 +181,14 @@ hydraExtModules = [
 
 ### 6. Promote functions incrementally
 
-Translate functions one at a time into the DSL, adding each to the module's elements list. After each function:
+Translate functions one at a time into the DSL, adding each to the module's `definitions` list. After each function:
 
 1. Build: `stack build` in `hydra-ext`
 2. Regenerate the target code (see "Regenerating target code" below)
 3. Comment out the original staging function, keeping it as a reference
 4. Import and use the generated version in the staging module:
    ```haskell
-   -- In Hydra.Ext.Staging.Python.Coder
+   -- In Hydra.Ext.Python.Coder
    import qualified Hydra.Ext.Python.Coder as Generated
 
    -- PROMOTED: now using generated version
@@ -233,7 +233,7 @@ Once all functions are promoted and the staging module just re-exports from the 
 **Original raw Haskell:**
 
 ```haskell
--- Raw Haskell in Hydra.Ext.Staging.Pg.Graphson.Coder
+-- Raw Haskell in Hydra.Ext.Pg.Graphson.Coder
 
 doubleValueToJson :: G.DoubleValue -> Json.Value
 doubleValueToJson v = case v of
@@ -251,7 +251,7 @@ it uses GraphSON domain types which were defined using Hydra.
 ```haskell
 -- Hydra source module in Hydra.Ext.Sources.Pg.Graphson.Coder
 
-doubleValueToJson :: TBinding (G.DoubleValue -> JM.Value)
+doubleValueToJson :: TTermDefinition (G.DoubleValue -> JM.Value)
 doubleValueToJson = define "doubleValueToJson" $
   doc "Convert a GraphSON DoubleValue to a JSON Value" $
   match G._DoubleValue Nothing [
@@ -349,10 +349,10 @@ Raw function application becomes `@@`:
 f @@ var "x" @@ var "y"
 ```
 
-When calling a `TBinding` (a defined function in the same module), use `@@`:
+When calling a `TTermDefinition` (a defined function in the same module), use `@@`:
 
 ```haskell
--- If you have: myHelper :: TBinding (String -> Int)
+-- If you have: myHelper :: TTermDefinition (String -> Int)
 -- Call it with:
 myHelper @@ var "str"
 
@@ -562,7 +562,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
 
    ```haskell
    -- If you need 'any' but Lists doesn't export it:
-   listAny :: TBinding ((a -> Bool) -> [a] -> Bool)
+   listAny :: TTermDefinition ((a -> Bool) -> [a] -> Bool)
    listAny = define "listAny" $
      "pred" ~> "xs" ~>
        Logic.not $ Lists.null $ Lists.filter (var "pred") (var "xs")
@@ -590,19 +590,19 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
    This is because `inject` returns a `TTerm b`, not a curried `TTerm (a -> b)`.
    Other functions like `wrap` follow the same pattern.
 
-10. **`TBinding` vs `TTerm`**: A `TBinding a` value must be explicitly converted with `asTerm` when used in a context
+10. **`TTermDefinition` vs `TTerm`**: A `TTermDefinition a` value must be explicitly converted with `asTerm` when used in a context
     expecting `TTerm a`. This comes up when passing module-level configuration bindings to DSL functions like
     `Logic.and` or `Equality.equal`:
 
     ```haskell
-    -- If you have: useInlineTypeParams :: TBinding Bool
+    -- If you have: useInlineTypeParams :: TTermDefinition Bool
     -- Wrong:
     Logic.and useInlineTypeParams (var "flag")
     -- Correct:
     Logic.and (asTerm useInlineTypeParams) (var "flag")
     ```
 
-    Note: `TBinding` values work fine with `@@` (application) without conversion, since `@@` has an `AsTerm` constraint.
+    Note: `TTermDefinition` values work fine with `@@` (application) without conversion, since `@@` has an `AsTerm` constraint.
     The issue only arises with DSL functions that expect `TTerm` directly.
 
 11. **Wrapping Haskell-level DSL functions in lambdas for higher-order use**: DSL library functions like `Lists.concat`
@@ -623,7 +623,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     copying all unchanged fields:
 
     ```haskell
-    setMyField :: TBinding (MyRecord -> Int -> MyRecord)
+    setMyField :: TTermDefinition (MyRecord -> Int -> MyRecord)
     setMyField = define "setMyField" $
       "r" ~> "v" ~>
         record _MyRecord [
@@ -632,8 +632,8 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
           _MyRecord_field3>>: project _MyRecord _MyRecord_field3 @@ var "r"]
     ```
 
-13. **Where clauses become separate TBindings**: Haskell `where` clauses have no DSL equivalent.
-    Extract local helper functions into separate top-level `TBinding` definitions and add them to the module's elements
+13. **Where clauses become separate TTermDefinitions**: Haskell `where` clauses have no DSL equivalent.
+    Extract local helper functions into separate top-level `TTermDefinition` definitions and add them to the module's elements
     list.
 
 14. **Constructing syntax types without DSL helpers**: Not all generated types have convenience constructors in DSL
@@ -660,8 +660,8 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     consumers don't need changes:
 
     ```haskell
-    module Hydra.Ext.Staging.Java.Utils (
-      module Hydra.Ext.Staging.Java.Utils,
+    module Hydra.Ext.Java.Utils (
+      module Hydra.Ext.Java.Utils,
       module Hydra.Ext.Java.Helpers,
       module Hydra.Ext.Java.Utils,
       ) where
@@ -770,7 +770,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
 - [ ] Build empty module to verify structure compiles
 - [ ] Promote functions one at a time, testing after each:
   - [ ] Translate function into DSL
-  - [ ] Add to module's elements list
+  - [ ] Add to module's `definitions` list
   - [ ] Regenerate target code
   - [ ] Comment out original staging function
   - [ ] Import and use generated version
@@ -783,30 +783,30 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
 
     ```haskell
     -- Full definition for encodeTerm (calls encodeApplication)
-    encodeTerm :: TBinding (...)
+    encodeTerm :: TTermDefinition (...)
     encodeTerm = def "encodeTerm" $
       lambda "env" $ lambda "term" $
         ... encodeApplication @@ var "env" @@ var "app" ...
 
     -- Stub for encodeApplication (not yet promoted)
-    encodeApplication :: TBinding (...)
+    encodeApplication :: TTermDefinition (...)
     encodeApplication = def "encodeApplication" $
       lambda "env" $ lambda "app" $
         Monads.unexpected @@ string "encodeApplication stub" @@ string "encodeApplication"
     ```
 
-    All stubs must appear in the module's elements list.
+    All stubs must appear in the module's `definitions` list.
     As you promote each function, replace its stub with the real implementation.
     The generated code will compile and work correctly for the promoted functions,
     while any path that hits a stub will fail with a clear error message.
 
     **Extracting nested helpers**: Complex staging functions often have `where`-clause helpers that capture closed-over
-    variables. When promoting, extract these into separate top-level `TBinding` definitions,
-    passing the captured variables as explicit parameters. Add the extracted helpers to the elements list.
+    variables. When promoting, extract these into separate top-level `TTermDefinition` definitions,
+    passing the captured variables as explicit parameters. Add the extracted helpers to the `definitions` list.
 
     **Fallback pattern**: When a function has complex nested case analysis (e.g.,
     `encodeApplication` has a `fallback` helper),
-    extract the fallback logic into a separate `TBinding` with an explicit name like `encodeApplication_fallback`.
+    extract the fallback logic into a separate `TTermDefinition` with an explicit name like `encodeApplication_fallback`.
     This simplifies the main function and creates a clean separation of concerns.
 
 22. **DSL function availability pitfalls**: When translating Haskell code to DSL,
@@ -849,7 +849,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     "prims" <~ Graph.graphPrimitives (var "g") $
     ```
 
-    Note: `Graph.graphPrimitives`, `Graph.primitiveType`, etc. are Haskell-level DSL helpers (not `TBinding`s),
+    Note: `Graph.graphPrimitives`, `Graph.primitiveType`, etc. are Haskell-level DSL helpers (not `TTermDefinition`s),
     so they take direct arguments without `@@`.
 
 25. **`Arity` module**: The `typeArity` function for computing function type arity is in
@@ -869,7 +869,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
 
 27. **Extracting large `where`-clause helpers**: When promoting complex functions like `encodeElimination` or
     `bindingsToStatements`, extract substantial `where`-clause helpers (e.g., `otherwiseBranch`, `visitBranch`,
-    `toDeclInit`, `toDeclStatement`) as separate TBindings.
+    `toDeclInit`, `toDeclStatement`) as separate TTermDefinitions.
     Pass shared state (like `aliases`, `tcExtended`, `recursiveVars`) as explicit parameters.
     This makes each TBinding manageable and independently testable.
 
@@ -904,7 +904,7 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     `JavaUtilsSource.javaMethodInvocationToJavaPrimary`) that handles the wrapping,
     rather than constructing the Primary inline.
 
-35. **`Rewriting.deannotateType` is a TBinding**: Like other TBindings,
+35. **`Rewriting.deannotateType` is a TBinding**: Like other TTermDefinitions,
     it must be applied with `@@`: `Rewriting.deannotateType @@ var "t"`, NOT `Rewriting.deannotateType (var "t")`.
 
 36. **Naming collisions with kernel imports**: If your TBinding name (e.g.,
@@ -1072,7 +1072,7 @@ Key differences from promoting terms:
 - Use `>:` for field definitions (name `>:` type)
 - Reference other type bindings (e.g., `Module.module'` for the `Module` type) — note that `module'` is the
   *type binding*, while `module_` is the Haskell `Module` value for the module definition
-- Add the new binding to the module's elements list
+- Add the new binding to the module's `definitions` list
 - After regeneration, the type appears in `gen-main` with field names prefixed by the type name
   (e.g., `testGeneratorNamespacesForModule`)
 
@@ -1098,15 +1098,15 @@ The promoted DSL version in `Hydra.Sources.Kernel.Lib.Names`:
 
 ```haskell
 -- Namespace constants
-defineNs :: String -> String -> TBinding Namespace
+defineNs :: String -> String -> TTermDefinition Namespace
 defineNs name nsStr = define name $
   wrap _Namespace $ string nsStr
 
-lists :: TBinding Namespace
+lists :: TTermDefinition Namespace
 lists = defineNs "lists" "hydra.lib.lists"
 
 -- Name constants
-defineName :: String -> String -> String -> TBinding Name
+defineName :: String -> String -> String -> TTermDefinition Name
 defineName name nsStr localName = define name $
   wrap _Name $ string (nsStr <> "." <> localName)
 
