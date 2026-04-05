@@ -394,7 +394,7 @@ In a namespace rename from `hydra.foo` to `hydra.foo.bar`:
 - `src/gen-test/haskell/Hydra/Test/Foo/*.hs` (generated test files)
 
 **hydra-ext:**
-- `src/main/haskell/Hydra/Ext/Staging/*/Coder.hs` (various coders)
+- `src/main/haskell/Hydra/Ext/*/Coder.hs` (various coders)
 - `src/gen-main/haskell/Hydra/Ext/*/*.hs` (generated files)
 
 **hydra-python:**

@@ -146,19 +146,19 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 ns :: Namespace
 ns = Namespace "hydra.eval.lib.eithers"
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Monads.module_, ShowCore.module_]
     kernelTypesModules $
     Just "Evaluation-level implementations of Either functions."
   where
-    elements = [toBinding bimap_]
+    definitions = [toDefinition bimap_]
 
 -- | Interpreter-friendly bimap for Either terms.
-bimap_ :: TBinding (Term -> Term -> Term -> Flow s Term)
+bimap_ :: TTermDefinition (Term -> Term -> Term -> Flow s Term)
 bimap_ = define "bimap" $
   doc "Interpreter-friendly bimap for Either terms." $
   "leftFun" ~> "rightFun" ~> "eitherTerm" ~>

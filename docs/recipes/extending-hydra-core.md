@@ -252,7 +252,7 @@ Without adding your constructor here, code generation will fail with "No such fi
 > Use descriptive names like `pairFst`, `pairSnd`, `listHead`, etc.
 
 ```haskell
-inferTypeOfEitherDef :: TBinding (InferenceContext -> Prelude.Either Term Term -> Either (InContext OtherError) InferenceResult)
+inferTypeOfEitherDef :: TTermDefinition (InferenceContext -> Prelude.Either Term Term -> Either (InContext OtherError) InferenceResult)
 inferTypeOfEitherDef = define "inferTypeOfEither" $
   doc "Infer the type of an either value" $
   "cx" ~> "e" ~>
@@ -294,10 +294,10 @@ _Term_either>>: "e" ~> ref inferTypeOfEitherDef @@ var "cx" @@ var "e",
 
 #### 3.3: Register in Module Exports
 
-In the `elements` list (around line 69), add:
+In the `definitions` list (around line 69), add:
 
 ```haskell
-elements = [
+definitions = [
   el bindConstraintsDef,
   -- ...
   el inferTypeOfDef,
@@ -324,7 +324,7 @@ import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
 Type checking reconstructs types from terms that already have type applications (added during inference).
 
 ```haskell
-typeOfEitherDef :: TBinding (TypeContext -> [Type] -> Prelude.Either Term Term -> Either (InContext OtherError) Type)
+typeOfEitherDef :: TTermDefinition (TypeContext -> [Type] -> Prelude.Either Term Term -> Either (InContext OtherError) Type)
 typeOfEitherDef = define "typeOfEither" $
   doc "Reconstruct the type of an either value" $
   "tx" ~> "typeArgs" ~> "et" ~>
@@ -347,7 +347,7 @@ typeOfEitherDef = define "typeOfEither" $
     (var "et"))
 ```
 
-Add case to main checking function and register in elements list, similar to inference.
+Add case to main checking function and register in `definitions` list, similar to inference.
 
 ---
 
@@ -798,7 +798,7 @@ stack test
 | `No such field: pair` during code generation | Missing from TermVariant/TypeVariant enums in Meta module | **CRITICAL:** Add to `TermVariant` and `TypeVariant` enum definitions in `src/main/haskell/Hydra/Sources/Kernel/Types/Meta.hs` |
 | `Variable not in scope: fst` compilation error | Variable name clashes with Prelude function | Use descriptive names: `pairFst`, `pairSnd`, not `fst`, `snd` |
 | `No such field: either` | Term union missing the constructor in Core schema | Add to `src/main/haskell/Hydra/Sources/Kernel/Types/Core.hs` |
-| `Variable not bound to type: hydra.inference.inferTypeOfX` | Function not registered in module exports | Add `el inferTypeOfXDef` to elements list |
+| `Variable not bound to type: hydra.inference.inferTypeOfX` | Function not registered in module exports | Add `toDefinition inferTypeOfXDef` to `definitions` list |
 | Using `cases _Either` on built-in types | Confusion between Hydra unions and Haskell types | Use library functions (`Eithers.either_`) for Haskell built-ins |
 | `unexpected type: either<...>` in codegen | Coder doesn't know how to encode the type | Manually patch `Hydra/Ext/Haskell/Coder.hs` |
 | Type signature mismatch | Using wrong bind operations | Use `Eithers.bind` for Either binds, `<~` for pure lets |
@@ -868,14 +868,14 @@ stack test
 - [ ] `src/main/haskell/Hydra/Sources/Kernel/Terms/Inference.hs`
   - [ ] Create `inferTypeOfXDef` function with type applications
   - [ ] Add case to `inferTypeOfTermDef`
-  - [ ] Register in `elements` list
+  - [ ] Register in `definitions` list
   - [ ] Add necessary imports
 
 - [ ] `src/main/haskell/Hydra/Sources/Kernel/Terms/Checking.hs`
   - [ ] Create `typeOfXDef` function
   - [ ] Verify type arguments are provided correctly
   - [ ] Add case to main checking function
-  - [ ] Register in `elements` list
+  - [ ] Register in `definitions` list
   - [ ] Add necessary imports
 
 - [ ] `src/main/haskell/Hydra/Sources/Kernel/Terms/Rewriting.hs`
