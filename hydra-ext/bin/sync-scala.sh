@@ -101,7 +101,7 @@ if [ "$QUICK_MODE" = false ]; then
     echo "Step 4/$TOTAL_STEPS: Compiling and testing Scala..."
     echo ""
     cd "$HYDRA_SCALA_DIR"
-    sbt compile
+    sbt test
     cd "$HYDRA_EXT_DIR"
 else
     echo ""
