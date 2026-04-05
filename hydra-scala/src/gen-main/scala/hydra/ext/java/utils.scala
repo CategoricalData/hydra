@@ -12,28 +12,6 @@ import hydra.ext.java.syntax.*
 
 import hydra.packaging.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.math
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def addExpressions(exprs: Seq[hydra.ext.java.syntax.MultiplicativeExpression]): hydra.ext.java.syntax.AdditiveExpression =
   {
   lazy val first: hydra.ext.java.syntax.AdditiveExpression = hydra.ext.java.syntax.AdditiveExpression.unary(hydra.lib.lists.head[hydra.ext.java.syntax.MultiplicativeExpression](exprs))

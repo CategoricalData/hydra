@@ -4,8 +4,6 @@ import hydra.core.*
 
 import hydra.packaging.*
 
-import hydra.lib.maps
-
 lazy val testContext: hydra.context.Context = hydra.lexical.emptyContext
 
 lazy val testGraph: hydra.graph.Graph = hydra.TestSuiteRunner.buildTestGraph()

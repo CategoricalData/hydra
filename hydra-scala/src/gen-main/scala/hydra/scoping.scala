@@ -4,14 +4,6 @@ import hydra.core.*
 
 import hydra.graph.*
 
-import hydra.lib.lists
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.sets
-
 def extendGraphForLambda(g: hydra.graph.Graph)(lam: hydra.core.Lambda): hydra.graph.Graph =
   {
   lazy val `var`: hydra.core.Name = (lam.parameter)

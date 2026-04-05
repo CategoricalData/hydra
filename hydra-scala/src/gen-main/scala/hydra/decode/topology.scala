@@ -6,8 +6,6 @@ import hydra.errors.*
 
 import hydra.topology.*
 
-import hydra.lib.eithers
-
 def graph(v1: hydra.graph.Graph)(v2: hydra.core.Term): Either[hydra.errors.DecodingError, Map[Int, Seq[Int]]] =
   hydra.extract.core.decodeMap(hydra.decode.topology.vertex)((v12: hydra.graph.Graph) =>
   (v22: hydra.core.Term) =>

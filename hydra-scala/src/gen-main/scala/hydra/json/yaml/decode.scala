@@ -4,14 +4,6 @@ import hydra.ext.org.yaml.model.*
 
 import hydra.json.model.*
 
-import hydra.lib.eithers
-
-import hydra.lib.literals
-
-import hydra.lib.maps
-
-import hydra.lib.pairs
-
 def fromYaml(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Name)(typ: hydra.core.Type)(node: hydra.ext.org.yaml.model.Node): Either[scala.Predef.String,
    hydra.core.Term] =
   {

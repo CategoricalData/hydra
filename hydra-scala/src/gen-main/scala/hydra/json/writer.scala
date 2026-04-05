@@ -4,22 +4,6 @@ import hydra.ast.*
 
 import hydra.json.model.*
 
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.math
-
-import hydra.lib.pairs
-
-import hydra.lib.strings
-
 lazy val colonOp: hydra.ast.Op = hydra.ast.Op(":", hydra.ast.Padding(hydra.ast.Ws.none, hydra.ast.Ws.space), 0, hydra.ast.Associativity.none)
 
 def jsonString(s: scala.Predef.String): scala.Predef.String =

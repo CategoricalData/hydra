@@ -27,7 +27,7 @@
                                     "typeApplication": {
                                       "body": {
                                         "typeApplication": {
-                                          "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                          "body": {"variable": "hydra.lib.lists.map"},
                                           "type": {"variable": "hydra.core.Binding"}}},
                                       "type": {"literal": {"string": {}}}}}}}}},
                           "type": {"type": {"list": {"literal": {"string": {}}}}, "variables": []}}],
@@ -42,9 +42,9 @@
                                   "function": {
                                     "application": {
                                       "argument": {"literal": {"string": ", "}},
-                                      "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}},
+                                      "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
                               {"literal": {"string": "}"}}]},
-                          "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}}}},
+                          "function": {"variable": "hydra.lib.strings.cat"}}}}},
                   "domain": {"list": {"variable": "hydra.core.Binding"}},
                   "parameter": "elements"}}}}},
         "type": {

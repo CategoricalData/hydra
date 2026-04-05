@@ -4,26 +4,6 @@ import hydra.core.*
 
 import hydra.json.model.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def encodeFloat[T0](fv: hydra.core.FloatValue): Either[T0, hydra.json.model.Value] =
   fv match
   case hydra.core.FloatValue.bigfloat(v_FloatValue_bigfloat_bf) => Right(hydra.json.model.Value.number(v_FloatValue_bigfloat_bf))

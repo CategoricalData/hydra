@@ -8,18 +8,6 @@ import hydra.testing.*
 
 import hydra.util.*
 
-import hydra.lib.eithers
-
-import hydra.lib.lists
-
-import hydra.lib.logic
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.strings
-
 def addGenerationPrefix(`ns_`: hydra.packaging.Namespace): hydra.packaging.Namespace = hydra.lib.strings.cat2("generation.")(`ns_`)
 
 def buildConvertCaseCall(fromConv: hydra.util.CaseConvention)(toConv: hydra.util.CaseConvention)(`input_`: scala.Predef.String): hydra.core.Term =

@@ -97,11 +97,11 @@ alter_ = define "alter" $
       right $ Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
           (Core.termApplication $ Core.application
-            (Core.termFunction $ Core.functionPrimitive $ encodedName _maybes_maybe)
+            (Core.termVariable $ encodedName _maybes_maybe)
             -- default: delete key from map
             (Core.termApplication $ Core.application
               (Core.termApplication $ Core.application
-                (Core.termFunction $ Core.functionPrimitive $ encodedName _maps_delete)
+                (Core.termVariable $ encodedName _maps_delete)
                 (var "keyTerm"))
               (var "mapTerm")))
           -- function: insert new value (as a term-level lambda)
@@ -109,7 +109,7 @@ alter_ = define "alter" $
             Core.termApplication $ Core.application
               (Core.termApplication $ Core.application
                 (Core.termApplication $ Core.application
-                  (Core.termFunction $ Core.functionPrimitive $ encodedName _maps_insert)
+                  (Core.termVariable $ encodedName _maps_insert)
                   (var "keyTerm"))
                 (Core.termVariable $ wrap _Name $ string "newV"))
               (var "mapTerm")))
@@ -150,16 +150,16 @@ filter_ = define "filter" $
       "pairs" <~ Maps.toList (var "m") $
       -- Build: fromList (concat (map (\(k,v) -> if valPred v then [(k,v)] else []) pairs))
       right $ Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _maps_fromList)
+        (Core.termVariable $ encodedName _maps_fromList)
         (Core.termApplication $ Core.application
-          (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat)
+          (Core.termVariable $ encodedName _lists_concat)
           (Core.termList $ Lists.map
             ("p" ~>
               "v" <~ Pairs.second (var "p") $
               Core.termApplication $ Core.application
                 (Core.termApplication $ Core.application
                   (Core.termApplication $ Core.application
-                    (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+                    (Core.termVariable $ encodedName _logic_ifElse)
                     (Core.termApplication $ Core.application (var "valPred") (var "v")))
                   (Core.termList $ Lists.pure $ Core.termPair $ pair (Pairs.first $ var "p") (var "v")))
                 (Core.termList $ list ([] :: [TTerm Term])))
@@ -178,9 +178,9 @@ filterWithKey_ = define "filterWithKey" $
       "pairs" <~ Maps.toList (var "m") $
       -- Build: fromList (concat (map (\(k,v) -> if pred k v then [(k,v)] else []) pairs))
       right $ Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _maps_fromList)
+        (Core.termVariable $ encodedName _maps_fromList)
         (Core.termApplication $ Core.application
-          (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat)
+          (Core.termVariable $ encodedName _lists_concat)
           (Core.termList $ Lists.map
             ("p" ~>
               "k" <~ Pairs.first (var "p") $
@@ -188,7 +188,7 @@ filterWithKey_ = define "filterWithKey" $
               Core.termApplication $ Core.application
                 (Core.termApplication $ Core.application
                   (Core.termApplication $ Core.application
-                    (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+                    (Core.termVariable $ encodedName _logic_ifElse)
                     (Core.termApplication $ Core.application
                       (Core.termApplication $ Core.application (var "pred") (var "k"))
                       (var "v")))
@@ -206,11 +206,11 @@ findWithDefault_ = define "findWithDefault" $
   -- Build: fromMaybe default (lookup key map)
   right $ Core.termApplication $ Core.application
     (Core.termApplication $ Core.application
-      (Core.termFunction $ Core.functionPrimitive $ encodedName _maybes_fromMaybe)
+      (Core.termVariable $ encodedName _maybes_fromMaybe)
       (var "defaultTerm"))
     (Core.termApplication $ Core.application
       (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _maps_lookup)
+        (Core.termVariable $ encodedName _maps_lookup)
         (var "keyTerm"))
       (var "mapTerm"))
 

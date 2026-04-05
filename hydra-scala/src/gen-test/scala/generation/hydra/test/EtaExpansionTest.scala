@@ -15,9 +15,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.strings.toLower!) == (
+      hydra.lib.strings.toLower) == (
 
-      hydra.lib.strings.toLower!))
+      hydra.lib.strings.toLower))
 
   }
 
@@ -25,9 +25,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.strings.splitOn!) == (
+      hydra.lib.strings.splitOn) == (
 
-      hydra.lib.strings.splitOn!))
+      hydra.lib.strings.splitOn))
 
   }
 
@@ -37,9 +37,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      λv1.(hydra.lib.strings.splitOn! @ "foo" @ v1)) == (
+      λv1.(hydra.lib.strings.splitOn @ "foo" @ v1)) == (
 
-      λv1.(hydra.lib.strings.splitOn! @ "foo" @ v1)))
+      λv1.(hydra.lib.strings.splitOn @ "foo" @ v1)))
 
   }
 
@@ -47,9 +47,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      λv1.λv2.(hydra.lib.lists.foldl! @ f @ v1 @ v2)) == (
+      λv1.λv2.(hydra.lib.lists.foldl @ f @ v1 @ v2)) == (
 
-      λv1.λv2.(hydra.lib.lists.foldl! @ f @ v1 @ v2)))
+      λv1.λv2.(hydra.lib.lists.foldl @ f @ v1 @ v2)))
 
   }
 
@@ -59,9 +59,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      (hydra.lib.strings.toLower! @ "FOO")) == (
+      (hydra.lib.strings.toLower @ "FOO")) == (
 
-      (hydra.lib.strings.toLower! @ "FOO")))
+      (hydra.lib.strings.toLower @ "FOO")))
 
   }
 
@@ -69,9 +69,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      (hydra.lib.strings.splitOn! @ "," @ "a,b,c")) == (
+      (hydra.lib.strings.splitOn @ "," @ "a,b,c")) == (
 
-      (hydra.lib.strings.splitOn! @ "," @ "a,b,c")))
+      (hydra.lib.strings.splitOn @ "," @ "a,b,c")))
 
   }
 
@@ -117,9 +117,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      [λv1.(project(Person){firstName} @ v1), hydra.lib.strings.toLower!]) == (
+      [λv1.(project(Person){firstName} @ v1), hydra.lib.strings.toLower]) == (
 
-      [λv1.(project(Person){firstName} @ v1), hydra.lib.strings.toLower!]))
+      [λv1.(project(Person){firstName} @ v1), hydra.lib.strings.toLower]))
 
   }
 
@@ -159,9 +159,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      (project(Triple){first}⟨(string → string)⟩⟨string⟩⟨string⟩ @ record(Triple){first=hydra.lib.strings.toLower!, second="middle", third="last"}⟨(string → string)⟩⟨string⟩⟨string⟩ @ "DATA")) == (
+      (project(Triple){first}⟨(string → string)⟩⟨string⟩⟨string⟩ @ record(Triple){first=hydra.lib.strings.toLower, second="middle", third="last"}⟨(string → string)⟩⟨string⟩⟨string⟩ @ "DATA")) == (
 
-      (project(Triple){first}⟨(string → string)⟩⟨string⟩⟨string⟩ @ record(Triple){first=hydra.lib.strings.toLower!, second="middle", third="last"}⟨(string → string)⟩⟨string⟩⟨string⟩ @ "DATA")))
+      (project(Triple){first}⟨(string → string)⟩⟨string⟩⟨string⟩ @ record(Triple){first=hydra.lib.strings.toLower, second="middle", third="last"}⟨(string → string)⟩⟨string⟩⟨string⟩ @ "DATA")))
 
   }
 
@@ -183,9 +183,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      let partial:(((string → list<string>))) = λv1.(hydra.lib.strings.splitOn! @ "foo" @ v1) in partial) == (
+      let partial:(((string → list<string>))) = λv1.(hydra.lib.strings.splitOn @ "foo" @ v1) in partial) == (
 
-      let partial:(((string → list<string>))) = λv1.(hydra.lib.strings.splitOn! @ "foo" @ v1) in partial))
+      let partial:(((string → list<string>))) = λv1.(hydra.lib.strings.splitOn @ "foo" @ v1) in partial))
 
   }
 
@@ -215,9 +215,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      let id:((forall a. (a → a))) = Λa.λx.x in (id⟨(string → string → list<string>)⟩ @ hydra.lib.strings.splitOn!)) == (
+      let id:((forall a. (a → a))) = Λa.λx.x in (id⟨(string → string → list<string>)⟩ @ hydra.lib.strings.splitOn)) == (
 
-      let id:((forall a. (a → a))) = Λa.λx.x in (id⟨(string → string → list<string>)⟩ @ hydra.lib.strings.splitOn!)))
+      let id:((forall a. (a → a))) = Λa.λx.x in (id⟨(string → string → list<string>)⟩ @ hydra.lib.strings.splitOn)))
 
   }
 
@@ -225,9 +225,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      let id:((forall a. (a → a))) = Λa.λx.x in (id⟨(string → list<string>)⟩ @ λv1.(hydra.lib.strings.splitOn! @ "," @ v1))) == (
+      let id:((forall a. (a → a))) = Λa.λx.x in (id⟨(string → list<string>)⟩ @ λv1.(hydra.lib.strings.splitOn @ "," @ v1))) == (
 
-      let id:((forall a. (a → a))) = Λa.λx.x in (id⟨(string → list<string>)⟩ @ λv1.(hydra.lib.strings.splitOn! @ "," @ v1))))
+      let id:((forall a. (a → a))) = Λa.λx.x in (id⟨(string → list<string>)⟩ @ λv1.(hydra.lib.strings.splitOn @ "," @ v1))))
 
   }
 
@@ -235,9 +235,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      let id:((forall a. (a → a))) = Λa.λx.x in (id⟨list<string>⟩ @ (hydra.lib.strings.splitOn! @ "," @ "foo,bar"))) == (
+      let id:((forall a. (a → a))) = Λa.λx.x in (id⟨list<string>⟩ @ (hydra.lib.strings.splitOn @ "," @ "foo,bar"))) == (
 
-      let id:((forall a. (a → a))) = Λa.λx.x in (id⟨list<string>⟩ @ (hydra.lib.strings.splitOn! @ "," @ "foo,bar"))))
+      let id:((forall a. (a → a))) = Λa.λx.x in (id⟨list<string>⟩ @ (hydra.lib.strings.splitOn @ "," @ "foo,bar"))))
 
   }
 
@@ -245,9 +245,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      let id:((forall a. (a → a))) = Λa.λx.x in λv1.(id⟨(string → string → list<string>)⟩ @ hydra.lib.strings.splitOn! @ "," @ v1)) == (
+      let id:((forall a. (a → a))) = Λa.λx.x in λv1.(id⟨(string → string → list<string>)⟩ @ hydra.lib.strings.splitOn @ "," @ v1)) == (
 
-      let id:((forall a. (a → a))) = Λa.λx.x in λv1.(id⟨(string → string → list<string>)⟩ @ hydra.lib.strings.splitOn! @ "," @ v1)))
+      let id:((forall a. (a → a))) = Λa.λx.x in λv1.(id⟨(string → string → list<string>)⟩ @ hydra.lib.strings.splitOn @ "," @ v1)))
 
   }
 
@@ -255,9 +255,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      let id:((forall a. (a → a))) = Λa.λx.x in (id⟨(string → string → list<string>)⟩ @ hydra.lib.strings.splitOn! @ "," @ "foo,bar")) == (
+      let id:((forall a. (a → a))) = Λa.λx.x in (id⟨(string → string → list<string>)⟩ @ hydra.lib.strings.splitOn @ "," @ "foo,bar")) == (
 
-      let id:((forall a. (a → a))) = Λa.λx.x in (id⟨(string → string → list<string>)⟩ @ hydra.lib.strings.splitOn! @ "," @ "foo,bar")))
+      let id:((forall a. (a → a))) = Λa.λx.x in (id⟨(string → string → list<string>)⟩ @ hydra.lib.strings.splitOn @ "," @ "foo,bar")))
 
   }
 
@@ -269,9 +269,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      λx.hydra.lib.strings.splitOn!) == (
+      λx.hydra.lib.strings.splitOn) == (
 
-      λx.hydra.lib.strings.splitOn!))
+      λx.hydra.lib.strings.splitOn))
 
   }
 
@@ -279,9 +279,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      λx.hydra.lib.strings.toLower!) == (
+      λx.hydra.lib.strings.toLower) == (
 
-      λx.hydra.lib.strings.toLower!))
+      λx.hydra.lib.strings.toLower))
 
   }
 
@@ -289,9 +289,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      λx.λv1.(hydra.lib.strings.splitOn! @ "," @ v1)) == (
+      λx.λv1.(hydra.lib.strings.splitOn @ "," @ v1)) == (
 
-      λx.λv1.(hydra.lib.strings.splitOn! @ "," @ v1)))
+      λx.λv1.(hydra.lib.strings.splitOn @ "," @ v1)))
 
   }
 
@@ -299,9 +299,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      λx.(hydra.lib.strings.splitOn! @ "," @ x)) == (
+      λx.(hydra.lib.strings.splitOn @ "," @ x)) == (
 
-      λx.(hydra.lib.strings.splitOn! @ "," @ x)))
+      λx.(hydra.lib.strings.splitOn @ "," @ x)))
 
   }
 
@@ -319,9 +319,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      λx.λy.λv1.(hydra.lib.strings.splitOn! @ x @ v1)) == (
+      λx.λy.λv1.(hydra.lib.strings.splitOn @ x @ v1)) == (
 
-      λx.λy.λv1.(hydra.lib.strings.splitOn! @ x @ v1)))
+      λx.λy.λv1.(hydra.lib.strings.splitOn @ x @ v1)))
 
   }
 
@@ -329,9 +329,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      λx.λy.λz.λv1.(hydra.lib.strings.splitOn! @ x @ v1)) == (
+      λx.λy.λz.λv1.(hydra.lib.strings.splitOn @ x @ v1)) == (
 
-      λx.λy.λz.λv1.(hydra.lib.strings.splitOn! @ x @ v1)))
+      λx.λy.λz.λv1.(hydra.lib.strings.splitOn @ x @ v1)))
 
   }
 
@@ -343,9 +343,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      let helper:(((string → string → string → string))) = λarg1.λarg2.λarg3.(hydra.lib.strings.cat! @ [arg1, arg2, arg3]) in λv1.λv2.(helper @ "foo" @ v1 @ v2)) == (
+      let helper:(((string → string → string → string))) = λarg1.λarg2.λarg3.(hydra.lib.strings.cat @ [arg1, arg2, arg3]) in λv1.λv2.(helper @ "foo" @ v1 @ v2)) == (
 
-      let helper:(((string → string → string → string))) = λarg1.λarg2.λarg3.(hydra.lib.strings.cat! @ [arg1, arg2, arg3]) in λv1.λv2.(helper @ "foo" @ v1 @ v2)))
+      let helper:(((string → string → string → string))) = λarg1.λarg2.λarg3.(hydra.lib.strings.cat @ [arg1, arg2, arg3]) in λv1.λv2.(helper @ "foo" @ v1 @ v2)))
 
   }
 
@@ -353,9 +353,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      let helper:(((string → string → string → string))) = λarg1.λarg2.λarg3.(hydra.lib.strings.cat! @ [arg1, arg2, arg3]) in (hydra.lib.lists.foldl!⟨string⟩⟨string⟩ @ λv1.λv2.(helper @ "foo" @ v1 @ v2) @ "" @ ["bar", "baz"])) == (
+      let helper:(((string → string → string → string))) = λarg1.λarg2.λarg3.(hydra.lib.strings.cat @ [arg1, arg2, arg3]) in (hydra.lib.lists.foldl⟨string⟩⟨string⟩ @ λv1.λv2.(helper @ "foo" @ v1 @ v2) @ "" @ ["bar", "baz"])) == (
 
-      let helper:(((string → string → string → string))) = λarg1.λarg2.λarg3.(hydra.lib.strings.cat! @ [arg1, arg2, arg3]) in (hydra.lib.lists.foldl!⟨string⟩⟨string⟩ @ λv1.λv2.(helper @ "foo" @ v1 @ v2) @ "" @ ["bar", "baz"])))
+      let helper:(((string → string → string → string))) = λarg1.λarg2.λarg3.(hydra.lib.strings.cat @ [arg1, arg2, arg3]) in (hydra.lib.lists.foldl⟨string⟩⟨string⟩ @ λv1.λv2.(helper @ "foo" @ v1 @ v2) @ "" @ ["bar", "baz"])))
 
   }
 
@@ -363,9 +363,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      let tryme:(((string → string → string))) = let helper:(((string → string → string → string))) = λarg1.λarg2.λarg3.(hydra.lib.strings.cat! @ [arg1, arg2, arg3]) in λv1.λv2.(helper @ "foo" @ v1 @ v2) in unit) == (
+      let tryme:(((string → string → string))) = let helper:(((string → string → string → string))) = λarg1.λarg2.λarg3.(hydra.lib.strings.cat @ [arg1, arg2, arg3]) in λv1.λv2.(helper @ "foo" @ v1 @ v2) in unit) == (
 
-      let tryme:(((string → string → string))) = let helper:(((string → string → string → string))) = λarg1.λarg2.λarg3.(hydra.lib.strings.cat! @ [arg1, arg2, arg3]) in λv1.λv2.(helper @ "foo" @ v1 @ v2) in unit))
+      let tryme:(((string → string → string))) = let helper:(((string → string → string → string))) = λarg1.λarg2.λarg3.(hydra.lib.strings.cat @ [arg1, arg2, arg3]) in λv1.λv2.(helper @ "foo" @ v1 @ v2) in unit))
 
   }
 
@@ -441,9 +441,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      let test:((((UnionPolymorphicRecursive @ int32) → string))) = λv1.(case(UnionPolymorphicRecursive){value=λi:int32.(hydra.lib.literals.showInt32! @ i), [default]="other"}⟨int32⟩ @ v1) in test) == (
+      let test:((((UnionPolymorphicRecursive @ int32) → string))) = λv1.(case(UnionPolymorphicRecursive){value=λi:int32.(hydra.lib.literals.showInt32 @ i), [default]="other"}⟨int32⟩ @ v1) in test) == (
 
-      let test:((((UnionPolymorphicRecursive @ int32) → string))) = λv1.(case(UnionPolymorphicRecursive){value=λi:int32.(hydra.lib.literals.showInt32! @ i), [default]="other"}⟨int32⟩ @ v1) in test))
+      let test:((((UnionPolymorphicRecursive @ int32) → string))) = λv1.(case(UnionPolymorphicRecursive){value=λi:int32.(hydra.lib.literals.showInt32 @ i), [default]="other"}⟨int32⟩ @ v1) in test))
 
   }
 
@@ -451,9 +451,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      let test:((string)) = (case(UnionPolymorphicRecursive){value=λi:int32.(hydra.lib.literals.showInt32! @ i), [default]="other"}⟨int32⟩ @ inject(UnionPolymorphicRecursive){value=42:int32}⟨int32⟩) in test) == (
+      let test:((string)) = (case(UnionPolymorphicRecursive){value=λi:int32.(hydra.lib.literals.showInt32 @ i), [default]="other"}⟨int32⟩ @ inject(UnionPolymorphicRecursive){value=42:int32}⟨int32⟩) in test) == (
 
-      let test:((string)) = (case(UnionPolymorphicRecursive){value=λi:int32.(hydra.lib.literals.showInt32! @ i), [default]="other"}⟨int32⟩ @ inject(UnionPolymorphicRecursive){value=42:int32}⟨int32⟩) in test))
+      let test:((string)) = (case(UnionPolymorphicRecursive){value=λi:int32.(hydra.lib.literals.showInt32 @ i), [default]="other"}⟨int32⟩ @ inject(UnionPolymorphicRecursive){value=42:int32}⟨int32⟩) in test))
 
   }
 
@@ -461,9 +461,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      let test:((((UnionPolymorphicRecursive @ int32) → string))) = λx:(UnionPolymorphicRecursive @ int32).(case(UnionPolymorphicRecursive){value=λi:int32.(hydra.lib.literals.showInt32! @ i), [default]="other"}⟨int32⟩ @ x) in test) == (
+      let test:((((UnionPolymorphicRecursive @ int32) → string))) = λx:(UnionPolymorphicRecursive @ int32).(case(UnionPolymorphicRecursive){value=λi:int32.(hydra.lib.literals.showInt32 @ i), [default]="other"}⟨int32⟩ @ x) in test) == (
 
-      let test:((((UnionPolymorphicRecursive @ int32) → string))) = λx:(UnionPolymorphicRecursive @ int32).(case(UnionPolymorphicRecursive){value=λi:int32.(hydra.lib.literals.showInt32! @ i), [default]="other"}⟨int32⟩ @ x) in test))
+      let test:((((UnionPolymorphicRecursive @ int32) → string))) = λx:(UnionPolymorphicRecursive @ int32).(case(UnionPolymorphicRecursive){value=λi:int32.(hydra.lib.literals.showInt32 @ i), [default]="other"}⟨int32⟩ @ x) in test))
 
   }
 
@@ -483,9 +483,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      let handler:(((string → string))) = hydra.lib.strings.toLower! in λv1.(case(UnionMonomorphic){bool=λignored."boolean value", string=λv1.(handler @ v1), unit=λignored."unit value"} @ v1)) == (
+      let handler:(((string → string))) = hydra.lib.strings.toLower in λv1.(case(UnionMonomorphic){bool=λignored."boolean value", string=λv1.(handler @ v1), unit=λignored."unit value"} @ v1)) == (
 
-      let handler:(((string → string))) = hydra.lib.strings.toLower! in λv1.(case(UnionMonomorphic){bool=λignored."boolean value", string=λv1.(handler @ v1), unit=λignored."unit value"} @ v1)))
+      let handler:(((string → string))) = hydra.lib.strings.toLower in λv1.(case(UnionMonomorphic){bool=λignored."boolean value", string=λv1.(handler @ v1), unit=λignored."unit value"} @ v1)))
 
   }
 
@@ -493,9 +493,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      λv1.(case(UnionMonomorphic){bool=λignored."boolean value", string=λv1.(hydra.lib.strings.toLower! @ v1), unit=λignored."unit value"} @ v1)) == (
+      λv1.(case(UnionMonomorphic){bool=λignored."boolean value", string=λv1.(hydra.lib.strings.toLower @ v1), unit=λignored."unit value"} @ v1)) == (
 
-      λv1.(case(UnionMonomorphic){bool=λignored."boolean value", string=λv1.(hydra.lib.strings.toLower! @ v1), unit=λignored."unit value"} @ v1)))
+      λv1.(case(UnionMonomorphic){bool=λignored."boolean value", string=λv1.(hydra.lib.strings.toLower @ v1), unit=λignored."unit value"} @ v1)))
 
   }
 
@@ -503,9 +503,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      let handler = hydra.lib.strings.toLower! in handler) == (
+      let handler = hydra.lib.strings.toLower in handler) == (
 
-      let handler = hydra.lib.strings.toLower! in handler))
+      let handler = hydra.lib.strings.toLower in handler))
 
   }
 
@@ -513,9 +513,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.strings.toLower!) == (
+      hydra.lib.strings.toLower) == (
 
-      hydra.lib.strings.toLower!))
+      hydra.lib.strings.toLower))
 
   }
 
@@ -535,9 +535,9 @@ class EtaExpansionTest extends AnyFunSuite {
 
     assert((
 
-      (project(Triple){third}⟨int32⟩⟨int32⟩⟨(string → string)⟩ @ record(Triple){first=42:int32, second=137:int32, third=λs.(hydra.lib.strings.toLower! @ s)})) == (
+      (project(Triple){third}⟨int32⟩⟨int32⟩⟨(string → string)⟩ @ record(Triple){first=42:int32, second=137:int32, third=λs.(hydra.lib.strings.toLower @ s)})) == (
 
-      (project(Triple){third}⟨int32⟩⟨int32⟩⟨(string → string)⟩ @ record(Triple){first=42:int32, second=137:int32, third=λs.(hydra.lib.strings.toLower! @ s)})))
+      (project(Triple){third}⟨int32⟩⟨int32⟩⟨(string → string)⟩ @ record(Triple){first=42:int32, second=137:int32, third=λs.(hydra.lib.strings.toLower @ s)})))
 
   }
 }

@@ -2,22 +2,6 @@ package hydra.sorting
 
 import hydra.topology.*
 
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.math
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
 def adjacencyListToMap[T0, T1](pairs: Seq[Tuple2[T0, Seq[T1]]]): Map[T0, Seq[T1]] =
   hydra.lib.lists.foldl[Map[T0, Seq[T1]], Tuple2[T0, Seq[T1]]]((mp: Map[T0, Seq[T1]]) =>
   (p: Tuple2[T0, Seq[T1]]) =>

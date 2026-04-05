@@ -74,7 +74,7 @@
                                                         "argument": {"variable": "out"},
                                                         "function": {
                                                           "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
                                                             "type": {"maybe": {"variable": "hydra.json.model.Value"}}}}}}}}}}}},
                                         "type": {"literal": {"string": {}}}}},
                                     "type": {"maybe": {"variable": "hydra.json.model.Value"}}}},
@@ -111,7 +111,7 @@
                                                         "argument": {"variable": "out"},
                                                         "function": {
                                                           "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
                                                             "type": {"maybe": {"variable": "hydra.json.model.Value"}}}}}}}}}}}},
                                         "type": {"literal": {"string": {}}}}},
                                     "type": {"maybe": {"variable": "hydra.json.model.Value"}}}},
@@ -177,7 +177,7 @@
                                     "term": {
                                       "application": {
                                         "argument": {"variable": "d"},
-                                        "function": {"function": {"primitive": "hydra.lib.literals.float64ToBigfloat"}}}}},
+                                        "function": {"variable": "hydra.lib.literals.float64ToBigfloat"}}}},
                                   "typeName": "hydra.json.model.Value"}},
                               "domain": {"literal": {"float": {"float64": {}}}},
                               "parameter": "d"}}}},
@@ -256,7 +256,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"function": {"primitive": "hydra.lib.maps.toList"}},
+                                                        "body": {"variable": "hydra.lib.maps.toList"},
                                                         "type": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"}}},
                                                     "type": {"list": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}}}}}},
                                             "function": {
@@ -279,7 +279,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                  "body": {"variable": "hydra.lib.pairs.first"},
                                                                                   "type": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"}}},
                                                                               "type": {"list": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}}}}}},
                                                                       "function": {
@@ -297,7 +297,7 @@
                                                                                   "typeApplication": {
                                                                                     "body": {
                                                                                       "typeApplication": {
-                                                                                        "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                        "body": {"variable": "hydra.lib.pairs.second"},
                                                                                         "type": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"}}},
                                                                                     "type": {"list": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}}}}}},
                                                                             "function": {
@@ -310,7 +310,7 @@
                                                                                   "typeApplication": {
                                                                                     "body": {
                                                                                       "typeApplication": {
-                                                                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                        "body": {"variable": "hydra.lib.lists.map"},
                                                                                         "type": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}}},
                                                                                     "type": {"variable": "hydra.json.model.Value"}}}}}}}},
                                                                       "typeName": "hydra.json.model.Value"}}}},
@@ -325,7 +325,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                        "body": {"variable": "hydra.lib.lists.map"},
                                                         "type": {
                                                           "pair": {
                                                             "first": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"},
@@ -338,7 +338,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
-                                                "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
+                                                "body": {"variable": "hydra.lib.maps.fromList"},
                                                 "type": {"literal": {"string": {}}}}},
                                             "type": {"variable": "hydra.json.model.Value"}}}}}},
                                   "typeName": "hydra.json.model.Value"}}},
@@ -357,12 +357,12 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
-                                                "body": {"function": {"primitive": "hydra.lib.maps.null"}},
+                                                "body": {"variable": "hydra.lib.maps.null"},
                                                 "type": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"}}},
                                             "type": {"list": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}}}}}},
                                     "function": {
                                       "typeApplication": {
-                                        "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                        "body": {"variable": "hydra.lib.logic.ifElse"},
                                         "type": {"maybe": {"variable": "hydra.json.model.Value"}}}}}}}}}},
                         "domain": {
                           "map": {
@@ -415,7 +415,7 @@
                                             "typeApplication": {
                                               "body": {
                                                 "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.maps.toList"}},
+                                                  "body": {"variable": "hydra.lib.maps.toList"},
                                                   "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
                                               "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}},
                                       "function": {
@@ -438,7 +438,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                            "body": {"variable": "hydra.lib.pairs.first"},
                                                                             "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
                                                                         "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}},
                                                                 "function": {
@@ -452,7 +452,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                            "body": {"variable": "hydra.lib.pairs.second"},
                                                                             "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
                                                                         "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}},
                                                                 "function": {"variable": "hydra.pg.graphson.coder.valueToJson"}}}}},
@@ -467,7 +467,7 @@
                                             "typeApplication": {
                                               "body": {
                                                 "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                   "type": {
                                                     "pair": {
                                                       "first": {"variable": "hydra.pg.graphson.syntax.PropertyKey"},
@@ -480,7 +480,7 @@
                                     "typeApplication": {
                                       "body": {
                                         "typeApplication": {
-                                          "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
+                                          "body": {"variable": "hydra.lib.maps.fromList"},
                                           "type": {"literal": {"string": {}}}}},
                                       "type": {"variable": "hydra.json.model.Value"}}}}}},
                             "typeName": "hydra.json.model.Value"}}},
@@ -499,12 +499,12 @@
                                     "typeApplication": {
                                       "body": {
                                         "typeApplication": {
-                                          "body": {"function": {"primitive": "hydra.lib.maps.null"}},
+                                          "body": {"variable": "hydra.lib.maps.null"},
                                           "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
                                       "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}},
                               "function": {
                                 "typeApplication": {
-                                  "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                  "body": {"variable": "hydra.lib.logic.ifElse"},
                                   "type": {"maybe": {"variable": "hydra.json.model.Value"}}}}}}}}}},
                   "domain": {
                     "map": {
@@ -547,7 +547,7 @@
                                     "term": {
                                       "application": {
                                         "argument": {"variable": "f"},
-                                        "function": {"function": {"primitive": "hydra.lib.literals.float32ToBigfloat"}}}}},
+                                        "function": {"variable": "hydra.lib.literals.float32ToBigfloat"}}}},
                                   "typeName": "hydra.json.model.Value"}},
                               "domain": {"literal": {"float": {"float32": {}}}},
                               "parameter": "f"}}}},
@@ -651,12 +651,12 @@
                                       "typeApplication": {
                                         "body": {
                                           "typeApplication": {
-                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                            "body": {"variable": "hydra.lib.lists.map"},
                                             "type": {"variable": "hydra.pg.graphson.syntax.ValuePair"}}},
                                         "type": {"list": {"variable": "hydra.json.model.Value"}}}}}}}},
                             "function": {
                               "typeApplication": {
-                                "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                "body": {"variable": "hydra.lib.lists.concat"},
                                 "type": {"variable": "hydra.json.model.Value"}}}}}},
                       "typeName": "hydra.json.model.Value"}},
                   "domain": {"variable": "hydra.pg.graphson.syntax.Map"},
@@ -706,7 +706,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                              "body": {"variable": "hydra.lib.pairs.second"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"maybe": {"variable": "hydra.json.model.Value"}}}}}},
                                                   "function": {
@@ -727,7 +727,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {
                                                                                   "typeApplication": {
-                                                                                    "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                    "body": {"variable": "hydra.lib.pairs.first"},
                                                                                     "type": {"literal": {"string": {}}}}},
                                                                                 "type": {"maybe": {"variable": "hydra.json.model.Value"}}}}}},
                                                                         "@second": {"variable": "v"}}},
@@ -739,7 +739,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                              "body": {"variable": "hydra.lib.maybes.map"},
                                                               "type": {"variable": "hydra.json.model.Value"}}},
                                                           "type": {
                                                             "pair": {
@@ -754,7 +754,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
-                                                "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                "body": {"variable": "hydra.lib.lists.map"},
                                                 "type": {
                                                   "pair": {
                                                     "first": {"literal": {"string": {}}},
@@ -766,7 +766,7 @@
                                                   "second": {"variable": "hydra.json.model.Value"}}}}}}}}}},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"function": {"primitive": "hydra.lib.maybes.cat"}},
+                                    "body": {"variable": "hydra.lib.maybes.cat"},
                                     "type": {
                                       "pair": {
                                         "first": {"literal": {"string": {}}},
@@ -775,7 +775,7 @@
                               "typeApplication": {
                                 "body": {
                                   "typeApplication": {
-                                    "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
+                                    "body": {"variable": "hydra.lib.maps.fromList"},
                                     "type": {"literal": {"string": {}}}}},
                                 "type": {"variable": "hydra.json.model.Value"}}}}}},
                       "typeName": "hydra.json.model.Value"}},
@@ -904,7 +904,7 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "i"},
-                                            "function": {"function": {"primitive": "hydra.lib.literals.bigintToBigfloat"}}}}},
+                                            "function": {"variable": "hydra.lib.literals.bigintToBigfloat"}}}},
                                       "typeName": "hydra.json.model.Value"}},
                                   "function": {
                                     "application": {
@@ -956,8 +956,8 @@
                                             "argument": {
                                               "application": {
                                                 "argument": {"variable": "b"},
-                                                "function": {"function": {"primitive": "hydra.lib.literals.uint8ToBigint"}}}},
-                                            "function": {"function": {"primitive": "hydra.lib.literals.bigintToBigfloat"}}}}},
+                                                "function": {"variable": "hydra.lib.literals.uint8ToBigint"}}},
+                                            "function": {"variable": "hydra.lib.literals.bigintToBigfloat"}}}},
                                       "typeName": "hydra.json.model.Value"}},
                                   "function": {
                                     "application": {
@@ -985,13 +985,13 @@
                                                     "argument": {
                                                       "application": {
                                                         "argument": {"variable": "c"},
-                                                        "function": {"function": {"primitive": "hydra.lib.literals.uint32ToBigint"}}}},
-                                                    "function": {"function": {"primitive": "hydra.lib.literals.bigintToInt32"}}}},
+                                                        "function": {"variable": "hydra.lib.literals.uint32ToBigint"}}},
+                                                    "function": {"variable": "hydra.lib.literals.bigintToInt32"}}},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"function": {"primitive": "hydra.lib.lists.pure"}},
+                                                    "body": {"variable": "hydra.lib.lists.pure"},
                                                     "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                            "function": {"function": {"primitive": "hydra.lib.strings.fromList"}}}}},
+                                            "function": {"variable": "hydra.lib.strings.fromList"}}}},
                                       "typeName": "hydra.json.model.Value"}},
                                   "function": {
                                     "application": {
@@ -1132,8 +1132,8 @@
                                             "argument": {
                                               "application": {
                                                 "argument": {"variable": "i"},
-                                                "function": {"function": {"primitive": "hydra.lib.literals.int32ToBigint"}}}},
-                                            "function": {"function": {"primitive": "hydra.lib.literals.bigintToBigfloat"}}}}},
+                                                "function": {"variable": "hydra.lib.literals.int32ToBigint"}}},
+                                            "function": {"variable": "hydra.lib.literals.bigintToBigfloat"}}}},
                                       "typeName": "hydra.json.model.Value"}},
                                   "function": {
                                     "application": {
@@ -1162,7 +1162,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                        "body": {"variable": "hydra.lib.lists.map"},
                                                         "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                                     "type": {"variable": "hydra.json.model.Value"}}}}}}}},
                                       "typeName": "hydra.json.model.Value"}},
@@ -1188,8 +1188,8 @@
                                             "argument": {
                                               "application": {
                                                 "argument": {"variable": "l"},
-                                                "function": {"function": {"primitive": "hydra.lib.literals.int64ToBigint"}}}},
-                                            "function": {"function": {"primitive": "hydra.lib.literals.bigintToBigfloat"}}}}},
+                                                "function": {"variable": "hydra.lib.literals.int64ToBigint"}}},
+                                            "function": {"variable": "hydra.lib.literals.bigintToBigfloat"}}}},
                                       "typeName": "hydra.json.model.Value"}},
                                   "function": {
                                     "application": {
@@ -1273,7 +1273,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                        "body": {"variable": "hydra.lib.lists.map"},
                                                         "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                                     "type": {"variable": "hydra.json.model.Value"}}}}}}}},
                                       "typeName": "hydra.json.model.Value"}},
@@ -1299,8 +1299,8 @@
                                             "argument": {
                                               "application": {
                                                 "argument": {"variable": "i"},
-                                                "function": {"function": {"primitive": "hydra.lib.literals.int16ToBigint"}}}},
-                                            "function": {"function": {"primitive": "hydra.lib.literals.bigintToBigfloat"}}}}},
+                                                "function": {"variable": "hydra.lib.literals.int16ToBigint"}}},
+                                            "function": {"variable": "hydra.lib.literals.bigintToBigfloat"}}}},
                                       "typeName": "hydra.json.model.Value"}},
                                   "function": {
                                     "application": {
@@ -1381,7 +1381,7 @@
                                             "typeApplication": {
                                               "body": {
                                                 "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.maps.toList"}},
+                                                  "body": {"variable": "hydra.lib.maps.toList"},
                                                   "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
                                               "type": {"list": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}}}}},
                                       "function": {
@@ -1404,7 +1404,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                            "body": {"variable": "hydra.lib.pairs.first"},
                                                                             "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
                                                                         "type": {"list": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}}}}},
                                                                 "function": {
@@ -1422,7 +1422,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                  "body": {"variable": "hydra.lib.pairs.second"},
                                                                                   "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
                                                                               "type": {"list": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}}}}},
                                                                       "function": {
@@ -1432,7 +1432,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                                   "type": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}},
                                                                               "type": {"variable": "hydra.json.model.Value"}}}}}}}},
                                                                 "typeName": "hydra.json.model.Value"}}}},
@@ -1447,7 +1447,7 @@
                                             "typeApplication": {
                                               "body": {
                                                 "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                   "type": {
                                                     "pair": {
                                                       "first": {"variable": "hydra.pg.graphson.syntax.PropertyKey"},
@@ -1460,7 +1460,7 @@
                                     "typeApplication": {
                                       "body": {
                                         "typeApplication": {
-                                          "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
+                                          "body": {"variable": "hydra.lib.maps.fromList"},
                                           "type": {"literal": {"string": {}}}}},
                                       "type": {"variable": "hydra.json.model.Value"}}}}}},
                             "typeName": "hydra.json.model.Value"}}},
@@ -1479,12 +1479,12 @@
                                     "typeApplication": {
                                       "body": {
                                         "typeApplication": {
-                                          "body": {"function": {"primitive": "hydra.lib.maps.null"}},
+                                          "body": {"variable": "hydra.lib.maps.null"},
                                           "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
                                       "type": {"list": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}}}}},
                               "function": {
                                 "typeApplication": {
-                                  "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                  "body": {"variable": "hydra.lib.logic.ifElse"},
                                   "type": {"maybe": {"variable": "hydra.json.model.Value"}}}}}}}}}},
                   "domain": {
                     "map": {
@@ -1542,7 +1542,7 @@
                                                 "typeApplication": {
                                                   "body": {
                                                     "typeApplication": {
-                                                      "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                      "body": {"variable": "hydra.lib.maybes.map"},
                                                       "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                                   "type": {"variable": "hydra.json.model.Value"}}}}}}}}},
                                   "type": {"literal": {"string": {}}}}},
@@ -1651,7 +1651,7 @@
                                                 "typeApplication": {
                                                   "body": {
                                                     "typeApplication": {
-                                                      "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                      "body": {"variable": "hydra.lib.maybes.map"},
                                                       "type": {"variable": "hydra.pg.graphson.syntax.VertexLabel"}}},
                                                   "type": {"variable": "hydra.json.model.Value"}}}}}}}}},
                                   "type": {"literal": {"string": {}}}}},

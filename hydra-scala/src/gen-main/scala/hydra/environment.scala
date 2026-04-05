@@ -8,22 +8,6 @@ import hydra.errors.*
 
 import hydra.packaging.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
 def definitionAsTypeApplicationTerm(cx: hydra.context.Context)(el: hydra.core.Binding): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.core.TypeApplicationTerm] =
   hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error], hydra.core.TypeApplicationTerm],

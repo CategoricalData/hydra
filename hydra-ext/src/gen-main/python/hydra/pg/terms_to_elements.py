@@ -138,7 +138,7 @@ def decode_value_spec(cx: hydra.context.Context, g: hydra.graph.Graph, term: hyd
         case _:
             return read_injection(cx, g, ((hydra.core.Name("value"), (lambda _: Right(cast(hydra.pg.mapping.ValueSpec, hydra.pg.mapping.ValueSpecValue())))), (hydra.core.Name("pattern"), (lambda t: hydra.lib.eithers.map((lambda _x: cast(hydra.pg.mapping.ValueSpec, hydra.pg.mapping.ValueSpecPattern(_x))), hydra.extract.core.string(cx, g, t))))), term)
 
-def read_field(cx: hydra.context.Context, fields: FrozenDict[hydra.core.Name, T0], fname: hydra.core.Name, fun: Callable[[T0], Either[hydra.context.InContext[hydra.errors.Error], T1]]) -> Either[hydra.context.InContext[hydra.errors.Error], T0]:
+def read_field(cx: hydra.context.Context, fields: FrozenDict[hydra.core.Name, T0], fname: hydra.core.Name, fun: Callable[[T0], Either[hydra.context.InContext[hydra.errors.Error], T1]]) -> Either[hydra.context.InContext[hydra.errors.Error], T1]:
     r"""Read a field from a map of fields by name."""
 
     return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2("no such field: ", fname.value)))), cx))), fun, hydra.lib.maps.lookup(fname, fields))

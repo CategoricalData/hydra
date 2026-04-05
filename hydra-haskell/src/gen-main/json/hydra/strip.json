@@ -819,7 +819,7 @@
                                                                                                 "typeApplication": {
                                                                                                   "body": {
                                                                                                     "typeApplication": {
-                                                                                                      "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                                      "body": {"variable": "hydra.lib.lists.map"},
                                                                                                       "type": {"variable": "hydra.core.Binding"}}},
                                                                                                   "type": {"variable": "hydra.core.Binding"}}}}}}}},
                                                                                     {
@@ -1094,7 +1094,7 @@
                                                                                                 "typeApplication": {
                                                                                                   "body": {
                                                                                                     "typeApplication": {
-                                                                                                      "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                                      "body": {"variable": "hydra.lib.lists.map"},
                                                                                                       "type": {"variable": "hydra.core.Binding"}}},
                                                                                                   "type": {"variable": "hydra.core.Binding"}}}}}}}},
                                                                                     {

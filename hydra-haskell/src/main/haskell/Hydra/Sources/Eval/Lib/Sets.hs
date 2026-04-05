@@ -86,16 +86,16 @@ difference_ = define "difference" $
       Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
           (Core.termApplication $ Core.application
-            (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+            (Core.termVariable $ encodedName _logic_ifElse)
             (Core.termApplication $ Core.application
               (Core.termApplication $ Core.application
-                (Core.termFunction $ Core.functionPrimitive $ encodedName _sets_member)
+                (Core.termVariable $ encodedName _sets_member)
                 (var "el"))
               (var "set2Term")))
           (var "acc"))
         (Core.termApplication $ Core.application
           (Core.termApplication $ Core.application
-            (Core.termFunction $ Core.functionPrimitive $ encodedName _sets_insert)
+            (Core.termVariable $ encodedName _sets_insert)
             (var "el"))
           (var "acc")))
     (Core.termSet $ Sets.fromList (list ([] :: [TTerm Term])))
@@ -115,15 +115,15 @@ intersection_ = define "intersection" $
       Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
           (Core.termApplication $ Core.application
-            (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+            (Core.termVariable $ encodedName _logic_ifElse)
             (Core.termApplication $ Core.application
               (Core.termApplication $ Core.application
-                (Core.termFunction $ Core.functionPrimitive $ encodedName _sets_member)
+                (Core.termVariable $ encodedName _sets_member)
                 (var "el"))
               (var "set2Term")))
           (Core.termApplication $ Core.application
             (Core.termApplication $ Core.application
-              (Core.termFunction $ Core.functionPrimitive $ encodedName _sets_insert)
+              (Core.termVariable $ encodedName _sets_insert)
               (var "el"))
             (var "acc")))
         (var "acc"))
@@ -140,7 +140,7 @@ map_ = define "map" $
   "elements" <<~ (ExtractCore.set @@ var "cx" @@ var "g" @@ var "setTerm") $
   -- Build: fromList (map fun (toList elements))
   right $ Core.termApplication $ Core.application
-    (Core.termFunction $ Core.functionPrimitive $ encodedName _sets_fromList)
+    (Core.termVariable $ encodedName _sets_fromList)
     (Core.termList $ Lists.map
       ("el" ~> Core.termApplication $ Core.application (var "fun") (var "el"))
       (Sets.toList $ var "elements"))
@@ -158,7 +158,7 @@ union_ = define "union" $
     ("acc" ~> "el" ~>
       Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
-          (Core.termFunction $ Core.functionPrimitive $ encodedName _sets_insert)
+          (Core.termVariable $ encodedName _sets_insert)
           (var "el"))
         (var "acc"))
     (var "set2Term")
@@ -177,7 +177,7 @@ unions_ = define "unions" $
     ("acc" ~> "s" ~>
       Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
-          (Core.termFunction $ Core.functionPrimitive $ encodedName _sets_union)
+          (Core.termVariable $ encodedName _sets_union)
           (var "acc"))
         (var "s"))
     (Core.termSet $ Sets.fromList (list ([] :: [TTerm Term])))

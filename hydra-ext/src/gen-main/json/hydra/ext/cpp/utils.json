@@ -574,11 +574,11 @@
                                       "argument": {"variable": "params"},
                                       "function": {
                                         "typeApplication": {
-                                          "body": {"function": {"primitive": "hydra.lib.lists.null"}},
+                                          "body": {"variable": "hydra.lib.lists.null"},
                                           "type": {"variable": "t0"}}}}},
                                   "function": {
                                     "typeApplication": {
-                                      "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                      "body": {"variable": "hydra.lib.logic.ifElse"},
                                       "type": {"variable": "hydra.ext.cpp.syntax.FunctionBody"}}}}}}}}},
                       "domain": {"list": {"variable": "t0"}},
                       "parameter": "params"}}}}},
@@ -1169,7 +1169,7 @@
                                                 "typeApplication": {
                                                   "body": {
                                                     "typeApplication": {
-                                                      "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                      "body": {"variable": "hydra.lib.lists.map"},
                                                       "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                   "type": {"variable": "hydra.ext.cpp.syntax.TemplateArgument"}}}}}}}}],
                                   "typeName": "hydra.ext.cpp.syntax.TemplateType"}}},

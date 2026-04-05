@@ -26,13 +26,15 @@ def build_java_test_module(test_module: hydra.packaging.Module, test_group: hydr
     r"""Build the complete Java test module content."""
 
     ns_ = test_module.namespace
-    parts = hydra.lib.strings.split_on(".", ns_.value)
+    @lru_cache(1)
+    def parts() -> frozenlist[str]:
+        return hydra.lib.strings.split_on(".", ns_.value)
     @lru_cache(1)
     def package_name() -> str:
-        return hydra.lib.strings.intercalate(".", hydra.lib.lists.init(parts))
+        return hydra.lib.strings.intercalate(".", hydra.lib.lists.init(parts()))
     @lru_cache(1)
     def class_name_() -> str:
-        return hydra.lib.strings.cat2(hydra.formatting.capitalize(hydra.lib.lists.last(parts)), "Test")
+        return hydra.lib.strings.cat2(hydra.formatting.capitalize(hydra.lib.lists.last(parts())), "Test")
     group_name_ = test_group.name
     standard_imports = ("import org.junit.jupiter.api.Test;", "import static org.junit.jupiter.api.Assertions.*;", "import java.util.*;", "import hydra.util.*;")
     @lru_cache(1)

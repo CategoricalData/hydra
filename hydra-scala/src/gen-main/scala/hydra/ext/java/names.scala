@@ -2,8 +2,6 @@ package hydra.ext.java.names
 
 import hydra.ext.java.syntax.*
 
-import hydra.lib.lists
-
 lazy val acceptMethodName: scala.Predef.String = "accept"
 
 lazy val applyMethodName: scala.Predef.String = "apply"

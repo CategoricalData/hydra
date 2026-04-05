@@ -85,7 +85,17 @@ public interface Predicates {
             name,
             (tc).boundTypes));
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> true,
+            () -> ((java.util.function.Supplier<Boolean>) (() -> {
+              hydra.util.Lazy<hydra.util.Maybe<hydra.graph.Primitive>> primLookup = new hydra.util.Lazy<>(() -> hydra.lib.maps.Lookup.apply(
+                name,
+                (tc).primitives));
+              return hydra.lib.maybes.Maybe.applyLazy(
+                () -> true,
+                (java.util.function.Function<hydra.graph.Primitive, Boolean>) (prim -> hydra.lib.equality.Gt.apply(
+                  hydra.Arity.typeSchemeArity((prim).type),
+                  0)),
+                primLookup.get());
+            })).get(),
             (java.util.function.Function<hydra.core.TypeScheme, Boolean>) (ts -> hydra.lib.equality.Gt.apply(
               hydra.Arity.typeSchemeArity(ts),
               0)),
@@ -271,8 +281,12 @@ public interface Predicates {
       }
 
       @Override
-      public Boolean visit(hydra.core.Term.Variable ignored) {
-        return true;
+      public Boolean visit(hydra.core.Term.Variable nm) {
+        return hydra.lib.equality.Equal.apply(
+          hydra.lib.lists.Length.apply(hydra.lib.strings.SplitOn.apply(
+            ".",
+            (nm).value.value)),
+          1);
       }
 
       @Override

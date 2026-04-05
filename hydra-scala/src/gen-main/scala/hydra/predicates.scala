@@ -12,24 +12,6 @@ import hydra.graph.*
 
 import hydra.variants.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def isComplexBinding(tc: hydra.graph.Graph)(b: hydra.core.Binding): Boolean =
   {
   lazy val term: hydra.core.Term = (b.term)
@@ -62,7 +44,11 @@ def isComplexVariable(tc: hydra.graph.Graph)(name: hydra.core.Name): Boolean =
   lazy val metaLookup: Option[hydra.core.Term] = hydra.lib.maps.lookup[hydra.core.Name, hydra.core.Term](name)(tc.metadata)
   hydra.lib.logic.ifElse[Boolean](hydra.lib.maybes.isJust[hydra.core.Term](metaLookup))(true)(hydra.lib.logic.ifElse[Boolean](hydra.lib.sets.member[hydra.core.Name](name)(tc.lambdaVariables))(true)({
     lazy val typeLookup: Option[hydra.core.TypeScheme] = hydra.lib.maps.lookup[hydra.core.Name, hydra.core.TypeScheme](name)(tc.boundTypes)
-    hydra.lib.maybes.maybe[Boolean, hydra.core.TypeScheme](true)((ts: hydra.core.TypeScheme) =>
+    hydra.lib.maybes.maybe[Boolean, hydra.core.TypeScheme]({
+      lazy val primLookup: Option[hydra.graph.Primitive] = hydra.lib.maps.lookup[hydra.core.Name, hydra.graph.Primitive](name)(tc.primitives)
+      hydra.lib.maybes.maybe[Boolean, hydra.graph.Primitive](true)((prim: hydra.graph.Primitive) =>
+        hydra.lib.equality.gt[Int](hydra.arity.typeSchemeArity(prim.`type`))(0))(primLookup)
+    })((ts: hydra.core.TypeScheme) =>
       hydra.lib.equality.gt[Int](hydra.arity.typeSchemeArity(ts))(0))(typeLookup)
   }))
 }
@@ -136,7 +122,7 @@ def isSerializableType(typ: hydra.core.Type): Boolean =
 def isTrivialTerm(t: hydra.core.Term): Boolean =
   hydra.strip.deannotateTerm(t) match
   case hydra.core.Term.literal(v_Term_literal__) => true
-  case hydra.core.Term.variable(v_Term_variable__) => true
+  case hydra.core.Term.variable(v_Term_variable_nm) => hydra.lib.equality.equal[Int](hydra.lib.lists.length[scala.Predef.String](hydra.lib.strings.splitOn(".")(v_Term_variable_nm)))(1)
   case hydra.core.Term.unit => true
   case hydra.core.Term.application(v_Term_application_app) => {
     lazy val fun: hydra.core.Term = (v_Term_application_app.function)

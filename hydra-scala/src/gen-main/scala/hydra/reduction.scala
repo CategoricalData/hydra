@@ -8,28 +8,6 @@ import hydra.errors.*
 
 import hydra.graph.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.math
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def alphaConvert(vold: hydra.core.Name)(vnew: hydra.core.Name)(term: hydra.core.Term): hydra.core.Term =
   hydra.variables.replaceFreeTermVariable(vold)(hydra.core.Term.variable(vnew))(term)
 
@@ -109,7 +87,8 @@ def etaExpandTerm(tx0: hydra.graph.Graph)(term0: hydra.core.Term): hydra.core.Te
     case hydra.core.Term.let(v_Term_let_l) => termArityWithContext(hydra.scoping.extendGraphForLet((_x: hydra.graph.Graph) => (_2: hydra.core.Binding) => None)(tx)(v_Term_let_l))(v_Term_let_l.body)
     case hydra.core.Term.typeLambda(v_Term_typeLambda_tl) => termArityWithContext(hydra.scoping.extendGraphForTypeLambda(tx)(v_Term_typeLambda_tl))(v_Term_typeLambda_tl.body)
     case hydra.core.Term.typeApplication(v_Term_typeApplication_tat) => termArityWithContext(tx)(v_Term_typeApplication_tat.body)
-    case hydra.core.Term.variable(v_Term_variable_name) => hydra.lib.maybes.maybe[Int, hydra.core.Type](0)(hydra.arity.typeArity)(hydra.lib.maybes.map[hydra.core.TypeScheme,
+    case hydra.core.Term.variable(v_Term_variable_name) => hydra.lib.maybes.maybe[Int, hydra.core.Type](hydra.lib.maybes.maybe[Int,
+       hydra.core.TypeScheme](0)(hydra.arity.typeSchemeArity)(hydra.lib.maps.lookup[hydra.core.Name, hydra.core.TypeScheme](v_Term_variable_name)(primTypes)))(hydra.arity.typeArity)(hydra.lib.maybes.map[hydra.core.TypeScheme,
        hydra.core.Type](hydra.scoping.typeSchemeToFType)(hydra.lib.maps.lookup[hydra.core.Name, hydra.core.TypeScheme](v_Term_variable_name)(tx.boundTypes)))
     case _ => 0
   def domainTypes(n: Int)(mt: Option[hydra.core.Type]): Seq[Option[hydra.core.Type]] =
@@ -613,7 +592,15 @@ def reduceTerm(cx: hydra.context.Context)(graph: hydra.graph.Graph)(eager: Boole
         })
       case hydra.core.Term.variable(v_Term_variable_v) => {
         lazy val mBinding: Option[hydra.core.Binding] = hydra.lexical.lookupBinding(graph)(v_Term_variable_v)
-        hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term], hydra.core.Binding](Right(applyToArguments(original)(args)))((binding: hydra.core.Binding) => applyIfNullary(eager2)(binding.term)(args))(mBinding)
+        hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term], hydra.core.Binding]({
+          lazy val mPrim: Option[hydra.graph.Primitive] = hydra.lexical.lookupPrimitive(graph)(v_Term_variable_v)
+          hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term],
+             hydra.graph.Primitive](Right(applyToArguments(original)(args)))((prim: hydra.graph.Primitive) =>
+            {
+            lazy val arity: Int = hydra.arity.primitiveArity(prim)
+            hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]](hydra.lib.equality.gt[Int](arity)(hydra.lib.lists.length[hydra.core.Term](args)))(Right(applyToArguments(original)(args)))(forPrimitive(prim)(arity)(args))
+          })(mPrim)
+        })((binding: hydra.core.Binding) => applyIfNullary(eager2)(binding.term)(args))(mBinding)
       }
       case hydra.core.Term.let(v_Term_let_lt) => {
         lazy val bindings: Seq[hydra.core.Binding] = (v_Term_let_lt.bindings)

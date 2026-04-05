@@ -6,22 +6,6 @@ import hydra.error.packaging.*
 
 import hydra.packaging.*
 
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def checkConflictingModuleNamespaces(pkg: hydra.packaging.Package): Option[hydra.error.packaging.InvalidPackageError] =
   {
   lazy val result: Tuple2[Map[scala.Predef.String, hydra.packaging.Namespace], Option[hydra.error.packaging.InvalidPackageError]] = hydra.lib.lists.foldl[Tuple2[Map[scala.Predef.String,

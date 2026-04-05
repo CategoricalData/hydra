@@ -6,28 +6,6 @@ import hydra.core.*
 
 import hydra.packaging.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.math
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def definitionsWithDependencies(cx: hydra.context.Context)(graph: hydra.graph.Graph)(original: Seq[hydra.core.Binding]): Either[hydra.context.InContext[hydra.errors.Error],
    Seq[hydra.core.Binding]] =
   {
@@ -348,7 +326,7 @@ def topologicalSortBindingMap(bindingMap: Map[hydra.core.Name, hydra.core.Term])
   def toPair(name: hydra.core.Name): Tuple2[hydra.core.Name, hydra.core.Term] =
     Tuple2(name, hydra.lib.maybes.fromMaybe[hydra.core.Term](hydra.core.Term.literal(hydra.core.Literal.string("Impossible!")))(hydra.lib.maps.lookup[hydra.core.Name,
        hydra.core.Term](name)(bindingMap)))
-  hydra.lib.lists.map[Seq[hydra.core.Name], Seq[Tuple2[hydra.core.Name, hydra.core.Term]]]((v1: Seq[hydra.core.Name]) =>
+  hydra.lib.lists.map[Seq[hydra.core.Name], Seq[Tuple2[hydra.core.Name, hydra.core.Term]]]((v1) =>
     hydra.lib.lists.map[hydra.core.Name, Tuple2[hydra.core.Name, hydra.core.Term]](toPair)(v1))(hydra.sorting.topologicalSortComponents(hydra.lib.lists.map[Tuple2[hydra.core.Name,
        hydra.core.Term], Tuple2[hydra.core.Name, Seq[hydra.core.Name]]](depsOf)(bindings)))
 }

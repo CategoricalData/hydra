@@ -613,7 +613,30 @@ encodeTerm = def "encodeTerm" $
                       (right (ScalaUtilsSource.sapplyTypes @@ (ScalaUtilsSource.sprim @@ var "pname") @@ var "stypeArgs")))),
             _Function_elimination>>: (constant $
               -- For eliminations (record/union projections): encode the substituted body
-              asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody")])]),
+              asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody")]),
+          -- TermVariable referencing a primitive: same treatment as Function_primitive
+          _Term_variable>>: ("pname" ~>
+            Maybes.cases (Maps.lookup (var "pname") (Graph.graphPrimitives (var "g")))
+              -- Not a primitive: encode the substituted body
+              (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody")
+              (lambda "_prim" $
+                Eithers.bind
+                  (Eithers.mapList ("targ" ~> asTerm encodeType @@ var "cx" @@ var "g" @@ var "targ") (var "typeArgs"))
+                  ("stypeArgs" ~> lets [
+                      "inScopeTypeVarNames">: Sets.fromList (Lists.map
+                        ("n" ~> Formatting.capitalize @@ (Core.unName (var "n")))
+                        (Sets.toList (Graph.graphTypeVariables $ var "g"))),
+                      "hasForallResidual">: Logic.not (Lists.null (Lists.filter ("st" ~>
+                        cases Scala._Type (var "st") (Just false) [
+                          Scala._Type_var>>: ("tv" ~> lets [
+                            "tvName">: project Scala._Type_Name Scala._Type_Name_value @@ (project Scala._Type_Var Scala._Type_Var_name @@ var "tv")] $
+                            Logic.and
+                              (Logic.not (Lists.elem (int32 46) (Strings.toList (var "tvName"))))
+                              (Logic.not (Sets.member (var "tvName") (var "inScopeTypeVarNames"))))])
+                        (var "stypeArgs")))] $
+                      Logic.ifElse (var "hasForallResidual")
+                        (right (ScalaUtilsSource.sprim @@ var "pname"))
+                        (right (ScalaUtilsSource.sapplyTypes @@ (ScalaUtilsSource.sprim @@ var "pname") @@ var "stypeArgs")))))]),
       _Term_typeLambda>>: ("tl" ~>
         asTerm encodeTerm @@ var "cx" @@ (Scoping.extendGraphForTypeLambda @@ var "g" @@ var "tl") @@ (Core.typeLambdaBody $ var "tl")),
       _Term_application>>: ("app" ~> lets [

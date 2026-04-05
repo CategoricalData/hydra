@@ -153,7 +153,7 @@ def eta_expand_term(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra.cor
                 return term_arity_with_context(tx, tat.body)
 
             case hydra.core.TermVariable(value=name):
-                return hydra.lib.maybes.maybe((lambda : 0), (lambda x1: hydra.arity.type_arity(x1)), hydra.lib.maybes.map((lambda x1: hydra.scoping.type_scheme_to_f_type(x1)), hydra.lib.maps.lookup(name, tx.bound_types)))
+                return hydra.lib.maybes.maybe((lambda : hydra.lib.maybes.maybe((lambda : 0), (lambda x1: hydra.arity.type_scheme_arity(x1)), hydra.lib.maps.lookup(name, prim_types()))), (lambda x1: hydra.arity.type_arity(x1)), hydra.lib.maybes.map((lambda x1: hydra.scoping.type_scheme_to_f_type(x1)), hydra.lib.maps.lookup(name, tx.bound_types)))
 
             case _:
                 return 0
@@ -738,7 +738,7 @@ def reduce_term(cx: hydra.context.Context, graph: hydra.graph.Graph, eager: bool
                 @lru_cache(1)
                 def m_binding() -> Maybe[hydra.core.Binding]:
                     return hydra.lexical.lookup_binding(graph, v)
-                return hydra.lib.maybes.maybe((lambda : Right(apply_to_arguments(original, args))), (lambda binding: apply_if_nullary(eager2, binding.term, args)), m_binding())
+                return hydra.lib.maybes.maybe((lambda : (m_prim := hydra.lexical.lookup_primitive(graph, v), hydra.lib.maybes.maybe((lambda : Right(apply_to_arguments(original, args))), (lambda prim: (arity := hydra.arity.primitive_arity(prim), hydra.lib.logic.if_else(hydra.lib.equality.gt(arity, hydra.lib.lists.length(args)), (lambda : Right(apply_to_arguments(original, args))), (lambda : for_primitive(prim, arity, args))))[1]), m_prim))[1]), (lambda binding: apply_if_nullary(eager2, binding.term, args)), m_binding())
 
             case hydra.core.TermLet(value=lt):
                 bindings = lt.bindings

@@ -6,8 +6,6 @@ import hydra.errors.*
 
 import hydra.phantoms.*
 
-import hydra.lib.eithers
-
 def tBinding[T0, T1](a: T0)(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.phantoms.TBinding[T1]] =
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.phantoms.TBinding[T1]]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match

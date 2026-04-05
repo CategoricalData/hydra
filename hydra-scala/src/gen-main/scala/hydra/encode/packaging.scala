@@ -4,14 +4,6 @@ import hydra.core.*
 
 import hydra.packaging.*
 
-import hydra.lib.lists
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
 def definition(v1: hydra.packaging.Definition): hydra.core.Term =
   v1 match
   case hydra.packaging.Definition.term(v_Definition_term_y) => hydra.core.Term.union(hydra.core.Injection("hydra.packaging.Definition",

@@ -121,9 +121,11 @@ def flatten_let_terms(term: hydra.core.Term) -> hydra.core.Term:
             case hydra.core.TermLet(value=inner_let):
                 bindings1 = inner_let.bindings
                 body1 = inner_let.body
-                prefix = hydra.lib.strings.cat2(key0.value, "_")
+                @lru_cache(1)
+                def prefix() -> str:
+                    return hydra.lib.strings.cat2(key0.value, "_")
                 def qualify(n: hydra.core.Name) -> hydra.core.Name:
-                    return hydra.core.Name(hydra.lib.strings.cat2(prefix, n.value))
+                    return hydra.core.Name(hydra.lib.strings.cat2(prefix(), n.value))
                 def to_subst_pair(b: hydra.core.Binding) -> tuple[hydra.core.Name, hydra.core.Name]:
                     return (b.name, qualify(b.name))
                 @lru_cache(1)
@@ -389,7 +391,7 @@ def to_short_names(original: frozenlist[hydra.core.Name]) -> FrozenDict[hydra.co
         return hydra.lib.lists.zip_with((lambda x1, x2: rename(x1, x2)), hydra.lib.sets.to_list(names()), range_from(1))
     return hydra.lib.maps.from_list(hydra.lib.lists.concat(hydra.lib.lists.map((lambda x1: rename_group(x1)), hydra.lib.maps.to_list(groups()))))
 
-def topological_sort_binding_map(binding_map: FrozenDict[hydra.core.Name, hydra.core.Term]) -> frozenlist[frozenlist[tuple[hydra.core.Name, hydra.core.Term]]]:
+def topological_sort_binding_map(binding_map: FrozenDict[hydra.core.Name, hydra.core.Term]):
     r"""Topological sort of connected components, in terms of dependencies between variable/term binding pairs."""
 
     @lru_cache(1)

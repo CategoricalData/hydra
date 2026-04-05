@@ -14,28 +14,6 @@ import hydra.testing.*
 
 import hydra.util.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.math
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def addNamespacesToNamespaces(ns0: hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName])(names: scala.collection.immutable.Set[hydra.core.Name]): hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName] =
   {
   lazy val newNamespaces: scala.collection.immutable.Set[hydra.packaging.Namespace] = hydra.lib.sets.fromList[hydra.packaging.Namespace](hydra.lib.maybes.cat[hydra.packaging.Namespace](hydra.lib.lists.map[hydra.core.Name,
