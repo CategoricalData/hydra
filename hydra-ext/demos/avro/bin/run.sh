@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 #
 # Runner for the Avro bidirectional coder demo.
 #
@@ -12,8 +13,7 @@
 #
 #   --demo N     Run only demo N (1-4, or "all" for all demos)
 #   --tag TAG    Append a tag to the run directory name
-
-set -euo pipefail
+#   --help       Show this help message
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HYDRA_EXT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
@@ -30,25 +30,19 @@ while [ $# -gt 0 ]; do
     --demo=*) DEMO="${1#--demo=}"; shift ;;
     --tag) TAG="$2"; shift 2 ;;
     --tag=*) TAG="${1#--tag=}"; shift ;;
+    --help|-h)
+      sed -n '4,16p' "$0" | sed 's/^# //; s/^#//'
+      exit 0
+      ;;
     *)
-      echo "Unknown argument: $1" >&2
-      echo "Usage: $0 [--demo N] [--tag TAG]" >&2
-      exit 1
+      die "Unknown argument: $1 (try --help)"
       ;;
   esac
 done
 
-# Colors
-BOLD='\033[1m'
-CYAN='\033[0;36m'
-GREEN='\033[0;32m'
-NC='\033[0m'
-
-header() { echo ""; echo -e "${BOLD}${CYAN}=== $1 ===${NC}"; }
-
 RUN_DIR=$(create_run_dir /tmp/hydra-avro-demo "$TAG")
 
-header "Avro Bidirectional Coder Demo"
+demo_demo_header "Avro Bidirectional Coder Demo"
 echo "Run directory: $RUN_DIR"
 
 cd "$HYDRA_EXT_ROOT"
@@ -61,8 +55,7 @@ case "$DEMO" in
   5) GHCI_FN="runPropertyGraphDemo" ;;
   all) GHCI_FN="runAllDemos" ;;
   *)
-    echo "Invalid demo number: $DEMO (expected 1-4 or 'all')" >&2
-    exit 1
+    die "Invalid demo number: $DEMO (expected 1-4 or 'all')"
     ;;
 esac
 
@@ -75,7 +68,7 @@ let ms = fromIntegral (t1 - t0) / 1e9 :: Double
 putStrLn (\"\\nElapsed: \" ++ show (round ms :: Int) ++ \" ms\")
 :quit"
 
-header "Running demo: $DEMO"
+demo_header "Running demo: $DEMO"
 
 if echo "$GHCI_CMD" | stack ghci hydra-ext:lib --ghci-options='-v0' \
   > "$RUN_DIR/stdout.txt" 2> "$RUN_DIR/stderr.txt"; then

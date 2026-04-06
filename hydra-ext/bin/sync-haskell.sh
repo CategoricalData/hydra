@@ -1,5 +1,5 @@
-#!/bin/bash
-set -eo pipefail
+#!/usr/bin/env bash
+set -euo pipefail
 
 # Script to synchronize Hydra-Haskell generated code with the source of truth.
 #
@@ -16,6 +16,13 @@ set -eo pipefail
 #   ./bin/sync-haskell.sh          # Full sync (all steps)
 #   ./bin/sync-haskell.sh --quick  # Skip tests (for faster iteration)
 #   ./bin/sync-haskell.sh --help   # Show this help
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+HYDRA_EXT_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
+HYDRA_ROOT_DIR="$( cd "$HYDRA_EXT_DIR/.." && pwd )"
+HYDRA_HASKELL_DIR="$HYDRA_ROOT_DIR/hydra-haskell"
+
+source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 
 QUICK_MODE=false
 
@@ -37,45 +44,33 @@ for arg in "$@"; do
             echo "Steps performed:"
             echo "  1. Build executable"
             echo "  2. Generate Haskell modules and tests from JSON"
-            echo "  3. Run Haskell build and tests (unless --quick)"
+            echo "  3. Build and test Haskell (unless --quick)"
             echo "  4. Report new files to git add"
             exit 0
+            ;;
+        *)
+            die "Unknown argument: $arg (try --help)"
             ;;
     esac
 done
 
-echo "=========================================="
-echo "Synchronizing Hydra-Haskell"
-echo "=========================================="
+banner2 "Synchronizing Hydra-Haskell (from JSON)"
 echo ""
-
-# Get the directory where this script is located
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-HYDRA_EXT_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
-HYDRA_HASKELL_DIR="$( cd "$HYDRA_EXT_DIR/../hydra-haskell" && pwd )"
 
 cd "$HYDRA_EXT_DIR"
 
-# RTS flags to avoid stack overflow during generation
-RTS_FLAGS="+RTS -K256M -A32M -RTS"
+TOTAL_STEPS=4
 
-echo "Step 1/3: Building executable..."
+step 1 $TOTAL_STEPS "Building executable"
 echo ""
 stack build hydra-ext:exe:bootstrap-from-json
 
-echo ""
-echo "Step 2/3: Generating Haskell modules and tests from JSON..."
+step 2 $TOTAL_STEPS "Generating Haskell modules and tests from JSON"
 echo ""
 stack exec bootstrap-from-json -- --target haskell --output ../hydra-haskell --include-tests --include-gentests $RTS_FLAGS
 
-echo ""
-echo "=========================================="
-echo "Generation complete!"
-echo "=========================================="
-
 if [ "$QUICK_MODE" = false ]; then
-    echo ""
-    echo "Step 3/3: Building and testing Haskell..."
+    step 3 $TOTAL_STEPS "Building and testing Haskell"
     echo ""
 
     cd "$HYDRA_HASKELL_DIR"
@@ -85,19 +80,14 @@ if [ "$QUICK_MODE" = false ]; then
 
     cd "$HYDRA_EXT_DIR"
 else
-    echo ""
-    echo "Step 3/3: Skipped (--quick mode)"
+    step 3 $TOTAL_STEPS "Skipped (--quick mode)"
 fi
 
-echo ""
-echo "=========================================="
-echo "Checking for new files..."
-echo "=========================================="
+step 4 $TOTAL_STEPS "Checking for new files"
 echo ""
 
 cd "$HYDRA_HASKELL_DIR"
 
-# Find untracked Haskell files in gen directories
 NEW_FILES=$(git status --porcelain src/gen-main/haskell src/gen-test/haskell 2>/dev/null | grep "^??" | awk '{print $2}' || true)
 
 if [ -n "$NEW_FILES" ]; then
@@ -116,7 +106,4 @@ else
     echo "No new files created."
 fi
 
-echo ""
-echo "=========================================="
-echo "Sync complete!"
-echo "=========================================="
+banner2_done "Hydra-Haskell sync complete!"

@@ -1,5 +1,5 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+set -euo pipefail
 
 # Pre-release verification script for Hydra.
 #
@@ -20,6 +20,11 @@ set -e
 #   ./bin/verify-release.sh          # Full verification
 #   ./bin/verify-release.sh --help   # Show this help
 
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
+
+source "$HYDRA_ROOT/bin/lib/common.sh"
+
 for arg in "$@"; do
     case $arg in
         --help|-h)
@@ -39,26 +44,31 @@ for arg in "$@"; do
             echo "  6. Scala build and tests"
             echo "  7. Lisp tests (Clojure, Common Lisp, Emacs Lisp, Scheme)"
             echo "  8. JSON kernel verification"
+            echo ""
+            echo "Logs are written to verify-logs/."
             exit 0
+            ;;
+        *)
+            die "Unknown argument: $arg (try --help)"
             ;;
     esac
 done
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
-
 cd "$HYDRA_ROOT"
+
+# Logs go to a dedicated directory (gitignored), not the repo root.
+LOG_DIR="$HYDRA_ROOT/verify-logs"
+mkdir -p "$LOG_DIR"
+
+TOTAL_STEPS=8
 
 ERRORS=0
 WARNINGS=0
 
-echo "=========================================="
-echo "Hydra Release Verification"
-echo "=========================================="
+banner1 "Hydra Release Verification"
 echo ""
 
-# --- Step 1: Version synchronization ---
-echo "Step 1/8: Checking version synchronization..."
+step 1 $TOTAL_STEPS "Checking version synchronization"
 echo ""
 
 CANONICAL_VERSION=$(tr -d '[:space:]' < VERSION 2>/dev/null || echo "")
@@ -114,63 +124,59 @@ else
 fi
 
 # --- Step 2: Haskell tests (hydra-haskell) ---
-echo ""
-echo "Step 2/8: Running Haskell tests (hydra-haskell)..."
+step 2 $TOTAL_STEPS "Running Haskell tests (hydra-haskell)"
 echo ""
 
 cd "$HYDRA_ROOT/hydra-haskell"
-if stack test 2>&1 | tee "$HYDRA_ROOT/verify-haskell.log"; then
+if stack test 2>&1 | tee "$LOG_DIR/haskell.log"; then
     echo ""
     echo "  OK: hydra-haskell tests passed"
 else
     echo ""
-    echo "  FAIL: hydra-haskell tests failed (see verify-haskell.log)"
+    echo "  FAIL: hydra-haskell tests failed (see verify-logs/haskell.log)"
     ERRORS=$((ERRORS + 1))
 fi
 
 # --- Step 3: Haskell tests (hydra-ext) ---
-echo ""
-echo "Step 3/8: Running Haskell tests (hydra-ext)..."
+step 3 $TOTAL_STEPS "Running Haskell tests (hydra-ext)"
 echo ""
 
 cd "$HYDRA_ROOT/hydra-ext"
-if stack test 2>&1 | tee "$HYDRA_ROOT/verify-ext.log"; then
+if stack test 2>&1 | tee "$LOG_DIR/ext.log"; then
     echo ""
     echo "  OK: hydra-ext tests passed"
 else
     echo ""
-    echo "  FAIL: hydra-ext tests failed (see verify-ext.log)"
+    echo "  FAIL: hydra-ext tests failed (see verify-logs/ext.log)"
     ERRORS=$((ERRORS + 1))
 fi
 
 # --- Step 4: Java build and tests ---
-echo ""
-echo "Step 4/8: Running Java build and tests..."
+step 4 $TOTAL_STEPS "Running Java build and tests"
 echo ""
 
 cd "$HYDRA_ROOT"
-if ./gradlew test 2>&1 | tee "$HYDRA_ROOT/verify-java.log"; then
+if ./gradlew test 2>&1 | tee "$LOG_DIR/java.log"; then
     echo ""
     echo "  OK: Java tests passed"
 else
     echo ""
-    echo "  FAIL: Java tests failed (see verify-java.log)"
+    echo "  FAIL: Java tests failed (see verify-logs/java.log)"
     ERRORS=$((ERRORS + 1))
 fi
 
 # --- Step 5: Python tests and code quality ---
-echo ""
-echo "Step 5/8: Running Python tests and code quality checks..."
+step 5 $TOTAL_STEPS "Running Python tests and code quality checks"
 echo ""
 
 cd "$HYDRA_ROOT/hydra-python"
 
-if uv run pytest 2>&1 | tee "$HYDRA_ROOT/verify-python.log"; then
+if uv run pytest 2>&1 | tee "$LOG_DIR/python.log"; then
     echo ""
     echo "  OK: Python tests passed"
 else
     echo ""
-    echo "  FAIL: Python tests failed (see verify-python.log)"
+    echo "  FAIL: Python tests failed (see verify-logs/python.log)"
     ERRORS=$((ERRORS + 1))
 fi
 
@@ -189,23 +195,21 @@ else
 fi
 
 # --- Step 6: Scala build and tests ---
-echo ""
-echo "Step 6/8: Running Scala build and tests..."
+step 6 $TOTAL_STEPS "Running Scala build and tests"
 echo ""
 
 cd "$HYDRA_ROOT/hydra-scala"
-if sbt test 2>&1 | tee "$HYDRA_ROOT/verify-scala.log"; then
+if sbt test 2>&1 | tee "$LOG_DIR/scala.log"; then
     echo ""
     echo "  OK: Scala tests passed"
 else
     echo ""
-    echo "  FAIL: Scala tests failed (see verify-scala.log)"
+    echo "  FAIL: Scala tests failed (see verify-logs/scala.log)"
     ERRORS=$((ERRORS + 1))
 fi
 
 # --- Step 7: Lisp tests ---
-echo ""
-echo "Step 7/8: Running Lisp tests..."
+step 7 $TOTAL_STEPS "Running Lisp tests"
 echo ""
 
 LISP_DIR="$HYDRA_ROOT/hydra-lisp"
@@ -215,10 +219,10 @@ for dialect_dir in hydra-clojure hydra-common-lisp hydra-emacs-lisp hydra-scheme
     DIR="$LISP_DIR/$dialect_dir"
     if [ -f "$DIR/run-tests.sh" ]; then
         echo "  Testing $dialect_name..."
-        if bash "$DIR/run-tests.sh" 2>&1 | tee "$HYDRA_ROOT/verify-${dialect_name}.log" | tail -3; then
+        if bash "$DIR/run-tests.sh" 2>&1 | tee "$LOG_DIR/${dialect_name}.log" | tail -3; then
             echo "  OK: $dialect_name tests passed"
         else
-            echo "  FAIL: $dialect_name tests failed (see verify-${dialect_name}.log)"
+            echo "  FAIL: $dialect_name tests failed (see verify-logs/${dialect_name}.log)"
             ERRORS=$((ERRORS + 1))
         fi
         echo ""
@@ -229,8 +233,7 @@ for dialect_dir in hydra-clojure hydra-common-lisp hydra-emacs-lisp hydra-scheme
 done
 
 # --- Step 8: JSON kernel verification ---
-echo ""
-echo "Step 8/8: Verifying JSON kernel..."
+step 8 $TOTAL_STEPS "Verifying JSON kernel"
 echo ""
 
 cd "$HYDRA_ROOT/hydra-haskell"
@@ -245,9 +248,7 @@ fi
 
 # --- Summary ---
 echo ""
-echo "=========================================="
-echo "Verification Summary"
-echo "=========================================="
+banner1 "Verification Summary"
 echo ""
 echo "  Version: $EXPECTED"
 echo "  Errors:  $ERRORS"
