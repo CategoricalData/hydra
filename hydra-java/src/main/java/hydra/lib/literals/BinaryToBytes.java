@@ -6,8 +6,6 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.ConsList;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -54,11 +52,11 @@ public class BinaryToBytes extends PrimitiveFunction {
         };
     }
 
-    public static ConsList<Integer> apply(byte[] binary) {
+    public static List<Integer> apply(byte[] binary) {
         List<Integer> result = new ArrayList<>(binary.length);
         for (byte b : binary) {
             result.add(b & 0xFF);
         }
-        return ConsList.fromList(result);
+        return result;
     }
 }

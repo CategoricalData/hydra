@@ -69,6 +69,10 @@
           hydra_lib_literals_uint64_to_bigint)
   (begin
 
+    ;; Safe abs that handles complex numbers (returns magnitude for complex, which is real)
+    (define (safe-abs x)
+      (if (real? x) (abs x) (magnitude x)))
+
     ;; bigfloat_to_bigint :: Double -> BigInteger
     ;; Uses round (banker's rounding / round-half-even) matching Haskell's behavior
     (define hydra_lib_literals_bigfloat_to_bigint
@@ -249,10 +253,14 @@
     ;; Round to float32 precision
     (define hydra_lib_literals_read_float32
       (lambda (s)
-        (let ((n (string->number s)))
-          (if n
-              (list 'just (float32-approx n))
-              (list 'nothing)))))
+        (cond
+          ((string=? s "NaN") (list 'just +nan.0))
+          ((string=? s "Infinity") (list 'just +inf.0))
+          ((string=? s "-Infinity") (list 'just -inf.0))
+          (else (let ((n (string->number s)))
+                  (if n
+                      (list 'just (float32-approx n))
+                      (list 'nothing)))))))
 
     ;; read_int :: String -> Maybe Int
     (define hydra_lib_literals_read_int
@@ -299,8 +307,11 @@
     ;; |x| < 0.1 or |x| >= 1e7, decimal notation otherwise. Full precision.
     (define (haskell-show-float x)
       (cond
+        ((not (real? x)) "NaN")  ;; complex results from out-of-domain trig
+        ((not (= x x)) "NaN")
+        ((or (= x +inf.0) (= x -inf.0)) (if (> x 0) "Infinity" "-Infinity"))
         ((= x 0.0) "0.0")
-        ((or (< (abs x) 0.1) (>= (abs x) 1.0e7))
+        ((or (< (safe-abs x) 0.1) (>= (safe-abs x) 1.0e7))
          ;; Scientific notation needed. Use number->string and convert if needed.
          (let* ((s (number->string x))
                 (has-e (let loop ((i 0))
@@ -339,13 +350,18 @@
     ;; Format a float32 value with minimum digits for unique representation
     ;; Simplified version without IEEE 754 bytevector round-trip
     (define (haskell-show-float32 x)
+      (cond
+        ((not (real? x)) "NaN")  ;; complex results from out-of-domain trig
+        ((not (= x x)) "NaN")
+        ((or (= x +inf.0) (= x -inf.0)) (if (> x 0) "Infinity" "-Infinity"))
+        (else
       (let ((f32 (float32-approx x)))
         (define (f32-roundtrip v) (float32-approx v))
         (define (f32-equal? a b) (= (float32-approx a) (float32-approx b)))
         ;; Round to n significant digits and format
         (define (round-sig x n)
           (if (= x 0.0) 0.0
-              (let* ((e (exact (floor (/ (log (abs x)) (log 10)))))
+              (let* ((e (exact (floor (/ (log (safe-abs x)) (log 10)))))
                      (scale (expt 10 (- n e 1)))
                      (rounded (/ (round (* x scale)) scale)))
                 (* 1.0 rounded))))
@@ -359,15 +375,15 @@
         (cond
           ((= f32 0.0) "0.0")
           ((and (not (= f32 0.0))
-                (or (< (abs f32) 0.1) (>= (abs f32) 1.0e7)))
-           (let* ((e (exact (floor (/ (log (abs f32)) (log 10)))))
+                (or (< (safe-abs f32) 0.1) (>= (safe-abs f32) 1.0e7)))
+           (let* ((e (exact (floor (/ (log (safe-abs f32)) (log 10)))))
                   (m (/ f32 (expt 10.0 e)))
-                  (m-rounded (* 1.0 (/ (round (* (abs m) 1e6)) 1e6)))
+                  (m-rounded (* 1.0 (/ (round (* (safe-abs m) 1e6)) 1e6)))
                   (adj-e (if (>= m-rounded 10.0) (+ e 1) e))
                   (adj-m (if (>= m-rounded 10.0) (/ m-rounded 10.0) m-rounded))
                   (sign (if (< f32 0) "-" "")))
              (string-append sign (number->string adj-m) "e" (number->string adj-e))))
-          (else (try-digits 1)))))
+          (else (try-digits 1)))))))
 
     ;; show_bigfloat :: Double -> String
     (define hydra_lib_literals_show_bigfloat
@@ -547,10 +563,14 @@
     ;; read_float64 :: String -> Maybe Float64
     (define hydra_lib_literals_read_float64
       (lambda (s)
-        (let ((n (string->number s)))
-          (if n
-              (list 'just (inexact n))
-              (list 'nothing)))))
+        (cond
+          ((string=? s "NaN") (list 'just +nan.0))
+          ((string=? s "Infinity") (list 'just +inf.0))
+          ((string=? s "-Infinity") (list 'just -inf.0))
+          (else (let ((n (string->number s)))
+                  (if n
+                      (list 'just (inexact n))
+                      (list 'nothing)))))))
 
     ;; read_int8 :: String -> Maybe Int8
     (define hydra_lib_literals_read_int8

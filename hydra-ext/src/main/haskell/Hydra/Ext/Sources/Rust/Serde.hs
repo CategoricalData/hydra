@@ -94,12 +94,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.rust.serde"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Constants.ns, Serialization.ns, RustOperators.ns]
     (RustSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Rust serializer: converts Rust AST to concrete syntax"
   where
-    elements = [
+    definitions = [
       -- Top-level serialization
       toDefinition crateToExpr,
       toDefinition itemToExpr,

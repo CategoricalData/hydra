@@ -167,12 +167,16 @@
 ;; read_float32 :: String -> Maybe Float
 (defvar hydra_lib_literals_read_float32
   (lambda (s)
-    (condition-case nil
-        (let ((n (string-to-number s)))
-          (if (and (numberp n) (or (not (= n 0)) (string= s "0") (string= s "0.0")))
-              (list :just (round-to-float32 (float n)))
-              (list :nothing)))
-      (error (list :nothing)))))
+    (cond
+      ((string= s "NaN") (list :just 0.0e+NaN))
+      ((string= s "Infinity") (list :just 1.0e+INF))
+      ((string= s "-Infinity") (list :just -1.0e+INF))
+      (t (condition-case nil
+             (let ((n (string-to-number s)))
+               (if (and (numberp n) (or (not (= n 0)) (string= s "0") (string= s "0.0")))
+                   (list :just (round-to-float32 (float n)))
+                   (list :nothing)))
+           (error (list :nothing)))))))
 
 ;; read_int :: String -> Maybe Int
 (defvar hydra_lib_literals_read_int
@@ -225,9 +229,18 @@
       (error (list :nothing)))))
 
 ;; Helper for Haskell-compatible float show
+(defun hydra--literals-infinitep (x)
+  "Return non-nil if X is a positive or negative infinity."
+  (and (numberp x)
+       (not (isnan x))
+       (or (> x 1.7976931348623157e308)
+           (< x -1.7976931348623157e308))))
+
 (defun haskell-show-float (x)
   "Format a double-float in Haskell's show style."
   (cond
+    ((isnan x) "NaN")
+    ((hydra--literals-infinitep x) (if (> x 0) "Infinity" "-Infinity"))
     ((= x 0.0) "0.0")
     ((and (/= x 0.0)
           (or (< (abs x) 0.1) (>= (abs x) 1.0e7)))
@@ -267,16 +280,22 @@
 
 (defun round-to-float32 (x)
   "Snap a double to IEEE 754 float32 precision (24-bit mantissa)."
-  (if (= x 0.0) 0.0
-    (let* ((sign (if (< x 0) -1.0 1.0))
-           (ax (abs x))
-           (e (floor (log ax 2.0)))
-           (scale (expt 2.0 (- 23 e)))
-           (mantissa (round (* ax scale))))
-      (* sign (/ mantissa scale)))))
+  (cond ((isnan x) x)
+        ((hydra--literals-infinitep x) x)
+        ((= x 0.0) 0.0)
+        (t (let* ((sign (if (< x 0) -1.0 1.0))
+                  (ax (abs x))
+                  (e (floor (log ax 2.0)))
+                  (scale (expt 2.0 (- 23 e)))
+                  (mantissa (round (* ax scale))))
+             (* sign (/ mantissa scale))))))
 
 (defun haskell-show-float32 (x)
   "Format a float32 value with minimum digits for unique representation."
+  (cond
+   ((isnan x) "NaN")
+   ((hydra--literals-infinitep x) (if (> x 0) "Infinity" "-Infinity"))
+   (t
   (let ((f32 (round-to-float32 (float x))))
     (cond
       ((= f32 0.0) "0.0")
@@ -302,7 +321,7 @@
                 for rounded = (/ (round (* f32 factor)) factor)
                 when (= (round-to-float32 rounded) (round-to-float32 f32))
                 return (haskell-show-float-simple (* 1.0 rounded))
-                finally return (haskell-show-float-simple f32))))))
+                finally return (haskell-show-float-simple f32))))))))
 
 ;; show_float32 :: Float -> String
 (defvar hydra_lib_literals_show_float32
@@ -498,12 +517,16 @@
 ;; read_float64 :: String -> Maybe Float64
 (defvar hydra_lib_literals_read_float64
   (lambda (s)
-    (condition-case nil
-        (let ((n (string-to-number s)))
-          (if (and (numberp n) (or (not (= n 0)) (string= s "0") (string= s "0.0")))
-              (list :just (float n))
-              (list :nothing)))
-      (error (list :nothing)))))
+    (cond
+      ((string= s "NaN") (list :just 0.0e+NaN))
+      ((string= s "Infinity") (list :just 1.0e+INF))
+      ((string= s "-Infinity") (list :just -1.0e+INF))
+      (t (condition-case nil
+             (let ((n (string-to-number s)))
+               (if (and (numberp n) (or (not (= n 0)) (string= s "0") (string= s "0.0")))
+                   (list :just (float n))
+                   (list :nothing)))
+           (error (list :nothing)))))))
 
 ;; read_int8 :: String -> Maybe Int8
 (defvar hydra_lib_literals_read_int8
