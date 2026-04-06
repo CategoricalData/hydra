@@ -874,7 +874,7 @@ public interface Serde {
     return (num).accept(new hydra.ext.python.syntax.Number_.PartialVisitor<>() {
       @Override
       public hydra.ast.Expr visit(hydra.ext.python.syntax.Number_.Float_ f) {
-        return hydra.Serialization.cst(hydra.lib.literals.ShowBigfloat.apply((f).value));
+        return hydra.Serialization.cst(hydra.ext.python.Serde.pythonFloatLiteralText(hydra.lib.literals.ShowBigfloat.apply((f).value)));
       }
 
       @Override
@@ -1581,6 +1581,25 @@ public interface Serde {
       hydra.lib.strings.Cat2.apply(
         escaped.get(),
         quote.get()));
+  }
+
+  static String pythonFloatLiteralText(String s) {
+    return hydra.lib.logic.IfElse.lazy(
+      hydra.lib.equality.Equal.apply(
+        s,
+        "NaN"),
+      () -> "float('nan')",
+      () -> hydra.lib.logic.IfElse.lazy(
+        hydra.lib.equality.Equal.apply(
+          s,
+          "Infinity"),
+        () -> "float('inf')",
+        () -> hydra.lib.logic.IfElse.lazy(
+          hydra.lib.equality.Equal.apply(
+            s,
+            "-Infinity"),
+          () -> "float('-inf')",
+          () -> s)));
   }
 
   static String toPythonComments(String doc_) {

@@ -53,8 +53,10 @@ avroHydraAdapter cx schema env0 =
                 Coders.adapterCoder = Coders.Coder {
                   Coders.coderEncode = encode,
                   Coders.coderDecode = decode}}, env)
-          doubleToInt = \d -> Literals.bigintToInt32 (Math.truncate (Literals.bigfloatToFloat64 d))
-          doubleToLong = \d -> Literals.bigintToInt64 (Math.truncate (Literals.bigfloatToFloat64 d))
+          doubleToInt =
+                  \d -> Literals.bigintToInt32 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 d))))
+          doubleToLong =
+                  \d -> Literals.bigintToInt64 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 d))))
       in case schema of
         Schema.SchemaArray v0 -> Eithers.bind (avroHydraAdapter cx (Schema.arrayItems v0) env0) (\adEnv ->
           let ad = Pairs.first adEnv

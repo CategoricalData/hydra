@@ -220,6 +220,24 @@ def fieldAccessToExpr(d: hydra.ext.lisp.syntax.Dialect)(fa: hydra.ext.lisp.synta
        hydra.serialization.cst("-"), field)), target)))
 }
 
+def formatLispFloat(d: hydra.ext.lisp.syntax.Dialect)(v: BigDecimal): scala.Predef.String =
+  {
+  lazy val s: scala.Predef.String = hydra.lib.literals.showBigfloat(v)
+  hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](s)("NaN"))(d match
+    case hydra.ext.lisp.syntax.Dialect.clojure => "Double/NaN"
+    case hydra.ext.lisp.syntax.Dialect.scheme => "+nan.0"
+    case hydra.ext.lisp.syntax.Dialect.commonLisp => "+hydra-nan+"
+    case hydra.ext.lisp.syntax.Dialect.emacsLisp => "0.0e+NaN")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](s)("Infinity"))(d match
+    case hydra.ext.lisp.syntax.Dialect.clojure => "Double/POSITIVE_INFINITY"
+    case hydra.ext.lisp.syntax.Dialect.scheme => "+inf.0"
+    case hydra.ext.lisp.syntax.Dialect.commonLisp => "+hydra-pos-inf+"
+    case hydra.ext.lisp.syntax.Dialect.emacsLisp => "1.0e+INF")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](s)("-Infinity"))(d match
+    case hydra.ext.lisp.syntax.Dialect.clojure => "Double/NEGATIVE_INFINITY"
+    case hydra.ext.lisp.syntax.Dialect.scheme => "-inf.0"
+    case hydra.ext.lisp.syntax.Dialect.commonLisp => "+hydra-neg-inf+"
+    case hydra.ext.lisp.syntax.Dialect.emacsLisp => "-1.0e+INF")(s)))
+}
+
 def functionDefinitionToExpr(d: hydra.ext.lisp.syntax.Dialect)(fdef: hydra.ext.lisp.syntax.FunctionDefinition): hydra.ast.Expr =
   {
   lazy val name: hydra.ast.Expr = hydra.ext.lisp.serde.symbolToExpr(fdef.name)
@@ -382,7 +400,7 @@ def listLiteralToExpr(d: hydra.ext.lisp.syntax.Dialect)(ll: hydra.ext.lisp.synta
 def literalToExpr(d: hydra.ext.lisp.syntax.Dialect)(lit: hydra.ext.lisp.syntax.Literal): hydra.ast.Expr =
   lit match
   case hydra.ext.lisp.syntax.Literal.integer(v_Literal_integer_i) => hydra.serialization.cst(hydra.lib.literals.showBigint(v_Literal_integer_i.value))
-  case hydra.ext.lisp.syntax.Literal.float(v_Literal_float_f) => hydra.serialization.cst(hydra.lib.literals.showBigfloat(v_Literal_float_f.value))
+  case hydra.ext.lisp.syntax.Literal.float(v_Literal_float_f) => hydra.serialization.cst(hydra.ext.lisp.serde.formatLispFloat(d)(v_Literal_float_f.value))
   case hydra.ext.lisp.syntax.Literal.string(v_Literal_string_s) => {
     lazy val e1: scala.Predef.String = hydra.lib.strings.intercalate("\\\\")(hydra.lib.strings.splitOn("\\")(v_Literal_string_s))
     d match

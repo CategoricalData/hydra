@@ -61,17 +61,29 @@
     (define (acosh x) (log (+ x (sqrt (- (* x x) 1)))))
     (define (atanh x) (/ (log (/ (+ 1 x) (- 1 x))) 2))
 
+    ;; Scheme's trig/log functions can return complex numbers for out-of-domain
+    ;; real inputs. Hydra's semantics (per Haskell / IEEE 754) require NaN or
+    ;; ±Inf in such cases. These helpers guard against out-of-domain inputs
+    ;; and return the appropriate real result.
+
     ;; abs :: Int -> Int
     (define hydra_lib_math_abs
       (lambda (n) (abs n)))
 
-    ;; acos :: Double -> Double
+    ;; acos :: Double -> Double  (domain [-1, 1]; out-of-domain -> NaN)
     (define hydra_lib_math_acos
-      (lambda (x) (acos x)))
+      (lambda (x)
+        (if (or (nan? x) (< x -1.0) (> x 1.0))
+            +nan.0
+            (acos x))))
 
-    ;; acosh :: Double -> Double
+    ;; acosh :: Double -> Double  (domain [1, +inf); out-of-domain -> NaN)
     (define hydra_lib_math_acosh
-      (lambda (x) (acosh x)))
+      (lambda (x)
+        (cond ((nan? x) +nan.0)
+              ((< x 1.0) +nan.0)
+              ((= x +inf.0) +inf.0)
+              (else (acosh x)))))
 
     ;; add :: Int -> Int -> Int
     (define hydra_lib_math_add
@@ -79,31 +91,53 @@
         (lambda (b)
           (+ a b))))
 
-    ;; asin :: Double -> Double
+    ;; asin :: Double -> Double  (domain [-1, 1]; out-of-domain -> NaN)
     (define hydra_lib_math_asin
-      (lambda (x) (asin x)))
+      (lambda (x)
+        (if (or (nan? x) (< x -1.0) (> x 1.0))
+            +nan.0
+            (asin x))))
 
-    ;; asinh :: Double -> Double
+    ;; asinh :: Double -> Double  (unrestricted domain)
     (define hydra_lib_math_asinh
-      (lambda (x) (asinh x)))
+      (lambda (x)
+        (cond ((nan? x) +nan.0)
+              ((= x +inf.0) +inf.0)
+              ((= x -inf.0) -inf.0)
+              (else (asinh x)))))
 
-    ;; atan :: Double -> Double
+    ;; atan :: Double -> Double  (unrestricted domain)
     (define hydra_lib_math_atan
       (lambda (x) (atan x)))
 
     ;; atan2 :: Double -> Double -> Double
+    ;; Match Haskell: atan2 returns NaN when both arguments are infinite
+    ;; (Scheme's two-arg atan returns ±pi/4 or ±3pi/4 in these cases).
     (define hydra_lib_math_atan2
       (lambda (y)
         (lambda (x)
-          (atan y x))))
+          (if (and (infinite? y) (infinite? x))
+              +nan.0
+              (atan y x)))))
 
-    ;; atanh :: Double -> Double
+    ;; atanh :: Double -> Double  (domain (-1, 1); boundary -> ±Inf; |x|>1 -> NaN)
     (define hydra_lib_math_atanh
-      (lambda (x) (atanh x)))
+      (lambda (x)
+        (cond ((nan? x) +nan.0)
+              ((< x -1.0) +nan.0)
+              ((> x 1.0) +nan.0)
+              ((= x 1.0) +inf.0)
+              ((= x -1.0) -inf.0)
+              (else (atanh x)))))
 
-    ;; ceiling :: Double -> BigInt
+    ;; ceiling :: Double -> Double
+    ;; DIVERGENCE FROM HASKELL: Hydra returns a float, not an integer, so that
+    ;; NaN/Inf propagate naturally per IEEE 754.
     (define hydra_lib_math_ceiling
-      (lambda (x) (exact (ceiling x))))
+      (lambda (x)
+        (if (or (nan? x) (infinite? x))
+            x
+            (inexact (ceiling x)))))
 
     ;; cos :: Double -> Double
     (define hydra_lib_math_cos
@@ -130,19 +164,29 @@
     (define hydra_lib_math_exp
       (lambda (x) (exp x)))
 
-    ;; floor :: Double -> BigInt
+    ;; floor :: Double -> Double
+    ;; DIVERGENCE FROM HASKELL: returns a float, not an integer (see ceiling).
     (define hydra_lib_math_floor
-      (lambda (x) (exact (floor x))))
+      (lambda (x)
+        (if (or (nan? x) (infinite? x))
+            x
+            (inexact (floor x)))))
 
-    ;; log :: Double -> Double
+    ;; log :: Double -> Double  (domain (0, +inf); x=0 -> -Inf; x<0 -> NaN)
     (define hydra_lib_math_log
-      (lambda (x) (log x)))
+      (lambda (x)
+        (cond ((nan? x) +nan.0)
+              ((< x 0.0) +nan.0)
+              ((= x 0.0) -inf.0)
+              ((= x -inf.0) +nan.0)
+              (else (log x)))))
 
     ;; logBase :: Double -> Double -> Double
+    ;; Defined via the guarded log, so NaN/Inf compose correctly.
     (define hydra_lib_math_logBase
       (lambda (base)
         (lambda (x)
-          (/ (log x) (log base)))))
+          (/ (hydra_lib_math_log x) (hydra_lib_math_log base)))))
 
     (define hydra_lib_math_log_base hydra_lib_math_logBase)
 
@@ -221,10 +265,22 @@
     (define hydra_lib_math_pi (* 4 (atan 1)))
 
     ;; pow :: Double -> Double -> Double
+    ;; Scheme's expt can return complex numbers (e.g. negative base with
+    ;; fractional exponent); Haskell's (**) returns NaN in such cases.
+    ;; pow :: Double -> Double -> Double
+    ;; Match Haskell's (**): 0^negative = Inf, complex results -> NaN
     (define hydra_lib_math_pow
       (lambda (base)
         (lambda (exp_)
-          (expt base exp_))))
+          (let ((b (* 1.0 base)) (e (* 1.0 exp_)))
+            (cond
+              ;; 0^negative = Infinity (Guile returns NaN)
+              ((and (= b 0.0) (< e 0.0)) +inf.0)
+              (else
+                (let ((result (expt b e)))
+                  (if (real? result)
+                      result
+                      +nan.0))))))))
 
     ;; pred :: Int -> Int
     (define hydra_lib_math_pred
@@ -245,18 +301,24 @@
         (lambda (b)
           (truncate-remainder a b))))
 
-    ;; round :: Double -> BigInt
+    ;; round :: Double -> Double
+    ;; DIVERGENCE FROM HASKELL: returns a float, not an integer (see ceiling).
     (define hydra_lib_math_round
-      (lambda (x) (exact (round x))))
+      (lambda (x)
+        (if (or (nan? x) (infinite? x))
+            x
+            (inexact (round x)))))
 
     ;; roundFloat64 :: Int -> Double -> Double
+    ;; Returns NaN/Inf inputs unchanged (no rounding is possible).
     (define hydra_lib_math_round_float64
       (lambda (n)
         (lambda (x)
-          (if (= x 0.0)
-              0.0
-              (let ((factor (expt 10.0 (- n 1 (exact (floor (/ (log (abs x)) (log 10))))))))
-                (/ (inexact (round (* x factor))) factor))))))
+          (cond ((or (nan? x) (infinite? x)) x)
+                ((= x 0.0) 0.0)
+                (else
+                 (let ((factor (expt 10.0 (- n 1 (exact (floor (/ (log (abs x)) (log 10))))))))
+                   (/ (inexact (round (* x factor))) factor)))))))
 
     ;; roundFloat32 :: Int -> Float -> Float
     ;; Rounds to N significant digits, then snaps through IEEE float32
@@ -280,9 +342,13 @@
     (define hydra_lib_math_sinh
       (lambda (x) (sinh x)))
 
-    ;; sqrt :: Double -> Double
+    ;; sqrt :: Double -> Double  (domain [0, +inf); x<0 -> NaN)
     (define hydra_lib_math_sqrt
-      (lambda (x) (sqrt x)))
+      (lambda (x)
+        (cond ((nan? x) +nan.0)
+              ((< x 0.0) +nan.0)
+              ((= x -inf.0) +nan.0)
+              (else (sqrt x)))))
 
     ;; sub :: Int -> Int -> Int
     (define hydra_lib_math_sub
@@ -299,9 +365,19 @@
       (lambda (x) (tan x)))
 
     ;; tanh :: Double -> Double
+    ;; The custom tanh (sinh/cosh) returns NaN for ±Inf because Inf/Inf = NaN.
+    ;; Haskell's tanh returns ±1.0 at the infinities.
     (define hydra_lib_math_tanh
-      (lambda (x) (tanh x)))
+      (lambda (x)
+        (cond ((nan? x) +nan.0)
+              ((= x +inf.0) 1.0)
+              ((= x -inf.0) -1.0)
+              (else (tanh x)))))
 
-    ;; truncate :: Double -> BigInt
+    ;; truncate :: Double -> Double
+    ;; DIVERGENCE FROM HASKELL: returns a float, not an integer (see ceiling).
     (define hydra_lib_math_truncate
-      (lambda (x) (exact (truncate x))))))
+      (lambda (x)
+        (if (or (nan? x) (infinite? x))
+            x
+            (inexact (truncate x)))))))

@@ -99,6 +99,16 @@ literalRoundtripGroup = subgroup "literal types" [
     roundtripTest "float32" T.float32 (float32 1.5),
     roundtripTest "float64" T.float64 (float64 3.14159),
 
+    -- Special floats (NaN, Infinity, -Infinity) encoded as JSON string sentinels.
+    -- Bigfloat is omitted because Java BigDecimal and Python Decimal cannot represent
+    -- IEEE 754 special values; float32 and float64 carry them natively.
+    roundtripTest "float32 NaN" T.float32 (float32 (0/0)),
+    roundtripTest "float32 positive infinity" T.float32 (float32 (1/0)),
+    roundtripTest "float32 negative infinity" T.float32 (float32 (-1/0)),
+    roundtripTest "float64 NaN" T.float64 (float64 (0/0)),
+    roundtripTest "float64 positive infinity" T.float64 (float64 (1/0)),
+    roundtripTest "float64 negative infinity" T.float64 (float64 (-1/0)),
+
     -- Strings
     roundtripTest "string simple" T.string (string "hello"),
     roundtripTest "string empty" T.string (string ""),

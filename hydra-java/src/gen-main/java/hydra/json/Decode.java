@@ -10,10 +10,17 @@ public interface Decode {
     return (ft).accept(new hydra.core.FloatType.PartialVisitor<>() {
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.FloatType.Bigfloat ignored) {
-        hydra.util.Either<String, java.math.BigDecimal> numResult = hydra.json.Decode.expectNumber(value);
-        return hydra.lib.eithers.Map.apply(
-          (java.util.function.Function<java.math.BigDecimal, hydra.core.Term>) (n -> new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Bigfloat(n)))),
-          numResult);
+        return (value).accept(new hydra.json.model.Value.PartialVisitor<>() {
+          @Override
+          public hydra.util.Either<String, hydra.core.Term> otherwise(hydra.json.model.Value instance) {
+            return hydra.util.Either.<String, hydra.core.Term>left("expected number for bigfloat");
+          }
+
+          @Override
+          public hydra.util.Either<String, hydra.core.Term> visit(hydra.json.model.Value.Number_ n) {
+            return hydra.util.Either.<String, hydra.core.Term>right(new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Bigfloat((n).value))));
+          }
+        });
       }
 
       @Override
@@ -35,10 +42,27 @@ public interface Decode {
 
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.FloatType.Float64 ignored) {
-        hydra.util.Either<String, java.math.BigDecimal> numResult = hydra.json.Decode.expectNumber(value);
-        return hydra.lib.eithers.Map.apply(
-          (java.util.function.Function<java.math.BigDecimal, hydra.core.Term>) (n -> new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(hydra.lib.literals.BigfloatToFloat64.apply(n))))),
-          numResult);
+        return (value).accept(new hydra.json.model.Value.PartialVisitor<>() {
+          @Override
+          public hydra.util.Either<String, hydra.core.Term> otherwise(hydra.json.model.Value instance) {
+            return hydra.util.Either.<String, hydra.core.Term>left("expected number or special float string for float64");
+          }
+
+          @Override
+          public hydra.util.Either<String, hydra.core.Term> visit(hydra.json.model.Value.Number_ n) {
+            return hydra.util.Either.<String, hydra.core.Term>right(new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(hydra.lib.literals.BigfloatToFloat64.apply((n).value)))));
+          }
+
+          @Override
+          public hydra.util.Either<String, hydra.core.Term> visit(hydra.json.model.Value.String_ s) {
+            return hydra.lib.maybes.Maybe.applyLazy(
+              () -> hydra.util.Either.<String, hydra.core.Term>left(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
+                "invalid float64 sentinel: ",
+                (s).value))),
+              (java.util.function.Function<Double, hydra.util.Either<String, hydra.core.Term>>) (v -> hydra.util.Either.<String, hydra.core.Term>right(new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(v))))),
+              hydra.json.Decode.parseSpecialFloat((s).value));
+          }
+        });
       }
     });
   }
@@ -655,5 +679,22 @@ public interface Decode {
           lookedUp.get());
       }
     });
+  }
+
+  static hydra.util.Maybe<Double> parseSpecialFloat(String s) {
+    return hydra.lib.logic.IfElse.lazy(
+      hydra.lib.logic.Or.apply(
+        hydra.lib.equality.Equal.apply(
+          s,
+          "NaN"),
+        hydra.lib.logic.Or.apply(
+          hydra.lib.equality.Equal.apply(
+            s,
+            "Infinity"),
+          hydra.lib.equality.Equal.apply(
+            s,
+            "-Infinity"))),
+      () -> hydra.lib.literals.ReadFloat64.apply(s),
+      () -> (hydra.util.Maybe<Double>) (hydra.util.Maybe.<Double>nothing()));
   }
 }

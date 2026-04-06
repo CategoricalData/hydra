@@ -43,6 +43,9 @@ public class RoundFloat64 extends PrimitiveFunction {
     }
 
     public static double apply(int n, double x) {
+        if (Double.isNaN(x) || Double.isInfinite(x)) {
+            return x;
+        }
         if (x == 0) {
             return 0.0;
         }

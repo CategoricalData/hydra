@@ -2255,6 +2255,1154 @@
                                     {
                                       "record": {
                                         "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "float32 NaN"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "literal",
+                                                                        "term": {
+                                                                          "union": {
+                                                                            "field": {
+                                                                              "name": "float",
+                                                                              "term": {
+                                                                                "union": {
+                                                                                  "field": {
+                                                                                    "name": "float32",
+                                                                                    "term": {"literal": {"float": {"float32": "NaN"}}}},
+                                                                                  "typeName": "hydra.core.FloatValue"}}},
+                                                                            "typeName": "hydra.core.Literal"}}},
+                                                                      "typeName": "hydra.core.Term"}},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "literal",
+                                                                            "term": {
+                                                                              "union": {
+                                                                                "field": {
+                                                                                  "name": "float",
+                                                                                  "term": {
+                                                                                    "union": {
+                                                                                      "field": {"name": "float32", "term": {"unit": {}}},
+                                                                                      "typeName": "hydra.core.FloatType"}}},
+                                                                                "typeName": "hydra.core.LiteralType"}}},
+                                                                          "typeName": "hydra.core.Type"}},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "wrap": {
+                                                                              "body": {"literal": {"string": "test"}},
+                                                                              "typeName": "hydra.core.Name"}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"variable": "hydra.lib.maps.empty"},
+                                                                                      "type": {"variable": "hydra.core.Name"}}},
+                                                                                  "type": {"variable": "hydra.core.Type"}}},
+                                                                              "function": {"variable": "hydra.json.encode.toJson"}}}}}}}}},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "function": {
+                                                                      "lambda": {
+                                                                        "body": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "json"},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "union": {
+                                                                                        "field": {
+                                                                                          "name": "literal",
+                                                                                          "term": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "float",
+                                                                                                "term": {
+                                                                                                  "union": {
+                                                                                                    "field": {"name": "float32", "term": {"unit": {}}},
+                                                                                                    "typeName": "hydra.core.FloatType"}}},
+                                                                                              "typeName": "hydra.core.LiteralType"}}},
+                                                                                        "typeName": "hydra.core.Type"}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "wrap": {
+                                                                                            "body": {"literal": {"string": "test"}},
+                                                                                            "typeName": "hydra.core.Name"}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"variable": "hydra.lib.maps.empty"},
+                                                                                                    "type": {"variable": "hydra.core.Name"}}},
+                                                                                                "type": {"variable": "hydra.core.Type"}}},
+                                                                                            "function": {"variable": "hydra.json.decode.fromJson"}}}}}}}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "function": {
+                                                                                    "lambda": {
+                                                                                      "body": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "decoded"},
+                                                                                          "function": {"variable": "hydra.show.core.term"}}},
+                                                                                      "domain": {"variable": "hydra.core.Term"},
+                                                                                      "parameter": "decoded"}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "function": {
+                                                                                        "lambda": {
+                                                                                          "body": {"variable": "e"},
+                                                                                          "domain": {"literal": {"string": {}}},
+                                                                                          "parameter": "e"}}},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"variable": "hydra.lib.eithers.either"},
+                                                                                                "type": {"literal": {"string": {}}}}},
+                                                                                            "type": {"variable": "hydra.core.Term"}}},
+                                                                                        "type": {"literal": {"string": {}}}}}}}}}}},
+                                                                        "domain": {"variable": "hydra.json.model.Value"},
+                                                                        "parameter": "json"}}},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "function": {
+                                                                          "lambda": {
+                                                                            "body": {"variable": "e"},
+                                                                            "domain": {"literal": {"string": {}}},
+                                                                            "parameter": "e"}}},
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"variable": "hydra.lib.eithers.either"},
+                                                                                  "type": {"literal": {"string": {}}}}},
+                                                                              "type": {"variable": "hydra.json.model.Value"}}},
+                                                                          "type": {"literal": {"string": {}}}}}}}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "float",
+                                                                          "term": {
+                                                                            "union": {
+                                                                              "field": {
+                                                                                "name": "float32",
+                                                                                "term": {"literal": {"float": {"float32": "NaN"}}}},
+                                                                              "typeName": "hydra.core.FloatValue"}}},
+                                                                        "typeName": "hydra.core.Literal"}}},
+                                                                  "typeName": "hydra.core.Term"}},
+                                                              "function": {"variable": "hydra.show.core.term"}}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                    {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "name",
+                                            "term": {"literal": {"string": "float32 positive infinity"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "literal",
+                                                                        "term": {
+                                                                          "union": {
+                                                                            "field": {
+                                                                              "name": "float",
+                                                                              "term": {
+                                                                                "union": {
+                                                                                  "field": {
+                                                                                    "name": "float32",
+                                                                                    "term": {"literal": {"float": {"float32": "Infinity"}}}},
+                                                                                  "typeName": "hydra.core.FloatValue"}}},
+                                                                            "typeName": "hydra.core.Literal"}}},
+                                                                      "typeName": "hydra.core.Term"}},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "literal",
+                                                                            "term": {
+                                                                              "union": {
+                                                                                "field": {
+                                                                                  "name": "float",
+                                                                                  "term": {
+                                                                                    "union": {
+                                                                                      "field": {"name": "float32", "term": {"unit": {}}},
+                                                                                      "typeName": "hydra.core.FloatType"}}},
+                                                                                "typeName": "hydra.core.LiteralType"}}},
+                                                                          "typeName": "hydra.core.Type"}},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "wrap": {
+                                                                              "body": {"literal": {"string": "test"}},
+                                                                              "typeName": "hydra.core.Name"}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"variable": "hydra.lib.maps.empty"},
+                                                                                      "type": {"variable": "hydra.core.Name"}}},
+                                                                                  "type": {"variable": "hydra.core.Type"}}},
+                                                                              "function": {"variable": "hydra.json.encode.toJson"}}}}}}}}},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "function": {
+                                                                      "lambda": {
+                                                                        "body": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "json"},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "union": {
+                                                                                        "field": {
+                                                                                          "name": "literal",
+                                                                                          "term": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "float",
+                                                                                                "term": {
+                                                                                                  "union": {
+                                                                                                    "field": {"name": "float32", "term": {"unit": {}}},
+                                                                                                    "typeName": "hydra.core.FloatType"}}},
+                                                                                              "typeName": "hydra.core.LiteralType"}}},
+                                                                                        "typeName": "hydra.core.Type"}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "wrap": {
+                                                                                            "body": {"literal": {"string": "test"}},
+                                                                                            "typeName": "hydra.core.Name"}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"variable": "hydra.lib.maps.empty"},
+                                                                                                    "type": {"variable": "hydra.core.Name"}}},
+                                                                                                "type": {"variable": "hydra.core.Type"}}},
+                                                                                            "function": {"variable": "hydra.json.decode.fromJson"}}}}}}}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "function": {
+                                                                                    "lambda": {
+                                                                                      "body": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "decoded"},
+                                                                                          "function": {"variable": "hydra.show.core.term"}}},
+                                                                                      "domain": {"variable": "hydra.core.Term"},
+                                                                                      "parameter": "decoded"}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "function": {
+                                                                                        "lambda": {
+                                                                                          "body": {"variable": "e"},
+                                                                                          "domain": {"literal": {"string": {}}},
+                                                                                          "parameter": "e"}}},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"variable": "hydra.lib.eithers.either"},
+                                                                                                "type": {"literal": {"string": {}}}}},
+                                                                                            "type": {"variable": "hydra.core.Term"}}},
+                                                                                        "type": {"literal": {"string": {}}}}}}}}}}},
+                                                                        "domain": {"variable": "hydra.json.model.Value"},
+                                                                        "parameter": "json"}}},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "function": {
+                                                                          "lambda": {
+                                                                            "body": {"variable": "e"},
+                                                                            "domain": {"literal": {"string": {}}},
+                                                                            "parameter": "e"}}},
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"variable": "hydra.lib.eithers.either"},
+                                                                                  "type": {"literal": {"string": {}}}}},
+                                                                              "type": {"variable": "hydra.json.model.Value"}}},
+                                                                          "type": {"literal": {"string": {}}}}}}}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "float",
+                                                                          "term": {
+                                                                            "union": {
+                                                                              "field": {
+                                                                                "name": "float32",
+                                                                                "term": {"literal": {"float": {"float32": "Infinity"}}}},
+                                                                              "typeName": "hydra.core.FloatValue"}}},
+                                                                        "typeName": "hydra.core.Literal"}}},
+                                                                  "typeName": "hydra.core.Term"}},
+                                                              "function": {"variable": "hydra.show.core.term"}}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                    {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "name",
+                                            "term": {"literal": {"string": "float32 negative infinity"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "literal",
+                                                                        "term": {
+                                                                          "union": {
+                                                                            "field": {
+                                                                              "name": "float",
+                                                                              "term": {
+                                                                                "union": {
+                                                                                  "field": {
+                                                                                    "name": "float32",
+                                                                                    "term": {"literal": {"float": {"float32": "-Infinity"}}}},
+                                                                                  "typeName": "hydra.core.FloatValue"}}},
+                                                                            "typeName": "hydra.core.Literal"}}},
+                                                                      "typeName": "hydra.core.Term"}},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "literal",
+                                                                            "term": {
+                                                                              "union": {
+                                                                                "field": {
+                                                                                  "name": "float",
+                                                                                  "term": {
+                                                                                    "union": {
+                                                                                      "field": {"name": "float32", "term": {"unit": {}}},
+                                                                                      "typeName": "hydra.core.FloatType"}}},
+                                                                                "typeName": "hydra.core.LiteralType"}}},
+                                                                          "typeName": "hydra.core.Type"}},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "wrap": {
+                                                                              "body": {"literal": {"string": "test"}},
+                                                                              "typeName": "hydra.core.Name"}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"variable": "hydra.lib.maps.empty"},
+                                                                                      "type": {"variable": "hydra.core.Name"}}},
+                                                                                  "type": {"variable": "hydra.core.Type"}}},
+                                                                              "function": {"variable": "hydra.json.encode.toJson"}}}}}}}}},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "function": {
+                                                                      "lambda": {
+                                                                        "body": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "json"},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "union": {
+                                                                                        "field": {
+                                                                                          "name": "literal",
+                                                                                          "term": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "float",
+                                                                                                "term": {
+                                                                                                  "union": {
+                                                                                                    "field": {"name": "float32", "term": {"unit": {}}},
+                                                                                                    "typeName": "hydra.core.FloatType"}}},
+                                                                                              "typeName": "hydra.core.LiteralType"}}},
+                                                                                        "typeName": "hydra.core.Type"}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "wrap": {
+                                                                                            "body": {"literal": {"string": "test"}},
+                                                                                            "typeName": "hydra.core.Name"}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"variable": "hydra.lib.maps.empty"},
+                                                                                                    "type": {"variable": "hydra.core.Name"}}},
+                                                                                                "type": {"variable": "hydra.core.Type"}}},
+                                                                                            "function": {"variable": "hydra.json.decode.fromJson"}}}}}}}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "function": {
+                                                                                    "lambda": {
+                                                                                      "body": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "decoded"},
+                                                                                          "function": {"variable": "hydra.show.core.term"}}},
+                                                                                      "domain": {"variable": "hydra.core.Term"},
+                                                                                      "parameter": "decoded"}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "function": {
+                                                                                        "lambda": {
+                                                                                          "body": {"variable": "e"},
+                                                                                          "domain": {"literal": {"string": {}}},
+                                                                                          "parameter": "e"}}},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"variable": "hydra.lib.eithers.either"},
+                                                                                                "type": {"literal": {"string": {}}}}},
+                                                                                            "type": {"variable": "hydra.core.Term"}}},
+                                                                                        "type": {"literal": {"string": {}}}}}}}}}}},
+                                                                        "domain": {"variable": "hydra.json.model.Value"},
+                                                                        "parameter": "json"}}},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "function": {
+                                                                          "lambda": {
+                                                                            "body": {"variable": "e"},
+                                                                            "domain": {"literal": {"string": {}}},
+                                                                            "parameter": "e"}}},
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"variable": "hydra.lib.eithers.either"},
+                                                                                  "type": {"literal": {"string": {}}}}},
+                                                                              "type": {"variable": "hydra.json.model.Value"}}},
+                                                                          "type": {"literal": {"string": {}}}}}}}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "float",
+                                                                          "term": {
+                                                                            "union": {
+                                                                              "field": {
+                                                                                "name": "float32",
+                                                                                "term": {"literal": {"float": {"float32": "-Infinity"}}}},
+                                                                              "typeName": "hydra.core.FloatValue"}}},
+                                                                        "typeName": "hydra.core.Literal"}}},
+                                                                  "typeName": "hydra.core.Term"}},
+                                                              "function": {"variable": "hydra.show.core.term"}}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                    {
+                                      "record": {
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "float64 NaN"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "literal",
+                                                                        "term": {
+                                                                          "union": {
+                                                                            "field": {
+                                                                              "name": "float",
+                                                                              "term": {
+                                                                                "union": {
+                                                                                  "field": {
+                                                                                    "name": "float64",
+                                                                                    "term": {"literal": {"float": {"float64": "NaN"}}}},
+                                                                                  "typeName": "hydra.core.FloatValue"}}},
+                                                                            "typeName": "hydra.core.Literal"}}},
+                                                                      "typeName": "hydra.core.Term"}},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "literal",
+                                                                            "term": {
+                                                                              "union": {
+                                                                                "field": {
+                                                                                  "name": "float",
+                                                                                  "term": {
+                                                                                    "union": {
+                                                                                      "field": {"name": "float64", "term": {"unit": {}}},
+                                                                                      "typeName": "hydra.core.FloatType"}}},
+                                                                                "typeName": "hydra.core.LiteralType"}}},
+                                                                          "typeName": "hydra.core.Type"}},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "wrap": {
+                                                                              "body": {"literal": {"string": "test"}},
+                                                                              "typeName": "hydra.core.Name"}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"variable": "hydra.lib.maps.empty"},
+                                                                                      "type": {"variable": "hydra.core.Name"}}},
+                                                                                  "type": {"variable": "hydra.core.Type"}}},
+                                                                              "function": {"variable": "hydra.json.encode.toJson"}}}}}}}}},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "function": {
+                                                                      "lambda": {
+                                                                        "body": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "json"},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "union": {
+                                                                                        "field": {
+                                                                                          "name": "literal",
+                                                                                          "term": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "float",
+                                                                                                "term": {
+                                                                                                  "union": {
+                                                                                                    "field": {"name": "float64", "term": {"unit": {}}},
+                                                                                                    "typeName": "hydra.core.FloatType"}}},
+                                                                                              "typeName": "hydra.core.LiteralType"}}},
+                                                                                        "typeName": "hydra.core.Type"}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "wrap": {
+                                                                                            "body": {"literal": {"string": "test"}},
+                                                                                            "typeName": "hydra.core.Name"}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"variable": "hydra.lib.maps.empty"},
+                                                                                                    "type": {"variable": "hydra.core.Name"}}},
+                                                                                                "type": {"variable": "hydra.core.Type"}}},
+                                                                                            "function": {"variable": "hydra.json.decode.fromJson"}}}}}}}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "function": {
+                                                                                    "lambda": {
+                                                                                      "body": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "decoded"},
+                                                                                          "function": {"variable": "hydra.show.core.term"}}},
+                                                                                      "domain": {"variable": "hydra.core.Term"},
+                                                                                      "parameter": "decoded"}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "function": {
+                                                                                        "lambda": {
+                                                                                          "body": {"variable": "e"},
+                                                                                          "domain": {"literal": {"string": {}}},
+                                                                                          "parameter": "e"}}},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"variable": "hydra.lib.eithers.either"},
+                                                                                                "type": {"literal": {"string": {}}}}},
+                                                                                            "type": {"variable": "hydra.core.Term"}}},
+                                                                                        "type": {"literal": {"string": {}}}}}}}}}}},
+                                                                        "domain": {"variable": "hydra.json.model.Value"},
+                                                                        "parameter": "json"}}},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "function": {
+                                                                          "lambda": {
+                                                                            "body": {"variable": "e"},
+                                                                            "domain": {"literal": {"string": {}}},
+                                                                            "parameter": "e"}}},
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"variable": "hydra.lib.eithers.either"},
+                                                                                  "type": {"literal": {"string": {}}}}},
+                                                                              "type": {"variable": "hydra.json.model.Value"}}},
+                                                                          "type": {"literal": {"string": {}}}}}}}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "float",
+                                                                          "term": {
+                                                                            "union": {
+                                                                              "field": {
+                                                                                "name": "float64",
+                                                                                "term": {"literal": {"float": {"float64": "NaN"}}}},
+                                                                              "typeName": "hydra.core.FloatValue"}}},
+                                                                        "typeName": "hydra.core.Literal"}}},
+                                                                  "typeName": "hydra.core.Term"}},
+                                                              "function": {"variable": "hydra.show.core.term"}}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                    {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "name",
+                                            "term": {"literal": {"string": "float64 positive infinity"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "literal",
+                                                                        "term": {
+                                                                          "union": {
+                                                                            "field": {
+                                                                              "name": "float",
+                                                                              "term": {
+                                                                                "union": {
+                                                                                  "field": {
+                                                                                    "name": "float64",
+                                                                                    "term": {"literal": {"float": {"float64": "Infinity"}}}},
+                                                                                  "typeName": "hydra.core.FloatValue"}}},
+                                                                            "typeName": "hydra.core.Literal"}}},
+                                                                      "typeName": "hydra.core.Term"}},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "literal",
+                                                                            "term": {
+                                                                              "union": {
+                                                                                "field": {
+                                                                                  "name": "float",
+                                                                                  "term": {
+                                                                                    "union": {
+                                                                                      "field": {"name": "float64", "term": {"unit": {}}},
+                                                                                      "typeName": "hydra.core.FloatType"}}},
+                                                                                "typeName": "hydra.core.LiteralType"}}},
+                                                                          "typeName": "hydra.core.Type"}},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "wrap": {
+                                                                              "body": {"literal": {"string": "test"}},
+                                                                              "typeName": "hydra.core.Name"}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"variable": "hydra.lib.maps.empty"},
+                                                                                      "type": {"variable": "hydra.core.Name"}}},
+                                                                                  "type": {"variable": "hydra.core.Type"}}},
+                                                                              "function": {"variable": "hydra.json.encode.toJson"}}}}}}}}},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "function": {
+                                                                      "lambda": {
+                                                                        "body": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "json"},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "union": {
+                                                                                        "field": {
+                                                                                          "name": "literal",
+                                                                                          "term": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "float",
+                                                                                                "term": {
+                                                                                                  "union": {
+                                                                                                    "field": {"name": "float64", "term": {"unit": {}}},
+                                                                                                    "typeName": "hydra.core.FloatType"}}},
+                                                                                              "typeName": "hydra.core.LiteralType"}}},
+                                                                                        "typeName": "hydra.core.Type"}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "wrap": {
+                                                                                            "body": {"literal": {"string": "test"}},
+                                                                                            "typeName": "hydra.core.Name"}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"variable": "hydra.lib.maps.empty"},
+                                                                                                    "type": {"variable": "hydra.core.Name"}}},
+                                                                                                "type": {"variable": "hydra.core.Type"}}},
+                                                                                            "function": {"variable": "hydra.json.decode.fromJson"}}}}}}}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "function": {
+                                                                                    "lambda": {
+                                                                                      "body": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "decoded"},
+                                                                                          "function": {"variable": "hydra.show.core.term"}}},
+                                                                                      "domain": {"variable": "hydra.core.Term"},
+                                                                                      "parameter": "decoded"}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "function": {
+                                                                                        "lambda": {
+                                                                                          "body": {"variable": "e"},
+                                                                                          "domain": {"literal": {"string": {}}},
+                                                                                          "parameter": "e"}}},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"variable": "hydra.lib.eithers.either"},
+                                                                                                "type": {"literal": {"string": {}}}}},
+                                                                                            "type": {"variable": "hydra.core.Term"}}},
+                                                                                        "type": {"literal": {"string": {}}}}}}}}}}},
+                                                                        "domain": {"variable": "hydra.json.model.Value"},
+                                                                        "parameter": "json"}}},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "function": {
+                                                                          "lambda": {
+                                                                            "body": {"variable": "e"},
+                                                                            "domain": {"literal": {"string": {}}},
+                                                                            "parameter": "e"}}},
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"variable": "hydra.lib.eithers.either"},
+                                                                                  "type": {"literal": {"string": {}}}}},
+                                                                              "type": {"variable": "hydra.json.model.Value"}}},
+                                                                          "type": {"literal": {"string": {}}}}}}}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "float",
+                                                                          "term": {
+                                                                            "union": {
+                                                                              "field": {
+                                                                                "name": "float64",
+                                                                                "term": {"literal": {"float": {"float64": "Infinity"}}}},
+                                                                              "typeName": "hydra.core.FloatValue"}}},
+                                                                        "typeName": "hydra.core.Literal"}}},
+                                                                  "typeName": "hydra.core.Term"}},
+                                                              "function": {"variable": "hydra.show.core.term"}}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                    {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "name",
+                                            "term": {"literal": {"string": "float64 negative infinity"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "literal",
+                                                                        "term": {
+                                                                          "union": {
+                                                                            "field": {
+                                                                              "name": "float",
+                                                                              "term": {
+                                                                                "union": {
+                                                                                  "field": {
+                                                                                    "name": "float64",
+                                                                                    "term": {"literal": {"float": {"float64": "-Infinity"}}}},
+                                                                                  "typeName": "hydra.core.FloatValue"}}},
+                                                                            "typeName": "hydra.core.Literal"}}},
+                                                                      "typeName": "hydra.core.Term"}},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "literal",
+                                                                            "term": {
+                                                                              "union": {
+                                                                                "field": {
+                                                                                  "name": "float",
+                                                                                  "term": {
+                                                                                    "union": {
+                                                                                      "field": {"name": "float64", "term": {"unit": {}}},
+                                                                                      "typeName": "hydra.core.FloatType"}}},
+                                                                                "typeName": "hydra.core.LiteralType"}}},
+                                                                          "typeName": "hydra.core.Type"}},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "wrap": {
+                                                                              "body": {"literal": {"string": "test"}},
+                                                                              "typeName": "hydra.core.Name"}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"variable": "hydra.lib.maps.empty"},
+                                                                                      "type": {"variable": "hydra.core.Name"}}},
+                                                                                  "type": {"variable": "hydra.core.Type"}}},
+                                                                              "function": {"variable": "hydra.json.encode.toJson"}}}}}}}}},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "function": {
+                                                                      "lambda": {
+                                                                        "body": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "json"},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "union": {
+                                                                                        "field": {
+                                                                                          "name": "literal",
+                                                                                          "term": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "float",
+                                                                                                "term": {
+                                                                                                  "union": {
+                                                                                                    "field": {"name": "float64", "term": {"unit": {}}},
+                                                                                                    "typeName": "hydra.core.FloatType"}}},
+                                                                                              "typeName": "hydra.core.LiteralType"}}},
+                                                                                        "typeName": "hydra.core.Type"}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "wrap": {
+                                                                                            "body": {"literal": {"string": "test"}},
+                                                                                            "typeName": "hydra.core.Name"}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"variable": "hydra.lib.maps.empty"},
+                                                                                                    "type": {"variable": "hydra.core.Name"}}},
+                                                                                                "type": {"variable": "hydra.core.Type"}}},
+                                                                                            "function": {"variable": "hydra.json.decode.fromJson"}}}}}}}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "function": {
+                                                                                    "lambda": {
+                                                                                      "body": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "decoded"},
+                                                                                          "function": {"variable": "hydra.show.core.term"}}},
+                                                                                      "domain": {"variable": "hydra.core.Term"},
+                                                                                      "parameter": "decoded"}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "function": {
+                                                                                        "lambda": {
+                                                                                          "body": {"variable": "e"},
+                                                                                          "domain": {"literal": {"string": {}}},
+                                                                                          "parameter": "e"}}},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"variable": "hydra.lib.eithers.either"},
+                                                                                                "type": {"literal": {"string": {}}}}},
+                                                                                            "type": {"variable": "hydra.core.Term"}}},
+                                                                                        "type": {"literal": {"string": {}}}}}}}}}}},
+                                                                        "domain": {"variable": "hydra.json.model.Value"},
+                                                                        "parameter": "json"}}},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "function": {
+                                                                          "lambda": {
+                                                                            "body": {"variable": "e"},
+                                                                            "domain": {"literal": {"string": {}}},
+                                                                            "parameter": "e"}}},
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"variable": "hydra.lib.eithers.either"},
+                                                                                  "type": {"literal": {"string": {}}}}},
+                                                                              "type": {"variable": "hydra.json.model.Value"}}},
+                                                                          "type": {"literal": {"string": {}}}}}}}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "float",
+                                                                          "term": {
+                                                                            "union": {
+                                                                              "field": {
+                                                                                "name": "float64",
+                                                                                "term": {"literal": {"float": {"float64": "-Infinity"}}}},
+                                                                              "typeName": "hydra.core.FloatValue"}}},
+                                                                        "typeName": "hydra.core.Literal"}}},
+                                                                  "typeName": "hydra.core.Term"}},
+                                                              "function": {"variable": "hydra.show.core.term"}}}}],
+                                                      "typeName": "hydra.testing.UniversalTestCase"}}},
+                                                "typeName": "hydra.testing.TestCase"}}},
+                                          {
+                                            "name": "description",
+                                            "term": {
+                                              "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {
+                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                        "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                    {
+                                      "record": {
+                                        "fields": [
                                           {"name": "name", "term": {"literal": {"string": "string simple"}}},
                                           {
                                             "name": "case",

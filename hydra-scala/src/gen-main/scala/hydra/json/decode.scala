@@ -6,11 +6,9 @@ import hydra.json.model.*
 
 def decodeFloat(ft: hydra.core.FloatType)(value: hydra.json.model.Value): Either[scala.Predef.String, hydra.core.Term] =
   ft match
-  case hydra.core.FloatType.bigfloat => {
-    lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
-    hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
-      hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.bigfloat(n))))(numResult)
-  }
+  case hydra.core.FloatType.bigfloat => value match
+    case hydra.json.model.Value.number(v_Value_number_n) => Right(hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.bigfloat(v_Value_number_n))))
+    case _ => Left("expected number for bigfloat")
   case hydra.core.FloatType.float32 => {
     lazy val strResult: Either[scala.Predef.String, scala.Predef.String] = hydra.json.decode.expectString(value)
     hydra.lib.eithers.either[scala.Predef.String, scala.Predef.String, Either[scala.Predef.String, hydra.core.Term]]((err: scala.Predef.String) => Left(err))((s: scala.Predef.String) =>
@@ -20,11 +18,12 @@ def decodeFloat(ft: hydra.core.FloatType)(value: hydra.json.model.Value): Either
         Right(hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float32(v)))))(parsed)
     })(strResult)
   }
-  case hydra.core.FloatType.float64 => {
-    lazy val numResult: Either[scala.Predef.String, BigDecimal] = hydra.json.decode.expectNumber(value)
-    hydra.lib.eithers.map[BigDecimal, hydra.core.Term, scala.Predef.String]((n: BigDecimal) =>
-      hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(hydra.lib.literals.bigfloatToFloat64(n)))))(numResult)
-  }
+  case hydra.core.FloatType.float64 => value match
+    case hydra.json.model.Value.number(v_Value_number_n) => Right(hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(hydra.lib.literals.bigfloatToFloat64(v_Value_number_n)))))
+    case hydra.json.model.Value.string(v_Value_string_s) => hydra.lib.maybes.maybe[Either[scala.Predef.String,
+       hydra.core.Term], Double](Left(hydra.lib.strings.cat(Seq("invalid float64 sentinel: ", v_Value_string_s))))((v: Double) =>
+      Right(hydra.core.Term.literal(hydra.core.Literal.float(hydra.core.FloatValue.float64(v)))))(hydra.json.decode.parseSpecialFloat(v_Value_string_s))
+    case _ => Left("expected number or special float string for float64")
 
 def decodeInteger(it: hydra.core.IntegerType)(value: hydra.json.model.Value): Either[scala.Predef.String, hydra.core.Term] =
   it match
@@ -372,3 +371,6 @@ def fromJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Nam
     }
     case _ => Left(hydra.lib.strings.cat(Seq("unsupported type for JSON decoding: ", hydra.show.core.`type`(typ))))
 }
+
+def parseSpecialFloat(s: scala.Predef.String): Option[Double] =
+  hydra.lib.logic.ifElse[Option[Double]](hydra.lib.logic.or(hydra.lib.equality.equal[scala.Predef.String](s)("NaN"))(hydra.lib.logic.or(hydra.lib.equality.equal[scala.Predef.String](s)("Infinity"))(hydra.lib.equality.equal[scala.Predef.String](s)("-Infinity"))))(hydra.lib.literals.readFloat64(s))(None)

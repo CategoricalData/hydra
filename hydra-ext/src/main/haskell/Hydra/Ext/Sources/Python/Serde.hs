@@ -203,6 +203,7 @@ module_ = Module ns definitions
       toDefinition encodeValuePattern,
       toDefinition encodeWhileStatement,
       toDefinition escapePythonString,
+      toDefinition pythonFloatLiteralText,
       toDefinition toPythonComments]
 
 
@@ -513,12 +514,23 @@ encodeNameOrAttribute = def "encodeNameOrAttribute" $
     Serialization.dotSep @@ Lists.map encodeName (unwrap Py._NameOrAttribute @@ var "noa")
 
 
+-- | Convert a showBigfloat result into valid Python source syntax, mapping
+-- NaN and ±Infinity to float() constructor calls.
+pythonFloatLiteralText :: TTermDefinition (String -> String)
+pythonFloatLiteralText = def "pythonFloatLiteralText" $
+  lambda "s" $
+    Logic.ifElse (Equality.equal (var "s") (string "NaN")) (string "float('nan')") $
+    Logic.ifElse (Equality.equal (var "s") (string "Infinity")) (string "float('inf')") $
+    Logic.ifElse (Equality.equal (var "s") (string "-Infinity")) (string "float('-inf')")
+      (var "s")
+
 encodeNumber :: TTermDefinition (Py.Number -> Expr)
 encodeNumber = def "encodeNumber" $
   doc "Serialize a Python number literal" $
   lambda "num" $
     cases Py._Number (var "num") Nothing [
-      Py._Number_float>>: lambda "f" $ Serialization.cst @@ Literals.showBigfloat (var "f"),
+      Py._Number_float>>: lambda "f" $
+        Serialization.cst @@ (pythonFloatLiteralText @@ Literals.showBigfloat (var "f")),
       Py._Number_integer>>: lambda "i" $ Serialization.cst @@ Literals.showBigint (var "i")]
 
 encodeString :: TTermDefinition (Py.String_ -> Expr)

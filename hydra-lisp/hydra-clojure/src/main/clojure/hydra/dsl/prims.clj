@@ -119,7 +119,7 @@
   (->hydra_graph_term_coder
    (list :literal (list :float (list :float32 nil)))
    (fn [cx g t] (((@(ns-resolve 'hydra.extract.core 'hydra_extract_core_float32) cx) g) t))
-   (fn [cx v] (list :right (list :literal (list :float (list :float32 (float v))))))))
+   (fn [cx v] (list :right (list :literal (list :float (list :float32 v)))))))
 
 (defn tc-float64 []
   (->hydra_graph_term_coder

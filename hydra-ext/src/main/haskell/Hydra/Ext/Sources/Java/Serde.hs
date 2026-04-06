@@ -101,6 +101,7 @@ module_ = Module ns definitions
       toDefinition escapeJavaChar,
       toDefinition escapeJavaString,
       toDefinition hexDigit,
+      toDefinition javaFloatLiteralText,
       toDefinition javaUnicodeEscape,
       toDefinition padHex4,
       toDefinition sanitizeJavaComment,
@@ -740,7 +741,17 @@ writeTypeArgumentsOrDiamond = def "writeTypeArgumentsOrDiamond" $
 writeFloatingPointLiteral :: TTermDefinition (Java.FloatingPointLiteral -> Expr)
 writeFloatingPointLiteral = def "writeFloatingPointLiteral" $
   lambda "fl" $
-    Serialization.cst @@ LibLiterals.showBigfloat (unwrap Java._FloatingPointLiteral @@ var "fl")
+    Serialization.cst @@ (javaFloatLiteralText @@ LibLiterals.showBigfloat (unwrap Java._FloatingPointLiteral @@ var "fl"))
+
+-- | Convert a showBigfloat result into valid Java source syntax, mapping
+-- NaN and ±Infinity to Double.NaN / Double.POSITIVE_INFINITY / Double.NEGATIVE_INFINITY.
+javaFloatLiteralText :: TTermDefinition (String -> String)
+javaFloatLiteralText = def "javaFloatLiteralText" $
+  lambda "s" $
+    Logic.ifElse (Equality.equal (var "s") (string "NaN")) (string "Double.NaN") $
+    Logic.ifElse (Equality.equal (var "s") (string "Infinity")) (string "Double.POSITIVE_INFINITY") $
+    Logic.ifElse (Equality.equal (var "s") (string "-Infinity")) (string "Double.NEGATIVE_INFINITY")
+      (var "s")
 
 writeIntegerLiteral :: TTermDefinition (Java.IntegerLiteral -> Expr)
 writeIntegerLiteral = def "writeIntegerLiteral" $

@@ -2,7 +2,7 @@
 
 module Hydra.Lib.Math where
 
-import Prelude (Num, Ord, Integral, Enum, Bool, Double, Int, Integer, Float, Maybe(..), (.), ($), (+), (-), (*), (==))
+import Prelude (Num, Ord, Integral, Enum, Bool, Double, Int, Integer, Float, Maybe(..), (.), ($), (+), (-), (*), (==), (||))
 import qualified Prelude
 
 
@@ -42,9 +42,18 @@ atan2 = Prelude.atan2
 atanh :: Double -> Double
 atanh = Prelude.atanh
 
--- | Return the ceiling of x as an integer.
-ceiling :: Double -> Integer
-ceiling = Prelude.ceiling
+-- | Return the ceiling of x as a float.
+--
+-- DIVERGENCE FROM HASKELL: Haskell's Prelude.ceiling returns an Integer, which
+-- cannot represent NaN or Inf; GHC's behavior on those inputs is undefined and
+-- produces nonsensical gigantic integers. Hydra returns a Float64 instead so
+-- that NaN and ±Inf propagate naturally per IEEE 754, matching the conventions
+-- of C (ceil), Java (Math.ceil), Go (math.Ceil), Rust (f64::ceil), and JavaScript
+-- (Math.ceil). Users who need an Integer value must convert explicitly.
+ceiling :: Double -> Double
+ceiling x
+  | Prelude.isNaN x Prelude.|| Prelude.isInfinite x = x
+  | Prelude.otherwise = Prelude.fromIntegral (Prelude.ceiling x :: Integer)
 
 -- | Return the cosine of x radians.
 cos :: Double -> Double
@@ -71,9 +80,14 @@ even = Prelude.even
 exp :: Double -> Double
 exp = Prelude.exp
 
--- | Return the floor of x as an integer.
-floor :: Double -> Integer
-floor = Prelude.floor
+-- | Return the floor of x as a float.
+--
+-- DIVERGENCE FROM HASKELL: see the note on ceiling. Returns Float64 rather than
+-- Integer so that NaN and ±Inf propagate naturally per IEEE 754.
+floor :: Double -> Double
+floor x
+  | Prelude.isNaN x Prelude.|| Prelude.isInfinite x = x
+  | Prelude.otherwise = Prelude.fromIntegral (Prelude.floor x :: Integer)
 
 -- | Return the natural logarithm of x.
 log :: Double -> Double
@@ -150,25 +164,34 @@ maybeRem x y = Just (Prelude.rem x y)
 rem :: Integral a => a -> a -> a
 rem = Prelude.rem
 
--- | Return x rounded to the nearest integer.
-round :: Double -> Integer
-round = Prelude.round
+-- | Return x rounded to the nearest integer, as a float.
+--
+-- DIVERGENCE FROM HASKELL: see the note on ceiling. Returns Float64 rather than
+-- Integer so that NaN and ±Inf propagate naturally per IEEE 754.
+round :: Double -> Double
+round x
+  | Prelude.isNaN x Prelude.|| Prelude.isInfinite x = x
+  | Prelude.otherwise = Prelude.fromIntegral (Prelude.round x :: Integer)
 
 -- | Round a bigfloat to n significant digits.
 roundBigfloat :: Int -> Double -> Double
 roundBigfloat = roundFloat64
 
 -- | Round a float32 to n significant digits.
+-- Returns NaN/Inf inputs unchanged (no rounding is possible).
 roundFloat32 :: Int -> Float -> Float
 roundFloat32 n x
+  | Prelude.isNaN x Prelude.|| Prelude.isInfinite x = x
   | x Prelude.== 0 = 0
   | Prelude.otherwise =
       let factor = 10 Prelude.^^ (n - 1 - Prelude.floor (Prelude.logBase 10 (Prelude.abs x)))
       in Prelude.fromIntegral (Prelude.round (x * factor) :: Integer) Prelude./ factor
 
 -- | Round a float64 to n significant digits.
+-- Returns NaN/Inf inputs unchanged (no rounding is possible).
 roundFloat64 :: Int -> Double -> Double
 roundFloat64 n x
+  | Prelude.isNaN x Prelude.|| Prelude.isInfinite x = x
   | x Prelude.== 0 = 0
   | Prelude.otherwise =
       let factor = 10 Prelude.^^ (n - 1 - Prelude.floor (Prelude.logBase 10 (Prelude.abs x)))
@@ -212,6 +235,11 @@ tan = Prelude.tan
 tanh :: Double -> Double
 tanh = Prelude.tanh
 
--- | Return x truncated to an integer (towards zero).
-truncate :: Double -> Integer
-truncate = Prelude.truncate
+-- | Return x truncated (towards zero), as a float.
+--
+-- DIVERGENCE FROM HASKELL: see the note on ceiling. Returns Float64 rather than
+-- Integer so that NaN and ±Inf propagate naturally per IEEE 754.
+truncate :: Double -> Double
+truncate x
+  | Prelude.isNaN x Prelude.|| Prelude.isInfinite x = x
+  | Prelude.otherwise = Prelude.fromIntegral (Prelude.truncate x :: Integer)

@@ -77,6 +77,16 @@ echo ""
 stack build hydra:exe:update-haskell-kernel
 stack exec update-haskell-kernel -- $RTS_FLAGS
 
+if [ $? -ne 0 ]; then
+    echo "ERROR: Kernel generation failed"
+    exit 1
+fi
+
+# Apply bootstrap patch for NaN/Inf emission in Haskell serde
+echo ""
+echo "Applying Haskell serde bootstrap patch (NaN/Inf)..."
+bash "$SCRIPT_DIR/patch-haskell-serde.sh"
+
 echo ""
 echo "  Rebuilding..."
 stack build
@@ -120,6 +130,16 @@ stack build
 step 5 $TOTAL_STEPS "Regenerating kernel modules (post encoder/decoder)"
 echo ""
 stack exec update-haskell-kernel -- $RTS_FLAGS
+
+if [ $? -ne 0 ]; then
+    echo "ERROR: Kernel regeneration failed"
+    exit 1
+fi
+
+# Reapply bootstrap patch after kernel regeneration
+echo ""
+echo "Reapplying Haskell serde bootstrap patch (NaN/Inf)..."
+bash "$SCRIPT_DIR/patch-haskell-serde.sh"
 
 echo ""
 echo "  Rebuilding..."

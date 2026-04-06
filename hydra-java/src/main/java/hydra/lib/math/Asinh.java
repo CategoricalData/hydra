@@ -55,6 +55,11 @@ public class Asinh extends PrimitiveFunction {
      * @return the inverse hyperbolic sine
      */
     public static Double apply(Double x) {
+        // Special-case infinities to match Haskell: asinh(±Inf) = ±Inf.
+        // The naive formula gives log(-Inf + Inf) = NaN for -Inf input.
+        if (Double.isInfinite(x)) {
+            return x;
+        }
         return Math.log(x + Math.sqrt(x * x + 1.0));
     }
 }
