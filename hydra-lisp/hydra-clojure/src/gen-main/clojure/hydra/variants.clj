@@ -4,7 +4,7 @@
 
 (def hydra_variants_elimination_variant-variants (list :record :union :wrap))
 
-(def hydra_variants_function_variant-variants (list :elimination :lambda :primitive))
+(def hydra_variants_function_variant-variants (list :elimination :lambda))
 
 (def hydra_variants_literal_variant-variants (list :binary :boolean :float :integer :string))
 

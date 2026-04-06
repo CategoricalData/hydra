@@ -256,12 +256,6 @@ def encodeApplicationInner(cx: hydra.context.Context)(env: hydra.ext.python.envi
           }
         }
         case _ => defaultCase
-      case hydra.core.Function.primitive(v_Function_primitive_name) => {
-        lazy val wrappedArgs: Seq[hydra.ext.python.syntax.Expression] = hydra.ext.python.coder.wrapLazyArguments(v_Function_primitive_name)(hargs)
-        hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.ext.python.syntax.Expression,
-           Tuple2[hydra.ext.python.syntax.Expression, Seq[hydra.ext.python.syntax.Expression]]](hydra.ext.python.coder.encodeVariable(cx)(env)(v_Function_primitive_name)(wrappedArgs))((expr: hydra.ext.python.syntax.Expression) => Right(Tuple2(expr,
-           rargs)))
-      }
       case hydra.core.Function.lambda(v_Function_lambda__) => hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error],
          hydra.ext.python.syntax.Expression, Tuple2[hydra.ext.python.syntax.Expression, Seq[hydra.ext.python.syntax.Expression]]](hydra.ext.python.coder.encodeTermInline(cx)(env)(false)(fun))((pfun: hydra.ext.python.syntax.Expression) =>
         Right(Tuple2(hydra.ext.python.utils.functionCall(hydra.ext.python.utils.pyExpressionToPyPrimary(pfun))(hargs), rargs)))
@@ -827,7 +821,6 @@ def encodeFunction(cx: hydra.context.Context)(env: hydra.ext.python.environment.
       }
     }
   })
-  case hydra.core.Function.primitive(v_Function_primitive_name) => hydra.ext.python.coder.encodeVariable(cx)(env)(v_Function_primitive_name)(Seq())
   case hydra.core.Function.elimination(v_Function_elimination_e) => v_Function_elimination_e match
     case hydra.core.Elimination.record(v_Elimination_record_proj) => {
       lazy val fname: hydra.core.Name = (v_Elimination_record_proj.field)
@@ -1978,8 +1971,6 @@ def functionArityWithPrimitives(graph: hydra.graph.Graph)(f: hydra.core.Function
   f match
   case hydra.core.Function.elimination(v_Function_elimination__) => 1
   case hydra.core.Function.lambda(v_Function_lambda_lam) => hydra.lib.math.add(1)(hydra.ext.python.coder.termArityWithPrimitives(graph)(v_Function_lambda_lam.body))
-  case hydra.core.Function.primitive(v_Function_primitive_name) => hydra.lib.maybes.maybe[Int, hydra.graph.Primitive](0)((prim: hydra.graph.Primitive) => hydra.arity.primitiveArity(prim))(hydra.lib.maps.lookup[hydra.core.Name,
-     hydra.graph.Primitive](v_Function_primitive_name)(graph.primitives))
   case _ => 0
 
 def gatherLambdas(term: hydra.core.Term): Tuple2[Seq[hydra.core.Name], hydra.core.Term] =

@@ -174,19 +174,9 @@ def lisp_list_expr(elements: frozenlist[hydra.ext.lisp.syntax.Expression]) -> hy
 
 lisp_nil_expr = cast(hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.ExpressionLiteral(cast(hydra.ext.lisp.syntax.Literal, hydra.ext.lisp.syntax.LiteralNil())))
 
-def is_primitive_ref(prim_name: str, term: hydra.core.Term):
+def is_primitive_ref(prim_name: str, term: hydra.core.Term) -> bool:
     while True:
-        def _hoist_hydra_ext_lisp_coder_is_primitive_ref_1(prim_name, v1):
-            match v1:
-                case hydra.core.FunctionPrimitive(value=name):
-                    return hydra.lib.equality.equal(name.value, prim_name)
-
-                case _:
-                    return False
         match term:
-            case hydra.core.TermFunction(value=f):
-                return _hoist_hydra_ext_lisp_coder_is_primitive_ref_1(prim_name, f)
-
             case hydra.core.TermVariable(value=name):
                 return hydra.lib.equality.equal(name.value, prim_name)
 
@@ -279,9 +269,6 @@ def encode_function(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, fun: 
             def param() -> str:
                 return hydra.formatting.convert_case_camel_or_underscore_to_lower_snake(hydra.formatting.sanitize_with_underscores(hydra.ext.lisp.language.lisp_reserved_words(), lam.parameter.value))
             return hydra.lib.eithers.bind(encode_term(dialect, cx, g, lam.body), (lambda body: Right(lisp_lambda_expr((param(),), body))))
-
-        case hydra.core.FunctionPrimitive(value=name):
-            return Right(lisp_var(hydra.formatting.convert_case_camel_or_underscore_to_lower_snake(hydra.formatting.sanitize_with_underscores(hydra.ext.lisp.language.lisp_reserved_words(), name.value))))
 
         case hydra.core.FunctionElimination(value=elim):
             return encode_elimination(dialect, cx, g, elim, Nothing())

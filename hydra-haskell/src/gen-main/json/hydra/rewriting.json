@@ -9001,18 +9001,7 @@
                                                                                               "typeName": "hydra.core.Lambda"}}},
                                                                                         "typeName": "hydra.core.Function"}},
                                                                                     "domain": {"variable": "hydra.core.Lambda"},
-                                                                                    "parameter": "l"}}}},
-                                                                            {
-                                                                              "name": "primitive",
-                                                                              "term": {
-                                                                                "function": {
-                                                                                  "lambda": {
-                                                                                    "body": {
-                                                                                      "union": {
-                                                                                        "field": {"name": "primitive", "term": {"variable": "name"}},
-                                                                                        "typeName": "hydra.core.Function"}},
-                                                                                    "domain": {"variable": "hydra.core.Name"},
-                                                                                    "parameter": "name"}}}}],
+                                                                                    "parameter": "l"}}}}],
                                                                           "typeName": "hydra.core.Function"}}}}}},
                                                               "domain": {"variable": "hydra.core.Function"},
                                                               "parameter": "fun"}}},
@@ -10814,26 +10803,7 @@
                                                                                                                                                           "type": {"variable": "hydra.core.Term"}}},
                                                                                                                                                       "type": {"variable": "hydra.core.Function"}}}}}}}}}}}}},
                                                                                                                               "domain": {"variable": "hydra.core.Lambda"},
-                                                                                                                              "parameter": "l"}}}},
-                                                                                                                      {
-                                                                                                                        "name": "primitive",
-                                                                                                                        "term": {
-                                                                                                                          "function": {
-                                                                                                                            "lambda": {
-                                                                                                                              "body": {
-                                                                                                                                "typeApplication": {
-                                                                                                                                  "body": {
-                                                                                                                                    "typeApplication": {
-                                                                                                                                      "body": {
-                                                                                                                                        "either": {
-                                                                                                                                          "@right": {
-                                                                                                                                            "union": {
-                                                                                                                                              "field": {"name": "primitive", "term": {"variable": "name"}},
-                                                                                                                                              "typeName": "hydra.core.Function"}}}},
-                                                                                                                                      "type": {"variable": "t1"}}},
-                                                                                                                                  "type": {"variable": "hydra.core.Function"}}},
-                                                                                                                              "domain": {"variable": "hydra.core.Name"},
-                                                                                                                              "parameter": "name"}}}}],
+                                                                                                                              "parameter": "l"}}}}],
                                                                                                                     "typeName": "hydra.core.Function"}}}}}},
                                                                                                         "domain": {"variable": "hydra.core.Function"},
                                                                                                         "parameter": "fun"}}},
@@ -12121,18 +12091,7 @@
                                                                                                                           "typeName": "hydra.core.Lambda"}}},
                                                                                                                     "typeName": "hydra.core.Function"}},
                                                                                                                 "domain": {"variable": "hydra.core.Lambda"},
-                                                                                                                "parameter": "l"}}}},
-                                                                                                        {
-                                                                                                          "name": "primitive",
-                                                                                                          "term": {
-                                                                                                            "function": {
-                                                                                                              "lambda": {
-                                                                                                                "body": {
-                                                                                                                  "union": {
-                                                                                                                    "field": {"name": "primitive", "term": {"variable": "name"}},
-                                                                                                                    "typeName": "hydra.core.Function"}},
-                                                                                                                "domain": {"variable": "hydra.core.Name"},
-                                                                                                                "parameter": "name"}}}}],
+                                                                                                                "parameter": "l"}}}}],
                                                                                                       "typeName": "hydra.core.Function"}}}}}},
                                                                                           "domain": {"variable": "hydra.core.Function"},
                                                                                           "parameter": "fun"}}},
@@ -13634,26 +13593,7 @@
                                                                                                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                                                                                                     "type": {"variable": "hydra.core.Function"}}}}}}}}}}}}},
                                                                                                                             "domain": {"variable": "hydra.core.Lambda"},
-                                                                                                                            "parameter": "l"}}}},
-                                                                                                                    {
-                                                                                                                      "name": "primitive",
-                                                                                                                      "term": {
-                                                                                                                        "function": {
-                                                                                                                          "lambda": {
-                                                                                                                            "body": {
-                                                                                                                              "typeApplication": {
-                                                                                                                                "body": {
-                                                                                                                                  "typeApplication": {
-                                                                                                                                    "body": {
-                                                                                                                                      "either": {
-                                                                                                                                        "@right": {
-                                                                                                                                          "union": {
-                                                                                                                                            "field": {"name": "primitive", "term": {"variable": "name"}},
-                                                                                                                                            "typeName": "hydra.core.Function"}}}},
-                                                                                                                                    "type": {"variable": "t3"}}},
-                                                                                                                                "type": {"variable": "hydra.core.Function"}}},
-                                                                                                                            "domain": {"variable": "hydra.core.Name"},
-                                                                                                                            "parameter": "name"}}}}],
+                                                                                                                            "parameter": "l"}}}}],
                                                                                                                   "typeName": "hydra.core.Function"}}}}}},
                                                                                                       "domain": {"variable": "hydra.core.Function"},
                                                                                                       "parameter": "fun"}}},

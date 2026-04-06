@@ -17,7 +17,7 @@
 (define hydra_core_float_type-variants (list 'bigfloat 'float32 'float64))
 (define hydra_core_float_value-variants (list 'bigfloat 'float32 'float64))
 (define-record-type hydra_core_forall_type (make-hydra_core_forall_type parameter body) hydra_core_forall_type? (parameter hydra_core_forall_type-parameter) (body hydra_core_forall_type-body))
-(define hydra_core_function-variants (list 'elimination 'lambda 'primitive))
+(define hydra_core_function-variants (list 'elimination 'lambda))
 (define-record-type hydra_core_function_type (make-hydra_core_function_type domain codomain) hydra_core_function_type? (domain hydra_core_function_type-domain) (codomain hydra_core_function_type-codomain))
 (define-record-type hydra_core_injection (make-hydra_core_injection type_name field) hydra_core_injection? (type_name hydra_core_injection-type_name) (field hydra_core_injection-field))
 (define hydra_core_integer_type-variants (list 'bigint 'int8 'int16 'int32 'int64 'uint8 'uint16 'uint32 'uint64))

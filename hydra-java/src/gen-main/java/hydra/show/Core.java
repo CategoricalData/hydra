@@ -166,13 +166,6 @@ public interface Core {
       public String visit(hydra.core.Function.Lambda v1) {
         return hydra.show.Core.lambda((v1).value);
       }
-
-      @Override
-      public String visit(hydra.core.Function.Primitive name) {
-        return hydra.lib.strings.Cat2.apply(
-          (name).value.value,
-          "!");
-      }
     });
   }
 

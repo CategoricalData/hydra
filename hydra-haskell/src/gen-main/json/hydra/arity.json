@@ -61,23 +61,7 @@
                                         "domain": {"literal": {"integer": {"int32": {}}}},
                                         "parameter": "i"}}}}},
                               "domain": {"variable": "hydra.core.Lambda"},
-                              "parameter": "arg_"}}}},
-                      {
-                        "name": "primitive",
-                        "term": {
-                          "function": {
-                            "lambda": {
-                              "body": {
-                                "annotated": {
-                                  "annotation": [
-                                    {
-                                      "@key": "description",
-                                      "@value": {
-                                        "literal": {
-                                          "string": "TODO: This function needs to be monadic, so we can look up the primitive"}}}],
-                                  "body": {"literal": {"integer": {"int32": 42}}}}},
-                              "domain": {"variable": "hydra.core.Name"},
-                              "parameter": "_"}}}}],
+                              "parameter": "arg_"}}}}],
                     "typeName": "hydra.core.Function"}}}}}},
         "type": {
           "type": {

@@ -8194,18 +8194,7 @@
                                                                                       "typeName": "hydra.core.Lambda"}}},
                                                                                 "typeName": "hydra.core.Function"}},
                                                                             "domain": {"variable": "hydra.core.Lambda"},
-                                                                            "parameter": "l"}}}},
-                                                                    {
-                                                                      "name": "primitive",
-                                                                      "term": {
-                                                                        "function": {
-                                                                          "lambda": {
-                                                                            "body": {
-                                                                              "union": {
-                                                                                "field": {"name": "primitive", "term": {"variable": "name"}},
-                                                                                "typeName": "hydra.core.Function"}},
-                                                                            "domain": {"variable": "hydra.core.Name"},
-                                                                            "parameter": "name"}}}}],
+                                                                            "parameter": "l"}}}}],
                                                                   "typeName": "hydra.core.Function"}}}}}},
                                                       "domain": {"variable": "hydra.core.Function"},
                                                       "parameter": "fun"}}},

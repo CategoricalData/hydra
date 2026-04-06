@@ -715,14 +715,6 @@ public interface Inference {
           cx,
           (l).value);
       }
-
-      @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.typing.InferenceResult> visit(hydra.core.Function.Primitive name) {
-        return hydra.Inference.inferTypeOfPrimitive(
-          fcx,
-          cx,
-          (name).value);
-      }
     });
   }
 
@@ -1265,7 +1257,7 @@ public interface Inference {
           fcx2.get(),
           hydra.Inference.buildTypeApplicationTerm(
             ts.get().variables,
-            new hydra.core.Term.Function(new hydra.core.Function.Primitive(name))),
+            new hydra.core.Term.Variable(name)),
           ts.get().type,
           hydra.Substitution.idTypeSubst(),
           constraints.get()));

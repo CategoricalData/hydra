@@ -531,17 +531,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "A function abstraction (lambda)"}}}],
-                        "body": {"variable": "hydra.core.Lambda"}}}},
-                  {
-                    "name": "primitive",
-                    "type": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {"string": "A reference to a built-in (primitive) function"}}}],
-                        "body": {"variable": "hydra.core.Name"}}}}]}}},
+                        "body": {"variable": "hydra.core.Lambda"}}}}]}}},
           "variables": []}}},
     {
       "type": {

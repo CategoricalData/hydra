@@ -21,9 +21,6 @@ def function_arity(v1: hydra.core.Function) -> int:
         case hydra.core.FunctionLambda(value=arg_):
             return hydra.lib.math.add(1, term_arity(arg_.body))
 
-        case hydra.core.FunctionPrimitive():
-            return 42
-
         case _:
             raise AssertionError("Unreachable: all variants handled")
 

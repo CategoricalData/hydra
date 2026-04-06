@@ -8,7 +8,7 @@
 
 (require 'hydra.lib.math)
 
-(defvar hydra_arity_function_arity (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :elimination) (funcall (lambda (_) 1) match_value)) ((equal (car match_target) :lambda) (funcall (lambda (arg_) (funcall (lambda (i) (funcall (hydra_lib_math_add 1) i)) (funcall (lambda (arg_2) (hydra_arity_term_arity (funcall (lambda (v) (hydra_core_lambda-body v)) arg_2))) arg_))) match_value)) ((equal (car match_target) :primitive) (funcall (lambda (_) 42) match_value)))) (cadr match_target))))
+(defvar hydra_arity_function_arity (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :elimination) (funcall (lambda (_) 1) match_value)) ((equal (car match_target) :lambda) (funcall (lambda (arg_) (funcall (lambda (i) (funcall (hydra_lib_math_add 1) i)) (funcall (lambda (arg_2) (hydra_arity_term_arity (funcall (lambda (v) (hydra_core_lambda-body v)) arg_2))) arg_))) match_value)))) (cadr match_target))))
 
 (defvar hydra_arity_term_arity (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :application) (funcall (lambda (arg_) (funcall (lambda (arg_2) (funcall (lambda (xapp) (funcall (hydra_lib_math_sub xapp) 1)) (hydra_arity_term_arity arg_2))) (funcall (lambda (v) (hydra_core_application-function v)) arg_))) match_value)) ((equal (car match_target) :function) (hydra_arity_function_arity match_value)) (t 0))) (cadr match_target))))
 

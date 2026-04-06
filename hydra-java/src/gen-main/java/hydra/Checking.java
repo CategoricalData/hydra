@@ -413,15 +413,6 @@ public interface Checking {
               typeArgs,
               (v1).value);
           }
-
-          @Override
-          public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>> visit(hydra.core.Function.Primitive v1) {
-            return hydra.Checking.typeOfPrimitive(
-              cx1.get(),
-              tx,
-              typeArgs,
-              (v1).value);
-          }
         });
       }
 

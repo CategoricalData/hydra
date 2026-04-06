@@ -44,7 +44,7 @@
 (defrecord hydra_core_forall_type [parameter body])
 (defn make-hydra_core_forall_type [parameter body] (->hydra_core_forall_type parameter body))
 
-(def hydra_core_function-variants (list :elimination :lambda :primitive))
+(def hydra_core_function-variants (list :elimination :lambda))
 
 (defrecord hydra_core_function_type [domain codomain])
 (defn make-hydra_core_function_type [domain codomain] (->hydra_core_function_type domain codomain))

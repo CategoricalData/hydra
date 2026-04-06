@@ -1969,38 +1969,6 @@
                                                                   "domain": {"variable": "hydra.core.Lambda"},
                                                                   "parameter": "lam"}}}},
                                                           {
-                                                            "name": "primitive",
-                                                            "term": {
-                                                              "function": {
-                                                                "lambda": {
-                                                                  "body": {
-                                                                    "typeApplication": {
-                                                                      "body": {
-                                                                        "typeApplication": {
-                                                                          "body": {
-                                                                            "either": {
-                                                                              "@right": {
-                                                                                "application": {
-                                                                                  "argument": {
-                                                                                    "application": {
-                                                                                      "argument": {
-                                                                                        "application": {
-                                                                                          "argument": {
-                                                                                            "application": {
-                                                                                              "argument": {"variable": "name"},
-                                                                                              "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
-                                                                                          "function": {
-                                                                                            "application": {
-                                                                                              "argument": {"variable": "hydra.ext.lisp.language.lispReservedWords"},
-                                                                                              "function": {"variable": "hydra.formatting.sanitizeWithUnderscores"}}}}},
-                                                                                      "function": {
-                                                                                        "variable": "hydra.formatting.convertCaseCamelOrUnderscoreToLowerSnake"}}},
-                                                                                  "function": {"variable": "hydra.ext.lisp.coder.lispVar"}}}}},
-                                                                          "type": {"variable": "t2"}}},
-                                                                      "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
-                                                                  "domain": {"variable": "hydra.core.Name"},
-                                                                  "parameter": "name"}}}},
-                                                          {
                                                             "name": "elimination",
                                                             "term": {
                                                               "function": {
@@ -6999,43 +6967,6 @@
                             "elimination": {
                               "union": {
                                 "cases": [
-                                  {
-                                    "name": "function",
-                                    "term": {
-                                      "function": {
-                                        "lambda": {
-                                          "body": {
-                                            "application": {
-                                              "argument": {"variable": "f"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {
-                                                    "union": {
-                                                      "cases": [
-                                                        {
-                                                          "name": "primitive",
-                                                          "term": {
-                                                            "function": {
-                                                              "lambda": {
-                                                                "body": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "primName"},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "name"},
-                                                                            "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {"variable": "hydra.lib.equality.equal"},
-                                                                            "type": {"literal": {"string": {}}}}}}}}},
-                                                                "domain": {"variable": "hydra.core.Name"},
-                                                                "parameter": "name"}}}}],
-                                                      "default": {"literal": {"boolean": false}},
-                                                      "typeName": "hydra.core.Function"}}}}}},
-                                          "domain": {"variable": "hydra.core.Function"},
-                                          "parameter": "f"}}}},
                                   {
                                     "name": "variable",
                                     "term": {

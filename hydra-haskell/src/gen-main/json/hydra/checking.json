@@ -2855,19 +2855,7 @@
                                                                                       "function": {
                                                                                         "application": {
                                                                                           "argument": {"variable": "cx1"},
-                                                                                          "function": {"variable": "hydra.checking.typeOfLambda"}}}}}}}},
-                                                                            {
-                                                                              "name": "primitive",
-                                                                              "term": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "typeArgs"},
-                                                                                  "function": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "tx"},
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "argument": {"variable": "cx1"},
-                                                                                          "function": {"variable": "hydra.checking.typeOfPrimitive"}}}}}}}}],
+                                                                                          "function": {"variable": "hydra.checking.typeOfLambda"}}}}}}}}],
                                                                           "typeName": "hydra.core.Function"}}}}}},
                                                               "domain": {"variable": "hydra.core.Function"},
                                                               "parameter": "f"}}}},

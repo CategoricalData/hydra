@@ -44,8 +44,7 @@ functionVariant cx raw =
             variantMap =
                     Maps.fromList [
                       (Core.Name "elimination", (\input -> Eithers.map (\t -> Variants.FunctionVariantElimination) (Core_.decodeUnit cx input))),
-                      (Core.Name "lambda", (\input -> Eithers.map (\t -> Variants.FunctionVariantLambda) (Core_.decodeUnit cx input))),
-                      (Core.Name "primitive", (\input -> Eithers.map (\t -> Variants.FunctionVariantPrimitive) (Core_.decodeUnit cx input)))]
+                      (Core.Name "lambda", (\input -> Eithers.map (\t -> Variants.FunctionVariantLambda) (Core_.decodeUnit cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),

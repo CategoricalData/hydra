@@ -105,7 +105,6 @@ etaExpandTerm tx0 term0 =
                     Core.TermFunction v0 -> case v0 of
                       Core.FunctionElimination _ -> 1
                       Core.FunctionLambda _ -> 0
-                      Core.FunctionPrimitive v1 -> Maybes.maybe 0 Arity.typeSchemeArity (Maps.lookup v1 primTypes)
                     Core.TermLet v0 -> termArityWithContext (Scoping.extendGraphForLet (\_ -> \_2 -> Nothing) tx v0) (Core.letBody v0)
                     Core.TermTypeLambda v0 -> termArityWithContext (Scoping.extendGraphForTypeLambda tx v0) (Core.typeLambdaBody v0)
                     Core.TermTypeApplication v0 -> termArityWithContext tx (Core.typeApplicationTermBody v0)
@@ -163,9 +162,7 @@ etaExpandTerm tx0 term0 =
                         termHeadType =
                                 \tx2 -> \trm2 -> case trm2 of
                                   Core.TermAnnotated v0 -> termHeadType tx2 (Core.annotatedTermBody v0)
-                                  Core.TermFunction v0 -> case v0 of
-                                    Core.FunctionPrimitive v1 -> Maybes.map Scoping.typeSchemeToFType (Maps.lookup v1 primTypes)
-                                    _ -> Nothing
+                                  Core.TermFunction _ -> Nothing
                                   Core.TermLet v0 -> termHeadType (Scoping.extendGraphForLet (\_ -> \_2 -> Nothing) tx2 v0) (Core.letBody v0)
                                   Core.TermTypeLambda v0 -> termHeadType (Scoping.extendGraphForTypeLambda tx2 v0) (Core.typeLambdaBody v0)
                                   Core.TermTypeApplication v0 -> Maybes.bind (termHeadType tx2 (Core.typeApplicationTermBody v0)) (\htyp2 -> case htyp2 of
@@ -235,10 +232,6 @@ etaExpandTerm tx0 term0 =
                                         Core.lambdaBody = body}))
                               arty = termArityWithContext tx result
                           in (expand False args arty Nothing result)
-                        Core.FunctionPrimitive v1 ->
-                          let arty = termArityWithContext tx term
-                              primType = Maybes.map (\ts -> Core.typeSchemeType ts) (Maps.lookup v1 primTypes)
-                          in (expand False args arty primType term)
                       Core.TermLet v0 ->
                         let tx1 = Scoping.extendGraphForLet (\_ -> \_2 -> Nothing) tx v0
                             mapBinding =
@@ -317,7 +310,6 @@ etaExpandTypedTerm cx tx0 term0 =
                                             Core.FunctionLambda v0 ->
                                               let txl = Scoping.extendGraphForLambda tx3 v0
                                               in (arityOf txl (Core.lambdaBody v0))
-                                            Core.FunctionPrimitive v0 -> Eithers.map (\_ts -> Arity.typeSchemeArity _ts) (Lexical.requirePrimitiveType cx tx3 v0)
                               in case term2 of
                                 Core.TermAnnotated v0 -> arityOf tx2 (Core.annotatedTermBody v0)
                                 Core.TermFunction v0 -> forFunction tx2 v0
@@ -403,7 +395,6 @@ etaExpansionArity graph term =
       Core.TermFunction v0 -> case v0 of
         Core.FunctionElimination _ -> 1
         Core.FunctionLambda _ -> 0
-        Core.FunctionPrimitive v1 -> Arity.primitiveArity (Maybes.fromJust (Lexical.lookupPrimitive graph v1))
       Core.TermTypeLambda v0 -> etaExpansionArity graph (Core.typeLambdaBody v0)
       Core.TermTypeApplication v0 -> etaExpansionArity graph (Core.typeApplicationTermBody v0)
       Core.TermVariable v0 -> Maybes.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeType ts)) (Maybes.bind (Lexical.lookupBinding graph v0) (\b -> Core.bindingType b))
@@ -524,9 +515,6 @@ reduceTerm cx graph eager term =
                       Core.TermFunction v0 -> case v0 of
                         Core.FunctionElimination v1 -> Logic.ifElse (Lists.null args) (Right original) (forElimination v1 args)
                         Core.FunctionLambda v1 -> Logic.ifElse (Lists.null args) (Right original) (forLambda v1 args)
-                        Core.FunctionPrimitive v1 -> Eithers.bind (Lexical.requirePrimitive cx graph v1) (\prim ->
-                          let arity = Arity.primitiveArity prim
-                          in (Logic.ifElse (Equality.gt arity (Lists.length args)) (Right (applyToArguments original args)) (forPrimitive prim arity args)))
                       Core.TermVariable v0 ->
                         let mBinding = Lexical.lookupBinding graph v0
                         in (Maybes.maybe (
@@ -575,7 +563,6 @@ termIsValue term =
                       Core.EliminationRecord _ -> True
                       Core.EliminationUnion v1 -> Logic.and (checkFields (Core.caseStatementCases v1)) (Maybes.maybe True termIsValue (Core.caseStatementDefault v1))
                     Core.FunctionLambda v0 -> termIsValue (Core.lambdaBody v0)
-                    Core.FunctionPrimitive _ -> True
       in case (Strip.deannotateTerm term) of
         Core.TermApplication _ -> False
         Core.TermEither v0 -> Eithers.either (\l -> termIsValue l) (\r -> termIsValue r) v0

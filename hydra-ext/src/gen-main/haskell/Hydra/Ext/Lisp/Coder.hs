@@ -153,7 +153,6 @@ encodeFunction dialect cx g fun =
                 Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName (Core.lambdaParameter v0)))
         in (Eithers.bind (encodeTerm dialect cx g (Core.lambdaBody v0)) (\body -> Right (lispLambdaExpr [
           param] body)))
-      Core.FunctionPrimitive v0 -> Right (lispVar (Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName v0))))
       Core.FunctionElimination v0 -> encodeElimination dialect cx g v0 Nothing
 
 encodeLetAsLambdaApp :: Syntax.Dialect -> t0 -> t1 -> [Core.Binding] -> Core.Term -> Either t2 Syntax.Expression
@@ -443,9 +442,6 @@ isLazy3ArgPrimitive name = Equality.equal name (Core.Name "hydra.lib.maybes.mayb
 isPrimitiveRef :: String -> Core.Term -> Bool
 isPrimitiveRef primName term =
     case term of
-      Core.TermFunction v0 -> case v0 of
-        Core.FunctionPrimitive v1 -> Equality.equal (Core.unName v1) primName
-        _ -> False
       Core.TermVariable v0 -> Equality.equal (Core.unName v0) primName
       Core.TermAnnotated v0 -> isPrimitiveRef primName (Core.annotatedTermBody v0)
       Core.TermTypeApplication v0 -> isPrimitiveRef primName (Core.typeApplicationTermBody v0)

@@ -30,7 +30,7 @@
 
 (def hydra_show_core_fields (fn [flds] (let [field_strs ((hydra_lib_lists_map hydra_show_core_field) flds)] (hydra_lib_strings_cat (list "{" ((hydra_lib_strings_intercalate ", ") field_strs) "}")))))
 
-(def hydra_show_core_function (fn [f] ((fn [match_target] ((fn [match_value] (cond (= (first match_target) :elimination) (hydra_show_core_elimination match_value) (= (first match_target) :lambda) (hydra_show_core_lambda match_value) (= (first match_target) :primitive) ((fn [name] ((hydra_lib_strings_cat2 ((fn [v] v) name)) "!")) match_value))) (second match_target))) f)))
+(def hydra_show_core_function (fn [f] ((fn [match_target] ((fn [match_value] (cond (= (first match_target) :elimination) (hydra_show_core_elimination match_value) (= (first match_target) :lambda) (hydra_show_core_lambda match_value))) (second match_target))) f)))
 
 (def hydra_show_core_injection (fn [inj] (let [tname ((fn [v] (:type_name v)) inj)] (let [f ((fn [v] (:field v)) inj)] (hydra_lib_strings_cat (list "inject(" ((fn [v] v) tname) ")" (hydra_show_core_fields (list f))))))))
 

@@ -14,8 +14,6 @@ public abstract class FunctionVariant implements Serializable, Comparable<Functi
 
   public static final hydra.core.Name LAMBDA = new hydra.core.Name("lambda");
 
-  public static final hydra.core.Name PRIMITIVE = new hydra.core.Name("primitive");
-
   private FunctionVariant () {
 
   }
@@ -26,8 +24,6 @@ public abstract class FunctionVariant implements Serializable, Comparable<Functi
     R visit(Elimination instance) ;
 
     R visit(Lambda instance) ;
-
-    R visit(Primitive instance) ;
   }
 
   public interface PartialVisitor<R> extends Visitor<R> {
@@ -40,10 +36,6 @@ public abstract class FunctionVariant implements Serializable, Comparable<Functi
     }
 
     default R visit(Lambda instance) {
-      return otherwise(instance);
-    }
-
-    default R visit(Primitive instance) {
       return otherwise(instance);
     }
   }
@@ -94,41 +86,6 @@ public abstract class FunctionVariant implements Serializable, Comparable<Functi
         return false;
       }
       Lambda o = (Lambda) other;
-      return true;
-    }
-
-    @Override
-    public int hashCode() {
-      return 0;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public int compareTo(FunctionVariant other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
-      if (tagCmp != 0) {
-        return tagCmp;
-      }
-      return 0;
-    }
-
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-
-  public static final class Primitive extends hydra.variants.FunctionVariant implements Serializable {
-    public Primitive () {
-
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Primitive)) {
-        return false;
-      }
-      Primitive o = (Primitive) other;
       return true;
     }
 
