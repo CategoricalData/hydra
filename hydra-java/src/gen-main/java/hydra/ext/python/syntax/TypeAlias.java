@@ -15,11 +15,11 @@ public class TypeAlias implements Serializable, Comparable<TypeAlias> {
 
   public final hydra.ext.python.syntax.Name name;
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> typeParams;
+  public final java.util.List<hydra.ext.python.syntax.TypeParameter> typeParams;
 
   public final hydra.ext.python.syntax.Expression expression;
 
-  public TypeAlias (hydra.ext.python.syntax.Name name, hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> typeParams, hydra.ext.python.syntax.Expression expression) {
+  public TypeAlias (hydra.ext.python.syntax.Name name, java.util.List<hydra.ext.python.syntax.TypeParameter> typeParams, hydra.ext.python.syntax.Expression expression) {
     this.name = name;
     this.typeParams = typeParams;
     this.expression = expression;
@@ -49,22 +49,28 @@ public class TypeAlias implements Serializable, Comparable<TypeAlias> {
   @SuppressWarnings("unchecked")
   public int compareTo(TypeAlias other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) typeParams).compareTo(other.typeParams);
+    cmp = hydra.util.Comparing.compare(
+      typeParams,
+      other.typeParams);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) expression).compareTo(other.expression);
+    return hydra.util.Comparing.compare(
+      expression,
+      other.expression);
   }
 
   public TypeAlias withName(hydra.ext.python.syntax.Name name) {
     return new TypeAlias(name, typeParams, expression);
   }
 
-  public TypeAlias withTypeParams(hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> typeParams) {
+  public TypeAlias withTypeParams(java.util.List<hydra.ext.python.syntax.TypeParameter> typeParams) {
     return new TypeAlias(name, typeParams, expression);
   }
 

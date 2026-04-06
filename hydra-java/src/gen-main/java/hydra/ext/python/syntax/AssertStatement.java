@@ -42,11 +42,15 @@ public class AssertStatement implements Serializable, Comparable<AssertStatement
   @SuppressWarnings("unchecked")
   public int compareTo(AssertStatement other) {
     int cmp = 0;
-    cmp = ((Comparable) expression1).compareTo(other.expression1);
+    cmp = hydra.util.Comparing.compare(
+      expression1,
+      other.expression1);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) expression2).compareTo(other.expression2);
+    return hydra.util.Comparing.compare(
+      expression2,
+      other.expression2);
   }
 
   public AssertStatement withExpression1(hydra.ext.python.syntax.Expression expression1) {

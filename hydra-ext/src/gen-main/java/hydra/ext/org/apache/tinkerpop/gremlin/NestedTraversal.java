@@ -76,7 +76,9 @@ public abstract class NestedTraversal implements Serializable, Comparable<Nested
         return tagCmp;
       }
       Root o = (Root) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class NestedTraversal implements Serializable, Comparable<Nested
         return tagCmp;
       }
       Chained o = (Chained) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class NestedTraversal implements Serializable, Comparable<Nested
         return tagCmp;
       }
       Anonymous o = (Anonymous) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

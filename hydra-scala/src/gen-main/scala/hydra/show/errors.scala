@@ -6,14 +6,6 @@ import hydra.error.checking.*
 
 import hydra.errors.*
 
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def checkingError(ce: hydra.error.checking.CheckingError): scala.Predef.String =
   ce match
   case hydra.error.checking.CheckingError.incorrectUnification(v_CheckingError_incorrectUnification_v1) => hydra.show.errors.incorrectUnificationError(v_CheckingError_incorrectUnification_v1)

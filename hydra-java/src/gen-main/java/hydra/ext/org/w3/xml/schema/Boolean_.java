@@ -34,6 +34,8 @@ public class Boolean_ implements Serializable, Comparable<Boolean_> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Boolean_ other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

@@ -8,26 +8,6 @@ import hydra.paths.*
 
 import hydra.typing.*
 
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.math
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def augmentBindingsWithNewFreeVars(cx: hydra.graph.Graph)(boundVars: scala.collection.immutable.Set[hydra.core.Name])(bindings: Seq[hydra.core.Binding]): Tuple2[Seq[hydra.core.Binding],
    hydra.typing.TermSubst] =
   {

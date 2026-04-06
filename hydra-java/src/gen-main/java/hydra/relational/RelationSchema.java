@@ -26,19 +26,19 @@ public class RelationSchema<T> implements Serializable, Comparable<RelationSchem
   /**
    * A list of column specifications
    */
-  public final hydra.util.ConsList<hydra.relational.ColumnSchema<T>> columns;
+  public final java.util.List<hydra.relational.ColumnSchema<T>> columns;
 
   /**
    * Any number of primary keys for the relation, each of which must be valid for this relation
    */
-  public final hydra.util.ConsList<hydra.relational.PrimaryKey> primaryKeys;
+  public final java.util.List<hydra.relational.PrimaryKey> primaryKeys;
 
   /**
    * Any number of foreign keys, each of which must be valid for both this relation and the target relation
    */
-  public final hydra.util.ConsList<hydra.relational.ForeignKey> foreignKeys;
+  public final java.util.List<hydra.relational.ForeignKey> foreignKeys;
 
-  public RelationSchema (hydra.relational.RelationName name, hydra.util.ConsList<hydra.relational.ColumnSchema<T>> columns, hydra.util.ConsList<hydra.relational.PrimaryKey> primaryKeys, hydra.util.ConsList<hydra.relational.ForeignKey> foreignKeys) {
+  public RelationSchema (hydra.relational.RelationName name, java.util.List<hydra.relational.ColumnSchema<T>> columns, java.util.List<hydra.relational.PrimaryKey> primaryKeys, java.util.List<hydra.relational.ForeignKey> foreignKeys) {
     this.name = name;
     this.columns = columns;
     this.primaryKeys = primaryKeys;
@@ -71,34 +71,42 @@ public class RelationSchema<T> implements Serializable, Comparable<RelationSchem
   @SuppressWarnings("unchecked")
   public int compareTo(RelationSchema other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) columns).compareTo(other.columns);
+    cmp = hydra.util.Comparing.compare(
+      columns,
+      other.columns);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) primaryKeys).compareTo(other.primaryKeys);
+    cmp = hydra.util.Comparing.compare(
+      primaryKeys,
+      other.primaryKeys);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) foreignKeys).compareTo(other.foreignKeys);
+    return hydra.util.Comparing.compare(
+      foreignKeys,
+      other.foreignKeys);
   }
 
   public RelationSchema withName(hydra.relational.RelationName name) {
     return new RelationSchema(name, columns, primaryKeys, foreignKeys);
   }
 
-  public RelationSchema withColumns(hydra.util.ConsList<hydra.relational.ColumnSchema<T>> columns) {
+  public RelationSchema withColumns(java.util.List<hydra.relational.ColumnSchema<T>> columns) {
     return new RelationSchema(name, columns, primaryKeys, foreignKeys);
   }
 
-  public RelationSchema withPrimaryKeys(hydra.util.ConsList<hydra.relational.PrimaryKey> primaryKeys) {
+  public RelationSchema withPrimaryKeys(java.util.List<hydra.relational.PrimaryKey> primaryKeys) {
     return new RelationSchema(name, columns, primaryKeys, foreignKeys);
   }
 
-  public RelationSchema withForeignKeys(hydra.util.ConsList<hydra.relational.ForeignKey> foreignKeys) {
+  public RelationSchema withForeignKeys(java.util.List<hydra.relational.ForeignKey> foreignKeys) {
     return new RelationSchema(name, columns, primaryKeys, foreignKeys);
   }
 }

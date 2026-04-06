@@ -42,11 +42,15 @@ public class OptionalTraversalScopeArgumentAndIntegerArgument implements Seriali
   @SuppressWarnings("unchecked")
   public int compareTo(OptionalTraversalScopeArgumentAndIntegerArgument other) {
     int cmp = 0;
-    cmp = ((Comparable) scope).compareTo(other.scope);
+    cmp = hydra.util.Comparing.compare(
+      scope,
+      other.scope);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) long_).compareTo(other.long_);
+    return hydra.util.Comparing.compare(
+      long_,
+      other.long_);
   }
 
   public OptionalTraversalScopeArgumentAndIntegerArgument withScope(hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.TraversalScopeArgument> scope) {

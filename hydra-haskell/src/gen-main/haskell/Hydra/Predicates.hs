@@ -58,7 +58,9 @@ isComplexVariable tc name =
       let metaLookup = Maps.lookup name (Graph.graphMetadata tc)
       in (Logic.ifElse (Maybes.isJust metaLookup) True (Logic.ifElse (Sets.member name (Graph.graphLambdaVariables tc)) True (
         let typeLookup = Maps.lookup name (Graph.graphBoundTypes tc)
-        in (Maybes.maybe True (\ts -> Equality.gt (Arity.typeSchemeArity ts) 0) typeLookup))))
+        in (Maybes.maybe (
+          let primLookup = Maps.lookup name (Graph.graphPrimitives tc)
+          in (Maybes.maybe True (\prim -> Equality.gt (Arity.typeSchemeArity (Graph.primitiveType prim)) 0) primLookup)) (\ts -> Equality.gt (Arity.typeSchemeArity ts) 0) typeLookup))))
 
 -- | Determines whether a given term is an encoded term (meta-level term)
 isEncodedTerm :: Core.Term -> Bool
@@ -130,7 +132,7 @@ isTrivialTerm :: Core.Term -> Bool
 isTrivialTerm t =
     case (Strip.deannotateTerm t) of
       Core.TermLiteral _ -> True
-      Core.TermVariable _ -> True
+      Core.TermVariable v0 -> Equality.equal (Lists.length (Strings.splitOn "." (Core.unName v0))) 1
       Core.TermUnit -> True
       Core.TermApplication v0 ->
         let fun = Core.applicationFunction v0

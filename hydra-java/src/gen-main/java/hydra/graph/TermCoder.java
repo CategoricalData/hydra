@@ -61,7 +61,9 @@ public class TermCoder<A> implements Serializable, Comparable<TermCoder<A>> {
   @SuppressWarnings("unchecked")
   public int compareTo(TermCoder other) {
     int cmp = 0;
-    cmp = ((Comparable) type).compareTo(other.type);
+    cmp = hydra.util.Comparing.compare(
+      type,
+      other.type);
     if (cmp != 0) {
       return cmp;
     }

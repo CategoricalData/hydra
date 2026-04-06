@@ -17,9 +17,9 @@ public class Pkg implements Serializable, Comparable<Pkg> {
 
   public final hydra.ext.scala.syntax.Data_Ref ref;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Stat> stats;
+  public final java.util.List<hydra.ext.scala.syntax.Stat> stats;
 
-  public Pkg (hydra.ext.scala.syntax.Data_Name name, hydra.ext.scala.syntax.Data_Ref ref, hydra.util.ConsList<hydra.ext.scala.syntax.Stat> stats) {
+  public Pkg (hydra.ext.scala.syntax.Data_Name name, hydra.ext.scala.syntax.Data_Ref ref, java.util.List<hydra.ext.scala.syntax.Stat> stats) {
     this.name = name;
     this.ref = ref;
     this.stats = stats;
@@ -49,15 +49,21 @@ public class Pkg implements Serializable, Comparable<Pkg> {
   @SuppressWarnings("unchecked")
   public int compareTo(Pkg other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) ref).compareTo(other.ref);
+    cmp = hydra.util.Comparing.compare(
+      ref,
+      other.ref);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) stats).compareTo(other.stats);
+    return hydra.util.Comparing.compare(
+      stats,
+      other.stats);
   }
 
   public Pkg withName(hydra.ext.scala.syntax.Data_Name name) {
@@ -68,7 +74,7 @@ public class Pkg implements Serializable, Comparable<Pkg> {
     return new Pkg(name, ref, stats);
   }
 
-  public Pkg withStats(hydra.util.ConsList<hydra.ext.scala.syntax.Stat> stats) {
+  public Pkg withStats(java.util.List<hydra.ext.scala.syntax.Stat> stats) {
     return new Pkg(name, ref, stats);
   }
 }

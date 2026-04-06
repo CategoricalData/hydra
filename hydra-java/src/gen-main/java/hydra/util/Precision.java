@@ -112,7 +112,9 @@ public abstract class Precision implements Serializable, Comparable<Precision> {
         return tagCmp;
       }
       Bits o = (Bits) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

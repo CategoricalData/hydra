@@ -164,7 +164,9 @@ public abstract class Pat implements Serializable, Comparable<Pat> {
         return tagCmp;
       }
       Var o = (Var) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -274,7 +276,9 @@ public abstract class Pat implements Serializable, Comparable<Pat> {
         return tagCmp;
       }
       Bind o = (Bind) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -314,7 +318,9 @@ public abstract class Pat implements Serializable, Comparable<Pat> {
         return tagCmp;
       }
       Alternative o = (Alternative) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -354,7 +360,9 @@ public abstract class Pat implements Serializable, Comparable<Pat> {
         return tagCmp;
       }
       Tuple o = (Tuple) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -394,7 +402,9 @@ public abstract class Pat implements Serializable, Comparable<Pat> {
         return tagCmp;
       }
       Repeated o = (Repeated) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -434,7 +444,9 @@ public abstract class Pat implements Serializable, Comparable<Pat> {
         return tagCmp;
       }
       Extract o = (Extract) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -474,7 +486,9 @@ public abstract class Pat implements Serializable, Comparable<Pat> {
         return tagCmp;
       }
       ExtractInfix o = (ExtractInfix) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -514,7 +528,9 @@ public abstract class Pat implements Serializable, Comparable<Pat> {
         return tagCmp;
       }
       Interpolate o = (Interpolate) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -554,7 +570,9 @@ public abstract class Pat implements Serializable, Comparable<Pat> {
         return tagCmp;
       }
       Xml o = (Xml) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -594,7 +612,9 @@ public abstract class Pat implements Serializable, Comparable<Pat> {
         return tagCmp;
       }
       Typed o = (Typed) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -634,7 +654,9 @@ public abstract class Pat implements Serializable, Comparable<Pat> {
         return tagCmp;
       }
       Macro o = (Macro) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -674,7 +696,9 @@ public abstract class Pat implements Serializable, Comparable<Pat> {
         return tagCmp;
       }
       Given o = (Given) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

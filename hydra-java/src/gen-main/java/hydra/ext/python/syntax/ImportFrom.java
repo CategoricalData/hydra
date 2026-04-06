@@ -13,13 +13,13 @@ public class ImportFrom implements Serializable, Comparable<ImportFrom> {
 
   public static final hydra.core.Name TARGETS = new hydra.core.Name("targets");
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.RelativeImportPrefix> prefixes;
+  public final java.util.List<hydra.ext.python.syntax.RelativeImportPrefix> prefixes;
 
   public final hydra.util.Maybe<hydra.ext.python.syntax.DottedName> dottedName;
 
   public final hydra.ext.python.syntax.ImportFromTargets targets;
 
-  public ImportFrom (hydra.util.ConsList<hydra.ext.python.syntax.RelativeImportPrefix> prefixes, hydra.util.Maybe<hydra.ext.python.syntax.DottedName> dottedName, hydra.ext.python.syntax.ImportFromTargets targets) {
+  public ImportFrom (java.util.List<hydra.ext.python.syntax.RelativeImportPrefix> prefixes, hydra.util.Maybe<hydra.ext.python.syntax.DottedName> dottedName, hydra.ext.python.syntax.ImportFromTargets targets) {
     this.prefixes = prefixes;
     this.dottedName = dottedName;
     this.targets = targets;
@@ -49,18 +49,24 @@ public class ImportFrom implements Serializable, Comparable<ImportFrom> {
   @SuppressWarnings("unchecked")
   public int compareTo(ImportFrom other) {
     int cmp = 0;
-    cmp = ((Comparable) prefixes).compareTo(other.prefixes);
+    cmp = hydra.util.Comparing.compare(
+      prefixes,
+      other.prefixes);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) dottedName).compareTo(other.dottedName);
+    cmp = hydra.util.Comparing.compare(
+      dottedName,
+      other.dottedName);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) targets).compareTo(other.targets);
+    return hydra.util.Comparing.compare(
+      targets,
+      other.targets);
   }
 
-  public ImportFrom withPrefixes(hydra.util.ConsList<hydra.ext.python.syntax.RelativeImportPrefix> prefixes) {
+  public ImportFrom withPrefixes(java.util.List<hydra.ext.python.syntax.RelativeImportPrefix> prefixes) {
     return new ImportFrom(prefixes, dottedName, targets);
   }
 

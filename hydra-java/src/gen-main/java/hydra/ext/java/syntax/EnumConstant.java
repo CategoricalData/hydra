@@ -15,15 +15,15 @@ public class EnumConstant implements Serializable, Comparable<EnumConstant> {
 
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.EnumConstantModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.EnumConstantModifier> modifiers;
 
   public final hydra.ext.java.syntax.Identifier identifier;
 
-  public final hydra.util.ConsList<hydra.util.ConsList<hydra.ext.java.syntax.Expression>> arguments;
+  public final java.util.List<java.util.List<hydra.ext.java.syntax.Expression>> arguments;
 
   public final hydra.util.Maybe<hydra.ext.java.syntax.ClassBody> body;
 
-  public EnumConstant (hydra.util.ConsList<hydra.ext.java.syntax.EnumConstantModifier> modifiers, hydra.ext.java.syntax.Identifier identifier, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.java.syntax.Expression>> arguments, hydra.util.Maybe<hydra.ext.java.syntax.ClassBody> body) {
+  public EnumConstant (java.util.List<hydra.ext.java.syntax.EnumConstantModifier> modifiers, hydra.ext.java.syntax.Identifier identifier, java.util.List<java.util.List<hydra.ext.java.syntax.Expression>> arguments, hydra.util.Maybe<hydra.ext.java.syntax.ClassBody> body) {
     this.modifiers = modifiers;
     this.identifier = identifier;
     this.arguments = arguments;
@@ -56,22 +56,30 @@ public class EnumConstant implements Serializable, Comparable<EnumConstant> {
   @SuppressWarnings("unchecked")
   public int compareTo(EnumConstant other) {
     int cmp = 0;
-    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
+    cmp = hydra.util.Comparing.compare(
+      modifiers,
+      other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) identifier).compareTo(other.identifier);
+    cmp = hydra.util.Comparing.compare(
+      identifier,
+      other.identifier);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) arguments).compareTo(other.arguments);
+    cmp = hydra.util.Comparing.compare(
+      arguments,
+      other.arguments);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
-  public EnumConstant withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.EnumConstantModifier> modifiers) {
+  public EnumConstant withModifiers(java.util.List<hydra.ext.java.syntax.EnumConstantModifier> modifiers) {
     return new EnumConstant(modifiers, identifier, arguments, body);
   }
 
@@ -79,7 +87,7 @@ public class EnumConstant implements Serializable, Comparable<EnumConstant> {
     return new EnumConstant(modifiers, identifier, arguments, body);
   }
 
-  public EnumConstant withArguments(hydra.util.ConsList<hydra.util.ConsList<hydra.ext.java.syntax.Expression>> arguments) {
+  public EnumConstant withArguments(java.util.List<java.util.List<hydra.ext.java.syntax.Expression>> arguments) {
     return new EnumConstant(modifiers, identifier, arguments, body);
   }
 

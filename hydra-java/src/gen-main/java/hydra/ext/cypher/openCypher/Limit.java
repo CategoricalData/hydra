@@ -34,6 +34,8 @@ public class Limit implements Serializable, Comparable<Limit> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Limit other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

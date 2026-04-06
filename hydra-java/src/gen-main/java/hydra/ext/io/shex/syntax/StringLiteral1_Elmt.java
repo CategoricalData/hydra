@@ -76,7 +76,9 @@ public abstract class StringLiteral1_Elmt implements Serializable, Comparable<St
         return tagCmp;
       }
       Regex o = (Regex) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class StringLiteral1_Elmt implements Serializable, Comparable<St
         return tagCmp;
       }
       Echar o = (Echar) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class StringLiteral1_Elmt implements Serializable, Comparable<St
         return tagCmp;
       }
       Uchar o = (Uchar) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

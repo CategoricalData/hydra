@@ -4,20 +4,6 @@ import hydra.ast.*
 
 import hydra.util.*
 
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.math
-
-import hydra.lib.maybes
-
-import hydra.lib.strings
-
 lazy val angleBraces: hydra.ast.Brackets = hydra.ast.Brackets("<", ">")
 
 def angleBracesList(style: hydra.ast.BlockStyle)(els: Seq[hydra.ast.Expr]): hydra.ast.Expr =

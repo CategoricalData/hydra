@@ -34,6 +34,8 @@ public class Default implements Serializable, Comparable<Default> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Default other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

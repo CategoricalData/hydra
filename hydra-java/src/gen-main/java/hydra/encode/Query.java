@@ -41,7 +41,7 @@ public interface Query {
   }
 
   static hydra.core.Term edge(hydra.query.Edge x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Edge"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Edge"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("type"), hydra.encode.Core.name((x).type)),
       new hydra.core.Field(new hydra.core.Name("out"), new hydra.core.Term.Maybe(hydra.lib.maybes.Map.apply(
         hydra.encode.Core::name,
@@ -52,7 +52,7 @@ public interface Query {
   }
 
   static hydra.core.Term graphPattern(hydra.query.GraphPattern x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.GraphPattern"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.GraphPattern"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("graph"), hydra.encode.Core.name((x).graph)),
       new hydra.core.Field(new hydra.core.Name("patterns"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
         hydra.encode.Query::pattern,
@@ -98,7 +98,7 @@ public interface Query {
   }
 
   static hydra.core.Term pathEquation(hydra.query.PathEquation x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.PathEquation"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.PathEquation"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("left"), hydra.encode.Query.path((x).left)),
       new hydra.core.Field(new hydra.core.Name("right"), hydra.encode.Query.path((x).right)))));
   }
@@ -137,13 +137,13 @@ public interface Query {
   }
 
   static hydra.core.Term patternImplication(hydra.query.PatternImplication x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.PatternImplication"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.PatternImplication"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("antecedent"), hydra.encode.Query.pattern((x).antecedent)),
       new hydra.core.Field(new hydra.core.Name("consequent"), hydra.encode.Query.pattern((x).consequent)))));
   }
 
   static hydra.core.Term query(hydra.query.Query x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Query"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Query"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("variables"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
         hydra.encode.Query::variable,
         (x).variables))),
@@ -153,7 +153,7 @@ public interface Query {
   }
 
   static hydra.core.Term range(hydra.query.Range x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Range"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.Range"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("min"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32((x).min)))),
       new hydra.core.Field(new hydra.core.Name("max"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32((x).max)))))));
   }
@@ -198,7 +198,7 @@ public interface Query {
   }
 
   static hydra.core.Term regexSequence(hydra.query.RegexSequence x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.RegexSequence"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.RegexSequence"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("path"), hydra.encode.Query.path((x).path)),
       new hydra.core.Field(new hydra.core.Name("quantifier"), hydra.encode.Query.regexQuantifier((x).quantifier)))));
   }
@@ -223,7 +223,7 @@ public interface Query {
   }
 
   static hydra.core.Term triplePattern(hydra.query.TriplePattern x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.TriplePattern"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.TriplePattern"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("subject"), hydra.encode.Query.node((x).subject)),
       new hydra.core.Field(new hydra.core.Name("predicate"), hydra.encode.Query.path((x).predicate)),
       new hydra.core.Field(new hydra.core.Name("object"), hydra.encode.Query.node((x).object)))));

@@ -12,9 +12,9 @@ public class ShapesGraph implements Serializable, Comparable<ShapesGraph> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.Shape>> value;
+  public final java.util.Set<hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.Shape>> value;
 
-  public ShapesGraph (hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.Shape>> value) {
+  public ShapesGraph (java.util.Set<hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.Shape>> value) {
     this.value = value;
   }
 
@@ -37,6 +37,8 @@ public class ShapesGraph implements Serializable, Comparable<ShapesGraph> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ShapesGraph other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

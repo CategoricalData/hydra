@@ -42,11 +42,15 @@ public class ChainedTraversal implements Serializable, Comparable<ChainedTravers
   @SuppressWarnings("unchecked")
   public int compareTo(ChainedTraversal other) {
     int cmp = 0;
-    cmp = ((Comparable) first).compareTo(other.first);
+    cmp = hydra.util.Comparing.compare(
+      first,
+      other.first);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) rest).compareTo(other.rest);
+    return hydra.util.Comparing.compare(
+      rest,
+      other.rest);
   }
 
   public ChainedTraversal withFirst(hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod first) {

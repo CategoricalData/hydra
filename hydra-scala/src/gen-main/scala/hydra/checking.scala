@@ -18,26 +18,6 @@ import hydra.paths.*
 
 import hydra.typing.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def allEqual[T0](els: Seq[T0]): Boolean =
   hydra.lib.logic.ifElse[Boolean](hydra.lib.lists.`null`[T0](els))(true)(hydra.lib.lists.foldl[Boolean, T0]((b: Boolean) =>
   (t: T0) =>
@@ -949,23 +929,22 @@ def typeOfVariable(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: S
    Tuple2[hydra.core.Type, hydra.context.Context]] =
   {
   lazy val rawTypeScheme: Option[hydra.core.TypeScheme] = hydra.lib.maps.lookup[hydra.core.Name, hydra.core.TypeScheme](name)(tx.boundTypes)
-  hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error], Tuple2[hydra.core.Type, hydra.context.Context]],
-     hydra.core.TypeScheme](Left(hydra.context.InContext(hydra.errors.Error.untypedTermVariable(hydra.error.core.UntypedTermVariableError(Seq(),
-     name)), cx)))((ts: hydra.core.TypeScheme) =>
+  def forScheme(ts: hydra.core.TypeScheme): Either[hydra.context.InContext[hydra.errors.Error], Tuple2[hydra.core.Type, hydra.context.Context]] =
     {
     lazy val tResult: Tuple2[hydra.core.Type, hydra.context.Context] = hydra.lib.logic.ifElse[Tuple2[hydra.core.Type,
        hydra.context.Context]](hydra.lib.lists.`null`[hydra.core.Type](typeArgs))(hydra.resolution.instantiateType(cx)(hydra.scoping.typeSchemeToFType(ts)))(Tuple2(hydra.scoping.typeSchemeToFType(ts),
        cx))
-    {
-      lazy val t: hydra.core.Type = hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context](tResult)
-      {
-        lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Type, hydra.context.Context](tResult)
-        hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Type, Tuple2[hydra.core.Type,
-           hydra.context.Context]](hydra.checking.applyTypeArgumentsToType(cx2)(tx)(typeArgs)(t))((applied: hydra.core.Type) => Right(Tuple2(applied,
-           cx2)))
-      }
-    }
-  })(rawTypeScheme)
+    lazy val t: hydra.core.Type = hydra.lib.pairs.first[hydra.core.Type, hydra.context.Context](tResult)
+    lazy val cx2: hydra.context.Context = hydra.lib.pairs.second[hydra.core.Type, hydra.context.Context](tResult)
+    hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Type, Tuple2[hydra.core.Type,
+       hydra.context.Context]](hydra.checking.applyTypeArgumentsToType(cx2)(tx)(typeArgs)(t))((applied: hydra.core.Type) => Right(Tuple2(applied,
+       cx2)))
+  }
+  hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error], Tuple2[hydra.core.Type, hydra.context.Context]],
+     hydra.core.TypeScheme](hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error],
+     Tuple2[hydra.core.Type, hydra.context.Context]], hydra.core.TypeScheme](Left(hydra.context.InContext(hydra.errors.Error.untypedTermVariable(hydra.error.core.UntypedTermVariableError(Seq(),
+     name)), cx)))(forScheme)(hydra.lib.maybes.map[hydra.graph.Primitive, hydra.core.TypeScheme]((_p: hydra.graph.Primitive) => (_p.`type`))(hydra.lib.maps.lookup[hydra.core.Name,
+     hydra.graph.Primitive](name)(tx.primitives))))(forScheme)(rawTypeScheme)
 }
 
 def typeOfWrappedTerm(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq[hydra.core.Type])(wt: hydra.core.WrappedTerm): Either[hydra.context.InContext[hydra.errors.Error],

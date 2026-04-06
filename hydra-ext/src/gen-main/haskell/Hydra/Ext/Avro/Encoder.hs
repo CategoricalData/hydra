@@ -321,7 +321,7 @@ integerAdapter cx typ it =
           Graph.graphPrimitives = Maps.empty,
           Graph.graphSchemaTypes = Maps.empty,
           Graph.graphTypeVariables = Sets.empty}) t)) (\_cx -> \j -> case j of
-          Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Literals.bigintToInt32 (Math.truncate (Literals.bigfloatToFloat64 v1)))))))
+          Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Literals.bigintToInt32 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 v1)))))))))
         Core.IntegerTypeInt64 -> simple (Schema.SchemaPrimitive Schema.PrimitiveLong) False (\_cx -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToBigfloat (Literals.int64ToBigint i))) (Core_.int64 cx (Graph.Graph {
           Graph.graphBoundTerms = Maps.empty,
           Graph.graphBoundTypes = Maps.empty,
@@ -331,11 +331,11 @@ integerAdapter cx typ it =
           Graph.graphPrimitives = Maps.empty,
           Graph.graphSchemaTypes = Maps.empty,
           Graph.graphTypeVariables = Sets.empty}) t)) (\_cx -> \j -> case j of
-          Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 (Literals.bigintToInt64 (Math.truncate (Literals.bigfloatToFloat64 v1)))))))
+          Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 (Literals.bigintToInt64 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 v1)))))))))
         _ -> simple (Schema.SchemaPrimitive Schema.PrimitiveLong) True (\_cx -> \t -> case t of
           Core.TermLiteral v0 -> case v0 of
             Core.LiteralInteger v1 -> Right (Model.ValueNumber (integerValueToDouble v1))) (\_cx -> \j -> case j of
-          Model.ValueNumber v0 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 (Literals.bigintToInt64 (Math.truncate (Literals.bigfloatToFloat64 v0)))))))
+          Model.ValueNumber v0 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 (Literals.bigintToInt64 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 v0)))))))))
 
 -- | Convert any integer value to a double (bigfloat)
 integerValueToDouble :: Core.IntegerValue -> Double

@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.java.environment.JavaSymbolClass",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -66,7 +65,6 @@
       "type": {
         "name": "hydra.ext.java.environment.JavaFeatures",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -90,7 +88,6 @@
       "type": {
         "name": "hydra.ext.java.environment.Aliases",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -250,7 +247,6 @@
       "type": {
         "name": "hydra.ext.java.environment.JavaEnvironment",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -278,7 +274,7 @@
                             "@value": {"literal": {"string": "Graph context for type inference"}}}],
                         "body": {"variable": "hydra.graph.Graph"}}}}]}}},
           "variables": []}}}],
-  "description": ["Environment types for Java code generation"],
+  "description": "Environment types for Java code generation",
   "namespace": "hydra.ext.java.environment",
   "termDependencies": [],
   "typeDependencies": [

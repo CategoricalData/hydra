@@ -40,6 +40,8 @@ public class QuasiquoteExpression implements Serializable, Comparable<Quasiquote
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(QuasiquoteExpression other) {
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 }

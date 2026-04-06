@@ -6,14 +6,6 @@ import hydra.error.checking.*
 
 import hydra.errors.*
 
-import hydra.lib.eithers
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.strings
-
 def checkingError(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.error.checking.CheckingError] =
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.error.checking.CheckingError]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match

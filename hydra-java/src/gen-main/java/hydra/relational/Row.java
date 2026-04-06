@@ -12,9 +12,9 @@ public class Row<V> implements Serializable, Comparable<Row<V>> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<V> value;
+  public final java.util.List<V> value;
 
-  public Row (hydra.util.ConsList<V> value) {
+  public Row (java.util.List<V> value) {
     this.value = value;
   }
 
@@ -37,6 +37,8 @@ public class Row<V> implements Serializable, Comparable<Row<V>> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Row other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

@@ -37,6 +37,8 @@ public class Docstring implements Serializable, Comparable<Docstring> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Docstring other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

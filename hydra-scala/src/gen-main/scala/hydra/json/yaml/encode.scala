@@ -4,14 +4,6 @@ import hydra.ext.org.yaml.model.*
 
 import hydra.json.model.*
 
-import hydra.lib.eithers
-
-import hydra.lib.lists
-
-import hydra.lib.maps
-
-import hydra.lib.pairs
-
 def jsonToYaml(value: hydra.json.model.Value): hydra.ext.org.yaml.model.Node =
   value match
   case hydra.json.model.Value.array(v_Value_array_arr) => hydra.ext.org.yaml.model.Node.sequence(hydra.lib.lists.map[hydra.json.model.Value,
@@ -28,5 +20,6 @@ def jsonToYaml(value: hydra.json.model.Value): hydra.ext.org.yaml.model.Node =
        hydra.json.model.Value](kv))))(hydra.lib.maps.toList[scala.Predef.String, hydra.json.model.Value](v_Value_object_obj))))
   case hydra.json.model.Value.string(v_Value_string_s) => hydra.ext.org.yaml.model.Node.scalar(hydra.ext.org.yaml.model.Scalar.str(v_Value_string_s))
 
-def toYaml(term: hydra.core.Term): Either[scala.Predef.String, hydra.ext.org.yaml.model.Node] =
-  hydra.lib.eithers.map[hydra.json.model.Value, hydra.ext.org.yaml.model.Node, scala.Predef.String]((v: hydra.json.model.Value) => hydra.json.yaml.encode.jsonToYaml(v))(hydra.json.encode.toJson(term))
+def toYaml(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Name)(typ: hydra.core.Type)(term: hydra.core.Term): Either[scala.Predef.String,
+   hydra.ext.org.yaml.model.Node] =
+  hydra.lib.eithers.map[hydra.json.model.Value, hydra.ext.org.yaml.model.Node, scala.Predef.String]((v: hydra.json.model.Value) => hydra.json.yaml.encode.jsonToYaml(v))(hydra.json.encode.toJson(types)(tname)(typ)(term))

@@ -42,11 +42,15 @@ public class Data_Do implements Serializable, Comparable<Data_Do> {
   @SuppressWarnings("unchecked")
   public int compareTo(Data_Do other) {
     int cmp = 0;
-    cmp = ((Comparable) body).compareTo(other.body);
+    cmp = hydra.util.Comparing.compare(
+      body,
+      other.body);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) expr).compareTo(other.expr);
+    return hydra.util.Comparing.compare(
+      expr,
+      other.expr);
   }
 
   public Data_Do withBody(hydra.ext.scala.syntax.Data body) {

@@ -42,11 +42,15 @@ public class InQueryCall implements Serializable, Comparable<InQueryCall> {
   @SuppressWarnings("unchecked")
   public int compareTo(InQueryCall other) {
     int cmp = 0;
-    cmp = ((Comparable) call).compareTo(other.call);
+    cmp = hydra.util.Comparing.compare(
+      call,
+      other.call);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) yieldItems).compareTo(other.yieldItems);
+    return hydra.util.Comparing.compare(
+      yieldItems,
+      other.yieldItems);
   }
 
   public InQueryCall withCall(hydra.ext.cypher.openCypher.ExplicitProcedureInvocation call) {

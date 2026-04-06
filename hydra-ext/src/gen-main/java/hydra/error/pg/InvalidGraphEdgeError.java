@@ -51,11 +51,15 @@ public class InvalidGraphEdgeError<V> implements Serializable, Comparable<Invali
   @SuppressWarnings("unchecked")
   public int compareTo(InvalidGraphEdgeError other) {
     int cmp = 0;
-    cmp = ((Comparable) id).compareTo(other.id);
+    cmp = hydra.util.Comparing.compare(
+      id,
+      other.id);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) error).compareTo(other.error);
+    return hydra.util.Comparing.compare(
+      error,
+      other.error);
   }
 
   public InvalidGraphEdgeError withId(V id) {

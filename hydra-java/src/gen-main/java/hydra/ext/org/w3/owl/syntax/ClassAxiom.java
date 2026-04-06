@@ -84,7 +84,9 @@ public abstract class ClassAxiom implements Serializable, Comparable<ClassAxiom>
         return tagCmp;
       }
       DisjointClasses o = (DisjointClasses) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -124,7 +126,9 @@ public abstract class ClassAxiom implements Serializable, Comparable<ClassAxiom>
         return tagCmp;
       }
       DisjointUnion o = (DisjointUnion) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -164,7 +168,9 @@ public abstract class ClassAxiom implements Serializable, Comparable<ClassAxiom>
         return tagCmp;
       }
       EquivalentClasses o = (EquivalentClasses) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +210,9 @@ public abstract class ClassAxiom implements Serializable, Comparable<ClassAxiom>
         return tagCmp;
       }
       SubClassOf o = (SubClassOf) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

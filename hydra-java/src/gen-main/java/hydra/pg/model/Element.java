@@ -71,7 +71,9 @@ public abstract class Element<V> implements Serializable, Comparable<Element<V>>
         return tagCmp;
       }
       Vertex o = (Vertex) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -111,7 +113,9 @@ public abstract class Element<V> implements Serializable, Comparable<Element<V>>
         return tagCmp;
       }
       Edge o = (Edge) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

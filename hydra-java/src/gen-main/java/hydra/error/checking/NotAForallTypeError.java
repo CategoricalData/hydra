@@ -22,9 +22,9 @@ public class NotAForallTypeError implements Serializable, Comparable<NotAForallT
   /**
    * The type arguments that were being applied
    */
-  public final hydra.util.ConsList<hydra.core.Type> typeArguments;
+  public final java.util.List<hydra.core.Type> typeArguments;
 
-  public NotAForallTypeError (hydra.core.Type type, hydra.util.ConsList<hydra.core.Type> typeArguments) {
+  public NotAForallTypeError (hydra.core.Type type, java.util.List<hydra.core.Type> typeArguments) {
     this.type = type;
     this.typeArguments = typeArguments;
   }
@@ -51,18 +51,22 @@ public class NotAForallTypeError implements Serializable, Comparable<NotAForallT
   @SuppressWarnings("unchecked")
   public int compareTo(NotAForallTypeError other) {
     int cmp = 0;
-    cmp = ((Comparable) type).compareTo(other.type);
+    cmp = hydra.util.Comparing.compare(
+      type,
+      other.type);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) typeArguments).compareTo(other.typeArguments);
+    return hydra.util.Comparing.compare(
+      typeArguments,
+      other.typeArguments);
   }
 
   public NotAForallTypeError withType(hydra.core.Type type) {
     return new NotAForallTypeError(type, typeArguments);
   }
 
-  public NotAForallTypeError withTypeArguments(hydra.util.ConsList<hydra.core.Type> typeArguments) {
+  public NotAForallTypeError withTypeArguments(java.util.List<hydra.core.Type> typeArguments) {
     return new NotAForallTypeError(type, typeArguments);
   }
 }

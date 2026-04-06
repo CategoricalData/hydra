@@ -2100,7 +2100,7 @@ public class MathTest {
 
         assertEquals(
 
-            new java.math.BigInteger("4"),
+            (double) 4.0,
 
             hydra.lib.math.Ceiling.apply(3.2));
 
@@ -2112,7 +2112,7 @@ public class MathTest {
 
         assertEquals(
 
-            new java.math.BigInteger("3"),
+            (double) 3.0,
 
             hydra.lib.math.Ceiling.apply(3.0));
 
@@ -2124,7 +2124,7 @@ public class MathTest {
 
         assertEquals(
 
-            new java.math.BigInteger("-3"),
+            (double) -3.0,
 
             hydra.lib.math.Ceiling.apply(-3.2));
 
@@ -2136,7 +2136,7 @@ public class MathTest {
 
         assertEquals(
 
-            new java.math.BigInteger("-3"),
+            (double) -3.0,
 
             hydra.lib.math.Ceiling.apply(-3.0));
 
@@ -2150,7 +2150,7 @@ public class MathTest {
 
         assertEquals(
 
-            new java.math.BigInteger("3"),
+            (double) 3.0,
 
             hydra.lib.math.Floor.apply(3.8));
 
@@ -2162,7 +2162,7 @@ public class MathTest {
 
         assertEquals(
 
-            new java.math.BigInteger("3"),
+            (double) 3.0,
 
             hydra.lib.math.Floor.apply(3.0));
 
@@ -2174,7 +2174,7 @@ public class MathTest {
 
         assertEquals(
 
-            new java.math.BigInteger("-4"),
+            (double) -4.0,
 
             hydra.lib.math.Floor.apply(-3.2));
 
@@ -2186,7 +2186,7 @@ public class MathTest {
 
         assertEquals(
 
-            new java.math.BigInteger("-3"),
+            (double) -3.0,
 
             hydra.lib.math.Floor.apply(-3.0));
 
@@ -2200,7 +2200,7 @@ public class MathTest {
 
         assertEquals(
 
-            new java.math.BigInteger("3"),
+            (double) 3.0,
 
             hydra.lib.math.Round.apply(3.4));
 
@@ -2212,7 +2212,7 @@ public class MathTest {
 
         assertEquals(
 
-            new java.math.BigInteger("4"),
+            (double) 4.0,
 
             hydra.lib.math.Round.apply(3.5));
 
@@ -2224,7 +2224,7 @@ public class MathTest {
 
         assertEquals(
 
-            new java.math.BigInteger("4"),
+            (double) 4.0,
 
             hydra.lib.math.Round.apply(3.6));
 
@@ -2236,7 +2236,7 @@ public class MathTest {
 
         assertEquals(
 
-            new java.math.BigInteger("-3"),
+            (double) -3.0,
 
             hydra.lib.math.Round.apply(-3.4));
 
@@ -2248,7 +2248,7 @@ public class MathTest {
 
         assertEquals(
 
-            new java.math.BigInteger("-4"),
+            (double) -4.0,
 
             hydra.lib.math.Round.apply(-3.5));
 
@@ -2494,7 +2494,7 @@ public class MathTest {
 
         assertEquals(
 
-            new java.math.BigInteger("3"),
+            (double) 3.0,
 
             hydra.lib.math.Truncate.apply(3.8));
 
@@ -2506,7 +2506,7 @@ public class MathTest {
 
         assertEquals(
 
-            new java.math.BigInteger("3"),
+            (double) 3.0,
 
             hydra.lib.math.Truncate.apply(3.2));
 
@@ -2518,7 +2518,7 @@ public class MathTest {
 
         assertEquals(
 
-            new java.math.BigInteger("-3"),
+            (double) -3.0,
 
             hydra.lib.math.Truncate.apply(-3.8));
 
@@ -2530,7 +2530,7 @@ public class MathTest {
 
         assertEquals(
 
-            new java.math.BigInteger("-3"),
+            (double) -3.0,
 
             hydra.lib.math.Truncate.apply(-3.2));
 

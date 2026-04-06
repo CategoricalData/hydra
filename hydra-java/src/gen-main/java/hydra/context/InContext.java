@@ -51,11 +51,15 @@ public class InContext<E> implements Serializable, Comparable<InContext<E>> {
   @SuppressWarnings("unchecked")
   public int compareTo(InContext other) {
     int cmp = 0;
-    cmp = ((Comparable) object).compareTo(other.object);
+    cmp = hydra.util.Comparing.compare(
+      object,
+      other.object);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) context).compareTo(other.context);
+    return hydra.util.Comparing.compare(
+      context,
+      other.context);
   }
 
   public InContext withObject(E object) {

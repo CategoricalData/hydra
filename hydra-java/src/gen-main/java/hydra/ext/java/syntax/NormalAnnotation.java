@@ -13,9 +13,9 @@ public class NormalAnnotation implements Serializable, Comparable<NormalAnnotati
 
   public final hydra.ext.java.syntax.TypeName typeName;
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.ElementValuePair> pairs;
+  public final java.util.List<hydra.ext.java.syntax.ElementValuePair> pairs;
 
-  public NormalAnnotation (hydra.ext.java.syntax.TypeName typeName, hydra.util.ConsList<hydra.ext.java.syntax.ElementValuePair> pairs) {
+  public NormalAnnotation (hydra.ext.java.syntax.TypeName typeName, java.util.List<hydra.ext.java.syntax.ElementValuePair> pairs) {
     this.typeName = typeName;
     this.pairs = pairs;
   }
@@ -42,18 +42,22 @@ public class NormalAnnotation implements Serializable, Comparable<NormalAnnotati
   @SuppressWarnings("unchecked")
   public int compareTo(NormalAnnotation other) {
     int cmp = 0;
-    cmp = ((Comparable) typeName).compareTo(other.typeName);
+    cmp = hydra.util.Comparing.compare(
+      typeName,
+      other.typeName);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) pairs).compareTo(other.pairs);
+    return hydra.util.Comparing.compare(
+      pairs,
+      other.pairs);
   }
 
   public NormalAnnotation withTypeName(hydra.ext.java.syntax.TypeName typeName) {
     return new NormalAnnotation(typeName, pairs);
   }
 
-  public NormalAnnotation withPairs(hydra.util.ConsList<hydra.ext.java.syntax.ElementValuePair> pairs) {
+  public NormalAnnotation withPairs(java.util.List<hydra.ext.java.syntax.ElementValuePair> pairs) {
     return new NormalAnnotation(typeName, pairs);
   }
 }

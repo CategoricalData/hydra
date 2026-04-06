@@ -34,6 +34,8 @@ public class Identifier implements Serializable, Comparable<Identifier> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Identifier other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

@@ -76,9 +76,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
    * A JSON array
    */
   public static final class Array extends hydra.json.model.Value implements Serializable {
-    public final hydra.util.ConsList<hydra.json.model.Value> value;
+    public final java.util.List<hydra.json.model.Value> value;
 
-    public Array (hydra.util.ConsList<hydra.json.model.Value> value) {
+    public Array (java.util.List<hydra.json.model.Value> value) {
       this.value = value;
     }
 
@@ -106,7 +106,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       Array o = (Array) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -149,7 +151,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       Boolean_ o = (Boolean_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -228,7 +232,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       Number_ o = (Number_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -241,9 +247,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
    * A JSON object as a set of key/value pairs
    */
   public static final class Object_ extends hydra.json.model.Value implements Serializable {
-    public final hydra.util.PersistentMap<String, hydra.json.model.Value> value;
+    public final java.util.Map<String, hydra.json.model.Value> value;
 
-    public Object_ (hydra.util.PersistentMap<String, hydra.json.model.Value> value) {
+    public Object_ (java.util.Map<String, hydra.json.model.Value> value) {
       this.value = value;
     }
 
@@ -271,7 +277,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       Object_ o = (Object_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -314,7 +322,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       String_ o = (String_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

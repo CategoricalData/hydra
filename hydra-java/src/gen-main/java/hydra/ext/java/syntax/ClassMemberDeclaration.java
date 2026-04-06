@@ -92,7 +92,9 @@ public abstract class ClassMemberDeclaration implements Serializable, Comparable
         return tagCmp;
       }
       Field o = (Field) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -132,7 +134,9 @@ public abstract class ClassMemberDeclaration implements Serializable, Comparable
         return tagCmp;
       }
       Method o = (Method) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -172,7 +176,9 @@ public abstract class ClassMemberDeclaration implements Serializable, Comparable
         return tagCmp;
       }
       Class_ o = (Class_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -212,7 +218,9 @@ public abstract class ClassMemberDeclaration implements Serializable, Comparable
         return tagCmp;
       }
       Interface o = (Interface) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

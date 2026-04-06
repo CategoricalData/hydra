@@ -33,7 +33,7 @@ def infer_test_case(g: T0, tcm: hydra.testing.TestCaseWithMetadata) -> Either[T1
     tags_ = tcm.tags
     return hydra.lib.eithers.map((lambda inferred_case: hydra.testing.TestCaseWithMetadata(name_, inferred_case, desc, tags_)), Right(tcase))
 
-def infer_test_group_terms(g: T0, tg: hydra.testing.TestGroup) -> Either[frozenlist[hydra.testing.TestGroup], hydra.testing.TestGroup]:
+def infer_test_group_terms(g: T0, tg: hydra.testing.TestGroup) -> Either[T1, hydra.testing.TestGroup]:
     r"""Run type inference on all terms in a TestGroup to ensure lambdas have domain types."""
 
     name_ = tg.name

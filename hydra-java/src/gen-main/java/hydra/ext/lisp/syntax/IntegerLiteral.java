@@ -49,11 +49,15 @@ public class IntegerLiteral implements Serializable, Comparable<IntegerLiteral> 
   @SuppressWarnings("unchecked")
   public int compareTo(IntegerLiteral other) {
     int cmp = 0;
-    cmp = ((Comparable) value).compareTo(other.value);
+    cmp = hydra.util.Comparing.compare(
+      value,
+      other.value);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) bigint).compareTo(other.bigint);
+    return hydra.util.Comparing.compare(
+      bigint,
+      other.bigint);
   }
 
   public IntegerLiteral withValue(java.math.BigInteger value) {

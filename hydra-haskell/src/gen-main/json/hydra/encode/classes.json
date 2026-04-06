@@ -49,12 +49,12 @@
                                                             "union": {
                                                               "field": {"name": "unit", "term": {"unit": {}}},
                                                               "typeName": "hydra.core.Term"}},
-                                                          "domain": [{"unit": {}}],
+                                                          "domain": {"unit": {}},
                                                           "parameter": "_"}}}}}}],
                                             "typeName": "hydra.core.Field"}}}],
                                     "typeName": "hydra.core.Injection"}}},
                               "typeName": "hydra.core.Term"}},
-                          "domain": [{"unit": {}}],
+                          "domain": {"unit": {}},
                           "parameter": "y"}}}},
                   {
                     "name": "ordering",
@@ -97,24 +97,21 @@
                                                             "union": {
                                                               "field": {"name": "unit", "term": {"unit": {}}},
                                                               "typeName": "hydra.core.Term"}},
-                                                          "domain": [{"unit": {}}],
+                                                          "domain": {"unit": {}},
                                                           "parameter": "_"}}}}}}],
                                             "typeName": "hydra.core.Field"}}}],
                                     "typeName": "hydra.core.Injection"}}},
                               "typeName": "hydra.core.Term"}},
-                          "domain": [{"unit": {}}],
+                          "domain": {"unit": {}},
                           "parameter": "y"}}}}],
-                "default": null,
                 "typeName": "hydra.classes.TypeClass"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.core.Term"},
-                "domain": {"variable": "hydra.classes.TypeClass"}}},
-            "variables": []}]}}],
-  "description": ["Term encoders for hydra.classes"],
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.classes.TypeClass"}}},
+          "variables": []}}}],
+  "description": "Term encoders for hydra.classes",
   "namespace": "hydra.encode.classes",
   "termDependencies": ["hydra.encode.core"],
   "typeDependencies": ["hydra.classes"]}

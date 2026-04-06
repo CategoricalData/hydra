@@ -13,9 +13,9 @@ public class RelationshipsPattern implements Serializable, Comparable<Relationsh
 
   public final hydra.ext.cypher.openCypher.NodePattern nodePattern;
 
-  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.PatternElementChain> chain;
+  public final java.util.List<hydra.ext.cypher.openCypher.PatternElementChain> chain;
 
-  public RelationshipsPattern (hydra.ext.cypher.openCypher.NodePattern nodePattern, hydra.util.ConsList<hydra.ext.cypher.openCypher.PatternElementChain> chain) {
+  public RelationshipsPattern (hydra.ext.cypher.openCypher.NodePattern nodePattern, java.util.List<hydra.ext.cypher.openCypher.PatternElementChain> chain) {
     this.nodePattern = nodePattern;
     this.chain = chain;
   }
@@ -42,18 +42,22 @@ public class RelationshipsPattern implements Serializable, Comparable<Relationsh
   @SuppressWarnings("unchecked")
   public int compareTo(RelationshipsPattern other) {
     int cmp = 0;
-    cmp = ((Comparable) nodePattern).compareTo(other.nodePattern);
+    cmp = hydra.util.Comparing.compare(
+      nodePattern,
+      other.nodePattern);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) chain).compareTo(other.chain);
+    return hydra.util.Comparing.compare(
+      chain,
+      other.chain);
   }
 
   public RelationshipsPattern withNodePattern(hydra.ext.cypher.openCypher.NodePattern nodePattern) {
     return new RelationshipsPattern(nodePattern, chain);
   }
 
-  public RelationshipsPattern withChain(hydra.util.ConsList<hydra.ext.cypher.openCypher.PatternElementChain> chain) {
+  public RelationshipsPattern withChain(java.util.List<hydra.ext.cypher.openCypher.PatternElementChain> chain) {
     return new RelationshipsPattern(nodePattern, chain);
   }
 }

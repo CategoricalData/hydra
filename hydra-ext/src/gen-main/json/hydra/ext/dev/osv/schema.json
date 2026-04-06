@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.dev.osv.schema.Credited",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "name", "type": {"literal": {"string": {}}}},
@@ -16,7 +15,6 @@
       "type": {
         "name": "hydra.ext.dev.osv.schema.Ecosystem",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -31,7 +29,6 @@
       "type": {
         "name": "hydra.ext.dev.osv.schema.Entry",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -84,7 +81,6 @@
       "type": {
         "name": "hydra.ext.dev.osv.schema.Event",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -104,7 +100,6 @@
       "type": {
         "name": "hydra.ext.dev.osv.schema.Id",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -119,7 +114,6 @@
       "type": {
         "name": "hydra.ext.dev.osv.schema.Markdown",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -132,7 +126,6 @@
       "type": {
         "name": "hydra.ext.dev.osv.schema.OsvVersion",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -147,7 +140,6 @@
       "type": {
         "name": "hydra.ext.dev.osv.schema.Package",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -162,7 +154,6 @@
       "type": {
         "name": "hydra.ext.dev.osv.schema.PackageVersions",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -180,7 +171,6 @@
       "type": {
         "name": "hydra.ext.dev.osv.schema.Reference",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -192,7 +182,6 @@
       "type": {
         "name": "hydra.ext.dev.osv.schema.ReferenceType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -207,7 +196,6 @@
       "type": {
         "name": "hydra.ext.dev.osv.schema.Severity",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -220,15 +208,11 @@
     {
       "type": {
         "name": "hydra.ext.dev.osv.schema.SeverityScore",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.dev.osv.schema.SeverityType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -242,7 +226,6 @@
       "type": {
         "name": "hydra.ext.dev.osv.schema.Timestamp",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -255,15 +238,11 @@
     {
       "type": {
         "name": "hydra.ext.dev.osv.schema.Url",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.dev.osv.schema.Version",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -277,7 +256,6 @@
       "type": {
         "name": "hydra.ext.dev.osv.schema.VersionOrStar",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -292,7 +270,6 @@
       "type": {
         "name": "hydra.ext.dev.osv.schema.VersionOrZero",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -307,7 +284,6 @@
       "type": {
         "name": "hydra.ext.dev.osv.schema.VersionRange",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -324,7 +300,6 @@
       "type": {
         "name": "hydra.ext.dev.osv.schema.VersionType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -334,7 +309,7 @@
                     "literal": {"string": "One of the values 'SEMVER', 'ECOSYSTEM', or 'GIT"}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []}}}],
-  "description": ["See https://ossf.github.io/osv-schema"],
+  "description": "See https://ossf.github.io/osv-schema",
   "namespace": "hydra.ext.dev.osv.schema",
   "termDependencies": [],
   "typeDependencies": []}

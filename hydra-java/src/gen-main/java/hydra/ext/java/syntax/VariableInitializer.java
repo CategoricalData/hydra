@@ -68,7 +68,9 @@ public abstract class VariableInitializer implements Serializable, Comparable<Va
         return tagCmp;
       }
       Expression o = (Expression) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class VariableInitializer implements Serializable, Comparable<Va
         return tagCmp;
       }
       ArrayInitializer o = (ArrayInitializer) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

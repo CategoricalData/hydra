@@ -42,11 +42,15 @@ public class LambdaExpression implements Serializable, Comparable<LambdaExpressi
   @SuppressWarnings("unchecked")
   public int compareTo(LambdaExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) parameters).compareTo(other.parameters);
+    cmp = hydra.util.Comparing.compare(
+      parameters,
+      other.parameters);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
   public LambdaExpression withParameters(hydra.ext.java.syntax.LambdaParameters parameters) {

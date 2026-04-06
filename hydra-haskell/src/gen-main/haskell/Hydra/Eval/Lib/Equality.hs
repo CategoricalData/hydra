@@ -17,10 +17,10 @@ max cx g x y =
     Right (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
-          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
+          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
           Core.applicationArgument = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.gte"))),
+              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.gte")),
               Core.applicationArgument = x})),
             Core.applicationArgument = y}))})),
         Core.applicationArgument = x})),
@@ -32,10 +32,10 @@ min cx g x y =
     Right (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
-          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
+          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
           Core.applicationArgument = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.lte"))),
+              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.lte")),
               Core.applicationArgument = x})),
             Core.applicationArgument = y}))})),
         Core.applicationArgument = x})),

@@ -42,11 +42,15 @@ public class RangeArgument implements Serializable, Comparable<RangeArgument> {
   @SuppressWarnings("unchecked")
   public int compareTo(RangeArgument other) {
     int cmp = 0;
-    cmp = ((Comparable) min).compareTo(other.min);
+    cmp = hydra.util.Comparing.compare(
+      min,
+      other.min);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) max).compareTo(other.max);
+    return hydra.util.Comparing.compare(
+      max,
+      other.max);
   }
 
   public RangeArgument withMin(hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument min) {

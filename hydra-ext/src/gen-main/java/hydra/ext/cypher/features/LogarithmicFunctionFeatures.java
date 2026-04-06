@@ -81,23 +81,33 @@ public class LogarithmicFunctionFeatures implements Serializable, Comparable<Log
   @SuppressWarnings("unchecked")
   public int compareTo(LogarithmicFunctionFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) e).compareTo(other.e);
+    cmp = hydra.util.Comparing.compare(
+      e,
+      other.e);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) exp).compareTo(other.exp);
+    cmp = hydra.util.Comparing.compare(
+      exp,
+      other.exp);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) log).compareTo(other.log);
+    cmp = hydra.util.Comparing.compare(
+      log,
+      other.log);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) log10).compareTo(other.log10);
+    cmp = hydra.util.Comparing.compare(
+      log10,
+      other.log10);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) sqrt).compareTo(other.sqrt);
+    return hydra.util.Comparing.compare(
+      sqrt,
+      other.sqrt);
   }
 
   public LogarithmicFunctionFeatures withE(Boolean e) {

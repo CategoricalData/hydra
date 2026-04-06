@@ -3,15 +3,11 @@
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.BigDecimalValue",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.CompositeTypedValue",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -24,15 +20,11 @@
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.DateTime",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.DoubleValue",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "finite", "type": {"literal": {"float": {"float64": {}}}}},
@@ -43,22 +35,15 @@
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.Duration",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.EdgeLabel",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.FloatValue",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "finite", "type": {"literal": {"float": {"float32": {}}}}},
@@ -70,14 +55,12 @@
       "type": {
         "name": "hydra.pg.graphson.syntax.Map",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"list": {"variable": "hydra.pg.graphson.syntax.ValuePair"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.AdjacentEdge",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "id", "type": {"variable": "hydra.pg.graphson.syntax.Value"}},
@@ -95,7 +78,6 @@
       "type": {
         "name": "hydra.pg.graphson.syntax.PrimitiveTypedValue",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -106,29 +88,19 @@
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.PropertyKey",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.TypeName",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.Uuid",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.Value",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -179,7 +151,6 @@
       "type": {
         "name": "hydra.pg.graphson.syntax.ValuePair",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -193,7 +164,6 @@
       "type": {
         "name": "hydra.pg.graphson.syntax.Vertex",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "id", "type": {"variable": "hydra.pg.graphson.syntax.Value"}},
@@ -222,15 +192,11 @@
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.VertexLabel",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.VertexPropertyValue",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -240,8 +206,7 @@
                 "name": "value",
                 "type": {"variable": "hydra.pg.graphson.syntax.Value"}}]},
           "variables": []}}}],
-  "description": [
-    "A syntax model for TinkerPop's GraphSON format. This model is designed to be as inclusive as possible, supporting GraphSON 4.0 as well as earlier versions. See https://github.com/apache/tinkerpop/blob/master/docs/src/dev/io/graphson.asciidoc."],
+  "description": "A syntax model for TinkerPop's GraphSON format. This model is designed to be as inclusive as possible, supporting GraphSON 4.0 as well as earlier versions. See https://github.com/apache/tinkerpop/blob/master/docs/src/dev/io/graphson.asciidoc.",
   "namespace": "hydra.pg.graphson.syntax",
   "termDependencies": [],
   "typeDependencies": ["hydra.core"]}

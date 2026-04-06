@@ -49,15 +49,21 @@ public class ExceptStarBlock implements Serializable, Comparable<ExceptStarBlock
   @SuppressWarnings("unchecked")
   public int compareTo(ExceptStarBlock other) {
     int cmp = 0;
-    cmp = ((Comparable) expression).compareTo(other.expression);
+    cmp = hydra.util.Comparing.compare(
+      expression,
+      other.expression);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) as).compareTo(other.as);
+    cmp = hydra.util.Comparing.compare(
+      as,
+      other.as);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
   public ExceptStarBlock withExpression(hydra.ext.python.syntax.Expression expression) {

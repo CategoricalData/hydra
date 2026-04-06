@@ -37,6 +37,8 @@ public class Name implements Serializable, Comparable<Name> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Name other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

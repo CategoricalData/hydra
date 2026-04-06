@@ -9,9 +9,9 @@ public class ValueSet implements Serializable, Comparable<ValueSet> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.ValueSetValue> value;
+  public final java.util.List<hydra.ext.io.shex.syntax.ValueSetValue> value;
 
-  public ValueSet (hydra.util.ConsList<hydra.ext.io.shex.syntax.ValueSetValue> value) {
+  public ValueSet (java.util.List<hydra.ext.io.shex.syntax.ValueSetValue> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class ValueSet implements Serializable, Comparable<ValueSet> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ValueSet other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

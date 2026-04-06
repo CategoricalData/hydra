@@ -66,7 +66,9 @@ public abstract class Number_ implements Serializable, Comparable<Number_> {
         return tagCmp;
       }
       Integer_ o = (Integer_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -104,7 +106,9 @@ public abstract class Number_ implements Serializable, Comparable<Number_> {
         return tagCmp;
       }
       Float_ o = (Float_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -63,41 +63,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The remaining input at the point of failure"}}}],
-                              "body": {"literal": {"string": {}}}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "remainder"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An error message"}}}],
-                        "body": {"literal": {"string": {}}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "message"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.parsing.ParseError"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -107,18 +72,49 @@
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The remaining input at the point of failure"}}}],
                             "body": {"literal": {"string": {}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An error message"}}}],
-                        "body": {"literal": {"string": {}}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "remainder"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "An error message"}}}],
+                      "body": {"literal": {"string": {}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "message"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.parsing.ParseError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {"literal": {"string": "The remaining input at the point of failure"}}}],
+                          "body": {"literal": {"string": {}}}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "An error message"}}}],
+                      "body": {"literal": {"string": {}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.parsing.parseErrorMessage",
@@ -176,32 +172,29 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.parsing.ParseError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.parsing.ParseError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "An error message"}}}],
-                        "body": {"literal": {"string": {}}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.parsing.ParseError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "An error message"}}}],
+                      "body": {"literal": {"string": {}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.parsing.ParseError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.parsing.parseErrorRemainder",
@@ -259,32 +252,29 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.parsing.ParseError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.parsing.ParseError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The remaining input at the point of failure"}}}],
-                        "body": {"literal": {"string": {}}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.parsing.ParseError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The remaining input at the point of failure"}}}],
+                      "body": {"literal": {"string": {}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.parsing.ParseError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.parsing.parseErrorWithMessage",
@@ -392,35 +382,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "An error message"}}}],
-                              "body": {"literal": {"string": {}}}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.parsing.ParseError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.parsing.ParseError"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -430,12 +391,37 @@
                                 "@key": "description",
                                 "@value": {"literal": {"string": "An error message"}}}],
                             "body": {"literal": {"string": {}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.parsing.ParseError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.parsing.ParseError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.parsing.ParseError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {"literal": {"string": "An error message"}}}],
+                          "body": {"literal": {"string": {}}}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.parsing.ParseError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.parsing.parseErrorWithRemainder",
@@ -543,35 +529,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The remaining input at the point of failure"}}}],
-                              "body": {"literal": {"string": {}}}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.parsing.ParseError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.parsing.ParseError"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -581,12 +538,37 @@
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The remaining input at the point of failure"}}}],
                             "body": {"literal": {"string": {}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.parsing.ParseError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.parsing.ParseError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.parsing.ParseError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {"literal": {"string": "The remaining input at the point of failure"}}}],
+                          "body": {"literal": {"string": {}}}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.parsing.ParseError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.parsing.parseResultSuccess",
@@ -629,51 +611,48 @@
                             "typeName": "hydra.core.Injection"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {
-                                "string": "A successful parse, with a value and the remaining unparsed input"}}}],
-                        "body": {
-                          "application": {
-                            "argument": {"variable": "a"},
-                            "function": {"variable": "hydra.parsing.ParseSuccess"}}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "A successful parse, with a value and the remaining unparsed input"}}}],
+                      "body": {
+                        "application": {
+                          "argument": {"variable": "a"},
+                          "function": {"variable": "hydra.parsing.ParseSuccess"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "a"},
-                        "function": {"variable": "hydra.parsing.ParseResult"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {
-                                "string": "A successful parse, with a value and the remaining unparsed input"}}}],
-                        "body": {
-                          "application": {
-                            "argument": {"variable": "a"},
-                            "function": {"variable": "hydra.parsing.ParseSuccess"}}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": ["a"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "a"},
+                      "function": {"variable": "hydra.parsing.ParseResult"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "A successful parse, with a value and the remaining unparsed input"}}}],
+                      "body": {
+                        "application": {
+                          "argument": {"variable": "a"},
+                          "function": {"variable": "hydra.parsing.ParseSuccess"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": ["a"]}}},
     {
       "term": {
         "name": "hydra.dsl.parsing.parseResultFailure",
@@ -716,45 +695,42 @@
                             "typeName": "hydra.core.Injection"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {
-                                "string": "A failed parse, with an error message and the remaining input"}}}],
-                        "body": {"variable": "hydra.parsing.ParseError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "A failed parse, with an error message and the remaining input"}}}],
+                      "body": {"variable": "hydra.parsing.ParseError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "a"},
-                        "function": {"variable": "hydra.parsing.ParseResult"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {
-                                "string": "A failed parse, with an error message and the remaining input"}}}],
-                        "body": {"variable": "hydra.parsing.ParseError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": ["a"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "a"},
+                      "function": {"variable": "hydra.parsing.ParseResult"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "A failed parse, with an error message and the remaining input"}}}],
+                      "body": {"variable": "hydra.parsing.ParseError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": ["a"]}}},
     {
       "term": {
         "name": "hydra.dsl.parsing.parseSuccess",
@@ -818,44 +794,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The remaining unparsed input"}}}],
-                              "body": {"literal": {"string": {}}}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "remainder"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The parsed value"}}}],
-                        "body": {"variable": "a"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "value"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {
-                          "application": {
-                            "argument": {"variable": "a"},
-                            "function": {"variable": "hydra.parsing.ParseSuccess"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -865,18 +803,52 @@
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The remaining unparsed input"}}}],
                             "body": {"literal": {"string": {}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The parsed value"}}}],
-                        "body": {"variable": "a"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": ["a"]}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "remainder"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The parsed value"}}}],
+                      "body": {"variable": "a"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "value"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {
+                        "application": {
+                          "argument": {"variable": "a"},
+                          "function": {"variable": "hydra.parsing.ParseSuccess"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {"literal": {"string": "The remaining unparsed input"}}}],
+                          "body": {"literal": {"string": {}}}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The parsed value"}}}],
+                      "body": {"variable": "a"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": ["a"]}}},
     {
       "term": {
         "name": "hydra.dsl.parsing.parseSuccessValue",
@@ -934,38 +906,35 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "a"},
-                        "function": {"variable": "hydra.parsing.ParseSuccess"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "a"},
+                      "function": {"variable": "hydra.parsing.ParseSuccess"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The parsed value"}}}],
-                        "body": {"variable": "a"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "a"},
-                        "function": {"variable": "hydra.parsing.ParseSuccess"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": ["a"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The parsed value"}}}],
+                      "body": {"variable": "a"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "a"},
+                      "function": {"variable": "hydra.parsing.ParseSuccess"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": ["a"]}}},
     {
       "term": {
         "name": "hydra.dsl.parsing.parseSuccessRemainder",
@@ -1023,38 +992,35 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "a"},
-                        "function": {"variable": "hydra.parsing.ParseSuccess"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "a"},
+                      "function": {"variable": "hydra.parsing.ParseSuccess"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The remaining unparsed input"}}}],
-                        "body": {"literal": {"string": {}}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "a"},
-                        "function": {"variable": "hydra.parsing.ParseSuccess"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": ["a"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The remaining unparsed input"}}}],
+                      "body": {"literal": {"string": {}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "a"},
+                      "function": {"variable": "hydra.parsing.ParseSuccess"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": ["a"]}}},
     {
       "term": {
         "name": "hydra.dsl.parsing.parseSuccessWithValue",
@@ -1162,41 +1128,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The parsed value"}}}],
-                              "body": {"variable": "a"}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "a"},
-                        "function": {"variable": "hydra.parsing.ParseSuccess"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {
-                          "application": {
-                            "argument": {"variable": "a"},
-                            "function": {"variable": "hydra.parsing.ParseSuccess"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -1206,15 +1137,46 @@
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The parsed value"}}}],
                             "body": {"variable": "a"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "a"},
-                        "function": {"variable": "hydra.parsing.ParseSuccess"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": ["a"]}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "a"},
+                      "function": {"variable": "hydra.parsing.ParseSuccess"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {
+                        "application": {
+                          "argument": {"variable": "a"},
+                          "function": {"variable": "hydra.parsing.ParseSuccess"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {"literal": {"string": "The parsed value"}}}],
+                          "body": {"variable": "a"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "a"},
+                      "function": {"variable": "hydra.parsing.ParseSuccess"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": ["a"]}}},
     {
       "term": {
         "name": "hydra.dsl.parsing.parseSuccessWithRemainder",
@@ -1322,41 +1284,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The remaining unparsed input"}}}],
-                              "body": {"literal": {"string": {}}}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "a"},
-                        "function": {"variable": "hydra.parsing.ParseSuccess"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {
-                          "application": {
-                            "argument": {"variable": "a"},
-                            "function": {"variable": "hydra.parsing.ParseSuccess"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -1366,15 +1293,46 @@
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The remaining unparsed input"}}}],
                             "body": {"literal": {"string": {}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "a"},
-                        "function": {"variable": "hydra.parsing.ParseSuccess"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": ["a"]}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "a"},
+                      "function": {"variable": "hydra.parsing.ParseSuccess"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {
+                        "application": {
+                          "argument": {"variable": "a"},
+                          "function": {"variable": "hydra.parsing.ParseSuccess"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {"literal": {"string": "The remaining unparsed input"}}}],
+                          "body": {"literal": {"string": {}}}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "a"},
+                      "function": {"variable": "hydra.parsing.ParseSuccess"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": ["a"]}}},
     {
       "term": {
         "name": "hydra.dsl.parsing.parser",
@@ -1405,41 +1363,38 @@
                             "typeName": "hydra.core.WrappedTerm"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "function": {
-                        "codomain": {
-                          "application": {
-                            "argument": {"variable": "a"},
-                            "function": {"variable": "hydra.parsing.ParseResult"}}},
-                        "domain": {"literal": {"string": {}}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {
+                    "function": {
+                      "codomain": {
+                        "application": {
+                          "argument": {"variable": "a"},
+                          "function": {"variable": "hydra.parsing.ParseResult"}}},
+                      "domain": {"literal": {"string": {}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "a"},
-                        "function": {"variable": "hydra.parsing.Parser"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "function": {
-                        "codomain": {
-                          "application": {
-                            "argument": {"variable": "a"},
-                            "function": {"variable": "hydra.parsing.ParseResult"}}},
-                        "domain": {"literal": {"string": {}}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": ["a"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "a"},
+                      "function": {"variable": "hydra.parsing.Parser"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "function": {
+                      "codomain": {
+                        "application": {
+                          "argument": {"variable": "a"},
+                          "function": {"variable": "hydra.parsing.ParseResult"}}},
+                      "domain": {"literal": {"string": {}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": ["a"]}}},
     {
       "term": {
         "name": "hydra.dsl.parsing.unParser",
@@ -1485,39 +1440,36 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "a"},
-                        "function": {"variable": "hydra.parsing.Parser"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "a"},
+                      "function": {"variable": "hydra.parsing.Parser"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "function": {
-                        "codomain": {
-                          "application": {
-                            "argument": {"variable": "a"},
-                            "function": {"variable": "hydra.parsing.ParseResult"}}},
-                        "domain": {"literal": {"string": {}}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "application": {
-                        "argument": {"variable": "a"},
-                        "function": {"variable": "hydra.parsing.Parser"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": ["a"]}]}}],
-  "description": ["DSL functions for hydra.parsing"],
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "function": {
+                      "codomain": {
+                        "application": {
+                          "argument": {"variable": "a"},
+                          "function": {"variable": "hydra.parsing.ParseResult"}}},
+                      "domain": {"literal": {"string": {}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "a"},
+                      "function": {"variable": "hydra.parsing.Parser"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": ["a"]}}}],
+  "description": "DSL functions for hydra.parsing",
   "namespace": "hydra.dsl.parsing",
   "termDependencies": ["hydra.dsl.core"],
   "typeDependencies": ["hydra.parsing", "hydra.phantoms", "hydra.core"]}

@@ -84,7 +84,9 @@ public abstract class String_ implements Serializable, Comparable<String_> {
         return tagCmp;
       }
       StringLiteral1 o = (StringLiteral1) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -124,7 +126,9 @@ public abstract class String_ implements Serializable, Comparable<String_> {
         return tagCmp;
       }
       StringLiteralLong1 o = (StringLiteralLong1) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -164,7 +168,9 @@ public abstract class String_ implements Serializable, Comparable<String_> {
         return tagCmp;
       }
       StringLiteral2 o = (StringLiteral2) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +210,9 @@ public abstract class String_ implements Serializable, Comparable<String_> {
         return tagCmp;
       }
       StringLiteralLong2 o = (StringLiteralLong2) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

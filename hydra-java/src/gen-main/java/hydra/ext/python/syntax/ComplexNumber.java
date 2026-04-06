@@ -49,15 +49,21 @@ public class ComplexNumber implements Serializable, Comparable<ComplexNumber> {
   @SuppressWarnings("unchecked")
   public int compareTo(ComplexNumber other) {
     int cmp = 0;
-    cmp = ((Comparable) real).compareTo(other.real);
+    cmp = hydra.util.Comparing.compare(
+      real,
+      other.real);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) plusOrMinus).compareTo(other.plusOrMinus);
+    cmp = hydra.util.Comparing.compare(
+      plusOrMinus,
+      other.plusOrMinus);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) imaginary).compareTo(other.imaginary);
+    return hydra.util.Comparing.compare(
+      imaginary,
+      other.imaginary);
   }
 
   public ComplexNumber withReal(hydra.ext.python.syntax.SignedRealNumber real) {

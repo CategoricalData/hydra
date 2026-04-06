@@ -71,19 +71,27 @@ public class Adapter<T1, T2, V1, V2> implements Serializable, Comparable<Adapter
   @SuppressWarnings("unchecked")
   public int compareTo(Adapter other) {
     int cmp = 0;
-    cmp = ((Comparable) isLossy).compareTo(other.isLossy);
+    cmp = hydra.util.Comparing.compare(
+      isLossy,
+      other.isLossy);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) source).compareTo(other.source);
+    cmp = hydra.util.Comparing.compare(
+      source,
+      other.source);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) target).compareTo(other.target);
+    cmp = hydra.util.Comparing.compare(
+      target,
+      other.target);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) coder).compareTo(other.coder);
+    return hydra.util.Comparing.compare(
+      coder,
+      other.coder);
   }
 
   public Adapter withIsLossy(Boolean isLossy) {

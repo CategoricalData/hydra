@@ -15,15 +15,15 @@ public class ModuleDeclaration implements Serializable, Comparable<ModuleDeclara
 
   public static final hydra.core.Name DIRECTIVES = new hydra.core.Name("directives");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations;
+  public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
 
   public final Boolean open;
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.Identifier> identifiers;
+  public final java.util.List<hydra.ext.java.syntax.Identifier> identifiers;
 
-  public final hydra.util.ConsList<hydra.util.ConsList<hydra.ext.java.syntax.ModuleDirective>> directives;
+  public final java.util.List<java.util.List<hydra.ext.java.syntax.ModuleDirective>> directives;
 
-  public ModuleDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations, Boolean open, hydra.util.ConsList<hydra.ext.java.syntax.Identifier> identifiers, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.java.syntax.ModuleDirective>> directives) {
+  public ModuleDeclaration (java.util.List<hydra.ext.java.syntax.Annotation> annotations, Boolean open, java.util.List<hydra.ext.java.syntax.Identifier> identifiers, java.util.List<java.util.List<hydra.ext.java.syntax.ModuleDirective>> directives) {
     this.annotations = annotations;
     this.open = open;
     this.identifiers = identifiers;
@@ -56,22 +56,30 @@ public class ModuleDeclaration implements Serializable, Comparable<ModuleDeclara
   @SuppressWarnings("unchecked")
   public int compareTo(ModuleDeclaration other) {
     int cmp = 0;
-    cmp = ((Comparable) annotations).compareTo(other.annotations);
+    cmp = hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) open).compareTo(other.open);
+    cmp = hydra.util.Comparing.compare(
+      open,
+      other.open);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) identifiers).compareTo(other.identifiers);
+    cmp = hydra.util.Comparing.compare(
+      identifiers,
+      other.identifiers);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) directives).compareTo(other.directives);
+    return hydra.util.Comparing.compare(
+      directives,
+      other.directives);
   }
 
-  public ModuleDeclaration withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {
+  public ModuleDeclaration withAnnotations(java.util.List<hydra.ext.java.syntax.Annotation> annotations) {
     return new ModuleDeclaration(annotations, open, identifiers, directives);
   }
 
@@ -79,11 +87,11 @@ public class ModuleDeclaration implements Serializable, Comparable<ModuleDeclara
     return new ModuleDeclaration(annotations, open, identifiers, directives);
   }
 
-  public ModuleDeclaration withIdentifiers(hydra.util.ConsList<hydra.ext.java.syntax.Identifier> identifiers) {
+  public ModuleDeclaration withIdentifiers(java.util.List<hydra.ext.java.syntax.Identifier> identifiers) {
     return new ModuleDeclaration(annotations, open, identifiers, directives);
   }
 
-  public ModuleDeclaration withDirectives(hydra.util.ConsList<hydra.util.ConsList<hydra.ext.java.syntax.ModuleDirective>> directives) {
+  public ModuleDeclaration withDirectives(java.util.List<java.util.List<hydra.ext.java.syntax.ModuleDirective>> directives) {
     return new ModuleDeclaration(annotations, open, identifiers, directives);
   }
 }

@@ -220,7 +220,9 @@ public abstract class Mod implements Serializable, Comparable<Mod> {
         return tagCmp;
       }
       Annot o = (Annot) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -260,7 +262,9 @@ public abstract class Mod implements Serializable, Comparable<Mod> {
         return tagCmp;
       }
       Private o = (Private) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -300,7 +304,9 @@ public abstract class Mod implements Serializable, Comparable<Mod> {
         return tagCmp;
       }
       Protected o = (Protected) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

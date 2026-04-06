@@ -34,6 +34,8 @@ public class NOTATION implements Serializable, Comparable<NOTATION> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(NOTATION other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

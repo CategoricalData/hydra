@@ -61,15 +61,21 @@ public class UnificationError implements Serializable, Comparable<UnificationErr
   @SuppressWarnings("unchecked")
   public int compareTo(UnificationError other) {
     int cmp = 0;
-    cmp = ((Comparable) leftType).compareTo(other.leftType);
+    cmp = hydra.util.Comparing.compare(
+      leftType,
+      other.leftType);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) rightType).compareTo(other.rightType);
+    cmp = hydra.util.Comparing.compare(
+      rightType,
+      other.rightType);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) message).compareTo(other.message);
+    return hydra.util.Comparing.compare(
+      message,
+      other.message);
   }
 
   public UnificationError withLeftType(hydra.core.Type leftType) {

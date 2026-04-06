@@ -307,12 +307,14 @@ encodeApplicationInner cx env fun hargs rargs =
         Core.TermVariable v0 ->
           let g = pythonEnvironmentGetGraph env
               allArgs = Lists.concat2 hargs rargs
-          in (Maybes.maybe (Eithers.bind (encodeVariable cx env v0 hargs) (\expr -> Right (expr, rargs))) (\el -> Maybes.maybe (Eithers.bind (encodeVariable cx env v0 hargs) (\expr -> Right (expr, rargs))) (\ts ->
+          in (Maybes.cases (Maps.lookup v0 (Graph.graphPrimitives g)) (Maybes.maybe (Eithers.bind (encodeVariable cx env v0 hargs) (\expr -> Right (expr, rargs))) (\el -> Maybes.maybe (Eithers.bind (encodeVariable cx env v0 hargs) (\expr -> Right (expr, rargs))) (\ts ->
             let elArity = Arity.typeSchemeArity ts
                 consumeCount = Math.min elArity (Lists.length allArgs)
                 consumedArgs = Lists.take consumeCount allArgs
                 remainingArgs = Lists.drop consumeCount allArgs
-            in (Logic.ifElse (Lists.null consumedArgs) (Eithers.bind (encodeVariable cx env v0 []) (\expr -> Right (expr, rargs))) (Right (Utils.functionCall (Utils.pyNameToPyPrimary (Names.encodeName True Util.CaseConventionLowerSnake env v0)) consumedArgs, remainingArgs)))) (Core.bindingType el)) (Lexical.lookupBinding g v0))
+            in (Logic.ifElse (Lists.null consumedArgs) (Eithers.bind (encodeVariable cx env v0 []) (\expr -> Right (expr, rargs))) (Right (Utils.functionCall (Utils.pyNameToPyPrimary (Names.encodeName True Util.CaseConventionLowerSnake env v0)) consumedArgs, remainingArgs)))) (Core.bindingType el)) (Lexical.lookupBinding g v0)) (\_prim ->
+            let wrappedArgs = wrapLazyArguments v0 hargs
+            in (Eithers.bind (encodeVariable cx env v0 wrappedArgs) (\expr -> Right (expr, rargs)))))
         _ -> defaultCase
 
 -- | Encode an application type to Python expression

@@ -24,14 +24,14 @@ public class CaseExpression implements Serializable, Comparable<CaseExpression> 
   /**
    * The case clauses
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.CaseClause> clauses;
+  public final java.util.List<hydra.ext.lisp.syntax.CaseClause> clauses;
 
   /**
    * Optional default clause
    */
   public final hydra.util.Maybe<hydra.ext.lisp.syntax.Expression> default_;
 
-  public CaseExpression (hydra.ext.lisp.syntax.Expression scrutinee, hydra.util.ConsList<hydra.ext.lisp.syntax.CaseClause> clauses, hydra.util.Maybe<hydra.ext.lisp.syntax.Expression> default_) {
+  public CaseExpression (hydra.ext.lisp.syntax.Expression scrutinee, java.util.List<hydra.ext.lisp.syntax.CaseClause> clauses, hydra.util.Maybe<hydra.ext.lisp.syntax.Expression> default_) {
     this.scrutinee = scrutinee;
     this.clauses = clauses;
     this.default_ = default_;
@@ -61,22 +61,28 @@ public class CaseExpression implements Serializable, Comparable<CaseExpression> 
   @SuppressWarnings("unchecked")
   public int compareTo(CaseExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) scrutinee).compareTo(other.scrutinee);
+    cmp = hydra.util.Comparing.compare(
+      scrutinee,
+      other.scrutinee);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) clauses).compareTo(other.clauses);
+    cmp = hydra.util.Comparing.compare(
+      clauses,
+      other.clauses);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) default_).compareTo(other.default_);
+    return hydra.util.Comparing.compare(
+      default_,
+      other.default_);
   }
 
   public CaseExpression withScrutinee(hydra.ext.lisp.syntax.Expression scrutinee) {
     return new CaseExpression(scrutinee, clauses, default_);
   }
 
-  public CaseExpression withClauses(hydra.util.ConsList<hydra.ext.lisp.syntax.CaseClause> clauses) {
+  public CaseExpression withClauses(java.util.List<hydra.ext.lisp.syntax.CaseClause> clauses) {
     return new CaseExpression(scrutinee, clauses, default_);
   }
 

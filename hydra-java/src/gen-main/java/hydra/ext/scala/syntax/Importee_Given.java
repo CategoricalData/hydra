@@ -34,6 +34,8 @@ public class Importee_Given implements Serializable, Comparable<Importee_Given> 
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Importee_Given other) {
-    return ((Comparable) tpe).compareTo(other.tpe);
+    return hydra.util.Comparing.compare(
+      tpe,
+      other.tpe);
   }
 }

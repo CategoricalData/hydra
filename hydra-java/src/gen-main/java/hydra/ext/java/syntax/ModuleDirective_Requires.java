@@ -11,11 +11,11 @@ public class ModuleDirective_Requires implements Serializable, Comparable<Module
 
   public static final hydra.core.Name MODULE = new hydra.core.Name("module");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.RequiresModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.RequiresModifier> modifiers;
 
   public final hydra.ext.java.syntax.ModuleName module;
 
-  public ModuleDirective_Requires (hydra.util.ConsList<hydra.ext.java.syntax.RequiresModifier> modifiers, hydra.ext.java.syntax.ModuleName module) {
+  public ModuleDirective_Requires (java.util.List<hydra.ext.java.syntax.RequiresModifier> modifiers, hydra.ext.java.syntax.ModuleName module) {
     this.modifiers = modifiers;
     this.module = module;
   }
@@ -42,14 +42,18 @@ public class ModuleDirective_Requires implements Serializable, Comparable<Module
   @SuppressWarnings("unchecked")
   public int compareTo(ModuleDirective_Requires other) {
     int cmp = 0;
-    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
+    cmp = hydra.util.Comparing.compare(
+      modifiers,
+      other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) module).compareTo(other.module);
+    return hydra.util.Comparing.compare(
+      module,
+      other.module);
   }
 
-  public ModuleDirective_Requires withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.RequiresModifier> modifiers) {
+  public ModuleDirective_Requires withModifiers(java.util.List<hydra.ext.java.syntax.RequiresModifier> modifiers) {
     return new ModuleDirective_Requires(modifiers, module);
   }
 

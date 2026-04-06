@@ -21,10 +21,37 @@ public interface Serde {
     return new hydra.ast.Op(new hydra.ast.Symbol("match"), new hydra.ast.Padding(new hydra.ast.Ws.Space(), new hydra.ast.Ws.BreakAndIndent("  ")), new hydra.ast.Precedence(0), new hydra.ast.Associativity.None());
   }
 
+  static String scalaFloatLiteralText(String prefix, String suffix, String s) {
+    return hydra.lib.logic.IfElse.lazy(
+      hydra.lib.equality.Equal.apply(
+        s,
+        "NaN"),
+      () -> hydra.lib.strings.Cat2.apply(
+        prefix,
+        ".NaN"),
+      () -> hydra.lib.logic.IfElse.lazy(
+        hydra.lib.equality.Equal.apply(
+          s,
+          "Infinity"),
+        () -> hydra.lib.strings.Cat2.apply(
+          prefix,
+          ".PositiveInfinity"),
+        () -> hydra.lib.logic.IfElse.lazy(
+          hydra.lib.equality.Equal.apply(
+            s,
+            "-Infinity"),
+          () -> hydra.lib.strings.Cat2.apply(
+            prefix,
+            ".NegativeInfinity"),
+          () -> hydra.lib.strings.Cat2.apply(
+            s,
+            suffix))));
+  }
+
   static hydra.ast.Expr writeCase(hydra.ext.scala.syntax.Case c) {
     hydra.ext.scala.syntax.Pat pat = (c).pat;
     hydra.ext.scala.syntax.Data term = (c).body;
-    return hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+    return hydra.Serialization.spaceSep(java.util.Arrays.asList(
       hydra.Serialization.cst("case"),
       hydra.ext.scala.Serde.writePat(pat),
       hydra.Serialization.cst("=>"),
@@ -38,12 +65,12 @@ public interface Serde {
         hydra.ext.scala.syntax.Data body = (f).value.body;
         hydra.ast.Expr bodyExpr = hydra.ext.scala.Serde.writeTerm(body);
         Integer bodyLen = hydra.Serialization.expressionLength(bodyExpr);
-        hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param> params = (f).value.params;
+        java.util.List<hydra.ext.scala.syntax.Data_Param> params = (f).value.params;
         return hydra.lib.logic.IfElse.lazy(
           hydra.lib.equality.Gt.apply(
             bodyLen,
             60),
-          () -> hydra.Serialization.noSep(hydra.util.ConsList.of(
+          () -> hydra.Serialization.noSep(java.util.Arrays.asList(
             hydra.Serialization.parenList(
               false,
               hydra.lib.lists.Map.apply(
@@ -51,7 +78,7 @@ public interface Serde {
                 params)),
             hydra.Serialization.cst(" =>\n  "),
             bodyExpr)),
-          () -> hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+          () -> hydra.Serialization.spaceSep(java.util.Arrays.asList(
             hydra.Serialization.parenList(
               false,
               hydra.lib.lists.Map.apply(
@@ -70,10 +97,10 @@ public interface Serde {
   static hydra.ast.Expr writeData_Param(hydra.ext.scala.syntax.Data_Param dp) {
     hydra.ext.scala.syntax.Name name = (dp).name;
     hydra.util.Maybe<hydra.ext.scala.syntax.Type> stype = (dp).decltpe;
-    return hydra.Serialization.noSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    return hydra.Serialization.noSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.lib.maybes.Pure.apply(hydra.ext.scala.Serde.writeName(name)),
       hydra.lib.maybes.Map.apply(
-        (java.util.function.Function<hydra.ext.scala.syntax.Type, hydra.ast.Expr>) (t -> hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+        (java.util.function.Function<hydra.ext.scala.syntax.Type, hydra.ast.Expr>) (t -> hydra.Serialization.spaceSep(java.util.Arrays.asList(
           hydra.Serialization.cst(":"),
           hydra.ext.scala.Serde.writeType(t)))),
         stype))));
@@ -110,9 +137,9 @@ public interface Serde {
         hydra.ast.Expr bodyExpr = hydra.ext.scala.Serde.writeTerm(body);
         Integer bodyLen = hydra.Serialization.expressionLength(bodyExpr);
         hydra.ext.scala.syntax.Data_Name name = (dd).value.name;
-        hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> paramss = (dd).value.paramss;
-        hydra.util.Lazy<hydra.util.ConsList<hydra.ast.Expr>> paramssExprs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
-          (java.util.function.Function<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>, hydra.ast.Expr>) (ps -> hydra.Serialization.parenList(
+        java.util.List<java.util.List<hydra.ext.scala.syntax.Data_Param>> paramss = (dd).value.paramss;
+        hydra.util.Lazy<java.util.List<hydra.ast.Expr>> paramssExprs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+          (java.util.function.Function<java.util.List<hydra.ext.scala.syntax.Data_Param>, hydra.ast.Expr>) (ps -> hydra.Serialization.parenList(
             false,
             hydra.lib.lists.Map.apply(
               hydra.ext.scala.Serde::writeData_Param,
@@ -120,11 +147,11 @@ public interface Serde {
           paramss));
         hydra.util.Maybe<hydra.ext.scala.syntax.Type> scod = (dd).value.decltpe;
         hydra.util.Lazy<hydra.util.Maybe<hydra.ast.Expr>> scodExpr = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Map.apply(
-          (java.util.function.Function<hydra.ext.scala.syntax.Type, hydra.ast.Expr>) (t -> hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+          (java.util.function.Function<hydra.ext.scala.syntax.Type, hydra.ast.Expr>) (t -> hydra.Serialization.spaceSep(java.util.Arrays.asList(
             hydra.Serialization.cst(":"),
             hydra.ext.scala.Serde.writeType(t)))),
           scod));
-        hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams = (dd).value.tparams;
+        java.util.List<hydra.ext.scala.syntax.Type_Param> tparams = (dd).value.tparams;
         hydra.util.Lazy<hydra.util.Maybe<hydra.ast.Expr>> tparamsExpr = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(tparams),
           () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
@@ -133,14 +160,14 @@ public interface Serde {
             hydra.lib.lists.Map.apply(
               hydra.ext.scala.Serde::writeType_Param,
               tparams)))));
-        hydra.util.Lazy<hydra.ast.Expr> nameAndParams = new hydra.util.Lazy<>(() -> hydra.Serialization.noSep(hydra.lib.maybes.Cat.apply(hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
-          hydra.util.ConsList.of(hydra.lib.maybes.Pure.apply(hydra.ext.scala.Serde.writeData_Name(name))),
-          hydra.util.ConsList.of(tparamsExpr.get()),
+        hydra.util.Lazy<hydra.ast.Expr> nameAndParams = new hydra.util.Lazy<>(() -> hydra.Serialization.noSep(hydra.lib.maybes.Cat.apply(hydra.lib.lists.Concat.apply(java.util.Arrays.asList(
+          java.util.Arrays.asList(hydra.lib.maybes.Pure.apply(hydra.ext.scala.Serde.writeData_Name(name))),
+          java.util.Arrays.asList(tparamsExpr.get()),
           hydra.lib.lists.Map.apply(
             (java.util.function.Function<hydra.ast.Expr, hydra.util.Maybe<hydra.ast.Expr>>) (pe -> hydra.lib.maybes.Pure.apply(pe)),
             paramssExprs.get()),
-          hydra.util.ConsList.of(scodExpr.get()))))));
-        hydra.ast.Expr defSig = hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+          java.util.Arrays.asList(scodExpr.get()))))));
+        hydra.ast.Expr defSig = hydra.Serialization.spaceSep(java.util.Arrays.asList(
           hydra.Serialization.cst("def"),
           nameAndParams.get(),
           hydra.Serialization.cst("=")));
@@ -148,11 +175,11 @@ public interface Serde {
           hydra.lib.equality.Gt.apply(
             bodyLen,
             80),
-          () -> hydra.Serialization.noSep(hydra.util.ConsList.of(
+          () -> hydra.Serialization.noSep(java.util.Arrays.asList(
             defSig,
             hydra.Serialization.cst("\n  "),
             bodyExpr)),
-          () -> hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+          () -> hydra.Serialization.spaceSep(java.util.Arrays.asList(
             defSig,
             bodyExpr)));
       }
@@ -161,8 +188,8 @@ public interface Serde {
       public hydra.ast.Expr visit(hydra.ext.scala.syntax.Defn.Type dt) {
         hydra.ext.scala.syntax.Type body = (dt).value.body;
         hydra.ext.scala.syntax.Type_Name name = (dt).value.name;
-        hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams = (dt).value.tparams;
-        return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+        java.util.List<hydra.ext.scala.syntax.Type_Param> tparams = (dt).value.tparams;
+        return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
           hydra.lib.maybes.Pure.apply(hydra.Serialization.cst("type")),
           hydra.lib.maybes.Pure.apply(hydra.ext.scala.Serde.writeType_Name(name)),
           hydra.lib.logic.IfElse.lazy(
@@ -179,9 +206,9 @@ public interface Serde {
 
       @Override
       public hydra.ast.Expr visit(hydra.ext.scala.syntax.Defn.Val dv) {
-        hydra.util.ConsList<hydra.ext.scala.syntax.Pat> pats = (dv).value.pats;
+        java.util.List<hydra.ext.scala.syntax.Pat> pats = (dv).value.pats;
         hydra.util.Lazy<hydra.ext.scala.syntax.Pat> firstPat = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(pats));
-        hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods = (dv).value.mods;
+        java.util.List<hydra.ext.scala.syntax.Mod> mods = (dv).value.mods;
         hydra.ext.scala.syntax.Data_Name patName = firstPat.get().accept(new hydra.ext.scala.syntax.Pat.PartialVisitor<>() {
           @Override
           public hydra.ext.scala.syntax.Data_Name visit(hydra.ext.scala.syntax.Pat.Var pv) {
@@ -192,7 +219,7 @@ public interface Serde {
         hydra.util.Maybe<hydra.ext.scala.syntax.Type> typ = (dv).value.decltpe;
         hydra.util.Lazy<hydra.ast.Expr> nameAndType = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
           () -> hydra.Serialization.cst(nameStr),
-          (java.util.function.Function<hydra.ext.scala.syntax.Type, hydra.ast.Expr>) (t -> hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+          (java.util.function.Function<hydra.ext.scala.syntax.Type, hydra.ast.Expr>) (t -> hydra.Serialization.spaceSep(java.util.Arrays.asList(
             hydra.Serialization.cst(hydra.lib.strings.Cat2.apply(
               nameStr,
               ":")),
@@ -203,7 +230,7 @@ public interface Serde {
           hydra.lib.lists.Null.apply(mods),
           () -> "val",
           () -> "lazy val"));
-        return hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+        return hydra.Serialization.spaceSep(java.util.Arrays.asList(
           hydra.Serialization.cst(valKeyword.get()),
           nameAndType.get(),
           hydra.Serialization.cst("="),
@@ -213,9 +240,9 @@ public interface Serde {
       @Override
       public hydra.ast.Expr visit(hydra.ext.scala.syntax.Defn.Class_ dc) {
         hydra.ext.scala.syntax.Ctor_Primary ctor = (dc).value.ctor;
-        hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods = (dc).value.mods;
+        java.util.List<hydra.ext.scala.syntax.Mod> mods = (dc).value.mods;
         hydra.ext.scala.syntax.Type_Name name = (dc).value.name;
-        hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> paramss = (ctor).paramss;
+        java.util.List<java.util.List<hydra.ext.scala.syntax.Data_Param>> paramss = (ctor).paramss;
         hydra.util.Lazy<hydra.util.Maybe<hydra.ast.Expr>> paramsExpr = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(paramss),
           () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
@@ -224,7 +251,7 @@ public interface Serde {
             hydra.lib.lists.Map.apply(
               hydra.ext.scala.Serde::writeData_Param,
               hydra.lib.lists.Concat.apply(paramss))))));
-        hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams = (dc).value.tparams;
+        java.util.List<hydra.ext.scala.syntax.Type_Param> tparams = (dc).value.tparams;
         hydra.util.Lazy<hydra.util.Maybe<hydra.ast.Expr>> tparamsExpr = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(tparams),
           () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
@@ -233,15 +260,15 @@ public interface Serde {
             hydra.lib.lists.Map.apply(
               hydra.ext.scala.Serde::writeType_Param,
               tparams)))));
-        hydra.util.Lazy<hydra.ast.Expr> nameAndParams = new hydra.util.Lazy<>(() -> hydra.Serialization.noSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+        hydra.util.Lazy<hydra.ast.Expr> nameAndParams = new hydra.util.Lazy<>(() -> hydra.Serialization.noSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
           hydra.lib.maybes.Pure.apply(hydra.ext.scala.Serde.writeType_Name(name)),
           tparamsExpr.get(),
           paramsExpr.get()))));
-        return hydra.Serialization.spaceSep(hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
+        return hydra.Serialization.spaceSep(hydra.lib.lists.Concat.apply(java.util.Arrays.asList(
           hydra.lib.lists.Map.apply(
             hydra.ext.scala.Serde::writeMod,
             mods),
-          hydra.util.ConsList.of(
+          java.util.Arrays.asList(
             hydra.Serialization.cst("class"),
             nameAndParams.get()))));
       }
@@ -249,17 +276,17 @@ public interface Serde {
       @Override
       public hydra.ast.Expr visit(hydra.ext.scala.syntax.Defn.Enum_ de) {
         hydra.ext.scala.syntax.Template template = (de).value.template;
-        hydra.util.ConsList<hydra.ext.scala.syntax.Stat> stats = (template).stats;
-        hydra.util.Lazy<hydra.util.ConsList<hydra.ast.Expr>> enumCases = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
-          (java.util.function.Function<hydra.ext.scala.syntax.Stat, hydra.ast.Expr>) (s -> hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+        java.util.List<hydra.ext.scala.syntax.Stat> stats = (template).stats;
+        hydra.util.Lazy<java.util.List<hydra.ast.Expr>> enumCases = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+          (java.util.function.Function<hydra.ext.scala.syntax.Stat, hydra.ast.Expr>) (s -> hydra.Serialization.spaceSep(java.util.Arrays.asList(
             hydra.Serialization.cst("  "),
             hydra.ext.scala.Serde.writeStat(s)))),
           stats));
         hydra.ext.scala.syntax.Type_Name name = (de).value.name;
-        hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams = (de).value.tparams;
-        hydra.util.Lazy<hydra.ast.Expr> enumHeader = new hydra.util.Lazy<>(() -> hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+        java.util.List<hydra.ext.scala.syntax.Type_Param> tparams = (de).value.tparams;
+        hydra.util.Lazy<hydra.ast.Expr> enumHeader = new hydra.util.Lazy<>(() -> hydra.Serialization.spaceSep(java.util.Arrays.asList(
           hydra.Serialization.cst("enum"),
-          hydra.Serialization.noSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+          hydra.Serialization.noSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
             hydra.lib.maybes.Pure.apply(hydra.ext.scala.Serde.writeType_Name(name)),
             hydra.lib.logic.IfElse.lazy(
               hydra.lib.lists.Null.apply(tparams),
@@ -270,21 +297,21 @@ public interface Serde {
                   hydra.ext.scala.Serde::writeType_Param,
                   tparams))))))),
           hydra.Serialization.cst(":"))));
-        return hydra.Serialization.newlineSep(hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
-          hydra.util.ConsList.of(enumHeader.get()),
+        return hydra.Serialization.newlineSep(hydra.lib.lists.Concat.apply(java.util.Arrays.asList(
+          java.util.Arrays.asList(enumHeader.get()),
           enumCases.get())));
       }
 
       @Override
       public hydra.ast.Expr visit(hydra.ext.scala.syntax.Defn.EnumCase dec) {
         hydra.ext.scala.syntax.Ctor_Primary ctor = (dec).value.ctor;
-        hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> paramss = (ctor).paramss;
-        hydra.util.Lazy<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> allParams = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(paramss));
-        hydra.util.ConsList<hydra.ext.scala.syntax.Init> inits = (dec).value.inits;
+        java.util.List<java.util.List<hydra.ext.scala.syntax.Data_Param>> paramss = (ctor).paramss;
+        hydra.util.Lazy<java.util.List<hydra.ext.scala.syntax.Data_Param>> allParams = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(paramss));
+        java.util.List<hydra.ext.scala.syntax.Init> inits = (dec).value.inits;
         hydra.util.Lazy<hydra.ast.Expr> extendsClause = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(inits),
           () -> hydra.Serialization.cst(""),
-          () -> hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+          () -> hydra.Serialization.spaceSep(java.util.Arrays.asList(
             hydra.Serialization.cst("extends"),
             hydra.Serialization.commaSep(
               hydra.Serialization.inlineStyle(),
@@ -300,9 +327,9 @@ public interface Serde {
             hydra.lib.lists.Map.apply(
               hydra.ext.scala.Serde::writeData_Param,
               allParams.get()))));
-        return hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+        return hydra.Serialization.spaceSep(java.util.Arrays.asList(
           hydra.Serialization.cst("case"),
-          hydra.Serialization.noSep(hydra.util.ConsList.of(
+          hydra.Serialization.noSep(java.util.Arrays.asList(
             hydra.ext.scala.Serde.writeData_Name(name),
             params.get())),
           extendsClause.get()));
@@ -314,7 +341,7 @@ public interface Serde {
     return (ie).accept(new hydra.ext.scala.syntax.ImportExportStat.PartialVisitor<>() {
       @Override
       public hydra.ast.Expr visit(hydra.ext.scala.syntax.ImportExportStat.Import imp) {
-        hydra.util.ConsList<hydra.ext.scala.syntax.Importer> importers = (imp).value.importers;
+        java.util.List<hydra.ext.scala.syntax.Importer> importers = (imp).value.importers;
         return hydra.Serialization.newlineSep(hydra.lib.lists.Map.apply(
           hydra.ext.scala.Serde::writeImporter,
           importers));
@@ -323,7 +350,7 @@ public interface Serde {
   }
 
   static hydra.ast.Expr writeImporter(hydra.ext.scala.syntax.Importer imp) {
-    hydra.util.ConsList<hydra.ext.scala.syntax.Importee> importees = (imp).importees;
+    java.util.List<hydra.ext.scala.syntax.Importee> importees = (imp).importees;
     hydra.util.Lazy<hydra.ast.Expr> forImportees = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(importees),
       () -> hydra.Serialization.cst(""),
@@ -331,7 +358,7 @@ public interface Serde {
         hydra.lib.equality.Equal.apply(
           hydra.lib.lists.Length.apply(importees),
           1),
-        () -> hydra.Serialization.noSep(hydra.util.ConsList.of(
+        () -> hydra.Serialization.noSep(java.util.Arrays.asList(
           hydra.Serialization.cst("."),
           hydra.lib.lists.Head.apply(importees).accept(new hydra.ext.scala.syntax.Importee.PartialVisitor<>() {
             @Override
@@ -349,7 +376,7 @@ public interface Serde {
               }));
             }
           }))),
-        () -> hydra.Serialization.noSep(hydra.util.ConsList.of(
+        () -> hydra.Serialization.noSep(java.util.Arrays.asList(
           hydra.Serialization.cst("."),
           hydra.Serialization.curlyBracesList(
             (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()),
@@ -379,9 +406,9 @@ public interface Serde {
         return (dn).value.value.value;
       }
     });
-    return hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+    return hydra.Serialization.spaceSep(java.util.Arrays.asList(
       hydra.Serialization.cst("import"),
-      hydra.Serialization.noSep(hydra.util.ConsList.of(
+      hydra.Serialization.noSep(java.util.Arrays.asList(
         hydra.Serialization.cst(refName),
         forImportees.get()))));
   }
@@ -433,14 +460,18 @@ public interface Serde {
 
       @Override
       public hydra.ast.Expr visit(hydra.ext.scala.syntax.Lit.Float_ f) {
-        return hydra.Serialization.cst(hydra.lib.strings.Cat2.apply(
-          hydra.lib.literals.ShowFloat32.apply((f).value),
-          "f"));
+        return hydra.Serialization.cst(hydra.ext.scala.Serde.scalaFloatLiteralText(
+          "Float",
+          "f",
+          hydra.lib.literals.ShowFloat32.apply((f).value)));
       }
 
       @Override
       public hydra.ast.Expr visit(hydra.ext.scala.syntax.Lit.Double_ f) {
-        return hydra.Serialization.cst(hydra.lib.literals.ShowFloat64.apply((f).value));
+        return hydra.Serialization.cst(hydra.ext.scala.Serde.scalaFloatLiteralText(
+          "Double",
+          "",
+          hydra.lib.literals.ShowFloat64.apply((f).value)));
       }
 
       @Override
@@ -536,12 +567,12 @@ public interface Serde {
     return (pat).accept(new hydra.ext.scala.syntax.Pat.PartialVisitor<>() {
       @Override
       public hydra.ast.Expr visit(hydra.ext.scala.syntax.Pat.Extract pe) {
-        hydra.util.ConsList<hydra.ext.scala.syntax.Pat> args = (pe).value.args;
+        java.util.List<hydra.ext.scala.syntax.Pat> args = (pe).value.args;
         hydra.ext.scala.syntax.Data fun = (pe).value.fun;
         return hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(args),
           () -> hydra.ext.scala.Serde.writeTerm(fun),
-          () -> hydra.Serialization.noSep(hydra.util.ConsList.of(
+          () -> hydra.Serialization.noSep(java.util.Arrays.asList(
             hydra.ext.scala.Serde.writeTerm(fun),
             hydra.Serialization.parenList(
               false,
@@ -564,12 +595,12 @@ public interface Serde {
 
   static hydra.ast.Expr writePkg(hydra.ext.scala.syntax.Pkg pkg) {
     hydra.ext.scala.syntax.Data_Name name = (pkg).name;
-    hydra.ast.Expr package_ = hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+    hydra.ast.Expr package_ = hydra.Serialization.spaceSep(java.util.Arrays.asList(
       hydra.Serialization.cst("package"),
       hydra.ext.scala.Serde.writeData_Name(name)));
-    hydra.util.ConsList<hydra.ext.scala.syntax.Stat> stats = (pkg).stats;
-    return hydra.Serialization.doubleNewlineSep(hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
-      hydra.util.ConsList.of(package_),
+    java.util.List<hydra.ext.scala.syntax.Stat> stats = (pkg).stats;
+    return hydra.Serialization.doubleNewlineSep(hydra.lib.lists.Concat.apply(java.util.Arrays.asList(
+      java.util.Arrays.asList(package_),
       hydra.lib.lists.Map.apply(
         hydra.ext.scala.Serde::writeStat,
         stats))));
@@ -608,9 +639,9 @@ public interface Serde {
 
       @Override
       public hydra.ast.Expr visit(hydra.ext.scala.syntax.Data.Apply app) {
-        hydra.util.ConsList<hydra.ext.scala.syntax.Data> args = (app).value.args;
+        java.util.List<hydra.ext.scala.syntax.Data> args = (app).value.args;
         hydra.ext.scala.syntax.Data fun = (app).value.fun;
-        return hydra.Serialization.noSep(hydra.util.ConsList.of(
+        return hydra.Serialization.noSep(java.util.Arrays.asList(
           hydra.ext.scala.Serde.writeTerm(fun),
           hydra.Serialization.parenList(
             false,
@@ -623,7 +654,7 @@ public interface Serde {
       public hydra.ast.Expr visit(hydra.ext.scala.syntax.Data.Assign a) {
         hydra.ext.scala.syntax.Data lhs = (a).value.lhs;
         hydra.ext.scala.syntax.Data rhs = (a).value.rhs;
-        return hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+        return hydra.Serialization.spaceSep(java.util.Arrays.asList(
           hydra.ext.scala.Serde.writeTerm(lhs),
           hydra.Serialization.cst("->"),
           hydra.ext.scala.Serde.writeTerm(rhs)));
@@ -641,7 +672,7 @@ public interface Serde {
       @Override
       public hydra.ast.Expr visit(hydra.ext.scala.syntax.Data.Match m) {
         hydra.ext.scala.syntax.Data expr = (m).value.expr;
-        hydra.util.ConsList<hydra.ext.scala.syntax.Case> mCases = (m).value.cases;
+        java.util.List<hydra.ext.scala.syntax.Case> mCases = (m).value.cases;
         return hydra.Serialization.ifx(
           hydra.ext.scala.Serde.matchOp(),
           hydra.ext.scala.Serde.writeTerm(expr),
@@ -657,7 +688,7 @@ public interface Serde {
 
       @Override
       public hydra.ast.Expr visit(hydra.ext.scala.syntax.Data.Block blk) {
-        hydra.util.ConsList<hydra.ext.scala.syntax.Stat> stats = (blk).value.stats;
+        java.util.List<hydra.ext.scala.syntax.Stat> stats = (blk).value.stats;
         return hydra.Serialization.curlyBlock(
           hydra.Serialization.fullBlockStyle(),
           hydra.Serialization.newlineSep(hydra.lib.lists.Map.apply(
@@ -681,9 +712,9 @@ public interface Serde {
 
       @Override
       public hydra.ast.Expr visit(hydra.ext.scala.syntax.Type.Apply ta) {
-        hydra.util.ConsList<hydra.ext.scala.syntax.Type> args = (ta).value.args;
+        java.util.List<hydra.ext.scala.syntax.Type> args = (ta).value.args;
         hydra.ext.scala.syntax.Type fun = (ta).value.tpe;
-        return hydra.Serialization.noSep(hydra.util.ConsList.of(
+        return hydra.Serialization.noSep(java.util.Arrays.asList(
           hydra.ext.scala.Serde.writeType(fun),
           hydra.Serialization.bracketList(
             hydra.Serialization.inlineStyle(),
@@ -710,8 +741,8 @@ public interface Serde {
       @Override
       public hydra.ast.Expr visit(hydra.ext.scala.syntax.Type.Lambda tl) {
         hydra.ext.scala.syntax.Type body = (tl).value.tpe;
-        hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> params = (tl).value.tparams;
-        return hydra.Serialization.noSep(hydra.util.ConsList.of(
+        java.util.List<hydra.ext.scala.syntax.Type_Param> params = (tl).value.tparams;
+        return hydra.Serialization.noSep(java.util.Arrays.asList(
           hydra.ext.scala.Serde.writeType(body),
           hydra.Serialization.bracketList(
             hydra.Serialization.inlineStyle(),

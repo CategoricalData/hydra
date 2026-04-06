@@ -13,13 +13,13 @@ public class CatchFormalParameter implements Serializable, Comparable<CatchForma
 
   public static final hydra.core.Name ID = new hydra.core.Name("id");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers;
 
   public final hydra.ext.java.syntax.CatchType type;
 
   public final hydra.ext.java.syntax.VariableDeclaratorId id;
 
-  public CatchFormalParameter (hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.CatchType type, hydra.ext.java.syntax.VariableDeclaratorId id) {
+  public CatchFormalParameter (java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.CatchType type, hydra.ext.java.syntax.VariableDeclaratorId id) {
     this.modifiers = modifiers;
     this.type = type;
     this.id = id;
@@ -49,18 +49,24 @@ public class CatchFormalParameter implements Serializable, Comparable<CatchForma
   @SuppressWarnings("unchecked")
   public int compareTo(CatchFormalParameter other) {
     int cmp = 0;
-    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
+    cmp = hydra.util.Comparing.compare(
+      modifiers,
+      other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) type).compareTo(other.type);
+    cmp = hydra.util.Comparing.compare(
+      type,
+      other.type);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) id).compareTo(other.id);
+    return hydra.util.Comparing.compare(
+      id,
+      other.id);
   }
 
-  public CatchFormalParameter withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers) {
+  public CatchFormalParameter withModifiers(java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers) {
     return new CatchFormalParameter(modifiers, type, id);
   }
 

@@ -148,7 +148,9 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
         return tagCmp;
       }
       Literal o = (Literal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -188,7 +190,9 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
         return tagCmp;
       }
       Parameter o = (Parameter) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -228,7 +232,9 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
         return tagCmp;
       }
       Case o = (Case) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -303,7 +309,9 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
         return tagCmp;
       }
       ListComprehension o = (ListComprehension) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -343,7 +351,9 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
         return tagCmp;
       }
       PatternComprehension o = (PatternComprehension) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -383,7 +393,9 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
         return tagCmp;
       }
       Quantifier o = (Quantifier) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -423,7 +435,9 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
         return tagCmp;
       }
       PatternPredicate o = (PatternPredicate) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -463,7 +477,9 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
         return tagCmp;
       }
       Parenthesized o = (Parenthesized) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -503,7 +519,9 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
         return tagCmp;
       }
       FunctionInvocation o = (FunctionInvocation) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -543,7 +561,9 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
         return tagCmp;
       }
       ExistentialSubquery o = (ExistentialSubquery) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -583,7 +603,9 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
         return tagCmp;
       }
       Variable o = (Variable) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

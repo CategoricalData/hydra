@@ -68,7 +68,9 @@ public abstract class StarPattern implements Serializable, Comparable<StarPatter
         return tagCmp;
       }
       Capture o = (Capture) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

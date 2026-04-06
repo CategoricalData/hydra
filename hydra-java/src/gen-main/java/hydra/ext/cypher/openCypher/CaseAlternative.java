@@ -42,11 +42,15 @@ public class CaseAlternative implements Serializable, Comparable<CaseAlternative
   @SuppressWarnings("unchecked")
   public int compareTo(CaseAlternative other) {
     int cmp = 0;
-    cmp = ((Comparable) condition).compareTo(other.condition);
+    cmp = hydra.util.Comparing.compare(
+      condition,
+      other.condition);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) result).compareTo(other.result);
+    return hydra.util.Comparing.compare(
+      result,
+      other.result);
   }
 
   public CaseAlternative withCondition(hydra.ext.cypher.openCypher.Expression condition) {

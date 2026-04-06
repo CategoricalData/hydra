@@ -50,7 +50,7 @@ public interface Serde {
                       hydra.lib.equality.Lt.apply(
                         c,
                         127)),
-                    () -> hydra.lib.strings.FromList.apply(hydra.util.ConsList.of(c)),
+                    () -> hydra.lib.strings.FromList.apply(java.util.Arrays.asList(c)),
                     () -> hydra.ext.java.Serde.javaUnicodeEscape(c)))))))));
   }
 
@@ -73,6 +73,25 @@ public interface Serde {
           n,
           10),
         65));
+  }
+
+  static String javaFloatLiteralText(String s) {
+    return hydra.lib.logic.IfElse.lazy(
+      hydra.lib.equality.Equal.apply(
+        s,
+        "NaN"),
+      () -> "Double.NaN",
+      () -> hydra.lib.logic.IfElse.lazy(
+        hydra.lib.equality.Equal.apply(
+          s,
+          "Infinity"),
+        () -> "Double.POSITIVE_INFINITY",
+        () -> hydra.lib.logic.IfElse.lazy(
+          hydra.lib.equality.Equal.apply(
+            s,
+            "-Infinity"),
+          () -> "Double.NEGATIVE_INFINITY",
+          () -> s)));
   }
 
   static String javaUnicodeEscape(Integer n) {
@@ -130,7 +149,7 @@ public interface Serde {
     Integer d3 = hydra.lib.math.Div.apply(
       n,
       4096);
-    return hydra.lib.strings.FromList.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.FromList.apply(java.util.Arrays.asList(
       hydra.ext.java.Serde.hexDigit(d3),
       hydra.ext.java.Serde.hexDigit(d2),
       hydra.ext.java.Serde.hexDigit(d1),
@@ -158,7 +177,7 @@ public interface Serde {
   static hydra.ast.Expr withComments(hydra.util.Maybe<String> mc, hydra.ast.Expr expr) {
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> expr,
-      (java.util.function.Function<String, hydra.ast.Expr>) (c -> hydra.Serialization.newlineSep(hydra.util.ConsList.of(
+      (java.util.function.Function<String, hydra.ast.Expr>) (c -> hydra.Serialization.newlineSep(java.util.Arrays.asList(
         hydra.Serialization.cst(hydra.lib.strings.Cat2.apply(
           "/**\n",
           hydra.lib.strings.Cat2.apply(
@@ -175,7 +194,7 @@ public interface Serde {
   }
 
   static hydra.ast.Expr writeAdditionalBound(hydra.ext.java.syntax.AdditionalBound ab) {
-    return hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+    return hydra.Serialization.spaceSep(java.util.Arrays.asList(
       hydra.Serialization.cst("&"),
       hydra.ext.java.Serde.writeInterfaceType((ab).value)));
   }
@@ -256,9 +275,9 @@ public interface Serde {
       public hydra.ast.Expr visit(hydra.ext.java.syntax.ArrayCreationExpression.PrimitiveArray pa) {
         hydra.ext.java.syntax.ArrayInitializer ai = (pa).value.array;
         hydra.ext.java.syntax.PrimitiveTypeWithAnnotations pt = (pa).value.type;
-        return hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+        return hydra.Serialization.spaceSep(java.util.Arrays.asList(
           hydra.Serialization.cst("new"),
-          hydra.Serialization.noSep(hydra.util.ConsList.of(
+          hydra.Serialization.noSep(java.util.Arrays.asList(
             hydra.ext.java.Serde.writePrimitiveTypeWithAnnotations(pt),
             hydra.Serialization.cst("[]"))),
           hydra.ext.java.Serde.writeArrayInitializer(ai)));
@@ -282,12 +301,12 @@ public interface Serde {
   }
 
   static hydra.ast.Expr writeArrayInitializer(hydra.ext.java.syntax.ArrayInitializer ai) {
-    hydra.util.ConsList<hydra.util.ConsList<hydra.ext.java.syntax.VariableInitializer>> groups = (ai).value;
+    java.util.List<java.util.List<hydra.ext.java.syntax.VariableInitializer>> groups = (ai).value;
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Equal.apply(
         hydra.lib.lists.Length.apply(groups),
         1),
-      () -> hydra.Serialization.noSep(hydra.util.ConsList.of(
+      () -> hydra.Serialization.noSep(java.util.Arrays.asList(
         hydra.Serialization.cst("{"),
         hydra.Serialization.commaSep(
           hydra.Serialization.inlineStyle(),
@@ -317,7 +336,7 @@ public interface Serde {
         return hydra.ext.java.Serde.writeTypeVariable((tv).value);
       }
     });
-    return hydra.Serialization.noSep(hydra.util.ConsList.of(
+    return hydra.Serialization.noSep(java.util.Arrays.asList(
       varExpr,
       hydra.ext.java.Serde.writeDims(dims)));
   }
@@ -440,7 +459,7 @@ public interface Serde {
 
   static hydra.ast.Expr writeBreakStatement(hydra.ext.java.syntax.BreakStatement bs) {
     hydra.util.Maybe<hydra.ext.java.syntax.Identifier> mlabel = (bs).value;
-    return hydra.Serialization.withSemi(hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    return hydra.Serialization.withSemi(hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.util.Maybe.just(hydra.Serialization.cst("break")),
       hydra.lib.maybes.Map.apply(
         hydra.ext.java.Serde::writeIdentifier,
@@ -473,7 +492,7 @@ public interface Serde {
   static hydra.ast.Expr writeCastExpression_NotPlusMinus(hydra.ext.java.syntax.CastExpression_NotPlusMinus npm) {
     hydra.ext.java.syntax.UnaryExpression ex = (npm).expression;
     hydra.ext.java.syntax.CastExpression_RefAndBounds rb = (npm).refAndBounds;
-    return hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+    return hydra.Serialization.spaceSep(java.util.Arrays.asList(
       hydra.ext.java.Serde.writeCastExpression_RefAndBounds(rb),
       hydra.ext.java.Serde.writeUnaryExpression(ex)));
   }
@@ -481,19 +500,19 @@ public interface Serde {
   static hydra.ast.Expr writeCastExpression_Primitive(hydra.ext.java.syntax.CastExpression_Primitive cp) {
     hydra.ext.java.syntax.UnaryExpression ex = (cp).expression;
     hydra.ext.java.syntax.PrimitiveTypeWithAnnotations pt = (cp).type;
-    return hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+    return hydra.Serialization.spaceSep(java.util.Arrays.asList(
       hydra.Serialization.parenList(
         false,
-        hydra.util.ConsList.of(hydra.ext.java.Serde.writePrimitiveTypeWithAnnotations(pt))),
+        java.util.Arrays.asList(hydra.ext.java.Serde.writePrimitiveTypeWithAnnotations(pt))),
       hydra.ext.java.Serde.writeUnaryExpression(ex)));
   }
 
   static hydra.ast.Expr writeCastExpression_RefAndBounds(hydra.ext.java.syntax.CastExpression_RefAndBounds rab) {
-    hydra.util.ConsList<hydra.ext.java.syntax.AdditionalBound> adds = (rab).bounds;
+    java.util.List<hydra.ext.java.syntax.AdditionalBound> adds = (rab).bounds;
     hydra.ext.java.syntax.ReferenceType rt = (rab).type;
     return hydra.Serialization.parenList(
       false,
-      hydra.util.ConsList.of(hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+      java.util.Arrays.asList(hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
         hydra.util.Maybe.just(hydra.ext.java.Serde.writeReferenceType(rt)),
         hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(adds),
@@ -562,7 +581,7 @@ public interface Serde {
     hydra.util.Maybe<hydra.ext.java.syntax.ClassInstanceCreationExpression_Qualifier> mqual = (cice).qualifier;
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> hydra.ext.java.Serde.writeUnqualifiedClassInstanceCreationExpression(e),
-      (java.util.function.Function<hydra.ext.java.syntax.ClassInstanceCreationExpression_Qualifier, hydra.ast.Expr>) (q -> hydra.Serialization.dotSep(hydra.util.ConsList.of(
+      (java.util.function.Function<hydra.ext.java.syntax.ClassInstanceCreationExpression_Qualifier, hydra.ast.Expr>) (q -> hydra.Serialization.dotSep(java.util.Arrays.asList(
         hydra.ext.java.Serde.writeClassInstanceCreationExpression_Qualifier(q),
         hydra.ext.java.Serde.writeUnqualifiedClassInstanceCreationExpression(e)))),
       mqual);
@@ -674,9 +693,9 @@ public interface Serde {
   }
 
   static hydra.ast.Expr writeClassOrInterfaceTypeToInstantiate(hydra.ext.java.syntax.ClassOrInterfaceTypeToInstantiate coitti) {
-    hydra.util.ConsList<hydra.ext.java.syntax.AnnotatedIdentifier> ids = (coitti).identifiers;
+    java.util.List<hydra.ext.java.syntax.AnnotatedIdentifier> ids = (coitti).identifiers;
     hydra.util.Maybe<hydra.ext.java.syntax.TypeArgumentsOrDiamond> margs = (coitti).typeArguments;
-    return hydra.Serialization.noSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    return hydra.Serialization.noSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.util.Maybe.just(hydra.Serialization.dotSep(hydra.lib.lists.Map.apply(
         hydra.ext.java.Serde::writeAnnotatedIdentifier,
         ids))),
@@ -686,8 +705,8 @@ public interface Serde {
   }
 
   static hydra.ast.Expr writeClassType(hydra.ext.java.syntax.ClassType ct) {
-    hydra.util.ConsList<hydra.ext.java.syntax.Annotation> anns = (ct).annotations;
-    hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> args = (ct).arguments;
+    java.util.List<hydra.ext.java.syntax.Annotation> anns = (ct).annotations;
+    java.util.List<hydra.ext.java.syntax.TypeArgument> args = (ct).arguments;
     hydra.ext.java.syntax.TypeIdentifier id = (ct).identifier;
     hydra.ext.java.syntax.ClassTypeQualifier qual = (ct).qualifier;
     hydra.ast.Expr qualifiedId = (qual).accept(new hydra.ext.java.syntax.ClassTypeQualifier.PartialVisitor<>() {
@@ -698,20 +717,20 @@ public interface Serde {
 
       @Override
       public hydra.ast.Expr visit(hydra.ext.java.syntax.ClassTypeQualifier.Package_ pkg) {
-        return hydra.Serialization.dotSep(hydra.util.ConsList.of(
+        return hydra.Serialization.dotSep(java.util.Arrays.asList(
           hydra.ext.java.Serde.writePackageName((pkg).value),
           hydra.ext.java.Serde.writeTypeIdentifier(id)));
       }
 
       @Override
       public hydra.ast.Expr visit(hydra.ext.java.syntax.ClassTypeQualifier.Parent cit) {
-        return hydra.Serialization.dotSep(hydra.util.ConsList.of(
+        return hydra.Serialization.dotSep(java.util.Arrays.asList(
           hydra.ext.java.Serde.writeClassOrInterfaceType((cit).value),
           hydra.ext.java.Serde.writeTypeIdentifier(id)));
       }
     });
-    return hydra.Serialization.noSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
-      hydra.util.Maybe.just(hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    return hydra.Serialization.noSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
+      hydra.util.Maybe.just(hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
         hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(anns),
           () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
@@ -735,7 +754,7 @@ public interface Serde {
     return (u).accept(new hydra.ext.java.syntax.CompilationUnit.PartialVisitor<>() {
       @Override
       public hydra.ast.Expr visit(hydra.ext.java.syntax.CompilationUnit.Ordinary ocu) {
-        hydra.util.ConsList<hydra.ext.java.syntax.ImportDeclaration> imports = (ocu).value.imports;
+        java.util.List<hydra.ext.java.syntax.ImportDeclaration> imports = (ocu).value.imports;
         hydra.util.Lazy<hydra.util.Maybe<hydra.ast.Expr>> importsSec = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(imports),
           () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
@@ -746,7 +765,7 @@ public interface Serde {
         hydra.util.Lazy<hydra.util.Maybe<hydra.ast.Expr>> pkgSec = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Map.apply(
           hydra.ext.java.Serde::writePackageDeclaration,
           mpkg));
-        hydra.util.ConsList<hydra.ext.java.syntax.TypeDeclarationWithComments> types = (ocu).value.types;
+        java.util.List<hydra.ext.java.syntax.TypeDeclarationWithComments> types = (ocu).value.types;
         hydra.util.Lazy<hydra.util.Maybe<hydra.ast.Expr>> typesSec = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(types),
           () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
@@ -754,7 +773,7 @@ public interface Serde {
             hydra.ext.java.Serde::writeTypeDeclarationWithComments,
             types)))));
         hydra.util.Maybe<hydra.ast.Expr> warning = hydra.util.Maybe.just(hydra.ext.java.Serde.singleLineComment(hydra.Constants.warningAutoGeneratedFile()));
-        return hydra.Serialization.doubleNewlineSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+        return hydra.Serialization.doubleNewlineSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
           warning,
           pkgSec.get(),
           importsSec.get(),
@@ -807,10 +826,10 @@ public interface Serde {
   }
 
   static hydra.ast.Expr writeConstantDeclaration(hydra.ext.java.syntax.ConstantDeclaration cd) {
-    hydra.util.ConsList<hydra.ext.java.syntax.ConstantModifier> mods = (cd).modifiers;
+    java.util.List<hydra.ext.java.syntax.ConstantModifier> mods = (cd).modifiers;
     hydra.ext.java.syntax.UnannType typ = (cd).type;
-    hydra.util.ConsList<hydra.ext.java.syntax.VariableDeclarator> vars = (cd).variables;
-    return hydra.Serialization.withSemi(hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    java.util.List<hydra.ext.java.syntax.VariableDeclarator> vars = (cd).variables;
+    return hydra.Serialization.withSemi(hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(mods),
         () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
@@ -831,10 +850,10 @@ public interface Serde {
 
   static hydra.ast.Expr writeConstructorBody(hydra.ext.java.syntax.ConstructorBody cb) {
     hydra.util.Maybe<hydra.ext.java.syntax.ExplicitConstructorInvocation> minvoc = (cb).invocation;
-    hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement> stmts = (cb).statements;
+    java.util.List<hydra.ext.java.syntax.BlockStatement> stmts = (cb).statements;
     return hydra.Serialization.curlyBlock(
       hydra.Serialization.fullBlockStyle(),
-      hydra.Serialization.doubleNewlineSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+      hydra.Serialization.doubleNewlineSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
         hydra.lib.maybes.Map.apply(
           p0 -> hydra.ext.java.Serde.<hydra.ext.java.syntax.ExplicitConstructorInvocation>writeExplicitConstructorInvocation(p0),
           minvoc),
@@ -846,9 +865,9 @@ public interface Serde {
   static hydra.ast.Expr writeConstructorDeclaration(hydra.ext.java.syntax.ConstructorDeclaration cd) {
     hydra.ext.java.syntax.ConstructorBody body = (cd).body;
     hydra.ext.java.syntax.ConstructorDeclarator cons = (cd).constructor;
-    hydra.util.ConsList<hydra.ext.java.syntax.ConstructorModifier> mods = (cd).modifiers;
+    java.util.List<hydra.ext.java.syntax.ConstructorModifier> mods = (cd).modifiers;
     hydra.util.Maybe<hydra.ext.java.syntax.Throws> mthrows = (cd).throws_;
-    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(mods),
         () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
@@ -863,10 +882,10 @@ public interface Serde {
   }
 
   static hydra.ast.Expr writeConstructorDeclarator(hydra.ext.java.syntax.ConstructorDeclarator cd) {
-    hydra.util.ConsList<hydra.ext.java.syntax.FormalParameter> fparams = (cd).formalParameters;
+    java.util.List<hydra.ext.java.syntax.FormalParameter> fparams = (cd).formalParameters;
     hydra.ext.java.syntax.SimpleTypeName name = (cd).name;
-    hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> tparams = (cd).parameters;
-    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    java.util.List<hydra.ext.java.syntax.TypeParameter> tparams = (cd).parameters;
+    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(tparams),
         () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
@@ -909,7 +928,7 @@ public interface Serde {
 
   static hydra.ast.Expr writeContinueStatement(hydra.ext.java.syntax.ContinueStatement cs) {
     hydra.util.Maybe<hydra.ext.java.syntax.Identifier> mlabel = (cs).value;
-    return hydra.Serialization.withSemi(hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    return hydra.Serialization.withSemi(hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.util.Maybe.just(hydra.Serialization.cst("continue")),
       hydra.lib.maybes.Map.apply(
         hydra.ext.java.Serde::writeIdentifier,
@@ -918,7 +937,7 @@ public interface Serde {
 
   static hydra.ast.Expr writeDims(hydra.ext.java.syntax.Dims d) {
     return hydra.Serialization.noSep(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.util.ConsList<hydra.ext.java.syntax.Annotation>, hydra.ast.Expr>) (ignored -> hydra.Serialization.cst("[]")),
+      (java.util.function.Function<java.util.List<hydra.ext.java.syntax.Annotation>, hydra.ast.Expr>) (ignored -> hydra.Serialization.cst("[]")),
       (d).value));
   }
 
@@ -1016,7 +1035,7 @@ public interface Serde {
   static hydra.ast.Expr writeExpressionName(hydra.ext.java.syntax.ExpressionName en) {
     hydra.ext.java.syntax.Identifier id = (en).identifier;
     hydra.util.Maybe<hydra.ext.java.syntax.AmbiguousName> mqual = (en).qualifier;
-    return hydra.Serialization.dotSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    return hydra.Serialization.dotSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.lib.maybes.Map.apply(
         hydra.ext.java.Serde::writeAmbiguousName,
         mqual),
@@ -1033,21 +1052,21 @@ public interface Serde {
     return (qual).accept(new hydra.ext.java.syntax.FieldAccess_Qualifier.PartialVisitor<>() {
       @Override
       public hydra.ast.Expr visit(hydra.ext.java.syntax.FieldAccess_Qualifier.Primary p) {
-        return hydra.Serialization.dotSep(hydra.util.ConsList.of(
+        return hydra.Serialization.dotSep(java.util.Arrays.asList(
           hydra.ext.java.Serde.writePrimary((p).value),
           hydra.ext.java.Serde.writeIdentifier(id)));
       }
 
       @Override
       public hydra.ast.Expr visit(hydra.ext.java.syntax.FieldAccess_Qualifier.Super ignored) {
-        return hydra.Serialization.dotSep(hydra.util.ConsList.of(
+        return hydra.Serialization.dotSep(java.util.Arrays.asList(
           hydra.Serialization.cst("super"),
           hydra.ext.java.Serde.writeIdentifier(id)));
       }
 
       @Override
       public hydra.ast.Expr visit(hydra.ext.java.syntax.FieldAccess_Qualifier.Typed tn) {
-        return hydra.Serialization.dotSep(hydra.util.ConsList.of(
+        return hydra.Serialization.dotSep(java.util.Arrays.asList(
           hydra.ext.java.Serde.writeTypeName((tn).value),
           hydra.Serialization.cst("super"),
           hydra.ext.java.Serde.writeIdentifier(id)));
@@ -1056,10 +1075,10 @@ public interface Serde {
   }
 
   static hydra.ast.Expr writeFieldDeclaration(hydra.ext.java.syntax.FieldDeclaration fd) {
-    hydra.util.ConsList<hydra.ext.java.syntax.FieldModifier> mods = (fd).modifiers;
+    java.util.List<hydra.ext.java.syntax.FieldModifier> mods = (fd).modifiers;
     hydra.ext.java.syntax.UnannType typ = (fd).unannType;
-    hydra.util.ConsList<hydra.ext.java.syntax.VariableDeclarator> vars = (fd).variableDeclarators;
-    return hydra.Serialization.withSemi(hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    java.util.List<hydra.ext.java.syntax.VariableDeclarator> vars = (fd).variableDeclarators;
+    return hydra.Serialization.withSemi(hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(mods),
         () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
@@ -1119,7 +1138,7 @@ public interface Serde {
   }
 
   static hydra.ast.Expr writeFloatingPointLiteral(hydra.ext.java.syntax.FloatingPointLiteral fl) {
-    return hydra.Serialization.cst(hydra.lib.literals.ShowBigfloat.apply((fl).value));
+    return hydra.Serialization.cst(hydra.ext.java.Serde.javaFloatLiteralText(hydra.lib.literals.ShowBigfloat.apply((fl).value)));
   }
 
   static hydra.ast.Expr writeFloatingPointType(hydra.ext.java.syntax.FloatingPointType ft) {
@@ -1156,9 +1175,9 @@ public interface Serde {
 
   static hydra.ast.Expr writeFormalParameter_Simple(hydra.ext.java.syntax.FormalParameter_Simple fps) {
     hydra.ext.java.syntax.VariableDeclaratorId id = (fps).id;
-    hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> mods = (fps).modifiers;
+    java.util.List<hydra.ext.java.syntax.VariableModifier> mods = (fps).modifiers;
     hydra.ext.java.syntax.UnannType typ = (fps).type;
-    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(mods),
         () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
@@ -1180,11 +1199,11 @@ public interface Serde {
   static hydra.ast.Expr writeIfThenStatement(hydra.ext.java.syntax.IfThenStatement its) {
     hydra.ext.java.syntax.Expression cond = (its).expression;
     hydra.ext.java.syntax.Statement thn = (its).statement;
-    return hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+    return hydra.Serialization.spaceSep(java.util.Arrays.asList(
       hydra.Serialization.cst("if"),
       hydra.Serialization.parenList(
         false,
-        hydra.util.ConsList.of(hydra.ext.java.Serde.writeExpression(cond))),
+        java.util.Arrays.asList(hydra.ext.java.Serde.writeExpression(cond))),
       hydra.Serialization.curlyBlock(
         hydra.Serialization.fullBlockStyle(),
         hydra.ext.java.Serde.writeStatement(thn))));
@@ -1194,7 +1213,7 @@ public interface Serde {
     return (imp).accept(new hydra.ext.java.syntax.ImportDeclaration.PartialVisitor<>() {
       @Override
       public hydra.ast.Expr visit(hydra.ext.java.syntax.ImportDeclaration.SingleType st) {
-        return hydra.Serialization.withSemi(hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+        return hydra.Serialization.withSemi(hydra.Serialization.spaceSep(java.util.Arrays.asList(
           hydra.Serialization.cst("import"),
           hydra.ext.java.Serde.writeTypeName((st).value.value))));
       }
@@ -1323,8 +1342,8 @@ public interface Serde {
   static hydra.ast.Expr writeInterfaceMethodDeclaration(hydra.ext.java.syntax.InterfaceMethodDeclaration imd) {
     hydra.ext.java.syntax.MethodBody body = (imd).body;
     hydra.ext.java.syntax.MethodHeader header = (imd).header;
-    hydra.util.ConsList<hydra.ext.java.syntax.InterfaceMethodModifier> mods = (imd).modifiers;
-    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    java.util.List<hydra.ext.java.syntax.InterfaceMethodModifier> mods = (imd).modifiers;
+    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(mods),
         () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
@@ -1545,7 +1564,7 @@ public interface Serde {
                           hydra.lib.equality.Lt.apply(
                             ci,
                             127)),
-                        () -> hydra.lib.strings.FromList.apply(hydra.util.ConsList.of(ci)),
+                        () -> hydra.lib.strings.FromList.apply(java.util.Arrays.asList(ci)),
                         () -> hydra.ext.java.Serde.javaUnicodeEscape(ci))))))),
             "'")));
       }
@@ -1572,10 +1591,10 @@ public interface Serde {
   }
 
   static hydra.ast.Expr writeLocalVariableDeclaration(hydra.ext.java.syntax.LocalVariableDeclaration lvd) {
-    hydra.util.ConsList<hydra.ext.java.syntax.VariableDeclarator> decls = (lvd).declarators;
-    hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> mods = (lvd).modifiers;
+    java.util.List<hydra.ext.java.syntax.VariableDeclarator> decls = (lvd).declarators;
+    java.util.List<hydra.ext.java.syntax.VariableModifier> mods = (lvd).modifiers;
     hydra.ext.java.syntax.LocalVariableType t = (lvd).type;
-    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(mods),
         () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
@@ -1615,11 +1634,11 @@ public interface Serde {
   }
 
   static hydra.ast.Expr writeMethodDeclaration(hydra.ext.java.syntax.MethodDeclaration md) {
-    hydra.util.ConsList<hydra.ext.java.syntax.Annotation> anns = (md).annotations;
+    java.util.List<hydra.ext.java.syntax.Annotation> anns = (md).annotations;
     hydra.ext.java.syntax.MethodBody body = (md).body;
     hydra.ext.java.syntax.MethodHeader header = (md).header;
-    hydra.util.ConsList<hydra.ext.java.syntax.MethodModifier> mods = (md).modifiers;
-    hydra.util.Lazy<hydra.ast.Expr> headerAndBody = new hydra.util.Lazy<>(() -> hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    java.util.List<hydra.ext.java.syntax.MethodModifier> mods = (md).modifiers;
+    hydra.util.Lazy<hydra.ast.Expr> headerAndBody = new hydra.util.Lazy<>(() -> hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(mods),
         () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
@@ -1628,7 +1647,7 @@ public interface Serde {
           mods)))),
       hydra.util.Maybe.just(hydra.ext.java.Serde.writeMethodHeader(header)),
       hydra.util.Maybe.just(hydra.ext.java.Serde.writeMethodBody(body))))));
-    return hydra.Serialization.newlineSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    return hydra.Serialization.newlineSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(anns),
         () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
@@ -1640,8 +1659,8 @@ public interface Serde {
 
   static hydra.ast.Expr writeMethodDeclarator(hydra.ext.java.syntax.MethodDeclarator md) {
     hydra.ext.java.syntax.Identifier id = (md).identifier;
-    hydra.util.ConsList<hydra.ext.java.syntax.FormalParameter> params = (md).formalParameters;
-    return hydra.Serialization.noSep(hydra.util.ConsList.of(
+    java.util.List<hydra.ext.java.syntax.FormalParameter> params = (md).formalParameters;
+    return hydra.Serialization.noSep(java.util.Arrays.asList(
       hydra.ext.java.Serde.writeIdentifier(id),
       hydra.Serialization.parenList(
         false,
@@ -1653,9 +1672,9 @@ public interface Serde {
   static hydra.ast.Expr writeMethodHeader(hydra.ext.java.syntax.MethodHeader mh) {
     hydra.ext.java.syntax.MethodDeclarator decl = (mh).declarator;
     hydra.util.Maybe<hydra.ext.java.syntax.Throws> mthrows = (mh).throws_;
-    hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> params = (mh).parameters;
+    java.util.List<hydra.ext.java.syntax.TypeParameter> params = (mh).parameters;
     hydra.ext.java.syntax.Result result = (mh).result;
-    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(params),
         () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
@@ -1672,7 +1691,7 @@ public interface Serde {
   }
 
   static hydra.ast.Expr writeMethodInvocation(hydra.ext.java.syntax.MethodInvocation mi) {
-    hydra.util.ConsList<hydra.ext.java.syntax.Expression> args = (mi).arguments;
+    java.util.List<hydra.ext.java.syntax.Expression> args = (mi).arguments;
     hydra.util.Lazy<hydra.ast.Expr> argSec = new hydra.util.Lazy<>(() -> hydra.Serialization.parenList(
       true,
       hydra.lib.lists.Map.apply(
@@ -1689,8 +1708,8 @@ public interface Serde {
       public hydra.ast.Expr visit(hydra.ext.java.syntax.MethodInvocation_Header.Complex cx) {
         hydra.ext.java.syntax.Identifier cid = (cx).value.identifier;
         hydra.ext.java.syntax.MethodInvocation_Variant cvar = (cx).value.variant;
-        hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> targs = (cx).value.typeArguments;
-        hydra.util.Lazy<hydra.ast.Expr> idSec = new hydra.util.Lazy<>(() -> hydra.Serialization.noSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+        java.util.List<hydra.ext.java.syntax.TypeArgument> targs = (cx).value.typeArguments;
+        hydra.util.Lazy<hydra.ast.Expr> idSec = new hydra.util.Lazy<>(() -> hydra.Serialization.noSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
           hydra.lib.logic.IfElse.lazy(
             hydra.lib.lists.Null.apply(targs),
             () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
@@ -1703,35 +1722,35 @@ public interface Serde {
         return (cvar).accept(new hydra.ext.java.syntax.MethodInvocation_Variant.PartialVisitor<>() {
           @Override
           public hydra.ast.Expr visit(hydra.ext.java.syntax.MethodInvocation_Variant.Type tname) {
-            return hydra.Serialization.dotSep(hydra.util.ConsList.of(
+            return hydra.Serialization.dotSep(java.util.Arrays.asList(
               hydra.ext.java.Serde.writeTypeName((tname).value),
               idSec.get()));
           }
 
           @Override
           public hydra.ast.Expr visit(hydra.ext.java.syntax.MethodInvocation_Variant.Expression en) {
-            return hydra.Serialization.dotSep(hydra.util.ConsList.of(
+            return hydra.Serialization.dotSep(java.util.Arrays.asList(
               hydra.ext.java.Serde.writeExpressionName((en).value),
               idSec.get()));
           }
 
           @Override
           public hydra.ast.Expr visit(hydra.ext.java.syntax.MethodInvocation_Variant.Primary p) {
-            return hydra.Serialization.dotSep(hydra.util.ConsList.of(
+            return hydra.Serialization.dotSep(java.util.Arrays.asList(
               hydra.ext.java.Serde.writePrimary((p).value),
               idSec.get()));
           }
 
           @Override
           public hydra.ast.Expr visit(hydra.ext.java.syntax.MethodInvocation_Variant.Super ignored) {
-            return hydra.Serialization.dotSep(hydra.util.ConsList.of(
+            return hydra.Serialization.dotSep(java.util.Arrays.asList(
               hydra.Serialization.cst("super"),
               idSec.get()));
           }
 
           @Override
           public hydra.ast.Expr visit(hydra.ext.java.syntax.MethodInvocation_Variant.TypeSuper tname) {
-            return hydra.Serialization.dotSep(hydra.util.ConsList.of(
+            return hydra.Serialization.dotSep(java.util.Arrays.asList(
               hydra.ext.java.Serde.writeTypeName((tname).value),
               hydra.Serialization.cst("super"),
               idSec.get()));
@@ -1739,7 +1758,7 @@ public interface Serde {
         });
       }
     }));
-    return hydra.Serialization.noSep(hydra.util.ConsList.of(
+    return hydra.Serialization.noSep(java.util.Arrays.asList(
       headerSec.get(),
       argSec.get()));
   }
@@ -1835,11 +1854,11 @@ public interface Serde {
   }
 
   static hydra.ast.Expr writeNormalAnnotation(hydra.ext.java.syntax.NormalAnnotation na) {
-    hydra.util.ConsList<hydra.ext.java.syntax.ElementValuePair> pairs = (na).pairs;
+    java.util.List<hydra.ext.java.syntax.ElementValuePair> pairs = (na).pairs;
     hydra.ext.java.syntax.TypeName tname = (na).typeName;
     return hydra.Serialization.prefix(
       "@",
-      hydra.Serialization.noSep(hydra.util.ConsList.of(
+      hydra.Serialization.noSep(java.util.Arrays.asList(
         hydra.ext.java.Serde.writeTypeName(tname),
         hydra.Serialization.commaSep(
           hydra.Serialization.inlineStyle(),
@@ -1851,11 +1870,11 @@ public interface Serde {
   static hydra.ast.Expr writeNormalClassDeclaration(hydra.ext.java.syntax.NormalClassDeclaration ncd) {
     hydra.ext.java.syntax.ClassBody body = (ncd).body;
     hydra.ext.java.syntax.TypeIdentifier id = (ncd).identifier;
-    hydra.util.ConsList<hydra.ext.java.syntax.ClassModifier> mods = (ncd).modifiers;
+    java.util.List<hydra.ext.java.syntax.ClassModifier> mods = (ncd).modifiers;
     hydra.util.Maybe<hydra.ext.java.syntax.ClassType> msuperc = (ncd).extends_;
-    hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType> superi = (ncd).implements_;
-    hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> tparams = (ncd).parameters;
-    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    java.util.List<hydra.ext.java.syntax.InterfaceType> superi = (ncd).implements_;
+    java.util.List<hydra.ext.java.syntax.TypeParameter> tparams = (ncd).parameters;
+    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(mods),
         () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
@@ -1863,7 +1882,7 @@ public interface Serde {
           hydra.ext.java.Serde::writeClassModifier,
           mods)))),
       hydra.util.Maybe.just(hydra.Serialization.cst("class")),
-      hydra.util.Maybe.just(hydra.Serialization.noSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+      hydra.util.Maybe.just(hydra.Serialization.noSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
         hydra.util.Maybe.just(hydra.ext.java.Serde.writeTypeIdentifier(id)),
         hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(tparams),
@@ -1874,14 +1893,14 @@ public interface Serde {
               hydra.ext.java.Serde::writeTypeParameter,
               tparams)))))))),
       hydra.lib.maybes.Map.apply(
-        (java.util.function.Function<hydra.ext.java.syntax.ClassType, hydra.ast.Expr>) (c -> hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+        (java.util.function.Function<hydra.ext.java.syntax.ClassType, hydra.ast.Expr>) (c -> hydra.Serialization.spaceSep(java.util.Arrays.asList(
           hydra.Serialization.cst("extends"),
           hydra.ext.java.Serde.writeClassType(c)))),
         msuperc),
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(superi),
         () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
-        () -> hydra.util.Maybe.just(hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+        () -> hydra.util.Maybe.just(hydra.Serialization.spaceSep(java.util.Arrays.asList(
           hydra.Serialization.cst("implements"),
           hydra.Serialization.commaSep(
             hydra.Serialization.inlineStyle(),
@@ -1893,11 +1912,11 @@ public interface Serde {
 
   static hydra.ast.Expr writeNormalInterfaceDeclaration(hydra.ext.java.syntax.NormalInterfaceDeclaration nid) {
     hydra.ext.java.syntax.InterfaceBody body = (nid).body;
-    hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType> extends_ = (nid).extends_;
+    java.util.List<hydra.ext.java.syntax.InterfaceType> extends_ = (nid).extends_;
     hydra.ext.java.syntax.TypeIdentifier id = (nid).identifier;
-    hydra.util.ConsList<hydra.ext.java.syntax.InterfaceModifier> mods = (nid).modifiers;
-    hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> tparams = (nid).parameters;
-    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    java.util.List<hydra.ext.java.syntax.InterfaceModifier> mods = (nid).modifiers;
+    java.util.List<hydra.ext.java.syntax.TypeParameter> tparams = (nid).parameters;
+    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(mods),
         () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
@@ -1905,7 +1924,7 @@ public interface Serde {
           hydra.ext.java.Serde::writeInterfaceModifier,
           mods)))),
       hydra.util.Maybe.just(hydra.Serialization.cst("interface")),
-      hydra.util.Maybe.just(hydra.Serialization.noSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+      hydra.util.Maybe.just(hydra.Serialization.noSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
         hydra.util.Maybe.just(hydra.ext.java.Serde.writeTypeIdentifier(id)),
         hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(tparams),
@@ -1918,7 +1937,7 @@ public interface Serde {
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(extends_),
         () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
-        () -> hydra.util.Maybe.just(hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+        () -> hydra.util.Maybe.just(hydra.Serialization.spaceSep(java.util.Arrays.asList(
           hydra.Serialization.cst("extends"),
           hydra.Serialization.commaSep(
             hydra.Serialization.inlineStyle(),
@@ -1943,16 +1962,16 @@ public interface Serde {
   }
 
   static hydra.ast.Expr writePackageDeclaration(hydra.ext.java.syntax.PackageDeclaration pd) {
-    hydra.util.ConsList<hydra.ext.java.syntax.Identifier> ids = (pd).identifiers;
-    hydra.util.ConsList<hydra.ext.java.syntax.PackageModifier> mods = (pd).modifiers;
-    return hydra.Serialization.withSemi(hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    java.util.List<hydra.ext.java.syntax.Identifier> ids = (pd).identifiers;
+    java.util.List<hydra.ext.java.syntax.PackageModifier> mods = (pd).modifiers;
+    return hydra.Serialization.withSemi(hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(mods),
         () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
         () -> hydra.util.Maybe.just(hydra.Serialization.spaceSep(hydra.lib.lists.Map.apply(
           hydra.ext.java.Serde::writePackageModifier,
           mods)))),
-      hydra.util.Maybe.just(hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+      hydra.util.Maybe.just(hydra.Serialization.spaceSep(java.util.Arrays.asList(
         hydra.Serialization.cst("package"),
         hydra.Serialization.cst(hydra.lib.strings.Intercalate.apply(
           ".",
@@ -2050,7 +2069,7 @@ public interface Serde {
 
       @Override
       public hydra.ast.Expr visit(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.DotThis n) {
-        return hydra.Serialization.dotSep(hydra.util.ConsList.of(
+        return hydra.Serialization.dotSep(java.util.Arrays.asList(
           hydra.ext.java.Serde.writeTypeName((n).value),
           hydra.Serialization.cst("this")));
       }
@@ -2059,7 +2078,7 @@ public interface Serde {
       public hydra.ast.Expr visit(hydra.ext.java.syntax.PrimaryNoNewArrayExpression.Parens e) {
         return hydra.Serialization.parenList(
           false,
-          hydra.util.ConsList.of(hydra.ext.java.Serde.writeExpression((e).value)));
+          java.util.Arrays.asList(hydra.ext.java.Serde.writeExpression((e).value)));
       }
 
       @Override
@@ -2104,9 +2123,9 @@ public interface Serde {
   }
 
   static hydra.ast.Expr writePrimitiveTypeWithAnnotations(hydra.ext.java.syntax.PrimitiveTypeWithAnnotations ptwa) {
-    hydra.util.ConsList<hydra.ext.java.syntax.Annotation> anns = (ptwa).annotations;
+    java.util.List<hydra.ext.java.syntax.Annotation> anns = (ptwa).annotations;
     hydra.ext.java.syntax.PrimitiveType pt = (ptwa).type;
-    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(anns),
         () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
@@ -2224,7 +2243,7 @@ public interface Serde {
 
   static hydra.ast.Expr writeReturnStatement(hydra.ext.java.syntax.ReturnStatement rs) {
     hydra.util.Maybe<hydra.ext.java.syntax.Expression> mex = (rs).value;
-    return hydra.Serialization.withSemi(hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    return hydra.Serialization.withSemi(hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.util.Maybe.just(hydra.Serialization.cst("return")),
       hydra.lib.maybes.Map.apply(
         hydra.ext.java.Serde::writeExpression,
@@ -2275,11 +2294,11 @@ public interface Serde {
       () -> hydra.ext.java.Serde.writeMarkerAnnotation(new hydra.ext.java.syntax.MarkerAnnotation(tname)),
       (java.util.function.Function<hydra.ext.java.syntax.ElementValue, hydra.ast.Expr>) (v -> hydra.Serialization.prefix(
         "@",
-        hydra.Serialization.noSep(hydra.util.ConsList.of(
+        hydra.Serialization.noSep(java.util.Arrays.asList(
           hydra.ext.java.Serde.writeTypeName(tname),
           hydra.Serialization.parenList(
             false,
-            hydra.util.ConsList.of(hydra.ext.java.Serde.writeElementValue(v))))))),
+            java.util.Arrays.asList(hydra.ext.java.Serde.writeElementValue(v))))))),
       mv);
   }
 
@@ -2442,7 +2461,7 @@ public interface Serde {
   }
 
   static hydra.ast.Expr writeThrowStatement(hydra.ext.java.syntax.ThrowStatement ts) {
-    return hydra.Serialization.withSemi(hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+    return hydra.Serialization.withSemi(hydra.Serialization.spaceSep(java.util.Arrays.asList(
       hydra.Serialization.cst("throw"),
       hydra.ext.java.Serde.writeExpression((ts).value))));
   }
@@ -2510,7 +2529,7 @@ public interface Serde {
 
       @Override
       public hydra.ast.Expr visit(hydra.ext.java.syntax.TypeBound.ClassOrInterface ci) {
-        hydra.util.ConsList<hydra.ext.java.syntax.AdditionalBound> additional = (ci).value.additional;
+        java.util.List<hydra.ext.java.syntax.AdditionalBound> additional = (ci).value.additional;
         hydra.ext.java.syntax.ClassOrInterfaceType cit = (ci).value.type;
         return hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(additional),
@@ -2558,7 +2577,7 @@ public interface Serde {
   static hydra.ast.Expr writeTypeName(hydra.ext.java.syntax.TypeName tn) {
     hydra.ext.java.syntax.TypeIdentifier id = (tn).identifier;
     hydra.util.Maybe<hydra.ext.java.syntax.PackageOrTypeName> mqual = (tn).qualifier;
-    return hydra.Serialization.dotSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    return hydra.Serialization.dotSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.lib.maybes.Map.apply(
         hydra.ext.java.Serde::writePackageOrTypeName,
         mqual),
@@ -2568,8 +2587,8 @@ public interface Serde {
   static hydra.ast.Expr writeTypeParameter(hydra.ext.java.syntax.TypeParameter tp) {
     hydra.util.Maybe<hydra.ext.java.syntax.TypeBound> bound = (tp).bound;
     hydra.ext.java.syntax.TypeIdentifier id = (tp).identifier;
-    hydra.util.ConsList<hydra.ext.java.syntax.TypeParameterModifier> mods = (tp).modifiers;
-    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    java.util.List<hydra.ext.java.syntax.TypeParameterModifier> mods = (tp).modifiers;
+    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(mods),
         () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
@@ -2578,7 +2597,7 @@ public interface Serde {
           mods)))),
       hydra.util.Maybe.just(hydra.ext.java.Serde.writeTypeIdentifier(id)),
       hydra.lib.maybes.Map.apply(
-        (java.util.function.Function<hydra.ext.java.syntax.TypeBound, hydra.ast.Expr>) (b -> hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+        (java.util.function.Function<hydra.ext.java.syntax.TypeBound, hydra.ast.Expr>) (b -> hydra.Serialization.spaceSep(java.util.Arrays.asList(
           hydra.Serialization.cst("extends"),
           hydra.ext.java.Serde.writeTypeBound(b)))),
         bound))));
@@ -2589,9 +2608,9 @@ public interface Serde {
   }
 
   static hydra.ast.Expr writeTypeVariable(hydra.ext.java.syntax.TypeVariable tv) {
-    hydra.util.ConsList<hydra.ext.java.syntax.Annotation> anns = (tv).annotations;
+    java.util.List<hydra.ext.java.syntax.Annotation> anns = (tv).annotations;
     hydra.ext.java.syntax.TypeIdentifier id = (tv).identifier;
-    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(anns),
         () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
@@ -2619,14 +2638,14 @@ public interface Serde {
 
       @Override
       public hydra.ast.Expr visit(hydra.ext.java.syntax.UnaryExpression.Plus p) {
-        return hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+        return hydra.Serialization.spaceSep(java.util.Arrays.asList(
           hydra.Serialization.cst("+"),
           hydra.ext.java.Serde.writeUnaryExpression((p).value)));
       }
 
       @Override
       public hydra.ast.Expr visit(hydra.ext.java.syntax.UnaryExpression.Minus m) {
-        return hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+        return hydra.Serialization.spaceSep(java.util.Arrays.asList(
           hydra.Serialization.cst("-"),
           hydra.ext.java.Serde.writeUnaryExpression((m).value)));
       }
@@ -2647,14 +2666,14 @@ public interface Serde {
 
       @Override
       public hydra.ast.Expr visit(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Tilde u) {
-        return hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+        return hydra.Serialization.spaceSep(java.util.Arrays.asList(
           hydra.Serialization.cst("~"),
           hydra.ext.java.Serde.writeUnaryExpression((u).value)));
       }
 
       @Override
       public hydra.ast.Expr visit(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Not u) {
-        return hydra.Serialization.noSep(hydra.util.ConsList.of(
+        return hydra.Serialization.noSep(java.util.Arrays.asList(
           hydra.Serialization.cst("!"),
           hydra.ext.java.Serde.writeUnaryExpression((u).value)));
       }
@@ -2667,11 +2686,11 @@ public interface Serde {
   }
 
   static hydra.ast.Expr writeUnqualifiedClassInstanceCreationExpression(hydra.ext.java.syntax.UnqualifiedClassInstanceCreationExpression ucice) {
-    hydra.util.ConsList<hydra.ext.java.syntax.Expression> args = (ucice).arguments;
+    java.util.List<hydra.ext.java.syntax.Expression> args = (ucice).arguments;
     hydra.ext.java.syntax.ClassOrInterfaceTypeToInstantiate cit = (ucice).classOrInterface;
     hydra.util.Maybe<hydra.ext.java.syntax.ClassBody> mbody = (ucice).body;
-    hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> targs = (ucice).typeArguments;
-    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    java.util.List<hydra.ext.java.syntax.TypeArgument> targs = (ucice).typeArguments;
+    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.util.Maybe.just(hydra.Serialization.cst("new")),
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(targs),
@@ -2681,7 +2700,7 @@ public interface Serde {
           hydra.lib.lists.Map.apply(
             hydra.ext.java.Serde::writeTypeArgument,
             targs)))),
-      hydra.util.Maybe.just(hydra.Serialization.noSep(hydra.util.ConsList.of(
+      hydra.util.Maybe.just(hydra.Serialization.noSep(java.util.Arrays.asList(
         hydra.ext.java.Serde.writeClassOrInterfaceTypeToInstantiate(cit),
         hydra.Serialization.parenList(
           false,
@@ -2713,7 +2732,7 @@ public interface Serde {
   static hydra.ast.Expr writeVariableDeclaratorId(hydra.ext.java.syntax.VariableDeclaratorId vdi) {
     hydra.ext.java.syntax.Identifier id = (vdi).identifier;
     hydra.util.Maybe<hydra.ext.java.syntax.Dims> mdims = (vdi).dims;
-    return hydra.Serialization.noSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    return hydra.Serialization.noSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.util.Maybe.just(hydra.ext.java.Serde.writeIdentifier(id)),
       hydra.lib.maybes.Map.apply(
         hydra.ext.java.Serde::writeDims,
@@ -2755,20 +2774,20 @@ public interface Serde {
       () -> hydra.Serialization.cst("true"),
       (java.util.function.Function<hydra.ext.java.syntax.Expression, hydra.ast.Expr>) (c -> hydra.ext.java.Serde.writeExpression(c)),
       mcond));
-    return hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+    return hydra.Serialization.spaceSep(java.util.Arrays.asList(
       hydra.Serialization.cst("while"),
       hydra.Serialization.parenList(
         false,
-        hydra.util.ConsList.of(condSer.get())),
+        java.util.Arrays.asList(condSer.get())),
       hydra.Serialization.curlyBlock(
         hydra.Serialization.fullBlockStyle(),
         hydra.ext.java.Serde.writeStatement(body))));
   }
 
   static hydra.ast.Expr writeWildcard(hydra.ext.java.syntax.Wildcard w) {
-    hydra.util.ConsList<hydra.ext.java.syntax.Annotation> anns = (w).annotations;
+    java.util.List<hydra.ext.java.syntax.Annotation> anns = (w).annotations;
     hydra.util.Maybe<hydra.ext.java.syntax.WildcardBounds> mbounds = (w).wildcard;
-    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+    return hydra.Serialization.spaceSep(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(anns),
         () -> (hydra.util.Maybe<hydra.ast.Expr>) (hydra.util.Maybe.<hydra.ast.Expr>nothing()),
@@ -2787,14 +2806,14 @@ public interface Serde {
     return (b).accept(new hydra.ext.java.syntax.WildcardBounds.PartialVisitor<>() {
       @Override
       public hydra.ast.Expr visit(hydra.ext.java.syntax.WildcardBounds.Extends rt) {
-        return hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+        return hydra.Serialization.spaceSep(java.util.Arrays.asList(
           hydra.Serialization.cst("extends"),
           hydra.ext.java.Serde.writeReferenceType((rt).value)));
       }
 
       @Override
       public hydra.ast.Expr visit(hydra.ext.java.syntax.WildcardBounds.Super rt) {
-        return hydra.Serialization.spaceSep(hydra.util.ConsList.of(
+        return hydra.Serialization.spaceSep(java.util.Arrays.asList(
           hydra.Serialization.cst("super"),
           hydra.ext.java.Serde.writeReferenceType((rt).value)));
       }

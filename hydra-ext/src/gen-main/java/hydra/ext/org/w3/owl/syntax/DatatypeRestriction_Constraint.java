@@ -42,11 +42,15 @@ public class DatatypeRestriction_Constraint implements Serializable, Comparable<
   @SuppressWarnings("unchecked")
   public int compareTo(DatatypeRestriction_Constraint other) {
     int cmp = 0;
-    cmp = ((Comparable) constrainingFacet).compareTo(other.constrainingFacet);
+    cmp = hydra.util.Comparing.compare(
+      constrainingFacet,
+      other.constrainingFacet);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) restrictionValue).compareTo(other.restrictionValue);
+    return hydra.util.Comparing.compare(
+      restrictionValue,
+      other.restrictionValue);
   }
 
   public DatatypeRestriction_Constraint withConstrainingFacet(hydra.ext.org.w3.owl.syntax.DatatypeRestriction_ConstrainingFacet constrainingFacet) {

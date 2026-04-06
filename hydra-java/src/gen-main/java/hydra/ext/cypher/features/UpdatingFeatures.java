@@ -61,15 +61,21 @@ public class UpdatingFeatures implements Serializable, Comparable<UpdatingFeatur
   @SuppressWarnings("unchecked")
   public int compareTo(UpdatingFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) create).compareTo(other.create);
+    cmp = hydra.util.Comparing.compare(
+      create,
+      other.create);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) set).compareTo(other.set);
+    cmp = hydra.util.Comparing.compare(
+      set,
+      other.set);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) with).compareTo(other.with);
+    return hydra.util.Comparing.compare(
+      with,
+      other.with);
   }
 
   public UpdatingFeatures withCreate(Boolean create) {

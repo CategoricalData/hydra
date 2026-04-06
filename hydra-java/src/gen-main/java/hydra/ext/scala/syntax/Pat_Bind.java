@@ -42,11 +42,15 @@ public class Pat_Bind implements Serializable, Comparable<Pat_Bind> {
   @SuppressWarnings("unchecked")
   public int compareTo(Pat_Bind other) {
     int cmp = 0;
-    cmp = ((Comparable) lhs).compareTo(other.lhs);
+    cmp = hydra.util.Comparing.compare(
+      lhs,
+      other.lhs);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) rhs).compareTo(other.rhs);
+    return hydra.util.Comparing.compare(
+      rhs,
+      other.rhs);
   }
 
   public Pat_Bind withLhs(hydra.ext.scala.syntax.Pat lhs) {

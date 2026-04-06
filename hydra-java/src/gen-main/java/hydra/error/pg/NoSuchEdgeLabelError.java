@@ -40,6 +40,8 @@ public class NoSuchEdgeLabelError implements Serializable, Comparable<NoSuchEdge
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(NoSuchEdgeLabelError other) {
-    return ((Comparable) label).compareTo(other.label);
+    return hydra.util.Comparing.compare(
+      label,
+      other.label);
   }
 }

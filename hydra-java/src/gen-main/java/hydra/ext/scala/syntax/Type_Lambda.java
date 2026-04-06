@@ -11,11 +11,11 @@ public class Type_Lambda implements Serializable, Comparable<Type_Lambda> {
 
   public static final hydra.core.Name TPE = new hydra.core.Name("tpe");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams;
+  public final java.util.List<hydra.ext.scala.syntax.Type_Param> tparams;
 
   public final hydra.ext.scala.syntax.Type tpe;
 
-  public Type_Lambda (hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams, hydra.ext.scala.syntax.Type tpe) {
+  public Type_Lambda (java.util.List<hydra.ext.scala.syntax.Type_Param> tparams, hydra.ext.scala.syntax.Type tpe) {
     this.tparams = tparams;
     this.tpe = tpe;
   }
@@ -42,14 +42,18 @@ public class Type_Lambda implements Serializable, Comparable<Type_Lambda> {
   @SuppressWarnings("unchecked")
   public int compareTo(Type_Lambda other) {
     int cmp = 0;
-    cmp = ((Comparable) tparams).compareTo(other.tparams);
+    cmp = hydra.util.Comparing.compare(
+      tparams,
+      other.tparams);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) tpe).compareTo(other.tpe);
+    return hydra.util.Comparing.compare(
+      tpe,
+      other.tpe);
   }
 
-  public Type_Lambda withTparams(hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams) {
+  public Type_Lambda withTparams(java.util.List<hydra.ext.scala.syntax.Type_Param> tparams) {
     return new Type_Lambda(tparams, tpe);
   }
 

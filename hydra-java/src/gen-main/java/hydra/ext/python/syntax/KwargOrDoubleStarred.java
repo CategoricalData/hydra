@@ -68,7 +68,9 @@ public abstract class KwargOrDoubleStarred implements Serializable, Comparable<K
         return tagCmp;
       }
       Kwarg o = (Kwarg) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class KwargOrDoubleStarred implements Serializable, Comparable<K
         return tagCmp;
       }
       DoubleStarred o = (DoubleStarred) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -42,11 +42,15 @@ public class PrefixDecl implements Serializable, Comparable<PrefixDecl> {
   @SuppressWarnings("unchecked")
   public int compareTo(PrefixDecl other) {
     int cmp = 0;
-    cmp = ((Comparable) PnameNs).compareTo(other.PnameNs);
+    cmp = hydra.util.Comparing.compare(
+      PnameNs,
+      other.PnameNs);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) IriRef).compareTo(other.IriRef);
+    return hydra.util.Comparing.compare(
+      IriRef,
+      other.IriRef);
   }
 
   public PrefixDecl withPnameNs(hydra.ext.io.shex.syntax.PnameNs PnameNs) {

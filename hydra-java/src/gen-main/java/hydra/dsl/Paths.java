@@ -7,7 +7,7 @@ package hydra.dsl;
  */
 public interface Paths {
   static hydra.phantoms.TTerm<hydra.paths.SubtermEdge> subtermEdge(hydra.phantoms.TTerm<hydra.paths.SubtermNode> source, hydra.phantoms.TTerm<hydra.paths.SubtermPath> path, hydra.phantoms.TTerm<hydra.paths.SubtermNode> target) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermEdge"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermEdge"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("source"), (source).value),
       new hydra.core.Field(new hydra.core.Name("path"), (path).value),
       new hydra.core.Field(new hydra.core.Name("target"), (target).value)))));
@@ -26,54 +26,54 @@ public interface Paths {
   }
 
   static hydra.phantoms.TTerm<hydra.paths.SubtermEdge> subtermEdgeWithPath(hydra.phantoms.TTerm<hydra.paths.SubtermEdge> original, hydra.phantoms.TTerm<hydra.paths.SubtermPath> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermEdge"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermEdge"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("source"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtermEdge"), new hydra.core.Name("source"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("path"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("target"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtermEdge"), new hydra.core.Name("target"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.paths.SubtermEdge> subtermEdgeWithSource(hydra.phantoms.TTerm<hydra.paths.SubtermEdge> original, hydra.phantoms.TTerm<hydra.paths.SubtermNode> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermEdge"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermEdge"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("source"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("path"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtermEdge"), new hydra.core.Name("path"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("target"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtermEdge"), new hydra.core.Name("target"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.paths.SubtermEdge> subtermEdgeWithTarget(hydra.phantoms.TTerm<hydra.paths.SubtermEdge> original, hydra.phantoms.TTerm<hydra.paths.SubtermNode> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermEdge"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermEdge"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("source"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtermEdge"), new hydra.core.Name("source"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("path"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtermEdge"), new hydra.core.Name("path"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("target"), (newVal).value)))));
   }
 
-  static hydra.phantoms.TTerm<hydra.paths.SubtermGraph> subtermGraph(hydra.phantoms.TTerm<hydra.util.ConsList<hydra.paths.SubtermNode>> nodes, hydra.phantoms.TTerm<hydra.util.ConsList<hydra.paths.SubtermEdge>> edges) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermGraph"), hydra.util.ConsList.of(
+  static hydra.phantoms.TTerm<hydra.paths.SubtermGraph> subtermGraph(hydra.phantoms.TTerm<java.util.List<hydra.paths.SubtermNode>> nodes, hydra.phantoms.TTerm<java.util.List<hydra.paths.SubtermEdge>> edges) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermGraph"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("nodes"), (nodes).value),
       new hydra.core.Field(new hydra.core.Name("edges"), (edges).value)))));
   }
 
-  static hydra.phantoms.TTerm<hydra.util.ConsList<hydra.paths.SubtermEdge>> subtermGraphEdges(hydra.phantoms.TTerm<hydra.paths.SubtermGraph> x) {
+  static hydra.phantoms.TTerm<java.util.List<hydra.paths.SubtermEdge>> subtermGraphEdges(hydra.phantoms.TTerm<hydra.paths.SubtermGraph> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtermGraph"), new hydra.core.Name("edges"))))), (x).value)));
   }
 
-  static hydra.phantoms.TTerm<hydra.util.ConsList<hydra.paths.SubtermNode>> subtermGraphNodes(hydra.phantoms.TTerm<hydra.paths.SubtermGraph> x) {
+  static hydra.phantoms.TTerm<java.util.List<hydra.paths.SubtermNode>> subtermGraphNodes(hydra.phantoms.TTerm<hydra.paths.SubtermGraph> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtermGraph"), new hydra.core.Name("nodes"))))), (x).value)));
   }
 
-  static hydra.phantoms.TTerm<hydra.paths.SubtermGraph> subtermGraphWithEdges(hydra.phantoms.TTerm<hydra.paths.SubtermGraph> original, hydra.phantoms.TTerm<hydra.util.ConsList<hydra.paths.SubtermEdge>> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermGraph"), hydra.util.ConsList.of(
+  static hydra.phantoms.TTerm<hydra.paths.SubtermGraph> subtermGraphWithEdges(hydra.phantoms.TTerm<hydra.paths.SubtermGraph> original, hydra.phantoms.TTerm<java.util.List<hydra.paths.SubtermEdge>> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermGraph"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("nodes"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtermGraph"), new hydra.core.Name("nodes"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("edges"), (newVal).value)))));
   }
 
-  static hydra.phantoms.TTerm<hydra.paths.SubtermGraph> subtermGraphWithNodes(hydra.phantoms.TTerm<hydra.paths.SubtermGraph> original, hydra.phantoms.TTerm<hydra.util.ConsList<hydra.paths.SubtermNode>> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermGraph"), hydra.util.ConsList.of(
+  static hydra.phantoms.TTerm<hydra.paths.SubtermGraph> subtermGraphWithNodes(hydra.phantoms.TTerm<hydra.paths.SubtermGraph> original, hydra.phantoms.TTerm<java.util.List<hydra.paths.SubtermNode>> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermGraph"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("nodes"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("edges"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtermGraph"), new hydra.core.Name("edges"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.paths.SubtermNode> subtermNode(hydra.phantoms.TTerm<hydra.core.Name> name, hydra.phantoms.TTerm<String> label, hydra.phantoms.TTerm<String> id) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermNode"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermNode"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("name"), (name).value),
       new hydra.core.Field(new hydra.core.Name("label"), (label).value),
       new hydra.core.Field(new hydra.core.Name("id"), (id).value)))));
@@ -92,27 +92,27 @@ public interface Paths {
   }
 
   static hydra.phantoms.TTerm<hydra.paths.SubtermNode> subtermNodeWithId(hydra.phantoms.TTerm<hydra.paths.SubtermNode> original, hydra.phantoms.TTerm<String> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermNode"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermNode"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("name"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtermNode"), new hydra.core.Name("name"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("label"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtermNode"), new hydra.core.Name("label"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("id"), (newVal).value)))));
   }
 
   static hydra.phantoms.TTerm<hydra.paths.SubtermNode> subtermNodeWithLabel(hydra.phantoms.TTerm<hydra.paths.SubtermNode> original, hydra.phantoms.TTerm<String> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermNode"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermNode"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("name"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtermNode"), new hydra.core.Name("name"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("label"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("id"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtermNode"), new hydra.core.Name("id"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.paths.SubtermNode> subtermNodeWithName(hydra.phantoms.TTerm<hydra.paths.SubtermNode> original, hydra.phantoms.TTerm<hydra.core.Name> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermNode"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermNode"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("name"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("label"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtermNode"), new hydra.core.Name("label"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("id"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtermNode"), new hydra.core.Name("id"))))), (original).value)))))));
   }
 
-  static hydra.phantoms.TTerm<hydra.paths.SubtermPath> subtermPath(hydra.phantoms.TTerm<hydra.util.ConsList<hydra.paths.SubtermStep>> x) {
+  static hydra.phantoms.TTerm<hydra.paths.SubtermPath> subtermPath(hydra.phantoms.TTerm<java.util.List<hydra.paths.SubtermStep>> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.paths.SubtermPath"), (x).value)));
   }
 
@@ -197,7 +197,7 @@ public interface Paths {
   }
 
   static hydra.phantoms.TTerm<hydra.paths.SubtypeEdge> subtypeEdge(hydra.phantoms.TTerm<hydra.paths.SubtypeNode> source, hydra.phantoms.TTerm<hydra.paths.SubtypePath> path, hydra.phantoms.TTerm<hydra.paths.SubtypeNode> target) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeEdge"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeEdge"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("source"), (source).value),
       new hydra.core.Field(new hydra.core.Name("path"), (path).value),
       new hydra.core.Field(new hydra.core.Name("target"), (target).value)))));
@@ -216,54 +216,54 @@ public interface Paths {
   }
 
   static hydra.phantoms.TTerm<hydra.paths.SubtypeEdge> subtypeEdgeWithPath(hydra.phantoms.TTerm<hydra.paths.SubtypeEdge> original, hydra.phantoms.TTerm<hydra.paths.SubtypePath> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeEdge"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeEdge"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("source"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtypeEdge"), new hydra.core.Name("source"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("path"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("target"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtypeEdge"), new hydra.core.Name("target"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.paths.SubtypeEdge> subtypeEdgeWithSource(hydra.phantoms.TTerm<hydra.paths.SubtypeEdge> original, hydra.phantoms.TTerm<hydra.paths.SubtypeNode> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeEdge"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeEdge"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("source"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("path"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtypeEdge"), new hydra.core.Name("path"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("target"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtypeEdge"), new hydra.core.Name("target"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.paths.SubtypeEdge> subtypeEdgeWithTarget(hydra.phantoms.TTerm<hydra.paths.SubtypeEdge> original, hydra.phantoms.TTerm<hydra.paths.SubtypeNode> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeEdge"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeEdge"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("source"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtypeEdge"), new hydra.core.Name("source"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("path"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtypeEdge"), new hydra.core.Name("path"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("target"), (newVal).value)))));
   }
 
-  static hydra.phantoms.TTerm<hydra.paths.SubtypeGraph> subtypeGraph(hydra.phantoms.TTerm<hydra.util.ConsList<hydra.paths.SubtypeNode>> nodes, hydra.phantoms.TTerm<hydra.util.ConsList<hydra.paths.SubtypeEdge>> edges) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeGraph"), hydra.util.ConsList.of(
+  static hydra.phantoms.TTerm<hydra.paths.SubtypeGraph> subtypeGraph(hydra.phantoms.TTerm<java.util.List<hydra.paths.SubtypeNode>> nodes, hydra.phantoms.TTerm<java.util.List<hydra.paths.SubtypeEdge>> edges) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeGraph"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("nodes"), (nodes).value),
       new hydra.core.Field(new hydra.core.Name("edges"), (edges).value)))));
   }
 
-  static hydra.phantoms.TTerm<hydra.util.ConsList<hydra.paths.SubtypeEdge>> subtypeGraphEdges(hydra.phantoms.TTerm<hydra.paths.SubtypeGraph> x) {
+  static hydra.phantoms.TTerm<java.util.List<hydra.paths.SubtypeEdge>> subtypeGraphEdges(hydra.phantoms.TTerm<hydra.paths.SubtypeGraph> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtypeGraph"), new hydra.core.Name("edges"))))), (x).value)));
   }
 
-  static hydra.phantoms.TTerm<hydra.util.ConsList<hydra.paths.SubtypeNode>> subtypeGraphNodes(hydra.phantoms.TTerm<hydra.paths.SubtypeGraph> x) {
+  static hydra.phantoms.TTerm<java.util.List<hydra.paths.SubtypeNode>> subtypeGraphNodes(hydra.phantoms.TTerm<hydra.paths.SubtypeGraph> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtypeGraph"), new hydra.core.Name("nodes"))))), (x).value)));
   }
 
-  static hydra.phantoms.TTerm<hydra.paths.SubtypeGraph> subtypeGraphWithEdges(hydra.phantoms.TTerm<hydra.paths.SubtypeGraph> original, hydra.phantoms.TTerm<hydra.util.ConsList<hydra.paths.SubtypeEdge>> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeGraph"), hydra.util.ConsList.of(
+  static hydra.phantoms.TTerm<hydra.paths.SubtypeGraph> subtypeGraphWithEdges(hydra.phantoms.TTerm<hydra.paths.SubtypeGraph> original, hydra.phantoms.TTerm<java.util.List<hydra.paths.SubtypeEdge>> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeGraph"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("nodes"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtypeGraph"), new hydra.core.Name("nodes"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("edges"), (newVal).value)))));
   }
 
-  static hydra.phantoms.TTerm<hydra.paths.SubtypeGraph> subtypeGraphWithNodes(hydra.phantoms.TTerm<hydra.paths.SubtypeGraph> original, hydra.phantoms.TTerm<hydra.util.ConsList<hydra.paths.SubtypeNode>> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeGraph"), hydra.util.ConsList.of(
+  static hydra.phantoms.TTerm<hydra.paths.SubtypeGraph> subtypeGraphWithNodes(hydra.phantoms.TTerm<hydra.paths.SubtypeGraph> original, hydra.phantoms.TTerm<java.util.List<hydra.paths.SubtypeNode>> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeGraph"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("nodes"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("edges"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtypeGraph"), new hydra.core.Name("edges"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.paths.SubtypeNode> subtypeNode(hydra.phantoms.TTerm<hydra.core.Name> name, hydra.phantoms.TTerm<String> label, hydra.phantoms.TTerm<String> id) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeNode"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeNode"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("name"), (name).value),
       new hydra.core.Field(new hydra.core.Name("label"), (label).value),
       new hydra.core.Field(new hydra.core.Name("id"), (id).value)))));
@@ -282,27 +282,27 @@ public interface Paths {
   }
 
   static hydra.phantoms.TTerm<hydra.paths.SubtypeNode> subtypeNodeWithId(hydra.phantoms.TTerm<hydra.paths.SubtypeNode> original, hydra.phantoms.TTerm<String> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeNode"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeNode"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("name"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtypeNode"), new hydra.core.Name("name"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("label"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtypeNode"), new hydra.core.Name("label"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("id"), (newVal).value)))));
   }
 
   static hydra.phantoms.TTerm<hydra.paths.SubtypeNode> subtypeNodeWithLabel(hydra.phantoms.TTerm<hydra.paths.SubtypeNode> original, hydra.phantoms.TTerm<String> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeNode"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeNode"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("name"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtypeNode"), new hydra.core.Name("name"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("label"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("id"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtypeNode"), new hydra.core.Name("id"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.paths.SubtypeNode> subtypeNodeWithName(hydra.phantoms.TTerm<hydra.paths.SubtypeNode> original, hydra.phantoms.TTerm<hydra.core.Name> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeNode"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeNode"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("name"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("label"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtypeNode"), new hydra.core.Name("label"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("id"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.paths.SubtypeNode"), new hydra.core.Name("id"))))), (original).value)))))));
   }
 
-  static hydra.phantoms.TTerm<hydra.paths.SubtypePath> subtypePath(hydra.phantoms.TTerm<hydra.util.ConsList<hydra.paths.SubtypeStep>> x) {
+  static hydra.phantoms.TTerm<hydra.paths.SubtypePath> subtypePath(hydra.phantoms.TTerm<java.util.List<hydra.paths.SubtypeStep>> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.paths.SubtypePath"), (x).value)));
   }
 
@@ -378,11 +378,11 @@ public interface Paths {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.paths.SubtypeStep"), new hydra.core.Field(new hydra.core.Name("wrappedType"), new hydra.core.Term.Unit()))));
   }
 
-  static hydra.phantoms.TTerm<hydra.util.ConsList<hydra.paths.SubtermStep>> unSubtermPath(hydra.phantoms.TTerm<hydra.paths.SubtermPath> x) {
+  static hydra.phantoms.TTerm<java.util.List<hydra.paths.SubtermStep>> unSubtermPath(hydra.phantoms.TTerm<hydra.paths.SubtermPath> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Wrap(new hydra.core.Name("hydra.paths.SubtermPath")))), (x).value)));
   }
 
-  static hydra.phantoms.TTerm<hydra.util.ConsList<hydra.paths.SubtypeStep>> unSubtypePath(hydra.phantoms.TTerm<hydra.paths.SubtypePath> x) {
+  static hydra.phantoms.TTerm<java.util.List<hydra.paths.SubtypeStep>> unSubtypePath(hydra.phantoms.TTerm<hydra.paths.SubtypePath> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Wrap(new hydra.core.Name("hydra.paths.SubtypePath")))), (x).value)));
   }
 }

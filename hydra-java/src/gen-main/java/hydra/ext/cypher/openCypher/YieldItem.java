@@ -42,11 +42,15 @@ public class YieldItem implements Serializable, Comparable<YieldItem> {
   @SuppressWarnings("unchecked")
   public int compareTo(YieldItem other) {
     int cmp = 0;
-    cmp = ((Comparable) field).compareTo(other.field);
+    cmp = hydra.util.Comparing.compare(
+      field,
+      other.field);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) variable).compareTo(other.variable);
+    return hydra.util.Comparing.compare(
+      variable,
+      other.variable);
   }
 
   public YieldItem withField(hydra.util.Maybe<hydra.ext.cypher.openCypher.ProcedureResultField> field) {

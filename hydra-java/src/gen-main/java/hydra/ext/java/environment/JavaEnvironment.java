@@ -51,11 +51,15 @@ public class JavaEnvironment implements Serializable, Comparable<JavaEnvironment
   @SuppressWarnings("unchecked")
   public int compareTo(JavaEnvironment other) {
     int cmp = 0;
-    cmp = ((Comparable) aliases).compareTo(other.aliases);
+    cmp = hydra.util.Comparing.compare(
+      aliases,
+      other.aliases);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) graph).compareTo(other.graph);
+    return hydra.util.Comparing.compare(
+      graph,
+      other.graph);
   }
 
   public JavaEnvironment withAliases(hydra.ext.java.environment.Aliases aliases) {

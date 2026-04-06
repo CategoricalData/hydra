@@ -68,7 +68,9 @@ public abstract class FormalParameter implements Serializable, Comparable<Formal
         return tagCmp;
       }
       Simple o = (Simple) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class FormalParameter implements Serializable, Comparable<Formal
         return tagCmp;
       }
       VariableArity o = (VariableArity) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

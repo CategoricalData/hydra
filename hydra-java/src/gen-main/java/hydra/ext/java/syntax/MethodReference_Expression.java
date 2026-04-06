@@ -15,11 +15,11 @@ public class MethodReference_Expression implements Serializable, Comparable<Meth
 
   public final hydra.ext.java.syntax.ExpressionName name;
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments;
+  public final java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments;
 
   public final hydra.ext.java.syntax.Identifier identifier;
 
-  public MethodReference_Expression (hydra.ext.java.syntax.ExpressionName name, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.Identifier identifier) {
+  public MethodReference_Expression (hydra.ext.java.syntax.ExpressionName name, java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.Identifier identifier) {
     this.name = name;
     this.typeArguments = typeArguments;
     this.identifier = identifier;
@@ -49,22 +49,28 @@ public class MethodReference_Expression implements Serializable, Comparable<Meth
   @SuppressWarnings("unchecked")
   public int compareTo(MethodReference_Expression other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) typeArguments).compareTo(other.typeArguments);
+    cmp = hydra.util.Comparing.compare(
+      typeArguments,
+      other.typeArguments);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) identifier).compareTo(other.identifier);
+    return hydra.util.Comparing.compare(
+      identifier,
+      other.identifier);
   }
 
   public MethodReference_Expression withName(hydra.ext.java.syntax.ExpressionName name) {
     return new MethodReference_Expression(name, typeArguments, identifier);
   }
 
-  public MethodReference_Expression withTypeArguments(hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments) {
+  public MethodReference_Expression withTypeArguments(java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     return new MethodReference_Expression(name, typeArguments, identifier);
   }
 

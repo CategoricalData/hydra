@@ -68,7 +68,9 @@ public abstract class RemoveItem implements Serializable, Comparable<RemoveItem>
         return tagCmp;
       }
       VariableLabels o = (VariableLabels) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class RemoveItem implements Serializable, Comparable<RemoveItem>
         return tagCmp;
       }
       Property o = (Property) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

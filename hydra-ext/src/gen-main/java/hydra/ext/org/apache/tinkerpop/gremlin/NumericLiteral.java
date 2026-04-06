@@ -68,7 +68,9 @@ public abstract class NumericLiteral implements Serializable, Comparable<Numeric
         return tagCmp;
       }
       Integer_ o = (Integer_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class NumericLiteral implements Serializable, Comparable<Numeric
         return tagCmp;
       }
       Float_ o = (Float_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

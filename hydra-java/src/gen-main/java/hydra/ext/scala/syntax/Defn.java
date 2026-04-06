@@ -164,7 +164,9 @@ public abstract class Defn implements Serializable, Comparable<Defn> {
         return tagCmp;
       }
       Val o = (Val) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +206,9 @@ public abstract class Defn implements Serializable, Comparable<Defn> {
         return tagCmp;
       }
       Var o = (Var) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -244,7 +248,9 @@ public abstract class Defn implements Serializable, Comparable<Defn> {
         return tagCmp;
       }
       Given o = (Given) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -284,7 +290,9 @@ public abstract class Defn implements Serializable, Comparable<Defn> {
         return tagCmp;
       }
       Enum_ o = (Enum_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -324,7 +332,9 @@ public abstract class Defn implements Serializable, Comparable<Defn> {
         return tagCmp;
       }
       EnumCase o = (EnumCase) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -364,7 +374,9 @@ public abstract class Defn implements Serializable, Comparable<Defn> {
         return tagCmp;
       }
       RepeatedEnumCase o = (RepeatedEnumCase) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -404,7 +416,9 @@ public abstract class Defn implements Serializable, Comparable<Defn> {
         return tagCmp;
       }
       GivenAlias o = (GivenAlias) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -444,7 +458,9 @@ public abstract class Defn implements Serializable, Comparable<Defn> {
         return tagCmp;
       }
       ExtensionGroup o = (ExtensionGroup) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -484,7 +500,9 @@ public abstract class Defn implements Serializable, Comparable<Defn> {
         return tagCmp;
       }
       Def o = (Def) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -524,7 +542,9 @@ public abstract class Defn implements Serializable, Comparable<Defn> {
         return tagCmp;
       }
       Macro o = (Macro) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -564,7 +584,9 @@ public abstract class Defn implements Serializable, Comparable<Defn> {
         return tagCmp;
       }
       Type o = (Type) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -604,7 +626,9 @@ public abstract class Defn implements Serializable, Comparable<Defn> {
         return tagCmp;
       }
       Class_ o = (Class_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -644,7 +668,9 @@ public abstract class Defn implements Serializable, Comparable<Defn> {
         return tagCmp;
       }
       Trait o = (Trait) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -684,7 +710,9 @@ public abstract class Defn implements Serializable, Comparable<Defn> {
         return tagCmp;
       }
       Object_ o = (Object_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

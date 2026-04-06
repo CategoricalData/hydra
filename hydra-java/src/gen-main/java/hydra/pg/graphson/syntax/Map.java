@@ -9,9 +9,9 @@ public class Map implements Serializable, Comparable<Map> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.pg.graphson.syntax.ValuePair> value;
+  public final java.util.List<hydra.pg.graphson.syntax.ValuePair> value;
 
-  public Map (hydra.util.ConsList<hydra.pg.graphson.syntax.ValuePair> value) {
+  public Map (java.util.List<hydra.pg.graphson.syntax.ValuePair> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class Map implements Serializable, Comparable<Map> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Map other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

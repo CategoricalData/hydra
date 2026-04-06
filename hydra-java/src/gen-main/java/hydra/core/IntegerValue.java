@@ -128,7 +128,9 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
         return tagCmp;
       }
       Bigint o = (Bigint) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -171,7 +173,9 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
         return tagCmp;
       }
       Int8 o = (Int8) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -214,7 +218,9 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
         return tagCmp;
       }
       Int16 o = (Int16) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -257,7 +263,9 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
         return tagCmp;
       }
       Int32 o = (Int32) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -300,7 +308,9 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
         return tagCmp;
       }
       Int64 o = (Int64) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -343,7 +353,9 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
         return tagCmp;
       }
       Uint8 o = (Uint8) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -386,7 +398,9 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
         return tagCmp;
       }
       Uint16 o = (Uint16) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -429,7 +443,9 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
         return tagCmp;
       }
       Uint32 o = (Uint32) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -470,7 +486,9 @@ public abstract class IntegerValue implements Serializable, Comparable<IntegerVa
         return tagCmp;
       }
       Uint64 o = (Uint64) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

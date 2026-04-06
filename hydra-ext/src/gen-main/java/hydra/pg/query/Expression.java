@@ -100,7 +100,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Associative o = (Associative) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -140,7 +142,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Binary o = (Binary) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -180,7 +184,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Property o = (Property) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -220,7 +226,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Unary o = (Unary) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -260,7 +268,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Variable o = (Variable) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -300,7 +310,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Vertex o = (Vertex) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

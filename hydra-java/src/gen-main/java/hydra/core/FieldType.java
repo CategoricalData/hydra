@@ -51,11 +51,15 @@ public class FieldType implements Serializable, Comparable<FieldType> {
   @SuppressWarnings("unchecked")
   public int compareTo(FieldType other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) type).compareTo(other.type);
+    return hydra.util.Comparing.compare(
+      type,
+      other.type);
   }
 
   public FieldType withName(hydra.core.Name name) {

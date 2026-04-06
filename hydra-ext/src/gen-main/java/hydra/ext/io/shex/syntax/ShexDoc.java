@@ -13,13 +13,13 @@ public class ShexDoc implements Serializable, Comparable<ShexDoc> {
 
   public static final hydra.core.Name PREFIX_DECL = new hydra.core.Name("PrefixDecl");
 
-  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.Directive> listOfDirective;
+  public final java.util.List<hydra.ext.io.shex.syntax.Directive> listOfDirective;
 
   public final hydra.util.Maybe<hydra.ext.io.shex.syntax.ShexDoc_Sequence_Option> Sequence;
 
   public final hydra.ext.io.shex.syntax.PrefixDecl PrefixDecl;
 
-  public ShexDoc (hydra.util.ConsList<hydra.ext.io.shex.syntax.Directive> listOfDirective, hydra.util.Maybe<hydra.ext.io.shex.syntax.ShexDoc_Sequence_Option> Sequence, hydra.ext.io.shex.syntax.PrefixDecl PrefixDecl) {
+  public ShexDoc (java.util.List<hydra.ext.io.shex.syntax.Directive> listOfDirective, hydra.util.Maybe<hydra.ext.io.shex.syntax.ShexDoc_Sequence_Option> Sequence, hydra.ext.io.shex.syntax.PrefixDecl PrefixDecl) {
     this.listOfDirective = listOfDirective;
     this.Sequence = Sequence;
     this.PrefixDecl = PrefixDecl;
@@ -49,18 +49,24 @@ public class ShexDoc implements Serializable, Comparable<ShexDoc> {
   @SuppressWarnings("unchecked")
   public int compareTo(ShexDoc other) {
     int cmp = 0;
-    cmp = ((Comparable) listOfDirective).compareTo(other.listOfDirective);
+    cmp = hydra.util.Comparing.compare(
+      listOfDirective,
+      other.listOfDirective);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) Sequence).compareTo(other.Sequence);
+    cmp = hydra.util.Comparing.compare(
+      Sequence,
+      other.Sequence);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) PrefixDecl).compareTo(other.PrefixDecl);
+    return hydra.util.Comparing.compare(
+      PrefixDecl,
+      other.PrefixDecl);
   }
 
-  public ShexDoc withListOfDirective(hydra.util.ConsList<hydra.ext.io.shex.syntax.Directive> listOfDirective) {
+  public ShexDoc withListOfDirective(java.util.List<hydra.ext.io.shex.syntax.Directive> listOfDirective) {
     return new ShexDoc(listOfDirective, Sequence, PrefixDecl);
   }
 

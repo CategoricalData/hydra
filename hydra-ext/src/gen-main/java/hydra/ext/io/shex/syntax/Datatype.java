@@ -34,6 +34,8 @@ public class Datatype implements Serializable, Comparable<Datatype> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Datatype other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

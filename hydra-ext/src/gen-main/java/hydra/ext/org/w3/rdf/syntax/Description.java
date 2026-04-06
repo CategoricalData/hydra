@@ -45,11 +45,15 @@ public class Description implements Serializable, Comparable<Description> {
   @SuppressWarnings("unchecked")
   public int compareTo(Description other) {
     int cmp = 0;
-    cmp = ((Comparable) subject).compareTo(other.subject);
+    cmp = hydra.util.Comparing.compare(
+      subject,
+      other.subject);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) graph).compareTo(other.graph);
+    return hydra.util.Comparing.compare(
+      graph,
+      other.graph);
   }
 
   public Description withSubject(hydra.ext.org.w3.rdf.syntax.Node subject) {

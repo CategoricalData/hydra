@@ -51,11 +51,15 @@ public class TBinding<A> implements Serializable, Comparable<TBinding<A>> {
   @SuppressWarnings("unchecked")
   public int compareTo(TBinding other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) term).compareTo(other.term);
+    return hydra.util.Comparing.compare(
+      term,
+      other.term);
   }
 
   public TBinding withName(hydra.core.Name name) {

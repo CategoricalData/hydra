@@ -20,7 +20,7 @@ public interface Testing {
   }
 
   static hydra.core.Term testCaseWithMetadata(hydra.testing.TestCaseWithMetadata x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.TestCaseWithMetadata"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.TestCaseWithMetadata"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("name"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).name))),
       new hydra.core.Field(new hydra.core.Name("case"), hydra.encode.Testing.testCase((x).case_)),
       new hydra.core.Field(new hydra.core.Name("description"), new hydra.core.Term.Maybe(hydra.lib.maybes.Map.apply(
@@ -32,7 +32,7 @@ public interface Testing {
   }
 
   static hydra.core.Term testGroup(hydra.testing.TestGroup x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.TestGroup"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.TestGroup"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("name"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).name))),
       new hydra.core.Field(new hydra.core.Name("description"), new hydra.core.Term.Maybe(hydra.lib.maybes.Map.apply(
         (java.util.function.Function<String, hydra.core.Term>) (x2 -> new hydra.core.Term.Literal(new hydra.core.Literal.String_(x2))),
@@ -46,7 +46,7 @@ public interface Testing {
   }
 
   static hydra.core.Term universalTestCase(hydra.testing.UniversalTestCase x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.UniversalTestCase"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.UniversalTestCase"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("actual"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).actual))),
       new hydra.core.Field(new hydra.core.Name("expected"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).expected))))));
   }

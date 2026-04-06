@@ -2,26 +2,6 @@ package hydra.formatting
 
 import hydra.util.*
 
-import hydra.lib.chars
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.math
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def capitalize(v1: scala.Predef.String): scala.Predef.String = hydra.formatting.mapFirstLetter(hydra.lib.strings.toUpper)(v1)
 
 def convertCase(from: hydra.util.CaseConvention)(to: hydra.util.CaseConvention)(original: scala.Predef.String): scala.Predef.String =

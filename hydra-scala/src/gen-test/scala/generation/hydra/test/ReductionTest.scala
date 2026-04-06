@@ -701,9 +701,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      (hydra.lib.strings.splitOn! @ "foo" @ "bar")) == (
+      (hydra.lib.strings.splitOn @ "foo" @ "bar")) == (
 
-      (hydra.lib.strings.splitOn! @ "foo" @ "bar")))
+      (hydra.lib.strings.splitOn @ "foo" @ "bar")))
 
   }
 
@@ -711,9 +711,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      λx.(hydra.lib.strings.splitOn! @ "," @ x)) == (
+      λx.(hydra.lib.strings.splitOn @ "," @ x)) == (
 
-      λx.(hydra.lib.strings.splitOn! @ "," @ x)))
+      λx.(hydra.lib.strings.splitOn @ "," @ x)))
 
   }
 
@@ -731,9 +731,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.strings.toLower!) == (
+      hydra.lib.strings.toLower) == (
 
-      hydra.lib.strings.toLower!))
+      hydra.lib.strings.toLower))
 
   }
 
@@ -741,9 +741,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      hydra.lib.strings.splitOn!) == (
+      hydra.lib.strings.splitOn) == (
 
-      hydra.lib.strings.splitOn!))
+      hydra.lib.strings.splitOn))
 
   }
 
@@ -751,9 +751,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      λv1.(hydra.lib.strings.splitOn! @ foo @ v1)) == (
+      λv1.(hydra.lib.strings.splitOn @ foo @ v1)) == (
 
-      λv1.(hydra.lib.strings.splitOn! @ foo @ v1)))
+      λv1.(hydra.lib.strings.splitOn @ foo @ v1)))
 
   }
 
@@ -771,9 +771,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      λx.λv1.(hydra.lib.strings.splitOn! @ x @ v1)) == (
+      λx.λv1.(hydra.lib.strings.splitOn @ x @ v1)) == (
 
-      λx.λv1.(hydra.lib.strings.splitOn! @ x @ v1)))
+      λx.λv1.(hydra.lib.strings.splitOn @ x @ v1)))
 
   }
 
@@ -791,9 +791,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      let foo = hydra.lib.strings.splitOn! in foo) == (
+      let foo = hydra.lib.strings.splitOn in foo) == (
 
-      let foo = hydra.lib.strings.splitOn! in foo))
+      let foo = hydra.lib.strings.splitOn in foo))
 
   }
 
@@ -801,9 +801,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      (hydra.lib.strings.toLower! @ "FOO")) == (
+      (hydra.lib.strings.toLower @ "FOO")) == (
 
-      (hydra.lib.strings.toLower! @ "FOO")))
+      (hydra.lib.strings.toLower @ "FOO")))
 
   }
 
@@ -811,9 +811,9 @@ class ReductionTest extends AnyFunSuite {
 
     assert((
 
-      [λx.["foo"], λv1.(hydra.lib.strings.splitOn! @ "bar" @ v1)]) == (
+      [λx.["foo"], λv1.(hydra.lib.strings.splitOn @ "bar" @ v1)]) == (
 
-      [λx.["foo"], λv1.(hydra.lib.strings.splitOn! @ "bar" @ v1)]))
+      [λx.["foo"], λv1.(hydra.lib.strings.splitOn @ "bar" @ v1)]))
 
   }
 }

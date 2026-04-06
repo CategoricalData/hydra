@@ -49,11 +49,15 @@ public class FloatLiteral implements Serializable, Comparable<FloatLiteral> {
   @SuppressWarnings("unchecked")
   public int compareTo(FloatLiteral other) {
     int cmp = 0;
-    cmp = ((Comparable) value).compareTo(other.value);
+    cmp = hydra.util.Comparing.compare(
+      value,
+      other.value);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) precision).compareTo(other.precision);
+    return hydra.util.Comparing.compare(
+      precision,
+      other.precision);
   }
 
   public FloatLiteral withValue(java.math.BigDecimal value) {

@@ -15,9 +15,9 @@ public class MapLiteral implements Serializable, Comparable<MapLiteral> {
   /**
    * The key-value pairs
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.MapEntry> entries;
+  public final java.util.List<hydra.ext.lisp.syntax.MapEntry> entries;
 
-  public MapLiteral (hydra.util.ConsList<hydra.ext.lisp.syntax.MapEntry> entries) {
+  public MapLiteral (java.util.List<hydra.ext.lisp.syntax.MapEntry> entries) {
     this.entries = entries;
   }
 
@@ -40,6 +40,8 @@ public class MapLiteral implements Serializable, Comparable<MapLiteral> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(MapLiteral other) {
-    return ((Comparable) entries).compareTo(other.entries);
+    return hydra.util.Comparing.compare(
+      entries,
+      other.entries);
   }
 }

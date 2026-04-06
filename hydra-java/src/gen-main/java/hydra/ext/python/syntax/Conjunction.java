@@ -9,9 +9,9 @@ public class Conjunction implements Serializable, Comparable<Conjunction> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.Inversion> value;
+  public final java.util.List<hydra.ext.python.syntax.Inversion> value;
 
-  public Conjunction (hydra.util.ConsList<hydra.ext.python.syntax.Inversion> value) {
+  public Conjunction (java.util.List<hydra.ext.python.syntax.Inversion> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class Conjunction implements Serializable, Comparable<Conjunction> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Conjunction other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

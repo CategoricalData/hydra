@@ -42,11 +42,15 @@ public class Lambda implements Serializable, Comparable<Lambda> {
   @SuppressWarnings("unchecked")
   public int compareTo(Lambda other) {
     int cmp = 0;
-    cmp = ((Comparable) params).compareTo(other.params);
+    cmp = hydra.util.Comparing.compare(
+      params,
+      other.params);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
   public Lambda withParams(hydra.ext.python.syntax.LambdaParameters params) {

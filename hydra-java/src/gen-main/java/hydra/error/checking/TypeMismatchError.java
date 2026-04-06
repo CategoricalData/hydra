@@ -51,11 +51,15 @@ public class TypeMismatchError implements Serializable, Comparable<TypeMismatchE
   @SuppressWarnings("unchecked")
   public int compareTo(TypeMismatchError other) {
     int cmp = 0;
-    cmp = ((Comparable) expectedType).compareTo(other.expectedType);
+    cmp = hydra.util.Comparing.compare(
+      expectedType,
+      other.expectedType);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) actualType).compareTo(other.actualType);
+    return hydra.util.Comparing.compare(
+      actualType,
+      other.actualType);
   }
 
   public TypeMismatchError withExpectedType(hydra.core.Type expectedType) {

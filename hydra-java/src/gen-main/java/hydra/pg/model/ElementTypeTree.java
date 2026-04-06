@@ -16,9 +16,9 @@ public class ElementTypeTree<T> implements Serializable, Comparable<ElementTypeT
 
   public final hydra.pg.model.ElementType<T> self;
 
-  public final hydra.util.ConsList<hydra.pg.model.ElementTypeTree<T>> dependencies;
+  public final java.util.List<hydra.pg.model.ElementTypeTree<T>> dependencies;
 
-  public ElementTypeTree (hydra.pg.model.ElementType<T> self, hydra.util.ConsList<hydra.pg.model.ElementTypeTree<T>> dependencies) {
+  public ElementTypeTree (hydra.pg.model.ElementType<T> self, java.util.List<hydra.pg.model.ElementTypeTree<T>> dependencies) {
     this.self = self;
     this.dependencies = dependencies;
   }
@@ -45,18 +45,22 @@ public class ElementTypeTree<T> implements Serializable, Comparable<ElementTypeT
   @SuppressWarnings("unchecked")
   public int compareTo(ElementTypeTree other) {
     int cmp = 0;
-    cmp = ((Comparable) self).compareTo(other.self);
+    cmp = hydra.util.Comparing.compare(
+      self,
+      other.self);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) dependencies).compareTo(other.dependencies);
+    return hydra.util.Comparing.compare(
+      dependencies,
+      other.dependencies);
   }
 
   public ElementTypeTree withSelf(hydra.pg.model.ElementType<T> self) {
     return new ElementTypeTree(self, dependencies);
   }
 
-  public ElementTypeTree withDependencies(hydra.util.ConsList<hydra.pg.model.ElementTypeTree<T>> dependencies) {
+  public ElementTypeTree withDependencies(java.util.List<hydra.pg.model.ElementTypeTree<T>> dependencies) {
     return new ElementTypeTree(self, dependencies);
   }
 }

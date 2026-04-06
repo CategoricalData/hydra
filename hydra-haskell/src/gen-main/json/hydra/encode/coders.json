@@ -49,12 +49,12 @@
                                                             "union": {
                                                               "field": {"name": "unit", "term": {"unit": {}}},
                                                               "typeName": "hydra.core.Term"}},
-                                                          "domain": [{"unit": {}}],
+                                                          "domain": {"unit": {}},
                                                           "parameter": "_"}}}}}}],
                                             "typeName": "hydra.core.Field"}}}],
                                     "typeName": "hydra.core.Injection"}}},
                               "typeName": "hydra.core.Term"}},
-                          "domain": [{"unit": {}}],
+                          "domain": {"unit": {}},
                           "parameter": "y"}}}},
                   {
                     "name": "decode",
@@ -97,23 +97,20 @@
                                                             "union": {
                                                               "field": {"name": "unit", "term": {"unit": {}}},
                                                               "typeName": "hydra.core.Term"}},
-                                                          "domain": [{"unit": {}}],
+                                                          "domain": {"unit": {}},
                                                           "parameter": "_"}}}}}}],
                                             "typeName": "hydra.core.Field"}}}],
                                     "typeName": "hydra.core.Injection"}}},
                               "typeName": "hydra.core.Term"}},
-                          "domain": [{"unit": {}}],
+                          "domain": {"unit": {}},
                           "parameter": "y"}}}}],
-                "default": null,
                 "typeName": "hydra.coders.CoderDirection"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.core.Term"},
-                "domain": {"variable": "hydra.coders.CoderDirection"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.coders.CoderDirection"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.encode.coders.languageName",
@@ -153,20 +150,18 @@
                                                 "field": {"name": "string", "term": {"variable": "x"}},
                                                 "typeName": "hydra.core.Literal"}}},
                                           "typeName": "hydra.core.Term"}},
-                                      "domain": [{"literal": {"string": {}}}],
+                                      "domain": {"literal": {"string": {}}},
                                       "parameter": "x"}}}}}}],
                         "typeName": "hydra.core.WrappedTerm"}}},
                   "typeName": "hydra.core.Term"}},
-              "domain": [{"variable": "hydra.coders.LanguageName"}],
+              "domain": {"variable": "hydra.coders.LanguageName"},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.core.Term"},
-                "domain": {"variable": "hydra.coders.LanguageName"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.coders.LanguageName"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.encode.coders.traversalOrder",
@@ -216,12 +211,12 @@
                                                             "union": {
                                                               "field": {"name": "unit", "term": {"unit": {}}},
                                                               "typeName": "hydra.core.Term"}},
-                                                          "domain": [{"unit": {}}],
+                                                          "domain": {"unit": {}},
                                                           "parameter": "_"}}}}}}],
                                             "typeName": "hydra.core.Field"}}}],
                                     "typeName": "hydra.core.Injection"}}},
                               "typeName": "hydra.core.Term"}},
-                          "domain": [{"unit": {}}],
+                          "domain": {"unit": {}},
                           "parameter": "y"}}}},
                   {
                     "name": "post",
@@ -264,24 +259,21 @@
                                                             "union": {
                                                               "field": {"name": "unit", "term": {"unit": {}}},
                                                               "typeName": "hydra.core.Term"}},
-                                                          "domain": [{"unit": {}}],
+                                                          "domain": {"unit": {}},
                                                           "parameter": "_"}}}}}}],
                                             "typeName": "hydra.core.Field"}}}],
                                     "typeName": "hydra.core.Injection"}}},
                               "typeName": "hydra.core.Term"}},
-                          "domain": [{"unit": {}}],
+                          "domain": {"unit": {}},
                           "parameter": "y"}}}}],
-                "default": null,
                 "typeName": "hydra.coders.TraversalOrder"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.core.Term"},
-                "domain": {"variable": "hydra.coders.TraversalOrder"}}},
-            "variables": []}]}}],
-  "description": ["Term encoders for hydra.coders"],
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.coders.TraversalOrder"}}},
+          "variables": []}}}],
+  "description": "Term encoders for hydra.coders",
   "namespace": "hydra.encode.coders",
   "termDependencies": [
     "hydra.encode.core",

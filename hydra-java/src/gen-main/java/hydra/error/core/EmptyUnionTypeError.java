@@ -40,6 +40,8 @@ public class EmptyUnionTypeError implements Serializable, Comparable<EmptyUnionT
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(EmptyUnionTypeError other) {
-    return ((Comparable) location).compareTo(other.location);
+    return hydra.util.Comparing.compare(
+      location,
+      other.location);
   }
 }

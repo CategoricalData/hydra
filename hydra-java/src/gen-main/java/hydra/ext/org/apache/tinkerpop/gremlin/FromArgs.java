@@ -76,7 +76,9 @@ public abstract class FromArgs implements Serializable, Comparable<FromArgs> {
         return tagCmp;
       }
       String_ o = (String_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class FromArgs implements Serializable, Comparable<FromArgs> {
         return tagCmp;
       }
       Vertex o = (Vertex) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class FromArgs implements Serializable, Comparable<FromArgs> {
         return tagCmp;
       }
       Traversal o = (Traversal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

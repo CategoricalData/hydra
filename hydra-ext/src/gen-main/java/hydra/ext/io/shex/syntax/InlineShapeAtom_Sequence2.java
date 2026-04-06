@@ -42,11 +42,15 @@ public class InlineShapeAtom_Sequence2 implements Serializable, Comparable<Inlin
   @SuppressWarnings("unchecked")
   public int compareTo(InlineShapeAtom_Sequence2 other) {
     int cmp = 0;
-    cmp = ((Comparable) InlineShapeOrRef).compareTo(other.InlineShapeOrRef);
+    cmp = hydra.util.Comparing.compare(
+      InlineShapeOrRef,
+      other.InlineShapeOrRef);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) NodeConstraint).compareTo(other.NodeConstraint);
+    return hydra.util.Comparing.compare(
+      NodeConstraint,
+      other.NodeConstraint);
   }
 
   public InlineShapeAtom_Sequence2 withInlineShapeOrRef(hydra.ext.io.shex.syntax.InlineShapeOrRef InlineShapeOrRef) {

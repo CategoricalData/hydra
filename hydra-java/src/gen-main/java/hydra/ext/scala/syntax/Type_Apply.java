@@ -13,9 +13,9 @@ public class Type_Apply implements Serializable, Comparable<Type_Apply> {
 
   public final hydra.ext.scala.syntax.Type tpe;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Type> args;
+  public final java.util.List<hydra.ext.scala.syntax.Type> args;
 
-  public Type_Apply (hydra.ext.scala.syntax.Type tpe, hydra.util.ConsList<hydra.ext.scala.syntax.Type> args) {
+  public Type_Apply (hydra.ext.scala.syntax.Type tpe, java.util.List<hydra.ext.scala.syntax.Type> args) {
     this.tpe = tpe;
     this.args = args;
   }
@@ -42,18 +42,22 @@ public class Type_Apply implements Serializable, Comparable<Type_Apply> {
   @SuppressWarnings("unchecked")
   public int compareTo(Type_Apply other) {
     int cmp = 0;
-    cmp = ((Comparable) tpe).compareTo(other.tpe);
+    cmp = hydra.util.Comparing.compare(
+      tpe,
+      other.tpe);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) args).compareTo(other.args);
+    return hydra.util.Comparing.compare(
+      args,
+      other.args);
   }
 
   public Type_Apply withTpe(hydra.ext.scala.syntax.Type tpe) {
     return new Type_Apply(tpe, args);
   }
 
-  public Type_Apply withArgs(hydra.util.ConsList<hydra.ext.scala.syntax.Type> args) {
+  public Type_Apply withArgs(java.util.List<hydra.ext.scala.syntax.Type> args) {
     return new Type_Apply(tpe, args);
   }
 }

@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.AnnotatedApplication",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -18,7 +17,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Application",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -32,7 +30,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Arg",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -49,7 +46,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Binder",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -75,7 +71,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.CaseItem",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -92,7 +87,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Cofix",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -106,7 +100,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.CofixBody",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -126,7 +119,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.CofixQual",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -140,7 +132,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.CofixWith",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -154,7 +145,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Equation",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -169,7 +159,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.ExistentialVariable",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -184,7 +173,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.ExistentialVariableVariant",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "placeholder", "type": {"unit": {}}},
@@ -198,14 +186,12 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.FieldIdent",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Fix",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -219,7 +205,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.FixAnnot",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -236,7 +221,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.FixAnnot_Measure",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -253,7 +237,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.FixAnnot_Wf",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -267,7 +250,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Fix_Decl",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -290,7 +272,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Fix_Qual",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -304,7 +285,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.FixWith",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -318,7 +298,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Forall",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -332,7 +311,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.ForallOrFun",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -346,7 +324,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Fun",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -360,7 +337,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.GeneralizingBinder",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -401,14 +377,12 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Ident",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.fr.inria.coq.syntax.String"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.IdentArg",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -422,7 +396,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.If",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -448,7 +421,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.ImplicitBinders",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -486,7 +458,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Let",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -506,7 +477,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.LetBinder",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -531,7 +501,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.LetBindings",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -545,7 +514,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.LetNamed",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -559,7 +527,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.LetDestructuring",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -579,7 +546,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.LetDestructuring_Variant1",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -596,7 +562,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.LetDestructuring_Variant2",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -613,7 +578,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.LetDestructuring_Variant3",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -633,7 +597,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Match",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -651,7 +614,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Name",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"maybe": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}}},
           "variables": []}}},
@@ -659,7 +621,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Natural",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -672,7 +633,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.NaturalArg",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -686,7 +646,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.NormalApplication",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -700,14 +659,12 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Number",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"literal": {"float": {"bigfloat": {}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.OneTerm",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -721,7 +678,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.OpenBinders",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -735,7 +691,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Pattern",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -749,7 +704,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Pattern0",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -773,7 +727,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Pattern1",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -787,7 +740,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Pattern10",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -804,7 +756,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Pattern10_As",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -818,7 +769,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Pattern10_Patterns",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -832,7 +782,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Pattern10_Qualid",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -846,7 +795,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.PrimitiveNotations",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -860,7 +808,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Qualid",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -880,7 +827,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.QualidAndPattern",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -894,7 +840,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.QualidAnnotated",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -908,7 +853,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.ReturnAs",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -922,14 +866,12 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.ScopeKey",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.fr.inria.coq.syntax.Ident"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Sort",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -979,15 +921,11 @@
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.String",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Term",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1013,7 +951,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Term0",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1042,7 +979,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Term1",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "projection", "type": {"unit": {}}},
@@ -1055,7 +991,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Term10",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1069,7 +1004,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Term100",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1083,14 +1017,12 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Type",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.fr.inria.coq.syntax.Term"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.TypeCast",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1107,7 +1039,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.TypeCastOperator",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1148,7 +1079,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.TypeBinders",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1162,7 +1092,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.TypeclassConstraint",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1177,7 +1106,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.UnivAnnot",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.fr.inria.coq.syntax.UniverseLevel"}}},
           "variables": []}}},
@@ -1185,7 +1113,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Universe",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1199,7 +1126,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.Universe_Expr",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1213,7 +1139,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.UniverseLevel",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "set", "type": {"unit": {}}},
@@ -1228,7 +1153,6 @@
       "type": {
         "name": "hydra.ext.fr.inria.coq.syntax.UniverseName",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1237,8 +1161,7 @@
               {"name": "set", "type": {"unit": {}}},
               {"name": "prop", "type": {"unit": {}}}]},
           "variables": []}}}],
-  "description": [
-    "A model for Coq core and extensions. Based on the Coq 8.15 grammar:\n  https://coq.github.io/doc/v8.15/refman/language/core/basic.html#essential-vocabulary"],
+  "description": "A model for Coq core and extensions. Based on the Coq 8.15 grammar:\n  https://coq.github.io/doc/v8.15/refman/language/core/basic.html#essential-vocabulary",
   "namespace": "hydra.ext.fr.inria.coq.syntax",
   "termDependencies": [],
   "typeDependencies": []}

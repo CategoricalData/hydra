@@ -4,20 +4,6 @@ import hydra.json.model.*
 
 import hydra.parsing.*
 
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.strings
-
 lazy val digit: hydra.parsing.Parser[Int] = hydra.parsers.satisfy((c: Int) =>
   hydra.lib.logic.and(hydra.lib.equality.gte[Int](c)(48))(hydra.lib.equality.lte[Int](c)(57)))
 

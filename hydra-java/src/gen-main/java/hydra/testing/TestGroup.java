@@ -31,14 +31,14 @@ public class TestGroup implements Serializable, Comparable<TestGroup> {
   /**
    * Zero or more subgroups
    */
-  public final hydra.util.ConsList<hydra.testing.TestGroup> subgroups;
+  public final java.util.List<hydra.testing.TestGroup> subgroups;
 
   /**
    * Zero or more test cases
    */
-  public final hydra.util.ConsList<hydra.testing.TestCaseWithMetadata> cases;
+  public final java.util.List<hydra.testing.TestCaseWithMetadata> cases;
 
-  public TestGroup (String name, hydra.util.Maybe<String> description, hydra.util.ConsList<hydra.testing.TestGroup> subgroups, hydra.util.ConsList<hydra.testing.TestCaseWithMetadata> cases) {
+  public TestGroup (String name, hydra.util.Maybe<String> description, java.util.List<hydra.testing.TestGroup> subgroups, java.util.List<hydra.testing.TestCaseWithMetadata> cases) {
     this.name = name;
     this.description = description;
     this.subgroups = subgroups;
@@ -71,19 +71,27 @@ public class TestGroup implements Serializable, Comparable<TestGroup> {
   @SuppressWarnings("unchecked")
   public int compareTo(TestGroup other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) description).compareTo(other.description);
+    cmp = hydra.util.Comparing.compare(
+      description,
+      other.description);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) subgroups).compareTo(other.subgroups);
+    cmp = hydra.util.Comparing.compare(
+      subgroups,
+      other.subgroups);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) cases).compareTo(other.cases);
+    return hydra.util.Comparing.compare(
+      cases,
+      other.cases);
   }
 
   public TestGroup withName(String name) {
@@ -94,11 +102,11 @@ public class TestGroup implements Serializable, Comparable<TestGroup> {
     return new TestGroup(name, description, subgroups, cases);
   }
 
-  public TestGroup withSubgroups(hydra.util.ConsList<hydra.testing.TestGroup> subgroups) {
+  public TestGroup withSubgroups(java.util.List<hydra.testing.TestGroup> subgroups) {
     return new TestGroup(name, description, subgroups, cases);
   }
 
-  public TestGroup withCases(hydra.util.ConsList<hydra.testing.TestCaseWithMetadata> cases) {
+  public TestGroup withCases(java.util.List<hydra.testing.TestCaseWithMetadata> cases) {
     return new TestGroup(name, description, subgroups, cases);
   }
 }

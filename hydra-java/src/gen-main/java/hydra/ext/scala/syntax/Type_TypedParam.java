@@ -42,11 +42,15 @@ public class Type_TypedParam implements Serializable, Comparable<Type_TypedParam
   @SuppressWarnings("unchecked")
   public int compareTo(Type_TypedParam other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) typ).compareTo(other.typ);
+    return hydra.util.Comparing.compare(
+      typ,
+      other.typ);
   }
 
   public Type_TypedParam withName(hydra.ext.scala.syntax.Name name) {

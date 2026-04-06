@@ -42,40 +42,37 @@
                             "typeName": "hydra.core.Injection"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {"string": "A post-unification consistency check failure"}}}],
-                        "body": {"variable": "hydra.error.checking.IncorrectUnificationError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "A post-unification consistency check failure"}}}],
+                      "body": {"variable": "hydra.error.checking.IncorrectUnificationError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.CheckingError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {"string": "A post-unification consistency check failure"}}}],
-                        "body": {"variable": "hydra.error.checking.IncorrectUnificationError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.CheckingError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "A post-unification consistency check failure"}}}],
+                      "body": {"variable": "hydra.error.checking.IncorrectUnificationError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.checkingErrorNotAForallType",
@@ -118,40 +115,37 @@
                             "typeName": "hydra.core.Injection"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {"string": "A type that is not a forall type when one was expected"}}}],
-                        "body": {"variable": "hydra.error.checking.NotAForallTypeError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "A type that is not a forall type when one was expected"}}}],
+                      "body": {"variable": "hydra.error.checking.NotAForallTypeError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.CheckingError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {"string": "A type that is not a forall type when one was expected"}}}],
-                        "body": {"variable": "hydra.error.checking.NotAForallTypeError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.CheckingError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "A type that is not a forall type when one was expected"}}}],
+                      "body": {"variable": "hydra.error.checking.NotAForallTypeError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.checkingErrorNotAFunctionType",
@@ -194,40 +188,37 @@
                             "typeName": "hydra.core.Injection"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {"string": "A type that is not a function type when one was expected"}}}],
-                        "body": {"variable": "hydra.error.checking.NotAFunctionTypeError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "A type that is not a function type when one was expected"}}}],
+                      "body": {"variable": "hydra.error.checking.NotAFunctionTypeError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.CheckingError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {"string": "A type that is not a function type when one was expected"}}}],
-                        "body": {"variable": "hydra.error.checking.NotAFunctionTypeError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.CheckingError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "A type that is not a function type when one was expected"}}}],
+                      "body": {"variable": "hydra.error.checking.NotAFunctionTypeError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.checkingErrorTypeArityMismatch",
@@ -270,42 +261,39 @@
                             "typeName": "hydra.core.Injection"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {
-                                "string": "A type constructor applied to the wrong number of arguments"}}}],
-                        "body": {"variable": "hydra.error.checking.TypeArityMismatchError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "A type constructor applied to the wrong number of arguments"}}}],
+                      "body": {"variable": "hydra.error.checking.TypeArityMismatchError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.CheckingError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {
-                                "string": "A type constructor applied to the wrong number of arguments"}}}],
-                        "body": {"variable": "hydra.error.checking.TypeArityMismatchError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.CheckingError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "A type constructor applied to the wrong number of arguments"}}}],
+                      "body": {"variable": "hydra.error.checking.TypeArityMismatchError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.checkingErrorTypeMismatch",
@@ -348,40 +336,37 @@
                             "typeName": "hydra.core.Injection"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {"string": "A type mismatch between expected and actual types"}}}],
-                        "body": {"variable": "hydra.error.checking.TypeMismatchError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "A type mismatch between expected and actual types"}}}],
+                      "body": {"variable": "hydra.error.checking.TypeMismatchError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.CheckingError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {"string": "A type mismatch between expected and actual types"}}}],
-                        "body": {"variable": "hydra.error.checking.TypeMismatchError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.CheckingError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "A type mismatch between expected and actual types"}}}],
+                      "body": {"variable": "hydra.error.checking.TypeMismatchError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.checkingErrorUnboundTypeVariables",
@@ -424,38 +409,35 @@
                             "typeName": "hydra.core.Injection"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Type variables that are not bound in scope"}}}],
-                        "body": {"variable": "hydra.error.checking.UnboundTypeVariablesError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Type variables that are not bound in scope"}}}],
+                      "body": {"variable": "hydra.error.checking.UnboundTypeVariablesError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.CheckingError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "Type variables that are not bound in scope"}}}],
-                        "body": {"variable": "hydra.error.checking.UnboundTypeVariablesError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.CheckingError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Type variables that are not bound in scope"}}}],
+                      "body": {"variable": "hydra.error.checking.UnboundTypeVariablesError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.checkingErrorUnequalTypes",
@@ -498,40 +480,37 @@
                             "typeName": "hydra.core.Injection"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {"string": "Multiple types that should be equal but are not"}}}],
-                        "body": {"variable": "hydra.error.checking.UnequalTypesError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "Multiple types that should be equal but are not"}}}],
+                      "body": {"variable": "hydra.error.checking.UnequalTypesError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.CheckingError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {"string": "Multiple types that should be equal but are not"}}}],
-                        "body": {"variable": "hydra.error.checking.UnequalTypesError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.CheckingError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "Multiple types that should be equal but are not"}}}],
+                      "body": {"variable": "hydra.error.checking.UnequalTypesError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.checkingErrorUnsupportedTermVariant",
@@ -574,40 +553,37 @@
                             "typeName": "hydra.core.Injection"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {"string": "A term variant that the type checker does not support"}}}],
-                        "body": {"variable": "hydra.error.checking.UnsupportedTermVariantError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "A term variant that the type checker does not support"}}}],
+                      "body": {"variable": "hydra.error.checking.UnsupportedTermVariantError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.CheckingError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {"string": "A term variant that the type checker does not support"}}}],
-                        "body": {"variable": "hydra.error.checking.UnsupportedTermVariantError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.CheckingError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "A term variant that the type checker does not support"}}}],
+                      "body": {"variable": "hydra.error.checking.UnsupportedTermVariantError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.checkingErrorUntypedLambda",
@@ -650,42 +626,39 @@
                             "typeName": "hydra.core.Injection"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {
-                                "string": "A lambda expression without a type annotation on its parameter"}}}],
-                        "body": {"variable": "hydra.error.checking.UntypedLambdaError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "A lambda expression without a type annotation on its parameter"}}}],
+                      "body": {"variable": "hydra.error.checking.UntypedLambdaError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.CheckingError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {
-                                "string": "A lambda expression without a type annotation on its parameter"}}}],
-                        "body": {"variable": "hydra.error.checking.UntypedLambdaError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.CheckingError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "A lambda expression without a type annotation on its parameter"}}}],
+                      "body": {"variable": "hydra.error.checking.UntypedLambdaError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.checkingErrorUntypedLetBinding",
@@ -728,38 +701,35 @@
                             "typeName": "hydra.core.Injection"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A let binding without a type annotation"}}}],
-                        "body": {"variable": "hydra.error.checking.UntypedLetBindingError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "A let binding without a type annotation"}}}],
+                      "body": {"variable": "hydra.error.checking.UntypedLetBindingError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.CheckingError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "A let binding without a type annotation"}}}],
-                        "body": {"variable": "hydra.error.checking.UntypedLetBindingError"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.CheckingError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "A let binding without a type annotation"}}}],
+                      "body": {"variable": "hydra.error.checking.UntypedLetBindingError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.incorrectUnificationError",
@@ -805,40 +775,37 @@
                             "typeName": "hydra.core.Record"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {"string": "The substitution that failed the consistency check"}}}],
-                        "body": {"variable": "hydra.typing.TypeSubst"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "The substitution that failed the consistency check"}}}],
+                      "body": {"variable": "hydra.typing.TypeSubst"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "substitution"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.IncorrectUnificationError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {"string": "The substitution that failed the consistency check"}}}],
-                        "body": {"variable": "hydra.typing.TypeSubst"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.IncorrectUnificationError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "The substitution that failed the consistency check"}}}],
+                      "body": {"variable": "hydra.typing.TypeSubst"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.incorrectUnificationErrorSubstitution",
@@ -897,33 +864,30 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.IncorrectUnificationError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.IncorrectUnificationError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {"string": "The substitution that failed the consistency check"}}}],
-                        "body": {"variable": "hydra.typing.TypeSubst"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.IncorrectUnificationError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "The substitution that failed the consistency check"}}}],
+                      "body": {"variable": "hydra.typing.TypeSubst"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.IncorrectUnificationError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.incorrectUnificationErrorWithSubstitution",
@@ -972,36 +936,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {
-                                    "literal": {"string": "The substitution that failed the consistency check"}}}],
-                              "body": {"variable": "hydra.typing.TypeSubst"}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.IncorrectUnificationError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.error.checking.IncorrectUnificationError"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -1012,12 +946,38 @@
                                 "@value": {
                                   "literal": {"string": "The substitution that failed the consistency check"}}}],
                             "body": {"variable": "hydra.typing.TypeSubst"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.IncorrectUnificationError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.IncorrectUnificationError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.checking.IncorrectUnificationError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {
+                                "literal": {"string": "The substitution that failed the consistency check"}}}],
+                          "body": {"variable": "hydra.typing.TypeSubst"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.IncorrectUnificationError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.notAForallTypeError",
@@ -1081,41 +1041,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The type arguments that were being applied"}}}],
-                              "body": {"list": {"variable": "hydra.core.Type"}}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "typeArguments"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The actual type encountered"}}}],
-                        "body": {"variable": "hydra.core.Type"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "type"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -1125,18 +1050,49 @@
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The type arguments that were being applied"}}}],
                             "body": {"list": {"variable": "hydra.core.Type"}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The actual type encountered"}}}],
-                        "body": {"variable": "hydra.core.Type"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "typeArguments"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The actual type encountered"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "type"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {"literal": {"string": "The type arguments that were being applied"}}}],
+                          "body": {"list": {"variable": "hydra.core.Type"}}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The actual type encountered"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.notAForallTypeErrorType",
@@ -1194,32 +1150,29 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The actual type encountered"}}}],
-                        "body": {"variable": "hydra.core.Type"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The actual type encountered"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.notAForallTypeErrorTypeArguments",
@@ -1277,32 +1230,29 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The type arguments that were being applied"}}}],
-                        "body": {"list": {"variable": "hydra.core.Type"}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The type arguments that were being applied"}}}],
+                      "body": {"list": {"variable": "hydra.core.Type"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.notAForallTypeErrorWithType",
@@ -1410,35 +1360,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The actual type encountered"}}}],
-                              "body": {"variable": "hydra.core.Type"}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -1448,12 +1369,37 @@
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The actual type encountered"}}}],
                             "body": {"variable": "hydra.core.Type"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {"literal": {"string": "The actual type encountered"}}}],
+                          "body": {"variable": "hydra.core.Type"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.notAForallTypeErrorWithTypeArguments",
@@ -1561,35 +1507,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The type arguments that were being applied"}}}],
-                              "body": {"list": {"variable": "hydra.core.Type"}}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -1599,12 +1516,37 @@
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The type arguments that were being applied"}}}],
                             "body": {"list": {"variable": "hydra.core.Type"}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {"literal": {"string": "The type arguments that were being applied"}}}],
+                          "body": {"list": {"variable": "hydra.core.Type"}}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.NotAForallTypeError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.notAFunctionTypeError",
@@ -1649,38 +1591,35 @@
                             "typeName": "hydra.core.Record"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The actual type encountered"}}}],
-                        "body": {"variable": "hydra.core.Type"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The actual type encountered"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "type"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.NotAFunctionTypeError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The actual type encountered"}}}],
-                        "body": {"variable": "hydra.core.Type"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.NotAFunctionTypeError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The actual type encountered"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.notAFunctionTypeErrorType",
@@ -1738,32 +1677,29 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.NotAFunctionTypeError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.NotAFunctionTypeError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The actual type encountered"}}}],
-                        "body": {"variable": "hydra.core.Type"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.NotAFunctionTypeError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The actual type encountered"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.NotAFunctionTypeError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.notAFunctionTypeErrorWithType",
@@ -1811,35 +1747,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The actual type encountered"}}}],
-                              "body": {"variable": "hydra.core.Type"}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.NotAFunctionTypeError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.error.checking.NotAFunctionTypeError"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -1849,12 +1756,37 @@
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The actual type encountered"}}}],
                             "body": {"variable": "hydra.core.Type"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.NotAFunctionTypeError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.NotAFunctionTypeError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.checking.NotAFunctionTypeError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {"literal": {"string": "The actual type encountered"}}}],
+                          "body": {"variable": "hydra.core.Type"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.NotAFunctionTypeError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.typeArityMismatchError",
@@ -1956,91 +1888,29 @@
                                               "typeName": "hydra.core.Record"}}},
                                         "typeName": "hydra.core.Term"}},
                                     "typeName": "hydra.phantoms.TTerm"}},
-                                "domain": [
-                                  {
-                                    "application": {
-                                      "argument": {
-                                        "annotated": {
-                                          "annotation": [
-                                            {
-                                              "@key": "description",
-                                              "@value": {"literal": {"string": "The type arguments that were provided"}}}],
-                                          "body": {"list": {"variable": "hydra.core.Type"}}}},
-                                      "function": {"variable": "hydra.phantoms.TTerm"}}}],
+                                "domain": {
+                                  "application": {
+                                    "argument": {
+                                      "annotated": {
+                                        "annotation": [
+                                          {
+                                            "@key": "description",
+                                            "@value": {"literal": {"string": "The type arguments that were provided"}}}],
+                                        "body": {"list": {"variable": "hydra.core.Type"}}}},
+                                    "function": {"variable": "hydra.phantoms.TTerm"}}},
                                 "parameter": "typeArguments"}}},
-                          "domain": [
-                            {
-                              "application": {
-                                "argument": {
-                                  "annotated": {
-                                    "annotation": [
-                                      {
-                                        "@key": "description",
-                                        "@value": {
-                                          "literal": {"string": "The actual number of type arguments provided"}}}],
-                                    "body": {"literal": {"integer": {"int32": {}}}}}},
-                                "function": {"variable": "hydra.phantoms.TTerm"}}}],
+                          "domain": {
+                            "application": {
+                              "argument": {
+                                "annotated": {
+                                  "annotation": [
+                                    {
+                                      "@key": "description",
+                                      "@value": {
+                                        "literal": {"string": "The actual number of type arguments provided"}}}],
+                                  "body": {"literal": {"integer": {"int32": {}}}}}},
+                              "function": {"variable": "hydra.phantoms.TTerm"}}},
                           "parameter": "actualArity"}}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The expected number of type arguments"}}}],
-                              "body": {"literal": {"integer": {"int32": {}}}}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "expectedArity"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The type being checked"}}}],
-                        "body": {"variable": "hydra.core.Type"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "type"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "function": {
-                        "codomain": {
-                          "function": {
-                            "codomain": {
-                              "application": {
-                                "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
-                                "function": {"variable": "hydra.phantoms.TTerm"}}},
-                            "domain": {
-                              "application": {
-                                "argument": {
-                                  "annotated": {
-                                    "annotation": [
-                                      {
-                                        "@key": "description",
-                                        "@value": {"literal": {"string": "The type arguments that were provided"}}}],
-                                    "body": {"list": {"variable": "hydra.core.Type"}}}},
-                                "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                        "domain": {
-                          "application": {
-                            "argument": {
-                              "annotated": {
-                                "annotation": [
-                                  {
-                                    "@key": "description",
-                                    "@value": {
-                                      "literal": {"string": "The actual number of type arguments provided"}}}],
-                                "body": {"literal": {"integer": {"int32": {}}}}}},
-                            "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -2050,18 +1920,74 @@
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The expected number of type arguments"}}}],
                             "body": {"literal": {"integer": {"int32": {}}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The type being checked"}}}],
-                        "body": {"variable": "hydra.core.Type"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "expectedArity"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The type being checked"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "type"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {
+                        "function": {
+                          "codomain": {
+                            "application": {
+                              "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
+                              "function": {"variable": "hydra.phantoms.TTerm"}}},
+                          "domain": {
+                            "application": {
+                              "argument": {
+                                "annotated": {
+                                  "annotation": [
+                                    {
+                                      "@key": "description",
+                                      "@value": {"literal": {"string": "The type arguments that were provided"}}}],
+                                  "body": {"list": {"variable": "hydra.core.Type"}}}},
+                              "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+                      "domain": {
+                        "application": {
+                          "argument": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "description",
+                                  "@value": {
+                                    "literal": {"string": "The actual number of type arguments provided"}}}],
+                              "body": {"literal": {"integer": {"int32": {}}}}}},
+                          "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {"literal": {"string": "The expected number of type arguments"}}}],
+                          "body": {"literal": {"integer": {"int32": {}}}}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The type being checked"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.typeArityMismatchErrorType",
@@ -2119,32 +2045,29 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The type being checked"}}}],
-                        "body": {"variable": "hydra.core.Type"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The type being checked"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.typeArityMismatchErrorExpectedArity",
@@ -2202,32 +2125,29 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The expected number of type arguments"}}}],
-                        "body": {"literal": {"integer": {"int32": {}}}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The expected number of type arguments"}}}],
+                      "body": {"literal": {"integer": {"int32": {}}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.typeArityMismatchErrorActualArity",
@@ -2285,33 +2205,30 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {"string": "The actual number of type arguments provided"}}}],
-                        "body": {"literal": {"integer": {"int32": {}}}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "The actual number of type arguments provided"}}}],
+                      "body": {"literal": {"integer": {"int32": {}}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.typeArityMismatchErrorTypeArguments",
@@ -2369,32 +2286,29 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The type arguments that were provided"}}}],
-                        "body": {"list": {"variable": "hydra.core.Type"}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The type arguments that were provided"}}}],
+                      "body": {"list": {"variable": "hydra.core.Type"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.typeArityMismatchErrorWithType",
@@ -2622,35 +2536,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The type being checked"}}}],
-                              "body": {"variable": "hydra.core.Type"}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -2660,12 +2545,37 @@
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The type being checked"}}}],
                             "body": {"variable": "hydra.core.Type"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {"literal": {"string": "The type being checked"}}}],
+                          "body": {"variable": "hydra.core.Type"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.typeArityMismatchErrorWithExpectedArity",
@@ -2893,35 +2803,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The expected number of type arguments"}}}],
-                              "body": {"literal": {"integer": {"int32": {}}}}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -2931,12 +2812,37 @@
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The expected number of type arguments"}}}],
                             "body": {"literal": {"integer": {"int32": {}}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {"literal": {"string": "The expected number of type arguments"}}}],
+                          "body": {"literal": {"integer": {"int32": {}}}}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.typeArityMismatchErrorWithActualArity",
@@ -3164,36 +3070,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {
-                                    "literal": {"string": "The actual number of type arguments provided"}}}],
-                              "body": {"literal": {"integer": {"int32": {}}}}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -3204,12 +3080,38 @@
                                 "@value": {
                                   "literal": {"string": "The actual number of type arguments provided"}}}],
                             "body": {"literal": {"integer": {"int32": {}}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {
+                                "literal": {"string": "The actual number of type arguments provided"}}}],
+                          "body": {"literal": {"integer": {"int32": {}}}}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.typeArityMismatchErrorWithTypeArguments",
@@ -3437,35 +3339,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The type arguments that were provided"}}}],
-                              "body": {"list": {"variable": "hydra.core.Type"}}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -3475,12 +3348,37 @@
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The type arguments that were provided"}}}],
                             "body": {"list": {"variable": "hydra.core.Type"}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {"literal": {"string": "The type arguments that were provided"}}}],
+                          "body": {"list": {"variable": "hydra.core.Type"}}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.TypeArityMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.typeMismatchError",
@@ -3544,41 +3442,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The actual type encountered"}}}],
-                              "body": {"variable": "hydra.core.Type"}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "actualType"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The expected type"}}}],
-                        "body": {"variable": "hydra.core.Type"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "expectedType"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.error.checking.TypeMismatchError"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -3588,18 +3451,49 @@
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The actual type encountered"}}}],
                             "body": {"variable": "hydra.core.Type"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The expected type"}}}],
-                        "body": {"variable": "hydra.core.Type"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "actualType"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The expected type"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "expectedType"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.checking.TypeMismatchError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {"literal": {"string": "The actual type encountered"}}}],
+                          "body": {"variable": "hydra.core.Type"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The expected type"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.typeMismatchErrorExpectedType",
@@ -3657,32 +3551,29 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.TypeMismatchError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.TypeMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The expected type"}}}],
-                        "body": {"variable": "hydra.core.Type"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.TypeMismatchError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The expected type"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.TypeMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.typeMismatchErrorActualType",
@@ -3740,32 +3631,29 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.TypeMismatchError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.TypeMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The actual type encountered"}}}],
-                        "body": {"variable": "hydra.core.Type"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.TypeMismatchError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The actual type encountered"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.TypeMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.typeMismatchErrorWithExpectedType",
@@ -3873,35 +3761,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The expected type"}}}],
-                              "body": {"variable": "hydra.core.Type"}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.TypeMismatchError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.error.checking.TypeMismatchError"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -3911,12 +3770,37 @@
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The expected type"}}}],
                             "body": {"variable": "hydra.core.Type"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.TypeMismatchError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.TypeMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.checking.TypeMismatchError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {"literal": {"string": "The expected type"}}}],
+                          "body": {"variable": "hydra.core.Type"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.TypeMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.typeMismatchErrorWithActualType",
@@ -4024,35 +3908,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The actual type encountered"}}}],
-                              "body": {"variable": "hydra.core.Type"}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.TypeMismatchError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.error.checking.TypeMismatchError"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -4062,12 +3917,37 @@
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The actual type encountered"}}}],
                             "body": {"variable": "hydra.core.Type"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.TypeMismatchError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.TypeMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.checking.TypeMismatchError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {"literal": {"string": "The actual type encountered"}}}],
+                          "body": {"variable": "hydra.core.Type"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.TypeMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.unboundTypeVariablesError",
@@ -4132,41 +4012,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The type containing the unbound variables"}}}],
-                              "body": {"variable": "hydra.core.Type"}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "type"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The set of unbound type variable names"}}}],
-                        "body": {"set": {"variable": "hydra.core.Name"}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "variables"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -4176,18 +4021,49 @@
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The type containing the unbound variables"}}}],
                             "body": {"variable": "hydra.core.Type"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The set of unbound type variable names"}}}],
-                        "body": {"set": {"variable": "hydra.core.Name"}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "type"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The set of unbound type variable names"}}}],
+                      "body": {"set": {"variable": "hydra.core.Name"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "variables"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {"literal": {"string": "The type containing the unbound variables"}}}],
+                          "body": {"variable": "hydra.core.Type"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The set of unbound type variable names"}}}],
+                      "body": {"set": {"variable": "hydra.core.Name"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.unboundTypeVariablesErrorVariables",
@@ -4246,32 +4122,29 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The set of unbound type variable names"}}}],
-                        "body": {"set": {"variable": "hydra.core.Name"}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The set of unbound type variable names"}}}],
+                      "body": {"set": {"variable": "hydra.core.Name"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.unboundTypeVariablesErrorType",
@@ -4330,32 +4203,29 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The type containing the unbound variables"}}}],
-                        "body": {"variable": "hydra.core.Type"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The type containing the unbound variables"}}}],
+                      "body": {"variable": "hydra.core.Type"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.unboundTypeVariablesErrorWithVariables",
@@ -4465,35 +4335,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The set of unbound type variable names"}}}],
-                              "body": {"set": {"variable": "hydra.core.Name"}}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -4503,12 +4344,37 @@
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The set of unbound type variable names"}}}],
                             "body": {"set": {"variable": "hydra.core.Name"}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {"literal": {"string": "The set of unbound type variable names"}}}],
+                          "body": {"set": {"variable": "hydra.core.Name"}}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.unboundTypeVariablesErrorWithType",
@@ -4618,35 +4484,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The type containing the unbound variables"}}}],
-                              "body": {"variable": "hydra.core.Type"}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -4656,12 +4493,37 @@
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The type containing the unbound variables"}}}],
                             "body": {"variable": "hydra.core.Type"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {"literal": {"string": "The type containing the unbound variables"}}}],
+                          "body": {"variable": "hydra.core.Type"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UnboundTypeVariablesError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.unequalTypesError",
@@ -4725,43 +4587,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {
-                                    "literal": {
-                                      "string": "A description of the context in which the types were expected to be equal"}}}],
-                              "body": {"literal": {"string": {}}}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "description"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The list of types that are not all equal"}}}],
-                        "body": {"list": {"variable": "hydra.core.Type"}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "types"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.error.checking.UnequalTypesError"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -4773,18 +4598,51 @@
                                   "literal": {
                                     "string": "A description of the context in which the types were expected to be equal"}}}],
                             "body": {"literal": {"string": {}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The list of types that are not all equal"}}}],
-                        "body": {"list": {"variable": "hydra.core.Type"}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "description"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The list of types that are not all equal"}}}],
+                      "body": {"list": {"variable": "hydra.core.Type"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "types"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.checking.UnequalTypesError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {
+                                "literal": {
+                                  "string": "A description of the context in which the types were expected to be equal"}}}],
+                          "body": {"literal": {"string": {}}}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The list of types that are not all equal"}}}],
+                      "body": {"list": {"variable": "hydra.core.Type"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.unequalTypesErrorTypes",
@@ -4842,32 +4700,29 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UnequalTypesError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UnequalTypesError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The list of types that are not all equal"}}}],
-                        "body": {"list": {"variable": "hydra.core.Type"}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UnequalTypesError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The list of types that are not all equal"}}}],
+                      "body": {"list": {"variable": "hydra.core.Type"}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UnequalTypesError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.unequalTypesErrorDescription",
@@ -4925,34 +4780,31 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UnequalTypesError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UnequalTypesError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {
-                              "literal": {
-                                "string": "A description of the context in which the types were expected to be equal"}}}],
-                        "body": {"literal": {"string": {}}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UnequalTypesError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "A description of the context in which the types were expected to be equal"}}}],
+                      "body": {"literal": {"string": {}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UnequalTypesError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.unequalTypesErrorWithTypes",
@@ -5060,35 +4912,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The list of types that are not all equal"}}}],
-                              "body": {"list": {"variable": "hydra.core.Type"}}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UnequalTypesError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.error.checking.UnequalTypesError"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -5098,12 +4921,37 @@
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The list of types that are not all equal"}}}],
                             "body": {"list": {"variable": "hydra.core.Type"}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UnequalTypesError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UnequalTypesError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.checking.UnequalTypesError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {"literal": {"string": "The list of types that are not all equal"}}}],
+                          "body": {"list": {"variable": "hydra.core.Type"}}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UnequalTypesError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.unequalTypesErrorWithDescription",
@@ -5211,37 +5059,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {
-                                    "literal": {
-                                      "string": "A description of the context in which the types were expected to be equal"}}}],
-                              "body": {"literal": {"string": {}}}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UnequalTypesError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.error.checking.UnequalTypesError"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -5253,12 +5070,39 @@
                                   "literal": {
                                     "string": "A description of the context in which the types were expected to be equal"}}}],
                             "body": {"literal": {"string": {}}}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UnequalTypesError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UnequalTypesError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.checking.UnequalTypesError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {
+                                "literal": {
+                                  "string": "A description of the context in which the types were expected to be equal"}}}],
+                          "body": {"literal": {"string": {}}}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UnequalTypesError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.unsupportedTermVariantError",
@@ -5304,38 +5148,35 @@
                             "typeName": "hydra.core.Record"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The unsupported term variant"}}}],
-                        "body": {"variable": "hydra.variants.TermVariant"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The unsupported term variant"}}}],
+                      "body": {"variable": "hydra.variants.TermVariant"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "termVariant"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UnsupportedTermVariantError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The unsupported term variant"}}}],
-                        "body": {"variable": "hydra.variants.TermVariant"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UnsupportedTermVariantError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The unsupported term variant"}}}],
+                      "body": {"variable": "hydra.variants.TermVariant"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.unsupportedTermVariantErrorTermVariant",
@@ -5394,32 +5235,29 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UnsupportedTermVariantError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UnsupportedTermVariantError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The unsupported term variant"}}}],
-                        "body": {"variable": "hydra.variants.TermVariant"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UnsupportedTermVariantError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The unsupported term variant"}}}],
+                      "body": {"variable": "hydra.variants.TermVariant"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UnsupportedTermVariantError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.unsupportedTermVariantErrorWithTermVariant",
@@ -5468,35 +5306,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The unsupported term variant"}}}],
-                              "body": {"variable": "hydra.variants.TermVariant"}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UnsupportedTermVariantError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.error.checking.UnsupportedTermVariantError"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -5506,12 +5315,37 @@
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The unsupported term variant"}}}],
                             "body": {"variable": "hydra.variants.TermVariant"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UnsupportedTermVariantError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UnsupportedTermVariantError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.checking.UnsupportedTermVariantError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {"literal": {"string": "The unsupported term variant"}}}],
+                          "body": {"variable": "hydra.variants.TermVariant"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UnsupportedTermVariantError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.untypedLambdaError",
@@ -5534,14 +5368,12 @@
                       "typeName": "hydra.core.Record"}}},
                 "typeName": "hydra.core.Term"}},
             "typeName": "hydra.phantoms.TTerm"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "application": {
-                "argument": {"variable": "hydra.error.checking.UntypedLambdaError"},
-                "function": {"variable": "hydra.phantoms.TTerm"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "application": {
+              "argument": {"variable": "hydra.error.checking.UntypedLambdaError"},
+              "function": {"variable": "hydra.phantoms.TTerm"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.untypedLetBindingError",
@@ -5586,38 +5418,35 @@
                             "typeName": "hydra.core.Record"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The untyped binding"}}}],
-                        "body": {"variable": "hydra.core.Binding"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The untyped binding"}}}],
+                      "body": {"variable": "hydra.core.Binding"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "binding"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UntypedLetBindingError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The untyped binding"}}}],
-                        "body": {"variable": "hydra.core.Binding"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UntypedLetBindingError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The untyped binding"}}}],
+                      "body": {"variable": "hydra.core.Binding"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.untypedLetBindingErrorBinding",
@@ -5675,32 +5504,29 @@
                             "typeName": "hydra.core.Application"}}},
                       "typeName": "hydra.core.Term"}},
                   "typeName": "hydra.phantoms.TTerm"}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UntypedLetBindingError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UntypedLetBindingError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "@key": "description",
-                            "@value": {"literal": {"string": "The untyped binding"}}}],
-                        "body": {"variable": "hydra.core.Binding"}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UntypedLetBindingError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The untyped binding"}}}],
+                      "body": {"variable": "hydra.core.Binding"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UntypedLetBindingError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.dsl.error.checking.untypedLetBindingErrorWithBinding",
@@ -5748,35 +5574,6 @@
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
                         "typeName": "hydra.phantoms.TTerm"}},
-                    "domain": [
-                      {
-                        "application": {
-                          "argument": {
-                            "annotated": {
-                              "annotation": [
-                                {
-                                  "@key": "description",
-                                  "@value": {"literal": {"string": "The untyped binding"}}}],
-                              "body": {"variable": "hydra.core.Binding"}}},
-                          "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                    "parameter": "newVal"}}},
-              "domain": [
-                {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UntypedLetBindingError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}],
-              "parameter": "original"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "application": {
-                        "argument": {"variable": "hydra.error.checking.UntypedLetBindingError"},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "domain": {
                       "application": {
                         "argument": {
@@ -5786,13 +5583,38 @@
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The untyped binding"}}}],
                             "body": {"variable": "hydra.core.Binding"}}},
-                        "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-                "domain": {
-                  "application": {
-                    "argument": {"variable": "hydra.error.checking.UntypedLetBindingError"},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}}}},
-            "variables": []}]}}],
-  "description": ["DSL functions for hydra.error.checking"],
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UntypedLetBindingError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "parameter": "original"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.checking.UntypedLetBindingError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {"literal": {"string": "The untyped binding"}}}],
+                          "body": {"variable": "hydra.core.Binding"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.checking.UntypedLetBindingError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}}],
+  "description": "DSL functions for hydra.error.checking",
   "namespace": "hydra.dsl.error.checking",
   "termDependencies": ["hydra.dsl.core", "hydra.dsl.typing", "hydra.dsl.variants"],
   "typeDependencies": [

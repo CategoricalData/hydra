@@ -68,7 +68,9 @@ public abstract class Uchar implements Serializable, Comparable<Uchar> {
         return tagCmp;
       }
       Sequence o = (Sequence) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class Uchar implements Serializable, Comparable<Uchar> {
         return tagCmp;
       }
       Sequence2 o = (Sequence2) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

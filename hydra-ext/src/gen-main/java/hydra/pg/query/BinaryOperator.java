@@ -76,7 +76,9 @@ public abstract class BinaryOperator implements Serializable, Comparable<BinaryO
         return tagCmp;
       }
       Boolean_ o = (Boolean_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class BinaryOperator implements Serializable, Comparable<BinaryO
         return tagCmp;
       }
       Comparison o = (Comparison) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

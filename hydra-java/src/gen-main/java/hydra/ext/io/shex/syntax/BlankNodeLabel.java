@@ -15,11 +15,11 @@ public class BlankNodeLabel implements Serializable, Comparable<BlankNodeLabel> 
 
   public final hydra.ext.io.shex.syntax.BlankNodeLabel_Alts alts;
 
-  public final hydra.util.Maybe<hydra.util.ConsList<hydra.ext.io.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt>> ListOfAlts;
+  public final hydra.util.Maybe<java.util.List<hydra.ext.io.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt>> ListOfAlts;
 
   public final hydra.ext.io.shex.syntax.PnChars PnChars;
 
-  public BlankNodeLabel (hydra.ext.io.shex.syntax.BlankNodeLabel_Alts alts, hydra.util.Maybe<hydra.util.ConsList<hydra.ext.io.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt>> ListOfAlts, hydra.ext.io.shex.syntax.PnChars PnChars) {
+  public BlankNodeLabel (hydra.ext.io.shex.syntax.BlankNodeLabel_Alts alts, hydra.util.Maybe<java.util.List<hydra.ext.io.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt>> ListOfAlts, hydra.ext.io.shex.syntax.PnChars PnChars) {
     this.alts = alts;
     this.ListOfAlts = ListOfAlts;
     this.PnChars = PnChars;
@@ -49,22 +49,28 @@ public class BlankNodeLabel implements Serializable, Comparable<BlankNodeLabel> 
   @SuppressWarnings("unchecked")
   public int compareTo(BlankNodeLabel other) {
     int cmp = 0;
-    cmp = ((Comparable) alts).compareTo(other.alts);
+    cmp = hydra.util.Comparing.compare(
+      alts,
+      other.alts);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) ListOfAlts).compareTo(other.ListOfAlts);
+    cmp = hydra.util.Comparing.compare(
+      ListOfAlts,
+      other.ListOfAlts);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) PnChars).compareTo(other.PnChars);
+    return hydra.util.Comparing.compare(
+      PnChars,
+      other.PnChars);
   }
 
   public BlankNodeLabel withAlts(hydra.ext.io.shex.syntax.BlankNodeLabel_Alts alts) {
     return new BlankNodeLabel(alts, ListOfAlts, PnChars);
   }
 
-  public BlankNodeLabel withListOfAlts(hydra.util.Maybe<hydra.util.ConsList<hydra.ext.io.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt>> ListOfAlts) {
+  public BlankNodeLabel withListOfAlts(hydra.util.Maybe<java.util.List<hydra.ext.io.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt>> ListOfAlts) {
     return new BlankNodeLabel(alts, ListOfAlts, PnChars);
   }
 

@@ -19,19 +19,19 @@ public class Defn_Macro implements Serializable, Comparable<Defn_Macro> {
 
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods;
+  public final java.util.List<hydra.ext.scala.syntax.Mod> mods;
 
   public final hydra.ext.scala.syntax.Data_Name name;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams;
+  public final java.util.List<hydra.ext.scala.syntax.Type_Param> tparams;
 
-  public final hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> paramss;
+  public final java.util.List<java.util.List<hydra.ext.scala.syntax.Data_Param>> paramss;
 
   public final hydra.util.Maybe<hydra.ext.scala.syntax.Type> decltpe;
 
   public final hydra.ext.scala.syntax.Data body;
 
-  public Defn_Macro (hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods, hydra.ext.scala.syntax.Data_Name name, hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> paramss, hydra.util.Maybe<hydra.ext.scala.syntax.Type> decltpe, hydra.ext.scala.syntax.Data body) {
+  public Defn_Macro (java.util.List<hydra.ext.scala.syntax.Mod> mods, hydra.ext.scala.syntax.Data_Name name, java.util.List<hydra.ext.scala.syntax.Type_Param> tparams, java.util.List<java.util.List<hydra.ext.scala.syntax.Data_Param>> paramss, hydra.util.Maybe<hydra.ext.scala.syntax.Type> decltpe, hydra.ext.scala.syntax.Data body) {
     this.mods = mods;
     this.name = name;
     this.tparams = tparams;
@@ -70,30 +70,42 @@ public class Defn_Macro implements Serializable, Comparable<Defn_Macro> {
   @SuppressWarnings("unchecked")
   public int compareTo(Defn_Macro other) {
     int cmp = 0;
-    cmp = ((Comparable) mods).compareTo(other.mods);
+    cmp = hydra.util.Comparing.compare(
+      mods,
+      other.mods);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) tparams).compareTo(other.tparams);
+    cmp = hydra.util.Comparing.compare(
+      tparams,
+      other.tparams);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) paramss).compareTo(other.paramss);
+    cmp = hydra.util.Comparing.compare(
+      paramss,
+      other.paramss);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) decltpe).compareTo(other.decltpe);
+    cmp = hydra.util.Comparing.compare(
+      decltpe,
+      other.decltpe);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
-  public Defn_Macro withMods(hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods) {
+  public Defn_Macro withMods(java.util.List<hydra.ext.scala.syntax.Mod> mods) {
     return new Defn_Macro(mods, name, tparams, paramss, decltpe, body);
   }
 
@@ -101,11 +113,11 @@ public class Defn_Macro implements Serializable, Comparable<Defn_Macro> {
     return new Defn_Macro(mods, name, tparams, paramss, decltpe, body);
   }
 
-  public Defn_Macro withTparams(hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams) {
+  public Defn_Macro withTparams(java.util.List<hydra.ext.scala.syntax.Type_Param> tparams) {
     return new Defn_Macro(mods, name, tparams, paramss, decltpe, body);
   }
 
-  public Defn_Macro withParamss(hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> paramss) {
+  public Defn_Macro withParamss(java.util.List<java.util.List<hydra.ext.scala.syntax.Data_Param>> paramss) {
     return new Defn_Macro(mods, name, tparams, paramss, decltpe, body);
   }
 

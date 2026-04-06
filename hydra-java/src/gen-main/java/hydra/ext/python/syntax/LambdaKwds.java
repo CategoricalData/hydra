@@ -34,6 +34,8 @@ public class LambdaKwds implements Serializable, Comparable<LambdaKwds> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(LambdaKwds other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

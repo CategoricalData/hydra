@@ -38,9 +38,9 @@ public abstract class SubjectExpression implements Serializable, Comparable<Subj
   }
 
   public static final class Tuple extends hydra.ext.python.syntax.SubjectExpression implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.python.syntax.StarNamedExpression> value;
+    public final java.util.List<hydra.ext.python.syntax.StarNamedExpression> value;
 
-    public Tuple (hydra.util.ConsList<hydra.ext.python.syntax.StarNamedExpression> value) {
+    public Tuple (java.util.List<hydra.ext.python.syntax.StarNamedExpression> value) {
       this.value = value;
     }
 
@@ -68,7 +68,9 @@ public abstract class SubjectExpression implements Serializable, Comparable<Subj
         return tagCmp;
       }
       Tuple o = (Tuple) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class SubjectExpression implements Serializable, Comparable<Subj
         return tagCmp;
       }
       Simple o = (Simple) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

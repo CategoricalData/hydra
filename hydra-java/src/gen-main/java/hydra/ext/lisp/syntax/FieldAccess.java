@@ -61,15 +61,21 @@ public class FieldAccess implements Serializable, Comparable<FieldAccess> {
   @SuppressWarnings("unchecked")
   public int compareTo(FieldAccess other) {
     int cmp = 0;
-    cmp = ((Comparable) recordType).compareTo(other.recordType);
+    cmp = hydra.util.Comparing.compare(
+      recordType,
+      other.recordType);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) field).compareTo(other.field);
+    cmp = hydra.util.Comparing.compare(
+      field,
+      other.field);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) target).compareTo(other.target);
+    return hydra.util.Comparing.compare(
+      target,
+      other.target);
   }
 
   public FieldAccess withRecordType(hydra.ext.lisp.syntax.Symbol recordType) {

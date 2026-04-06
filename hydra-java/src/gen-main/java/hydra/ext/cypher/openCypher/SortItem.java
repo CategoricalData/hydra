@@ -42,11 +42,15 @@ public class SortItem implements Serializable, Comparable<SortItem> {
   @SuppressWarnings("unchecked")
   public int compareTo(SortItem other) {
     int cmp = 0;
-    cmp = ((Comparable) expression).compareTo(other.expression);
+    cmp = hydra.util.Comparing.compare(
+      expression,
+      other.expression);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) order).compareTo(other.order);
+    return hydra.util.Comparing.compare(
+      order,
+      other.order);
   }
 
   public SortItem withExpression(hydra.ext.cypher.openCypher.Expression expression) {

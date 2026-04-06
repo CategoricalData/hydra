@@ -3,15 +3,11 @@
     {
       "type": {
         "name": "hydra.ext.org.w3.rdf.syntax.BlankNode",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.rdf.syntax.RdfsClass",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -24,14 +20,12 @@
       "type": {
         "name": "hydra.ext.org.w3.rdf.syntax.Dataset",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.Quad"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.rdf.syntax.Description",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -53,14 +47,12 @@
       "type": {
         "name": "hydra.ext.org.w3.rdf.syntax.Graph",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"set": {"variable": "hydra.ext.org.w3.rdf.syntax.Triple"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.w3.rdf.syntax.Iri",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -73,7 +65,6 @@
       "type": {
         "name": "hydra.ext.org.w3.rdf.syntax.IriOrLiteral",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -95,7 +86,6 @@
       "type": {
         "name": "hydra.ext.org.w3.rdf.syntax.LangStrings",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -114,7 +104,6 @@
       "type": {
         "name": "hydra.ext.org.w3.rdf.syntax.LanguageTag",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -127,7 +116,6 @@
       "type": {
         "name": "hydra.ext.org.w3.rdf.syntax.Literal",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -173,7 +161,6 @@
       "type": {
         "name": "hydra.ext.org.w3.rdf.syntax.Node",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -190,7 +177,6 @@
       "type": {
         "name": "hydra.ext.org.w3.rdf.syntax.Property",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -231,7 +217,6 @@
       "type": {
         "name": "hydra.ext.org.w3.rdf.syntax.Quad",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -258,7 +243,6 @@
       "type": {
         "name": "hydra.ext.org.w3.rdf.syntax.Resource",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -272,7 +256,6 @@
       "type": {
         "name": "hydra.ext.org.w3.rdf.syntax.Triple",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -293,7 +276,7 @@
                     "name": "object",
                     "type": {"variable": "hydra.ext.org.w3.rdf.syntax.Node"}}]}}},
           "variables": []}}}],
-  "description": ["An RDF 1.1 syntax model"],
+  "description": "An RDF 1.1 syntax model",
   "namespace": "hydra.ext.org.w3.rdf.syntax",
   "termDependencies": ["hydra.core"],
   "typeDependencies": ["hydra.core"]}

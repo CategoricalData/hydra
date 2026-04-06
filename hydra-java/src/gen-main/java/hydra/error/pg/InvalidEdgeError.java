@@ -114,7 +114,9 @@ public abstract class InvalidEdgeError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       Id o = (Id) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -157,7 +159,9 @@ public abstract class InvalidEdgeError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       InVertexLabel o = (InVertexLabel) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -238,7 +242,9 @@ public abstract class InvalidEdgeError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       Label o = (Label) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -281,7 +287,9 @@ public abstract class InvalidEdgeError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       OutVertexLabel o = (OutVertexLabel) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -362,7 +370,9 @@ public abstract class InvalidEdgeError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       Property o = (Property) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -34,6 +34,8 @@ public class PostDecrementExpression implements Serializable, Comparable<PostDec
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PostDecrementExpression other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

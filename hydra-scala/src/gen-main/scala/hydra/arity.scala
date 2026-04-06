@@ -4,10 +4,6 @@ import hydra.core.*
 
 import hydra.graph.*
 
-import hydra.lib.lists
-
-import hydra.lib.math
-
 def functionArity(v1: hydra.core.Function): Int =
   v1 match
   case hydra.core.Function.elimination(v_Function_elimination__) => 1

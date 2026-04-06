@@ -68,7 +68,9 @@ public abstract class SignedRealNumber implements Serializable, Comparable<Signe
         return tagCmp;
       }
       Sign o = (Sign) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class SignedRealNumber implements Serializable, Comparable<Signe
         return tagCmp;
       }
       Number_ o = (Number_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -49,15 +49,21 @@ public class RangeArgs implements Serializable, Comparable<RangeArgs> {
   @SuppressWarnings("unchecked")
   public int compareTo(RangeArgs other) {
     int cmp = 0;
-    cmp = ((Comparable) scope).compareTo(other.scope);
+    cmp = hydra.util.Comparing.compare(
+      scope,
+      other.scope);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) min).compareTo(other.min);
+    cmp = hydra.util.Comparing.compare(
+      min,
+      other.min);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) max).compareTo(other.max);
+    return hydra.util.Comparing.compare(
+      max,
+      other.max);
   }
 
   public RangeArgs withScope(hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.TraversalScopeArgument> scope) {

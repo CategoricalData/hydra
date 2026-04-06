@@ -68,7 +68,9 @@ public abstract class GenericLiteralArgumentAndTraversalPredicate implements Ser
         return tagCmp;
       }
       Literal o = (Literal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class GenericLiteralArgumentAndTraversalPredicate implements Ser
         return tagCmp;
       }
       Predicate o = (Predicate) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

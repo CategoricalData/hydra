@@ -84,7 +84,9 @@ public abstract class ShiftExpression implements Serializable, Comparable<ShiftE
         return tagCmp;
       }
       Unary o = (Unary) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -124,7 +126,9 @@ public abstract class ShiftExpression implements Serializable, Comparable<ShiftE
         return tagCmp;
       }
       ShiftLeft o = (ShiftLeft) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -164,7 +168,9 @@ public abstract class ShiftExpression implements Serializable, Comparable<ShiftE
         return tagCmp;
       }
       ShiftRight o = (ShiftRight) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +210,9 @@ public abstract class ShiftExpression implements Serializable, Comparable<ShiftE
         return tagCmp;
       }
       ShiftRightZeroFill o = (ShiftRightZeroFill) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

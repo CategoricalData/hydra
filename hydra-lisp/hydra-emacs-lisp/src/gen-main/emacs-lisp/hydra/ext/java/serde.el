@@ -30,6 +30,8 @@
 
 (defvar hydra_ext_java_serde_escape_java_string (lambda (s) (hydra_lib_strings_cat (funcall (hydra_lib_lists_map (lambda (c) (hydra_ext_java_serde_escape_java_char c))) (hydra_lib_strings_to_list s)))))
 
+(defvar hydra_ext_java_serde_java_float_literal_text (lambda (s) (if (funcall (hydra_lib_equality_equal s) "NaN") "Double.NaN" (if (funcall (hydra_lib_equality_equal s) "Infinity") "Double.POSITIVE_INFINITY" (if (funcall (hydra_lib_equality_equal s) "-Infinity") "Double.NEGATIVE_INFINITY" s)))))
+
 (defvar hydra_ext_java_serde_sanitize_java_comment (lambda (s) (funcall (hydra_lib_strings_intercalate "&gt;") (funcall (hydra_lib_strings_split_on ">") (funcall (hydra_lib_strings_intercalate "&lt;") (funcall (hydra_lib_strings_split_on "<") s))))))
 
 (defvar hydra_ext_java_serde_single_line_comment (lambda (c) (hydra_serialization_cst (funcall (hydra_lib_strings_cat2 "// ") (hydra_ext_java_serde_sanitize_java_comment c)))))
@@ -124,7 +126,7 @@
 
 (defvar hydra_ext_java_serde_write_class_literal (lambda (_) (hydra_serialization_cst "STUB:ClassLiteral")))
 
-(defvar hydra_ext_java_serde_write_floating_point_literal (lambda (fl) (hydra_serialization_cst (hydra_lib_literals_show_bigfloat (funcall (lambda (v) v) fl)))))
+(defvar hydra_ext_java_serde_write_floating_point_literal (lambda (fl) (hydra_serialization_cst (hydra_ext_java_serde_java_float_literal_text (hydra_lib_literals_show_bigfloat (funcall (lambda (v) v) fl))))))
 
 (defvar hydra_ext_java_serde_write_integer_literal (lambda (il) (let* ((i (funcall (lambda (v) v) il)) (suffix (if (funcall (hydra_lib_logic_or (funcall (hydra_lib_equality_gt i) 2147483647)) (funcall (hydra_lib_equality_lt i) -2147483648)) "L" ""))) (hydra_serialization_cst (funcall (hydra_lib_strings_cat2 (hydra_lib_literals_show_bigint i)) suffix)))))
 

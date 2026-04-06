@@ -21,7 +21,7 @@ public interface Coder {
   }
 
   static hydra.ext.python.syntax.ClosedPattern classVariantPatternUnit(hydra.ext.python.syntax.Name pyVariantName) {
-    return new hydra.ext.python.syntax.ClosedPattern.Class_(new hydra.ext.python.syntax.ClassPattern(new hydra.ext.python.syntax.NameOrAttribute(hydra.util.ConsList.of(pyVariantName)), (hydra.util.Maybe<hydra.ext.python.syntax.PositionalPatterns>) (hydra.util.Maybe.<hydra.ext.python.syntax.PositionalPatterns>nothing()), (hydra.util.Maybe<hydra.ext.python.syntax.KeywordPatterns>) (hydra.util.Maybe.<hydra.ext.python.syntax.KeywordPatterns>nothing())));
+    return new hydra.ext.python.syntax.ClosedPattern.Class_(new hydra.ext.python.syntax.ClassPattern(new hydra.ext.python.syntax.NameOrAttribute(java.util.Arrays.asList(pyVariantName)), (hydra.util.Maybe<hydra.ext.python.syntax.PositionalPatterns>) (hydra.util.Maybe.<hydra.ext.python.syntax.PositionalPatterns>nothing()), (hydra.util.Maybe<hydra.ext.python.syntax.KeywordPatterns>) (hydra.util.Maybe.<hydra.ext.python.syntax.KeywordPatterns>nothing())));
   }
 
   static hydra.ext.python.syntax.ClosedPattern classVariantPatternWithCapture(hydra.ext.python.environment.PythonEnvironment env, hydra.ext.python.syntax.Name pyVariantName, hydra.core.Name varName) {
@@ -30,18 +30,18 @@ public interface Coder {
       new hydra.util.CaseConvention.LowerSnake(),
       env,
       varName))));
-    hydra.ext.python.syntax.KeywordPattern keywordPattern = new hydra.ext.python.syntax.KeywordPattern(new hydra.ext.python.syntax.Name("value"), new hydra.ext.python.syntax.Pattern.Or(new hydra.ext.python.syntax.OrPattern(hydra.util.ConsList.of(capturePattern))));
-    hydra.ext.python.syntax.NameOrAttribute pyVarNameAttr = new hydra.ext.python.syntax.NameOrAttribute(hydra.util.ConsList.of(pyVariantName));
-    return new hydra.ext.python.syntax.ClosedPattern.Class_(new hydra.ext.python.syntax.ClassPattern(pyVarNameAttr, (hydra.util.Maybe<hydra.ext.python.syntax.PositionalPatterns>) (hydra.util.Maybe.<hydra.ext.python.syntax.PositionalPatterns>nothing()), hydra.util.Maybe.just(new hydra.ext.python.syntax.KeywordPatterns(hydra.util.ConsList.of(keywordPattern)))));
+    hydra.ext.python.syntax.KeywordPattern keywordPattern = new hydra.ext.python.syntax.KeywordPattern(new hydra.ext.python.syntax.Name("value"), new hydra.ext.python.syntax.Pattern.Or(new hydra.ext.python.syntax.OrPattern(java.util.Arrays.asList(capturePattern))));
+    hydra.ext.python.syntax.NameOrAttribute pyVarNameAttr = new hydra.ext.python.syntax.NameOrAttribute(java.util.Arrays.asList(pyVariantName));
+    return new hydra.ext.python.syntax.ClosedPattern.Class_(new hydra.ext.python.syntax.ClassPattern(pyVarNameAttr, (hydra.util.Maybe<hydra.ext.python.syntax.PositionalPatterns>) (hydra.util.Maybe.<hydra.ext.python.syntax.PositionalPatterns>nothing()), hydra.util.Maybe.just(new hydra.ext.python.syntax.KeywordPatterns(java.util.Arrays.asList(keywordPattern)))));
   }
 
-  static hydra.util.PersistentSet<hydra.core.Name> collectTypeVariables(hydra.util.PersistentSet<hydra.core.Name> initial, hydra.core.Type typ) {
+  static java.util.Set<hydra.core.Name> collectTypeVariables(java.util.Set<hydra.core.Name> initial, hydra.core.Type typ) {
     return hydra.Strip.deannotateType(typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
-      public hydra.util.PersistentSet<hydra.core.Name> otherwise(hydra.core.Type instance) {
-        hydra.util.PersistentSet<hydra.core.Name> freeVars = hydra.Variables.freeVariablesInType(typ);
+      public java.util.Set<hydra.core.Name> otherwise(hydra.core.Type instance) {
+        java.util.Set<hydra.core.Name> freeVars = hydra.Variables.freeVariablesInType(typ);
         java.util.function.Function<hydra.core.Name, Boolean> isTypeVar = (java.util.function.Function<hydra.core.Name, Boolean>) (n -> hydra.ext.python.Coder.isTypeVariableName(n));
-        hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> filteredList = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+        hydra.util.Lazy<java.util.List<hydra.core.Name>> filteredList = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
           isTypeVar,
           hydra.lib.sets.ToList.apply(freeVars)));
         return hydra.lib.sets.Union.apply(
@@ -50,7 +50,7 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Type.Forall ft) {
+      public java.util.Set<hydra.core.Name> visit(hydra.core.Type.Forall ft) {
         hydra.core.Type body = (ft).value.body;
         hydra.core.Name v = (ft).value.parameter;
         return hydra.ext.python.Coder.collectTypeVariables(
@@ -72,7 +72,7 @@ public interface Coder {
   static hydra.ext.python.syntax.NamedExpression dataclassDecorator() {
     return new hydra.ext.python.syntax.NamedExpression.Simple(hydra.ext.python.Utils.pyPrimaryToPyExpression(hydra.ext.python.Utils.primaryWithRhs(
       new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(new hydra.ext.python.syntax.Name("dataclass"))),
-      new hydra.ext.python.syntax.PrimaryRhs.Call(new hydra.ext.python.syntax.Args((hydra.util.ConsList<hydra.ext.python.syntax.PosArg>) (hydra.util.ConsList.<hydra.ext.python.syntax.PosArg>empty()), hydra.util.ConsList.of(new hydra.ext.python.syntax.KwargOrStarred.Kwarg(new hydra.ext.python.syntax.Kwarg(new hydra.ext.python.syntax.Name("frozen"), hydra.ext.python.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.True())))), (hydra.util.ConsList<hydra.ext.python.syntax.KwargOrDoubleStarred>) (hydra.util.ConsList.<hydra.ext.python.syntax.KwargOrDoubleStarred>empty()))))));
+      new hydra.ext.python.syntax.PrimaryRhs.Call(new hydra.ext.python.syntax.Args((java.util.List<hydra.ext.python.syntax.PosArg>) (java.util.Collections.<hydra.ext.python.syntax.PosArg>emptyList()), java.util.Arrays.asList(new hydra.ext.python.syntax.KwargOrStarred.Kwarg(new hydra.ext.python.syntax.Kwarg(new hydra.ext.python.syntax.Name("frozen"), hydra.ext.python.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.True())))), (java.util.List<hydra.ext.python.syntax.KwargOrDoubleStarred>) (java.util.Collections.<hydra.ext.python.syntax.KwargOrDoubleStarred>emptyList()))))));
   }
 
   static hydra.ext.python.syntax.Name deconflictVariantName(Boolean isQualified, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name unionName, hydra.core.Name fname, hydra.graph.Graph g) {
@@ -104,43 +104,43 @@ public interface Coder {
         fname));
   }
 
-  static hydra.util.ConsList<hydra.core.Field> deduplicateCaseVariables(hydra.util.ConsList<hydra.core.Field> cases_) {
-    java.util.function.Function<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>>, java.util.function.Function<hydra.core.Field, hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>>>> rewriteCase = (java.util.function.Function<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>>, java.util.function.Function<hydra.core.Field, hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>>>>) (state -> (java.util.function.Function<hydra.core.Field, hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>>>) (field -> {
-      hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, Integer>> countByName = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(state));
-      hydra.util.Lazy<hydra.util.ConsList<hydra.core.Field>> done = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(state));
+  static java.util.List<hydra.core.Field> deduplicateCaseVariables(java.util.List<hydra.core.Field> cases_) {
+    java.util.function.Function<hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>>, java.util.function.Function<hydra.core.Field, hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>>>> rewriteCase = (java.util.function.Function<hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>>, java.util.function.Function<hydra.core.Field, hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>>>>) (state -> (java.util.function.Function<hydra.core.Field, hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>>>) (field -> {
+      hydra.util.Lazy<java.util.Map<hydra.core.Name, Integer>> countByName = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(state));
+      hydra.util.Lazy<java.util.List<hydra.core.Field>> done = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(state));
       hydra.core.Name fname = (field).name;
       hydra.core.Term fterm = (field).term;
       return hydra.Strip.deannotateAndDetypeTerm(fterm).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
-        public hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>>) ((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>>) (new hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>>(countByName.get(), hydra.lib.lists.Cons.apply(
+        public hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>> otherwise(hydra.core.Term instance) {
+          return (hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>>) ((hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>>) (new hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>>(countByName.get(), hydra.lib.lists.Cons.apply(
             field,
             done.get()))));
         }
 
         @Override
-        public hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>> visit(hydra.core.Term.Function f) {
+        public hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>> visit(hydra.core.Term.Function f) {
           return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
             @Override
-            public hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>> otherwise(hydra.core.Function instance) {
-              return (hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>>) ((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>>) (new hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>>(countByName.get(), hydra.lib.lists.Cons.apply(
+            public hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>> otherwise(hydra.core.Function instance) {
+              return (hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>>) ((hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>>) (new hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>>(countByName.get(), hydra.lib.lists.Cons.apply(
                 field,
                 done.get()))));
             }
 
             @Override
-            public hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>> visit(hydra.core.Function.Lambda lam) {
+            public hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>> visit(hydra.core.Function.Lambda lam) {
               hydra.core.Term body = (lam).value.body;
               hydra.util.Maybe<hydra.core.Type> mdom = (lam).value.domain;
               hydra.core.Name v = (lam).value.parameter;
               return hydra.lib.maybes.Maybe.applyLazy(
-                () -> (hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>>) ((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>>) (new hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>>(hydra.lib.maps.Insert.apply(
+                () -> (hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>>) ((hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>>) (new hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>>(hydra.lib.maps.Insert.apply(
                   v,
                   1,
                   countByName.get()), hydra.lib.lists.Cons.apply(
                   field,
                   done.get())))),
-                (java.util.function.Function<Integer, hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>>>) (count -> {
+                (java.util.function.Function<Integer, hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>>>) (count -> {
                   Integer count2 = hydra.lib.math.Add.apply(
                     count,
                     1);
@@ -154,7 +154,7 @@ public interface Coder {
                   hydra.core.Lambda newLam = new hydra.core.Lambda(v2, mdom, newBody);
                   hydra.core.Term newTerm = new hydra.core.Term.Function(new hydra.core.Function.Lambda(newLam));
                   hydra.core.Field newField = new hydra.core.Field(fname, newTerm);
-                  return (hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>>) ((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>>) (new hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>>(hydra.lib.maps.Insert.apply(
+                  return (hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>>) ((hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>>) (new hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>>(hydra.lib.maps.Insert.apply(
                     v,
                     count2,
                     countByName.get()), hydra.lib.lists.Cons.apply(
@@ -169,9 +169,9 @@ public interface Coder {
         }
       });
     }));
-    hydra.util.Lazy<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>>> result = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+    hydra.util.Lazy<hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>>> result = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
       rewriteCase,
-      (hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>>) ((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>>) (new hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, Integer>, hydra.util.ConsList<hydra.core.Field>>((hydra.util.PersistentMap<hydra.core.Name, Integer>) ((hydra.util.PersistentMap<hydra.core.Name, Integer>) (hydra.lib.maps.Empty.<hydra.core.Name, Integer>apply())), (hydra.util.ConsList<hydra.core.Field>) (hydra.util.ConsList.<hydra.core.Field>empty())))),
+      (hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>>) ((hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>>) (new hydra.util.Pair<java.util.Map<hydra.core.Name, Integer>, java.util.List<hydra.core.Field>>((java.util.Map<hydra.core.Name, Integer>) ((java.util.Map<hydra.core.Name, Integer>) (hydra.lib.maps.Empty.<hydra.core.Name, Integer>apply())), (java.util.List<hydra.core.Field>) (java.util.Collections.<hydra.core.Field>emptyList())))),
       cases_));
     return hydra.lib.lists.Reverse.apply(hydra.lib.pairs.Second.apply(result.get()));
   }
@@ -352,15 +352,15 @@ public interface Coder {
   }
 
   static hydra.ext.python.environment.PythonModuleMetadata emptyMetadata(hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName> ns) {
-    return new hydra.ext.python.environment.PythonModuleMetadata(ns, (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false);
+    return new hydra.ext.python.environment.PythonModuleMetadata(ns, (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false);
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression> encodeApplication(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Application app) {
     hydra.core.Term term = new hydra.core.Term.Application(app);
-    hydra.util.Lazy<hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>> gathered = new hydra.util.Lazy<>(() -> hydra.Analysis.gatherArgs(
+    hydra.util.Lazy<hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Term>>> gathered = new hydra.util.Lazy<>(() -> hydra.Analysis.gatherArgs(
       term,
-      (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty())));
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> args = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(gathered.get()));
+      (java.util.List<hydra.core.Term>) (java.util.Collections.<hydra.core.Term>emptyList())));
+    hydra.util.Lazy<java.util.List<hydra.core.Term>> args = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(gathered.get()));
     hydra.util.Lazy<hydra.core.Term> fun = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered.get()));
     hydra.graph.Graph g = hydra.ext.python.Coder.pythonEnvironmentGetGraph(env);
     Integer knownArity = hydra.ext.python.Coder.termArityWithPrimitives(
@@ -377,11 +377,11 @@ public interface Coder {
           false,
           t)),
         args.get()),
-      (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.Expression>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (pargs -> {
-        hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.Expression>> hargs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Take.apply(
+      (java.util.function.Function<java.util.List<hydra.ext.python.syntax.Expression>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (pargs -> {
+        hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.Expression>> hargs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Take.apply(
           arity.get(),
           pargs));
-        hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.Expression>> rargs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Drop.apply(
+        hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.Expression>> rargs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Drop.apply(
           arity.get(),
           pargs));
         return hydra.lib.eithers.Bind.apply(
@@ -391,13 +391,13 @@ public interface Coder {
             fun.get(),
             hargs.get(),
             rargs.get()),
-          (java.util.function.Function<hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (result -> {
+          (java.util.function.Function<hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (result -> {
             hydra.util.Lazy<hydra.ext.python.syntax.Expression> lhs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(result));
-            hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.Expression>> remainingRargs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(result));
+            hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.Expression>> remainingRargs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(result));
             hydra.util.Lazy<hydra.ext.python.syntax.Expression> pyapp = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
               (java.util.function.Function<hydra.ext.python.syntax.Expression, java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.Expression>>) (t -> (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.Expression>) (a -> hydra.ext.python.Utils.functionCall(
                 hydra.ext.python.Utils.pyExpressionToPyPrimary(t),
-                hydra.util.ConsList.of(a)))),
+                java.util.Arrays.asList(a)))),
               lhs.get(),
               remainingRargs.get()));
             return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>right(pyapp.get());
@@ -405,18 +405,18 @@ public interface Coder {
       }));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>> encodeApplicationInner(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Term fun, hydra.util.ConsList<hydra.ext.python.syntax.Expression> hargs, hydra.util.ConsList<hydra.ext.python.syntax.Expression> rargs) {
-    hydra.util.Lazy<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>>> defaultCase = new hydra.util.Lazy<>(() -> hydra.lib.eithers.Bind.apply(
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>> encodeApplicationInner(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Term fun, java.util.List<hydra.ext.python.syntax.Expression> hargs, java.util.List<hydra.ext.python.syntax.Expression> rargs) {
+    hydra.util.Lazy<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>> defaultCase = new hydra.util.Lazy<>(() -> hydra.lib.eithers.Bind.apply(
       hydra.ext.python.Coder.encodeTermInline(
         cx,
         env,
         false,
         fun),
-      (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>>>) (pfun -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>(hydra.ext.python.Utils.functionCall(
+      (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>>) (pfun -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>(hydra.ext.python.Utils.functionCall(
         hydra.ext.python.Utils.pyExpressionToPyPrimary(pfun),
         hargs), rargs)))))));
     hydra.util.Lazy<hydra.ext.python.syntax.Expression> firstArg = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(hargs));
-    hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.Expression>> restArgs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Tail.apply(hargs));
+    hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.Expression>> restArgs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Tail.apply(hargs));
     java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.Expression> withRest = (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.Expression>) (e -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(restArgs.get()),
       () -> e,
@@ -425,51 +425,51 @@ public interface Coder {
         restArgs.get())));
     return hydra.Strip.deannotateAndDetypeTerm(fun).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>> otherwise(hydra.core.Term instance) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>> otherwise(hydra.core.Term instance) {
         return defaultCase.get();
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>> visit(hydra.core.Term.Function f) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>> visit(hydra.core.Term.Function f) {
         return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
-          public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>> otherwise(hydra.core.Function instance) {
+          public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>> otherwise(hydra.core.Function instance) {
             return defaultCase.get();
           }
 
           @Override
-          public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>> visit(hydra.core.Function.Elimination elm) {
+          public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>> visit(hydra.core.Function.Elimination elm) {
             return (elm).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
               @Override
-              public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>> otherwise(hydra.core.Elimination instance) {
+              public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>> otherwise(hydra.core.Elimination instance) {
                 return defaultCase.get();
               }
 
               @Override
-              public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>> visit(hydra.core.Elimination.Record proj) {
+              public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>> visit(hydra.core.Elimination.Record proj) {
                 hydra.core.Name fname = (proj).value.field;
                 hydra.ext.python.syntax.Expression fieldExpr = hydra.ext.python.Utils.projectFromExpression(
                   firstArg.get(),
                   hydra.ext.python.Names.encodeFieldName(
                     env,
                     fname));
-                return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>((withRest).apply(fieldExpr), rargs))));
+                return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>((withRest).apply(fieldExpr), rargs))));
               }
 
               @Override
-              public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>> visit(hydra.core.Elimination.Union cs) {
+              public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>> visit(hydra.core.Elimination.Union cs) {
                 return hydra.lib.eithers.Bind.apply(
                   hydra.ext.python.Coder.encodeUnionEliminationInline(
                     cx,
                     env,
                     (cs).value,
                     firstArg.get()),
-                  (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>>>) (inlineExpr -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>((withRest).apply(inlineExpr), rargs))))));
+                  (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>>) (inlineExpr -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>((withRest).apply(inlineExpr), rargs))))));
               }
 
               @Override
-              public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>> visit(hydra.core.Elimination.Wrap ignored) {
-                hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.Expression>> allArgs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
+              public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>> visit(hydra.core.Elimination.Wrap ignored) {
+                hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.Expression>> allArgs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
                   restArgs.get(),
                   rargs));
                 hydra.ext.python.syntax.Expression valueExpr = hydra.ext.python.Utils.projectFromExpression(
@@ -477,17 +477,17 @@ public interface Coder {
                   new hydra.ext.python.syntax.Name("value"));
                 return hydra.lib.logic.IfElse.lazy(
                   hydra.lib.lists.Null.apply(allArgs.get()),
-                  () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>(valueExpr, (hydra.util.ConsList<hydra.ext.python.syntax.Expression>) (hydra.util.ConsList.<hydra.ext.python.syntax.Expression>empty()))))),
-                  () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>(hydra.ext.python.Utils.functionCall(
+                  () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>(valueExpr, (java.util.List<hydra.ext.python.syntax.Expression>) (java.util.Collections.<hydra.ext.python.syntax.Expression>emptyList()))))),
+                  () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>(hydra.ext.python.Utils.functionCall(
                     hydra.ext.python.Utils.pyExpressionToPyPrimary(valueExpr),
-                    allArgs.get()), (hydra.util.ConsList<hydra.ext.python.syntax.Expression>) (hydra.util.ConsList.<hydra.ext.python.syntax.Expression>empty()))))));
+                    allArgs.get()), (java.util.List<hydra.ext.python.syntax.Expression>) (java.util.Collections.<hydra.ext.python.syntax.Expression>emptyList()))))));
               }
             });
           }
 
           @Override
-          public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>> visit(hydra.core.Function.Primitive name) {
-            hydra.util.ConsList<hydra.ext.python.syntax.Expression> wrappedArgs = hydra.ext.python.Coder.wrapLazyArguments(
+          public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>> visit(hydra.core.Function.Primitive name) {
+            java.util.List<hydra.ext.python.syntax.Expression> wrappedArgs = hydra.ext.python.Coder.wrapLazyArguments(
               (name).value,
               hargs);
             return hydra.lib.eithers.Bind.apply(
@@ -496,18 +496,18 @@ public interface Coder {
                 env,
                 (name).value,
                 wrappedArgs),
-              (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>>>) (expr -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>(expr, rargs))))));
+              (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>>) (expr -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>(expr, rargs))))));
           }
 
           @Override
-          public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>> visit(hydra.core.Function.Lambda ignored) {
+          public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>> visit(hydra.core.Function.Lambda ignored) {
             return hydra.lib.eithers.Bind.apply(
               hydra.ext.python.Coder.encodeTermInline(
                 cx,
                 env,
                 false,
                 fun),
-              (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>>>) (pfun -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>(hydra.ext.python.Utils.functionCall(
+              (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>>) (pfun -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>(hydra.ext.python.Utils.functionCall(
                 hydra.ext.python.Utils.pyExpressionToPyPrimary(pfun),
                 hargs), rargs))))));
           }
@@ -515,155 +515,171 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>> visit(hydra.core.Term.Variable name) {
-        hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.Expression>> allArgs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>> visit(hydra.core.Term.Variable name) {
+        hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.Expression>> allArgs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
           hargs,
           rargs));
         hydra.graph.Graph g = hydra.ext.python.Coder.pythonEnvironmentGetGraph(env);
-        return hydra.lib.maybes.Maybe.applyLazy(
-          () -> hydra.lib.eithers.Bind.apply(
-            hydra.ext.python.Coder.encodeVariable(
-              cx,
-              env,
-              (name).value,
-              hargs),
-            (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>>>) (expr -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>(expr, rargs)))))),
-          (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>>>) (el -> hydra.lib.maybes.Maybe.applyLazy(
+        return hydra.lib.maybes.Cases.applyLazy(
+          hydra.lib.maps.Lookup.apply(
+            (name).value,
+            (g).primitives),
+          () -> hydra.lib.maybes.Maybe.applyLazy(
             () -> hydra.lib.eithers.Bind.apply(
               hydra.ext.python.Coder.encodeVariable(
                 cx,
                 env,
                 (name).value,
                 hargs),
-              (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>>>) (expr -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>(expr, rargs)))))),
-            (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>>>) (ts -> {
-              Integer elArity = hydra.Arity.typeSchemeArity(ts);
-              hydra.util.Lazy<Integer> consumeCount = new hydra.util.Lazy<>(() -> hydra.lib.math.Min.apply(
-                elArity,
-                hydra.lib.lists.Length.apply(allArgs.get())));
-              hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.Expression>> consumedArgs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Take.apply(
-                consumeCount.get(),
-                allArgs.get()));
-              hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.Expression>> remainingArgs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Drop.apply(
-                consumeCount.get(),
-                allArgs.get()));
-              return hydra.lib.logic.IfElse.lazy(
-                hydra.lib.lists.Null.apply(consumedArgs.get()),
-                () -> hydra.lib.eithers.Bind.apply(
-                  hydra.ext.python.Coder.encodeVariable(
-                    cx,
-                    env,
-                    (name).value,
-                    (hydra.util.ConsList<hydra.ext.python.syntax.Expression>) (hydra.util.ConsList.<hydra.ext.python.syntax.Expression>empty())),
-                  (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>>>) (expr -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>(expr, rargs)))))),
-                () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>(hydra.ext.python.Utils.functionCall(
-                  hydra.ext.python.Utils.pyNameToPyPrimary(hydra.ext.python.Names.encodeName(
-                    true,
-                    new hydra.util.CaseConvention.LowerSnake(),
-                    env,
-                    (name).value)),
-                  consumedArgs.get()), remainingArgs.get())))));
-            }),
-            (el).type)),
-          hydra.Lexical.lookupBinding(
-            g,
-            (name).value));
+              (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>>) (expr -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>(expr, rargs)))))),
+            (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>>) (el -> hydra.lib.maybes.Maybe.applyLazy(
+              () -> hydra.lib.eithers.Bind.apply(
+                hydra.ext.python.Coder.encodeVariable(
+                  cx,
+                  env,
+                  (name).value,
+                  hargs),
+                (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>>) (expr -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>(expr, rargs)))))),
+              (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>>) (ts -> {
+                Integer elArity = hydra.Arity.typeSchemeArity(ts);
+                hydra.util.Lazy<Integer> consumeCount = new hydra.util.Lazy<>(() -> hydra.lib.math.Min.apply(
+                  elArity,
+                  hydra.lib.lists.Length.apply(allArgs.get())));
+                hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.Expression>> consumedArgs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Take.apply(
+                  consumeCount.get(),
+                  allArgs.get()));
+                hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.Expression>> remainingArgs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Drop.apply(
+                  consumeCount.get(),
+                  allArgs.get()));
+                return hydra.lib.logic.IfElse.lazy(
+                  hydra.lib.lists.Null.apply(consumedArgs.get()),
+                  () -> hydra.lib.eithers.Bind.apply(
+                    hydra.ext.python.Coder.encodeVariable(
+                      cx,
+                      env,
+                      (name).value,
+                      (java.util.List<hydra.ext.python.syntax.Expression>) (java.util.Collections.<hydra.ext.python.syntax.Expression>emptyList())),
+                    (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>>) (expr -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>(expr, rargs)))))),
+                  () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>(hydra.ext.python.Utils.functionCall(
+                    hydra.ext.python.Utils.pyNameToPyPrimary(hydra.ext.python.Names.encodeName(
+                      true,
+                      new hydra.util.CaseConvention.LowerSnake(),
+                      env,
+                      (name).value)),
+                    consumedArgs.get()), remainingArgs.get())))));
+              }),
+              (el).type)),
+            hydra.Lexical.lookupBinding(
+              g,
+              (name).value)),
+          (java.util.function.Function<hydra.graph.Primitive, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>>) (_prim -> {
+            java.util.List<hydra.ext.python.syntax.Expression> wrappedArgs = hydra.ext.python.Coder.wrapLazyArguments(
+              (name).value,
+              hargs);
+            return hydra.lib.eithers.Bind.apply(
+              hydra.ext.python.Coder.encodeVariable(
+                cx,
+                env,
+                (name).value,
+                wrappedArgs),
+              (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>>) (expr -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>(expr, rargs))))));
+          }));
       }
     });
   }
 
   static <T0> hydra.util.Either<T0, hydra.ext.python.syntax.Expression> encodeApplicationType(hydra.ext.python.environment.PythonEnvironment env, hydra.core.ApplicationType at) {
-    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.util.ConsList<hydra.core.Type>, hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>>>> gatherParams = new java.util.concurrent.atomic.AtomicReference<>();
-    gatherParams.set((java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.util.ConsList<hydra.core.Type>, hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>>>) (t -> (java.util.function.Function<hydra.util.ConsList<hydra.core.Type>, hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>>) (ps -> hydra.Strip.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
+    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Type, java.util.function.Function<java.util.List<hydra.core.Type>, hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>>>> gatherParams = new java.util.concurrent.atomic.AtomicReference<>();
+    gatherParams.set((java.util.function.Function<hydra.core.Type, java.util.function.Function<java.util.List<hydra.core.Type>, hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>>>) (t -> (java.util.function.Function<java.util.List<hydra.core.Type>, hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>>) (ps -> hydra.Strip.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>> visit(hydra.core.Type.Application appT) {
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>> visit(hydra.core.Type.Application appT) {
         return gatherParams.get().apply((appT).value.function).apply(hydra.lib.lists.Cons.apply(
           (appT).value.argument,
           ps));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>> visit(hydra.core.Type.Annotated ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>(t, ps)));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>> visit(hydra.core.Type.Annotated ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>(t, ps)));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>> visit(hydra.core.Type.Function ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>(t, ps)));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>> visit(hydra.core.Type.Function ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>(t, ps)));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>> visit(hydra.core.Type.Forall ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>(t, ps)));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>> visit(hydra.core.Type.Forall ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>(t, ps)));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>> visit(hydra.core.Type.List ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>(t, ps)));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>> visit(hydra.core.Type.List ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>(t, ps)));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>> visit(hydra.core.Type.Literal ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>(t, ps)));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>> visit(hydra.core.Type.Literal ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>(t, ps)));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>> visit(hydra.core.Type.Map ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>(t, ps)));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>> visit(hydra.core.Type.Map ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>(t, ps)));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>> visit(hydra.core.Type.Maybe ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>(t, ps)));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>> visit(hydra.core.Type.Maybe ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>(t, ps)));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>> visit(hydra.core.Type.Either ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>(t, ps)));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>> visit(hydra.core.Type.Either ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>(t, ps)));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>> visit(hydra.core.Type.Pair ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>(t, ps)));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>> visit(hydra.core.Type.Pair ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>(t, ps)));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>> visit(hydra.core.Type.Record ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>(t, ps)));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>> visit(hydra.core.Type.Record ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>(t, ps)));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>> visit(hydra.core.Type.Set ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>(t, ps)));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>> visit(hydra.core.Type.Set ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>(t, ps)));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>> visit(hydra.core.Type.Union ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>(t, ps)));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>> visit(hydra.core.Type.Union ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>(t, ps)));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>> visit(hydra.core.Type.Unit ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>(t, ps)));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>> visit(hydra.core.Type.Unit ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>(t, ps)));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>> visit(hydra.core.Type.Variable ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>(t, ps)));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>> visit(hydra.core.Type.Variable ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>(t, ps)));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>> visit(hydra.core.Type.Void_ ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>(t, ps)));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>> visit(hydra.core.Type.Void_ ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>(t, ps)));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>> visit(hydra.core.Type.Wrap ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>(t, ps)));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>> visit(hydra.core.Type.Wrap ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>(t, ps)));
       }
     }))));
-    hydra.util.Lazy<hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>> bodyAndArgs = new hydra.util.Lazy<>(() -> gatherParams.get().apply(new hydra.core.Type.Application(at)).apply((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty())));
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Type>> args = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(bodyAndArgs.get()));
+    hydra.util.Lazy<hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Type>>> bodyAndArgs = new hydra.util.Lazy<>(() -> gatherParams.get().apply(new hydra.core.Type.Application(at)).apply((java.util.List<hydra.core.Type>) (java.util.Collections.<hydra.core.Type>emptyList())));
+    hydra.util.Lazy<java.util.List<hydra.core.Type>> args = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(bodyAndArgs.get()));
     hydra.util.Lazy<hydra.core.Type> body = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(bodyAndArgs.get()));
     return hydra.lib.eithers.Bind.apply(
       hydra.ext.python.Coder.<T0>encodeType(
@@ -675,7 +691,7 @@ public interface Coder {
             env,
             v1)),
           args.get()),
-        (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.Expression>, hydra.util.Either<T0, hydra.ext.python.syntax.Expression>>) (pyArgs -> hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.primaryAndParams(
+        (java.util.function.Function<java.util.List<hydra.ext.python.syntax.Expression>, hydra.util.Either<T0, hydra.ext.python.syntax.Expression>>) (pyArgs -> hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.primaryAndParams(
           hydra.ext.python.Utils.pyExpressionToPyPrimary(pyBody),
           pyArgs))))));
   }
@@ -691,25 +707,25 @@ public interface Coder {
     hydra.core.Term term1 = (binding).term;
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (() -> {
-        hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Term> gathered = hydra.ext.python.Coder.gatherLambdas(term1);
+        hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Term> gathered = hydra.ext.python.Coder.gatherLambdas(term1);
         return ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (() -> {
-          hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> lambdaParams = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered));
+          hydra.util.Lazy<java.util.List<hydra.core.Name>> lambdaParams = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered));
           return ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (() -> {
             hydra.util.Lazy<hydra.core.Term> innerBody = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(gathered));
             return ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (() -> {
-              hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>>> mcsa = hydra.ext.python.Coder.isCaseStatementApplication(innerBody.get());
+              hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>> mcsa = hydra.ext.python.Coder.isCaseStatementApplication(innerBody.get());
               return hydra.lib.maybes.Maybe.applyLazy(
                 () -> ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (() -> {
                   hydra.util.Maybe<hydra.core.CaseStatement> mcs = hydra.ext.python.Coder.extractCaseElimination(term1);
                   return hydra.lib.maybes.Maybe.applyLazy(
                     () -> hydra.lib.eithers.Map.apply(
-                      (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.Statement>, hydra.ext.python.syntax.Statement>) (stmts -> hydra.lib.lists.Head.apply(stmts)),
+                      (java.util.function.Function<java.util.List<hydra.ext.python.syntax.Statement>, hydra.ext.python.syntax.Statement>) (stmts -> hydra.lib.lists.Head.apply(stmts)),
                       hydra.ext.python.Coder.encodeTermMultiline(
                         cx,
                         env,
                         term1)),
                     (java.util.function.Function<hydra.core.CaseStatement, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (cs -> {
-                      hydra.util.ConsList<hydra.core.Field> cases_ = (cs).cases;
+                      java.util.List<hydra.core.Field> cases_ = (cs).cases;
                       hydra.util.Maybe<hydra.core.Term> dflt = (cs).default_;
                       hydra.core.Name tname = (cs).typeName;
                       return hydra.lib.eithers.Bind.apply(
@@ -717,14 +733,14 @@ public interface Coder {
                           cx,
                           hydra.ext.python.Coder.pythonEnvironmentGetGraph(env),
                           tname),
-                        (java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (rt -> {
+                        (java.util.function.Function<java.util.List<hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (rt -> {
                           hydra.util.Lazy<hydra.ext.python.syntax.Param> innerParam = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.Param(new hydra.ext.python.syntax.Name("x"), (hydra.util.Maybe<hydra.ext.python.syntax.Annotation>) (hydra.util.Maybe.<hydra.ext.python.syntax.Annotation>nothing())));
                           Boolean isEnum = hydra.Predicates.isEnumRowType(rt);
                           hydra.util.Lazy<Boolean> isFull = new hydra.util.Lazy<>(() -> hydra.ext.python.Coder.isCasesFull(
                             rt,
                             cases_));
                           hydra.util.Lazy<hydra.ext.python.syntax.ParamNoDefault> param = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.ParamNoDefault(innerParam.get(), (hydra.util.Maybe<hydra.ext.python.syntax.TypeComment>) (hydra.util.Maybe.<hydra.ext.python.syntax.TypeComment>nothing())));
-                          hydra.util.Lazy<hydra.ext.python.syntax.Parameters> params = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.Parameters.ParamNoDefault(new hydra.ext.python.syntax.ParamNoDefaultParameters(hydra.util.ConsList.of(param.get()), (hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault>) (hydra.util.ConsList.<hydra.ext.python.syntax.ParamWithDefault>empty()), (hydra.util.Maybe<hydra.ext.python.syntax.StarEtc>) (hydra.util.Maybe.<hydra.ext.python.syntax.StarEtc>nothing()))));
+                          hydra.util.Lazy<hydra.ext.python.syntax.Parameters> params = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.Parameters.ParamNoDefault(new hydra.ext.python.syntax.ParamNoDefaultParameters(java.util.Arrays.asList(param.get()), (java.util.List<hydra.ext.python.syntax.ParamWithDefault>) (java.util.Collections.<hydra.ext.python.syntax.ParamWithDefault>emptyList()), (hydra.util.Maybe<hydra.ext.python.syntax.StarEtc>) (hydra.util.Maybe.<hydra.ext.python.syntax.StarEtc>nothing()))));
                           return hydra.lib.eithers.Bind.apply(
                             hydra.lib.eithers.MapList.apply(
                               (java.util.function.Function<hydra.core.Field, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.CaseBlock>>) (v1 -> hydra.ext.python.Coder.encodeCaseBlock(
@@ -733,13 +749,13 @@ public interface Coder {
                                 tname,
                                 rt,
                                 isEnum,
-                                (java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>>) (e -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (t -> hydra.ext.python.Coder.encodeTermMultiline(
+                                (java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>>) (e -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (t -> hydra.ext.python.Coder.encodeTermMultiline(
                                   cx,
                                   e,
                                   t))),
                                 v1)),
                               cases_),
-                            (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.CaseBlock>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (pyCases -> hydra.lib.eithers.Bind.apply(
+                            (java.util.function.Function<java.util.List<hydra.ext.python.syntax.CaseBlock>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (pyCases -> hydra.lib.eithers.Bind.apply(
                               hydra.ext.python.Coder.encodeDefaultCaseBlock(
                                 (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (t -> hydra.ext.python.Coder.encodeTermInline(
                                   cx,
@@ -749,35 +765,35 @@ public interface Coder {
                                 isFull.get(),
                                 dflt,
                                 tname),
-                              (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.CaseBlock>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (pyDflt -> {
-                                hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.CaseBlock>> allCases = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
+                              (java.util.function.Function<java.util.List<hydra.ext.python.syntax.CaseBlock>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (pyDflt -> {
+                                hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.CaseBlock>> allCases = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
                                   pyCases,
                                   pyDflt));
                                 hydra.ext.python.syntax.SubjectExpression subj = new hydra.ext.python.syntax.SubjectExpression.Simple(new hydra.ext.python.syntax.NamedExpression.Simple(hydra.ext.python.Utils.pyNameToPyExpression(new hydra.ext.python.syntax.Name("x"))));
                                 hydra.ext.python.syntax.Statement matchStmt = new hydra.ext.python.syntax.Statement.Compound(new hydra.ext.python.syntax.CompoundStatement.Match(new hydra.ext.python.syntax.MatchStatement(subj, allCases.get())));
                                 hydra.util.Lazy<hydra.ext.python.syntax.Block> body = new hydra.util.Lazy<>(() -> hydra.ext.python.Utils.indentedBlock(
                                   (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()),
-                                  hydra.util.ConsList.of(hydra.util.ConsList.of(matchStmt))));
-                                hydra.util.Lazy<hydra.ext.python.syntax.FunctionDefRaw> funcDefRaw = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.FunctionDefRaw(false, fname, (hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter>) (hydra.util.ConsList.<hydra.ext.python.syntax.TypeParameter>empty()), hydra.util.Maybe.just(params.get()), (hydra.util.Maybe<hydra.ext.python.syntax.Expression>) (hydra.util.Maybe.<hydra.ext.python.syntax.Expression>nothing()), (hydra.util.Maybe<hydra.ext.python.syntax.FuncTypeComment>) (hydra.util.Maybe.<hydra.ext.python.syntax.FuncTypeComment>nothing()), body.get()));
+                                  java.util.Arrays.asList(java.util.Arrays.asList(matchStmt))));
+                                hydra.util.Lazy<hydra.ext.python.syntax.FunctionDefRaw> funcDefRaw = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.FunctionDefRaw(false, fname, (java.util.List<hydra.ext.python.syntax.TypeParameter>) (java.util.Collections.<hydra.ext.python.syntax.TypeParameter>emptyList()), hydra.util.Maybe.just(params.get()), (hydra.util.Maybe<hydra.ext.python.syntax.Expression>) (hydra.util.Maybe.<hydra.ext.python.syntax.Expression>nothing()), (hydra.util.Maybe<hydra.ext.python.syntax.FuncTypeComment>) (hydra.util.Maybe.<hydra.ext.python.syntax.FuncTypeComment>nothing()), body.get()));
                                 return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>right(new hydra.ext.python.syntax.Statement.Compound(new hydra.ext.python.syntax.CompoundStatement.Function(new hydra.ext.python.syntax.FunctionDefinition((hydra.util.Maybe<hydra.ext.python.syntax.Decorators>) (hydra.util.Maybe.<hydra.ext.python.syntax.Decorators>nothing()), funcDefRaw.get()))));
                               }))));
                         }));
                     }),
                     mcs);
                 })).get(),
-                (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (csa -> hydra.lib.logic.IfElse.lazy(
+                (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (csa -> hydra.lib.logic.IfElse.lazy(
                   hydra.lib.lists.Null.apply(lambdaParams.get()),
                   () -> ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (() -> {
                     hydra.util.Maybe<hydra.core.CaseStatement> mcs = hydra.ext.python.Coder.extractCaseElimination(term1);
                     return hydra.lib.maybes.Maybe.applyLazy(
                       () -> hydra.lib.eithers.Map.apply(
-                        (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.Statement>, hydra.ext.python.syntax.Statement>) (stmts -> hydra.lib.lists.Head.apply(stmts)),
+                        (java.util.function.Function<java.util.List<hydra.ext.python.syntax.Statement>, hydra.ext.python.syntax.Statement>) (stmts -> hydra.lib.lists.Head.apply(stmts)),
                         hydra.ext.python.Coder.encodeTermMultiline(
                           cx,
                           env,
                           term1)),
                       (java.util.function.Function<hydra.core.CaseStatement, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (cs -> {
-                        hydra.util.ConsList<hydra.core.Field> cases_ = (cs).cases;
+                        java.util.List<hydra.core.Field> cases_ = (cs).cases;
                         hydra.util.Maybe<hydra.core.Term> dflt = (cs).default_;
                         hydra.core.Name tname = (cs).typeName;
                         return hydra.lib.eithers.Bind.apply(
@@ -785,14 +801,14 @@ public interface Coder {
                             cx,
                             hydra.ext.python.Coder.pythonEnvironmentGetGraph(env),
                             tname),
-                          (java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (rt -> {
+                          (java.util.function.Function<java.util.List<hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (rt -> {
                             hydra.util.Lazy<hydra.ext.python.syntax.Param> innerParam = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.Param(new hydra.ext.python.syntax.Name("x"), (hydra.util.Maybe<hydra.ext.python.syntax.Annotation>) (hydra.util.Maybe.<hydra.ext.python.syntax.Annotation>nothing())));
                             Boolean isEnum = hydra.Predicates.isEnumRowType(rt);
                             hydra.util.Lazy<Boolean> isFull = new hydra.util.Lazy<>(() -> hydra.ext.python.Coder.isCasesFull(
                               rt,
                               cases_));
                             hydra.util.Lazy<hydra.ext.python.syntax.ParamNoDefault> param = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.ParamNoDefault(innerParam.get(), (hydra.util.Maybe<hydra.ext.python.syntax.TypeComment>) (hydra.util.Maybe.<hydra.ext.python.syntax.TypeComment>nothing())));
-                            hydra.util.Lazy<hydra.ext.python.syntax.Parameters> params = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.Parameters.ParamNoDefault(new hydra.ext.python.syntax.ParamNoDefaultParameters(hydra.util.ConsList.of(param.get()), (hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault>) (hydra.util.ConsList.<hydra.ext.python.syntax.ParamWithDefault>empty()), (hydra.util.Maybe<hydra.ext.python.syntax.StarEtc>) (hydra.util.Maybe.<hydra.ext.python.syntax.StarEtc>nothing()))));
+                            hydra.util.Lazy<hydra.ext.python.syntax.Parameters> params = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.Parameters.ParamNoDefault(new hydra.ext.python.syntax.ParamNoDefaultParameters(java.util.Arrays.asList(param.get()), (java.util.List<hydra.ext.python.syntax.ParamWithDefault>) (java.util.Collections.<hydra.ext.python.syntax.ParamWithDefault>emptyList()), (hydra.util.Maybe<hydra.ext.python.syntax.StarEtc>) (hydra.util.Maybe.<hydra.ext.python.syntax.StarEtc>nothing()))));
                             return hydra.lib.eithers.Bind.apply(
                               hydra.lib.eithers.MapList.apply(
                                 (java.util.function.Function<hydra.core.Field, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.CaseBlock>>) (v1 -> hydra.ext.python.Coder.encodeCaseBlock(
@@ -801,13 +817,13 @@ public interface Coder {
                                   tname,
                                   rt,
                                   isEnum,
-                                  (java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>>) (e -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (t -> hydra.ext.python.Coder.encodeTermMultiline(
+                                  (java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>>) (e -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (t -> hydra.ext.python.Coder.encodeTermMultiline(
                                     cx,
                                     e,
                                     t))),
                                   v1)),
                                 cases_),
-                              (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.CaseBlock>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (pyCases -> hydra.lib.eithers.Bind.apply(
+                              (java.util.function.Function<java.util.List<hydra.ext.python.syntax.CaseBlock>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (pyCases -> hydra.lib.eithers.Bind.apply(
                                 hydra.ext.python.Coder.encodeDefaultCaseBlock(
                                   (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (t -> hydra.ext.python.Coder.encodeTermInline(
                                     cx,
@@ -817,16 +833,16 @@ public interface Coder {
                                   isFull.get(),
                                   dflt,
                                   tname),
-                                (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.CaseBlock>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (pyDflt -> {
-                                  hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.CaseBlock>> allCases = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
+                                (java.util.function.Function<java.util.List<hydra.ext.python.syntax.CaseBlock>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (pyDflt -> {
+                                  hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.CaseBlock>> allCases = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
                                     pyCases,
                                     pyDflt));
                                   hydra.ext.python.syntax.SubjectExpression subj = new hydra.ext.python.syntax.SubjectExpression.Simple(new hydra.ext.python.syntax.NamedExpression.Simple(hydra.ext.python.Utils.pyNameToPyExpression(new hydra.ext.python.syntax.Name("x"))));
                                   hydra.ext.python.syntax.Statement matchStmt = new hydra.ext.python.syntax.Statement.Compound(new hydra.ext.python.syntax.CompoundStatement.Match(new hydra.ext.python.syntax.MatchStatement(subj, allCases.get())));
                                   hydra.util.Lazy<hydra.ext.python.syntax.Block> body = new hydra.util.Lazy<>(() -> hydra.ext.python.Utils.indentedBlock(
                                     (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()),
-                                    hydra.util.ConsList.of(hydra.util.ConsList.of(matchStmt))));
-                                  hydra.util.Lazy<hydra.ext.python.syntax.FunctionDefRaw> funcDefRaw = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.FunctionDefRaw(false, fname, (hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter>) (hydra.util.ConsList.<hydra.ext.python.syntax.TypeParameter>empty()), hydra.util.Maybe.just(params.get()), (hydra.util.Maybe<hydra.ext.python.syntax.Expression>) (hydra.util.Maybe.<hydra.ext.python.syntax.Expression>nothing()), (hydra.util.Maybe<hydra.ext.python.syntax.FuncTypeComment>) (hydra.util.Maybe.<hydra.ext.python.syntax.FuncTypeComment>nothing()), body.get()));
+                                    java.util.Arrays.asList(java.util.Arrays.asList(matchStmt))));
+                                  hydra.util.Lazy<hydra.ext.python.syntax.FunctionDefRaw> funcDefRaw = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.FunctionDefRaw(false, fname, (java.util.List<hydra.ext.python.syntax.TypeParameter>) (java.util.Collections.<hydra.ext.python.syntax.TypeParameter>emptyList()), hydra.util.Maybe.just(params.get()), (hydra.util.Maybe<hydra.ext.python.syntax.Expression>) (hydra.util.Maybe.<hydra.ext.python.syntax.Expression>nothing()), (hydra.util.Maybe<hydra.ext.python.syntax.FuncTypeComment>) (hydra.util.Maybe.<hydra.ext.python.syntax.FuncTypeComment>nothing()), body.get()));
                                   return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>right(new hydra.ext.python.syntax.Statement.Compound(new hydra.ext.python.syntax.CompoundStatement.Function(new hydra.ext.python.syntax.FunctionDefinition((hydra.util.Maybe<hydra.ext.python.syntax.Decorators>) (hydra.util.Maybe.<hydra.ext.python.syntax.Decorators>nothing()), funcDefRaw.get()))));
                                 }))));
                           }));
@@ -836,21 +852,21 @@ public interface Coder {
                   () -> ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (() -> {
                     hydra.util.Lazy<hydra.core.Name> tname = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(csa));
                     return ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (() -> {
-                      hydra.util.Lazy<hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>> rest1 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(csa));
+                      hydra.util.Lazy<hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>> rest1 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(csa));
                       return ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (() -> {
                         hydra.util.Lazy<hydra.util.Maybe<hydra.core.Term>> dflt = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(rest1.get()));
                         return ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (() -> {
-                          hydra.util.Lazy<hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>> rest2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(rest1.get()));
+                          hydra.util.Lazy<hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>> rest2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(rest1.get()));
                           return ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (() -> {
-                            hydra.util.Lazy<hydra.util.ConsList<hydra.core.Field>> cases_ = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(rest2.get()));
+                            hydra.util.Lazy<java.util.List<hydra.core.Field>> cases_ = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(rest2.get()));
                             return hydra.lib.eithers.Bind.apply(
                               hydra.Resolution.requireUnionType(
                                 cx,
                                 hydra.ext.python.Coder.pythonEnvironmentGetGraph(env),
                                 tname.get()),
-                              (java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (rt -> {
-                                hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> capturedVarNames = new hydra.util.Lazy<>(() -> hydra.lib.lists.Init.apply(lambdaParams.get()));
-                                hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault>> capturedParams = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+                              (java.util.function.Function<java.util.List<hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (rt -> {
+                                hydra.util.Lazy<java.util.List<hydra.core.Name>> capturedVarNames = new hydra.util.Lazy<>(() -> hydra.lib.lists.Init.apply(lambdaParams.get()));
+                                hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.ParamNoDefault>> capturedParams = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
                                   (java.util.function.Function<hydra.core.Name, hydra.ext.python.syntax.ParamNoDefault>) (n -> new hydra.ext.python.syntax.ParamNoDefault(new hydra.ext.python.syntax.Param(hydra.ext.python.Names.encodeName(
                                     false,
                                     new hydra.util.CaseConvention.LowerSnake(),
@@ -864,9 +880,9 @@ public interface Coder {
                                   env,
                                   matchLambdaParam.get());
                                 hydra.util.Lazy<hydra.ext.python.syntax.ParamNoDefault> matchParam = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.ParamNoDefault(new hydra.ext.python.syntax.Param(matchArgName, (hydra.util.Maybe<hydra.ext.python.syntax.Annotation>) (hydra.util.Maybe.<hydra.ext.python.syntax.Annotation>nothing())), (hydra.util.Maybe<hydra.ext.python.syntax.TypeComment>) (hydra.util.Maybe.<hydra.ext.python.syntax.TypeComment>nothing())));
-                                hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault>> allParams = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
+                                hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.ParamNoDefault>> allParams = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
                                   capturedParams.get(),
-                                  hydra.util.ConsList.of(matchParam.get())));
+                                  java.util.Arrays.asList(matchParam.get())));
                                 hydra.ext.python.environment.PythonEnvironment envWithParams = hydra.ext.python.Coder.extendEnvWithLambdaParams(
                                   env,
                                   term1);
@@ -874,7 +890,7 @@ public interface Coder {
                                 hydra.util.Lazy<Boolean> isFull = new hydra.util.Lazy<>(() -> hydra.ext.python.Coder.isCasesFull(
                                   rt,
                                   cases_.get()));
-                                hydra.util.Lazy<hydra.ext.python.syntax.Parameters> params = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.Parameters.ParamNoDefault(new hydra.ext.python.syntax.ParamNoDefaultParameters(allParams.get(), (hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault>) (hydra.util.ConsList.<hydra.ext.python.syntax.ParamWithDefault>empty()), (hydra.util.Maybe<hydra.ext.python.syntax.StarEtc>) (hydra.util.Maybe.<hydra.ext.python.syntax.StarEtc>nothing()))));
+                                hydra.util.Lazy<hydra.ext.python.syntax.Parameters> params = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.Parameters.ParamNoDefault(new hydra.ext.python.syntax.ParamNoDefaultParameters(allParams.get(), (java.util.List<hydra.ext.python.syntax.ParamWithDefault>) (java.util.Collections.<hydra.ext.python.syntax.ParamWithDefault>emptyList()), (hydra.util.Maybe<hydra.ext.python.syntax.StarEtc>) (hydra.util.Maybe.<hydra.ext.python.syntax.StarEtc>nothing()))));
                                 return hydra.lib.eithers.Bind.apply(
                                   hydra.lib.eithers.MapList.apply(
                                     (java.util.function.Function<hydra.core.Field, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.CaseBlock>>) (v1 -> hydra.ext.python.Coder.encodeCaseBlock(
@@ -883,13 +899,13 @@ public interface Coder {
                                       tname.get(),
                                       rt,
                                       isEnum,
-                                      (java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>>) (e -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (t -> hydra.ext.python.Coder.encodeTermMultiline(
+                                      (java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>>) (e -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (t -> hydra.ext.python.Coder.encodeTermMultiline(
                                         cx,
                                         e,
                                         t))),
                                       v1)),
                                     cases_.get()),
-                                  (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.CaseBlock>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (pyCases -> hydra.lib.eithers.Bind.apply(
+                                  (java.util.function.Function<java.util.List<hydra.ext.python.syntax.CaseBlock>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (pyCases -> hydra.lib.eithers.Bind.apply(
                                     hydra.ext.python.Coder.encodeDefaultCaseBlock(
                                       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (t -> hydra.ext.python.Coder.encodeTermInline(
                                         cx,
@@ -899,16 +915,16 @@ public interface Coder {
                                       isFull.get(),
                                       dflt.get(),
                                       tname.get()),
-                                    (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.CaseBlock>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (pyDflt -> {
-                                      hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.CaseBlock>> allCases = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
+                                    (java.util.function.Function<java.util.List<hydra.ext.python.syntax.CaseBlock>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (pyDflt -> {
+                                      hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.CaseBlock>> allCases = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
                                         pyCases,
                                         pyDflt));
                                       hydra.ext.python.syntax.SubjectExpression subj = new hydra.ext.python.syntax.SubjectExpression.Simple(new hydra.ext.python.syntax.NamedExpression.Simple(hydra.ext.python.Utils.pyNameToPyExpression(matchArgName)));
                                       hydra.ext.python.syntax.Statement matchStmt = new hydra.ext.python.syntax.Statement.Compound(new hydra.ext.python.syntax.CompoundStatement.Match(new hydra.ext.python.syntax.MatchStatement(subj, allCases.get())));
                                       hydra.util.Lazy<hydra.ext.python.syntax.Block> body = new hydra.util.Lazy<>(() -> hydra.ext.python.Utils.indentedBlock(
                                         (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()),
-                                        hydra.util.ConsList.of(hydra.util.ConsList.of(matchStmt))));
-                                      hydra.util.Lazy<hydra.ext.python.syntax.FunctionDefRaw> funcDefRaw = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.FunctionDefRaw(false, fname, (hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter>) (hydra.util.ConsList.<hydra.ext.python.syntax.TypeParameter>empty()), hydra.util.Maybe.just(params.get()), (hydra.util.Maybe<hydra.ext.python.syntax.Expression>) (hydra.util.Maybe.<hydra.ext.python.syntax.Expression>nothing()), (hydra.util.Maybe<hydra.ext.python.syntax.FuncTypeComment>) (hydra.util.Maybe.<hydra.ext.python.syntax.FuncTypeComment>nothing()), body.get()));
+                                        java.util.Arrays.asList(java.util.Arrays.asList(matchStmt))));
+                                      hydra.util.Lazy<hydra.ext.python.syntax.FunctionDefRaw> funcDefRaw = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.FunctionDefRaw(false, fname, (java.util.List<hydra.ext.python.syntax.TypeParameter>) (java.util.Collections.<hydra.ext.python.syntax.TypeParameter>emptyList()), hydra.util.Maybe.just(params.get()), (hydra.util.Maybe<hydra.ext.python.syntax.Expression>) (hydra.util.Maybe.<hydra.ext.python.syntax.Expression>nothing()), (hydra.util.Maybe<hydra.ext.python.syntax.FuncTypeComment>) (hydra.util.Maybe.<hydra.ext.python.syntax.FuncTypeComment>nothing()), body.get()));
                                       return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>right(new hydra.ext.python.syntax.Statement.Compound(new hydra.ext.python.syntax.CompoundStatement.Function(new hydra.ext.python.syntax.FunctionDefinition((hydra.util.Maybe<hydra.ext.python.syntax.Decorators>) (hydra.util.Maybe.<hydra.ext.python.syntax.Decorators>nothing()), funcDefRaw.get()))));
                                     }))));
                               }));
@@ -993,13 +1009,13 @@ public interface Coder {
       }));
   }
 
-  static <T0, T1, T2, T3> hydra.util.Either<T2, hydra.util.ConsList<T3>> encodeBindingsAsDefs(T0 env, java.util.function.Function<T0, java.util.function.Function<T1, hydra.util.Either<T2, T3>>> encodeBinding, hydra.util.ConsList<T1> bindings) {
+  static <T0, T1, T2, T3> hydra.util.Either<T2, java.util.List<T3>> encodeBindingsAsDefs(T0 env, java.util.function.Function<T0, java.util.function.Function<T1, hydra.util.Either<T2, T3>>> encodeBinding, java.util.List<T1> bindings) {
     return hydra.lib.eithers.MapList.apply(
       (java.util.function.Function<T1, hydra.util.Either<T2, T3>>) (v1 -> (encodeBinding).apply(env).apply(v1)),
       bindings);
   }
 
-  static <T0, T1> hydra.util.Either<T1, hydra.ext.python.syntax.CaseBlock> encodeCaseBlock(T0 cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name tname, hydra.util.ConsList<hydra.core.FieldType> rowType, Boolean isEnum, java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>> encodeBody, hydra.core.Field field) {
+  static <T0, T1> hydra.util.Either<T1, hydra.ext.python.syntax.CaseBlock> encodeCaseBlock(T0 cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name tname, java.util.List<hydra.core.FieldType> rowType, Boolean isEnum, java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, java.util.List<hydra.ext.python.syntax.Statement>>>> encodeBody, hydra.core.Field field) {
     hydra.core.Name fname = (field).name;
     Boolean isUnitVariant = hydra.ext.python.Coder.isVariantUnitType(
       rowType,
@@ -1066,15 +1082,15 @@ public interface Coder {
       shouldCapture));
     return hydra.lib.eithers.Bind.apply(
       (encodeBody).apply(env2).apply(effectiveBody.get()),
-      (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.Statement>, hydra.util.Either<T1, hydra.ext.python.syntax.CaseBlock>>) (stmts -> {
+      (java.util.function.Function<java.util.List<hydra.ext.python.syntax.Statement>, hydra.util.Either<T1, hydra.ext.python.syntax.CaseBlock>>) (stmts -> {
         hydra.util.Lazy<hydra.ext.python.syntax.Block> pyBody = new hydra.util.Lazy<>(() -> hydra.ext.python.Utils.indentedBlock(
           (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()),
-          hydra.util.ConsList.of(stmts)));
+          java.util.Arrays.asList(stmts)));
         return hydra.util.Either.<T1, hydra.ext.python.syntax.CaseBlock>right(new hydra.ext.python.syntax.CaseBlock(hydra.ext.python.Utils.pyClosedPatternToPyPatterns(pattern.get()), (hydra.util.Maybe<hydra.ext.python.syntax.Guard>) (hydra.util.Maybe.<hydra.ext.python.syntax.Guard>nothing()), pyBody.get()));
       }));
   }
 
-  static <T0, T1> hydra.util.Either<T1, hydra.util.ConsList<hydra.ext.python.syntax.CaseBlock>> encodeDefaultCaseBlock(java.util.function.Function<T0, hydra.util.Either<T1, hydra.ext.python.syntax.Expression>> encodeTerm, Boolean isFull, hydra.util.Maybe<T0> mdflt, hydra.core.Name tname) {
+  static <T0, T1> hydra.util.Either<T1, java.util.List<hydra.ext.python.syntax.CaseBlock>> encodeDefaultCaseBlock(java.util.function.Function<T0, hydra.util.Either<T1, hydra.ext.python.syntax.Expression>> encodeTerm, Boolean isFull, hydra.util.Maybe<T0> mdflt, hydra.core.Name tname) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.maybes.Maybe.applyLazy(
         () -> hydra.util.Either.<T1, hydra.ext.python.syntax.Statement>right(hydra.lib.logic.IfElse.lazy(
@@ -1087,23 +1103,23 @@ public interface Coder {
           (encodeTerm).apply(d),
           (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<T1, hydra.ext.python.syntax.Statement>>) (pyexpr -> hydra.util.Either.<T1, hydra.ext.python.syntax.Statement>right(hydra.ext.python.Utils.returnSingle(pyexpr))))),
         mdflt),
-      (java.util.function.Function<hydra.ext.python.syntax.Statement, hydra.util.Either<T1, hydra.util.ConsList<hydra.ext.python.syntax.CaseBlock>>>) (stmt -> {
+      (java.util.function.Function<hydra.ext.python.syntax.Statement, hydra.util.Either<T1, java.util.List<hydra.ext.python.syntax.CaseBlock>>>) (stmt -> {
         hydra.util.Lazy<hydra.ext.python.syntax.Block> body = new hydra.util.Lazy<>(() -> hydra.ext.python.Utils.indentedBlock(
           (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()),
-          hydra.util.ConsList.of(hydra.util.ConsList.of(stmt))));
+          java.util.Arrays.asList(java.util.Arrays.asList(stmt))));
         hydra.ext.python.syntax.Patterns patterns = hydra.ext.python.Utils.pyClosedPatternToPyPatterns(new hydra.ext.python.syntax.ClosedPattern.Wildcard());
-        return hydra.util.Either.<T1, hydra.util.ConsList<hydra.ext.python.syntax.CaseBlock>>right(hydra.util.ConsList.of(new hydra.ext.python.syntax.CaseBlock(patterns, (hydra.util.Maybe<hydra.ext.python.syntax.Guard>) (hydra.util.Maybe.<hydra.ext.python.syntax.Guard>nothing()), body.get())));
+        return hydra.util.Either.<T1, java.util.List<hydra.ext.python.syntax.CaseBlock>>right(java.util.Arrays.asList(new hydra.ext.python.syntax.CaseBlock(patterns, (hydra.util.Maybe<hydra.ext.python.syntax.Guard>) (hydra.util.Maybe.<hydra.ext.python.syntax.Guard>nothing()), body.get())));
       }));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>> encodeDefinition(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.packaging.Definition def_) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<java.util.List<hydra.ext.python.syntax.Statement>>> encodeDefinition(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.packaging.Definition def_) {
     return (def_).accept(new hydra.packaging.Definition.PartialVisitor<>() {
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>> visit(hydra.packaging.Definition.Term td) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<java.util.List<hydra.ext.python.syntax.Statement>>> visit(hydra.packaging.Definition.Term td) {
         hydra.core.Name name = (td).value.name;
         hydra.core.Term term = (td).value.term;
         hydra.util.Lazy<hydra.core.TypeScheme> typ = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
-          () -> new hydra.core.TypeScheme((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Unit")), (hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing())),
+          () -> new hydra.core.TypeScheme((java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Unit")), (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing())),
           (java.util.function.Function<hydra.core.TypeScheme, hydra.core.TypeScheme>) (x -> x),
           (td).value.type));
         return hydra.lib.eithers.Bind.apply(
@@ -1111,7 +1127,7 @@ public interface Coder {
             cx,
             hydra.ext.python.Coder.pythonEnvironmentGetGraph(env),
             term),
-          (java.util.function.Function<hydra.util.Maybe<String>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>>) (comment -> {
+          (java.util.function.Function<hydra.util.Maybe<String>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<java.util.List<hydra.ext.python.syntax.Statement>>>>) (comment -> {
             hydra.util.Lazy<hydra.util.Maybe<String>> normComment = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Map.apply(
               hydra.Formatting::normalizeComment,
               comment));
@@ -1123,12 +1139,12 @@ public interface Coder {
                 term,
                 typ.get(),
                 normComment.get()),
-              (java.util.function.Function<hydra.ext.python.syntax.Statement, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>>) (stmt -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>right(hydra.util.ConsList.of(hydra.util.ConsList.of(stmt)))));
+              (java.util.function.Function<hydra.ext.python.syntax.Statement, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<java.util.List<hydra.ext.python.syntax.Statement>>>>) (stmt -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.util.List<java.util.List<hydra.ext.python.syntax.Statement>>>right(java.util.Arrays.asList(java.util.Arrays.asList(stmt)))));
           }));
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>> visit(hydra.packaging.Definition.Type td) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<java.util.List<hydra.ext.python.syntax.Statement>>> visit(hydra.packaging.Definition.Type td) {
         hydra.core.Name name = (td).value.name;
         hydra.core.Type typ = (td).value.type.type;
         return hydra.lib.eithers.Bind.apply(
@@ -1136,7 +1152,7 @@ public interface Coder {
             cx,
             hydra.ext.python.Coder.pythonEnvironmentGetGraph(env),
             typ),
-          (java.util.function.Function<hydra.util.Maybe<String>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>>) (comment -> {
+          (java.util.function.Function<hydra.util.Maybe<String>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<java.util.List<hydra.ext.python.syntax.Statement>>>>) (comment -> {
             hydra.util.Lazy<hydra.util.Maybe<String>> normComment = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Map.apply(
               hydra.Formatting::normalizeComment,
               comment));
@@ -1151,7 +1167,7 @@ public interface Coder {
     });
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> encodeEnumValueAssignment(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.FieldType fieldType) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>> encodeEnumValueAssignment(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.FieldType fieldType) {
     hydra.core.Name fname = (fieldType).name;
     hydra.core.Type ftype = (fieldType).type;
     return hydra.lib.eithers.Bind.apply(
@@ -1159,7 +1175,7 @@ public interface Coder {
         cx,
         hydra.ext.python.Coder.pythonEnvironmentGetGraph(env),
         ftype),
-      (java.util.function.Function<hydra.util.Maybe<String>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (mcomment -> {
+      (java.util.function.Function<hydra.util.Maybe<String>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (mcomment -> {
         hydra.ext.python.syntax.Name pyName = hydra.ext.python.Names.encodeEnumValue(
           env,
           fname);
@@ -1170,13 +1186,13 @@ public interface Coder {
             new hydra.util.CaseConvention.Pascal(),
             env,
             new hydra.core.Name("hydra.core.Name"))),
-          hydra.util.ConsList.of(hydra.ext.python.Utils.doubleQuotedString(fnameStr)));
+          java.util.Arrays.asList(hydra.ext.python.Utils.doubleQuotedString(fnameStr)));
         hydra.ext.python.syntax.Statement assignStmt = hydra.ext.python.Utils.assignmentStatement(
           pyName,
           pyValue);
-        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>right(hydra.lib.maybes.Maybe.applyLazy(
-          () -> hydra.util.ConsList.of(assignStmt),
-          (java.util.function.Function<String, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>) (c -> hydra.util.ConsList.of(
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>right(hydra.lib.maybes.Maybe.applyLazy(
+          () -> java.util.Arrays.asList(assignStmt),
+          (java.util.function.Function<String, java.util.List<hydra.ext.python.syntax.Statement>>) (c -> java.util.Arrays.asList(
             assignStmt,
             hydra.ext.python.Utils.pyExpressionToPyStatement(hydra.ext.python.Utils.tripleQuotedString(c)))),
           mcomment));
@@ -1224,7 +1240,7 @@ public interface Coder {
       public hydra.util.Either<T0, hydra.ext.python.syntax.Expression> visit(hydra.core.FloatValue.Bigfloat f) {
         return hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.functionCall(
           hydra.ext.python.Utils.pyNameToPyPrimary(new hydra.ext.python.syntax.Name("Decimal")),
-          hydra.util.ConsList.of(hydra.ext.python.Utils.singleQuotedString(hydra.lib.literals.ShowBigfloat.apply((f).value)))));
+          java.util.Arrays.asList(hydra.ext.python.Utils.singleQuotedString(hydra.lib.literals.ShowBigfloat.apply((f).value)))));
       }
 
       @Override
@@ -1240,98 +1256,98 @@ public interface Coder {
   }
 
   static <T0> hydra.util.Either<T0, hydra.ext.python.syntax.Expression> encodeForallType(hydra.ext.python.environment.PythonEnvironment env, hydra.core.ForallType lt) {
-    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.util.ConsList<hydra.core.Name>, hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>>>> gatherParams = new java.util.concurrent.atomic.AtomicReference<>();
-    gatherParams.set((java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.util.ConsList<hydra.core.Name>, hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>>>) (t -> (java.util.function.Function<hydra.util.ConsList<hydra.core.Name>, hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>>) (ps -> hydra.Strip.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
+    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Type, java.util.function.Function<java.util.List<hydra.core.Name>, hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>>>> gatherParams = new java.util.concurrent.atomic.AtomicReference<>();
+    gatherParams.set((java.util.function.Function<hydra.core.Type, java.util.function.Function<java.util.List<hydra.core.Name>, hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>>>) (t -> (java.util.function.Function<java.util.List<hydra.core.Name>, hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>>) (ps -> hydra.Strip.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>> visit(hydra.core.Type.Forall forallT) {
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>> visit(hydra.core.Type.Forall forallT) {
         return gatherParams.get().apply((forallT).value.body).apply(hydra.lib.lists.Cons.apply(
           (forallT).value.parameter,
           ps));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>> visit(hydra.core.Type.Annotated ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>> visit(hydra.core.Type.Annotated ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>> visit(hydra.core.Type.Application ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>> visit(hydra.core.Type.Application ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>> visit(hydra.core.Type.Function ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>> visit(hydra.core.Type.Function ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>> visit(hydra.core.Type.List ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>> visit(hydra.core.Type.List ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>> visit(hydra.core.Type.Literal ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>> visit(hydra.core.Type.Literal ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>> visit(hydra.core.Type.Map ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>> visit(hydra.core.Type.Map ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>> visit(hydra.core.Type.Maybe ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>> visit(hydra.core.Type.Maybe ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>> visit(hydra.core.Type.Either ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>> visit(hydra.core.Type.Either ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>> visit(hydra.core.Type.Pair ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>> visit(hydra.core.Type.Pair ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>> visit(hydra.core.Type.Record ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>> visit(hydra.core.Type.Record ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>> visit(hydra.core.Type.Set ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>> visit(hydra.core.Type.Set ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>> visit(hydra.core.Type.Union ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>> visit(hydra.core.Type.Union ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>> visit(hydra.core.Type.Unit ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>> visit(hydra.core.Type.Unit ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>> visit(hydra.core.Type.Variable ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>> visit(hydra.core.Type.Variable ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>> visit(hydra.core.Type.Void_ ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>> visit(hydra.core.Type.Void_ ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
       }
 
       @Override
-      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>> visit(hydra.core.Type.Wrap ignored) {
-        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
+      public hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>> visit(hydra.core.Type.Wrap ignored) {
+        return (hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
       }
     }))));
-    hydra.util.Lazy<hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>> bodyAndParams = new hydra.util.Lazy<>(() -> gatherParams.get().apply(new hydra.core.Type.Forall(lt)).apply((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty())));
+    hydra.util.Lazy<hydra.util.Pair<hydra.core.Type, java.util.List<hydra.core.Name>>> bodyAndParams = new hydra.util.Lazy<>(() -> gatherParams.get().apply(new hydra.core.Type.Forall(lt)).apply((java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList())));
     hydra.util.Lazy<hydra.core.Type> body = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(bodyAndParams.get()));
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> params = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(bodyAndParams.get()));
+    hydra.util.Lazy<java.util.List<hydra.core.Name>> params = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(bodyAndParams.get()));
     return hydra.lib.eithers.Bind.apply(
       hydra.ext.python.Coder.<T0>encodeType(
         env,
@@ -1339,7 +1355,7 @@ public interface Coder {
       (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<T0, hydra.ext.python.syntax.Expression>>) (pyBody -> hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.primaryAndParams(
         hydra.ext.python.Utils.pyExpressionToPyPrimary(pyBody),
         hydra.lib.lists.Map.apply(
-          (java.util.function.Function<hydra.core.Name, hydra.ext.python.syntax.Expression>) (n -> new hydra.ext.python.syntax.Expression.Simple(new hydra.ext.python.syntax.Disjunction(hydra.util.ConsList.of(new hydra.ext.python.syntax.Conjunction(hydra.util.ConsList.of(new hydra.ext.python.syntax.Inversion.Simple(new hydra.ext.python.syntax.Comparison(new hydra.ext.python.syntax.BitwiseOr((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseOr>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseOr>nothing()), new hydra.ext.python.syntax.BitwiseXor((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseXor>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseXor>nothing()), new hydra.ext.python.syntax.BitwiseAnd((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseAnd>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseAnd>nothing()), new hydra.ext.python.syntax.ShiftExpression((hydra.util.Maybe<hydra.ext.python.syntax.ShiftLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.ShiftLhs>nothing()), new hydra.ext.python.syntax.Sum((hydra.util.Maybe<hydra.ext.python.syntax.SumLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.SumLhs>nothing()), new hydra.ext.python.syntax.Term((hydra.util.Maybe<hydra.ext.python.syntax.TermLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.TermLhs>nothing()), new hydra.ext.python.syntax.Factor.Simple(new hydra.ext.python.syntax.Power(new hydra.ext.python.syntax.AwaitPrimary(false, new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(new hydra.ext.python.syntax.Name((n).value)))), (hydra.util.Maybe<hydra.ext.python.syntax.Factor>) (hydra.util.Maybe.<hydra.ext.python.syntax.Factor>nothing()))))))))), (hydra.util.ConsList<hydra.ext.python.syntax.CompareOpBitwiseOrPair>) (hydra.util.ConsList.<hydra.ext.python.syntax.CompareOpBitwiseOrPair>empty()))))))))),
+          (java.util.function.Function<hydra.core.Name, hydra.ext.python.syntax.Expression>) (n -> new hydra.ext.python.syntax.Expression.Simple(new hydra.ext.python.syntax.Disjunction(java.util.Arrays.asList(new hydra.ext.python.syntax.Conjunction(java.util.Arrays.asList(new hydra.ext.python.syntax.Inversion.Simple(new hydra.ext.python.syntax.Comparison(new hydra.ext.python.syntax.BitwiseOr((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseOr>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseOr>nothing()), new hydra.ext.python.syntax.BitwiseXor((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseXor>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseXor>nothing()), new hydra.ext.python.syntax.BitwiseAnd((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseAnd>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseAnd>nothing()), new hydra.ext.python.syntax.ShiftExpression((hydra.util.Maybe<hydra.ext.python.syntax.ShiftLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.ShiftLhs>nothing()), new hydra.ext.python.syntax.Sum((hydra.util.Maybe<hydra.ext.python.syntax.SumLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.SumLhs>nothing()), new hydra.ext.python.syntax.Term((hydra.util.Maybe<hydra.ext.python.syntax.TermLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.TermLhs>nothing()), new hydra.ext.python.syntax.Factor.Simple(new hydra.ext.python.syntax.Power(new hydra.ext.python.syntax.AwaitPrimary(false, new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(new hydra.ext.python.syntax.Name((n).value)))), (hydra.util.Maybe<hydra.ext.python.syntax.Factor>) (hydra.util.Maybe.<hydra.ext.python.syntax.Factor>nothing()))))))))), (java.util.List<hydra.ext.python.syntax.CompareOpBitwiseOrPair>) (java.util.Collections.<hydra.ext.python.syntax.CompareOpBitwiseOrPair>emptyList()))))))))),
           params.get())))));
   }
 
@@ -1353,8 +1369,8 @@ public interface Coder {
             env,
             new hydra.core.Term.Function(new hydra.core.Function.Lambda((lam).value))),
           (java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (fs -> {
-            hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> bindings = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, hydra.util.ConsList<hydra.core.Binding>>) (projected -> projected.bindings)).apply(fs));
-            hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> bindingNames = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+            hydra.util.Lazy<java.util.List<hydra.core.Binding>> bindings = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, java.util.List<hydra.core.Binding>>) (projected -> projected.bindings)).apply(fs));
+            hydra.util.Lazy<java.util.List<hydra.core.Name>> bindingNames = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
               (java.util.function.Function<hydra.core.Binding, hydra.core.Name>) (b -> (b).name),
               bindings.get()));
             hydra.util.Lazy<hydra.core.Term> innerBody = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, hydra.core.Term>) (projected -> projected.body)).apply(fs));
@@ -1362,7 +1378,7 @@ public interface Coder {
             hydra.util.Lazy<hydra.ext.python.environment.PythonEnvironment> innerEnv = new hydra.util.Lazy<>(() -> new hydra.ext.python.environment.PythonEnvironment(innerEnv0.get().namespaces, innerEnv0.get().boundTypeVariables, innerEnv0.get().graph, innerEnv0.get().nullaryBindings, innerEnv0.get().version, innerEnv0.get().skipCasts, hydra.lib.sets.Union.apply(
               hydra.lib.sets.FromList.apply(bindingNames.get()),
               innerEnv0.get().inlineVariables)));
-            hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> params = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, hydra.util.ConsList<hydra.core.Name>>) (projected -> projected.params)).apply(fs));
+            hydra.util.Lazy<java.util.List<hydra.core.Name>> params = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, java.util.List<hydra.core.Name>>) (projected -> projected.params)).apply(fs));
             return hydra.lib.eithers.Bind.apply(
               hydra.ext.python.Coder.encodeTermInline(
                 cx,
@@ -1370,7 +1386,7 @@ public interface Coder {
                 false,
                 innerBody.get()),
               (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (pbody -> {
-                hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.Name>> pparams = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+                hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.Name>> pparams = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
                   (java.util.function.Function<hydra.core.Name, hydra.ext.python.syntax.Name>) (v1 -> hydra.ext.python.Names.encodeName(
                     false,
                     new hydra.util.CaseConvention.LowerSnake(),
@@ -1390,19 +1406,19 @@ public interface Coder {
                         innerEnv.get(),
                         v1)),
                       bindings.get()),
-                    (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.NamedExpression>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (pbindingExprs -> {
+                    (java.util.function.Function<java.util.List<hydra.ext.python.syntax.NamedExpression>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (pbindingExprs -> {
                       hydra.util.Lazy<hydra.ext.python.syntax.Expression> indexValue = new hydra.util.Lazy<>(() -> hydra.ext.python.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.Number_(new hydra.ext.python.syntax.Number_.Integer_(hydra.lib.literals.Int32ToBigint.apply(hydra.lib.lists.Length.apply(bindings.get()))))));
-                      hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.StarNamedExpression>> pbindingStarExprs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+                      hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.StarNamedExpression>> pbindingStarExprs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
                         (java.util.function.Function<hydra.ext.python.syntax.NamedExpression, hydra.ext.python.syntax.StarNamedExpression>) (ne -> new hydra.ext.python.syntax.StarNamedExpression.Simple(ne)),
                         pbindingExprs));
                       hydra.ext.python.syntax.StarNamedExpression pbodyStarExpr = hydra.ext.python.Utils.pyExpressionToPyStarNamedExpression(pbody);
-                      hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.StarNamedExpression>> tupleElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
+                      hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.StarNamedExpression>> tupleElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
                         pbindingStarExprs.get(),
-                        hydra.util.ConsList.of(pbodyStarExpr)));
+                        java.util.Arrays.asList(pbodyStarExpr)));
                       hydra.ext.python.syntax.Expression tupleExpr = hydra.ext.python.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.Tuple(new hydra.ext.python.syntax.Tuple(tupleElements.get())));
                       hydra.ext.python.syntax.Primary indexedExpr = hydra.ext.python.Utils.primaryWithExpressionSlices(
                         hydra.ext.python.Utils.pyExpressionToPyPrimary(tupleExpr),
-                        hydra.util.ConsList.of(indexValue.get()));
+                        java.util.Arrays.asList(indexValue.get()));
                       return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Coder.makeUncurriedLambda(
                         pparams.get(),
                         hydra.ext.python.Utils.pyPrimaryToPyExpression(indexedExpr)));
@@ -1417,7 +1433,7 @@ public interface Coder {
           cx,
           env,
           (name).value,
-          (hydra.util.ConsList<hydra.ext.python.syntax.Expression>) (hydra.util.ConsList.<hydra.ext.python.syntax.Expression>empty()));
+          (java.util.List<hydra.ext.python.syntax.Expression>) (java.util.Collections.<hydra.ext.python.syntax.Expression>emptyList()));
       }
 
       @Override
@@ -1427,9 +1443,9 @@ public interface Coder {
           public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression> visit(hydra.core.Elimination.Record proj) {
             hydra.core.Name fname = (proj).value.field;
             return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Coder.makeCurriedLambda(
-              hydra.util.ConsList.of(new hydra.ext.python.syntax.Name("v1")),
+              java.util.Arrays.asList(new hydra.ext.python.syntax.Name("v1")),
               hydra.ext.python.Utils.projectFromExpression(
-                new hydra.ext.python.syntax.Expression.Simple(new hydra.ext.python.syntax.Disjunction(hydra.util.ConsList.of(new hydra.ext.python.syntax.Conjunction(hydra.util.ConsList.of(new hydra.ext.python.syntax.Inversion.Simple(new hydra.ext.python.syntax.Comparison(new hydra.ext.python.syntax.BitwiseOr((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseOr>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseOr>nothing()), new hydra.ext.python.syntax.BitwiseXor((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseXor>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseXor>nothing()), new hydra.ext.python.syntax.BitwiseAnd((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseAnd>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseAnd>nothing()), new hydra.ext.python.syntax.ShiftExpression((hydra.util.Maybe<hydra.ext.python.syntax.ShiftLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.ShiftLhs>nothing()), new hydra.ext.python.syntax.Sum((hydra.util.Maybe<hydra.ext.python.syntax.SumLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.SumLhs>nothing()), new hydra.ext.python.syntax.Term((hydra.util.Maybe<hydra.ext.python.syntax.TermLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.TermLhs>nothing()), new hydra.ext.python.syntax.Factor.Simple(new hydra.ext.python.syntax.Power(new hydra.ext.python.syntax.AwaitPrimary(false, new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(new hydra.ext.python.syntax.Name("v1")))), (hydra.util.Maybe<hydra.ext.python.syntax.Factor>) (hydra.util.Maybe.<hydra.ext.python.syntax.Factor>nothing()))))))))), (hydra.util.ConsList<hydra.ext.python.syntax.CompareOpBitwiseOrPair>) (hydra.util.ConsList.<hydra.ext.python.syntax.CompareOpBitwiseOrPair>empty())))))))),
+                new hydra.ext.python.syntax.Expression.Simple(new hydra.ext.python.syntax.Disjunction(java.util.Arrays.asList(new hydra.ext.python.syntax.Conjunction(java.util.Arrays.asList(new hydra.ext.python.syntax.Inversion.Simple(new hydra.ext.python.syntax.Comparison(new hydra.ext.python.syntax.BitwiseOr((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseOr>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseOr>nothing()), new hydra.ext.python.syntax.BitwiseXor((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseXor>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseXor>nothing()), new hydra.ext.python.syntax.BitwiseAnd((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseAnd>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseAnd>nothing()), new hydra.ext.python.syntax.ShiftExpression((hydra.util.Maybe<hydra.ext.python.syntax.ShiftLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.ShiftLhs>nothing()), new hydra.ext.python.syntax.Sum((hydra.util.Maybe<hydra.ext.python.syntax.SumLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.SumLhs>nothing()), new hydra.ext.python.syntax.Term((hydra.util.Maybe<hydra.ext.python.syntax.TermLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.TermLhs>nothing()), new hydra.ext.python.syntax.Factor.Simple(new hydra.ext.python.syntax.Power(new hydra.ext.python.syntax.AwaitPrimary(false, new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(new hydra.ext.python.syntax.Name("v1")))), (hydra.util.Maybe<hydra.ext.python.syntax.Factor>) (hydra.util.Maybe.<hydra.ext.python.syntax.Factor>nothing()))))))))), (java.util.List<hydra.ext.python.syntax.CompareOpBitwiseOrPair>) (java.util.Collections.<hydra.ext.python.syntax.CompareOpBitwiseOrPair>emptyList())))))))),
                 hydra.ext.python.Names.encodeFieldName(
                   env,
                   fname))));
@@ -1438,9 +1454,9 @@ public interface Coder {
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression> visit(hydra.core.Elimination.Wrap ignored) {
             return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Coder.makeCurriedLambda(
-              hydra.util.ConsList.of(new hydra.ext.python.syntax.Name("v1")),
+              java.util.Arrays.asList(new hydra.ext.python.syntax.Name("v1")),
               hydra.ext.python.Utils.projectFromExpression(
-                new hydra.ext.python.syntax.Expression.Simple(new hydra.ext.python.syntax.Disjunction(hydra.util.ConsList.of(new hydra.ext.python.syntax.Conjunction(hydra.util.ConsList.of(new hydra.ext.python.syntax.Inversion.Simple(new hydra.ext.python.syntax.Comparison(new hydra.ext.python.syntax.BitwiseOr((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseOr>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseOr>nothing()), new hydra.ext.python.syntax.BitwiseXor((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseXor>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseXor>nothing()), new hydra.ext.python.syntax.BitwiseAnd((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseAnd>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseAnd>nothing()), new hydra.ext.python.syntax.ShiftExpression((hydra.util.Maybe<hydra.ext.python.syntax.ShiftLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.ShiftLhs>nothing()), new hydra.ext.python.syntax.Sum((hydra.util.Maybe<hydra.ext.python.syntax.SumLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.SumLhs>nothing()), new hydra.ext.python.syntax.Term((hydra.util.Maybe<hydra.ext.python.syntax.TermLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.TermLhs>nothing()), new hydra.ext.python.syntax.Factor.Simple(new hydra.ext.python.syntax.Power(new hydra.ext.python.syntax.AwaitPrimary(false, new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(new hydra.ext.python.syntax.Name("v1")))), (hydra.util.Maybe<hydra.ext.python.syntax.Factor>) (hydra.util.Maybe.<hydra.ext.python.syntax.Factor>nothing()))))))))), (hydra.util.ConsList<hydra.ext.python.syntax.CompareOpBitwiseOrPair>) (hydra.util.ConsList.<hydra.ext.python.syntax.CompareOpBitwiseOrPair>empty())))))))),
+                new hydra.ext.python.syntax.Expression.Simple(new hydra.ext.python.syntax.Disjunction(java.util.Arrays.asList(new hydra.ext.python.syntax.Conjunction(java.util.Arrays.asList(new hydra.ext.python.syntax.Inversion.Simple(new hydra.ext.python.syntax.Comparison(new hydra.ext.python.syntax.BitwiseOr((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseOr>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseOr>nothing()), new hydra.ext.python.syntax.BitwiseXor((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseXor>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseXor>nothing()), new hydra.ext.python.syntax.BitwiseAnd((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseAnd>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseAnd>nothing()), new hydra.ext.python.syntax.ShiftExpression((hydra.util.Maybe<hydra.ext.python.syntax.ShiftLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.ShiftLhs>nothing()), new hydra.ext.python.syntax.Sum((hydra.util.Maybe<hydra.ext.python.syntax.SumLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.SumLhs>nothing()), new hydra.ext.python.syntax.Term((hydra.util.Maybe<hydra.ext.python.syntax.TermLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.TermLhs>nothing()), new hydra.ext.python.syntax.Factor.Simple(new hydra.ext.python.syntax.Power(new hydra.ext.python.syntax.AwaitPrimary(false, new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(new hydra.ext.python.syntax.Name("v1")))), (hydra.util.Maybe<hydra.ext.python.syntax.Factor>) (hydra.util.Maybe.<hydra.ext.python.syntax.Factor>nothing()))))))))), (java.util.List<hydra.ext.python.syntax.CompareOpBitwiseOrPair>) (java.util.Collections.<hydra.ext.python.syntax.CompareOpBitwiseOrPair>emptyList())))))))),
                 new hydra.ext.python.syntax.Name("value"))));
           }
 
@@ -1453,7 +1469,7 @@ public interface Coder {
     });
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement> encodeFunctionDefinition(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name name, hydra.util.ConsList<hydra.core.Name> tparams, hydra.util.ConsList<hydra.core.Name> args, hydra.core.Term body, hydra.util.ConsList<hydra.core.Type> doms, hydra.util.Maybe<hydra.core.Type> mcod, hydra.util.Maybe<String> comment, hydra.util.ConsList<hydra.ext.python.syntax.Statement> prefixes) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement> encodeFunctionDefinition(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name name, java.util.List<hydra.core.Name> tparams, java.util.List<hydra.core.Name> args, hydra.core.Term body, java.util.List<hydra.core.Type> doms, hydra.util.Maybe<hydra.core.Type> mcod, hydra.util.Maybe<String> comment, java.util.List<hydra.ext.python.syntax.Statement> prefixes) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.MapList.apply(
         (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Type>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.ParamNoDefault>>) (pair -> {
@@ -1472,13 +1488,13 @@ public interface Coder {
         hydra.lib.lists.Zip.apply(
           args,
           doms)),
-      (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (pyArgs -> {
+      (java.util.function.Function<java.util.List<hydra.ext.python.syntax.ParamNoDefault>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (pyArgs -> {
         hydra.util.Lazy<Boolean> isTCO = new hydra.util.Lazy<>(() -> hydra.lib.logic.And.apply(
           hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply(args)),
           hydra.Analysis.isSelfTailRecursive(
             name,
             body)));
-        hydra.util.Lazy<hydra.ext.python.syntax.Parameters> pyParams = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.Parameters.ParamNoDefault(new hydra.ext.python.syntax.ParamNoDefaultParameters(pyArgs, (hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault>) (hydra.util.ConsList.<hydra.ext.python.syntax.ParamWithDefault>empty()), (hydra.util.Maybe<hydra.ext.python.syntax.StarEtc>) (hydra.util.Maybe.<hydra.ext.python.syntax.StarEtc>nothing()))));
+        hydra.util.Lazy<hydra.ext.python.syntax.Parameters> pyParams = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.Parameters.ParamNoDefault(new hydra.ext.python.syntax.ParamNoDefaultParameters(pyArgs, (java.util.List<hydra.ext.python.syntax.ParamWithDefault>) (java.util.Collections.<hydra.ext.python.syntax.ParamWithDefault>emptyList()), (hydra.util.Maybe<hydra.ext.python.syntax.StarEtc>) (hydra.util.Maybe.<hydra.ext.python.syntax.StarEtc>nothing()))));
         return hydra.lib.eithers.Bind.apply(
           hydra.lib.logic.IfElse.lazy(
             isTCO.get(),
@@ -1489,26 +1505,26 @@ public interface Coder {
                 name,
                 args,
                 body),
-              (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.Statement>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Block>>) (tcoStmts -> {
+              (java.util.function.Function<java.util.List<hydra.ext.python.syntax.Statement>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Block>>) (tcoStmts -> {
                 hydra.ext.python.syntax.NamedExpression trueExpr = new hydra.ext.python.syntax.NamedExpression.Simple(hydra.ext.python.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.True()));
                 hydra.util.Lazy<hydra.ext.python.syntax.Block> whileBody = new hydra.util.Lazy<>(() -> hydra.ext.python.Utils.indentedBlock(
                   (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()),
-                  hydra.util.ConsList.of(hydra.lib.lists.Concat2.apply(
+                  java.util.Arrays.asList(hydra.lib.lists.Concat2.apply(
                     prefixes,
                     tcoStmts))));
                 hydra.util.Lazy<hydra.ext.python.syntax.Statement> whileStmt = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.Statement.Compound(new hydra.ext.python.syntax.CompoundStatement.While(new hydra.ext.python.syntax.WhileStatement(trueExpr, whileBody.get(), (hydra.util.Maybe<hydra.ext.python.syntax.Block>) (hydra.util.Maybe.<hydra.ext.python.syntax.Block>nothing())))));
                 return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Block>right(hydra.ext.python.Utils.indentedBlock(
                   comment,
-                  hydra.util.ConsList.of(hydra.util.ConsList.of(whileStmt.get()))));
+                  java.util.Arrays.asList(java.util.Arrays.asList(whileStmt.get()))));
               })),
             () -> hydra.lib.eithers.Bind.apply(
               hydra.ext.python.Coder.encodeTermMultiline(
                 cx,
                 env,
                 body),
-              (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.Statement>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Block>>) (stmts -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Block>right(hydra.ext.python.Utils.indentedBlock(
+              (java.util.function.Function<java.util.List<hydra.ext.python.syntax.Statement>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Block>>) (stmts -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Block>right(hydra.ext.python.Utils.indentedBlock(
                 comment,
-                hydra.util.ConsList.of(hydra.lib.lists.Concat2.apply(
+                java.util.Arrays.asList(hydra.lib.lists.Concat2.apply(
                   prefixes,
                   stmts))))))),
           (java.util.function.Function<hydra.ext.python.syntax.Block, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (block -> hydra.lib.eithers.Bind.apply(
@@ -1524,167 +1540,167 @@ public interface Coder {
               hydra.util.Lazy<Boolean> isThunk = new hydra.util.Lazy<>(() -> hydra.lib.lists.Null.apply(args));
               hydra.util.Lazy<hydra.util.Maybe<hydra.ext.python.syntax.Decorators>> mDecorators = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
                 isThunk.get(),
-                () -> hydra.util.Maybe.just(new hydra.ext.python.syntax.Decorators(hydra.util.ConsList.of(hydra.ext.python.Coder.lruCacheDecorator()))),
+                () -> hydra.util.Maybe.just(new hydra.ext.python.syntax.Decorators(java.util.Arrays.asList(hydra.ext.python.Coder.lruCacheDecorator()))),
                 () -> (hydra.util.Maybe<hydra.ext.python.syntax.Decorators>) (hydra.util.Maybe.<hydra.ext.python.syntax.Decorators>nothing())));
               hydra.ext.python.syntax.Name pyName = hydra.ext.python.Names.encodeName(
                 false,
                 new hydra.util.CaseConvention.LowerSnake(),
                 env,
                 name);
-              hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter>> pyTparams = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
+              hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.TypeParameter>> pyTparams = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
                 hydra.ext.python.Coder.useInlineTypeParams(),
                 () -> hydra.lib.lists.Map.apply(
                   (java.util.function.Function<hydra.core.Name, hydra.ext.python.syntax.TypeParameter>) (arg_ -> hydra.ext.python.Utils.pyNameToPyTypeParameter(hydra.ext.python.Names.encodeTypeVariable(arg_))),
                   tparams),
-                () -> (hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter>) (hydra.util.ConsList.<hydra.ext.python.syntax.TypeParameter>empty())));
+                () -> (java.util.List<hydra.ext.python.syntax.TypeParameter>) (java.util.Collections.<hydra.ext.python.syntax.TypeParameter>emptyList())));
               return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>right(new hydra.ext.python.syntax.Statement.Compound(new hydra.ext.python.syntax.CompoundStatement.Function(new hydra.ext.python.syntax.FunctionDefinition(mDecorators.get(), new hydra.ext.python.syntax.FunctionDefRaw(false, pyName, pyTparams.get(), hydra.util.Maybe.just(pyParams.get()), mreturnType, (hydra.util.Maybe<hydra.ext.python.syntax.FuncTypeComment>) (hydra.util.Maybe.<hydra.ext.python.syntax.FuncTypeComment>nothing()), block)))));
             }))));
       }));
   }
 
   static <T0> hydra.util.Either<T0, hydra.ext.python.syntax.Expression> encodeFunctionType(hydra.ext.python.environment.PythonEnvironment env, hydra.core.FunctionType ft) {
-    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.ConsList<hydra.core.Type>, java.util.function.Function<hydra.core.FunctionType, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>>>> gatherParams = new java.util.concurrent.atomic.AtomicReference<>();
-    gatherParams.set((java.util.function.Function<hydra.util.ConsList<hydra.core.Type>, java.util.function.Function<hydra.core.FunctionType, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>>>) (rdoms -> (java.util.function.Function<hydra.core.FunctionType, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>>) (ftype -> {
+    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.core.Type>, java.util.function.Function<hydra.core.FunctionType, hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>>>> gatherParams = new java.util.concurrent.atomic.AtomicReference<>();
+    gatherParams.set((java.util.function.Function<java.util.List<hydra.core.Type>, java.util.function.Function<hydra.core.FunctionType, hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>>>) (rdoms -> (java.util.function.Function<hydra.core.FunctionType, hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>>) (ftype -> {
       hydra.core.Type dom = (ftype).domain;
       hydra.core.Type innerCod = (ftype).codomain;
       return hydra.Strip.deannotateType(innerCod).accept(new hydra.core.Type.PartialVisitor<>() {
         @Override
-        public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Function ft2) {
+        public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Function ft2) {
           return gatherParams.get().apply(hydra.lib.lists.Cons.apply(
             dom,
             rdoms)).apply((ft2).value);
         }
 
         @Override
-        public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Annotated ignored) {
-          return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
+        public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Annotated ignored) {
+          return (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
             dom,
             rdoms)), innerCod)));
         }
 
         @Override
-        public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Application ignored) {
-          return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
+        public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Application ignored) {
+          return (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
             dom,
             rdoms)), innerCod)));
         }
 
         @Override
-        public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Forall ignored) {
-          return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
+        public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Forall ignored) {
+          return (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
             dom,
             rdoms)), innerCod)));
         }
 
         @Override
-        public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.List ignored) {
-          return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
+        public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.List ignored) {
+          return (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
             dom,
             rdoms)), innerCod)));
         }
 
         @Override
-        public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Literal ignored) {
-          return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
+        public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Literal ignored) {
+          return (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
             dom,
             rdoms)), innerCod)));
         }
 
         @Override
-        public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Map ignored) {
-          return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
+        public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Map ignored) {
+          return (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
             dom,
             rdoms)), innerCod)));
         }
 
         @Override
-        public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Maybe ignored) {
-          return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
+        public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Maybe ignored) {
+          return (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
             dom,
             rdoms)), innerCod)));
         }
 
         @Override
-        public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Either ignored) {
-          return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
+        public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Either ignored) {
+          return (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
             dom,
             rdoms)), innerCod)));
         }
 
         @Override
-        public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Pair ignored) {
-          return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
+        public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Pair ignored) {
+          return (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
             dom,
             rdoms)), innerCod)));
         }
 
         @Override
-        public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Record ignored) {
-          return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
+        public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Record ignored) {
+          return (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
             dom,
             rdoms)), innerCod)));
         }
 
         @Override
-        public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Set ignored) {
-          return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
+        public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Set ignored) {
+          return (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
             dom,
             rdoms)), innerCod)));
         }
 
         @Override
-        public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Union ignored) {
-          return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
+        public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Union ignored) {
+          return (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
             dom,
             rdoms)), innerCod)));
         }
 
         @Override
-        public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Unit ignored) {
-          return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
+        public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Unit ignored) {
+          return (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
             dom,
             rdoms)), innerCod)));
         }
 
         @Override
-        public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Variable ignored) {
-          return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
+        public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Variable ignored) {
+          return (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
             dom,
             rdoms)), innerCod)));
         }
 
         @Override
-        public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Void_ ignored) {
-          return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
+        public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Void_ ignored) {
+          return (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
             dom,
             rdoms)), innerCod)));
         }
 
         @Override
-        public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Wrap ignored) {
-          return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
+        public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Wrap ignored) {
+          return (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
             dom,
             rdoms)), innerCod)));
         }
       });
     })));
-    hydra.util.Lazy<hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>> domsAndCod = new hydra.util.Lazy<>(() -> gatherParams.get().apply((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty())).apply(ft));
+    hydra.util.Lazy<hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>> domsAndCod = new hydra.util.Lazy<>(() -> gatherParams.get().apply((java.util.List<hydra.core.Type>) (java.util.Collections.<hydra.core.Type>emptyList())).apply(ft));
     hydra.util.Lazy<hydra.core.Type> cod = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(domsAndCod.get()));
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Type>> doms = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(domsAndCod.get()));
+    hydra.util.Lazy<java.util.List<hydra.core.Type>> doms = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(domsAndCod.get()));
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.MapList.apply(
         (java.util.function.Function<hydra.core.Type, hydra.util.Either<T0, hydra.ext.python.syntax.Expression>>) (v1 -> hydra.ext.python.Coder.<T0>encodeType(
           env,
           v1)),
         doms.get()),
-      (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.Expression>, hydra.util.Either<T0, hydra.ext.python.syntax.Expression>>) (pydoms -> hydra.lib.eithers.Bind.apply(
+      (java.util.function.Function<java.util.List<hydra.ext.python.syntax.Expression>, hydra.util.Either<T0, hydra.ext.python.syntax.Expression>>) (pydoms -> hydra.lib.eithers.Bind.apply(
         hydra.ext.python.Coder.<T0>encodeType(
           env,
           cod.get()),
         (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<T0, hydra.ext.python.syntax.Expression>>) (pycod -> hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.pyPrimaryToPyExpression(hydra.ext.python.Utils.primaryWithSlices(
           new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(new hydra.ext.python.syntax.Name("Callable"))),
           hydra.ext.python.Utils.pyPrimaryToPySlice(new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.List(hydra.ext.python.Utils.pyList(pydoms)))),
-          hydra.util.ConsList.of(new hydra.ext.python.syntax.SliceOrStarredExpression.Slice(hydra.ext.python.Utils.pyExpressionToPySlice(pycod))))))))));
+          java.util.Arrays.asList(new hydra.ext.python.syntax.SliceOrStarredExpression.Slice(hydra.ext.python.Utils.pyExpressionToPySlice(pycod))))))))));
   }
 
   static <T0> hydra.util.Either<T0, hydra.ext.python.syntax.Expression> encodeIntegerValue(hydra.core.IntegerValue iv) {
@@ -1762,10 +1778,10 @@ public interface Coder {
     return (lit).accept(new hydra.core.Literal.PartialVisitor<>() {
       @Override
       public hydra.util.Either<T0, hydra.ext.python.syntax.Expression> visit(hydra.core.Literal.Binary bs) {
-        hydra.util.ConsList<Integer> byteValues = hydra.lib.literals.BinaryToBytes.apply((bs).value);
+        java.util.List<Integer> byteValues = hydra.lib.literals.BinaryToBytes.apply((bs).value);
         return hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.functionCall(
           new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(new hydra.ext.python.syntax.Name("bytes"))),
-          hydra.util.ConsList.of(hydra.ext.python.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.List(hydra.ext.python.Utils.pyList(hydra.lib.lists.Map.apply(
+          java.util.Arrays.asList(hydra.ext.python.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.List(hydra.ext.python.Utils.pyList(hydra.lib.lists.Map.apply(
             (java.util.function.Function<Integer, hydra.ext.python.syntax.Expression>) (byteVal -> hydra.ext.python.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.Number_(new hydra.ext.python.syntax.Number_.Integer_(hydra.lib.literals.Int32ToBigint.apply(byteVal))))),
             byteValues)))))));
       }
@@ -1839,11 +1855,11 @@ public interface Coder {
         return "str";
       }
     });
-    return hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(new hydra.ext.python.syntax.Expression.Simple(new hydra.ext.python.syntax.Disjunction(hydra.util.ConsList.of(new hydra.ext.python.syntax.Conjunction(hydra.util.ConsList.of(new hydra.ext.python.syntax.Inversion.Simple(new hydra.ext.python.syntax.Comparison(new hydra.ext.python.syntax.BitwiseOr((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseOr>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseOr>nothing()), new hydra.ext.python.syntax.BitwiseXor((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseXor>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseXor>nothing()), new hydra.ext.python.syntax.BitwiseAnd((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseAnd>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseAnd>nothing()), new hydra.ext.python.syntax.ShiftExpression((hydra.util.Maybe<hydra.ext.python.syntax.ShiftLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.ShiftLhs>nothing()), new hydra.ext.python.syntax.Sum((hydra.util.Maybe<hydra.ext.python.syntax.SumLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.SumLhs>nothing()), new hydra.ext.python.syntax.Term((hydra.util.Maybe<hydra.ext.python.syntax.TermLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.TermLhs>nothing()), new hydra.ext.python.syntax.Factor.Simple(new hydra.ext.python.syntax.Power(new hydra.ext.python.syntax.AwaitPrimary(false, new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(new hydra.ext.python.syntax.Name(findName)))), (hydra.util.Maybe<hydra.ext.python.syntax.Factor>) (hydra.util.Maybe.<hydra.ext.python.syntax.Factor>nothing()))))))))), (hydra.util.ConsList<hydra.ext.python.syntax.CompareOpBitwiseOrPair>) (hydra.util.ConsList.<hydra.ext.python.syntax.CompareOpBitwiseOrPair>empty())))))))));
+    return hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(new hydra.ext.python.syntax.Expression.Simple(new hydra.ext.python.syntax.Disjunction(java.util.Arrays.asList(new hydra.ext.python.syntax.Conjunction(java.util.Arrays.asList(new hydra.ext.python.syntax.Inversion.Simple(new hydra.ext.python.syntax.Comparison(new hydra.ext.python.syntax.BitwiseOr((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseOr>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseOr>nothing()), new hydra.ext.python.syntax.BitwiseXor((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseXor>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseXor>nothing()), new hydra.ext.python.syntax.BitwiseAnd((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseAnd>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseAnd>nothing()), new hydra.ext.python.syntax.ShiftExpression((hydra.util.Maybe<hydra.ext.python.syntax.ShiftLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.ShiftLhs>nothing()), new hydra.ext.python.syntax.Sum((hydra.util.Maybe<hydra.ext.python.syntax.SumLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.SumLhs>nothing()), new hydra.ext.python.syntax.Term((hydra.util.Maybe<hydra.ext.python.syntax.TermLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.TermLhs>nothing()), new hydra.ext.python.syntax.Factor.Simple(new hydra.ext.python.syntax.Power(new hydra.ext.python.syntax.AwaitPrimary(false, new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(new hydra.ext.python.syntax.Name(findName)))), (hydra.util.Maybe<hydra.ext.python.syntax.Factor>) (hydra.util.Maybe.<hydra.ext.python.syntax.Factor>nothing()))))))))), (java.util.List<hydra.ext.python.syntax.CompareOpBitwiseOrPair>) (java.util.Collections.<hydra.ext.python.syntax.CompareOpBitwiseOrPair>emptyList())))))))));
   }
 
-  static hydra.util.ConsList<hydra.ext.python.syntax.Statement> encodeNameConstants(hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name name, hydra.util.ConsList<hydra.core.FieldType> fields) {
-    hydra.util.Lazy<hydra.util.ConsList<hydra.util.Pair<hydra.ext.python.syntax.Name, hydra.core.Name>>> fieldPairs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+  static java.util.List<hydra.ext.python.syntax.Statement> encodeNameConstants(hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name name, java.util.List<hydra.core.FieldType> fields) {
+    hydra.util.Lazy<java.util.List<hydra.util.Pair<hydra.ext.python.syntax.Name, hydra.core.Name>>> fieldPairs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.core.FieldType, hydra.util.Pair<hydra.ext.python.syntax.Name, hydra.core.Name>>) (field -> (hydra.util.Pair<hydra.ext.python.syntax.Name, hydra.core.Name>) ((hydra.util.Pair<hydra.ext.python.syntax.Name, hydra.core.Name>) (new hydra.util.Pair<hydra.ext.python.syntax.Name, hydra.core.Name>(hydra.ext.python.Names.encodeConstantForFieldName(
         env,
         name,
@@ -1860,7 +1876,7 @@ public interface Coder {
           new hydra.util.CaseConvention.Pascal(),
           env,
           new hydra.core.Name("hydra.core.Name"))),
-        hydra.util.ConsList.of(hydra.ext.python.Utils.doubleQuotedString(hydra.lib.pairs.Second.apply(pair).value)))));
+        java.util.Arrays.asList(hydra.ext.python.Utils.doubleQuotedString(hydra.lib.pairs.Second.apply(pair).value)))));
     return hydra.lib.lists.Map.apply(
       toStmt,
       hydra.lib.lists.Cons.apply(
@@ -1868,8 +1884,8 @@ public interface Coder {
         fieldPairs.get()));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Module> encodePythonModule(hydra.context.Context cx, hydra.graph.Graph g, hydra.packaging.Module mod, hydra.util.ConsList<hydra.packaging.Definition> defs0) {
-    hydra.util.ConsList<hydra.packaging.Definition> defs = hydra.Environment.reorderDefs(defs0);
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Module> encodePythonModule(hydra.context.Context cx, hydra.graph.Graph g, hydra.packaging.Module mod, java.util.List<hydra.packaging.Definition> defs0) {
+    java.util.List<hydra.packaging.Definition> defs = hydra.Environment.reorderDefs(defs0);
     hydra.ext.python.environment.PythonModuleMetadata meta0 = hydra.ext.python.Coder.gatherMetadata(
       (mod).namespace,
       defs);
@@ -1883,17 +1899,17 @@ public interface Coder {
       defs,
       (java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Module>>) (env -> hydra.lib.eithers.Bind.apply(
         hydra.lib.eithers.Map.apply(
-          (java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (xs -> hydra.lib.lists.Concat.apply(xs)),
+          (java.util.function.Function<java.util.List<java.util.List<java.util.List<hydra.ext.python.syntax.Statement>>>, java.util.List<java.util.List<hydra.ext.python.syntax.Statement>>>) (xs -> hydra.lib.lists.Concat.apply(xs)),
           hydra.lib.eithers.MapList.apply(
-            (java.util.function.Function<hydra.packaging.Definition, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>>) (d -> hydra.ext.python.Coder.encodeDefinition(
+            (java.util.function.Function<hydra.packaging.Definition, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<java.util.List<hydra.ext.python.syntax.Statement>>>>) (d -> hydra.ext.python.Coder.encodeDefinition(
               cx,
               env,
               d)),
             defs)),
-        (java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Module>>) (defStmts -> {
-          hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.Statement>> commentStmts = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
-            () -> (hydra.util.ConsList<hydra.ext.python.syntax.Statement>) (hydra.util.ConsList.<hydra.ext.python.syntax.Statement>empty()),
-            (java.util.function.Function<String, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>) (c -> hydra.util.ConsList.of(hydra.ext.python.Utils.commentStatement(c))),
+        (java.util.function.Function<java.util.List<java.util.List<hydra.ext.python.syntax.Statement>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Module>>) (defStmts -> {
+          hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.Statement>> commentStmts = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+            () -> (java.util.List<hydra.ext.python.syntax.Statement>) (java.util.Collections.<hydra.ext.python.syntax.Statement>emptyList()),
+            (java.util.function.Function<String, java.util.List<hydra.ext.python.syntax.Statement>>) (c -> java.util.Arrays.asList(hydra.ext.python.Utils.commentStatement(c))),
             hydra.lib.maybes.Map.apply(
               hydra.Formatting::normalizeComment,
               (mod).description)));
@@ -1916,22 +1932,22 @@ public interface Coder {
               true),
             () -> meta2.get()));
           hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName> namespaces = (meta0).namespaces;
-          hydra.util.ConsList<hydra.ext.python.syntax.Statement> importStmts = hydra.ext.python.Coder.moduleImports(
+          java.util.List<hydra.ext.python.syntax.Statement> importStmts = hydra.ext.python.Coder.moduleImports(
             namespaces,
             meta.get());
-          hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> tvars = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
+          hydra.util.Lazy<java.util.Set<hydra.core.Name>> tvars = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
             hydra.lib.logic.Or.apply(
               isTypeMod,
               hydra.lib.logic.Not.apply(hydra.ext.python.Coder.useInlineTypeParams())),
             () -> meta.get().typeVariables,
-            () -> (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())));
-          hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.Statement>> tvarStmts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+            () -> (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())));
+          hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.Statement>> tvarStmts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
             (java.util.function.Function<hydra.core.Name, hydra.ext.python.syntax.Statement>) (tv -> hydra.ext.python.Coder.tvarStatement(hydra.ext.python.Names.encodeTypeVariable(tv))),
             hydra.lib.sets.ToList.apply(tvars.get())));
-          hydra.util.Lazy<hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>> body = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
-            (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.Statement>, Boolean>) (group -> hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply(group))),
-            hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
-              hydra.util.ConsList.of(
+          hydra.util.Lazy<java.util.List<java.util.List<hydra.ext.python.syntax.Statement>>> body = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+            (java.util.function.Function<java.util.List<hydra.ext.python.syntax.Statement>, Boolean>) (group -> hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply(group))),
+            hydra.lib.lists.Concat.apply(java.util.Arrays.asList(
+              java.util.Arrays.asList(
                 commentStmts.get(),
                 importStmts,
                 tvarStmts.get()),
@@ -1940,7 +1956,7 @@ public interface Coder {
         }))));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement> encodeRecordType(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name name, hydra.util.ConsList<hydra.core.FieldType> rowType, hydra.util.Maybe<String> comment) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement> encodeRecordType(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name name, java.util.List<hydra.core.FieldType> rowType, hydra.util.Maybe<String> comment) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.MapList.apply(
         (java.util.function.Function<hydra.core.FieldType, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (v1 -> hydra.ext.python.Coder.encodeFieldType(
@@ -1948,24 +1964,24 @@ public interface Coder {
           env,
           v1)),
         rowType),
-      (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.Statement>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (pyFields -> {
-        hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>> boundVars = (env).boundTypeVariables;
-        hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> tparamList = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(boundVars));
+      (java.util.function.Function<java.util.List<hydra.ext.python.syntax.Statement>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (pyFields -> {
+        hydra.util.Pair<java.util.List<hydra.core.Name>, java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>> boundVars = (env).boundTypeVariables;
+        hydra.util.Lazy<java.util.List<hydra.core.Name>> tparamList = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(boundVars));
         hydra.util.Maybe<hydra.ext.python.syntax.Expression> mGenericArg = hydra.ext.python.Coder.genericArg(tparamList.get());
         hydra.util.Lazy<hydra.util.Maybe<hydra.ext.python.syntax.Args>> args = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
           () -> (hydra.util.Maybe<hydra.ext.python.syntax.Args>) (hydra.util.Maybe.<hydra.ext.python.syntax.Args>nothing()),
-          (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Maybe<hydra.ext.python.syntax.Args>>) (a -> hydra.util.Maybe.just(hydra.ext.python.Utils.pyExpressionsToPyArgs(hydra.util.ConsList.of(a)))),
+          (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Maybe<hydra.ext.python.syntax.Args>>) (a -> hydra.util.Maybe.just(hydra.ext.python.Utils.pyExpressionsToPyArgs(java.util.Arrays.asList(a)))),
           mGenericArg));
-        hydra.util.ConsList<hydra.ext.python.syntax.Statement> constStmts = hydra.ext.python.Coder.encodeNameConstants(
+        java.util.List<hydra.ext.python.syntax.Statement> constStmts = hydra.ext.python.Coder.encodeNameConstants(
           env,
           name,
           rowType);
         hydra.ext.python.syntax.Block body = hydra.ext.python.Utils.indentedBlock(
           comment,
-          hydra.util.ConsList.of(
+          java.util.Arrays.asList(
             pyFields,
             constStmts));
-        hydra.util.Maybe<hydra.ext.python.syntax.Decorators> decs = hydra.util.Maybe.just(new hydra.ext.python.syntax.Decorators(hydra.util.ConsList.of(hydra.ext.python.Coder.dataclassDecorator())));
+        hydra.util.Maybe<hydra.ext.python.syntax.Decorators> decs = hydra.util.Maybe.just(new hydra.ext.python.syntax.Decorators(java.util.Arrays.asList(hydra.ext.python.Coder.dataclassDecorator())));
         hydra.ext.python.syntax.Name pyName = hydra.ext.python.Names.encodeName(
           false,
           new hydra.util.CaseConvention.Pascal(),
@@ -1975,8 +1991,8 @@ public interface Coder {
       }));
   }
 
-  static <T0> hydra.util.ConsList<T0> encodeRecordType_noTypeParams() {
-    return (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty());
+  static <T0> java.util.List<T0> encodeRecordType_noTypeParams() {
+    return (java.util.List<T0>) (java.util.Collections.<T0>emptyList());
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement> encodeTermAssignment(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name name, hydra.core.Term term, hydra.core.TypeScheme ts, hydra.util.Maybe<String> comment) {
@@ -1987,9 +2003,9 @@ public interface Coder {
         term),
       (java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (fs -> {
         hydra.core.Binding binding = new hydra.core.Binding(name, term, hydra.util.Maybe.just(ts));
-        hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> bindings = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, hydra.util.ConsList<hydra.core.Binding>>) (projected -> projected.bindings)).apply(fs));
+        hydra.util.Lazy<java.util.List<hydra.core.Binding>> bindings = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, java.util.List<hydra.core.Binding>>) (projected -> projected.bindings)).apply(fs));
         hydra.util.Lazy<hydra.core.Term> body = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, hydra.core.Term>) (projected -> projected.body)).apply(fs));
-        hydra.util.Lazy<hydra.util.ConsList<hydra.core.Type>> doms = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, hydra.util.ConsList<hydra.core.Type>>) (projected -> projected.domains)).apply(fs));
+        hydra.util.Lazy<java.util.List<hydra.core.Type>> doms = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, java.util.List<hydra.core.Type>>) (projected -> projected.domains)).apply(fs));
         hydra.util.Lazy<hydra.ext.python.environment.PythonEnvironment> env2 = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, hydra.ext.python.environment.PythonEnvironment>) (projected -> projected.environment)).apply(fs));
         hydra.graph.Graph tc = env2.get().graph;
         Boolean isComplex = hydra.Predicates.isComplexBinding(
@@ -1997,8 +2013,8 @@ public interface Coder {
           binding);
         Boolean isTrivial = hydra.Predicates.isTrivialTerm(term);
         hydra.util.Lazy<hydra.util.Maybe<hydra.core.Type>> mcod = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, hydra.util.Maybe<hydra.core.Type>>) (projected -> projected.codomain)).apply(fs));
-        hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> params = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, hydra.util.ConsList<hydra.core.Name>>) (projected -> projected.params)).apply(fs));
-        hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> tparams = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, hydra.util.ConsList<hydra.core.Name>>) (projected -> projected.typeParams)).apply(fs));
+        hydra.util.Lazy<java.util.List<hydra.core.Name>> params = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, java.util.List<hydra.core.Name>>) (projected -> projected.params)).apply(fs));
+        hydra.util.Lazy<java.util.List<hydra.core.Name>> tparams = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, java.util.List<hydra.core.Name>>) (projected -> projected.typeParams)).apply(fs));
         return hydra.lib.logic.IfElse.lazy(
           hydra.lib.logic.And.apply(
             isComplex,
@@ -2010,7 +2026,7 @@ public interface Coder {
                 env2.get(),
                 v1)),
               bindings.get()),
-            (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.Statement>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (bindingStmts -> hydra.ext.python.Coder.encodeFunctionDefinition(
+            (java.util.function.Function<java.util.List<hydra.ext.python.syntax.Statement>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (bindingStmts -> hydra.ext.python.Coder.encodeFunctionDefinition(
               cx,
               env2.get(),
               name,
@@ -2082,7 +2098,7 @@ public interface Coder {
             (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (pyexp -> hydra.ext.python.Coder.encodeTermInline_withCast(
               cx,
               env,
-              (java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.ConsList<hydra.core.Type>, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>>>>) (p0 -> p1 -> p2 -> p3 -> hydra.Checking.typeOf(
+              (java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<java.util.List<hydra.core.Type>, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>>>>) (p0 -> p1 -> p2 -> p3 -> hydra.Checking.typeOf(
                 p0,
                 p1,
                 p2,
@@ -2094,13 +2110,13 @@ public interface Coder {
               term,
               hydra.ext.python.Utils.functionCall(
                 hydra.ext.python.Utils.pyNameToPyPrimary(new hydra.ext.python.syntax.Name("Left")),
-                hydra.util.ConsList.of(pyexp)))))),
+                java.util.Arrays.asList(pyexp)))))),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (t1 -> hydra.lib.eithers.Bind.apply(
             (encode).apply(t1),
             (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (pyexp -> hydra.ext.python.Coder.encodeTermInline_withCast(
               cx,
               env,
-              (java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.ConsList<hydra.core.Type>, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>>>>) (p0 -> p1 -> p2 -> p3 -> hydra.Checking.typeOf(
+              (java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<java.util.List<hydra.core.Type>, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>>>>) (p0 -> p1 -> p2 -> p3 -> hydra.Checking.typeOf(
                 p0,
                 p1,
                 p2,
@@ -2112,7 +2128,7 @@ public interface Coder {
               term,
               hydra.ext.python.Utils.functionCall(
                 hydra.ext.python.Utils.pyNameToPyPrimary(new hydra.ext.python.syntax.Name("Right")),
-                hydra.util.ConsList.of(pyexp)))))),
+                java.util.Arrays.asList(pyexp)))))),
           (et).value);
       }
 
@@ -2126,7 +2142,7 @@ public interface Coder {
 
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression> visit(hydra.core.Term.Let lt) {
-        hydra.util.ConsList<hydra.core.Binding> bindings = (lt).value.bindings;
+        java.util.List<hydra.core.Binding> bindings = (lt).value.bindings;
         hydra.core.Term body = (lt).value.body;
         return hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(bindings),
@@ -2146,7 +2162,7 @@ public interface Coder {
                   innerEnv,
                   v1)),
                 bindings),
-              (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.NamedExpression>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (pbindingExprs -> hydra.lib.eithers.Bind.apply(
+              (java.util.function.Function<java.util.List<hydra.ext.python.syntax.NamedExpression>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (pbindingExprs -> hydra.lib.eithers.Bind.apply(
                 hydra.ext.python.Coder.encodeTermInline(
                   cx,
                   innerEnv,
@@ -2154,17 +2170,17 @@ public interface Coder {
                   body),
                 (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (pbody -> {
                   hydra.util.Lazy<hydra.ext.python.syntax.Expression> indexValue = new hydra.util.Lazy<>(() -> hydra.ext.python.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.Number_(new hydra.ext.python.syntax.Number_.Integer_(hydra.lib.literals.Int32ToBigint.apply(hydra.lib.lists.Length.apply(bindings))))));
-                  hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.StarNamedExpression>> pbindingStarExprs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+                  hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.StarNamedExpression>> pbindingStarExprs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
                     (java.util.function.Function<hydra.ext.python.syntax.NamedExpression, hydra.ext.python.syntax.StarNamedExpression>) (ne -> new hydra.ext.python.syntax.StarNamedExpression.Simple(ne)),
                     pbindingExprs));
                   hydra.ext.python.syntax.StarNamedExpression pbodyStarExpr = hydra.ext.python.Utils.pyExpressionToPyStarNamedExpression(pbody);
-                  hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.StarNamedExpression>> tupleElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
+                  hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.StarNamedExpression>> tupleElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
                     pbindingStarExprs.get(),
-                    hydra.util.ConsList.of(pbodyStarExpr)));
+                    java.util.Arrays.asList(pbodyStarExpr)));
                   hydra.ext.python.syntax.Expression tupleExpr = hydra.ext.python.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.Tuple(new hydra.ext.python.syntax.Tuple(tupleElements.get())));
                   hydra.ext.python.syntax.Primary indexedExpr = hydra.ext.python.Utils.primaryWithExpressionSlices(
                     hydra.ext.python.Utils.pyExpressionToPyPrimary(tupleExpr),
-                    hydra.util.ConsList.of(indexValue.get()));
+                    java.util.Arrays.asList(indexValue.get()));
                   return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.pyPrimaryToPyExpression(indexedExpr));
                 })))))));
       }
@@ -2175,7 +2191,7 @@ public interface Coder {
           hydra.lib.eithers.MapList.apply(
             encode,
             (terms).value),
-          (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.Expression>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (pyExprs -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.Tuple(new hydra.ext.python.syntax.Tuple(hydra.lib.lists.Map.apply(
+          (java.util.function.Function<java.util.List<hydra.ext.python.syntax.Expression>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (pyExprs -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.Tuple(new hydra.ext.python.syntax.Tuple(hydra.lib.lists.Map.apply(
             hydra.ext.python.Utils::pyExpressionToPyStarNamedExpression,
             pyExprs)))))));
       }
@@ -2199,9 +2215,9 @@ public interface Coder {
                   (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.DoubleStarredKvpair>>) (pyV -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.DoubleStarredKvpair>right(new hydra.ext.python.syntax.DoubleStarredKvpair.Pair(new hydra.ext.python.syntax.Kvpair(pyK, pyV)))))));
             }),
             hydra.lib.maps.ToList.apply((m).value)),
-          (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.DoubleStarredKvpair>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (pairs -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.functionCall(
+          (java.util.function.Function<java.util.List<hydra.ext.python.syntax.DoubleStarredKvpair>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (pairs -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.functionCall(
             hydra.ext.python.Utils.pyNameToPyPrimary(new hydra.ext.python.syntax.Name("FrozenDict")),
-            hydra.util.ConsList.of(hydra.ext.python.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.Dict(new hydra.ext.python.syntax.Dict(pairs))))))));
+            java.util.Arrays.asList(hydra.ext.python.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.Dict(new hydra.ext.python.syntax.Dict(pairs))))))));
       }
 
       @Override
@@ -2209,13 +2225,13 @@ public interface Coder {
         return hydra.lib.maybes.Maybe.applyLazy(
           () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.functionCall(
             hydra.ext.python.Utils.pyNameToPyPrimary(new hydra.ext.python.syntax.Name("Nothing")),
-            (hydra.util.ConsList<hydra.ext.python.syntax.Expression>) (hydra.util.ConsList.<hydra.ext.python.syntax.Expression>empty()))),
+            (java.util.List<hydra.ext.python.syntax.Expression>) (java.util.Collections.<hydra.ext.python.syntax.Expression>emptyList()))),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (t1 -> hydra.lib.eithers.Bind.apply(
             (encode).apply(t1),
             (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (pyexp -> hydra.ext.python.Coder.encodeTermInline_withCast(
               cx,
               env,
-              (java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.ConsList<hydra.core.Type>, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>>>>) (p0 -> p1 -> p2 -> p3 -> hydra.Checking.typeOf(
+              (java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<java.util.List<hydra.core.Type>, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>>>>) (p0 -> p1 -> p2 -> p3 -> hydra.Checking.typeOf(
                 p0,
                 p1,
                 p2,
@@ -2227,7 +2243,7 @@ public interface Coder {
               term,
               hydra.ext.python.Utils.functionCall(
                 hydra.ext.python.Utils.pyNameToPyPrimary(new hydra.ext.python.syntax.Name("Just")),
-                hydra.util.ConsList.of(pyexp)))))),
+                java.util.Arrays.asList(pyexp)))))),
           (mt).value);
       }
 
@@ -2239,20 +2255,20 @@ public interface Coder {
           (encode).apply(t1.get()),
           (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (pyExpr1 -> hydra.lib.eithers.Bind.apply(
             (encode).apply(t2.get()),
-            (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (pyExpr2 -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.Tuple(new hydra.ext.python.syntax.Tuple(hydra.util.ConsList.of(
+            (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (pyExpr2 -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.Tuple(new hydra.ext.python.syntax.Tuple(java.util.Arrays.asList(
               hydra.ext.python.Utils.pyExpressionToPyStarNamedExpression(pyExpr1),
               hydra.ext.python.Utils.pyExpressionToPyStarNamedExpression(pyExpr2))))))))));
       }
 
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression> visit(hydra.core.Term.Record r) {
-        hydra.util.ConsList<hydra.core.Field> fields = (r).value.fields;
+        java.util.List<hydra.core.Field> fields = (r).value.fields;
         hydra.core.Name tname = (r).value.typeName;
         return hydra.lib.eithers.Bind.apply(
           hydra.lib.eithers.MapList.apply(
             (java.util.function.Function<hydra.core.Field, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (fld -> (encode).apply((fld).term)),
             fields),
-          (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.Expression>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (pargs -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.functionCall(
+          (java.util.function.Function<java.util.List<hydra.ext.python.syntax.Expression>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (pargs -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.functionCall(
             hydra.ext.python.Utils.pyNameToPyPrimary(hydra.ext.python.Names.encodeNameQualified(
               env,
               tname)),
@@ -2265,9 +2281,9 @@ public interface Coder {
           hydra.lib.eithers.MapList.apply(
             encode,
             hydra.lib.sets.ToList.apply((s).value)),
-          (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.Expression>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (pyEls -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.functionCall(
+          (java.util.function.Function<java.util.List<hydra.ext.python.syntax.Expression>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (pyEls -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.functionCall(
             hydra.ext.python.Utils.pyNameToPyPrimary(new hydra.ext.python.syntax.Name("frozenset")),
-            hydra.util.ConsList.of(hydra.ext.python.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.Set(new hydra.ext.python.syntax.Set(hydra.lib.lists.Map.apply(
+            java.util.Arrays.asList(hydra.ext.python.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.Set(new hydra.ext.python.syntax.Set(hydra.lib.lists.Map.apply(
               hydra.ext.python.Utils::pyExpressionToPyStarNamedExpression,
               pyEls)))))))));
       }
@@ -2284,7 +2300,7 @@ public interface Coder {
           (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (pybase -> hydra.ext.python.Coder.encodeTermInline_withCast(
             cx,
             env,
-            (java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.ConsList<hydra.core.Type>, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>>>>) (p0 -> p1 -> p2 -> p3 -> hydra.Checking.typeOf(
+            (java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<java.util.List<hydra.core.Type>, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>>>>) (p0 -> p1 -> p2 -> p3 -> hydra.Checking.typeOf(
               p0,
               p1,
               p2,
@@ -2319,7 +2335,7 @@ public interface Coder {
             cx,
             hydra.ext.python.Coder.pythonEnvironmentGetGraph(env),
             tname),
-          (java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (rt -> hydra.lib.logic.IfElse.lazy(
+          (java.util.function.Function<java.util.List<hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (rt -> hydra.lib.logic.IfElse.lazy(
             hydra.Predicates.isEnumRowType(rt),
             () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.projectFromExpression(
               hydra.ext.python.Utils.pyNameToPyExpression(hydra.ext.python.Names.encodeNameQualified(
@@ -2344,11 +2360,11 @@ public interface Coder {
                     hydra.lib.logic.Or.apply(
                       hydra.Predicates.isUnitTerm((field).term),
                       isUnitVariant.get()),
-                    () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>right((hydra.util.ConsList<hydra.ext.python.syntax.Expression>) (hydra.util.ConsList.<hydra.ext.python.syntax.Expression>empty())),
+                    () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Expression>>right((java.util.List<hydra.ext.python.syntax.Expression>) (java.util.Collections.<hydra.ext.python.syntax.Expression>emptyList())),
                     () -> hydra.lib.eithers.Bind.apply(
                       (encode).apply((field).term),
-                      (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>>) (parg -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Expression>>right(hydra.util.ConsList.of(parg))))),
-                  (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.Expression>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (args -> {
+                      (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Expression>>>) (parg -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Expression>>right(java.util.Arrays.asList(parg))))),
+                  (java.util.function.Function<java.util.List<hydra.ext.python.syntax.Expression>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (args -> {
                     hydra.ext.python.syntax.Name deconflictedName = hydra.ext.python.Coder.deconflictVariantName(
                       true,
                       env,
@@ -2378,7 +2394,7 @@ public interface Coder {
           cx,
           env,
           (name).value,
-          (hydra.util.ConsList<hydra.ext.python.syntax.Expression>) (hydra.util.ConsList.<hydra.ext.python.syntax.Expression>empty()));
+          (java.util.List<hydra.ext.python.syntax.Expression>) (java.util.Collections.<hydra.ext.python.syntax.Expression>emptyList()));
       }
 
       @Override
@@ -2391,12 +2407,12 @@ public interface Coder {
             hydra.ext.python.Utils.pyNameToPyPrimary(hydra.ext.python.Names.encodeNameQualified(
               env,
               tname)),
-            hydra.util.ConsList.of(parg)))));
+            java.util.Arrays.asList(parg)))));
       }
     });
   }
 
-  static <T1> hydra.util.Either<T1, hydra.ext.python.syntax.Expression> encodeTermInline_withCast(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.ConsList<hydra.core.Type>, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>>>> hydra_checking_typeOf, java.util.function.Function<hydra.ext.python.syntax.Expression, java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.Expression>> hydra_ext_python_utils_castTo, Boolean noCast, hydra.core.Term term, hydra.ext.python.syntax.Expression pyexp) {
+  static <T1> hydra.util.Either<T1, hydra.ext.python.syntax.Expression> encodeTermInline_withCast(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<java.util.List<hydra.core.Type>, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>>>> hydra_checking_typeOf, java.util.function.Function<hydra.ext.python.syntax.Expression, java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.Expression>> hydra_ext_python_utils_castTo, Boolean noCast, hydra.core.Term term, hydra.ext.python.syntax.Expression pyexp) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.logic.Or.apply(
         noCast,
@@ -2407,7 +2423,7 @@ public interface Coder {
         return ((java.util.function.Supplier<hydra.util.Either<T1, hydra.ext.python.syntax.Expression>>) (() -> {
           hydra.util.Lazy<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Type>> mtyp = new hydra.util.Lazy<>(() -> hydra.lib.eithers.Map.apply(
             (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.core.Type>) (_r -> hydra.lib.pairs.First.apply(_r)),
-            (hydra_checking_typeOf).apply(cx).apply(tc).apply((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty())).apply(term)));
+            (hydra_checking_typeOf).apply(cx).apply(tc).apply((java.util.List<hydra.core.Type>) (java.util.Collections.<hydra.core.Type>emptyList())).apply(term)));
           return hydra.lib.eithers.Either.apply(
             (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Either<T1, hydra.ext.python.syntax.Expression>>) (ignored -> hydra.util.Either.<T1, hydra.ext.python.syntax.Expression>right(pyexp)),
             (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.ext.python.syntax.Expression>>) (typ -> hydra.lib.eithers.Either.apply(
@@ -2421,20 +2437,20 @@ public interface Coder {
       })).get());
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> encodeTermMultiline(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Term term) {
-    hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term> gathered = hydra.Analysis.gatherApplications(term);
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> args = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered));
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>> encodeTermMultiline(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Term term) {
+    hydra.util.Pair<java.util.List<hydra.core.Term>, hydra.core.Term> gathered = hydra.Analysis.gatherApplications(term);
+    hydra.util.Lazy<java.util.List<hydra.core.Term>> args = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered));
     hydra.util.Lazy<hydra.core.Term> body = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(gathered));
-    hydra.util.Lazy<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>> dfltLogic = new hydra.util.Lazy<>(() -> hydra.lib.eithers.Bind.apply(
+    hydra.util.Lazy<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>> dfltLogic = new hydra.util.Lazy<>(() -> hydra.lib.eithers.Bind.apply(
       hydra.ext.python.Coder.analyzePythonFunction(
         cx,
         env,
         term),
-      (java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (fs -> {
-        hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> bindings = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, hydra.util.ConsList<hydra.core.Binding>>) (projected -> projected.bindings)).apply(fs));
+      (java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (fs -> {
+        hydra.util.Lazy<java.util.List<hydra.core.Binding>> bindings = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, java.util.List<hydra.core.Binding>>) (projected -> projected.bindings)).apply(fs));
         hydra.util.Lazy<hydra.ext.python.environment.PythonEnvironment> env2 = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, hydra.ext.python.environment.PythonEnvironment>) (projected -> projected.environment)).apply(fs));
         hydra.util.Lazy<hydra.core.Term> innerBody = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, hydra.core.Term>) (projected -> projected.body)).apply(fs));
-        hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> params = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, hydra.util.ConsList<hydra.core.Name>>) (projected -> projected.params)).apply(fs));
+        hydra.util.Lazy<java.util.List<hydra.core.Name>> params = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.python.environment.PythonEnvironment>, java.util.List<hydra.core.Name>>) (projected -> projected.params)).apply(fs));
         return hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(bindings.get()),
           () -> hydra.lib.eithers.Bind.apply(
@@ -2443,7 +2459,7 @@ public interface Coder {
               env,
               false,
               term),
-            (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (expr -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>right(hydra.util.ConsList.of(hydra.ext.python.Utils.returnSingle(expr))))),
+            (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (expr -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>right(java.util.Arrays.asList(hydra.ext.python.Utils.returnSingle(expr))))),
           () -> hydra.lib.eithers.Bind.apply(
             hydra.lib.eithers.MapList.apply(
               (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (v1 -> hydra.ext.python.Coder.encodeBindingAs(
@@ -2451,12 +2467,12 @@ public interface Coder {
                 env2.get(),
                 v1)),
               bindings.get()),
-            (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.Statement>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (bindingStmts -> hydra.lib.eithers.Bind.apply(
+            (java.util.function.Function<java.util.List<hydra.ext.python.syntax.Statement>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (bindingStmts -> hydra.lib.eithers.Bind.apply(
               hydra.ext.python.Coder.encodeTermMultiline(
                 cx,
                 env2.get(),
                 innerBody.get()),
-              (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.Statement>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (bodyStmts -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>right(hydra.lib.lists.Concat2.apply(
+              (java.util.function.Function<java.util.List<hydra.ext.python.syntax.Statement>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (bodyStmts -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>right(hydra.lib.lists.Concat2.apply(
                 bindingStmts,
                 bodyStmts)))))));
       })));
@@ -2464,33 +2480,33 @@ public interface Coder {
       hydra.lib.equality.Equal.apply(
         hydra.lib.lists.Length.apply(args.get()),
         1),
-      () -> ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (() -> {
+      () -> ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (() -> {
         hydra.util.Lazy<hydra.core.Term> arg = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(args.get()));
         return hydra.Strip.deannotateAndDetypeTerm(body.get()).accept(new hydra.core.Term.PartialVisitor<>() {
           @Override
-          public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> otherwise(hydra.core.Term instance) {
+          public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>> otherwise(hydra.core.Term instance) {
             return dfltLogic.get();
           }
 
           @Override
-          public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> visit(hydra.core.Term.Function f) {
+          public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>> visit(hydra.core.Term.Function f) {
             return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
               @Override
-              public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> otherwise(hydra.core.Function instance) {
+              public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>> otherwise(hydra.core.Function instance) {
                 return dfltLogic.get();
               }
 
               @Override
-              public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> visit(hydra.core.Function.Elimination e) {
+              public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>> visit(hydra.core.Function.Elimination e) {
                 return (e).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
                   @Override
-                  public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> otherwise(hydra.core.Elimination instance) {
+                  public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>> otherwise(hydra.core.Elimination instance) {
                     return dfltLogic.get();
                   }
 
                   @Override
-                  public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> visit(hydra.core.Elimination.Union cs) {
-                    hydra.util.ConsList<hydra.core.Field> cases_ = (cs).value.cases;
+                  public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>> visit(hydra.core.Elimination.Union cs) {
+                    java.util.List<hydra.core.Field> cases_ = (cs).value.cases;
                     hydra.util.Maybe<hydra.core.Term> dflt = (cs).value.default_;
                     hydra.core.Name tname = (cs).value.typeName;
                     return hydra.lib.eithers.Bind.apply(
@@ -2498,7 +2514,7 @@ public interface Coder {
                         cx,
                         hydra.ext.python.Coder.pythonEnvironmentGetGraph(env),
                         tname),
-                      (java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (rt -> {
+                      (java.util.function.Function<java.util.List<hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (rt -> {
                         Boolean isEnum = hydra.Predicates.isEnumRowType(rt);
                         hydra.util.Lazy<Boolean> isFull = new hydra.util.Lazy<>(() -> hydra.ext.python.Coder.isCasesFull(
                           rt,
@@ -2509,7 +2525,7 @@ public interface Coder {
                             env,
                             false,
                             arg.get()),
-                          (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (pyArg -> hydra.lib.eithers.Bind.apply(
+                          (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (pyArg -> hydra.lib.eithers.Bind.apply(
                             hydra.lib.eithers.MapList.apply(
                               (java.util.function.Function<hydra.core.Field, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.CaseBlock>>) (v1 -> hydra.ext.python.Coder.encodeCaseBlock(
                                 cx,
@@ -2517,13 +2533,13 @@ public interface Coder {
                                 tname,
                                 rt,
                                 isEnum,
-                                (java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>>) (e2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (t -> hydra.ext.python.Coder.encodeTermMultiline(
+                                (java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>>) (e2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (t -> hydra.ext.python.Coder.encodeTermMultiline(
                                   cx,
                                   e2,
                                   t))),
                                 v1)),
                               hydra.ext.python.Coder.deduplicateCaseVariables(cases_)),
-                            (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.CaseBlock>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (pyCases -> hydra.lib.eithers.Bind.apply(
+                            (java.util.function.Function<java.util.List<hydra.ext.python.syntax.CaseBlock>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (pyCases -> hydra.lib.eithers.Bind.apply(
                               hydra.ext.python.Coder.encodeDefaultCaseBlock(
                                 (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (t -> hydra.ext.python.Coder.encodeTermInline(
                                   cx,
@@ -2533,12 +2549,12 @@ public interface Coder {
                                 isFull.get(),
                                 dflt,
                                 tname),
-                              (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.CaseBlock>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (pyDflt -> {
+                              (java.util.function.Function<java.util.List<hydra.ext.python.syntax.CaseBlock>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (pyDflt -> {
                                 hydra.ext.python.syntax.SubjectExpression subj = new hydra.ext.python.syntax.SubjectExpression.Simple(new hydra.ext.python.syntax.NamedExpression.Simple(pyArg));
                                 hydra.util.Lazy<hydra.ext.python.syntax.Statement> matchStmt = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.Statement.Compound(new hydra.ext.python.syntax.CompoundStatement.Match(new hydra.ext.python.syntax.MatchStatement(subj, hydra.lib.lists.Concat2.apply(
                                   pyCases,
                                   pyDflt)))));
-                                return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>right(hydra.util.ConsList.of(matchStmt.get()));
+                                return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>right(java.util.Arrays.asList(matchStmt.get()));
                               }))))));
                       }));
                   }
@@ -2551,10 +2567,10 @@ public interface Coder {
       () -> dfltLogic.get());
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> encodeTermMultilineTCO(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name funcName, hydra.util.ConsList<hydra.core.Name> paramNames, hydra.core.Term term) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>> encodeTermMultilineTCO(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name funcName, java.util.List<hydra.core.Name> paramNames, hydra.core.Term term) {
     hydra.core.Term stripped = hydra.Strip.deannotateAndDetypeTerm(term);
-    hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term> gathered = hydra.Analysis.gatherApplications(stripped);
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> gatherArgs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered));
+    hydra.util.Pair<java.util.List<hydra.core.Term>, hydra.core.Term> gathered = hydra.Analysis.gatherApplications(stripped);
+    hydra.util.Lazy<java.util.List<hydra.core.Term>> gatherArgs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered));
     hydra.util.Lazy<hydra.core.Term> gatherFun = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(gathered));
     hydra.core.Term strippedFun = hydra.Strip.deannotateAndDetypeTerm(gatherFun.get());
     hydra.util.Lazy<Boolean> isSelfCall = new hydra.util.Lazy<>(() -> (strippedFun).accept(new hydra.core.Term.PartialVisitor<>() {
@@ -2584,8 +2600,8 @@ public interface Coder {
             false,
             a)),
           gatherArgs.get()),
-        (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.Expression>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (pyArgs -> {
-          hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.Statement>> assignments = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+        (java.util.function.Function<java.util.List<hydra.ext.python.syntax.Expression>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (pyArgs -> {
+          hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.Statement>> assignments = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
             (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.ext.python.syntax.Expression>, hydra.ext.python.syntax.Statement>) (pair -> {
               hydra.util.Lazy<hydra.core.Name> paramName = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pair));
               hydra.util.Lazy<hydra.ext.python.syntax.Expression> pyArg = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair));
@@ -2600,66 +2616,66 @@ public interface Coder {
             hydra.lib.lists.Zip.apply(
               paramNames,
               pyArgs)));
-          hydra.ext.python.syntax.Statement continueStmt = new hydra.ext.python.syntax.Statement.Simple(hydra.util.ConsList.of(new hydra.ext.python.syntax.SimpleStatement.Continue()));
-          return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>right(hydra.lib.lists.Concat2.apply(
+          hydra.ext.python.syntax.Statement continueStmt = new hydra.ext.python.syntax.Statement.Simple(java.util.Arrays.asList(new hydra.ext.python.syntax.SimpleStatement.Continue()));
+          return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>right(hydra.lib.lists.Concat2.apply(
             assignments.get(),
-            hydra.util.ConsList.of(continueStmt)));
+            java.util.Arrays.asList(continueStmt)));
         })),
-      () -> ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (() -> {
-        hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term> gathered2 = hydra.Analysis.gatherApplications(term);
-        return ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (() -> {
-          hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> args2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered2));
-          return ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (() -> {
+      () -> ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (() -> {
+        hydra.util.Pair<java.util.List<hydra.core.Term>, hydra.core.Term> gathered2 = hydra.Analysis.gatherApplications(term);
+        return ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (() -> {
+          hydra.util.Lazy<java.util.List<hydra.core.Term>> args2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered2));
+          return ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (() -> {
             hydra.util.Lazy<hydra.core.Term> body2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(gathered2));
             return hydra.lib.logic.IfElse.lazy(
               hydra.lib.equality.Equal.apply(
                 hydra.lib.lists.Length.apply(args2.get()),
                 1),
-              () -> ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (() -> {
+              () -> ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (() -> {
                 hydra.util.Lazy<hydra.core.Term> arg = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(args2.get()));
                 return hydra.Strip.deannotateAndDetypeTerm(body2.get()).accept(new hydra.core.Term.PartialVisitor<>() {
                   @Override
-                  public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> otherwise(hydra.core.Term instance) {
+                  public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>> otherwise(hydra.core.Term instance) {
                     return hydra.lib.eithers.Bind.apply(
                       hydra.ext.python.Coder.encodeTermInline(
                         cx,
                         env,
                         false,
                         term),
-                      (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (expr -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>right(hydra.util.ConsList.of(hydra.ext.python.Utils.returnSingle(expr)))));
+                      (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (expr -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>right(java.util.Arrays.asList(hydra.ext.python.Utils.returnSingle(expr)))));
                   }
 
                   @Override
-                  public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> visit(hydra.core.Term.Function f) {
+                  public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>> visit(hydra.core.Term.Function f) {
                     return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
                       @Override
-                      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> otherwise(hydra.core.Function instance) {
+                      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>> otherwise(hydra.core.Function instance) {
                         return hydra.lib.eithers.Bind.apply(
                           hydra.ext.python.Coder.encodeTermInline(
                             cx,
                             env,
                             false,
                             term),
-                          (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (expr -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>right(hydra.util.ConsList.of(hydra.ext.python.Utils.returnSingle(expr)))));
+                          (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (expr -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>right(java.util.Arrays.asList(hydra.ext.python.Utils.returnSingle(expr)))));
                       }
 
                       @Override
-                      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> visit(hydra.core.Function.Elimination e) {
+                      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>> visit(hydra.core.Function.Elimination e) {
                         return (e).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
                           @Override
-                          public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> otherwise(hydra.core.Elimination instance) {
+                          public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>> otherwise(hydra.core.Elimination instance) {
                             return hydra.lib.eithers.Bind.apply(
                               hydra.ext.python.Coder.encodeTermInline(
                                 cx,
                                 env,
                                 false,
                                 term),
-                              (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (expr -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>right(hydra.util.ConsList.of(hydra.ext.python.Utils.returnSingle(expr)))));
+                              (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (expr -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>right(java.util.Arrays.asList(hydra.ext.python.Utils.returnSingle(expr)))));
                           }
 
                           @Override
-                          public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> visit(hydra.core.Elimination.Union cs) {
-                            hydra.util.ConsList<hydra.core.Field> cases_ = (cs).value.cases;
+                          public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>> visit(hydra.core.Elimination.Union cs) {
+                            java.util.List<hydra.core.Field> cases_ = (cs).value.cases;
                             hydra.util.Maybe<hydra.core.Term> dflt = (cs).value.default_;
                             hydra.core.Name tname = (cs).value.typeName;
                             return hydra.lib.eithers.Bind.apply(
@@ -2667,7 +2683,7 @@ public interface Coder {
                                 cx,
                                 hydra.ext.python.Coder.pythonEnvironmentGetGraph(env),
                                 tname),
-                              (java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (rt -> {
+                              (java.util.function.Function<java.util.List<hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (rt -> {
                                 Boolean isEnum = hydra.Predicates.isEnumRowType(rt);
                                 hydra.util.Lazy<Boolean> isFull = new hydra.util.Lazy<>(() -> hydra.ext.python.Coder.isCasesFull(
                                   rt,
@@ -2678,7 +2694,7 @@ public interface Coder {
                                     env,
                                     false,
                                     arg.get()),
-                                  (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (pyArg -> hydra.lib.eithers.Bind.apply(
+                                  (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (pyArg -> hydra.lib.eithers.Bind.apply(
                                     hydra.lib.eithers.MapList.apply(
                                       (java.util.function.Function<hydra.core.Field, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.CaseBlock>>) (v1 -> hydra.ext.python.Coder.encodeCaseBlock(
                                         cx,
@@ -2686,7 +2702,7 @@ public interface Coder {
                                         tname,
                                         rt,
                                         isEnum,
-                                        (java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>>) (e2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (t2 -> hydra.ext.python.Coder.encodeTermMultilineTCO(
+                                        (java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>>) (e2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (t2 -> hydra.ext.python.Coder.encodeTermMultilineTCO(
                                           cx,
                                           e2,
                                           funcName,
@@ -2694,7 +2710,7 @@ public interface Coder {
                                           t2))),
                                         v1)),
                                       hydra.ext.python.Coder.deduplicateCaseVariables(cases_)),
-                                    (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.CaseBlock>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (pyCases -> hydra.lib.eithers.Bind.apply(
+                                    (java.util.function.Function<java.util.List<hydra.ext.python.syntax.CaseBlock>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (pyCases -> hydra.lib.eithers.Bind.apply(
                                       hydra.ext.python.Coder.encodeDefaultCaseBlock(
                                         (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (t2 -> hydra.ext.python.Coder.encodeTermInline(
                                           cx,
@@ -2704,12 +2720,12 @@ public interface Coder {
                                         isFull.get(),
                                         dflt,
                                         tname),
-                                      (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.CaseBlock>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (pyDflt -> {
+                                      (java.util.function.Function<java.util.List<hydra.ext.python.syntax.CaseBlock>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (pyDflt -> {
                                         hydra.ext.python.syntax.SubjectExpression subj = new hydra.ext.python.syntax.SubjectExpression.Simple(new hydra.ext.python.syntax.NamedExpression.Simple(pyArg));
                                         hydra.util.Lazy<hydra.ext.python.syntax.Statement> matchStmt = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.Statement.Compound(new hydra.ext.python.syntax.CompoundStatement.Match(new hydra.ext.python.syntax.MatchStatement(subj, hydra.lib.lists.Concat2.apply(
                                           pyCases,
                                           pyDflt)))));
-                                        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>right(hydra.util.ConsList.of(matchStmt.get()));
+                                        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>right(java.util.Arrays.asList(matchStmt.get()));
                                       }))))));
                               }));
                           }
@@ -2725,7 +2741,7 @@ public interface Coder {
                   env,
                   false,
                   term),
-                (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (expr -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>right(hydra.util.ConsList.of(hydra.ext.python.Utils.returnSingle(expr))))));
+                (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (expr -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>right(java.util.Arrays.asList(hydra.ext.python.Utils.returnSingle(expr))))));
           })).get();
         })).get();
       })).get());
@@ -2762,7 +2778,7 @@ public interface Coder {
             (et).value),
           (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<T0, hydra.ext.python.syntax.Expression>>) (pyet -> hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.nameAndParams(
             new hydra.ext.python.syntax.Name("frozenlist"),
-            hydra.util.ConsList.of(pyet)))));
+            java.util.Arrays.asList(pyet)))));
       }
 
       @Override
@@ -2777,7 +2793,7 @@ public interface Coder {
               (mt).value.values),
             (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<T0, hydra.ext.python.syntax.Expression>>) (pyvt -> hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.nameAndParams(
               new hydra.ext.python.syntax.Name("FrozenDict"),
-              hydra.util.ConsList.of(
+              java.util.Arrays.asList(
                 pykt,
                 pyvt)))))));
       }
@@ -2795,7 +2811,7 @@ public interface Coder {
             (et).value),
           (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<T0, hydra.ext.python.syntax.Expression>>) (ptype -> hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.pyPrimaryToPyExpression(hydra.ext.python.Utils.primaryWithExpressionSlices(
             new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(new hydra.ext.python.syntax.Name("Maybe"))),
-            hydra.util.ConsList.of(ptype))))));
+            java.util.Arrays.asList(ptype))))));
       }
 
       @Override
@@ -2810,7 +2826,7 @@ public interface Coder {
               (eitherT).value.right),
             (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<T0, hydra.ext.python.syntax.Expression>>) (pyright -> hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.pyPrimaryToPyExpression(hydra.ext.python.Utils.primaryWithExpressionSlices(
               new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(new hydra.ext.python.syntax.Name("Either"))),
-              hydra.util.ConsList.of(
+              java.util.Arrays.asList(
                 pyleft,
                 pyright))))))));
       }
@@ -2827,7 +2843,7 @@ public interface Coder {
               (pairT).value.second),
             (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<T0, hydra.ext.python.syntax.Expression>>) (pySecond -> hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.nameAndParams(
               new hydra.ext.python.syntax.Name("tuple"),
-              hydra.util.ConsList.of(
+              java.util.Arrays.asList(
                 pyFirst,
                 pySecond)))))));
       }
@@ -2849,7 +2865,7 @@ public interface Coder {
             (et).value),
           (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<T0, hydra.ext.python.syntax.Expression>>) (pyet -> hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.nameAndParams(
             new hydra.ext.python.syntax.Name("frozenset"),
-            hydra.util.ConsList.of(pyet)))));
+            java.util.Arrays.asList(pyet)))));
       }
 
       @Override
@@ -2898,7 +2914,7 @@ public interface Coder {
     });
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>> encodeTypeAssignment(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name name, hydra.core.Type typ, hydra.util.Maybe<String> comment) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<java.util.List<hydra.ext.python.syntax.Statement>>> encodeTypeAssignment(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name name, hydra.core.Type typ, hydra.util.Maybe<String> comment) {
     return hydra.lib.eithers.Bind.apply(
       hydra.ext.python.Coder.encodeTypeAssignmentInner(
         cx,
@@ -2906,20 +2922,20 @@ public interface Coder {
         name,
         typ,
         comment),
-      (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.Statement>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>>) (defStmts -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>right(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.ext.python.syntax.Statement, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>) (s -> hydra.util.ConsList.of(s)),
+      (java.util.function.Function<java.util.List<hydra.ext.python.syntax.Statement>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<java.util.List<hydra.ext.python.syntax.Statement>>>>) (defStmts -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.util.List<java.util.List<hydra.ext.python.syntax.Statement>>>right(hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.ext.python.syntax.Statement, java.util.List<hydra.ext.python.syntax.Statement>>) (s -> java.util.Arrays.asList(s)),
         defStmts))));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> encodeTypeAssignmentInner(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name name, hydra.core.Type typ, hydra.util.Maybe<String> comment) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>> encodeTypeAssignmentInner(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name name, hydra.core.Type typ, hydra.util.Maybe<String> comment) {
     hydra.core.Type stripped = hydra.Strip.deannotateType(typ);
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> otherwise(hydra.core.Type instance) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>> otherwise(hydra.core.Type instance) {
         return hydra.ext.python.Coder.encodeTypeAssignmentInner_dflt(
           comment,
           env,
-          (java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.util.Maybe<String>, java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>>>) (p0 -> p1 -> p2 -> p3 -> hydra.ext.python.Coder.encodeTypeDefSingle(
+          (java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.util.Maybe<String>, java.util.function.Function<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Statement>>>>>) (p0 -> p1 -> p2 -> p3 -> hydra.ext.python.Coder.encodeTypeDefSingle(
             p0,
             p1,
             p2,
@@ -2929,7 +2945,7 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> visit(hydra.core.Type.Forall ft) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>> visit(hydra.core.Type.Forall ft) {
         hydra.core.Type body = (ft).value.body;
         hydra.core.Name tvar = (ft).value.parameter;
         hydra.ext.python.environment.PythonEnvironment newEnv = hydra.ext.python.Coder.extendEnvWithTypeVar(
@@ -2944,9 +2960,9 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> visit(hydra.core.Type.Record rt) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>> visit(hydra.core.Type.Record rt) {
         return hydra.lib.eithers.Map.apply(
-          (java.util.function.Function<hydra.ext.python.syntax.Statement, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>) (s -> hydra.util.ConsList.of(s)),
+          (java.util.function.Function<hydra.ext.python.syntax.Statement, java.util.List<hydra.ext.python.syntax.Statement>>) (s -> java.util.Arrays.asList(s)),
           hydra.ext.python.Coder.encodeRecordType(
             cx,
             env,
@@ -2956,7 +2972,7 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> visit(hydra.core.Type.Union rt) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>> visit(hydra.core.Type.Union rt) {
         return hydra.ext.python.Coder.encodeUnionType(
           cx,
           env,
@@ -2966,7 +2982,7 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> visit(hydra.core.Type.Wrap wt) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>> visit(hydra.core.Type.Wrap wt) {
         return hydra.ext.python.Coder.encodeWrappedType(
           env,
           name,
@@ -2976,22 +2992,22 @@ public interface Coder {
     });
   }
 
-  static <T0> hydra.util.Either<T0, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> encodeTypeAssignmentInner_dflt(hydra.util.Maybe<String> comment, hydra.ext.python.environment.PythonEnvironment env, java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.util.Maybe<String>, java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>>> hydra_ext_python_coder_encodeTypeDefSingle, hydra.core.Name name, hydra.core.Type typ) {
+  static <T0> hydra.util.Either<T0, java.util.List<hydra.ext.python.syntax.Statement>> encodeTypeAssignmentInner_dflt(hydra.util.Maybe<String> comment, hydra.ext.python.environment.PythonEnvironment env, java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.util.Maybe<String>, java.util.function.Function<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Statement>>>>> hydra_ext_python_coder_encodeTypeDefSingle, hydra.core.Name name, hydra.core.Type typ) {
     return hydra.lib.eithers.Bind.apply(
       hydra.ext.python.Coder.<T0>encodeType(
         env,
         typ),
-      (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<T0, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (typeExpr -> hydra.util.Either.<T0, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>right((hydra_ext_python_coder_encodeTypeDefSingle).apply(env).apply(name).apply(comment).apply(typeExpr))));
+      (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<T0, java.util.List<hydra.ext.python.syntax.Statement>>>) (typeExpr -> hydra.util.Either.<T0, java.util.List<hydra.ext.python.syntax.Statement>>right((hydra_ext_python_coder_encodeTypeDefSingle).apply(env).apply(name).apply(comment).apply(typeExpr))));
   }
 
-  static hydra.util.ConsList<hydra.ext.python.syntax.Statement> encodeTypeDefSingle(hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name name, hydra.util.Maybe<String> comment, hydra.ext.python.syntax.Expression typeExpr) {
+  static java.util.List<hydra.ext.python.syntax.Statement> encodeTypeDefSingle(hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name name, hydra.util.Maybe<String> comment, hydra.ext.python.syntax.Expression typeExpr) {
     hydra.ext.python.syntax.Name pyName = hydra.ext.python.Names.encodeName(
       false,
       new hydra.util.CaseConvention.Pascal(),
       env,
       name);
-    hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> tparams = hydra.ext.python.Coder.environmentTypeParameters(env);
-    return hydra.util.ConsList.of(hydra.ext.python.Coder.typeAliasStatementFor(
+    java.util.List<hydra.ext.python.syntax.TypeParameter> tparams = hydra.ext.python.Coder.environmentTypeParameters(env);
+    return java.util.Arrays.asList(hydra.ext.python.Coder.typeAliasStatementFor(
       env,
       pyName,
       tparams,
@@ -3017,7 +3033,7 @@ public interface Coder {
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression> encodeUnionEliminationInline(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.CaseStatement cs, hydra.ext.python.syntax.Expression pyArg) {
-    hydra.util.ConsList<hydra.core.Field> cases_ = (cs).cases;
+    java.util.List<hydra.core.Field> cases_ = (cs).cases;
     hydra.util.Maybe<hydra.core.Term> mdefault = (cs).default_;
     hydra.core.Name tname = (cs).typeName;
     return hydra.lib.eithers.Bind.apply(
@@ -3025,7 +3041,7 @@ public interface Coder {
         cx,
         hydra.ext.python.Coder.pythonEnvironmentGetGraph(env),
         tname),
-      (java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (rt -> {
+      (java.util.function.Function<java.util.List<hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (rt -> {
         Boolean isEnum = hydra.Predicates.isEnumRowType(rt);
         hydra.ext.python.syntax.Primary isinstancePrimary = hydra.ext.python.Utils.pyNameToPyPrimary(new hydra.ext.python.syntax.Name("isinstance"));
         hydra.ext.python.syntax.Expression valueExpr = hydra.ext.python.Utils.projectFromExpression(
@@ -3055,10 +3071,10 @@ public interface Coder {
                 (env).graph);
               hydra.util.Lazy<hydra.ext.python.syntax.Expression> isinstanceCheck = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
                 isEnum,
-                () -> new hydra.ext.python.syntax.Expression.Simple(new hydra.ext.python.syntax.Disjunction(hydra.util.ConsList.of(new hydra.ext.python.syntax.Conjunction(hydra.util.ConsList.of(new hydra.ext.python.syntax.Inversion.Simple(new hydra.ext.python.syntax.Comparison(hydra.ext.python.Utils.pyExpressionToBitwiseOr(pyArg), hydra.util.ConsList.of(new hydra.ext.python.syntax.CompareOpBitwiseOrPair(new hydra.ext.python.syntax.CompareOp.Eq(), hydra.ext.python.Utils.pyExpressionToBitwiseOr(hydra.ext.python.Utils.pyNameToPyExpression(pyVariantName))))))))))),
+                () -> new hydra.ext.python.syntax.Expression.Simple(new hydra.ext.python.syntax.Disjunction(java.util.Arrays.asList(new hydra.ext.python.syntax.Conjunction(java.util.Arrays.asList(new hydra.ext.python.syntax.Inversion.Simple(new hydra.ext.python.syntax.Comparison(hydra.ext.python.Utils.pyExpressionToBitwiseOr(pyArg), java.util.Arrays.asList(new hydra.ext.python.syntax.CompareOpBitwiseOrPair(new hydra.ext.python.syntax.CompareOp.Eq(), hydra.ext.python.Utils.pyExpressionToBitwiseOr(hydra.ext.python.Utils.pyNameToPyExpression(pyVariantName))))))))))),
                 () -> hydra.ext.python.Utils.functionCall(
                   isinstancePrimary,
-                  hydra.util.ConsList.of(
+                  java.util.Arrays.asList(
                     pyArg,
                     hydra.ext.python.Utils.pyNameToPyExpression(pyVariantName)))));
               return hydra.lib.eithers.Bind.apply(
@@ -3072,15 +3088,15 @@ public interface Coder {
                     isEnum,
                     () -> hydra.ext.python.Utils.functionCall(
                       hydra.ext.python.Utils.pyExpressionToPyPrimary(pyBranch),
-                      hydra.util.ConsList.of(pyArg)),
+                      java.util.Arrays.asList(pyArg)),
                     () -> hydra.lib.logic.IfElse.lazy(
                       isUnitVariant,
                       () -> hydra.ext.python.Utils.functionCall(
                         hydra.ext.python.Utils.pyExpressionToPyPrimary(pyBranch),
-                        hydra.util.ConsList.of(pyArg)),
+                        java.util.Arrays.asList(pyArg)),
                       () -> hydra.ext.python.Utils.functionCall(
                         hydra.ext.python.Utils.pyExpressionToPyPrimary(pyBranch),
-                        hydra.util.ConsList.of(valueExpr)))));
+                        java.util.Arrays.asList(valueExpr)))));
                   return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.Expression>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.Expression>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.Expression>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.Expression>(isinstanceCheck.get(), pyResult.get()))));
                 }));
             });
@@ -3088,7 +3104,7 @@ public interface Coder {
               hydra.lib.eithers.MapList.apply(
                 encodeBranch,
                 cases_),
-              (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.Expression>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (encodedBranches -> {
+              (java.util.function.Function<java.util.List<hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.Expression>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (encodedBranches -> {
                 java.util.function.Function<hydra.ext.python.syntax.Expression, java.util.function.Function<hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.Expression>, hydra.ext.python.syntax.Expression>> buildChain = (java.util.function.Function<hydra.ext.python.syntax.Expression, java.util.function.Function<hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.Expression>, hydra.ext.python.syntax.Expression>>) (elseExpr -> (java.util.function.Function<hydra.util.Pair<hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.Expression>, hydra.ext.python.syntax.Expression>) (branchPair -> {
                   hydra.util.Lazy<hydra.ext.python.syntax.Expression> checkExpr = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(branchPair));
                   hydra.util.Lazy<hydra.ext.python.syntax.Expression> resultExpr = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(branchPair));
@@ -3125,17 +3141,17 @@ public interface Coder {
           isUnit.get(),
           () -> hydra.ext.python.Utils.indentedBlock(
             fcomment,
-            hydra.util.ConsList.of(hydra.ext.python.Utils.unitVariantMethods(varName))),
+            java.util.Arrays.asList(hydra.ext.python.Utils.unitVariantMethods(varName))),
           () -> hydra.ext.python.Utils.indentedBlock(
             fcomment,
-            (hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>) (hydra.util.ConsList.<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>empty()))));
-        hydra.util.ConsList<hydra.core.Name> tparamNames = hydra.ext.python.Coder.findTypeParams(
+            (java.util.List<java.util.List<hydra.ext.python.syntax.Statement>>) (java.util.Collections.<java.util.List<hydra.ext.python.syntax.Statement>>emptyList()))));
+        java.util.List<hydra.core.Name> tparamNames = hydra.ext.python.Coder.findTypeParams(
           env,
           ftype);
-        hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.Name>> tparamPyNames = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+        hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.Name>> tparamPyNames = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
           hydra.ext.python.Names::encodeTypeVariable,
           tparamNames));
-        hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter>> fieldParams = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+        hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.TypeParameter>> fieldParams = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
           hydra.ext.python.Utils::pyNameToPyTypeParameter,
           tparamPyNames.get()));
         return hydra.lib.eithers.Bind.apply(
@@ -3148,7 +3164,7 @@ public interface Coder {
                 ftype),
               (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.ext.python.syntax.Args>>>) (quotedType -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.ext.python.syntax.Args>>right(hydra.util.Maybe.just(hydra.ext.python.Coder.variantArgs(
                 quotedType,
-                (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()))))))),
+                (java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()))))))),
           (java.util.function.Function<hydra.util.Maybe<hydra.ext.python.syntax.Args>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>>) (margs -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Statement>right(hydra.ext.python.Utils.pyClassDefinitionToPyStatement(new hydra.ext.python.syntax.ClassDefinition((hydra.util.Maybe<hydra.ext.python.syntax.Decorators>) (hydra.util.Maybe.<hydra.ext.python.syntax.Decorators>nothing()), varName, fieldParams.get(), margs, body.get())))));
       }));
   }
@@ -3161,17 +3177,17 @@ public interface Coder {
       env,
       unionName,
       fname));
-    hydra.util.ConsList<hydra.core.Name> tparamNames = hydra.ext.python.Coder.findTypeParams(
+    java.util.List<hydra.core.Name> tparamNames = hydra.ext.python.Coder.findTypeParams(
       env,
       ftype);
-    hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.Name>> tparams = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+    hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.Name>> tparams = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       hydra.ext.python.Names::encodeTypeVariable,
       tparamNames));
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(tparams.get()),
       () -> namePrim,
       () -> ((java.util.function.Supplier<hydra.ext.python.syntax.Primary>) (() -> {
-        hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.Expression>> tparamExprs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+        hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.Expression>> tparamExprs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
           hydra.ext.python.Utils::pyNameToPyExpression,
           tparams.get()));
         return hydra.ext.python.Utils.primaryWithExpressionSlices(
@@ -3180,19 +3196,19 @@ public interface Coder {
       })).get());
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> encodeUnionType(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name name, hydra.util.ConsList<hydra.core.FieldType> rowType, hydra.util.Maybe<String> comment) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>> encodeUnionType(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name name, java.util.List<hydra.core.FieldType> rowType, hydra.util.Maybe<String> comment) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.Predicates.isEnumRowType(rowType),
       () -> hydra.lib.eithers.Bind.apply(
         hydra.lib.eithers.MapList.apply(
-          (java.util.function.Function<hydra.core.FieldType, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (v1 -> hydra.ext.python.Coder.encodeEnumValueAssignment(
+          (java.util.function.Function<hydra.core.FieldType, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (v1 -> hydra.ext.python.Coder.encodeEnumValueAssignment(
             cx,
             env,
             v1)),
           rowType),
-        (java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (vals -> {
+        (java.util.function.Function<java.util.List<java.util.List<hydra.ext.python.syntax.Statement>>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (vals -> {
           hydra.ext.python.syntax.Name enumName = new hydra.ext.python.syntax.Name("Enum");
-          hydra.util.Maybe<hydra.ext.python.syntax.Args> args = hydra.util.Maybe.just(hydra.ext.python.Utils.pyExpressionsToPyArgs(hydra.util.ConsList.of(hydra.ext.python.Utils.pyNameToPyExpression(enumName))));
+          hydra.util.Maybe<hydra.ext.python.syntax.Args> args = hydra.util.Maybe.just(hydra.ext.python.Utils.pyExpressionsToPyArgs(java.util.Arrays.asList(hydra.ext.python.Utils.pyNameToPyExpression(enumName))));
           hydra.ext.python.syntax.Block body = hydra.ext.python.Utils.indentedBlock(
             comment,
             vals);
@@ -3212,13 +3228,13 @@ public interface Coder {
                 new hydra.util.CaseConvention.Pascal(),
                 env,
                 new hydra.core.Name("hydra.core.Name"))),
-              hydra.util.ConsList.of(hydra.ext.python.Utils.doubleQuotedString((name).value)))));
-          return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>right(hydra.util.ConsList.of(
-            hydra.ext.python.Utils.pyClassDefinitionToPyStatement(new hydra.ext.python.syntax.ClassDefinition((hydra.util.Maybe<hydra.ext.python.syntax.Decorators>) (hydra.util.Maybe.<hydra.ext.python.syntax.Decorators>nothing()), pyName, (hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter>) (hydra.util.ConsList.<hydra.ext.python.syntax.TypeParameter>empty()), args, body)),
+              java.util.Arrays.asList(hydra.ext.python.Utils.doubleQuotedString((name).value)))));
+          return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>right(java.util.Arrays.asList(
+            hydra.ext.python.Utils.pyClassDefinitionToPyStatement(new hydra.ext.python.syntax.ClassDefinition((hydra.util.Maybe<hydra.ext.python.syntax.Decorators>) (hydra.util.Maybe.<hydra.ext.python.syntax.Decorators>nothing()), pyName, (java.util.List<hydra.ext.python.syntax.TypeParameter>) (java.util.Collections.<hydra.ext.python.syntax.TypeParameter>emptyList()), args, body)),
             typeConstStmt.get()));
         })),
-      () -> ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (() -> {
-        hydra.util.ConsList<hydra.ext.python.syntax.Statement> constStmts = hydra.ext.python.Coder.encodeNameConstants(
+      () -> ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (() -> {
+        java.util.List<hydra.ext.python.syntax.Statement> constStmts = hydra.ext.python.Coder.encodeNameConstants(
           env,
           name,
           rowType);
@@ -3230,15 +3246,15 @@ public interface Coder {
               name,
               v1)),
             rowType),
-          (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.Statement>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (fieldStmts -> {
-            hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> tparams = hydra.ext.python.Coder.environmentTypeParameters(env);
-            hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.Primary>> unionAlts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+          (java.util.function.Function<java.util.List<hydra.ext.python.syntax.Statement>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>>) (fieldStmts -> {
+            java.util.List<hydra.ext.python.syntax.TypeParameter> tparams = hydra.ext.python.Coder.environmentTypeParameters(env);
+            hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.Primary>> unionAlts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
               (java.util.function.Function<hydra.core.FieldType, hydra.ext.python.syntax.Primary>) (v1 -> hydra.ext.python.Coder.encodeUnionFieldAlt(
                 env,
                 name,
                 v1)),
               rowType));
-            hydra.util.ConsList<hydra.ext.python.syntax.Statement> unionStmts = hydra.ext.python.Coder.unionTypeStatementsFor(
+            java.util.List<hydra.ext.python.syntax.Statement> unionStmts = hydra.ext.python.Coder.unionTypeStatementsFor(
               env,
               hydra.ext.python.Names.encodeName(
                 false,
@@ -3249,14 +3265,14 @@ public interface Coder {
               comment,
               hydra.ext.python.Utils.orExpression(unionAlts.get()),
               constStmts);
-            return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>right(hydra.lib.lists.Concat2.apply(
+            return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.ext.python.syntax.Statement>>right(hydra.lib.lists.Concat2.apply(
               fieldStmts,
               unionStmts));
           }));
       })).get());
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression> encodeVariable(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name name, hydra.util.ConsList<hydra.ext.python.syntax.Expression> args) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression> encodeVariable(hydra.context.Context cx, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name name, java.util.List<hydra.ext.python.syntax.Expression> args) {
     hydra.ext.python.syntax.Expression asFunctionCall = hydra.ext.python.Utils.functionCall(
       hydra.ext.python.Utils.pyNameToPyPrimary(hydra.ext.python.Names.encodeName(
         true,
@@ -3268,17 +3284,17 @@ public interface Coder {
       env,
       name);
     hydra.graph.Graph g = hydra.ext.python.Coder.pythonEnvironmentGetGraph(env);
-    hydra.util.PersistentSet<hydra.core.Name> inlineVars = (env).inlineVariables;
+    java.util.Set<hydra.core.Name> inlineVars = (env).inlineVariables;
     hydra.graph.Graph tc = (env).graph;
-    hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme> tcTypes = (tc).boundTypes;
+    java.util.Map<hydra.core.Name, hydra.core.TypeScheme> tcTypes = (tc).boundTypes;
     hydra.util.Lazy<hydra.util.Maybe<hydra.core.TypeScheme>> mTypScheme = new hydra.util.Lazy<>(() -> hydra.lib.maps.Lookup.apply(
       name,
       tcTypes));
     hydra.util.Lazy<hydra.util.Maybe<hydra.core.Type>> mTyp = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Map.apply(
       (java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type>) (ts_ -> (ts_).type),
       mTypScheme.get()));
-    hydra.util.PersistentSet<hydra.core.Name> tcLambdaVars = (tc).lambdaVariables;
-    hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> tcMetadata = (tc).metadata;
+    java.util.Set<hydra.core.Name> tcLambdaVars = (tc).lambdaVariables;
+    java.util.Map<hydra.core.Name, hydra.core.Term> tcMetadata = (tc).metadata;
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply(args)),
       () -> hydra.lib.maybes.Maybe.applyLazy(
@@ -3295,7 +3311,7 @@ public interface Coder {
                 primArity,
                 hydra.lib.lists.Length.apply(args)));
               return ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (() -> {
-                hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.Name>> remainingParams = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+                hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.Name>> remainingParams = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
                   (java.util.function.Function<Integer, hydra.ext.python.syntax.Name>) (i -> new hydra.ext.python.syntax.Name(hydra.lib.strings.Cat2.apply(
                     "x",
                     hydra.lib.literals.ShowInt32.apply(i)))),
@@ -3303,11 +3319,11 @@ public interface Coder {
                     1,
                     numRemaining.get())));
                 return ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (() -> {
-                  hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.Expression>> remainingExprs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
-                    (java.util.function.Function<hydra.ext.python.syntax.Name, hydra.ext.python.syntax.Expression>) (n -> new hydra.ext.python.syntax.Expression.Simple(new hydra.ext.python.syntax.Disjunction(hydra.util.ConsList.of(new hydra.ext.python.syntax.Conjunction(hydra.util.ConsList.of(new hydra.ext.python.syntax.Inversion.Simple(new hydra.ext.python.syntax.Comparison(new hydra.ext.python.syntax.BitwiseOr((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseOr>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseOr>nothing()), new hydra.ext.python.syntax.BitwiseXor((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseXor>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseXor>nothing()), new hydra.ext.python.syntax.BitwiseAnd((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseAnd>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseAnd>nothing()), new hydra.ext.python.syntax.ShiftExpression((hydra.util.Maybe<hydra.ext.python.syntax.ShiftLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.ShiftLhs>nothing()), new hydra.ext.python.syntax.Sum((hydra.util.Maybe<hydra.ext.python.syntax.SumLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.SumLhs>nothing()), new hydra.ext.python.syntax.Term((hydra.util.Maybe<hydra.ext.python.syntax.TermLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.TermLhs>nothing()), new hydra.ext.python.syntax.Factor.Simple(new hydra.ext.python.syntax.Power(new hydra.ext.python.syntax.AwaitPrimary(false, new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(n))), (hydra.util.Maybe<hydra.ext.python.syntax.Factor>) (hydra.util.Maybe.<hydra.ext.python.syntax.Factor>nothing()))))))))), (hydra.util.ConsList<hydra.ext.python.syntax.CompareOpBitwiseOrPair>) (hydra.util.ConsList.<hydra.ext.python.syntax.CompareOpBitwiseOrPair>empty()))))))))),
+                  hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.Expression>> remainingExprs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+                    (java.util.function.Function<hydra.ext.python.syntax.Name, hydra.ext.python.syntax.Expression>) (n -> new hydra.ext.python.syntax.Expression.Simple(new hydra.ext.python.syntax.Disjunction(java.util.Arrays.asList(new hydra.ext.python.syntax.Conjunction(java.util.Arrays.asList(new hydra.ext.python.syntax.Inversion.Simple(new hydra.ext.python.syntax.Comparison(new hydra.ext.python.syntax.BitwiseOr((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseOr>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseOr>nothing()), new hydra.ext.python.syntax.BitwiseXor((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseXor>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseXor>nothing()), new hydra.ext.python.syntax.BitwiseAnd((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseAnd>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseAnd>nothing()), new hydra.ext.python.syntax.ShiftExpression((hydra.util.Maybe<hydra.ext.python.syntax.ShiftLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.ShiftLhs>nothing()), new hydra.ext.python.syntax.Sum((hydra.util.Maybe<hydra.ext.python.syntax.SumLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.SumLhs>nothing()), new hydra.ext.python.syntax.Term((hydra.util.Maybe<hydra.ext.python.syntax.TermLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.TermLhs>nothing()), new hydra.ext.python.syntax.Factor.Simple(new hydra.ext.python.syntax.Power(new hydra.ext.python.syntax.AwaitPrimary(false, new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(n))), (hydra.util.Maybe<hydra.ext.python.syntax.Factor>) (hydra.util.Maybe.<hydra.ext.python.syntax.Factor>nothing()))))))))), (java.util.List<hydra.ext.python.syntax.CompareOpBitwiseOrPair>) (java.util.Collections.<hydra.ext.python.syntax.CompareOpBitwiseOrPair>emptyList()))))))))),
                     remainingParams.get()));
                   return ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (() -> {
-                    hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.Expression>> allArgs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
+                    hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.Expression>> allArgs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
                       args,
                       remainingExprs.get()));
                     return ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression>>) (() -> {
@@ -3500,16 +3516,16 @@ public interface Coder {
         mTyp.get()));
   }
 
-  static <T0> hydra.util.Either<T0, hydra.util.ConsList<hydra.ext.python.syntax.Statement>> encodeWrappedType(hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name name, hydra.core.Type typ, hydra.util.Maybe<String> comment) {
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> tparamList = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply((env).boundTypeVariables));
+  static <T0> hydra.util.Either<T0, java.util.List<hydra.ext.python.syntax.Statement>> encodeWrappedType(hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name name, hydra.core.Type typ, hydra.util.Maybe<String> comment) {
+    hydra.util.Lazy<java.util.List<hydra.core.Name>> tparamList = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply((env).boundTypeVariables));
     return hydra.lib.eithers.Bind.apply(
       hydra.ext.python.Coder.<T0>encodeTypeQuoted(
         env,
         typ),
-      (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<T0, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>) (ptypeQuoted -> {
+      (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<T0, java.util.List<hydra.ext.python.syntax.Statement>>>) (ptypeQuoted -> {
         hydra.util.Lazy<hydra.ext.python.syntax.Block> body = new hydra.util.Lazy<>(() -> hydra.ext.python.Utils.indentedBlock(
           comment,
-          (hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>) (hydra.util.ConsList.<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>empty())));
+          (java.util.List<java.util.List<hydra.ext.python.syntax.Statement>>) (java.util.Collections.<java.util.List<hydra.ext.python.syntax.Statement>>emptyList())));
         hydra.ext.python.syntax.Name pyName = hydra.ext.python.Names.encodeName(
           false,
           new hydra.util.CaseConvention.Pascal(),
@@ -3526,8 +3542,8 @@ public interface Coder {
               new hydra.util.CaseConvention.Pascal(),
               env,
               new hydra.core.Name("hydra.core.Name"))),
-            hydra.util.ConsList.of(hydra.ext.python.Utils.doubleQuotedString((name).value)))));
-        return hydra.util.Either.<T0, hydra.util.ConsList<hydra.ext.python.syntax.Statement>>right(hydra.util.ConsList.of(
+            java.util.Arrays.asList(hydra.ext.python.Utils.doubleQuotedString((name).value)))));
+        return hydra.util.Either.<T0, java.util.List<hydra.ext.python.syntax.Statement>>right(java.util.Arrays.asList(
           hydra.ext.python.Utils.pyClassDefinitionToPyStatement(new hydra.ext.python.syntax.ClassDefinition((hydra.util.Maybe<hydra.ext.python.syntax.Decorators>) (hydra.util.Maybe.<hydra.ext.python.syntax.Decorators>nothing()), pyName, hydra.lib.lists.Map.apply(
             (java.util.function.Function<hydra.core.Name, hydra.ext.python.syntax.TypeParameter>) (arg_ -> hydra.ext.python.Utils.pyNameToPyTypeParameter(hydra.ext.python.Names.encodeTypeVariable(arg_))),
             hydra.ext.python.Coder.findTypeParams(
@@ -3540,7 +3556,7 @@ public interface Coder {
   }
 
   static hydra.ext.python.syntax.ClosedPattern enumVariantPattern(hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name typeName, hydra.core.Name fieldName) {
-    return new hydra.ext.python.syntax.ClosedPattern.Value(new hydra.ext.python.syntax.ValuePattern(new hydra.ext.python.syntax.Attribute(hydra.util.ConsList.of(
+    return new hydra.ext.python.syntax.ClosedPattern.Value(new hydra.ext.python.syntax.ValuePattern(new hydra.ext.python.syntax.Attribute(java.util.Arrays.asList(
       hydra.ext.python.Names.encodeName(
         true,
         new hydra.util.CaseConvention.Pascal(),
@@ -3551,7 +3567,7 @@ public interface Coder {
         fieldName)))));
   }
 
-  static hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> environmentTypeParameters(hydra.ext.python.environment.PythonEnvironment env) {
+  static java.util.List<hydra.ext.python.syntax.TypeParameter> environmentTypeParameters(hydra.ext.python.environment.PythonEnvironment env) {
     return hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.core.Name, hydra.ext.python.syntax.TypeParameter>) (arg_ -> hydra.ext.python.Utils.pyNameToPyTypeParameter(hydra.ext.python.Names.encodeTypeVariable(arg_))),
       hydra.lib.pairs.First.apply((env).boundTypeVariables));
@@ -3590,17 +3606,17 @@ public interface Coder {
   }
 
   static hydra.ext.python.environment.PythonEnvironment extendEnvWithTypeVar(hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name var_) {
-    hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>> oldBound = (env).boundTypeVariables;
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> tparamList = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(oldBound));
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> newList = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
+    hydra.util.Pair<java.util.List<hydra.core.Name>, java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>> oldBound = (env).boundTypeVariables;
+    hydra.util.Lazy<java.util.List<hydra.core.Name>> tparamList = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(oldBound));
+    hydra.util.Lazy<java.util.List<hydra.core.Name>> newList = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
       tparamList.get(),
-      hydra.util.ConsList.of(var_)));
-    hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>> tparamMap = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(oldBound));
-    hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>> newMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.Insert.apply(
+      java.util.Arrays.asList(var_)));
+    hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>> tparamMap = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(oldBound));
+    hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>> newMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.Insert.apply(
       var_,
       hydra.ext.python.Names.encodeTypeVariable(var_),
       tparamMap.get()));
-    return new hydra.ext.python.environment.PythonEnvironment((env).namespaces, (hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>(newList.get(), newMap.get()))), (env).graph, (env).nullaryBindings, (env).version, (env).skipCasts, (env).inlineVariables);
+    return new hydra.ext.python.environment.PythonEnvironment((env).namespaces, (hydra.util.Pair<java.util.List<hydra.core.Name>, java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>>) ((hydra.util.Pair<java.util.List<hydra.core.Name>, java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>>) (new hydra.util.Pair<java.util.List<hydra.core.Name>, java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>>(newList.get(), newMap.get()))), (env).graph, (env).nullaryBindings, (env).version, (env).skipCasts, (env).inlineVariables);
   }
 
   static hydra.ext.python.environment.PythonModuleMetadata extendMetaForTerm(Boolean topLevel, hydra.ext.python.environment.PythonModuleMetadata meta0, hydra.core.Term term) {
@@ -3652,7 +3668,7 @@ public interface Coder {
 
       @Override
       public hydra.ext.python.environment.PythonModuleMetadata visit(hydra.core.Term.Let lt) {
-        hydra.util.ConsList<hydra.core.Binding> bindings = (lt).value.bindings;
+        java.util.List<hydra.core.Binding> bindings = (lt).value.bindings;
         return hydra.lib.lists.Foldl.apply(
           ((java.util.function.Supplier<java.util.function.Function<hydra.ext.python.environment.PythonModuleMetadata, java.util.function.Function<hydra.core.Binding, hydra.ext.python.environment.PythonModuleMetadata>>>) (() -> {
             java.util.function.Function<hydra.ext.python.environment.PythonModuleMetadata, java.util.function.Function<hydra.core.Binding, hydra.ext.python.environment.PythonModuleMetadata>> forBinding = (java.util.function.Function<hydra.ext.python.environment.PythonModuleMetadata, java.util.function.Function<hydra.core.Binding, hydra.ext.python.environment.PythonModuleMetadata>>) (m -> (java.util.function.Function<hydra.core.Binding, hydra.ext.python.environment.PythonModuleMetadata>) (b -> hydra.lib.maybes.Maybe.applyLazy(
@@ -3736,8 +3752,8 @@ public interface Coder {
   }
 
   static hydra.ext.python.environment.PythonModuleMetadata extendMetaForType(Boolean topLevel, Boolean isTermAnnot, hydra.core.Type typ, hydra.ext.python.environment.PythonModuleMetadata meta) {
-    hydra.util.PersistentSet<hydra.core.Name> currentTvars = (meta).typeVariables;
-    hydra.util.PersistentSet<hydra.core.Name> newTvars = hydra.ext.python.Coder.collectTypeVariables(
+    java.util.Set<hydra.core.Name> currentTvars = (meta).typeVariables;
+    java.util.Set<hydra.core.Name> newTvars = hydra.ext.python.Coder.collectTypeVariables(
       currentTvars,
       typ);
     hydra.ext.python.environment.PythonModuleMetadata metaWithTvars = hydra.ext.python.Coder.setMetaTypeVariables(
@@ -3907,10 +3923,10 @@ public interface Coder {
     });
   }
 
-  static hydra.ext.python.environment.PythonModuleMetadata extendMetaForTypes(hydra.util.ConsList<hydra.core.Type> types, hydra.ext.python.environment.PythonModuleMetadata meta) {
+  static hydra.ext.python.environment.PythonModuleMetadata extendMetaForTypes(java.util.List<hydra.core.Type> types, hydra.ext.python.environment.PythonModuleMetadata meta) {
     hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName> currentNs = (meta).namespaces;
-    hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> names = new hydra.util.Lazy<>(() -> hydra.lib.sets.Unions.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.core.Type, hydra.util.PersistentSet<hydra.core.Name>>) (t -> hydra.Dependencies.typeDependencyNames(
+    hydra.util.Lazy<java.util.Set<hydra.core.Name>> names = new hydra.util.Lazy<>(() -> hydra.lib.sets.Unions.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.core.Type, java.util.Set<hydra.core.Name>>) (t -> hydra.Dependencies.typeDependencyNames(
         false,
         t)),
       types)));
@@ -3965,8 +3981,8 @@ public interface Coder {
     });
   }
 
-  static hydra.util.ConsList<hydra.core.Name> findTypeParams(hydra.ext.python.environment.PythonEnvironment env, hydra.core.Type typ) {
-    hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>> boundVars = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply((env).boundTypeVariables));
+  static java.util.List<hydra.core.Name> findTypeParams(hydra.ext.python.environment.PythonEnvironment env, hydra.core.Type typ) {
+    hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>> boundVars = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply((env).boundTypeVariables));
     java.util.function.Function<hydra.core.Name, Boolean> isBound = (java.util.function.Function<hydra.core.Name, Boolean>) (v -> hydra.lib.maybes.IsJust.apply(hydra.lib.maps.Lookup.apply(
       v,
       boundVars.get())));
@@ -4008,35 +4024,35 @@ public interface Coder {
     });
   }
 
-  static hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Term> gatherLambdas(hydra.core.Term term) {
-    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.ConsList<hydra.core.Name>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Term>>>> go = new java.util.concurrent.atomic.AtomicReference<>();
-    go.set((java.util.function.Function<hydra.util.ConsList<hydra.core.Name>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Term>>>) (params -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Term>>) (t -> hydra.Strip.deannotateAndDetypeTerm(t).accept(new hydra.core.Term.PartialVisitor<>() {
+  static hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Term> gatherLambdas(hydra.core.Term term) {
+    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.core.Name>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Term>>>> go = new java.util.concurrent.atomic.AtomicReference<>();
+    go.set((java.util.function.Function<java.util.List<hydra.core.Name>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Term>>>) (params -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Term>>) (t -> hydra.Strip.deannotateAndDetypeTerm(t).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Term> otherwise(hydra.core.Term instance) {
-        return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Term>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Term>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Term>(params, t)));
+      public hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Term> otherwise(hydra.core.Term instance) {
+        return (hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Term>) ((hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Term>) (new hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Term>(params, t)));
       }
 
       @Override
-      public hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Term> visit(hydra.core.Term.Function f) {
+      public hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Term> visit(hydra.core.Term.Function f) {
         return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
-          public hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Term> otherwise(hydra.core.Function instance) {
-            return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Term>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Term>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Term>(params, t)));
+          public hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Term> otherwise(hydra.core.Function instance) {
+            return (hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Term>) ((hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Term>) (new hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Term>(params, t)));
           }
 
           @Override
-          public hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Term> visit(hydra.core.Function.Lambda l) {
+          public hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Term> visit(hydra.core.Function.Lambda l) {
             return go.get().apply(hydra.lib.lists.Concat2.apply(
               params,
-              hydra.util.ConsList.of((l).value.parameter))).apply((l).value.body);
+              java.util.Arrays.asList((l).value.parameter))).apply((l).value.body);
           }
         });
       }
     }))));
-    return go.get().apply((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty())).apply(term);
+    return go.get().apply((java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList())).apply(term);
   }
 
-  static hydra.ext.python.environment.PythonModuleMetadata gatherMetadata(hydra.packaging.Namespace focusNs, hydra.util.ConsList<hydra.packaging.Definition> defs) {
+  static hydra.ext.python.environment.PythonModuleMetadata gatherMetadata(hydra.packaging.Namespace focusNs, java.util.List<hydra.packaging.Definition> defs) {
     java.util.function.Function<hydra.ext.python.environment.PythonModuleMetadata, java.util.function.Function<hydra.packaging.Definition, hydra.ext.python.environment.PythonModuleMetadata>> addDef = (java.util.function.Function<hydra.ext.python.environment.PythonModuleMetadata, java.util.function.Function<hydra.packaging.Definition, hydra.ext.python.environment.PythonModuleMetadata>>) (meta -> (java.util.function.Function<hydra.packaging.Definition, hydra.ext.python.environment.PythonModuleMetadata>) (def -> (def).accept(new hydra.packaging.Definition.PartialVisitor<>() {
       @Override
       public hydra.ext.python.environment.PythonModuleMetadata visit(hydra.packaging.Definition.Term termDef) {
@@ -4085,69 +4101,69 @@ public interface Coder {
       hydra.ext.python.Coder.setMetaUsesLruCache(
         true,
         result.get()));
-    hydra.util.PersistentSet<hydra.core.Name> tvars = result.get().typeVariables;
+    java.util.Set<hydra.core.Name> tvars = result.get().typeVariables;
     return hydra.ext.python.Coder.setMetaUsesTypeVar(
       result2,
       hydra.lib.logic.Not.apply(hydra.lib.sets.Null.apply(tvars)));
   }
 
-  static hydra.util.Maybe<hydra.ext.python.syntax.Expression> genericArg(hydra.util.ConsList<hydra.core.Name> tparamList) {
+  static hydra.util.Maybe<hydra.ext.python.syntax.Expression> genericArg(java.util.List<hydra.core.Name> tparamList) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(tparamList),
       () -> (hydra.util.Maybe<hydra.ext.python.syntax.Expression>) (hydra.util.Maybe.<hydra.ext.python.syntax.Expression>nothing()),
       () -> hydra.util.Maybe.just(hydra.ext.python.Utils.pyPrimaryToPyExpression(hydra.ext.python.Utils.primaryWithExpressionSlices(
         new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(new hydra.ext.python.syntax.Name("Generic"))),
         hydra.lib.lists.Map.apply(
-          (java.util.function.Function<hydra.core.Name, hydra.ext.python.syntax.Expression>) (n -> new hydra.ext.python.syntax.Expression.Simple(new hydra.ext.python.syntax.Disjunction(hydra.util.ConsList.of(new hydra.ext.python.syntax.Conjunction(hydra.util.ConsList.of(new hydra.ext.python.syntax.Inversion.Simple(new hydra.ext.python.syntax.Comparison(new hydra.ext.python.syntax.BitwiseOr((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseOr>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseOr>nothing()), new hydra.ext.python.syntax.BitwiseXor((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseXor>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseXor>nothing()), new hydra.ext.python.syntax.BitwiseAnd((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseAnd>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseAnd>nothing()), new hydra.ext.python.syntax.ShiftExpression((hydra.util.Maybe<hydra.ext.python.syntax.ShiftLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.ShiftLhs>nothing()), new hydra.ext.python.syntax.Sum((hydra.util.Maybe<hydra.ext.python.syntax.SumLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.SumLhs>nothing()), new hydra.ext.python.syntax.Term((hydra.util.Maybe<hydra.ext.python.syntax.TermLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.TermLhs>nothing()), new hydra.ext.python.syntax.Factor.Simple(new hydra.ext.python.syntax.Power(new hydra.ext.python.syntax.AwaitPrimary(false, new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(hydra.ext.python.Names.encodeTypeVariable(n)))), (hydra.util.Maybe<hydra.ext.python.syntax.Factor>) (hydra.util.Maybe.<hydra.ext.python.syntax.Factor>nothing()))))))))), (hydra.util.ConsList<hydra.ext.python.syntax.CompareOpBitwiseOrPair>) (hydra.util.ConsList.<hydra.ext.python.syntax.CompareOpBitwiseOrPair>empty()))))))))),
+          (java.util.function.Function<hydra.core.Name, hydra.ext.python.syntax.Expression>) (n -> new hydra.ext.python.syntax.Expression.Simple(new hydra.ext.python.syntax.Disjunction(java.util.Arrays.asList(new hydra.ext.python.syntax.Conjunction(java.util.Arrays.asList(new hydra.ext.python.syntax.Inversion.Simple(new hydra.ext.python.syntax.Comparison(new hydra.ext.python.syntax.BitwiseOr((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseOr>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseOr>nothing()), new hydra.ext.python.syntax.BitwiseXor((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseXor>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseXor>nothing()), new hydra.ext.python.syntax.BitwiseAnd((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseAnd>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseAnd>nothing()), new hydra.ext.python.syntax.ShiftExpression((hydra.util.Maybe<hydra.ext.python.syntax.ShiftLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.ShiftLhs>nothing()), new hydra.ext.python.syntax.Sum((hydra.util.Maybe<hydra.ext.python.syntax.SumLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.SumLhs>nothing()), new hydra.ext.python.syntax.Term((hydra.util.Maybe<hydra.ext.python.syntax.TermLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.TermLhs>nothing()), new hydra.ext.python.syntax.Factor.Simple(new hydra.ext.python.syntax.Power(new hydra.ext.python.syntax.AwaitPrimary(false, new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(hydra.ext.python.Names.encodeTypeVariable(n)))), (hydra.util.Maybe<hydra.ext.python.syntax.Factor>) (hydra.util.Maybe.<hydra.ext.python.syntax.Factor>nothing()))))))))), (java.util.List<hydra.ext.python.syntax.CompareOpBitwiseOrPair>) (java.util.Collections.<hydra.ext.python.syntax.CompareOpBitwiseOrPair>emptyList()))))))))),
           tparamList)))));
   }
 
   static hydra.ext.python.environment.PythonEnvironment initialEnvironment(hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName> namespaces, hydra.graph.Graph tcontext) {
-    return new hydra.ext.python.environment.PythonEnvironment(namespaces, (hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()), (hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.ext.python.syntax.Name>apply()))))), tcontext, (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), hydra.ext.python.Coder.targetPythonVersion(), true, (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()));
+    return new hydra.ext.python.environment.PythonEnvironment(namespaces, (hydra.util.Pair<java.util.List<hydra.core.Name>, java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>>) ((hydra.util.Pair<java.util.List<hydra.core.Name>, java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>>) (new hydra.util.Pair<java.util.List<hydra.core.Name>, java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>>((java.util.List<hydra.core.Name>) (java.util.Collections.<hydra.core.Name>emptyList()), (java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>) ((java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.ext.python.syntax.Name>apply()))))), tcontext, (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), hydra.ext.python.Coder.targetPythonVersion(), true, (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()));
   }
 
   static hydra.ext.python.environment.PythonModuleMetadata initialMetadata(hydra.packaging.Namespace ns) {
     hydra.ext.python.syntax.DottedName dottedNs = hydra.ext.python.Names.encodeNamespace(ns);
-    hydra.util.Lazy<hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName>> emptyNs = new hydra.util.Lazy<>(() -> (hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName>) (new hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName>((hydra.util.Pair<hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName>) ((hydra.util.Pair<hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName>) (new hydra.util.Pair<hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName>(ns, dottedNs))), (hydra.util.PersistentMap<hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName>) ((hydra.util.PersistentMap<hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName>) (hydra.lib.maps.Empty.<hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName>apply())))));
-    return new hydra.ext.python.environment.PythonModuleMetadata(emptyNs.get(), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false);
+    hydra.util.Lazy<hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName>> emptyNs = new hydra.util.Lazy<>(() -> (hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName>) (new hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName>((hydra.util.Pair<hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName>) ((hydra.util.Pair<hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName>) (new hydra.util.Pair<hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName>(ns, dottedNs))), (java.util.Map<hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName>) ((java.util.Map<hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName>) (hydra.lib.maps.Empty.<hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName>apply())))));
+    return new hydra.ext.python.environment.PythonModuleMetadata(emptyNs.get(), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false);
   }
 
-  static hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>>> isCaseStatementApplication(hydra.core.Term term) {
-    hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term> gathered = hydra.Analysis.gatherApplications(term);
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> args = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered));
+  static hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>> isCaseStatementApplication(hydra.core.Term term) {
+    hydra.util.Pair<java.util.List<hydra.core.Term>, hydra.core.Term> gathered = hydra.Analysis.gatherApplications(term);
+    hydra.util.Lazy<java.util.List<hydra.core.Term>> args = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered));
     hydra.util.Lazy<hydra.core.Term> body = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(gathered));
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.logic.Not.apply(hydra.lib.equality.Equal.apply(
         hydra.lib.lists.Length.apply(args.get()),
         1)),
-      () -> (hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>>>) (hydra.util.Maybe.<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>>>nothing()),
-      () -> ((java.util.function.Supplier<hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>>>>) (() -> {
+      () -> (hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>>) (hydra.util.Maybe.<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>>nothing()),
+      () -> ((java.util.function.Supplier<hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>>>) (() -> {
         hydra.util.Lazy<hydra.core.Term> arg = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(args.get()));
         return hydra.Strip.deannotateAndDetypeTerm(body.get()).accept(new hydra.core.Term.PartialVisitor<>() {
           @Override
-          public hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>>> otherwise(hydra.core.Term instance) {
-            return (hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>>>) (hydra.util.Maybe.<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>>>nothing());
+          public hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>> otherwise(hydra.core.Term instance) {
+            return (hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>>) (hydra.util.Maybe.<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>>nothing());
           }
 
           @Override
-          public hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>>> visit(hydra.core.Term.Function f) {
+          public hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>> visit(hydra.core.Term.Function f) {
             return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
               @Override
-              public hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>>> otherwise(hydra.core.Function instance) {
-                return (hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>>>) (hydra.util.Maybe.<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>>>nothing());
+              public hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>> otherwise(hydra.core.Function instance) {
+                return (hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>>) (hydra.util.Maybe.<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>>nothing());
               }
 
               @Override
-              public hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>>> visit(hydra.core.Function.Elimination e) {
+              public hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>> visit(hydra.core.Function.Elimination e) {
                 return (e).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
                   @Override
-                  public hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>>> otherwise(hydra.core.Elimination instance) {
-                    return (hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>>>) (hydra.util.Maybe.<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>>>nothing());
+                  public hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>> otherwise(hydra.core.Elimination instance) {
+                    return (hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>>) (hydra.util.Maybe.<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>>nothing());
                   }
 
                   @Override
-                  public hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>>> visit(hydra.core.Elimination.Union cs) {
-                    return hydra.util.Maybe.just((hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>>) ((hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>>) (new hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>>((cs).value.typeName, (hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>) ((hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>) (new hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>>((cs).value.default_, (hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>((cs).value.cases, arg.get()))))))))));
+                  public hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>> visit(hydra.core.Elimination.Union cs) {
+                    return hydra.util.Maybe.just((hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>) ((hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>) (new hydra.util.Pair<hydra.core.Name, hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>>((cs).value.typeName, (hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>) ((hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>) (new hydra.util.Pair<hydra.util.Maybe<hydra.core.Term>, hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>>((cs).value.default_, (hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>) ((hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>) (new hydra.util.Pair<java.util.List<hydra.core.Field>, hydra.core.Term>((cs).value.cases, arg.get()))))))))));
                   }
                 });
               }
@@ -4157,7 +4173,7 @@ public interface Coder {
       })).get());
   }
 
-  static <T0, T1> Boolean isCasesFull(hydra.util.ConsList<T0> rowType, hydra.util.ConsList<T1> cases_) {
+  static <T0, T1> Boolean isCasesFull(java.util.List<T0> rowType, java.util.List<T1> cases_) {
     hydra.util.Lazy<Integer> numCases = new hydra.util.Lazy<>(() -> hydra.lib.lists.Length.apply(cases_));
     hydra.util.Lazy<Integer> numFields = new hydra.util.Lazy<>(() -> hydra.lib.lists.Length.apply(rowType));
     return hydra.lib.logic.Not.apply(hydra.lib.equality.Lt.apply(
@@ -4165,7 +4181,7 @@ public interface Coder {
       numFields.get()));
   }
 
-  static Boolean isTypeModuleCheck(hydra.util.ConsList<hydra.packaging.Definition> defs) {
+  static Boolean isTypeModuleCheck(java.util.List<hydra.packaging.Definition> defs) {
     return hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply(hydra.lib.lists.Filter.apply(
       (java.util.function.Function<hydra.packaging.Definition, Boolean>) (d -> (d).accept(new hydra.packaging.Definition.PartialVisitor<>() {
         @Override
@@ -4189,7 +4205,7 @@ public interface Coder {
         (name).value)));
   }
 
-  static Boolean isVariantUnitType(hydra.util.ConsList<hydra.core.FieldType> rowType, hydra.core.Name fieldName) {
+  static Boolean isVariantUnitType(java.util.List<hydra.core.FieldType> rowType, hydra.core.Name fieldName) {
     hydra.util.Lazy<hydra.util.Maybe<hydra.core.FieldType>> mfield = new hydra.util.Lazy<>(() -> hydra.lib.lists.Find.apply(
       (java.util.function.Function<hydra.core.FieldType, Boolean>) (ft -> hydra.lib.equality.Equal.apply(
         (ft).name,
@@ -4205,12 +4221,12 @@ public interface Coder {
   static hydra.ext.python.syntax.NamedExpression lruCacheDecorator() {
     return new hydra.ext.python.syntax.NamedExpression.Simple(hydra.ext.python.Utils.functionCall(
       new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(new hydra.ext.python.syntax.Name("lru_cache"))),
-      hydra.util.ConsList.of(hydra.ext.python.Coder.pyInt(new java.math.BigInteger("1")))));
+      java.util.Arrays.asList(hydra.ext.python.Coder.pyInt(new java.math.BigInteger("1")))));
   }
 
-  static hydra.ext.python.syntax.Expression makeCurriedLambda(hydra.util.ConsList<hydra.ext.python.syntax.Name> params, hydra.ext.python.syntax.Expression body) {
+  static hydra.ext.python.syntax.Expression makeCurriedLambda(java.util.List<hydra.ext.python.syntax.Name> params, hydra.ext.python.syntax.Expression body) {
     return hydra.lib.lists.Foldl.apply(
-      (java.util.function.Function<hydra.ext.python.syntax.Expression, java.util.function.Function<hydra.ext.python.syntax.Name, hydra.ext.python.syntax.Expression>>) (acc -> (java.util.function.Function<hydra.ext.python.syntax.Name, hydra.ext.python.syntax.Expression>) (p -> new hydra.ext.python.syntax.Expression.Lambda(new hydra.ext.python.syntax.Lambda(new hydra.ext.python.syntax.LambdaParameters((hydra.util.Maybe<hydra.ext.python.syntax.LambdaSlashNoDefault>) (hydra.util.Maybe.<hydra.ext.python.syntax.LambdaSlashNoDefault>nothing()), hydra.util.ConsList.of(new hydra.ext.python.syntax.LambdaParamNoDefault(p)), (hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamWithDefault>) (hydra.util.ConsList.<hydra.ext.python.syntax.LambdaParamWithDefault>empty()), (hydra.util.Maybe<hydra.ext.python.syntax.LambdaStarEtc>) (hydra.util.Maybe.<hydra.ext.python.syntax.LambdaStarEtc>nothing())), acc)))),
+      (java.util.function.Function<hydra.ext.python.syntax.Expression, java.util.function.Function<hydra.ext.python.syntax.Name, hydra.ext.python.syntax.Expression>>) (acc -> (java.util.function.Function<hydra.ext.python.syntax.Name, hydra.ext.python.syntax.Expression>) (p -> new hydra.ext.python.syntax.Expression.Lambda(new hydra.ext.python.syntax.Lambda(new hydra.ext.python.syntax.LambdaParameters((hydra.util.Maybe<hydra.ext.python.syntax.LambdaSlashNoDefault>) (hydra.util.Maybe.<hydra.ext.python.syntax.LambdaSlashNoDefault>nothing()), java.util.Arrays.asList(new hydra.ext.python.syntax.LambdaParamNoDefault(p)), (java.util.List<hydra.ext.python.syntax.LambdaParamWithDefault>) (java.util.Collections.<hydra.ext.python.syntax.LambdaParamWithDefault>emptyList()), (hydra.util.Maybe<hydra.ext.python.syntax.LambdaStarEtc>) (hydra.util.Maybe.<hydra.ext.python.syntax.LambdaStarEtc>nothing())), acc)))),
       body,
       hydra.lib.lists.Reverse.apply(params));
   }
@@ -4220,7 +4236,7 @@ public interface Coder {
   }
 
   static hydra.ext.python.syntax.Expression makeSimpleLambda(Integer arity, hydra.ext.python.syntax.Expression lhs) {
-    hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.Name>> args = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+    hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.Name>> args = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (java.util.function.Function<Integer, hydra.ext.python.syntax.Name>) (i -> new hydra.ext.python.syntax.Name(hydra.lib.strings.Cat2.apply(
         "x",
         hydra.lib.literals.ShowInt32.apply(i)))),
@@ -4234,10 +4250,10 @@ public interface Coder {
       () -> lhs,
       () -> new hydra.ext.python.syntax.Expression.Lambda(new hydra.ext.python.syntax.Lambda(new hydra.ext.python.syntax.LambdaParameters((hydra.util.Maybe<hydra.ext.python.syntax.LambdaSlashNoDefault>) (hydra.util.Maybe.<hydra.ext.python.syntax.LambdaSlashNoDefault>nothing()), hydra.lib.lists.Map.apply(
         (java.util.function.Function<hydra.ext.python.syntax.Name, hydra.ext.python.syntax.LambdaParamNoDefault>) (a -> new hydra.ext.python.syntax.LambdaParamNoDefault(a)),
-        args.get()), (hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamWithDefault>) (hydra.util.ConsList.<hydra.ext.python.syntax.LambdaParamWithDefault>empty()), (hydra.util.Maybe<hydra.ext.python.syntax.LambdaStarEtc>) (hydra.util.Maybe.<hydra.ext.python.syntax.LambdaStarEtc>nothing())), hydra.ext.python.Utils.functionCall(
+        args.get()), (java.util.List<hydra.ext.python.syntax.LambdaParamWithDefault>) (java.util.Collections.<hydra.ext.python.syntax.LambdaParamWithDefault>emptyList()), (hydra.util.Maybe<hydra.ext.python.syntax.LambdaStarEtc>) (hydra.util.Maybe.<hydra.ext.python.syntax.LambdaStarEtc>nothing())), hydra.ext.python.Utils.functionCall(
         hydra.ext.python.Utils.pyExpressionToPyPrimary(lhs),
         hydra.lib.lists.Map.apply(
-          (java.util.function.Function<hydra.ext.python.syntax.Name, hydra.ext.python.syntax.Expression>) (a -> new hydra.ext.python.syntax.Expression.Simple(new hydra.ext.python.syntax.Disjunction(hydra.util.ConsList.of(new hydra.ext.python.syntax.Conjunction(hydra.util.ConsList.of(new hydra.ext.python.syntax.Inversion.Simple(new hydra.ext.python.syntax.Comparison(new hydra.ext.python.syntax.BitwiseOr((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseOr>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseOr>nothing()), new hydra.ext.python.syntax.BitwiseXor((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseXor>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseXor>nothing()), new hydra.ext.python.syntax.BitwiseAnd((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseAnd>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseAnd>nothing()), new hydra.ext.python.syntax.ShiftExpression((hydra.util.Maybe<hydra.ext.python.syntax.ShiftLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.ShiftLhs>nothing()), new hydra.ext.python.syntax.Sum((hydra.util.Maybe<hydra.ext.python.syntax.SumLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.SumLhs>nothing()), new hydra.ext.python.syntax.Term((hydra.util.Maybe<hydra.ext.python.syntax.TermLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.TermLhs>nothing()), new hydra.ext.python.syntax.Factor.Simple(new hydra.ext.python.syntax.Power(new hydra.ext.python.syntax.AwaitPrimary(false, new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(a))), (hydra.util.Maybe<hydra.ext.python.syntax.Factor>) (hydra.util.Maybe.<hydra.ext.python.syntax.Factor>nothing()))))))))), (hydra.util.ConsList<hydra.ext.python.syntax.CompareOpBitwiseOrPair>) (hydra.util.ConsList.<hydra.ext.python.syntax.CompareOpBitwiseOrPair>empty()))))))))),
+          (java.util.function.Function<hydra.ext.python.syntax.Name, hydra.ext.python.syntax.Expression>) (a -> new hydra.ext.python.syntax.Expression.Simple(new hydra.ext.python.syntax.Disjunction(java.util.Arrays.asList(new hydra.ext.python.syntax.Conjunction(java.util.Arrays.asList(new hydra.ext.python.syntax.Inversion.Simple(new hydra.ext.python.syntax.Comparison(new hydra.ext.python.syntax.BitwiseOr((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseOr>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseOr>nothing()), new hydra.ext.python.syntax.BitwiseXor((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseXor>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseXor>nothing()), new hydra.ext.python.syntax.BitwiseAnd((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseAnd>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseAnd>nothing()), new hydra.ext.python.syntax.ShiftExpression((hydra.util.Maybe<hydra.ext.python.syntax.ShiftLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.ShiftLhs>nothing()), new hydra.ext.python.syntax.Sum((hydra.util.Maybe<hydra.ext.python.syntax.SumLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.SumLhs>nothing()), new hydra.ext.python.syntax.Term((hydra.util.Maybe<hydra.ext.python.syntax.TermLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.TermLhs>nothing()), new hydra.ext.python.syntax.Factor.Simple(new hydra.ext.python.syntax.Power(new hydra.ext.python.syntax.AwaitPrimary(false, new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(a))), (hydra.util.Maybe<hydra.ext.python.syntax.Factor>) (hydra.util.Maybe.<hydra.ext.python.syntax.Factor>nothing()))))))))), (java.util.List<hydra.ext.python.syntax.CompareOpBitwiseOrPair>) (java.util.Collections.<hydra.ext.python.syntax.CompareOpBitwiseOrPair>emptyList()))))))))),
           args.get())))));
   }
 
@@ -4245,52 +4261,52 @@ public interface Coder {
     return hydra.ext.python.Utils.functionCall(
       hydra.ext.python.Utils.pyExpressionToPyPrimary(hydra.ext.python.Utils.functionCall(
         new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(new hydra.ext.python.syntax.Name("lru_cache"))),
-        hydra.util.ConsList.of(hydra.ext.python.Coder.pyInt(new java.math.BigInteger("1"))))),
-      hydra.util.ConsList.of(hydra.ext.python.Coder.wrapInNullaryLambda(pbody)));
+        java.util.Arrays.asList(hydra.ext.python.Coder.pyInt(new java.math.BigInteger("1"))))),
+      java.util.Arrays.asList(hydra.ext.python.Coder.wrapInNullaryLambda(pbody)));
   }
 
-  static hydra.ext.python.syntax.Expression makeUncurriedLambda(hydra.util.ConsList<hydra.ext.python.syntax.Name> params, hydra.ext.python.syntax.Expression body) {
+  static hydra.ext.python.syntax.Expression makeUncurriedLambda(java.util.List<hydra.ext.python.syntax.Name> params, hydra.ext.python.syntax.Expression body) {
     return new hydra.ext.python.syntax.Expression.Lambda(new hydra.ext.python.syntax.Lambda(new hydra.ext.python.syntax.LambdaParameters((hydra.util.Maybe<hydra.ext.python.syntax.LambdaSlashNoDefault>) (hydra.util.Maybe.<hydra.ext.python.syntax.LambdaSlashNoDefault>nothing()), hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.ext.python.syntax.Name, hydra.ext.python.syntax.LambdaParamNoDefault>) (p -> new hydra.ext.python.syntax.LambdaParamNoDefault(p)),
-      params), (hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamWithDefault>) (hydra.util.ConsList.<hydra.ext.python.syntax.LambdaParamWithDefault>empty()), (hydra.util.Maybe<hydra.ext.python.syntax.LambdaStarEtc>) (hydra.util.Maybe.<hydra.ext.python.syntax.LambdaStarEtc>nothing())), body));
+      params), (java.util.List<hydra.ext.python.syntax.LambdaParamWithDefault>) (java.util.Collections.<hydra.ext.python.syntax.LambdaParamWithDefault>emptyList()), (hydra.util.Maybe<hydra.ext.python.syntax.LambdaStarEtc>) (hydra.util.Maybe.<hydra.ext.python.syntax.LambdaStarEtc>nothing())), body));
   }
 
-  static hydra.util.ConsList<hydra.ext.python.syntax.ImportStatement> moduleDomainImports(hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName> namespaces) {
-    hydra.util.Lazy<hydra.util.ConsList<hydra.ext.python.syntax.DottedName>> names = new hydra.util.Lazy<>(() -> hydra.lib.lists.Sort.apply(hydra.lib.maps.Elems.apply(((java.util.function.Function<hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName>, hydra.util.PersistentMap<hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName>>) (projected -> projected.mapping)).apply(namespaces))));
+  static java.util.List<hydra.ext.python.syntax.ImportStatement> moduleDomainImports(hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName> namespaces) {
+    hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.DottedName>> names = new hydra.util.Lazy<>(() -> hydra.lib.lists.Sort.apply(hydra.lib.maps.Elems.apply(((java.util.function.Function<hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName>, java.util.Map<hydra.packaging.Namespace, hydra.ext.python.syntax.DottedName>>) (projected -> projected.mapping)).apply(namespaces))));
     return hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.ext.python.syntax.DottedName, hydra.ext.python.syntax.ImportStatement>) (ns -> new hydra.ext.python.syntax.ImportStatement.Name(new hydra.ext.python.syntax.ImportName(hydra.util.ConsList.of(new hydra.ext.python.syntax.DottedAsName(ns, (hydra.util.Maybe<hydra.ext.python.syntax.Name>) (hydra.util.Maybe.<hydra.ext.python.syntax.Name>nothing())))))),
+      (java.util.function.Function<hydra.ext.python.syntax.DottedName, hydra.ext.python.syntax.ImportStatement>) (ns -> new hydra.ext.python.syntax.ImportStatement.Name(new hydra.ext.python.syntax.ImportName(java.util.Arrays.asList(new hydra.ext.python.syntax.DottedAsName(ns, (hydra.util.Maybe<hydra.ext.python.syntax.Name>) (hydra.util.Maybe.<hydra.ext.python.syntax.Name>nothing())))))),
       names.get());
   }
 
-  static hydra.util.ConsList<hydra.ext.python.syntax.Statement> moduleImports(hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName> namespaces, hydra.ext.python.environment.PythonModuleMetadata meta) {
+  static java.util.List<hydra.ext.python.syntax.Statement> moduleImports(hydra.packaging.Namespaces<hydra.ext.python.syntax.DottedName> namespaces, hydra.ext.python.environment.PythonModuleMetadata meta) {
     return hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.ext.python.syntax.ImportStatement, hydra.ext.python.syntax.Statement>) (imp -> hydra.ext.python.Utils.pySimpleStatementToPyStatement(new hydra.ext.python.syntax.SimpleStatement.Import(imp))),
-      hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
+      hydra.lib.lists.Concat.apply(java.util.Arrays.asList(
         hydra.ext.python.Coder.moduleStandardImports(meta),
         hydra.ext.python.Coder.moduleDomainImports(namespaces))));
   }
 
-  static hydra.util.ConsList<hydra.ext.python.syntax.ImportStatement> moduleStandardImports(hydra.ext.python.environment.PythonModuleMetadata meta) {
-    hydra.util.Lazy<hydra.util.ConsList<hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>>> pairs = new hydra.util.Lazy<>(() -> hydra.util.ConsList.of(
-      (hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>) ((hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>) (new hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>("__future__", hydra.util.ConsList.of(hydra.ext.python.Coder.condImportSymbol(
+  static java.util.List<hydra.ext.python.syntax.ImportStatement> moduleStandardImports(hydra.ext.python.environment.PythonModuleMetadata meta) {
+    hydra.util.Lazy<java.util.List<hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>>> pairs = new hydra.util.Lazy<>(() -> java.util.Arrays.asList(
+      (hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>) ((hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>) (new hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>("__future__", java.util.Arrays.asList(hydra.ext.python.Coder.condImportSymbol(
         "annotations",
         hydra.ext.python.Names.useFutureAnnotations()))))),
-      (hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>) ((hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>) (new hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>("collections.abc", hydra.util.ConsList.of(hydra.ext.python.Coder.condImportSymbol(
+      (hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>) ((hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>) (new hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>("collections.abc", java.util.Arrays.asList(hydra.ext.python.Coder.condImportSymbol(
         "Callable",
         (meta).usesCallable))))),
-      (hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>) ((hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>) (new hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>("dataclasses", hydra.util.ConsList.of(hydra.ext.python.Coder.condImportSymbol(
+      (hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>) ((hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>) (new hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>("dataclasses", java.util.Arrays.asList(hydra.ext.python.Coder.condImportSymbol(
         "dataclass",
         (meta).usesDataclass))))),
-      (hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>) ((hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>) (new hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>("decimal", hydra.util.ConsList.of(hydra.ext.python.Coder.condImportSymbol(
+      (hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>) ((hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>) (new hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>("decimal", java.util.Arrays.asList(hydra.ext.python.Coder.condImportSymbol(
         "Decimal",
         (meta).usesDecimal))))),
-      (hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>) ((hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>) (new hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>("enum", hydra.util.ConsList.of(hydra.ext.python.Coder.condImportSymbol(
+      (hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>) ((hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>) (new hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>("enum", java.util.Arrays.asList(hydra.ext.python.Coder.condImportSymbol(
         "Enum",
         (meta).usesEnum))))),
-      (hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>) ((hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>) (new hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>("functools", hydra.util.ConsList.of(hydra.ext.python.Coder.condImportSymbol(
+      (hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>) ((hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>) (new hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>("functools", java.util.Arrays.asList(hydra.ext.python.Coder.condImportSymbol(
         "lru_cache",
         (meta).usesLruCache))))),
-      (hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>) ((hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>) (new hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>("hydra.dsl.python", hydra.util.ConsList.of(
+      (hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>) ((hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>) (new hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>("hydra.dsl.python", java.util.Arrays.asList(
         hydra.ext.python.Coder.condImportSymbol(
           "Either",
           (meta).usesEither),
@@ -4318,7 +4334,7 @@ public interface Coder {
         hydra.ext.python.Coder.condImportSymbol(
           "frozenlist",
           (meta).usesFrozenList))))),
-      (hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>) ((hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>) (new hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>("typing", hydra.util.ConsList.of(
+      (hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>) ((hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>) (new hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>("typing", java.util.Arrays.asList(
         hydra.ext.python.Coder.condImportSymbol(
           "Annotated",
           (meta).usesAnnotated),
@@ -4334,37 +4350,37 @@ public interface Coder {
         hydra.ext.python.Coder.condImportSymbol(
           "cast",
           (meta).usesCast)))))));
-    hydra.util.Lazy<hydra.util.ConsList<hydra.util.Pair<String, hydra.util.ConsList<String>>>> simplified = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.util.Pair<String, hydra.util.ConsList<hydra.util.Maybe<String>>>, hydra.util.Maybe<hydra.util.Pair<String, hydra.util.ConsList<String>>>>) (p -> {
+    hydra.util.Lazy<java.util.List<hydra.util.Pair<String, java.util.List<String>>>> simplified = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.util.Pair<String, java.util.List<hydra.util.Maybe<String>>>, hydra.util.Maybe<hydra.util.Pair<String, java.util.List<String>>>>) (p -> {
         hydra.util.Lazy<String> modName = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(p));
-        hydra.util.Lazy<hydra.util.ConsList<String>> symbols = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(hydra.lib.pairs.Second.apply(p)));
+        hydra.util.Lazy<java.util.List<String>> symbols = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(hydra.lib.pairs.Second.apply(p)));
         return hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(symbols.get()),
-          () -> (hydra.util.Maybe<hydra.util.Pair<String, hydra.util.ConsList<String>>>) (hydra.util.Maybe.<hydra.util.Pair<String, hydra.util.ConsList<String>>>nothing()),
-          () -> hydra.util.Maybe.just((hydra.util.Pair<String, hydra.util.ConsList<String>>) ((hydra.util.Pair<String, hydra.util.ConsList<String>>) (new hydra.util.Pair<String, hydra.util.ConsList<String>>(modName.get(), symbols.get())))));
+          () -> (hydra.util.Maybe<hydra.util.Pair<String, java.util.List<String>>>) (hydra.util.Maybe.<hydra.util.Pair<String, java.util.List<String>>>nothing()),
+          () -> hydra.util.Maybe.just((hydra.util.Pair<String, java.util.List<String>>) ((hydra.util.Pair<String, java.util.List<String>>) (new hydra.util.Pair<String, java.util.List<String>>(modName.get(), symbols.get())))));
       }),
       pairs.get())));
     return hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.util.Pair<String, hydra.util.ConsList<String>>, hydra.ext.python.syntax.ImportStatement>) (p -> hydra.ext.python.Coder.standardImportStatement(
+      (java.util.function.Function<hydra.util.Pair<String, java.util.List<String>>, hydra.ext.python.syntax.ImportStatement>) (p -> hydra.ext.python.Coder.standardImportStatement(
         hydra.lib.pairs.First.apply(p),
         hydra.lib.pairs.Second.apply(p))),
       simplified.get());
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<String, String>> moduleToPython(hydra.packaging.Module mod, hydra.util.ConsList<hydra.packaging.Definition> defs, hydra.context.Context cx, hydra.graph.Graph g) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.Map<String, String>> moduleToPython(hydra.packaging.Module mod, java.util.List<hydra.packaging.Definition> defs, hydra.context.Context cx, hydra.graph.Graph g) {
     return hydra.lib.eithers.Bind.apply(
       hydra.ext.python.Coder.encodePythonModule(
         cx,
         g,
         mod,
         defs),
-      (java.util.function.Function<hydra.ext.python.syntax.Module, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<String, String>>>) (file -> {
+      (java.util.function.Function<hydra.ext.python.syntax.Module, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.Map<String, String>>>) (file -> {
         String path = hydra.Names.namespaceToFilePath(
           new hydra.util.CaseConvention.LowerSnake(),
           new hydra.packaging.FileExtension("py"),
           (mod).namespace);
         String s = hydra.Serialization.printExpr(hydra.Serialization.parenthesize(hydra.ext.python.Serde.encodeModule(file)));
-        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentMap<String, String>>right(hydra.lib.maps.Singleton.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.util.Map<String, String>>right(hydra.lib.maps.Singleton.apply(
           path,
           s));
       }));
@@ -4408,7 +4424,7 @@ public interface Coder {
     return new hydra.ext.python.environment.PythonModuleMetadata(ns, (m).typeVariables, (m).usesAnnotated, (m).usesCallable, (m).usesCast, (m).usesLruCache, (m).usesTypeAlias, (m).usesDataclass, (m).usesDecimal, (m).usesEither, (m).usesEnum, (m).usesFrozenDict, (m).usesFrozenList, (m).usesGeneric, (m).usesJust, (m).usesLeft, (m).usesMaybe, (m).usesName, (m).usesNode, (m).usesNothing, (m).usesRight, (m).usesTypeVar);
   }
 
-  static hydra.ext.python.environment.PythonModuleMetadata setMetaTypeVariables(hydra.ext.python.environment.PythonModuleMetadata m, hydra.util.PersistentSet<hydra.core.Name> tvars) {
+  static hydra.ext.python.environment.PythonModuleMetadata setMetaTypeVariables(hydra.ext.python.environment.PythonModuleMetadata m, java.util.Set<hydra.core.Name> tvars) {
     return new hydra.ext.python.environment.PythonModuleMetadata((m).namespaces, tvars, (m).usesAnnotated, (m).usesCallable, (m).usesCast, (m).usesLruCache, (m).usesTypeAlias, (m).usesDataclass, (m).usesDecimal, (m).usesEither, (m).usesEnum, (m).usesFrozenDict, (m).usesFrozenList, (m).usesGeneric, (m).usesJust, (m).usesLeft, (m).usesMaybe, (m).usesName, (m).usesNode, (m).usesNothing, (m).usesRight, (m).usesTypeVar);
   }
 
@@ -4500,8 +4516,8 @@ public interface Coder {
       hydra.lib.logic.Not.apply(hydra.Predicates.isTrivialTerm((b).term)));
   }
 
-  static hydra.ext.python.syntax.ImportStatement standardImportStatement(String modName, hydra.util.ConsList<String> symbols) {
-    return new hydra.ext.python.syntax.ImportStatement.From(new hydra.ext.python.syntax.ImportFrom((hydra.util.ConsList<hydra.ext.python.syntax.RelativeImportPrefix>) (hydra.util.ConsList.<hydra.ext.python.syntax.RelativeImportPrefix>empty()), hydra.util.Maybe.just(new hydra.ext.python.syntax.DottedName(hydra.util.ConsList.of(new hydra.ext.python.syntax.Name(modName)))), new hydra.ext.python.syntax.ImportFromTargets.Simple(hydra.lib.lists.Map.apply(
+  static hydra.ext.python.syntax.ImportStatement standardImportStatement(String modName, java.util.List<String> symbols) {
+    return new hydra.ext.python.syntax.ImportStatement.From(new hydra.ext.python.syntax.ImportFrom((java.util.List<hydra.ext.python.syntax.RelativeImportPrefix>) (java.util.Collections.<hydra.ext.python.syntax.RelativeImportPrefix>emptyList()), hydra.util.Maybe.just(new hydra.ext.python.syntax.DottedName(java.util.Arrays.asList(new hydra.ext.python.syntax.Name(modName)))), new hydra.ext.python.syntax.ImportFromTargets.Simple(hydra.lib.lists.Map.apply(
       (java.util.function.Function<String, hydra.ext.python.syntax.ImportFromAsName>) (s -> new hydra.ext.python.syntax.ImportFromAsName(new hydra.ext.python.syntax.Name(s), (hydra.util.Maybe<hydra.ext.python.syntax.Name>) (hydra.util.Maybe.<hydra.ext.python.syntax.Name>nothing()))),
       symbols))));
   }
@@ -4555,10 +4571,10 @@ public interface Coder {
       name,
       hydra.ext.python.Utils.functionCall(
         new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(new hydra.ext.python.syntax.Name("TypeVar"))),
-        hydra.util.ConsList.of(hydra.ext.python.Utils.doubleQuotedString((name).value))));
+        java.util.Arrays.asList(hydra.ext.python.Utils.doubleQuotedString((name).value))));
   }
 
-  static hydra.ext.python.syntax.Statement typeAliasStatementFor(hydra.ext.python.environment.PythonEnvironment env, hydra.ext.python.syntax.Name name, hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> tparams, hydra.util.Maybe<String> mcomment, hydra.ext.python.syntax.Expression tyexpr) {
+  static hydra.ext.python.syntax.Statement typeAliasStatementFor(hydra.ext.python.environment.PythonEnvironment env, hydra.ext.python.syntax.Name name, java.util.List<hydra.ext.python.syntax.TypeParameter> tparams, hydra.util.Maybe<String> mcomment, hydra.ext.python.syntax.Expression tyexpr) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.ext.python.Coder.useInlineTypeParamsFor((env).version),
       () -> hydra.ext.python.Utils.typeAliasStatement(
@@ -4573,11 +4589,11 @@ public interface Coder {
         tyexpr));
   }
 
-  static hydra.util.ConsList<hydra.ext.python.syntax.Statement> unionTypeStatementsFor(hydra.ext.python.environment.PythonEnvironment env, hydra.ext.python.syntax.Name name, hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> tparams, hydra.util.Maybe<String> mcomment, hydra.ext.python.syntax.Expression tyexpr, hydra.util.ConsList<hydra.ext.python.syntax.Statement> extraStmts) {
+  static java.util.List<hydra.ext.python.syntax.Statement> unionTypeStatementsFor(hydra.ext.python.environment.PythonEnvironment env, hydra.ext.python.syntax.Name name, java.util.List<hydra.ext.python.syntax.TypeParameter> tparams, hydra.util.Maybe<String> mcomment, hydra.ext.python.syntax.Expression tyexpr, java.util.List<hydra.ext.python.syntax.Statement> extraStmts) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.ext.python.Coder.useInlineTypeParamsFor((env).version),
       () -> hydra.lib.lists.Concat2.apply(
-        hydra.util.ConsList.of(hydra.ext.python.Utils.typeAliasStatement(
+        java.util.Arrays.asList(hydra.ext.python.Utils.typeAliasStatement(
           name,
           tparams,
           mcomment,
@@ -4595,11 +4611,11 @@ public interface Coder {
       hydra.ext.python.Utils.pyExpressionToPyPrimary(hydra.ext.python.Utils.projectFromExpression(
         hydra.ext.python.Utils.projectFromExpression(
           hydra.ext.python.Utils.projectFromExpression(
-            new hydra.ext.python.syntax.Expression.Simple(new hydra.ext.python.syntax.Disjunction(hydra.util.ConsList.of(new hydra.ext.python.syntax.Conjunction(hydra.util.ConsList.of(new hydra.ext.python.syntax.Inversion.Simple(new hydra.ext.python.syntax.Comparison(new hydra.ext.python.syntax.BitwiseOr((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseOr>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseOr>nothing()), new hydra.ext.python.syntax.BitwiseXor((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseXor>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseXor>nothing()), new hydra.ext.python.syntax.BitwiseAnd((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseAnd>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseAnd>nothing()), new hydra.ext.python.syntax.ShiftExpression((hydra.util.Maybe<hydra.ext.python.syntax.ShiftLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.ShiftLhs>nothing()), new hydra.ext.python.syntax.Sum((hydra.util.Maybe<hydra.ext.python.syntax.SumLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.SumLhs>nothing()), new hydra.ext.python.syntax.Term((hydra.util.Maybe<hydra.ext.python.syntax.TermLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.TermLhs>nothing()), new hydra.ext.python.syntax.Factor.Simple(new hydra.ext.python.syntax.Power(new hydra.ext.python.syntax.AwaitPrimary(false, new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(new hydra.ext.python.syntax.Name("hydra")))), (hydra.util.Maybe<hydra.ext.python.syntax.Factor>) (hydra.util.Maybe.<hydra.ext.python.syntax.Factor>nothing()))))))))), (hydra.util.ConsList<hydra.ext.python.syntax.CompareOpBitwiseOrPair>) (hydra.util.ConsList.<hydra.ext.python.syntax.CompareOpBitwiseOrPair>empty())))))))),
+            new hydra.ext.python.syntax.Expression.Simple(new hydra.ext.python.syntax.Disjunction(java.util.Arrays.asList(new hydra.ext.python.syntax.Conjunction(java.util.Arrays.asList(new hydra.ext.python.syntax.Inversion.Simple(new hydra.ext.python.syntax.Comparison(new hydra.ext.python.syntax.BitwiseOr((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseOr>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseOr>nothing()), new hydra.ext.python.syntax.BitwiseXor((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseXor>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseXor>nothing()), new hydra.ext.python.syntax.BitwiseAnd((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseAnd>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseAnd>nothing()), new hydra.ext.python.syntax.ShiftExpression((hydra.util.Maybe<hydra.ext.python.syntax.ShiftLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.ShiftLhs>nothing()), new hydra.ext.python.syntax.Sum((hydra.util.Maybe<hydra.ext.python.syntax.SumLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.SumLhs>nothing()), new hydra.ext.python.syntax.Term((hydra.util.Maybe<hydra.ext.python.syntax.TermLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.TermLhs>nothing()), new hydra.ext.python.syntax.Factor.Simple(new hydra.ext.python.syntax.Power(new hydra.ext.python.syntax.AwaitPrimary(false, new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(new hydra.ext.python.syntax.Name("hydra")))), (hydra.util.Maybe<hydra.ext.python.syntax.Factor>) (hydra.util.Maybe.<hydra.ext.python.syntax.Factor>nothing()))))))))), (java.util.List<hydra.ext.python.syntax.CompareOpBitwiseOrPair>) (java.util.Collections.<hydra.ext.python.syntax.CompareOpBitwiseOrPair>emptyList())))))))),
             new hydra.ext.python.syntax.Name("dsl")),
           new hydra.ext.python.syntax.Name("python")),
         new hydra.ext.python.syntax.Name("unsupported"))),
-      hydra.util.ConsList.of(hydra.ext.python.Utils.stringToPyExpression(
+      java.util.Arrays.asList(hydra.ext.python.Utils.stringToPyExpression(
         new hydra.ext.python.syntax.QuoteStyle.Double_(),
         msg)));
   }
@@ -4614,11 +4630,11 @@ public interface Coder {
       new hydra.ext.python.environment.PythonVersion.Python312());
   }
 
-  static hydra.ext.python.syntax.Args variantArgs(hydra.ext.python.syntax.Expression ptype, hydra.util.ConsList<hydra.core.Name> tparams) {
-    return hydra.ext.python.Utils.pyExpressionsToPyArgs(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
+  static hydra.ext.python.syntax.Args variantArgs(hydra.ext.python.syntax.Expression ptype, java.util.List<hydra.core.Name> tparams) {
+    return hydra.ext.python.Utils.pyExpressionsToPyArgs(hydra.lib.maybes.Cat.apply(java.util.Arrays.asList(
       hydra.util.Maybe.just(hydra.ext.python.Utils.pyPrimaryToPyExpression(hydra.ext.python.Utils.primaryWithExpressionSlices(
         new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(new hydra.ext.python.syntax.Name("Node"))),
-        hydra.util.ConsList.of(ptype)))),
+        java.util.Arrays.asList(ptype)))),
       hydra.ext.python.Coder.genericArg(tparams))));
   }
 
@@ -4641,11 +4657,11 @@ public interface Coder {
   static hydra.ext.python.syntax.CaseBlock wildcardCaseBlock(hydra.ext.python.syntax.Statement stmt) {
     return new hydra.ext.python.syntax.CaseBlock(hydra.ext.python.Utils.pyClosedPatternToPyPatterns(new hydra.ext.python.syntax.ClosedPattern.Wildcard()), (hydra.util.Maybe<hydra.ext.python.syntax.Guard>) (hydra.util.Maybe.<hydra.ext.python.syntax.Guard>nothing()), hydra.ext.python.Utils.indentedBlock(
       (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()),
-      hydra.util.ConsList.of(hydra.util.ConsList.of(stmt))));
+      java.util.Arrays.asList(java.util.Arrays.asList(stmt))));
   }
 
-  static <T0> T0 withDefinitions(hydra.ext.python.environment.PythonEnvironment env, hydra.util.ConsList<hydra.packaging.Definition> defs, java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, T0> body) {
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> bindings = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+  static <T0> T0 withDefinitions(hydra.ext.python.environment.PythonEnvironment env, java.util.List<hydra.packaging.Definition> defs, java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, T0> body) {
+    hydra.util.Lazy<java.util.List<hydra.core.Binding>> bindings = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.packaging.Definition, hydra.util.Maybe<hydra.core.Binding>>) (def_ -> (def_).accept(new hydra.packaging.Definition.PartialVisitor<>() {
         @Override
         public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.packaging.Definition instance) {
@@ -4696,10 +4712,10 @@ public interface Coder {
   }
 
   static <T0> T0 withLetInline(hydra.ext.python.environment.PythonEnvironment env, hydra.core.Let lt, java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, T0> body) {
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> bindingNames = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+    hydra.util.Lazy<java.util.List<hydra.core.Name>> bindingNames = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.core.Binding, hydra.core.Name>) (b -> (b).name),
       (lt).bindings));
-    hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> inlineVars = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(bindingNames.get()));
+    hydra.util.Lazy<java.util.Set<hydra.core.Name>> inlineVars = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(bindingNames.get()));
     return hydra.Environment.withLetContext(
       hydra.ext.python.Coder::pythonEnvironmentGetGraph,
       (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.ext.python.environment.PythonEnvironment, hydra.ext.python.environment.PythonEnvironment>>) (p0 -> p1 -> hydra.ext.python.Coder.pythonEnvironmentSetGraph(
@@ -4734,10 +4750,10 @@ public interface Coder {
   }
 
   static hydra.ext.python.syntax.Expression wrapInNullaryLambda(hydra.ext.python.syntax.Expression expr) {
-    return new hydra.ext.python.syntax.Expression.Lambda(new hydra.ext.python.syntax.Lambda(new hydra.ext.python.syntax.LambdaParameters((hydra.util.Maybe<hydra.ext.python.syntax.LambdaSlashNoDefault>) (hydra.util.Maybe.<hydra.ext.python.syntax.LambdaSlashNoDefault>nothing()), (hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamNoDefault>) (hydra.util.ConsList.<hydra.ext.python.syntax.LambdaParamNoDefault>empty()), (hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamWithDefault>) (hydra.util.ConsList.<hydra.ext.python.syntax.LambdaParamWithDefault>empty()), (hydra.util.Maybe<hydra.ext.python.syntax.LambdaStarEtc>) (hydra.util.Maybe.<hydra.ext.python.syntax.LambdaStarEtc>nothing())), expr));
+    return new hydra.ext.python.syntax.Expression.Lambda(new hydra.ext.python.syntax.Lambda(new hydra.ext.python.syntax.LambdaParameters((hydra.util.Maybe<hydra.ext.python.syntax.LambdaSlashNoDefault>) (hydra.util.Maybe.<hydra.ext.python.syntax.LambdaSlashNoDefault>nothing()), (java.util.List<hydra.ext.python.syntax.LambdaParamNoDefault>) (java.util.Collections.<hydra.ext.python.syntax.LambdaParamNoDefault>emptyList()), (java.util.List<hydra.ext.python.syntax.LambdaParamWithDefault>) (java.util.Collections.<hydra.ext.python.syntax.LambdaParamWithDefault>emptyList()), (hydra.util.Maybe<hydra.ext.python.syntax.LambdaStarEtc>) (hydra.util.Maybe.<hydra.ext.python.syntax.LambdaStarEtc>nothing())), expr));
   }
 
-  static hydra.util.ConsList<hydra.ext.python.syntax.Expression> wrapLazyArguments(hydra.core.Name name, hydra.util.ConsList<hydra.ext.python.syntax.Expression> args) {
+  static java.util.List<hydra.ext.python.syntax.Expression> wrapLazyArguments(hydra.core.Name name, java.util.List<hydra.ext.python.syntax.Expression> args) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.logic.And.apply(
         hydra.lib.equality.Equal.apply(
@@ -4746,7 +4762,7 @@ public interface Coder {
         hydra.lib.equality.Equal.apply(
           hydra.lib.lists.Length.apply(args),
           3)),
-      () -> hydra.util.ConsList.of(
+      () -> java.util.Arrays.asList(
         hydra.lib.lists.At.apply(
           0,
           args),
@@ -4764,7 +4780,7 @@ public interface Coder {
           hydra.lib.equality.Equal.apply(
             hydra.lib.lists.Length.apply(args),
             3)),
-        () -> hydra.util.ConsList.of(
+        () -> java.util.Arrays.asList(
           hydra.lib.lists.At.apply(
             0,
             args),

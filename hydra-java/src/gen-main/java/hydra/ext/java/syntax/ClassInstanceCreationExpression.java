@@ -42,11 +42,15 @@ public class ClassInstanceCreationExpression implements Serializable, Comparable
   @SuppressWarnings("unchecked")
   public int compareTo(ClassInstanceCreationExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) qualifier).compareTo(other.qualifier);
+    cmp = hydra.util.Comparing.compare(
+      qualifier,
+      other.qualifier);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) expression).compareTo(other.expression);
+    return hydra.util.Comparing.compare(
+      expression,
+      other.expression);
   }
 
   public ClassInstanceCreationExpression withQualifier(hydra.util.Maybe<hydra.ext.java.syntax.ClassInstanceCreationExpression_Qualifier> qualifier) {

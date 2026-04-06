@@ -67,16 +67,14 @@
                                     "typeName": "hydra.core.Field"}}]}}],
                         "typeName": "hydra.core.Record"}}},
                   "typeName": "hydra.core.Term"}},
-              "domain": [{"variable": "hydra.tabular.ColumnType"}],
+              "domain": {"variable": "hydra.tabular.ColumnType"},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.core.Term"},
-                "domain": {"variable": "hydra.tabular.ColumnType"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.tabular.ColumnType"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.encode.tabular.dataRow",
@@ -141,54 +139,50 @@
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "typeApplication": {
-                                                                                          "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                                                          "body": {"variable": "hydra.lib.maybes.map"},
                                                                                           "type": {"variable": "t0"}}},
                                                                                       "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                                         "typeName": "hydra.core.Term"}},
-                                                                    "domain": [{"maybe": {"variable": "t0"}}],
+                                                                    "domain": {"maybe": {"variable": "t0"}},
                                                                     "parameter": "opt"}}},
                                                               "function": {
                                                                 "typeApplication": {
                                                                   "body": {
                                                                     "typeApplication": {
-                                                                      "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                      "body": {"variable": "hydra.lib.lists.map"},
                                                                       "type": {"maybe": {"variable": "t0"}}}},
                                                                   "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                     "typeName": "hydra.core.Term"}},
-                                                "domain": [{"list": {"maybe": {"variable": "t0"}}}],
+                                                "domain": {"list": {"maybe": {"variable": "t0"}}},
                                                 "parameter": "xs"}}}}}}],
                                   "typeName": "hydra.core.WrappedTerm"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": [
-                          {
-                            "application": {
-                              "argument": {"variable": "t0"},
-                              "function": {"variable": "hydra.tabular.DataRow"}}}],
+                        "domain": {
+                          "application": {
+                            "argument": {"variable": "t0"},
+                            "function": {"variable": "hydra.tabular.DataRow"}}},
                         "parameter": "x"}}},
-                  "domain": [
-                    {
-                      "function": {
-                        "codomain": {"variable": "hydra.core.Term"},
-                        "domain": {"variable": "t0"}}}],
+                  "domain": {
+                    "function": {
+                      "codomain": {"variable": "hydra.core.Term"},
+                      "domain": {"variable": "t0"}}},
                   "parameter": "v"}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {
-                      "application": {
-                        "argument": {"variable": "t0"},
-                        "function": {"variable": "hydra.tabular.DataRow"}}}}},
-                "domain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {"variable": "t0"}}}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {
+                    "application": {
+                      "argument": {"variable": "t0"},
+                      "function": {"variable": "hydra.tabular.DataRow"}}}}},
+              "domain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.encode.tabular.headerRow",
@@ -240,30 +234,28 @@
                                                                     "field": {"name": "string", "term": {"variable": "x"}},
                                                                     "typeName": "hydra.core.Literal"}}},
                                                               "typeName": "hydra.core.Term"}},
-                                                          "domain": [{"literal": {"string": {}}}],
+                                                          "domain": {"literal": {"string": {}}},
                                                           "parameter": "x"}}},
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {
                                                           "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                            "body": {"variable": "hydra.lib.lists.map"},
                                                             "type": {"literal": {"string": {}}}}},
                                                         "type": {"variable": "hydra.core.Term"}}}}}}}},
                                           "typeName": "hydra.core.Term"}},
-                                      "domain": [{"list": {"literal": {"string": {}}}}],
+                                      "domain": {"list": {"literal": {"string": {}}}},
                                       "parameter": "xs"}}}}}}],
                         "typeName": "hydra.core.WrappedTerm"}}},
                   "typeName": "hydra.core.Term"}},
-              "domain": [{"variable": "hydra.tabular.HeaderRow"}],
+              "domain": {"variable": "hydra.tabular.HeaderRow"},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.core.Term"},
-                "domain": {"variable": "hydra.tabular.HeaderRow"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.tabular.HeaderRow"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.encode.tabular.table",
@@ -331,11 +323,11 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                                                  "body": {"variable": "hydra.lib.maybes.map"},
                                                                                   "type": {"variable": "hydra.tabular.HeaderRow"}}},
                                                                               "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                                 "typeName": "hydra.core.Term"}},
-                                                            "domain": [{"maybe": {"variable": "hydra.tabular.HeaderRow"}}],
+                                                            "domain": {"maybe": {"variable": "hydra.tabular.HeaderRow"}},
                                                             "parameter": "opt"}}}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
@@ -383,53 +375,48 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                                   "type": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "t0"},
                                                                                       "function": {"variable": "hydra.tabular.DataRow"}}}}},
                                                                               "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                                 "typeName": "hydra.core.Term"}},
-                                                            "domain": [
-                                                              {
-                                                                "list": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "t0"},
-                                                                    "function": {"variable": "hydra.tabular.DataRow"}}}}],
+                                                            "domain": {
+                                                              "list": {
+                                                                "application": {
+                                                                  "argument": {"variable": "t0"},
+                                                                  "function": {"variable": "hydra.tabular.DataRow"}}}},
                                                             "parameter": "xs"}}}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": [
-                          {
-                            "application": {
-                              "argument": {"variable": "t0"},
-                              "function": {"variable": "hydra.tabular.Table"}}}],
+                        "domain": {
+                          "application": {
+                            "argument": {"variable": "t0"},
+                            "function": {"variable": "hydra.tabular.Table"}}},
                         "parameter": "x"}}},
-                  "domain": [
-                    {
-                      "function": {
-                        "codomain": {"variable": "hydra.core.Term"},
-                        "domain": {"variable": "t0"}}}],
+                  "domain": {
+                    "function": {
+                      "codomain": {"variable": "hydra.core.Term"},
+                      "domain": {"variable": "t0"}}},
                   "parameter": "v"}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {
-                      "application": {
-                        "argument": {"variable": "t0"},
-                        "function": {"variable": "hydra.tabular.Table"}}}}},
-                "domain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {"variable": "t0"}}}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {
+                    "application": {
+                      "argument": {"variable": "t0"},
+                      "function": {"variable": "hydra.tabular.Table"}}}}},
+              "domain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.encode.tabular.tableType",
@@ -511,26 +498,24 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                        "body": {"variable": "hydra.lib.lists.map"},
                                                                         "type": {"variable": "hydra.tabular.ColumnType"}}},
                                                                     "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                       "typeName": "hydra.core.Term"}},
-                                                  "domain": [{"list": {"variable": "hydra.tabular.ColumnType"}}],
+                                                  "domain": {"list": {"variable": "hydra.tabular.ColumnType"}},
                                                   "parameter": "xs"}}}}}}],
                                     "typeName": "hydra.core.Field"}}]}}],
                         "typeName": "hydra.core.Record"}}},
                   "typeName": "hydra.core.Term"}},
-              "domain": [{"variable": "hydra.tabular.TableType"}],
+              "domain": {"variable": "hydra.tabular.TableType"},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.core.Term"},
-                "domain": {"variable": "hydra.tabular.TableType"}}},
-            "variables": []}]}}],
-  "description": ["Term encoders for hydra.tabular"],
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.tabular.TableType"}}},
+          "variables": []}}}],
+  "description": "Term encoders for hydra.tabular",
   "namespace": "hydra.encode.tabular",
   "termDependencies": ["hydra.encode.core", "hydra.encode.relational"],
   "typeDependencies": ["hydra.tabular"]}

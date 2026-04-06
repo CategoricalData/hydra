@@ -61,15 +61,21 @@ public class TypeConstraint implements Serializable, Comparable<TypeConstraint> 
   @SuppressWarnings("unchecked")
   public int compareTo(TypeConstraint other) {
     int cmp = 0;
-    cmp = ((Comparable) left).compareTo(other.left);
+    cmp = hydra.util.Comparing.compare(
+      left,
+      other.left);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) right).compareTo(other.right);
+    cmp = hydra.util.Comparing.compare(
+      right,
+      other.right);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) comment).compareTo(other.comment);
+    return hydra.util.Comparing.compare(
+      comment,
+      other.comment);
   }
 
   public TypeConstraint withLeft(hydra.core.Type left) {

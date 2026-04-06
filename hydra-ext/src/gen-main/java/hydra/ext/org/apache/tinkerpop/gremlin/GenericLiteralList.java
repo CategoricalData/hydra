@@ -9,9 +9,9 @@ public class GenericLiteralList implements Serializable, Comparable<GenericLiter
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteral> value;
+  public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteral> value;
 
-  public GenericLiteralList (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteral> value) {
+  public GenericLiteralList (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteral> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class GenericLiteralList implements Serializable, Comparable<GenericLiter
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(GenericLiteralList other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

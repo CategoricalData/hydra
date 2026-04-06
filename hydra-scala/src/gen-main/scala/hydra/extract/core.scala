@@ -6,26 +6,6 @@ import hydra.core.*
 
 import hydra.errors.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def bigfloat(cx: hydra.context.Context)(graph: hydra.graph.Graph)(t: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error], BigDecimal] =
   hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Literal, BigDecimal](hydra.extract.core.literal(cx)(graph)(t))((l: hydra.core.Literal) =>
   hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.FloatValue, BigDecimal](hydra.extract.core.floatLiteral(cx)(l))((f: hydra.core.FloatValue) => hydra.extract.core.bigfloatValue(cx)(f)))

@@ -37,6 +37,8 @@ public class DataComplementOf implements Serializable, Comparable<DataComplement
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DataComplementOf other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

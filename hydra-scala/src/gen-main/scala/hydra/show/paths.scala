@@ -4,18 +4,6 @@ import hydra.core.*
 
 import hydra.paths.*
 
-import hydra.lib.lists
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def subtermStep(step: hydra.paths.SubtermStep): Option[scala.Predef.String] =
   {
   def idx[T0, T1](i: T0): Option[T1] = None

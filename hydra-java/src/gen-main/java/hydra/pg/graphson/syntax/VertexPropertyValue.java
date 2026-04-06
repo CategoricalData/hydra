@@ -42,11 +42,15 @@ public class VertexPropertyValue implements Serializable, Comparable<VertexPrope
   @SuppressWarnings("unchecked")
   public int compareTo(VertexPropertyValue other) {
     int cmp = 0;
-    cmp = ((Comparable) id).compareTo(other.id);
+    cmp = hydra.util.Comparing.compare(
+      id,
+      other.id);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 
   public VertexPropertyValue withId(hydra.util.Maybe<hydra.pg.graphson.syntax.Value> id) {

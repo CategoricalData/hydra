@@ -42,11 +42,15 @@ public class UnaryExpression implements Serializable, Comparable<UnaryExpression
   @SuppressWarnings("unchecked")
   public int compareTo(UnaryExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) operator).compareTo(other.operator);
+    cmp = hydra.util.Comparing.compare(
+      operator,
+      other.operator);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) operand).compareTo(other.operand);
+    return hydra.util.Comparing.compare(
+      operand,
+      other.operand);
   }
 
   public UnaryExpression withOperator(hydra.pg.query.UnaryOperator operator) {

@@ -42,11 +42,15 @@ public class BasicForStatementNoShortIf implements Serializable, Comparable<Basi
   @SuppressWarnings("unchecked")
   public int compareTo(BasicForStatementNoShortIf other) {
     int cmp = 0;
-    cmp = ((Comparable) cond).compareTo(other.cond);
+    cmp = hydra.util.Comparing.compare(
+      cond,
+      other.cond);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
   public BasicForStatementNoShortIf withCond(hydra.ext.java.syntax.ForCond cond) {

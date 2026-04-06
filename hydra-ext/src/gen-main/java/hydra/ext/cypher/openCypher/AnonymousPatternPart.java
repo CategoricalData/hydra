@@ -34,6 +34,8 @@ public class AnonymousPatternPart implements Serializable, Comparable<AnonymousP
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(AnonymousPatternPart other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

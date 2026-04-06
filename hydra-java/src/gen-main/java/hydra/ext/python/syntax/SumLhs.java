@@ -42,11 +42,15 @@ public class SumLhs implements Serializable, Comparable<SumLhs> {
   @SuppressWarnings("unchecked")
   public int compareTo(SumLhs other) {
     int cmp = 0;
-    cmp = ((Comparable) operand).compareTo(other.operand);
+    cmp = hydra.util.Comparing.compare(
+      operand,
+      other.operand);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) operator).compareTo(other.operator);
+    return hydra.util.Comparing.compare(
+      operator,
+      other.operator);
   }
 
   public SumLhs withOperand(hydra.ext.python.syntax.Sum operand) {

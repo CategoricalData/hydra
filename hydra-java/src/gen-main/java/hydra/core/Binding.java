@@ -61,15 +61,21 @@ public class Binding implements Serializable, Comparable<Binding> {
   @SuppressWarnings("unchecked")
   public int compareTo(Binding other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) term).compareTo(other.term);
+    cmp = hydra.util.Comparing.compare(
+      term,
+      other.term);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) type).compareTo(other.type);
+    return hydra.util.Comparing.compare(
+      type,
+      other.type);
   }
 
   public Binding withName(hydra.core.Name name) {

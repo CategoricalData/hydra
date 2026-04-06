@@ -36,9 +36,9 @@ public class TypeArityMismatchError implements Serializable, Comparable<TypeArit
   /**
    * The type arguments that were provided
    */
-  public final hydra.util.ConsList<hydra.core.Type> typeArguments;
+  public final java.util.List<hydra.core.Type> typeArguments;
 
-  public TypeArityMismatchError (hydra.core.Type type, Integer expectedArity, Integer actualArity, hydra.util.ConsList<hydra.core.Type> typeArguments) {
+  public TypeArityMismatchError (hydra.core.Type type, Integer expectedArity, Integer actualArity, java.util.List<hydra.core.Type> typeArguments) {
     this.type = type;
     this.expectedArity = expectedArity;
     this.actualArity = actualArity;
@@ -71,19 +71,27 @@ public class TypeArityMismatchError implements Serializable, Comparable<TypeArit
   @SuppressWarnings("unchecked")
   public int compareTo(TypeArityMismatchError other) {
     int cmp = 0;
-    cmp = ((Comparable) type).compareTo(other.type);
+    cmp = hydra.util.Comparing.compare(
+      type,
+      other.type);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) expectedArity).compareTo(other.expectedArity);
+    cmp = hydra.util.Comparing.compare(
+      expectedArity,
+      other.expectedArity);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) actualArity).compareTo(other.actualArity);
+    cmp = hydra.util.Comparing.compare(
+      actualArity,
+      other.actualArity);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) typeArguments).compareTo(other.typeArguments);
+    return hydra.util.Comparing.compare(
+      typeArguments,
+      other.typeArguments);
   }
 
   public TypeArityMismatchError withType(hydra.core.Type type) {
@@ -98,7 +106,7 @@ public class TypeArityMismatchError implements Serializable, Comparable<TypeArit
     return new TypeArityMismatchError(type, expectedArity, actualArity, typeArguments);
   }
 
-  public TypeArityMismatchError withTypeArguments(hydra.util.ConsList<hydra.core.Type> typeArguments) {
+  public TypeArityMismatchError withTypeArguments(java.util.List<hydra.core.Type> typeArguments) {
     return new TypeArityMismatchError(type, expectedArity, actualArity, typeArguments);
   }
 }

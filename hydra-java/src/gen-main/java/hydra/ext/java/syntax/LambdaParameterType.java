@@ -68,7 +68,9 @@ public abstract class LambdaParameterType implements Serializable, Comparable<La
         return tagCmp;
       }
       Type o = (Type) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

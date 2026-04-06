@@ -42,11 +42,15 @@ public class StringLiteralLong1_Elmt_Sequence implements Serializable, Comparabl
   @SuppressWarnings("unchecked")
   public int compareTo(StringLiteralLong1_Elmt_Sequence other) {
     int cmp = 0;
-    cmp = ((Comparable) Alts).compareTo(other.Alts);
+    cmp = hydra.util.Comparing.compare(
+      Alts,
+      other.Alts);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) regex).compareTo(other.regex);
+    return hydra.util.Comparing.compare(
+      regex,
+      other.regex);
   }
 
   public StringLiteralLong1_Elmt_Sequence withAlts(hydra.util.Maybe<hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option> Alts) {

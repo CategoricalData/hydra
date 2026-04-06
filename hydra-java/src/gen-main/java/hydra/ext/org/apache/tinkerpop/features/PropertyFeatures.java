@@ -48,11 +48,15 @@ public class PropertyFeatures implements Serializable, Comparable<PropertyFeatur
   @SuppressWarnings("unchecked")
   public int compareTo(PropertyFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) dataTypeFeatures).compareTo(other.dataTypeFeatures);
+    cmp = hydra.util.Comparing.compare(
+      dataTypeFeatures,
+      other.dataTypeFeatures);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) supportsProperties).compareTo(other.supportsProperties);
+    return hydra.util.Comparing.compare(
+      supportsProperties,
+      other.supportsProperties);
   }
 
   public PropertyFeatures withDataTypeFeatures(hydra.ext.org.apache.tinkerpop.features.DataTypeFeatures dataTypeFeatures) {

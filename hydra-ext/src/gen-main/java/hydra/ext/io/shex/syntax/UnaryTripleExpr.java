@@ -68,7 +68,9 @@ public abstract class UnaryTripleExpr implements Serializable, Comparable<UnaryT
         return tagCmp;
       }
       Sequence o = (Sequence) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class UnaryTripleExpr implements Serializable, Comparable<UnaryT
         return tagCmp;
       }
       Include o = (Include) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -16,13 +16,13 @@ public class ObjectPropertyDomain implements Serializable, Comparable<ObjectProp
 
   public static final hydra.core.Name DOMAIN = new hydra.core.Name("domain");
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
 
   public final hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property;
 
   public final hydra.ext.org.w3.owl.syntax.ClassExpression domain;
 
-  public ObjectPropertyDomain (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property, hydra.ext.org.w3.owl.syntax.ClassExpression domain) {
+  public ObjectPropertyDomain (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property, hydra.ext.org.w3.owl.syntax.ClassExpression domain) {
     this.annotations = annotations;
     this.property = property;
     this.domain = domain;
@@ -52,18 +52,24 @@ public class ObjectPropertyDomain implements Serializable, Comparable<ObjectProp
   @SuppressWarnings("unchecked")
   public int compareTo(ObjectPropertyDomain other) {
     int cmp = 0;
-    cmp = ((Comparable) annotations).compareTo(other.annotations);
+    cmp = hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) property).compareTo(other.property);
+    cmp = hydra.util.Comparing.compare(
+      property,
+      other.property);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) domain).compareTo(other.domain);
+    return hydra.util.Comparing.compare(
+      domain,
+      other.domain);
   }
 
-  public ObjectPropertyDomain withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public ObjectPropertyDomain withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new ObjectPropertyDomain(annotations, property, domain);
   }
 

@@ -76,7 +76,9 @@ public abstract class ElementValue implements Serializable, Comparable<ElementVa
         return tagCmp;
       }
       ConditionalExpression o = (ConditionalExpression) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class ElementValue implements Serializable, Comparable<ElementVa
         return tagCmp;
       }
       ElementValueArrayInitializer o = (ElementValueArrayInitializer) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class ElementValue implements Serializable, Comparable<ElementVa
         return tagCmp;
       }
       Annotation o = (Annotation) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

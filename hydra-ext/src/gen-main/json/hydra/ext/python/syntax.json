@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.AnnotatedStatement",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "comment", "type": {"literal": {"string": {}}}},
@@ -16,7 +15,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Module",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"list": {"variable": "hydra.ext.python.syntax.Statement"}}}},
           "variables": []}}},
@@ -24,7 +22,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.QuoteStyle",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "single", "type": {"unit": {}}},
@@ -34,15 +31,11 @@
     {
       "type": {
         "name": "hydra.ext.python.syntax.Name",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.Number",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "integer", "type": {"literal": {"integer": {"bigint": {}}}}},
@@ -52,7 +45,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.String",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "value", "type": {"literal": {"string": {}}}},
@@ -63,36 +55,29 @@
     {
       "type": {
         "name": "hydra.ext.python.syntax.TypeComment",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.File",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"list": {"variable": "hydra.ext.python.syntax.Statement"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.Interactive",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.python.syntax.Statement"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.Eval",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"list": {"variable": "hydra.ext.python.syntax.Expression"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.FuncType",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -106,7 +91,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Statement",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -123,7 +107,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.SimpleStatement",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -167,7 +150,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.CompoundStatement",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -199,7 +181,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Assignment",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -216,7 +197,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.TypedAssignment",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -233,7 +213,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.UntypedAssignment",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -250,7 +229,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.AugAssignment",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -267,7 +245,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.AnnotatedRhs",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -281,7 +258,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.AugAssign",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "plusEqual", "type": {"unit": {}}},
@@ -302,7 +278,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ReturnStatement",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.python.syntax.StarExpression"}}},
           "variables": []}}},
@@ -310,7 +285,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.RaiseStatement",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"maybe": {"variable": "hydra.ext.python.syntax.RaiseExpression"}}},
           "variables": []}}},
@@ -318,7 +292,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.RaiseExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -332,21 +305,18 @@
       "type": {
         "name": "hydra.ext.python.syntax.DelStatement",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.python.syntax.DelTargets"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.YieldStatement",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.python.syntax.YieldExpression"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.AssertStatement",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -360,7 +330,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ImportStatement",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -374,7 +343,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ImportName",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.python.syntax.DottedAsName"}}},
           "variables": []}}},
@@ -382,7 +350,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ImportFrom",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -399,7 +366,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.RelativeImportPrefix",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "dot", "type": {"unit": {}}},
@@ -409,7 +375,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ImportFromTargets",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -424,7 +389,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ImportFromAsName",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.ext.python.syntax.Name"}},
@@ -436,7 +400,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.DottedAsName",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -450,14 +413,12 @@
       "type": {
         "name": "hydra.ext.python.syntax.DottedName",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"list": {"variable": "hydra.ext.python.syntax.Name"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.Block",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -471,7 +432,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Decorators",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.python.syntax.NamedExpression"}}},
           "variables": []}}},
@@ -479,7 +439,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ClassDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -500,7 +459,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.FunctionDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -514,7 +472,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.FunctionDefRaw",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "async", "type": {"literal": {"boolean": {}}}},
@@ -539,7 +496,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Parameters",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -562,7 +518,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.SlashNoDefaultParameters",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -582,7 +537,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.SlashWithDefaultParameters",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -599,7 +553,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ParamNoDefaultParameters",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -616,7 +569,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ParamWithDefaultParameters",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -630,7 +582,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.SlashNoDefault",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.python.syntax.ParamNoDefault"}}},
           "variables": []}}},
@@ -638,7 +589,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.SlashWithDefault",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -652,7 +602,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.StarEtc",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -672,7 +621,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.NoDefaultStarEtc",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -689,7 +637,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.NoDefaultStarAnnotationStarEtc",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -706,7 +653,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.CommaStarEtc",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -720,14 +666,12 @@
       "type": {
         "name": "hydra.ext.python.syntax.Keywords",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.python.syntax.ParamNoDefault"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.ParamNoDefault",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -741,7 +685,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ParamNoDefaultStarAnnotation",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -755,7 +698,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ParamWithDefault",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -772,7 +714,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ParamMaybeDefault",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -789,7 +730,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Param",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.ext.python.syntax.Name"}},
@@ -801,7 +741,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ParamStarAnnotation",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.ext.python.syntax.Name"}},
@@ -813,28 +752,24 @@
       "type": {
         "name": "hydra.ext.python.syntax.Annotation",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.python.syntax.Expression"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.StarAnnotation",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.python.syntax.StarExpression"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.Default",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.python.syntax.Expression"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.IfStatement",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -851,7 +786,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.IfTail",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -865,7 +799,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.WhileStatement",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -882,7 +815,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ForStatement",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "async", "type": {"literal": {"boolean": {}}}},
@@ -906,7 +838,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.WithStatement",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "async", "type": {"literal": {"boolean": {}}}},
@@ -924,7 +855,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.WithItem",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -938,7 +868,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.TryStatement",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -955,7 +884,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.TryFinallyStatement",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -969,7 +897,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.TryExceptStatement",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -989,7 +916,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.TryExceptStarStatement",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1009,7 +935,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ExceptBlock",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1023,7 +948,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ExceptExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1037,7 +961,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ExceptStarBlock",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1054,7 +977,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.MatchStatement",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1068,7 +990,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.SubjectExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1082,7 +1003,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.CaseBlock",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1099,14 +1019,12 @@
       "type": {
         "name": "hydra.ext.python.syntax.Guard",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.python.syntax.NamedExpression"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.Patterns",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1120,7 +1038,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Pattern",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1134,7 +1051,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.AsPattern",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1148,7 +1064,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.OrPattern",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.python.syntax.ClosedPattern"}}},
           "variables": []}}},
@@ -1156,7 +1071,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ClosedPattern",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1186,7 +1100,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.LiteralExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1204,7 +1117,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ComplexNumber",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1221,7 +1133,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.PlusOrMinus",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "plus", "type": {"unit": {}}},
@@ -1231,7 +1142,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.SignedNumber",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1245,7 +1155,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.SignedRealNumber",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1259,63 +1168,54 @@
       "type": {
         "name": "hydra.ext.python.syntax.RealNumber",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.python.syntax.Number"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.ImaginaryNumber",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.python.syntax.Number"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.CapturePattern",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.python.syntax.PatternCaptureTarget"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.PatternCaptureTarget",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.python.syntax.Name"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.ValuePattern",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.python.syntax.Attribute"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.Attribute",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"list": {"variable": "hydra.ext.python.syntax.Name"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.NameOrAttribute",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"list": {"variable": "hydra.ext.python.syntax.Name"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.GroupPattern",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.python.syntax.Pattern"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.SequencePattern",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1330,7 +1230,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.OpenSequencePattern",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1345,7 +1244,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.MaybeSequencePattern",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.python.syntax.MaybeStarPattern"}}},
           "variables": []}}},
@@ -1353,7 +1251,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.MaybeStarPattern",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1367,7 +1264,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.StarPattern",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1379,7 +1275,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.MappingPattern",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1393,7 +1288,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ItemsPattern",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.python.syntax.KeyValuePattern"}}},
           "variables": []}}},
@@ -1401,7 +1295,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.KeyValuePattern",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1415,7 +1308,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.LiteralExpressionOrAttribute",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1429,14 +1321,12 @@
       "type": {
         "name": "hydra.ext.python.syntax.DoubleStarPattern",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.python.syntax.PatternCaptureTarget"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.ClassPattern",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1453,14 +1343,12 @@
       "type": {
         "name": "hydra.ext.python.syntax.PositionalPatterns",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"list": {"variable": "hydra.ext.python.syntax.Pattern"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.KeywordPatterns",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.python.syntax.KeywordPattern"}}},
           "variables": []}}},
@@ -1468,7 +1356,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.KeywordPattern",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.ext.python.syntax.Name"}},
@@ -1480,7 +1367,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.TypeAlias",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.ext.python.syntax.Name"}},
@@ -1495,7 +1381,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.TypeParameter",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1512,7 +1397,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.SimpleTypeParameter",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.ext.python.syntax.Name"}},
@@ -1527,7 +1411,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.StarTypeParameter",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.ext.python.syntax.Name"}},
@@ -1539,7 +1422,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.DoubleStarTypeParameter",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.ext.python.syntax.Name"}},
@@ -1551,7 +1433,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Expression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1568,7 +1449,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Conditional",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1585,7 +1465,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.YieldExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1599,7 +1478,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.StarExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1613,7 +1491,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.StarNamedExpressions",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.python.syntax.StarNamedExpression"}}},
           "variables": []}}},
@@ -1621,7 +1498,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.StarNamedExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1635,7 +1511,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.AssignmentExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.ext.python.syntax.Name"}},
@@ -1647,7 +1522,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.NamedExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1661,7 +1535,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Disjunction",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.python.syntax.Conjunction"}}},
           "variables": []}}},
@@ -1669,14 +1542,12 @@
       "type": {
         "name": "hydra.ext.python.syntax.Conjunction",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"list": {"variable": "hydra.ext.python.syntax.Inversion"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.Inversion",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1690,7 +1561,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Comparison",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1705,7 +1575,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.CompareOpBitwiseOrPair",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1719,7 +1588,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.CompareOp",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "eq", "type": {"unit": {}}},
@@ -1737,7 +1605,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.BitwiseOr",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1751,7 +1618,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.BitwiseXor",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1765,7 +1631,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.BitwiseAnd",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1779,7 +1644,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ShiftExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1791,7 +1655,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ShiftLhs",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1805,7 +1668,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ShiftOp",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "left", "type": {"unit": {}}},
@@ -1815,7 +1677,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Sum",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1827,7 +1688,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.SumLhs",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1841,7 +1701,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.SumOp",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "add", "type": {"unit": {}}},
@@ -1851,7 +1710,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Term",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1865,7 +1723,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.TermLhs",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1879,7 +1736,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.TermOp",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "mul", "type": {"unit": {}}},
@@ -1892,7 +1748,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Factor",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1912,7 +1767,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Power",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1926,7 +1780,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.AwaitPrimary",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "await", "type": {"literal": {"boolean": {}}}},
@@ -1938,7 +1791,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Primary",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1952,7 +1804,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.PrimaryWithRhs",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1966,7 +1817,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.PrimaryRhs",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1984,7 +1834,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Slices",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1999,7 +1848,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.SliceOrStarredExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2013,7 +1861,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Slice",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2027,7 +1874,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.SliceExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2044,7 +1890,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Atom",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "name", "type": {"variable": "hydra.ext.python.syntax.Name"}},
@@ -2084,7 +1929,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Group",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2098,7 +1942,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Lambda",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2112,7 +1955,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.LambdaParameters",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2134,7 +1976,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.LambdaSlashNoDefault",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2145,7 +1986,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.LambdaSlashWithDefault",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2160,7 +2000,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.LambdaStarEtc",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "star", "type": {"literal": {"boolean": {}}}},
@@ -2179,21 +2018,18 @@
       "type": {
         "name": "hydra.ext.python.syntax.LambdaKwds",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.python.syntax.LambdaParamNoDefault"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.LambdaParamNoDefault",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.python.syntax.Name"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.LambdaParamWithDefault",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2207,7 +2043,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.LambdaParamMaybeDefault",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2221,7 +2056,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.List",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.python.syntax.StarNamedExpression"}}},
           "variables": []}}},
@@ -2229,7 +2063,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Tuple",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.python.syntax.StarNamedExpression"}}},
           "variables": []}}},
@@ -2237,7 +2070,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Set",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.python.syntax.StarNamedExpression"}}},
           "variables": []}}},
@@ -2245,7 +2077,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Dict",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.python.syntax.DoubleStarredKvpair"}}},
           "variables": []}}},
@@ -2253,7 +2084,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.DoubleStarredKvpair",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2267,7 +2097,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Kvpair",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2281,7 +2110,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ForIfClauses",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.python.syntax.ForIfClause"}}},
           "variables": []}}},
@@ -2289,7 +2117,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.ForIfClause",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "async", "type": {"literal": {"boolean": {}}}},
@@ -2307,7 +2134,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Listcomp",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2321,7 +2147,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Setcomp",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2335,7 +2160,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Genexp",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2349,7 +2173,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.GenexpHead",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2363,7 +2186,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Dictcomp",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2377,7 +2199,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Args",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2394,7 +2215,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.PosArg",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2411,14 +2231,12 @@
       "type": {
         "name": "hydra.ext.python.syntax.StarredExpression",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.python.syntax.Expression"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.KwargOrStarred",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2432,7 +2250,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.Kwarg",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "name", "type": {"variable": "hydra.ext.python.syntax.Name"}},
@@ -2444,7 +2261,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.KwargOrDoubleStarred",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2458,21 +2274,18 @@
       "type": {
         "name": "hydra.ext.python.syntax.StarTargetsListSeq",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"list": {"variable": "hydra.ext.python.syntax.StarTarget"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.StarTargetsTupleSeq",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"list": {"variable": "hydra.ext.python.syntax.StarTarget"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.StarTarget",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2486,7 +2299,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.TargetWithStarAtom",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2503,7 +2315,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.TPrimaryAndName",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2515,7 +2326,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.TPrimaryAndSlices",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2529,7 +2339,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.StarAtom",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "name", "type": {"variable": "hydra.ext.python.syntax.Name"}},
@@ -2547,7 +2356,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.SingleTarget",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2562,7 +2370,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.SingleSubscriptAttributeTarget",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2576,7 +2383,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.TPrimary",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2597,7 +2403,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.TPrimaryAndGenexp",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2611,7 +2416,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.TPrimaryAndArguments",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2625,14 +2429,12 @@
       "type": {
         "name": "hydra.ext.python.syntax.DelTargets",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"list": {"variable": "hydra.ext.python.syntax.DelTarget"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.python.syntax.DelTarget",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2649,7 +2451,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.DelTAtom",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "name", "type": {"variable": "hydra.ext.python.syntax.Name"}},
@@ -2664,7 +2465,6 @@
       "type": {
         "name": "hydra.ext.python.syntax.TypeExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2681,11 +2481,9 @@
       "type": {
         "name": "hydra.ext.python.syntax.FuncTypeComment",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.python.syntax.TypeComment"}},
           "variables": []}}}],
-  "description": [
-    "A Python syntax model, based on the Python v3 PEG grammar retrieved on 2024-12-22 from https://docs.python.org/3/reference/grammar.html"],
+  "description": "A Python syntax model, based on the Python v3 PEG grammar retrieved on 2024-12-22 from https://docs.python.org/3/reference/grammar.html",
   "namespace": "hydra.ext.python.syntax",
   "termDependencies": ["hydra.core"],
   "typeDependencies": ["hydra.core"]}

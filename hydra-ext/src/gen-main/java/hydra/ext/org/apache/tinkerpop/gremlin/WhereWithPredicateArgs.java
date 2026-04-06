@@ -42,11 +42,15 @@ public class WhereWithPredicateArgs implements Serializable, Comparable<WhereWit
   @SuppressWarnings("unchecked")
   public int compareTo(WhereWithPredicateArgs other) {
     int cmp = 0;
-    cmp = ((Comparable) leftArg).compareTo(other.leftArg);
+    cmp = hydra.util.Comparing.compare(
+      leftArg,
+      other.leftArg);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) predicate).compareTo(other.predicate);
+    return hydra.util.Comparing.compare(
+      predicate,
+      other.predicate);
   }
 
   public WhereWithPredicateArgs withLeftArg(hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.StringArgument> leftArg) {

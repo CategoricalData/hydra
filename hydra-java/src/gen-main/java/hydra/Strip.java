@@ -96,9 +96,9 @@ public interface Strip {
   }
 
   static hydra.core.TypeScheme deannotateTypeSchemeRecursive(hydra.core.TypeScheme ts) {
-    hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>> constraints = (ts).constraints;
+    hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>> constraints = (ts).constraints;
     hydra.core.Type typ = (ts).type;
-    hydra.util.ConsList<hydra.core.Name> vars = (ts).variables;
+    java.util.List<hydra.core.Name> vars = (ts).variables;
     return new hydra.core.TypeScheme(vars, hydra.Strip.deannotateTypeRecursive(typ), constraints);
   }
 
@@ -111,7 +111,7 @@ public interface Strip {
 
       @Override
       public hydra.core.Term visit(hydra.core.Term.Annotated at) {
-        hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> ann = (at).value.annotation;
+        java.util.Map<hydra.core.Name, hydra.core.Term> ann = (at).value.annotation;
         hydra.core.Term subj = (at).value.body;
         return new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(hydra.Strip.detypeTerm(subj), ann));
       }
@@ -272,7 +272,7 @@ public interface Strip {
 
       @Override
       public hydra.core.Term visit(hydra.core.Term.Annotated at) {
-        hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> ann = (at).value.annotation;
+        java.util.Map<hydra.core.Name, hydra.core.Term> ann = (at).value.annotation;
         hydra.core.Term subj = (at).value.body;
         return new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(hydra.Strip.stripTypeLambdas(subj), ann));
       }

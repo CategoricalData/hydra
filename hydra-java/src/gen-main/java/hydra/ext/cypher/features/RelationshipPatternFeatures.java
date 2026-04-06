@@ -61,15 +61,21 @@ public class RelationshipPatternFeatures implements Serializable, Comparable<Rel
   @SuppressWarnings("unchecked")
   public int compareTo(RelationshipPatternFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) multipleTypes).compareTo(other.multipleTypes);
+    cmp = hydra.util.Comparing.compare(
+      multipleTypes,
+      other.multipleTypes);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) variableRelationship).compareTo(other.variableRelationship);
+    cmp = hydra.util.Comparing.compare(
+      variableRelationship,
+      other.variableRelationship);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) wildcardType).compareTo(other.wildcardType);
+    return hydra.util.Comparing.compare(
+      wildcardType,
+      other.wildcardType);
   }
 
   public RelationshipPatternFeatures withMultipleTypes(Boolean multipleTypes) {

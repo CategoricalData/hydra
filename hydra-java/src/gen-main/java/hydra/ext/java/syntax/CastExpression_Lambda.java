@@ -42,11 +42,15 @@ public class CastExpression_Lambda implements Serializable, Comparable<CastExpre
   @SuppressWarnings("unchecked")
   public int compareTo(CastExpression_Lambda other) {
     int cmp = 0;
-    cmp = ((Comparable) refAndBounds).compareTo(other.refAndBounds);
+    cmp = hydra.util.Comparing.compare(
+      refAndBounds,
+      other.refAndBounds);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) expression).compareTo(other.expression);
+    return hydra.util.Comparing.compare(
+      expression,
+      other.expression);
   }
 
   public CastExpression_Lambda withRefAndBounds(hydra.ext.java.syntax.CastExpression_RefAndBounds refAndBounds) {

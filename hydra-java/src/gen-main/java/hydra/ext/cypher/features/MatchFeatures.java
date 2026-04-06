@@ -51,11 +51,15 @@ public class MatchFeatures implements Serializable, Comparable<MatchFeatures> {
   @SuppressWarnings("unchecked")
   public int compareTo(MatchFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) match).compareTo(other.match);
+    cmp = hydra.util.Comparing.compare(
+      match,
+      other.match);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) optionalMatch).compareTo(other.optionalMatch);
+    return hydra.util.Comparing.compare(
+      optionalMatch,
+      other.optionalMatch);
   }
 
   public MatchFeatures withMatch(Boolean match) {

@@ -3,22 +3,15 @@
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.Identifier",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.Keyword",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.Literal",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "boolean", "type": {"literal": {"boolean": {}}}},
@@ -34,7 +27,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.IntegerLiteral",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "decimal", "type": {"literal": {"string": {}}}},
@@ -45,21 +37,18 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.NamespaceName",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.csharp.syntax.NamespaceOrTypeName"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.TypeName",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.csharp.syntax.NamespaceOrTypeName"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.NamespaceOrTypeName",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -76,7 +65,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.IdentifierNamespaceOrTypeName",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -90,7 +78,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.QualifiedNamespaceOrTypeName",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -107,7 +94,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.Type",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -127,7 +113,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ReferenceType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -148,7 +133,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ClassType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -161,14 +145,12 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.InterfaceType",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.csharp.syntax.TypeName"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.ArrayType",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -182,7 +164,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.NonArrayType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -209,21 +190,18 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.RankSpecifier",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"literal": {"integer": {"int32": {}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.DelegateType",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.csharp.syntax.TypeName"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.ValueType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -237,7 +215,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.StructOrEnumType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -251,7 +228,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.StructType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -268,7 +244,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.SimpleType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -280,7 +255,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.NumericType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -295,7 +269,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.IntegralType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "sbyte", "type": {"unit": {}}},
@@ -312,7 +285,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.FloatingPointType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "float", "type": {"unit": {}}},
@@ -322,7 +294,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.TupleType",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.csharp.syntax.TupleTypeElement"}}},
           "variables": []}}},
@@ -330,7 +301,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.TupleTypeElement",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "type", "type": {"variable": "hydra.ext.csharp.syntax.Type"}},
@@ -342,28 +312,24 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.EnumType",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.csharp.syntax.TypeName"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.TypeArgumentList",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"list": {"variable": "hydra.ext.csharp.syntax.Type"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.TypeParameter",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.csharp.syntax.Identifier"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.UnmanagedType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -377,14 +343,12 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.VariableReference",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.csharp.syntax.Expression"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.Pattern",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -401,7 +365,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.DeclarationPattern",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "type", "type": {"variable": "hydra.ext.csharp.syntax.Type"}},
@@ -413,21 +376,18 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.Designation",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.csharp.syntax.Identifier"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.ArgumentList",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"list": {"variable": "hydra.ext.csharp.syntax.Argument"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.Argument",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -441,7 +401,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ArgumentValue",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -461,7 +420,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.PrimaryExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -476,7 +434,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.PrimaryNoArrayCreationExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -564,7 +521,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.InterpolatedStringExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -579,15 +535,11 @@
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.InterpolatedRegularStringExpression",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.RegularInterpolation",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -601,15 +553,11 @@
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.InterpolatedVerbatimStringExpression",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.VerbatimInterpolation",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -624,7 +572,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.SimpleName",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -638,7 +585,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.TupleExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -652,7 +598,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.TupleElement",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -666,7 +611,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.DeconstructionTuple",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {
               "list": {"variable": "hydra.ext.csharp.syntax.DeconstructionElement"}}},
@@ -675,7 +619,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.DeconstructionElement",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -689,7 +632,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.MemberAccess",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -706,7 +648,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.MemberAccessHead",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -723,7 +664,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.PredefinedType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "bool", "type": {"unit": {}}},
@@ -746,7 +686,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.NullConditionalMemberAccess",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -766,7 +705,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.DependentAccess",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -783,7 +721,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.DependentAccessForMember",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -797,7 +734,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.NullConditionalProjectionInitializer",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -814,7 +750,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.InvocationExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -828,7 +763,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.NullConditionalInvocationExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -843,7 +777,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.NullConditionalInvocationExpressionHead",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -857,7 +790,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ElementAccess",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -872,7 +804,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.NullConditionalElementAccess",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -890,7 +821,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.BaseAccess",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -904,7 +834,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.BaseAccessWithIdentifier",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -918,7 +847,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ObjectCreationExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "type", "type": {"variable": "hydra.ext.csharp.syntax.Type"}},
@@ -934,7 +862,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ObjectOrCollectionInitializer",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -948,7 +875,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.MemberInitializer",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -962,7 +888,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.InitializerTarget",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -976,7 +901,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.InitializerValue",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -990,7 +914,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ElementInitializer",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1004,14 +927,12 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ExpressionList",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"list": {"variable": "hydra.ext.csharp.syntax.Expression"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.ArrayCreationExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1031,7 +952,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.NonArrayTypeArrayCreationExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1051,7 +971,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ArrayTypeArrayCreationExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1065,7 +984,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.RankSpecifierArrayCreationExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1079,7 +997,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.DelegateCreationExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1093,7 +1010,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.MemberDeclaratorList",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.csharp.syntax.MemberDeclarator"}}},
           "variables": []}}},
@@ -1101,7 +1017,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.MemberDeclarator",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1125,7 +1040,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.AssignmentMemberDeclarator",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1139,7 +1053,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.TypeofExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "type", "type": {"variable": "hydra.ext.csharp.syntax.Type"}},
@@ -1152,7 +1065,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.UnboundTypeName",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.csharp.syntax.UnboundTypeNamePart"}}},
           "variables": []}}},
@@ -1160,7 +1072,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.UnboundTypeNamePart",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1175,7 +1086,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.DefaultValueExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1187,7 +1097,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.StackallocExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1204,7 +1113,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.NamedEntity",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1218,7 +1126,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.NamedEntityPart",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1232,7 +1139,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.NamedEntityTarget",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1251,7 +1157,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.UnaryExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1292,7 +1197,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.CastExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "type", "type": {"variable": "hydra.ext.csharp.syntax.Type"}},
@@ -1304,7 +1208,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.MultiplicativeExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1318,7 +1221,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.BinaryMultiplicativeExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1335,7 +1237,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.MultiplicativeOperator",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "times", "type": {"unit": {}}},
@@ -1346,7 +1247,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.AdditiveExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1360,7 +1260,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.BinaryAdditiveExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1377,7 +1276,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.AdditiveOperator",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "plus", "type": {"unit": {}}},
@@ -1387,7 +1285,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ShiftExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1401,7 +1298,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.BinaryShiftExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1418,7 +1314,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ShiftOperator",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "left", "type": {"unit": {}}},
@@ -1428,7 +1323,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.RelationalExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1451,7 +1345,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.BinaryRelationalExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1468,7 +1361,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.RelationalOperator",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "lessThan", "type": {"unit": {}}},
@@ -1480,7 +1372,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.IsTypeExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1492,7 +1383,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.IsPatternExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1506,7 +1396,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.AsTypeExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1518,7 +1407,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.EqualityExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1532,7 +1420,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.BinaryEqualityExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1549,7 +1436,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.EqualityOperator",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "equal", "type": {"unit": {}}},
@@ -1559,7 +1445,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.AndExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1573,7 +1458,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.BinaryAndExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1587,7 +1471,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ExclusiveOrExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1601,7 +1484,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.BinaryExclusiveOrExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1615,7 +1497,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.InclusiveOrExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1629,7 +1510,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.BinaryInclusiveOrExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1643,7 +1523,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ConditionalAndExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1657,7 +1536,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.BinaryConditionalAndExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1671,7 +1549,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ConditionalOrExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1685,7 +1562,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.BinaryConditionalOrExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1699,7 +1575,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.NullCoalescingExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1716,7 +1591,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.BinaryNullCoalescingExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1730,7 +1604,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.DeclarationExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1744,7 +1617,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.LocalVariableType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "type", "type": {"variable": "hydra.ext.csharp.syntax.Type"}},
@@ -1754,7 +1626,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ConditionalExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1771,7 +1642,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.SimpleConditionalExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1788,7 +1658,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.RefConditionalExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1805,7 +1674,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.LambdaExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "async", "type": {"literal": {"boolean": {}}}},
@@ -1820,7 +1688,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.AnonymousMethodExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "async", "type": {"literal": {"boolean": {}}}},
@@ -1837,7 +1704,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.AnonymousFunctionSignature",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1853,7 +1719,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ExplicitAnonymousFunctionParameter",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1870,7 +1735,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.AnonymousFunctionParameterModifier",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "ref", "type": {"unit": {}}},
@@ -1881,7 +1745,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.AnonymousFunctionBody",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1902,7 +1765,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.QueryExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1916,7 +1778,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.FromClause",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1933,7 +1794,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.QueryBody",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1950,7 +1810,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.QueryBodyClause",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1973,7 +1832,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.LetClause",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1987,7 +1845,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.JoinClause",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2013,7 +1870,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.Ordering",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2027,7 +1883,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.OrderingDirection",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "ascending", "type": {"unit": {}}},
@@ -2037,7 +1892,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.SelectOrGroupClause",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2051,7 +1905,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.GroupClause",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2065,7 +1918,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.QueryContinuation",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2079,7 +1931,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.Assignment",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2096,7 +1947,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.AssignmentOperator",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "simple", "type": {"literal": {"boolean": {}}}},
@@ -2115,7 +1965,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.Expression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2129,7 +1978,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.NonAssignmentExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2149,21 +1997,18 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ConstantExpression",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.csharp.syntax.Expression"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.BooleanExpression",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.csharp.syntax.Expression"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.Statement",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2180,7 +2025,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.EmbeddedStatement",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2228,14 +2072,12 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.Block",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"list": {"variable": "hydra.ext.csharp.syntax.Statement"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.LabeledStatement",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2249,7 +2091,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.DeclarationStatement",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2266,7 +2107,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.LocalVariableDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2285,7 +2125,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ImplicitlyTypedLocalVariableDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2301,7 +2140,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.RefVarImplicitlyTypedLocalVariableDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2315,7 +2153,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ImplicitlyTypedLocalVariableDeclarator",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2329,7 +2166,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ExplicitlyTypedLocalVariableDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "type", "type": {"variable": "hydra.ext.csharp.syntax.Type"}},
@@ -2343,7 +2179,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ExplicitlyTypedLocalVariableDeclarator",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2358,7 +2193,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.LocalVariableInitializer",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2372,7 +2206,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.RefLocalVariableDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2388,7 +2221,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.RefLocalVariableDeclarator",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2402,7 +2234,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.LocalConstantDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "type", "type": {"variable": "hydra.ext.csharp.syntax.Type"}},
@@ -2414,7 +2245,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ConstantDeclarator",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2428,7 +2258,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.LocalFunctionDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2443,7 +2272,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.StandardLocalFunctionDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2464,7 +2292,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.RefLocalFunctionDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2488,7 +2315,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.LocalFunctionHeader",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2509,7 +2335,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.LocalFunctionModifier",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2521,7 +2346,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.RefLocalFunctionModifier",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "static", "type": {"unit": {}}},
@@ -2531,7 +2355,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.LocalFunctionBody",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2549,7 +2372,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.RefLocalFunctionBody",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2563,7 +2385,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.StatementExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2599,7 +2420,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.SelectionStatement",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2613,7 +2433,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.IfStatement",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2630,7 +2449,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.SwitchStatement",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2644,7 +2462,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.SwitchSection",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2658,7 +2475,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.SwitchLabel",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2670,7 +2486,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.SwitchBranch",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2684,7 +2499,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.IterationStatement",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2704,7 +2518,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.WhileStatement",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2718,7 +2531,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.DoStatement",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2732,7 +2544,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ForStatement",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2753,7 +2564,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ForInitializer",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2767,7 +2577,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.StatementExpressionList",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.csharp.syntax.StatementExpression"}}},
           "variables": []}}},
@@ -2775,7 +2584,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ForeachStatement",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2798,7 +2606,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.JumpStatement",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "break", "type": {"unit": {}}},
@@ -2817,7 +2624,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.GotoStatement",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2832,7 +2638,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ReturnStatement",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "simple", "type": {"unit": {}}},
@@ -2847,7 +2652,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.TryStatement",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2864,7 +2668,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.CatchClauses",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2878,7 +2681,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.SpecificCatchClause",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2895,7 +2697,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ExceptionSpecifier",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "type", "type": {"variable": "hydra.ext.csharp.syntax.Type"}},
@@ -2907,7 +2708,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.LockStatement",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2921,7 +2721,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.UsingStatement",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2935,7 +2734,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ResourceAcquisition",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2949,7 +2747,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.YieldStatement",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2961,7 +2758,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.CompilationUnit",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2983,7 +2779,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.NamespaceDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2997,14 +2792,12 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.QualifiedIdentifier",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"list": {"variable": "hydra.ext.csharp.syntax.Identifier"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.NamespaceBody",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3022,14 +2815,12 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ExternAliasDirective",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.csharp.syntax.Identifier"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.UsingDirective",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -3046,7 +2837,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.UsingAliasDirective",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3060,7 +2850,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.NamespaceMemberDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -3074,7 +2863,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.TypeDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -3097,7 +2885,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.QualifiedAliasMember",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3114,7 +2901,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ClassDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3145,7 +2931,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ClassModifier",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "new", "type": {"unit": {}}},
@@ -3162,7 +2947,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.TypeParameterList",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.csharp.syntax.TypeParameterPart"}}},
           "variables": []}}},
@@ -3170,7 +2954,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.TypeParameterPart",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3184,7 +2967,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ClassBase",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -3198,7 +2980,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.TypeParameterConstraintsClause",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3213,7 +2994,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.TypeParameterConstraints",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3229,7 +3009,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.PrimaryConstraint",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -3243,7 +3022,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.SecondaryConstraints",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.csharp.syntax.SecondaryConstraint"}}},
           "variables": []}}},
@@ -3251,7 +3029,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.SecondaryConstraint",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -3265,7 +3042,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ClassBody",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {
               "list": {"variable": "hydra.ext.csharp.syntax.ClassMemberDeclaration"}}},
@@ -3274,7 +3050,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ClassMemberDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -3315,7 +3090,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ConstantDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3333,7 +3107,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ConstantModifier",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "new", "type": {"unit": {}}},
@@ -3346,7 +3119,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.FieldDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3364,7 +3136,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.FieldModifier",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "new", "type": {"unit": {}}},
@@ -3381,7 +3152,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.VariableDeclarators",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.csharp.syntax.VariableDeclarator"}}},
           "variables": []}}},
@@ -3389,7 +3159,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.VariableDeclarator",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3403,7 +3172,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.MethodDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -3417,7 +3185,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.StandardMethodDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3440,7 +3207,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.RefReturnMethodDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3466,7 +3232,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.MethodModifiers",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3478,7 +3243,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.RefKind",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "ref", "type": {"unit": {}}},
@@ -3488,7 +3252,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.MethodHeader",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3509,7 +3272,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.MethodModifier",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -3521,7 +3283,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.RefMethodModifier",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "new", "type": {"unit": {}}},
@@ -3541,7 +3302,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ReturnType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "ref", "type": {"variable": "hydra.ext.csharp.syntax.Type"}},
@@ -3551,7 +3311,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.MemberName",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3565,7 +3324,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.MethodBody",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -3584,7 +3342,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.RefMethodBody",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -3599,7 +3356,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.FormalParameterList",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3613,7 +3369,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.FixedParameter",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3634,7 +3389,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ParameterModifier",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -3646,7 +3400,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ParameterModeModifier",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "ref", "type": {"unit": {}}},
@@ -3657,7 +3410,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ParameterArray",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3674,7 +3426,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.PropertyDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -3688,7 +3439,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.StandardPropertyDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3709,7 +3459,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.RefReturnPropertyDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3733,7 +3482,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.PropertyModifier",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "new", "type": {"unit": {}}},
@@ -3753,7 +3501,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.PropertyBody",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -3767,7 +3514,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.BlockPropertyBody",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3781,7 +3527,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.RefPropertyBody",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -3795,7 +3540,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.AccessorDeclarations",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -3809,7 +3553,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.AccessorDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3826,7 +3569,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.AccessorModifier",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "protected", "type": {"unit": {}}},
@@ -3841,7 +3583,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.AccessorBody",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -3856,7 +3597,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.RefGetAccessorDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3873,7 +3613,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.RefAccessorBody",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -3888,7 +3627,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.EventDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -3902,7 +3640,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.StandardEventDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3920,7 +3657,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.AccessorsEventDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3941,7 +3677,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.EventModifier",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "new", "type": {"unit": {}}},
@@ -3961,7 +3696,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.EventAccessorDeclarations",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -3975,7 +3709,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.AddRemoveAccessorDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -3989,7 +3722,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.IndexerDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -4003,7 +3735,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.StandardIndexerDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4023,7 +3754,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.RefIndexerDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4046,7 +3776,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.IndexerModifier",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "new", "type": {"unit": {}}},
@@ -4065,7 +3794,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.IndexerDeclarator",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "type", "type": {"variable": "hydra.ext.csharp.syntax.Type"}},
@@ -4080,7 +3808,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.IndexerBody",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -4094,7 +3821,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.RefIndexerBody",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -4108,7 +3834,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.OperatorDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4128,7 +3853,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.OperatorModifier",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "public", "type": {"unit": {}}},
@@ -4140,7 +3864,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.OperatorDeclarator",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -4157,7 +3880,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.UnaryOperatorDeclarator",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "type", "type": {"variable": "hydra.ext.csharp.syntax.Type"}},
@@ -4172,7 +3894,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.OverloadableUnaryOperator",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "plus", "type": {"unit": {}}},
@@ -4188,7 +3909,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.BinaryOperatorDeclarator",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "type", "type": {"variable": "hydra.ext.csharp.syntax.Type"}},
@@ -4206,7 +3926,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.OverloadableBinaryOperator",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "add", "type": {"unit": {}}},
@@ -4230,7 +3949,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ConversionOperatorDeclarator",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4245,7 +3963,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ConversionKind",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "implicit", "type": {"unit": {}}},
@@ -4255,7 +3972,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.OperatorBody",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -4270,7 +3986,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ConstructorDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4290,7 +4005,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ConstructorModifier",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "public", "type": {"unit": {}}},
@@ -4304,7 +4018,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ConstructorDeclarator",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4322,7 +4035,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ConstructorInitializer",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -4336,7 +4048,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ConstructorBody",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -4351,7 +4062,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.StaticConstructorDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4371,7 +4081,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.StaticConstructorModifiers",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "extern", "type": {"literal": {"boolean": {}}}},
@@ -4381,7 +4090,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.StaticConstructorBody",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -4396,7 +4104,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.FinalizerDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4415,7 +4122,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.FinalizerBody",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -4430,7 +4136,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.StructDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4463,7 +4168,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.StructModifier",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "new", "type": {"unit": {}}},
@@ -4478,7 +4182,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.StructMemberDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -4519,7 +4222,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.ArrayInitializer",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.csharp.syntax.VariableInitializer"}}},
           "variables": []}}},
@@ -4527,7 +4229,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.VariableInitializer",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -4541,7 +4242,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.InterfaceDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4574,7 +4274,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.InterfaceModifier",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "new", "type": {"unit": {}}},
@@ -4588,7 +4287,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.VariantTypeParameters",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.csharp.syntax.VariantTypeParameter"}}},
           "variables": []}}},
@@ -4596,7 +4294,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.VariantTypeParameter",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4613,7 +4310,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.VarianceAnnotation",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "in", "type": {"unit": {}}},
@@ -4623,7 +4319,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.InterfaceMemberDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -4643,7 +4338,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.InterfaceMethodDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4664,7 +4358,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.InterfaceMethodHeader",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4685,7 +4378,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.InterfacePropertyDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4707,7 +4399,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.InterfaceAccessors",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4724,7 +4415,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.InterfaceEventDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4740,7 +4430,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.InterfaceIndexerDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4762,7 +4451,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.EnumDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4785,7 +4473,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.EnumBase",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -4799,7 +4486,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.EnumBody",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {
               "list": {"variable": "hydra.ext.csharp.syntax.EnumMemberDeclaration"}}},
@@ -4808,7 +4494,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.EnumModifier",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "new", "type": {"unit": {}}},
@@ -4821,7 +4506,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.EnumMemberDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4838,7 +4522,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.DelegateDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4864,7 +4547,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.DelegateHeader",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4886,7 +4568,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.DelegateModifier",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "new", "type": {"unit": {}}},
@@ -4900,7 +4581,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.GlobalAttributeSection",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4914,7 +4594,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.Attributes",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.csharp.syntax.AttributeSection"}}},
           "variables": []}}},
@@ -4922,7 +4601,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.AttributeSection",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4936,7 +4614,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.AttributeTarget",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -4950,14 +4627,12 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.AttributeList",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"list": {"variable": "hydra.ext.csharp.syntax.Attribute"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.Attribute",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4971,14 +4646,12 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.AttributeName",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.csharp.syntax.TypeName"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.csharp.syntax.AttributeArguments",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -4993,7 +4666,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.PositionalArgumentList",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.csharp.syntax.PositionalArgument"}}},
           "variables": []}}},
@@ -5001,7 +4673,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.PositionalArgument",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -5015,7 +4686,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.NamedArgumentList",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.csharp.syntax.NamedArgument"}}},
           "variables": []}}},
@@ -5023,7 +4693,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.NamedArgument",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -5037,7 +4706,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.AttributeArgumentExpression",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"variable": "hydra.ext.csharp.syntax.NonAssignmentExpression"}},
           "variables": []}}},
@@ -5045,7 +4713,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.PointerType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -5059,7 +4726,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.PointerMemberAccess",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -5076,7 +4742,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.PointerElementAccess",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -5091,7 +4756,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.FixedStatement",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -5109,7 +4773,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.FixedPointerDeclarator",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -5123,7 +4786,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.FixedSizeBufferDeclaration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -5145,7 +4807,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.FixedSizeBufferModifier",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "new", "type": {"unit": {}}},
@@ -5158,7 +4819,6 @@
       "type": {
         "name": "hydra.ext.csharp.syntax.FixedSizeBufferDeclarator",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -5168,8 +4828,7 @@
                 "name": "size",
                 "type": {"variable": "hydra.ext.csharp.syntax.ConstantExpression"}}]},
           "variables": []}}}],
-  "description": [
-    "A C# syntax module based on the ANTLR grammar dated 02/07/2024 and available at:\n  https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/grammar"],
+  "description": "A C# syntax module based on the ANTLR grammar dated 02/07/2024 and available at:\n  https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/grammar",
   "namespace": "hydra.ext.csharp.syntax",
   "termDependencies": ["hydra.core"],
   "typeDependencies": ["hydra.core"]}

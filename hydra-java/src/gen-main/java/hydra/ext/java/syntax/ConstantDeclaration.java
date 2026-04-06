@@ -13,13 +13,13 @@ public class ConstantDeclaration implements Serializable, Comparable<ConstantDec
 
   public static final hydra.core.Name VARIABLES = new hydra.core.Name("variables");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.ConstantModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.ConstantModifier> modifiers;
 
   public final hydra.ext.java.syntax.UnannType type;
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.VariableDeclarator> variables;
+  public final java.util.List<hydra.ext.java.syntax.VariableDeclarator> variables;
 
-  public ConstantDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.ConstantModifier> modifiers, hydra.ext.java.syntax.UnannType type, hydra.util.ConsList<hydra.ext.java.syntax.VariableDeclarator> variables) {
+  public ConstantDeclaration (java.util.List<hydra.ext.java.syntax.ConstantModifier> modifiers, hydra.ext.java.syntax.UnannType type, java.util.List<hydra.ext.java.syntax.VariableDeclarator> variables) {
     this.modifiers = modifiers;
     this.type = type;
     this.variables = variables;
@@ -49,18 +49,24 @@ public class ConstantDeclaration implements Serializable, Comparable<ConstantDec
   @SuppressWarnings("unchecked")
   public int compareTo(ConstantDeclaration other) {
     int cmp = 0;
-    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
+    cmp = hydra.util.Comparing.compare(
+      modifiers,
+      other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) type).compareTo(other.type);
+    cmp = hydra.util.Comparing.compare(
+      type,
+      other.type);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) variables).compareTo(other.variables);
+    return hydra.util.Comparing.compare(
+      variables,
+      other.variables);
   }
 
-  public ConstantDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.ConstantModifier> modifiers) {
+  public ConstantDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.ConstantModifier> modifiers) {
     return new ConstantDeclaration(modifiers, type, variables);
   }
 
@@ -68,7 +74,7 @@ public class ConstantDeclaration implements Serializable, Comparable<ConstantDec
     return new ConstantDeclaration(modifiers, type, variables);
   }
 
-  public ConstantDeclaration withVariables(hydra.util.ConsList<hydra.ext.java.syntax.VariableDeclarator> variables) {
+  public ConstantDeclaration withVariables(java.util.List<hydra.ext.java.syntax.VariableDeclarator> variables) {
     return new ConstantDeclaration(modifiers, type, variables);
   }
 }

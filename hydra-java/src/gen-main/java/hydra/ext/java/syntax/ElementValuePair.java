@@ -42,11 +42,15 @@ public class ElementValuePair implements Serializable, Comparable<ElementValuePa
   @SuppressWarnings("unchecked")
   public int compareTo(ElementValuePair other) {
     int cmp = 0;
-    cmp = ((Comparable) key).compareTo(other.key);
+    cmp = hydra.util.Comparing.compare(
+      key,
+      other.key);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 
   public ElementValuePair withKey(hydra.ext.java.syntax.Identifier key) {

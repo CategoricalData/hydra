@@ -61,15 +61,21 @@ public class MergeFeatures implements Serializable, Comparable<MergeFeatures> {
   @SuppressWarnings("unchecked")
   public int compareTo(MergeFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) merge).compareTo(other.merge);
+    cmp = hydra.util.Comparing.compare(
+      merge,
+      other.merge);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) mergeOnCreate).compareTo(other.mergeOnCreate);
+    cmp = hydra.util.Comparing.compare(
+      mergeOnCreate,
+      other.mergeOnCreate);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) mergeOnMatch).compareTo(other.mergeOnMatch);
+    return hydra.util.Comparing.compare(
+      mergeOnMatch,
+      other.mergeOnMatch);
   }
 
   public MergeFeatures withMerge(Boolean merge) {

@@ -68,7 +68,9 @@ public abstract class LambdaParameter implements Serializable, Comparable<Lambda
         return tagCmp;
       }
       Normal o = (Normal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class LambdaParameter implements Serializable, Comparable<Lambda
         return tagCmp;
       }
       VariableArity o = (VariableArity) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -15,7 +15,7 @@ public class AnnotationAssertion implements Serializable, Comparable<AnnotationA
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
 
   public final hydra.ext.org.w3.owl.syntax.AnnotationProperty property;
 
@@ -23,7 +23,7 @@ public class AnnotationAssertion implements Serializable, Comparable<AnnotationA
 
   public final hydra.ext.org.w3.owl.syntax.AnnotationValue value;
 
-  public AnnotationAssertion (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.AnnotationProperty property, hydra.ext.org.w3.owl.syntax.AnnotationSubject subject, hydra.ext.org.w3.owl.syntax.AnnotationValue value) {
+  public AnnotationAssertion (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.AnnotationProperty property, hydra.ext.org.w3.owl.syntax.AnnotationSubject subject, hydra.ext.org.w3.owl.syntax.AnnotationValue value) {
     this.annotations = annotations;
     this.property = property;
     this.subject = subject;
@@ -56,22 +56,30 @@ public class AnnotationAssertion implements Serializable, Comparable<AnnotationA
   @SuppressWarnings("unchecked")
   public int compareTo(AnnotationAssertion other) {
     int cmp = 0;
-    cmp = ((Comparable) annotations).compareTo(other.annotations);
+    cmp = hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) property).compareTo(other.property);
+    cmp = hydra.util.Comparing.compare(
+      property,
+      other.property);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) subject).compareTo(other.subject);
+    cmp = hydra.util.Comparing.compare(
+      subject,
+      other.subject);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 
-  public AnnotationAssertion withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public AnnotationAssertion withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new AnnotationAssertion(annotations, property, subject, value);
   }
 

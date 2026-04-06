@@ -4,10 +4,6 @@ import hydra.ast.*
 
 import hydra.core.*
 
-import hydra.lib.lists
-
-import hydra.lib.maybes
-
 def associativity(v1: hydra.ast.Associativity): hydra.core.Term =
   v1 match
   case hydra.ast.Associativity.none => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Associativity", hydra.core.Field("none", hydra.core.Term.unit)))

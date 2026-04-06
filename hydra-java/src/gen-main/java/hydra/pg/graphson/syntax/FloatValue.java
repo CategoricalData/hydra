@@ -84,7 +84,9 @@ public abstract class FloatValue implements Serializable, Comparable<FloatValue>
         return tagCmp;
       }
       Finite o = (Finite) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

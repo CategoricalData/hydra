@@ -13,13 +13,13 @@ public class TypeParameter implements Serializable, Comparable<TypeParameter> {
 
   public static final hydra.core.Name BOUND = new hydra.core.Name("bound");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.TypeParameterModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.TypeParameterModifier> modifiers;
 
   public final hydra.ext.java.syntax.TypeIdentifier identifier;
 
   public final hydra.util.Maybe<hydra.ext.java.syntax.TypeBound> bound;
 
-  public TypeParameter (hydra.util.ConsList<hydra.ext.java.syntax.TypeParameterModifier> modifiers, hydra.ext.java.syntax.TypeIdentifier identifier, hydra.util.Maybe<hydra.ext.java.syntax.TypeBound> bound) {
+  public TypeParameter (java.util.List<hydra.ext.java.syntax.TypeParameterModifier> modifiers, hydra.ext.java.syntax.TypeIdentifier identifier, hydra.util.Maybe<hydra.ext.java.syntax.TypeBound> bound) {
     this.modifiers = modifiers;
     this.identifier = identifier;
     this.bound = bound;
@@ -49,18 +49,24 @@ public class TypeParameter implements Serializable, Comparable<TypeParameter> {
   @SuppressWarnings("unchecked")
   public int compareTo(TypeParameter other) {
     int cmp = 0;
-    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
+    cmp = hydra.util.Comparing.compare(
+      modifiers,
+      other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) identifier).compareTo(other.identifier);
+    cmp = hydra.util.Comparing.compare(
+      identifier,
+      other.identifier);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) bound).compareTo(other.bound);
+    return hydra.util.Comparing.compare(
+      bound,
+      other.bound);
   }
 
-  public TypeParameter withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.TypeParameterModifier> modifiers) {
+  public TypeParameter withModifiers(java.util.List<hydra.ext.java.syntax.TypeParameterModifier> modifiers) {
     return new TypeParameter(modifiers, identifier, bound);
   }
 

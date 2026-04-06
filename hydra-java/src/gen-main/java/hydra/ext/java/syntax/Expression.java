@@ -68,7 +68,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Lambda o = (Lambda) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Assignment o = (Assignment) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

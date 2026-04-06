@@ -76,7 +76,9 @@ public abstract class LeftHandSide implements Serializable, Comparable<LeftHandS
         return tagCmp;
       }
       ExpressionName o = (ExpressionName) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class LeftHandSide implements Serializable, Comparable<LeftHandS
         return tagCmp;
       }
       FieldAccess o = (FieldAccess) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class LeftHandSide implements Serializable, Comparable<LeftHandS
         return tagCmp;
       }
       ArrayAccess o = (ArrayAccess) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

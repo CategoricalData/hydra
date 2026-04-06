@@ -12,9 +12,9 @@ public class Relationship<V> implements Serializable, Comparable<Relationship<V>
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.PersistentSet<hydra.util.PersistentMap<hydra.relational.ColumnName, V>> value;
+  public final java.util.Set<java.util.Map<hydra.relational.ColumnName, V>> value;
 
-  public Relationship (hydra.util.PersistentSet<hydra.util.PersistentMap<hydra.relational.ColumnName, V>> value) {
+  public Relationship (java.util.Set<java.util.Map<hydra.relational.ColumnName, V>> value) {
     this.value = value;
   }
 
@@ -37,6 +37,8 @@ public class Relationship<V> implements Serializable, Comparable<Relationship<V>
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Relationship other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

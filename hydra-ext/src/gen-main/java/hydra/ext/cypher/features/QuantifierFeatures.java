@@ -71,19 +71,27 @@ public class QuantifierFeatures implements Serializable, Comparable<QuantifierFe
   @SuppressWarnings("unchecked")
   public int compareTo(QuantifierFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) all).compareTo(other.all);
+    cmp = hydra.util.Comparing.compare(
+      all,
+      other.all);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) any).compareTo(other.any);
+    cmp = hydra.util.Comparing.compare(
+      any,
+      other.any);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) none).compareTo(other.none);
+    cmp = hydra.util.Comparing.compare(
+      none,
+      other.none);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) single).compareTo(other.single);
+    return hydra.util.Comparing.compare(
+      single,
+      other.single);
   }
 
   public QuantifierFeatures withAll(Boolean all) {

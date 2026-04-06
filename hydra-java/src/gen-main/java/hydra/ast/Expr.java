@@ -98,7 +98,9 @@ public abstract class Expr implements Serializable, Comparable<Expr> {
         return tagCmp;
       }
       Const o = (Const) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -141,7 +143,9 @@ public abstract class Expr implements Serializable, Comparable<Expr> {
         return tagCmp;
       }
       Indent o = (Indent) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -184,7 +188,9 @@ public abstract class Expr implements Serializable, Comparable<Expr> {
         return tagCmp;
       }
       Op o = (Op) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -227,7 +233,9 @@ public abstract class Expr implements Serializable, Comparable<Expr> {
         return tagCmp;
       }
       Brackets o = (Brackets) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -270,7 +278,9 @@ public abstract class Expr implements Serializable, Comparable<Expr> {
         return tagCmp;
       }
       Seq o = (Seq) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

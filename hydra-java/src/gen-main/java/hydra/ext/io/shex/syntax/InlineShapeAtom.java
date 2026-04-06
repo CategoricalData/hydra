@@ -84,7 +84,9 @@ public abstract class InlineShapeAtom implements Serializable, Comparable<Inline
         return tagCmp;
       }
       Sequence o = (Sequence) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -124,7 +126,9 @@ public abstract class InlineShapeAtom implements Serializable, Comparable<Inline
         return tagCmp;
       }
       Sequence2 o = (Sequence2) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -164,7 +168,9 @@ public abstract class InlineShapeAtom implements Serializable, Comparable<Inline
         return tagCmp;
       }
       Sequence3 o = (Sequence3) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -9,9 +9,9 @@ public class DelTargets implements Serializable, Comparable<DelTargets> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.DelTarget> value;
+  public final java.util.List<hydra.ext.python.syntax.DelTarget> value;
 
-  public DelTargets (hydra.util.ConsList<hydra.ext.python.syntax.DelTarget> value) {
+  public DelTargets (java.util.List<hydra.ext.python.syntax.DelTarget> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class DelTargets implements Serializable, Comparable<DelTargets> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DelTargets other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

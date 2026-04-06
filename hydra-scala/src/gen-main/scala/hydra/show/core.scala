@@ -2,24 +2,6 @@ package hydra.show.core
 
 import hydra.core.*
 
-import hydra.lib.eithers
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def binding(el: hydra.core.Binding): scala.Predef.String =
   {
   lazy val name: scala.Predef.String = (el.name)

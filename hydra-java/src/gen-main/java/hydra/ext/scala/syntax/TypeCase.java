@@ -42,11 +42,15 @@ public class TypeCase implements Serializable, Comparable<TypeCase> {
   @SuppressWarnings("unchecked")
   public int compareTo(TypeCase other) {
     int cmp = 0;
-    cmp = ((Comparable) pat).compareTo(other.pat);
+    cmp = hydra.util.Comparing.compare(
+      pat,
+      other.pat);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
   public TypeCase withPat(hydra.ext.scala.syntax.Type pat) {

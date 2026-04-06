@@ -42,11 +42,15 @@ public class HasTraversalTokenArgs implements Serializable, Comparable<HasTraver
   @SuppressWarnings("unchecked")
   public int compareTo(HasTraversalTokenArgs other) {
     int cmp = 0;
-    cmp = ((Comparable) traversalToken).compareTo(other.traversalToken);
+    cmp = hydra.util.Comparing.compare(
+      traversalToken,
+      other.traversalToken);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) rest).compareTo(other.rest);
+    return hydra.util.Comparing.compare(
+      rest,
+      other.rest);
   }
 
   public HasTraversalTokenArgs withTraversalToken(hydra.ext.org.apache.tinkerpop.gremlin.TraversalTokenArgument traversalToken) {

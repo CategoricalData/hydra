@@ -42,11 +42,15 @@ public class Pat_Alternative implements Serializable, Comparable<Pat_Alternative
   @SuppressWarnings("unchecked")
   public int compareTo(Pat_Alternative other) {
     int cmp = 0;
-    cmp = ((Comparable) lhs).compareTo(other.lhs);
+    cmp = hydra.util.Comparing.compare(
+      lhs,
+      other.lhs);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) rhs).compareTo(other.rhs);
+    return hydra.util.Comparing.compare(
+      rhs,
+      other.rhs);
   }
 
   public Pat_Alternative withLhs(hydra.ext.scala.syntax.Pat lhs) {

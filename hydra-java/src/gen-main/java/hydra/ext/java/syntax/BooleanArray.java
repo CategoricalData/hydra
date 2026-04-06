@@ -103,7 +103,9 @@ public abstract class BooleanArray implements Serializable, Comparable<BooleanAr
         return tagCmp;
       }
       Array o = (Array) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -13,9 +13,9 @@ public class ProjectionItems implements Serializable, Comparable<ProjectionItems
 
   public final Boolean star;
 
-  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.ProjectionItem> explicit;
+  public final java.util.List<hydra.ext.cypher.openCypher.ProjectionItem> explicit;
 
-  public ProjectionItems (Boolean star, hydra.util.ConsList<hydra.ext.cypher.openCypher.ProjectionItem> explicit) {
+  public ProjectionItems (Boolean star, java.util.List<hydra.ext.cypher.openCypher.ProjectionItem> explicit) {
     this.star = star;
     this.explicit = explicit;
   }
@@ -42,18 +42,22 @@ public class ProjectionItems implements Serializable, Comparable<ProjectionItems
   @SuppressWarnings("unchecked")
   public int compareTo(ProjectionItems other) {
     int cmp = 0;
-    cmp = ((Comparable) star).compareTo(other.star);
+    cmp = hydra.util.Comparing.compare(
+      star,
+      other.star);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) explicit).compareTo(other.explicit);
+    return hydra.util.Comparing.compare(
+      explicit,
+      other.explicit);
   }
 
   public ProjectionItems withStar(Boolean star) {
     return new ProjectionItems(star, explicit);
   }
 
-  public ProjectionItems withExplicit(hydra.util.ConsList<hydra.ext.cypher.openCypher.ProjectionItem> explicit) {
+  public ProjectionItems withExplicit(java.util.List<hydra.ext.cypher.openCypher.ProjectionItem> explicit) {
     return new ProjectionItems(star, explicit);
   }
 }

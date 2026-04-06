@@ -76,7 +76,9 @@ public abstract class InlineShapeDefinition_ListOfAlts_Elmt implements Serializa
         return tagCmp;
       }
       IncludeSet o = (IncludeSet) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class InlineShapeDefinition_ListOfAlts_Elmt implements Serializa
         return tagCmp;
       }
       ExtraPropertySet o = (ExtraPropertySet) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -84,7 +84,9 @@ public abstract class SetItem implements Serializable, Comparable<SetItem> {
         return tagCmp;
       }
       Property o = (Property) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -124,7 +126,9 @@ public abstract class SetItem implements Serializable, Comparable<SetItem> {
         return tagCmp;
       }
       VariableEqual o = (VariableEqual) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -164,7 +168,9 @@ public abstract class SetItem implements Serializable, Comparable<SetItem> {
         return tagCmp;
       }
       VariablePlusEqual o = (VariablePlusEqual) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +210,9 @@ public abstract class SetItem implements Serializable, Comparable<SetItem> {
         return tagCmp;
       }
       VariableLabels o = (VariableLabels) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

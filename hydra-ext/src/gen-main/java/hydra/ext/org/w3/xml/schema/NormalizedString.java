@@ -34,6 +34,8 @@ public class NormalizedString implements Serializable, Comparable<NormalizedStri
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(NormalizedString other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

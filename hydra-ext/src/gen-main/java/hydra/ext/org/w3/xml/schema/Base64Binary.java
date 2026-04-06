@@ -34,6 +34,8 @@ public class Base64Binary implements Serializable, Comparable<Base64Binary> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Base64Binary other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

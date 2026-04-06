@@ -84,7 +84,9 @@ public abstract class ShapeOrRef implements Serializable, Comparable<ShapeOrRef>
         return tagCmp;
       }
       ShapeDefinition o = (ShapeDefinition) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -124,7 +126,9 @@ public abstract class ShapeOrRef implements Serializable, Comparable<ShapeOrRef>
         return tagCmp;
       }
       AtpNameLn o = (AtpNameLn) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -164,7 +168,9 @@ public abstract class ShapeOrRef implements Serializable, Comparable<ShapeOrRef>
         return tagCmp;
       }
       AtpNameNs o = (AtpNameNs) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +210,9 @@ public abstract class ShapeOrRef implements Serializable, Comparable<ShapeOrRef>
         return tagCmp;
       }
       Sequence o = (Sequence) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

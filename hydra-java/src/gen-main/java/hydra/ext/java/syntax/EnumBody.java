@@ -9,9 +9,9 @@ public class EnumBody implements Serializable, Comparable<EnumBody> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.EnumBody_Element> value;
+  public final java.util.List<hydra.ext.java.syntax.EnumBody_Element> value;
 
-  public EnumBody (hydra.util.ConsList<hydra.ext.java.syntax.EnumBody_Element> value) {
+  public EnumBody (java.util.List<hydra.ext.java.syntax.EnumBody_Element> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class EnumBody implements Serializable, Comparable<EnumBody> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(EnumBody other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

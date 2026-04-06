@@ -17,9 +17,9 @@ public class Init implements Serializable, Comparable<Init> {
 
   public final hydra.ext.scala.syntax.Name name;
 
-  public final hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data>> argss;
+  public final java.util.List<java.util.List<hydra.ext.scala.syntax.Data>> argss;
 
-  public Init (hydra.ext.scala.syntax.Type tpe, hydra.ext.scala.syntax.Name name, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data>> argss) {
+  public Init (hydra.ext.scala.syntax.Type tpe, hydra.ext.scala.syntax.Name name, java.util.List<java.util.List<hydra.ext.scala.syntax.Data>> argss) {
     this.tpe = tpe;
     this.name = name;
     this.argss = argss;
@@ -49,15 +49,21 @@ public class Init implements Serializable, Comparable<Init> {
   @SuppressWarnings("unchecked")
   public int compareTo(Init other) {
     int cmp = 0;
-    cmp = ((Comparable) tpe).compareTo(other.tpe);
+    cmp = hydra.util.Comparing.compare(
+      tpe,
+      other.tpe);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) argss).compareTo(other.argss);
+    return hydra.util.Comparing.compare(
+      argss,
+      other.argss);
   }
 
   public Init withTpe(hydra.ext.scala.syntax.Type tpe) {
@@ -68,7 +74,7 @@ public class Init implements Serializable, Comparable<Init> {
     return new Init(tpe, name, argss);
   }
 
-  public Init withArgss(hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data>> argss) {
+  public Init withArgss(java.util.List<java.util.List<hydra.ext.scala.syntax.Data>> argss) {
     return new Init(tpe, name, argss);
   }
 }

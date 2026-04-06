@@ -34,6 +34,8 @@ public class Mod_Protected implements Serializable, Comparable<Mod_Protected> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Mod_Protected other) {
-    return ((Comparable) within).compareTo(other.within);
+    return hydra.util.Comparing.compare(
+      within,
+      other.within);
   }
 }

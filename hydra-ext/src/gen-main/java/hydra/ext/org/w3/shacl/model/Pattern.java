@@ -45,11 +45,15 @@ public class Pattern implements Serializable, Comparable<Pattern> {
   @SuppressWarnings("unchecked")
   public int compareTo(Pattern other) {
     int cmp = 0;
-    cmp = ((Comparable) regex).compareTo(other.regex);
+    cmp = hydra.util.Comparing.compare(
+      regex,
+      other.regex);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) flags).compareTo(other.flags);
+    return hydra.util.Comparing.compare(
+      flags,
+      other.flags);
   }
 
   public Pattern withRegex(String regex) {

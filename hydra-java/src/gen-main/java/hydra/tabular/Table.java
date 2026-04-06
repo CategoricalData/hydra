@@ -22,9 +22,9 @@ public class Table<V> implements Serializable, Comparable<Table<V>> {
   /**
    * The data rows of the table. Each row must have the same number of cells.
    */
-  public final hydra.util.ConsList<hydra.tabular.DataRow<V>> data;
+  public final java.util.List<hydra.tabular.DataRow<V>> data;
 
-  public Table (hydra.util.Maybe<hydra.tabular.HeaderRow> header, hydra.util.ConsList<hydra.tabular.DataRow<V>> data) {
+  public Table (hydra.util.Maybe<hydra.tabular.HeaderRow> header, java.util.List<hydra.tabular.DataRow<V>> data) {
     this.header = header;
     this.data = data;
   }
@@ -51,18 +51,22 @@ public class Table<V> implements Serializable, Comparable<Table<V>> {
   @SuppressWarnings("unchecked")
   public int compareTo(Table other) {
     int cmp = 0;
-    cmp = ((Comparable) header).compareTo(other.header);
+    cmp = hydra.util.Comparing.compare(
+      header,
+      other.header);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) data).compareTo(other.data);
+    return hydra.util.Comparing.compare(
+      data,
+      other.data);
   }
 
   public Table withHeader(hydra.util.Maybe<hydra.tabular.HeaderRow> header) {
     return new Table(header, data);
   }
 
-  public Table withData(hydra.util.ConsList<hydra.tabular.DataRow<V>> data) {
+  public Table withData(java.util.List<hydra.tabular.DataRow<V>> data) {
     return new Table(header, data);
   }
 }

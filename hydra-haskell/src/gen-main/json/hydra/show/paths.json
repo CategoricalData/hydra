@@ -27,18 +27,16 @@
                                       "lambda": {
                                         "body": {
                                           "typeApplication": {"body": {"maybe": null}, "type": {"variable": "t1"}}},
-                                        "domain": [{"variable": "t0"}],
+                                        "domain": {"variable": "t0"},
                                         "parameter": "i"}}},
                                   "parameter": "t1"}},
                               "parameter": "t0"}},
-                          "type": [
-                            {
-                              "constraints": null,
-                              "type": {
-                                "function": {
-                                  "codomain": {"maybe": {"variable": "t1"}},
-                                  "domain": {"variable": "t0"}}},
-                              "variables": ["t0", "t1"]}]}],
+                          "type": {
+                            "type": {
+                              "function": {
+                                "codomain": {"maybe": {"variable": "t1"}},
+                                "domain": {"variable": "t0"}}},
+                            "variables": ["t0", "t1"]}}],
                       "body": {
                         "let": {
                           "bindings": [
@@ -73,32 +71,30 @@
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"variable": "s"},
-                                                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                            "domain": [{"literal": {"string": {}}}],
+                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                            "domain": {"literal": {"string": {}}},
                                                             "parameter": "s"}}},
                                                       "function": {
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                              "body": {"variable": "hydra.lib.maybes.map"},
                                                               "type": {"literal": {"string": {}}}}},
                                                           "type": {"literal": {"string": {}}}}}}}}},
-                                              "domain": [{"variable": "t0"}],
+                                              "domain": {"variable": "t0"},
                                               "parameter": "i"}}},
-                                        "domain": [{"literal": {"string": {}}}],
+                                        "domain": {"literal": {"string": {}}},
                                         "parameter": "suffix"}}},
                                   "parameter": "t0"}},
-                              "type": [
-                                {
-                                  "constraints": null,
-                                  "type": {
-                                    "function": {
-                                      "codomain": {
-                                        "function": {
-                                          "codomain": {"maybe": {"literal": {"string": {}}}},
-                                          "domain": {"variable": "t0"}}},
-                                      "domain": {"literal": {"string": {}}}}},
-                                  "variables": ["t0"]}]}],
+                              "type": {
+                                "type": {
+                                  "function": {
+                                    "codomain": {
+                                      "function": {
+                                        "codomain": {"maybe": {"literal": {"string": {}}}},
+                                        "domain": {"variable": "t0"}}},
+                                    "domain": {"literal": {"string": {}}}}},
+                                "variables": ["t0"]}}],
                           "body": {
                             "application": {
                               "argument": {"variable": "step"},
@@ -114,39 +110,39 @@
                                               "lambda": {
                                                 "body": {
                                                   "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}},
-                                                "domain": [{"unit": {}}],
+                                                "domain": {"unit": {}},
                                                 "parameter": "_"}}}},
                                         {
                                           "name": "applicationFunction",
                                           "term": {
                                             "function": {
                                               "lambda": {
-                                                "body": {"maybe": [{"literal": {"string": "fun"}}]},
-                                                "domain": [{"unit": {}}],
+                                                "body": {"maybe": {"literal": {"string": "fun"}}},
+                                                "domain": {"unit": {}},
                                                 "parameter": "_"}}}},
                                         {
                                           "name": "applicationArgument",
                                           "term": {
                                             "function": {
                                               "lambda": {
-                                                "body": {"maybe": [{"literal": {"string": "arg"}}]},
-                                                "domain": [{"unit": {}}],
+                                                "body": {"maybe": {"literal": {"string": "arg"}}},
+                                                "domain": {"unit": {}},
                                                 "parameter": "_"}}}},
                                         {
                                           "name": "lambdaBody",
                                           "term": {
                                             "function": {
                                               "lambda": {
-                                                "body": {"maybe": [{"literal": {"string": "body"}}]},
-                                                "domain": [{"unit": {}}],
+                                                "body": {"maybe": {"literal": {"string": "body"}}},
+                                                "domain": {"unit": {}},
                                                 "parameter": "_"}}}},
                                         {
                                           "name": "unionCasesDefault",
                                           "term": {
                                             "function": {
                                               "lambda": {
-                                                "body": {"maybe": [{"literal": {"string": "default"}}]},
-                                                "domain": [{"unit": {}}],
+                                                "body": {"maybe": {"literal": {"string": "default"}}},
+                                                "domain": {"unit": {}},
                                                 "parameter": "_"}}}},
                                         {
                                           "name": "unionCasesBranch",
@@ -154,26 +150,25 @@
                                             "function": {
                                               "lambda": {
                                                 "body": {
-                                                  "maybe": [
-                                                    {
-                                                      "application": {
-                                                        "argument": {
-                                                          "application": {
-                                                            "argument": {"variable": "name"},
-                                                            "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {"literal": {"string": "."}},
-                                                            "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}}]},
-                                                "domain": [{"variable": "hydra.core.Name"}],
+                                                  "maybe": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "application": {
+                                                          "argument": {"variable": "name"},
+                                                          "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"literal": {"string": "."}},
+                                                          "function": {"variable": "hydra.lib.strings.cat2"}}}}}},
+                                                "domain": {"variable": "hydra.core.Name"},
                                                 "parameter": "name"}}}},
                                         {
                                           "name": "letBody",
                                           "term": {
                                             "function": {
                                               "lambda": {
-                                                "body": {"maybe": [{"literal": {"string": "in"}}]},
-                                                "domain": [{"unit": {}}],
+                                                "body": {"maybe": {"literal": {"string": "in"}}},
+                                                "domain": {"unit": {}},
                                                 "parameter": "_"}}}},
                                         {
                                           "name": "letBinding",
@@ -181,18 +176,17 @@
                                             "function": {
                                               "lambda": {
                                                 "body": {
-                                                  "maybe": [
-                                                    {
-                                                      "application": {
-                                                        "argument": {"literal": {"string": "="}},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "application": {
-                                                                "argument": {"variable": "name"},
-                                                                "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
-                                                            "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}}]},
-                                                "domain": [{"variable": "hydra.core.Name"}],
+                                                  "maybe": {
+                                                    "application": {
+                                                      "argument": {"literal": {"string": "="}},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {"variable": "name"},
+                                                              "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
+                                                          "function": {"variable": "hydra.lib.strings.cat2"}}}}}},
+                                                "domain": {"variable": "hydra.core.Name"},
                                                 "parameter": "name"}}}},
                                         {
                                           "name": "listElement",
@@ -209,7 +203,7 @@
                                                             "body": {"variable": "idx"},
                                                             "type": {"literal": {"integer": {"int32": {}}}}}},
                                                         "type": {"literal": {"string": {}}}}}}},
-                                                "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                "domain": {"literal": {"integer": {"int32": {}}}},
                                                 "parameter": "i"}}}},
                                         {
                                           "name": "mapKey",
@@ -226,7 +220,7 @@
                                                           "typeApplication": {
                                                             "body": {"variable": "idxSuff"},
                                                             "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                "domain": {"literal": {"integer": {"int32": {}}}},
                                                 "parameter": "i"}}}},
                                         {
                                           "name": "mapValue",
@@ -243,15 +237,15 @@
                                                           "typeApplication": {
                                                             "body": {"variable": "idxSuff"},
                                                             "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                "domain": {"literal": {"integer": {"int32": {}}}},
                                                 "parameter": "i"}}}},
                                         {
                                           "name": "maybeTerm",
                                           "term": {
                                             "function": {
                                               "lambda": {
-                                                "body": {"maybe": [{"literal": {"string": "just"}}]},
-                                                "domain": [{"unit": {}}],
+                                                "body": {"maybe": {"literal": {"string": "just"}}},
+                                                "domain": {"unit": {}},
                                                 "parameter": "_"}}}},
                                         {
                                           "name": "productTerm",
@@ -268,7 +262,7 @@
                                                             "body": {"variable": "idx"},
                                                             "type": {"literal": {"integer": {"int32": {}}}}}},
                                                         "type": {"literal": {"string": {}}}}}}},
-                                                "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                "domain": {"literal": {"integer": {"int32": {}}}},
                                                 "parameter": "i"}}}},
                                         {
                                           "name": "recordField",
@@ -276,18 +270,17 @@
                                             "function": {
                                               "lambda": {
                                                 "body": {
-                                                  "maybe": [
-                                                    {
-                                                      "application": {
-                                                        "argument": {
-                                                          "application": {
-                                                            "argument": {"variable": "name"},
-                                                            "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {"literal": {"string": "."}},
-                                                            "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}}]},
-                                                "domain": [{"variable": "hydra.core.Name"}],
+                                                  "maybe": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "application": {
+                                                          "argument": {"variable": "name"},
+                                                          "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"literal": {"string": "."}},
+                                                          "function": {"variable": "hydra.lib.strings.cat2"}}}}}},
+                                                "domain": {"variable": "hydra.core.Name"},
                                                 "parameter": "name"}}}},
                                         {
                                           "name": "setElement",
@@ -304,7 +297,7 @@
                                                             "body": {"variable": "idx"},
                                                             "type": {"literal": {"integer": {"int32": {}}}}}},
                                                         "type": {"literal": {"string": {}}}}}}},
-                                                "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                "domain": {"literal": {"integer": {"int32": {}}}},
                                                 "parameter": "i"}}}},
                                         {
                                           "name": "sumTerm",
@@ -313,7 +306,7 @@
                                               "lambda": {
                                                 "body": {
                                                   "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}},
-                                                "domain": [{"unit": {}}],
+                                                "domain": {"unit": {}},
                                                 "parameter": "_"}}}},
                                         {
                                           "name": "typeLambdaBody",
@@ -322,7 +315,7 @@
                                               "lambda": {
                                                 "body": {
                                                   "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}},
-                                                "domain": [{"unit": {}}],
+                                                "domain": {"unit": {}},
                                                 "parameter": "_"}}}},
                                         {
                                           "name": "typeApplicationTerm",
@@ -331,7 +324,7 @@
                                               "lambda": {
                                                 "body": {
                                                   "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}},
-                                                "domain": [{"unit": {}}],
+                                                "domain": {"unit": {}},
                                                 "parameter": "_"}}}},
                                         {
                                           "name": "injectionTerm",
@@ -340,7 +333,7 @@
                                               "lambda": {
                                                 "body": {
                                                   "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}},
-                                                "domain": [{"unit": {}}],
+                                                "domain": {"unit": {}},
                                                 "parameter": "_"}}}},
                                         {
                                           "name": "wrappedTerm",
@@ -349,20 +342,17 @@
                                               "lambda": {
                                                 "body": {
                                                   "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}},
-                                                "domain": [{"unit": {}}],
+                                                "domain": {"unit": {}},
                                                 "parameter": "_"}}}}],
-                                      "default": null,
                                       "typeName": "hydra.paths.SubtermStep"}}}}}}}}}},
-                  "domain": [{"variable": "hydra.paths.SubtermStep"}],
+                  "domain": {"variable": "hydra.paths.SubtermStep"},
                   "parameter": "step"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"maybe": {"literal": {"string": {}}}},
-                "domain": {"variable": "hydra.paths.SubtermStep"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"maybe": {"literal": {"string": {}}}},
+              "domain": {"variable": "hydra.paths.SubtermStep"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.show.paths.termToSubtermGraph",
@@ -387,11 +377,7 @@
                                   "union": {
                                     "field": {"name": "annotatedBody", "term": {"unit": {}}},
                                     "typeName": "hydra.paths.SubtermStep"}},
-                                "type": [
-                                  {
-                                    "constraints": null,
-                                    "type": {"variable": "hydra.paths.SubtermStep"},
-                                    "variables": []}]},
+                                "type": {"type": {"variable": "hydra.paths.SubtermStep"}, "variables": []}},
                               {
                                 "name": "helper",
                                 "term": {
@@ -421,14 +407,10 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                  "body": {"variable": "hydra.lib.pairs.first"},
                                                                                   "type": {"variable": "hydra.paths.SubtermStep"}}},
                                                                               "type": {"variable": "hydra.core.Term"}}}}},
-                                                                      "type": [
-                                                                        {
-                                                                          "constraints": null,
-                                                                          "type": {"variable": "hydra.paths.SubtermStep"},
-                                                                          "variables": []}]},
+                                                                      "type": {"type": {"variable": "hydra.paths.SubtermStep"}, "variables": []}},
                                                                     {
                                                                       "name": "currentTerm",
                                                                       "term": {
@@ -438,14 +420,10 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                  "body": {"variable": "hydra.lib.pairs.second"},
                                                                                   "type": {"variable": "hydra.paths.SubtermStep"}}},
                                                                               "type": {"variable": "hydra.core.Term"}}}}},
-                                                                      "type": [
-                                                                        {
-                                                                          "constraints": null,
-                                                                          "type": {"variable": "hydra.core.Term"},
-                                                                          "variables": []}]},
+                                                                      "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}},
                                                                     {
                                                                       "name": "nodesEdges",
                                                                       "term": {
@@ -455,20 +433,18 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                  "body": {"variable": "hydra.lib.pairs.first"},
                                                                                   "type": {
                                                                                     "pair": {
                                                                                       "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
                                                                                       "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}}}},
                                                                               "type": {"set": {"literal": {"string": {}}}}}}}},
-                                                                      "type": [
-                                                                        {
-                                                                          "constraints": null,
-                                                                          "type": {
-                                                                            "pair": {
-                                                                              "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
-                                                                              "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
-                                                                          "variables": []}]},
+                                                                      "type": {
+                                                                        "type": {
+                                                                          "pair": {
+                                                                            "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
+                                                                            "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
+                                                                        "variables": []}},
                                                                     {
                                                                       "name": "visited",
                                                                       "term": {
@@ -478,17 +454,13 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                  "body": {"variable": "hydra.lib.pairs.second"},
                                                                                   "type": {
                                                                                     "pair": {
                                                                                       "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
                                                                                       "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}}}},
                                                                               "type": {"set": {"literal": {"string": {}}}}}}}},
-                                                                      "type": [
-                                                                        {
-                                                                          "constraints": null,
-                                                                          "type": {"set": {"literal": {"string": {}}}},
-                                                                          "variables": []}]},
+                                                                      "type": {"type": {"set": {"literal": {"string": {}}}}, "variables": []}},
                                                                     {
                                                                       "name": "nodes",
                                                                       "term": {
@@ -498,14 +470,12 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                  "body": {"variable": "hydra.lib.pairs.first"},
                                                                                   "type": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
                                                                               "type": {"list": {"variable": "hydra.paths.SubtermEdge"}}}}}},
-                                                                      "type": [
-                                                                        {
-                                                                          "constraints": null,
-                                                                          "type": {"list": {"variable": "hydra.paths.SubtermNode"}},
-                                                                          "variables": []}]},
+                                                                      "type": {
+                                                                        "type": {"list": {"variable": "hydra.paths.SubtermNode"}},
+                                                                        "variables": []}},
                                                                     {
                                                                       "name": "edges",
                                                                       "term": {
@@ -515,14 +485,12 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                  "body": {"variable": "hydra.lib.pairs.second"},
                                                                                   "type": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
                                                                               "type": {"list": {"variable": "hydra.paths.SubtermEdge"}}}}}},
-                                                                      "type": [
-                                                                        {
-                                                                          "constraints": null,
-                                                                          "type": {"list": {"variable": "hydra.paths.SubtermEdge"}},
-                                                                          "variables": []}]},
+                                                                      "type": {
+                                                                        "type": {"list": {"variable": "hydra.paths.SubtermEdge"}},
+                                                                        "variables": []}},
                                                                     {
                                                                       "name": "nextPath",
                                                                       "term": {
@@ -533,13 +501,11 @@
                                                                               "argument": {"variable": "step"},
                                                                               "function": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
+                                                                                  "body": {"variable": "hydra.lib.lists.cons"},
                                                                                   "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
-                                                                      "type": [
-                                                                        {
-                                                                          "constraints": null,
-                                                                          "type": {"list": {"variable": "hydra.paths.SubtermStep"}},
-                                                                          "variables": []}]}],
+                                                                      "type": {
+                                                                        "type": {"list": {"variable": "hydra.paths.SubtermStep"}},
+                                                                        "variables": []}}],
                                                                   "body": {
                                                                     "application": {
                                                                       "argument": {"variable": "currentTerm"},
@@ -564,11 +530,9 @@
                                                                                                     "function": {
                                                                                                       "function": {
                                                                                                         "elimination": {"record": {"field": "bindings", "typeName": "hydra.core.Let"}}}}}},
-                                                                                                "type": [
-                                                                                                  {
-                                                                                                    "constraints": null,
-                                                                                                    "type": {"list": {"variable": "hydra.core.Binding"}},
-                                                                                                    "variables": []}]},
+                                                                                                "type": {
+                                                                                                  "type": {"list": {"variable": "hydra.core.Binding"}},
+                                                                                                  "variables": []}},
                                                                                               {
                                                                                                 "name": "env",
                                                                                                 "term": {
@@ -577,11 +541,7 @@
                                                                                                     "function": {
                                                                                                       "function": {
                                                                                                         "elimination": {"record": {"field": "body", "typeName": "hydra.core.Let"}}}}}},
-                                                                                                "type": [
-                                                                                                  {
-                                                                                                    "constraints": null,
-                                                                                                    "type": {"variable": "hydra.core.Term"},
-                                                                                                    "variables": []}]},
+                                                                                                "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}},
                                                                                               {
                                                                                                 "name": "bindingNames",
                                                                                                 "term": {
@@ -596,14 +556,10 @@
                                                                                                           "typeApplication": {
                                                                                                             "body": {
                                                                                                               "typeApplication": {
-                                                                                                                "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                                                "body": {"variable": "hydra.lib.lists.map"},
                                                                                                                 "type": {"variable": "hydra.core.Binding"}}},
                                                                                                             "type": {"variable": "hydra.core.Name"}}}}}}},
-                                                                                                "type": [
-                                                                                                  {
-                                                                                                    "constraints": null,
-                                                                                                    "type": {"list": {"variable": "hydra.core.Name"}},
-                                                                                                    "variables": []}]},
+                                                                                                "type": {"type": {"list": {"variable": "hydra.core.Name"}}, "variables": []}},
                                                                                               {
                                                                                                 "name": "addBindingName",
                                                                                                 "term": {
@@ -624,7 +580,7 @@
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {
                                                                                                                               "typeApplication": {
-                                                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                                                                "body": {"variable": "hydra.lib.pairs.first"},
                                                                                                                                 "type": {
                                                                                                                                   "pair": {
                                                                                                                                     "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
@@ -633,14 +589,12 @@
                                                                                                                               "map": {
                                                                                                                                 "keys": {"variable": "hydra.core.Name"},
                                                                                                                                 "values": {"variable": "hydra.paths.SubtermNode"}}}}}}},
-                                                                                                                    "type": [
-                                                                                                                      {
-                                                                                                                        "constraints": null,
-                                                                                                                        "type": {
-                                                                                                                          "pair": {
-                                                                                                                            "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
-                                                                                                                            "second": {"set": {"literal": {"string": {}}}}}},
-                                                                                                                        "variables": []}]},
+                                                                                                                    "type": {
+                                                                                                                      "type": {
+                                                                                                                        "pair": {
+                                                                                                                          "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
+                                                                                                                          "second": {"set": {"literal": {"string": {}}}}}},
+                                                                                                                      "variables": []}},
                                                                                                                   {
                                                                                                                     "name": "currentIds",
                                                                                                                     "term": {
@@ -650,7 +604,7 @@
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {
                                                                                                                               "typeApplication": {
-                                                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                                                 "type": {
                                                                                                                                   "pair": {
                                                                                                                                     "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
@@ -659,14 +613,12 @@
                                                                                                                               "map": {
                                                                                                                                 "keys": {"variable": "hydra.core.Name"},
                                                                                                                                 "values": {"variable": "hydra.paths.SubtermNode"}}}}}}},
-                                                                                                                    "type": [
-                                                                                                                      {
-                                                                                                                        "constraints": null,
-                                                                                                                        "type": {
-                                                                                                                          "map": {
-                                                                                                                            "keys": {"variable": "hydra.core.Name"},
-                                                                                                                            "values": {"variable": "hydra.paths.SubtermNode"}}},
-                                                                                                                        "variables": []}]},
+                                                                                                                    "type": {
+                                                                                                                      "type": {
+                                                                                                                        "map": {
+                                                                                                                          "keys": {"variable": "hydra.core.Name"},
+                                                                                                                          "values": {"variable": "hydra.paths.SubtermNode"}}},
+                                                                                                                      "variables": []}},
                                                                                                                   {
                                                                                                                     "name": "currentNodes",
                                                                                                                     "term": {
@@ -676,14 +628,12 @@
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {
                                                                                                                               "typeApplication": {
-                                                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                                                                "body": {"variable": "hydra.lib.pairs.first"},
                                                                                                                                 "type": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
                                                                                                                             "type": {"set": {"literal": {"string": {}}}}}}}},
-                                                                                                                    "type": [
-                                                                                                                      {
-                                                                                                                        "constraints": null,
-                                                                                                                        "type": {"list": {"variable": "hydra.paths.SubtermNode"}},
-                                                                                                                        "variables": []}]},
+                                                                                                                    "type": {
+                                                                                                                      "type": {"list": {"variable": "hydra.paths.SubtermNode"}},
+                                                                                                                      "variables": []}},
                                                                                                                   {
                                                                                                                     "name": "currentVisited",
                                                                                                                     "term": {
@@ -693,14 +643,10 @@
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {
                                                                                                                               "typeApplication": {
-                                                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                                                 "type": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
                                                                                                                             "type": {"set": {"literal": {"string": {}}}}}}}},
-                                                                                                                    "type": [
-                                                                                                                      {
-                                                                                                                        "constraints": null,
-                                                                                                                        "type": {"set": {"literal": {"string": {}}}},
-                                                                                                                        "variables": []}]},
+                                                                                                                    "type": {"type": {"set": {"literal": {"string": {}}}}, "variables": []}},
                                                                                                                   {
                                                                                                                     "name": "rawLabel",
                                                                                                                     "term": {
@@ -710,11 +656,7 @@
                                                                                                                           "application": {
                                                                                                                             "argument": {"variable": "namespaces"},
                                                                                                                             "function": {"variable": "hydra.names.compactName"}}}}},
-                                                                                                                    "type": [
-                                                                                                                      {
-                                                                                                                        "constraints": null,
-                                                                                                                        "type": {"literal": {"string": {}}},
-                                                                                                                        "variables": []}]},
+                                                                                                                    "type": {"type": {"literal": {"string": {}}}, "variables": []}},
                                                                                                                   {
                                                                                                                     "name": "uniqueLabel",
                                                                                                                     "term": {
@@ -724,11 +666,7 @@
                                                                                                                           "application": {
                                                                                                                             "argument": {"variable": "currentVisited"},
                                                                                                                             "function": {"variable": "hydra.names.uniqueLabel"}}}}},
-                                                                                                                    "type": [
-                                                                                                                      {
-                                                                                                                        "constraints": null,
-                                                                                                                        "type": {"literal": {"string": {}}},
-                                                                                                                        "variables": []}]},
+                                                                                                                    "type": {"type": {"literal": {"string": {}}}, "variables": []}},
                                                                                                                   {
                                                                                                                     "name": "node",
                                                                                                                     "term": {
@@ -738,11 +676,7 @@
                                                                                                                           {"name": "label", "term": {"variable": "rawLabel"}},
                                                                                                                           {"name": "id", "term": {"variable": "uniqueLabel"}}],
                                                                                                                         "typeName": "hydra.paths.SubtermNode"}},
-                                                                                                                    "type": [
-                                                                                                                      {
-                                                                                                                        "constraints": null,
-                                                                                                                        "type": {"variable": "hydra.paths.SubtermNode"},
-                                                                                                                        "variables": []}]},
+                                                                                                                    "type": {"type": {"variable": "hydra.paths.SubtermNode"}, "variables": []}},
                                                                                                                   {
                                                                                                                     "name": "newVisited",
                                                                                                                     "term": {
@@ -753,13 +687,9 @@
                                                                                                                             "argument": {"variable": "uniqueLabel"},
                                                                                                                             "function": {
                                                                                                                               "typeApplication": {
-                                                                                                                                "body": {"function": {"primitive": "hydra.lib.sets.insert"}},
+                                                                                                                                "body": {"variable": "hydra.lib.sets.insert"},
                                                                                                                                 "type": {"literal": {"string": {}}}}}}}}},
-                                                                                                                    "type": [
-                                                                                                                      {
-                                                                                                                        "constraints": null,
-                                                                                                                        "type": {"set": {"literal": {"string": {}}}},
-                                                                                                                        "variables": []}]},
+                                                                                                                    "type": {"type": {"set": {"literal": {"string": {}}}}, "variables": []}},
                                                                                                                   {
                                                                                                                     "name": "newNodes",
                                                                                                                     "term": {
@@ -770,13 +700,11 @@
                                                                                                                             "argument": {"variable": "node"},
                                                                                                                             "function": {
                                                                                                                               "typeApplication": {
-                                                                                                                                "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
+                                                                                                                                "body": {"variable": "hydra.lib.lists.cons"},
                                                                                                                                 "type": {"variable": "hydra.paths.SubtermNode"}}}}}}},
-                                                                                                                    "type": [
-                                                                                                                      {
-                                                                                                                        "constraints": null,
-                                                                                                                        "type": {"list": {"variable": "hydra.paths.SubtermNode"}},
-                                                                                                                        "variables": []}]},
+                                                                                                                    "type": {
+                                                                                                                      "type": {"list": {"variable": "hydra.paths.SubtermNode"}},
+                                                                                                                      "variables": []}},
                                                                                                                   {
                                                                                                                     "name": "newIds",
                                                                                                                     "term": {
@@ -792,17 +720,15 @@
                                                                                                                                   "typeApplication": {
                                                                                                                                     "body": {
                                                                                                                                       "typeApplication": {
-                                                                                                                                        "body": {"function": {"primitive": "hydra.lib.maps.insert"}},
+                                                                                                                                        "body": {"variable": "hydra.lib.maps.insert"},
                                                                                                                                         "type": {"variable": "hydra.core.Name"}}},
                                                                                                                                     "type": {"variable": "hydra.paths.SubtermNode"}}}}}}}}},
-                                                                                                                    "type": [
-                                                                                                                      {
-                                                                                                                        "constraints": null,
-                                                                                                                        "type": {
-                                                                                                                          "map": {
-                                                                                                                            "keys": {"variable": "hydra.core.Name"},
-                                                                                                                            "values": {"variable": "hydra.paths.SubtermNode"}}},
-                                                                                                                        "variables": []}]}],
+                                                                                                                    "type": {
+                                                                                                                      "type": {
+                                                                                                                        "map": {
+                                                                                                                          "keys": {"variable": "hydra.core.Name"},
+                                                                                                                          "values": {"variable": "hydra.paths.SubtermNode"}}},
+                                                                                                                      "variables": []}}],
                                                                                                                 "body": {
                                                                                                                   "typeApplication": {
                                                                                                                     "body": {
@@ -828,49 +754,46 @@
                                                                                                                       "map": {
                                                                                                                         "keys": {"variable": "hydra.core.Name"},
                                                                                                                         "values": {"variable": "hydra.paths.SubtermNode"}}}}}}},
-                                                                                                            "domain": [{"variable": "hydra.core.Name"}],
+                                                                                                            "domain": {"variable": "hydra.core.Name"},
                                                                                                             "parameter": "name"}}},
-                                                                                                      "domain": [
-                                                                                                        {
-                                                                                                          "pair": {
-                                                                                                            "first": {
-                                                                                                              "pair": {
-                                                                                                                "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
-                                                                                                                "second": {"set": {"literal": {"string": {}}}}}},
-                                                                                                            "second": {
-                                                                                                              "map": {
-                                                                                                                "keys": {"variable": "hydra.core.Name"},
-                                                                                                                "values": {"variable": "hydra.paths.SubtermNode"}}}}}],
+                                                                                                      "domain": {
+                                                                                                        "pair": {
+                                                                                                          "first": {
+                                                                                                            "pair": {
+                                                                                                              "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
+                                                                                                              "second": {"set": {"literal": {"string": {}}}}}},
+                                                                                                          "second": {
+                                                                                                            "map": {
+                                                                                                              "keys": {"variable": "hydra.core.Name"},
+                                                                                                              "values": {"variable": "hydra.paths.SubtermNode"}}}}},
                                                                                                       "parameter": "nodesVisitedIds"}}},
-                                                                                                "type": [
-                                                                                                  {
-                                                                                                    "constraints": null,
-                                                                                                    "type": {
-                                                                                                      "function": {
-                                                                                                        "codomain": {
-                                                                                                          "function": {
-                                                                                                            "codomain": {
-                                                                                                              "pair": {
-                                                                                                                "first": {
-                                                                                                                  "pair": {
-                                                                                                                    "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
-                                                                                                                    "second": {"set": {"literal": {"string": {}}}}}},
-                                                                                                                "second": {
-                                                                                                                  "map": {
-                                                                                                                    "keys": {"variable": "hydra.core.Name"},
-                                                                                                                    "values": {"variable": "hydra.paths.SubtermNode"}}}}},
-                                                                                                            "domain": {"variable": "hydra.core.Name"}}},
-                                                                                                        "domain": {
-                                                                                                          "pair": {
-                                                                                                            "first": {
-                                                                                                              "pair": {
-                                                                                                                "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
-                                                                                                                "second": {"set": {"literal": {"string": {}}}}}},
-                                                                                                            "second": {
-                                                                                                              "map": {
-                                                                                                                "keys": {"variable": "hydra.core.Name"},
-                                                                                                                "values": {"variable": "hydra.paths.SubtermNode"}}}}}}},
-                                                                                                    "variables": []}]},
+                                                                                                "type": {
+                                                                                                  "type": {
+                                                                                                    "function": {
+                                                                                                      "codomain": {
+                                                                                                        "function": {
+                                                                                                          "codomain": {
+                                                                                                            "pair": {
+                                                                                                              "first": {
+                                                                                                                "pair": {
+                                                                                                                  "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
+                                                                                                                  "second": {"set": {"literal": {"string": {}}}}}},
+                                                                                                              "second": {
+                                                                                                                "map": {
+                                                                                                                  "keys": {"variable": "hydra.core.Name"},
+                                                                                                                  "values": {"variable": "hydra.paths.SubtermNode"}}}}},
+                                                                                                          "domain": {"variable": "hydra.core.Name"}}},
+                                                                                                      "domain": {
+                                                                                                        "pair": {
+                                                                                                          "first": {
+                                                                                                            "pair": {
+                                                                                                              "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
+                                                                                                              "second": {"set": {"literal": {"string": {}}}}}},
+                                                                                                          "second": {
+                                                                                                            "map": {
+                                                                                                              "keys": {"variable": "hydra.core.Name"},
+                                                                                                              "values": {"variable": "hydra.paths.SubtermNode"}}}}}}},
+                                                                                                  "variables": []}},
                                                                                               {
                                                                                                 "name": "nodesVisitedIds1",
                                                                                                 "term": {
@@ -913,7 +836,7 @@
                                                                                                               "typeApplication": {
                                                                                                                 "body": {
                                                                                                                   "typeApplication": {
-                                                                                                                    "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
+                                                                                                                    "body": {"variable": "hydra.lib.lists.foldl"},
                                                                                                                     "type": {
                                                                                                                       "pair": {
                                                                                                                         "first": {
@@ -925,20 +848,18 @@
                                                                                                                             "keys": {"variable": "hydra.core.Name"},
                                                                                                                             "values": {"variable": "hydra.paths.SubtermNode"}}}}}}},
                                                                                                                 "type": {"variable": "hydra.core.Name"}}}}}}}}},
-                                                                                                "type": [
-                                                                                                  {
-                                                                                                    "constraints": null,
-                                                                                                    "type": {
-                                                                                                      "pair": {
-                                                                                                        "first": {
-                                                                                                          "pair": {
-                                                                                                            "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
-                                                                                                            "second": {"set": {"literal": {"string": {}}}}}},
-                                                                                                        "second": {
-                                                                                                          "map": {
-                                                                                                            "keys": {"variable": "hydra.core.Name"},
-                                                                                                            "values": {"variable": "hydra.paths.SubtermNode"}}}}},
-                                                                                                    "variables": []}]},
+                                                                                                "type": {
+                                                                                                  "type": {
+                                                                                                    "pair": {
+                                                                                                      "first": {
+                                                                                                        "pair": {
+                                                                                                          "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
+                                                                                                          "second": {"set": {"literal": {"string": {}}}}}},
+                                                                                                      "second": {
+                                                                                                        "map": {
+                                                                                                          "keys": {"variable": "hydra.core.Name"},
+                                                                                                          "values": {"variable": "hydra.paths.SubtermNode"}}}}},
+                                                                                                  "variables": []}},
                                                                                               {
                                                                                                 "name": "nodes1",
                                                                                                 "term": {
@@ -950,7 +871,7 @@
                                                                                                           "typeApplication": {
                                                                                                             "body": {
                                                                                                               "typeApplication": {
-                                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                                                "body": {"variable": "hydra.lib.pairs.first"},
                                                                                                                 "type": {
                                                                                                                   "pair": {
                                                                                                                     "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
@@ -963,14 +884,12 @@
                                                                                                       "typeApplication": {
                                                                                                         "body": {
                                                                                                           "typeApplication": {
-                                                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                                            "body": {"variable": "hydra.lib.pairs.first"},
                                                                                                             "type": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
                                                                                                         "type": {"set": {"literal": {"string": {}}}}}}}},
-                                                                                                "type": [
-                                                                                                  {
-                                                                                                    "constraints": null,
-                                                                                                    "type": {"list": {"variable": "hydra.paths.SubtermNode"}},
-                                                                                                    "variables": []}]},
+                                                                                                "type": {
+                                                                                                  "type": {"list": {"variable": "hydra.paths.SubtermNode"}},
+                                                                                                  "variables": []}},
                                                                                               {
                                                                                                 "name": "visited1",
                                                                                                 "term": {
@@ -982,7 +901,7 @@
                                                                                                           "typeApplication": {
                                                                                                             "body": {
                                                                                                               "typeApplication": {
-                                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                                                "body": {"variable": "hydra.lib.pairs.first"},
                                                                                                                 "type": {
                                                                                                                   "pair": {
                                                                                                                     "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
@@ -995,14 +914,10 @@
                                                                                                       "typeApplication": {
                                                                                                         "body": {
                                                                                                           "typeApplication": {
-                                                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                            "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                             "type": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
                                                                                                         "type": {"set": {"literal": {"string": {}}}}}}}},
-                                                                                                "type": [
-                                                                                                  {
-                                                                                                    "constraints": null,
-                                                                                                    "type": {"set": {"literal": {"string": {}}}},
-                                                                                                    "variables": []}]},
+                                                                                                "type": {"type": {"set": {"literal": {"string": {}}}}, "variables": []}},
                                                                                               {
                                                                                                 "name": "ids1",
                                                                                                 "term": {
@@ -1012,7 +927,7 @@
                                                                                                       "typeApplication": {
                                                                                                         "body": {
                                                                                                           "typeApplication": {
-                                                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                            "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                             "type": {
                                                                                                               "pair": {
                                                                                                                 "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
@@ -1021,14 +936,12 @@
                                                                                                           "map": {
                                                                                                             "keys": {"variable": "hydra.core.Name"},
                                                                                                             "values": {"variable": "hydra.paths.SubtermNode"}}}}}}},
-                                                                                                "type": [
-                                                                                                  {
-                                                                                                    "constraints": null,
-                                                                                                    "type": {
-                                                                                                      "map": {
-                                                                                                        "keys": {"variable": "hydra.core.Name"},
-                                                                                                        "values": {"variable": "hydra.paths.SubtermNode"}}},
-                                                                                                    "variables": []}]},
+                                                                                                "type": {
+                                                                                                  "type": {
+                                                                                                    "map": {
+                                                                                                      "keys": {"variable": "hydra.core.Name"},
+                                                                                                      "values": {"variable": "hydra.paths.SubtermNode"}}},
+                                                                                                  "variables": []}},
                                                                                               {
                                                                                                 "name": "addBindingTerm",
                                                                                                 "term": {
@@ -1049,14 +962,10 @@
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {
                                                                                                                               "typeApplication": {
-                                                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                                                                "body": {"variable": "hydra.lib.pairs.first"},
                                                                                                                                 "type": {"variable": "hydra.paths.SubtermNode"}}},
                                                                                                                             "type": {"variable": "hydra.core.Binding"}}}}},
-                                                                                                                    "type": [
-                                                                                                                      {
-                                                                                                                        "constraints": null,
-                                                                                                                        "type": {"variable": "hydra.paths.SubtermNode"},
-                                                                                                                        "variables": []}]},
+                                                                                                                    "type": {"type": {"variable": "hydra.paths.SubtermNode"}, "variables": []}},
                                                                                                                   {
                                                                                                                     "name": "binding",
                                                                                                                     "term": {
@@ -1066,14 +975,10 @@
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {
                                                                                                                               "typeApplication": {
-                                                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                                                 "type": {"variable": "hydra.paths.SubtermNode"}}},
                                                                                                                             "type": {"variable": "hydra.core.Binding"}}}}},
-                                                                                                                    "type": [
-                                                                                                                      {
-                                                                                                                        "constraints": null,
-                                                                                                                        "type": {"variable": "hydra.core.Binding"},
-                                                                                                                        "variables": []}]},
+                                                                                                                    "type": {"type": {"variable": "hydra.core.Binding"}, "variables": []}},
                                                                                                                   {
                                                                                                                     "name": "term1",
                                                                                                                     "term": {
@@ -1082,11 +987,7 @@
                                                                                                                         "function": {
                                                                                                                           "function": {
                                                                                                                             "elimination": {"record": {"field": "term", "typeName": "hydra.core.Binding"}}}}}},
-                                                                                                                    "type": [
-                                                                                                                      {
-                                                                                                                        "constraints": null,
-                                                                                                                        "type": {"variable": "hydra.core.Term"},
-                                                                                                                        "variables": []}]}],
+                                                                                                                    "type": {"type": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                                                                 "body": {
                                                                                                                   "application": {
                                                                                                                     "argument": {
@@ -1110,50 +1011,46 @@
                                                                                                                                 "type": {"variable": "hydra.paths.SubtermStep"}}},
                                                                                                                             "function": {
                                                                                                                               "application": {
-                                                                                                                                "argument": {"maybe": [{"variable": "root"}]},
+                                                                                                                                "argument": {"maybe": {"variable": "root"}},
                                                                                                                                 "function": {
                                                                                                                                   "application": {"argument": {"variable": "ids1"}, "function": {"variable": "helper"}}}}}}}}}}}}},
-                                                                                                            "domain": [
-                                                                                                              {
-                                                                                                                "pair": {
-                                                                                                                  "first": {"variable": "hydra.paths.SubtermNode"},
-                                                                                                                  "second": {"variable": "hydra.core.Binding"}}}],
-                                                                                                            "parameter": "nodeBinding"}}},
-                                                                                                      "domain": [
-                                                                                                        {
-                                                                                                          "pair": {
-                                                                                                            "first": {
-                                                                                                              "pair": {
-                                                                                                                "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
-                                                                                                                "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
-                                                                                                            "second": {"set": {"literal": {"string": {}}}}}}],
-                                                                                                      "parameter": "currentState"}}},
-                                                                                                "type": [
-                                                                                                  {
-                                                                                                    "constraints": null,
-                                                                                                    "type": {
-                                                                                                      "function": {
-                                                                                                        "codomain": {
-                                                                                                          "function": {
-                                                                                                            "codomain": {
-                                                                                                              "pair": {
-                                                                                                                "first": {
-                                                                                                                  "pair": {
-                                                                                                                    "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
-                                                                                                                    "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
-                                                                                                                "second": {"set": {"literal": {"string": {}}}}}},
                                                                                                             "domain": {
                                                                                                               "pair": {
                                                                                                                 "first": {"variable": "hydra.paths.SubtermNode"},
-                                                                                                                "second": {"variable": "hydra.core.Binding"}}}}},
-                                                                                                        "domain": {
-                                                                                                          "pair": {
-                                                                                                            "first": {
-                                                                                                              "pair": {
-                                                                                                                "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
-                                                                                                                "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
-                                                                                                            "second": {"set": {"literal": {"string": {}}}}}}}},
-                                                                                                    "variables": []}]},
+                                                                                                                "second": {"variable": "hydra.core.Binding"}}},
+                                                                                                            "parameter": "nodeBinding"}}},
+                                                                                                      "domain": {
+                                                                                                        "pair": {
+                                                                                                          "first": {
+                                                                                                            "pair": {
+                                                                                                              "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
+                                                                                                              "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
+                                                                                                          "second": {"set": {"literal": {"string": {}}}}}},
+                                                                                                      "parameter": "currentState"}}},
+                                                                                                "type": {
+                                                                                                  "type": {
+                                                                                                    "function": {
+                                                                                                      "codomain": {
+                                                                                                        "function": {
+                                                                                                          "codomain": {
+                                                                                                            "pair": {
+                                                                                                              "first": {
+                                                                                                                "pair": {
+                                                                                                                  "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
+                                                                                                                  "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
+                                                                                                              "second": {"set": {"literal": {"string": {}}}}}},
+                                                                                                          "domain": {
+                                                                                                            "pair": {
+                                                                                                              "first": {"variable": "hydra.paths.SubtermNode"},
+                                                                                                              "second": {"variable": "hydra.core.Binding"}}}}},
+                                                                                                      "domain": {
+                                                                                                        "pair": {
+                                                                                                          "first": {
+                                                                                                            "pair": {
+                                                                                                              "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
+                                                                                                              "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
+                                                                                                          "second": {"set": {"literal": {"string": {}}}}}}}},
+                                                                                                  "variables": []}},
                                                                                               {
                                                                                                 "name": "nodeBindingPairs",
                                                                                                 "term": {
@@ -1166,18 +1063,16 @@
                                                                                                           "typeApplication": {
                                                                                                             "body": {
                                                                                                               "typeApplication": {
-                                                                                                                "body": {"function": {"primitive": "hydra.lib.lists.zip"}},
+                                                                                                                "body": {"variable": "hydra.lib.lists.zip"},
                                                                                                                 "type": {"variable": "hydra.paths.SubtermNode"}}},
                                                                                                             "type": {"variable": "hydra.core.Binding"}}}}}}},
-                                                                                                "type": [
-                                                                                                  {
-                                                                                                    "constraints": null,
-                                                                                                    "type": {
-                                                                                                      "list": {
-                                                                                                        "pair": {
-                                                                                                          "first": {"variable": "hydra.paths.SubtermNode"},
-                                                                                                          "second": {"variable": "hydra.core.Binding"}}}},
-                                                                                                    "variables": []}]},
+                                                                                                "type": {
+                                                                                                  "type": {
+                                                                                                    "list": {
+                                                                                                      "pair": {
+                                                                                                        "first": {"variable": "hydra.paths.SubtermNode"},
+                                                                                                        "second": {"variable": "hydra.core.Binding"}}}},
+                                                                                                  "variables": []}},
                                                                                               {
                                                                                                 "name": "stateAfterBindings",
                                                                                                 "term": {
@@ -1205,7 +1100,7 @@
                                                                                                                                         "argument": {"variable": "nodes1"},
                                                                                                                                         "function": {
                                                                                                                                           "typeApplication": {
-                                                                                                                                            "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
+                                                                                                                                            "body": {"variable": "hydra.lib.lists.concat2"},
                                                                                                                                             "type": {"variable": "hydra.paths.SubtermNode"}}}}}}},
                                                                                                                                 "@second": {"variable": "edges"}}},
                                                                                                                             "type": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
@@ -1223,7 +1118,7 @@
                                                                                                               "typeApplication": {
                                                                                                                 "body": {
                                                                                                                   "typeApplication": {
-                                                                                                                    "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
+                                                                                                                    "body": {"variable": "hydra.lib.lists.foldl"},
                                                                                                                     "type": {
                                                                                                                       "pair": {
                                                                                                                         "first": {
@@ -1235,17 +1130,15 @@
                                                                                                                   "pair": {
                                                                                                                     "first": {"variable": "hydra.paths.SubtermNode"},
                                                                                                                     "second": {"variable": "hydra.core.Binding"}}}}}}}}}}},
-                                                                                                "type": [
-                                                                                                  {
-                                                                                                    "constraints": null,
-                                                                                                    "type": {
-                                                                                                      "pair": {
-                                                                                                        "first": {
-                                                                                                          "pair": {
-                                                                                                            "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
-                                                                                                            "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
-                                                                                                        "second": {"set": {"literal": {"string": {}}}}}},
-                                                                                                    "variables": []}]}],
+                                                                                                "type": {
+                                                                                                  "type": {
+                                                                                                    "pair": {
+                                                                                                      "first": {
+                                                                                                        "pair": {
+                                                                                                          "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
+                                                                                                          "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
+                                                                                                      "second": {"set": {"literal": {"string": {}}}}}},
+                                                                                                  "variables": []}}],
                                                                                             "body": {
                                                                                               "application": {
                                                                                                 "argument": {
@@ -1272,7 +1165,7 @@
                                                                                                             "argument": {"variable": "mroot"},
                                                                                                             "function": {
                                                                                                               "application": {"argument": {"variable": "ids1"}, "function": {"variable": "helper"}}}}}}}}}}}}},
-                                                                                        "domain": [{"variable": "hydra.core.Let"}],
+                                                                                        "domain": {"variable": "hydra.core.Let"},
                                                                                         "parameter": "letExpr"}}}},
                                                                                 {
                                                                                   "name": "variable",
@@ -1299,7 +1192,7 @@
                                                                                                                     "typeApplication": {
                                                                                                                       "body": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                                                                          "body": {"variable": "hydra.lib.maps.lookup"},
                                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                                       "type": {"variable": "hydra.paths.SubtermNode"}}}}}}},
                                                                                                           "function": {
@@ -1325,16 +1218,12 @@
                                                                                                                                             "argument": {"variable": "nextPath"},
                                                                                                                                             "function": {
                                                                                                                                               "typeApplication": {
-                                                                                                                                                "body": {"function": {"primitive": "hydra.lib.lists.reverse"}},
+                                                                                                                                                "body": {"variable": "hydra.lib.lists.reverse"},
                                                                                                                                                 "type": {"variable": "hydra.paths.SubtermStep"}}}}},
                                                                                                                                         "typeName": "hydra.paths.SubtermPath"}}},
                                                                                                                                   {"name": "target", "term": {"variable": "node"}}],
                                                                                                                                 "typeName": "hydra.paths.SubtermEdge"}},
-                                                                                                                            "type": [
-                                                                                                                              {
-                                                                                                                                "constraints": null,
-                                                                                                                                "type": {"variable": "hydra.paths.SubtermEdge"},
-                                                                                                                                "variables": []}]},
+                                                                                                                            "type": {"type": {"variable": "hydra.paths.SubtermEdge"}, "variables": []}},
                                                                                                                           {
                                                                                                                             "name": "newEdges",
                                                                                                                             "term": {
@@ -1345,13 +1234,11 @@
                                                                                                                                     "argument": {"variable": "edge"},
                                                                                                                                     "function": {
                                                                                                                                       "typeApplication": {
-                                                                                                                                        "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
+                                                                                                                                        "body": {"variable": "hydra.lib.lists.cons"},
                                                                                                                                         "type": {"variable": "hydra.paths.SubtermEdge"}}}}}}},
-                                                                                                                            "type": [
-                                                                                                                              {
-                                                                                                                                "constraints": null,
-                                                                                                                                "type": {"list": {"variable": "hydra.paths.SubtermEdge"}},
-                                                                                                                                "variables": []}]}],
+                                                                                                                            "type": {
+                                                                                                                              "type": {"list": {"variable": "hydra.paths.SubtermEdge"}},
+                                                                                                                              "variables": []}}],
                                                                                                                         "body": {
                                                                                                                           "typeApplication": {
                                                                                                                             "body": {
@@ -1372,7 +1259,7 @@
                                                                                                                                     "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
                                                                                                                                     "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}}}},
                                                                                                                             "type": {"set": {"literal": {"string": {}}}}}}}},
-                                                                                                                    "domain": [{"variable": "hydra.paths.SubtermNode"}],
+                                                                                                                    "domain": {"variable": "hydra.paths.SubtermNode"},
                                                                                                                     "parameter": "node"}}},
                                                                                                               "function": {
                                                                                                                 "application": {
@@ -1381,7 +1268,7 @@
                                                                                                                     "typeApplication": {
                                                                                                                       "body": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                                                          "body": {"variable": "hydra.lib.maybes.maybe"},
                                                                                                                           "type": {
                                                                                                                             "pair": {
                                                                                                                               "first": {
@@ -1390,7 +1277,7 @@
                                                                                                                                   "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
                                                                                                                               "second": {"set": {"literal": {"string": {}}}}}}}},
                                                                                                                       "type": {"variable": "hydra.paths.SubtermNode"}}}}}}}}},
-                                                                                                      "domain": [{"variable": "hydra.paths.SubtermNode"}],
+                                                                                                      "domain": {"variable": "hydra.paths.SubtermNode"},
                                                                                                       "parameter": "root"}}},
                                                                                                 "function": {
                                                                                                   "application": {
@@ -1399,7 +1286,7 @@
                                                                                                       "typeApplication": {
                                                                                                         "body": {
                                                                                                           "typeApplication": {
-                                                                                                            "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                                            "body": {"variable": "hydra.lib.maybes.maybe"},
                                                                                                             "type": {
                                                                                                               "pair": {
                                                                                                                 "first": {
@@ -1408,108 +1295,102 @@
                                                                                                                     "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
                                                                                                                 "second": {"set": {"literal": {"string": {}}}}}}}},
                                                                                                         "type": {"variable": "hydra.paths.SubtermNode"}}}}}}}}},
-                                                                                        "domain": [{"variable": "hydra.core.Name"}],
+                                                                                        "domain": {"variable": "hydra.core.Name"},
                                                                                         "parameter": "name"}}}}],
-                                                                              "default": [
-                                                                                {
-                                                                                  "application": {
-                                                                                    "argument": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "currentTerm"},
-                                                                                        "function": {"variable": "hydra.rewriting.subtermsWithSteps"}}},
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "state"},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {
-                                                                                              "application": {
-                                                                                                "argument": {"variable": "nextPath"},
-                                                                                                "function": {
-                                                                                                  "application": {
-                                                                                                    "argument": {"variable": "mroot"},
-                                                                                                    "function": {
-                                                                                                      "application": {"argument": {"variable": "ids"}, "function": {"variable": "helper"}}}}}}},
-                                                                                            "function": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
-                                                                                                    "type": {
-                                                                                                      "pair": {
-                                                                                                        "first": {
-                                                                                                          "pair": {
-                                                                                                            "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
-                                                                                                            "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
-                                                                                                        "second": {"set": {"literal": {"string": {}}}}}}}},
-                                                                                                "type": {
-                                                                                                  "pair": {
-                                                                                                    "first": {"variable": "hydra.paths.SubtermStep"},
-                                                                                                    "second": {"variable": "hydra.core.Term"}}}}}}}}}}}],
+                                                                              "default": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "currentTerm"},
+                                                                                      "function": {"variable": "hydra.rewriting.subtermsWithSteps"}}},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "state"},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "argument": {"variable": "nextPath"},
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "mroot"},
+                                                                                                  "function": {
+                                                                                                    "application": {"argument": {"variable": "ids"}, "function": {"variable": "helper"}}}}}}},
+                                                                                          "function": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"variable": "hydra.lib.lists.foldl"},
+                                                                                                  "type": {
+                                                                                                    "pair": {
+                                                                                                      "first": {
+                                                                                                        "pair": {
+                                                                                                          "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
+                                                                                                          "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
+                                                                                                      "second": {"set": {"literal": {"string": {}}}}}}}},
+                                                                                              "type": {
+                                                                                                "pair": {
+                                                                                                  "first": {"variable": "hydra.paths.SubtermStep"},
+                                                                                                  "second": {"variable": "hydra.core.Term"}}}}}}}}}}},
                                                                               "typeName": "hydra.core.Term"}}}}}}}},
-                                                              "domain": [
-                                                                {
-                                                                  "pair": {
-                                                                    "first": {"variable": "hydra.paths.SubtermStep"},
-                                                                    "second": {"variable": "hydra.core.Term"}}}],
-                                                              "parameter": "stepTerm"}}},
-                                                        "domain": [
-                                                          {
-                                                            "pair": {
-                                                              "first": {
+                                                              "domain": {
                                                                 "pair": {
-                                                                  "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
-                                                                  "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
-                                                              "second": {"set": {"literal": {"string": {}}}}}}],
-                                                        "parameter": "state"}}},
-                                                  "domain": [{"list": {"variable": "hydra.paths.SubtermStep"}}],
-                                                  "parameter": "path"}}},
-                                            "domain": [{"maybe": {"variable": "hydra.paths.SubtermNode"}}],
-                                            "parameter": "mroot"}}},
-                                      "domain": [
-                                        {
-                                          "map": {
-                                            "keys": {"variable": "hydra.core.Name"},
-                                            "values": {"variable": "hydra.paths.SubtermNode"}}}],
-                                      "parameter": "ids"}}},
-                                "type": [
-                                  {
-                                    "constraints": null,
-                                    "type": {
-                                      "function": {
-                                        "codomain": {
-                                          "function": {
-                                            "codomain": {
-                                              "function": {
-                                                "codomain": {
-                                                  "function": {
-                                                    "codomain": {
-                                                      "function": {
-                                                        "codomain": {
+                                                                  "first": {"variable": "hydra.paths.SubtermStep"},
+                                                                  "second": {"variable": "hydra.core.Term"}}},
+                                                              "parameter": "stepTerm"}}},
+                                                        "domain": {
                                                           "pair": {
                                                             "first": {
                                                               "pair": {
                                                                 "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
                                                                 "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
                                                             "second": {"set": {"literal": {"string": {}}}}}},
-                                                        "domain": {
-                                                          "pair": {
-                                                            "first": {"variable": "hydra.paths.SubtermStep"},
-                                                            "second": {"variable": "hydra.core.Term"}}}}},
-                                                    "domain": {
-                                                      "pair": {
-                                                        "first": {
-                                                          "pair": {
-                                                            "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
-                                                            "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
-                                                        "second": {"set": {"literal": {"string": {}}}}}}}},
-                                                "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
-                                            "domain": {"maybe": {"variable": "hydra.paths.SubtermNode"}}}},
-                                        "domain": {
-                                          "map": {
-                                            "keys": {"variable": "hydra.core.Name"},
-                                            "values": {"variable": "hydra.paths.SubtermNode"}}}}},
-                                    "variables": []}]},
+                                                        "parameter": "state"}}},
+                                                  "domain": {"list": {"variable": "hydra.paths.SubtermStep"}},
+                                                  "parameter": "path"}}},
+                                            "domain": {"maybe": {"variable": "hydra.paths.SubtermNode"}},
+                                            "parameter": "mroot"}}},
+                                      "domain": {
+                                        "map": {
+                                          "keys": {"variable": "hydra.core.Name"},
+                                          "values": {"variable": "hydra.paths.SubtermNode"}}},
+                                      "parameter": "ids"}}},
+                                "type": {
+                                  "type": {
+                                    "function": {
+                                      "codomain": {
+                                        "function": {
+                                          "codomain": {
+                                            "function": {
+                                              "codomain": {
+                                                "function": {
+                                                  "codomain": {
+                                                    "function": {
+                                                      "codomain": {
+                                                        "pair": {
+                                                          "first": {
+                                                            "pair": {
+                                                              "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
+                                                              "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
+                                                          "second": {"set": {"literal": {"string": {}}}}}},
+                                                      "domain": {
+                                                        "pair": {
+                                                          "first": {"variable": "hydra.paths.SubtermStep"},
+                                                          "second": {"variable": "hydra.core.Term"}}}}},
+                                                  "domain": {
+                                                    "pair": {
+                                                      "first": {
+                                                        "pair": {
+                                                          "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
+                                                          "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
+                                                      "second": {"set": {"literal": {"string": {}}}}}}}},
+                                              "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
+                                          "domain": {"maybe": {"variable": "hydra.paths.SubtermNode"}}}},
+                                      "domain": {
+                                        "map": {
+                                          "keys": {"variable": "hydra.core.Name"},
+                                          "values": {"variable": "hydra.paths.SubtermNode"}}}}},
+                                  "variables": []}},
                               {
                                 "name": "initialState",
                                 "term": {
@@ -1538,7 +1419,7 @@
                                                             "type": {"list": {"variable": "t1"}}}},
                                                         "@second": {
                                                           "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                            "body": {"variable": "hydra.lib.sets.empty"},
                                                             "type": {"variable": "t2"}}}}},
                                                     "type": {
                                                       "pair": {
@@ -1548,17 +1429,16 @@
                                             "parameter": "t2"}},
                                         "parameter": "t1"}},
                                     "parameter": "t0"}},
-                                "type": [
-                                  {
-                                    "constraints": [[{"@key": "t2", "@value": {"classes": ["ordering"]}}]],
-                                    "type": {
-                                      "pair": {
-                                        "first": {
-                                          "pair": {
-                                            "first": {"list": {"variable": "t0"}},
-                                            "second": {"list": {"variable": "t1"}}}},
-                                        "second": {"set": {"variable": "t2"}}}},
-                                    "variables": ["t0", "t1", "t2"]}]},
+                                "type": {
+                                  "constraints": [{"@key": "t2", "@value": {"classes": ["ordering"]}}],
+                                  "type": {
+                                    "pair": {
+                                      "first": {
+                                        "pair": {
+                                          "first": {"list": {"variable": "t0"}},
+                                          "second": {"list": {"variable": "t1"}}}},
+                                      "second": {"set": {"variable": "t2"}}}},
+                                  "variables": ["t0", "t1", "t2"]}},
                               {
                                 "name": "result",
                                 "term": {
@@ -1603,21 +1483,19 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
+                                                            "body": {"variable": "hydra.lib.maps.empty"},
                                                             "type": {"variable": "hydra.core.Name"}}},
                                                         "type": {"variable": "hydra.paths.SubtermNode"}}},
                                                     "function": {"variable": "helper"}}}}}}}}}}},
-                                "type": [
-                                  {
-                                    "constraints": null,
-                                    "type": {
-                                      "pair": {
-                                        "first": {
-                                          "pair": {
-                                            "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
-                                            "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
-                                        "second": {"set": {"literal": {"string": {}}}}}},
-                                    "variables": []}]},
+                                "type": {
+                                  "type": {
+                                    "pair": {
+                                      "first": {
+                                        "pair": {
+                                          "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
+                                          "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
+                                      "second": {"set": {"literal": {"string": {}}}}}},
+                                  "variables": []}},
                               {
                                 "name": "finalNodesEdges",
                                 "term": {
@@ -1627,20 +1505,18 @@
                                       "typeApplication": {
                                         "body": {
                                           "typeApplication": {
-                                            "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                            "body": {"variable": "hydra.lib.pairs.first"},
                                             "type": {
                                               "pair": {
                                                 "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
                                                 "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}}}},
                                         "type": {"set": {"literal": {"string": {}}}}}}}},
-                                "type": [
-                                  {
-                                    "constraints": null,
-                                    "type": {
-                                      "pair": {
-                                        "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
-                                        "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
-                                    "variables": []}]},
+                                "type": {
+                                  "type": {
+                                    "pair": {
+                                      "first": {"list": {"variable": "hydra.paths.SubtermNode"}},
+                                      "second": {"list": {"variable": "hydra.paths.SubtermEdge"}}}},
+                                  "variables": []}},
                               {
                                 "name": "finalNodes",
                                 "term": {
@@ -1650,14 +1526,12 @@
                                       "typeApplication": {
                                         "body": {
                                           "typeApplication": {
-                                            "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                            "body": {"variable": "hydra.lib.pairs.first"},
                                             "type": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
                                         "type": {"list": {"variable": "hydra.paths.SubtermEdge"}}}}}},
-                                "type": [
-                                  {
-                                    "constraints": null,
-                                    "type": {"list": {"variable": "hydra.paths.SubtermNode"}},
-                                    "variables": []}]},
+                                "type": {
+                                  "type": {"list": {"variable": "hydra.paths.SubtermNode"}},
+                                  "variables": []}},
                               {
                                 "name": "finalEdges",
                                 "term": {
@@ -1667,43 +1541,38 @@
                                       "typeApplication": {
                                         "body": {
                                           "typeApplication": {
-                                            "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                            "body": {"variable": "hydra.lib.pairs.second"},
                                             "type": {"list": {"variable": "hydra.paths.SubtermNode"}}}},
                                         "type": {"list": {"variable": "hydra.paths.SubtermEdge"}}}}}},
-                                "type": [
-                                  {
-                                    "constraints": null,
-                                    "type": {"list": {"variable": "hydra.paths.SubtermEdge"}},
-                                    "variables": []}]}],
+                                "type": {
+                                  "type": {"list": {"variable": "hydra.paths.SubtermEdge"}},
+                                  "variables": []}}],
                             "body": {
                               "record": {
                                 "fields": [
                                   {"name": "nodes", "term": {"variable": "finalNodes"}},
                                   {"name": "edges", "term": {"variable": "finalEdges"}}],
                                 "typeName": "hydra.paths.SubtermGraph"}}}},
-                        "domain": [{"variable": "hydra.core.Term"}],
+                        "domain": {"variable": "hydra.core.Term"},
                         "parameter": "term"}}},
-                  "domain": [
-                    {
-                      "map": {
-                        "keys": {"variable": "hydra.packaging.Namespace"},
-                        "values": {"literal": {"string": {}}}}}],
+                  "domain": {
+                    "map": {
+                      "keys": {"variable": "hydra.packaging.Namespace"},
+                      "values": {"literal": {"string": {}}}}},
                   "parameter": "namespaces"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.paths.SubtermGraph"},
-                    "domain": {"variable": "hydra.core.Term"}}},
-                "domain": {
-                  "map": {
-                    "keys": {"variable": "hydra.packaging.Namespace"},
-                    "values": {"literal": {"string": {}}}}}}},
-            "variables": []}]}}],
-  "description": ["Utilities for working with subterm steps and paths."],
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.paths.SubtermGraph"},
+                  "domain": {"variable": "hydra.core.Term"}}},
+              "domain": {
+                "map": {
+                  "keys": {"variable": "hydra.packaging.Namespace"},
+                  "values": {"literal": {"string": {}}}}}}},
+          "variables": []}}}],
+  "description": "Utilities for working with subterm steps and paths.",
   "namespace": "hydra.show.paths",
   "termDependencies": ["hydra.names", "hydra.rewriting"],
   "typeDependencies": [
@@ -1715,7 +1584,6 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
-    "hydra.error.module",
     "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",

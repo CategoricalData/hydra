@@ -10,20 +10,6 @@ import hydra.errors.*
 
 import hydra.typing.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.strings
-
 def joinTypes(cx: hydra.context.Context)(left: hydra.core.Type)(right: hydra.core.Type)(comment: scala.Predef.String): Either[hydra.context.InContext[hydra.errors.UnificationError],
    Seq[hydra.typing.TypeConstraint]] =
   {

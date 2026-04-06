@@ -82,7 +82,9 @@ public abstract class Elimination implements Serializable, Comparable<Eliminatio
         return tagCmp;
       }
       Record o = (Record) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -125,7 +127,9 @@ public abstract class Elimination implements Serializable, Comparable<Eliminatio
         return tagCmp;
       }
       Union o = (Union) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -168,7 +172,9 @@ public abstract class Elimination implements Serializable, Comparable<Eliminatio
         return tagCmp;
       }
       Wrap o = (Wrap) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

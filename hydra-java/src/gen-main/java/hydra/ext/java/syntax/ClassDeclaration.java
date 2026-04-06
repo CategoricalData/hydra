@@ -68,7 +68,9 @@ public abstract class ClassDeclaration implements Serializable, Comparable<Class
         return tagCmp;
       }
       Normal o = (Normal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class ClassDeclaration implements Serializable, Comparable<Class
         return tagCmp;
       }
       Enum_ o = (Enum_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

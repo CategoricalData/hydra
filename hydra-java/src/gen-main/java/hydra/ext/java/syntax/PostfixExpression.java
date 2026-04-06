@@ -84,7 +84,9 @@ public abstract class PostfixExpression implements Serializable, Comparable<Post
         return tagCmp;
       }
       Primary o = (Primary) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -124,7 +126,9 @@ public abstract class PostfixExpression implements Serializable, Comparable<Post
         return tagCmp;
       }
       Name o = (Name) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -164,7 +168,9 @@ public abstract class PostfixExpression implements Serializable, Comparable<Post
         return tagCmp;
       }
       PostIncrement o = (PostIncrement) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +210,9 @@ public abstract class PostfixExpression implements Serializable, Comparable<Post
         return tagCmp;
       }
       PostDecrement o = (PostDecrement) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

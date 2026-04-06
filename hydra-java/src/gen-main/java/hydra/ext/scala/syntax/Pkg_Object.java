@@ -13,13 +13,13 @@ public class Pkg_Object implements Serializable, Comparable<Pkg_Object> {
 
   public static final hydra.core.Name TEMPLATE = new hydra.core.Name("template");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods;
+  public final java.util.List<hydra.ext.scala.syntax.Mod> mods;
 
   public final hydra.ext.scala.syntax.Data_Name name;
 
   public final hydra.ext.scala.syntax.Template template;
 
-  public Pkg_Object (hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods, hydra.ext.scala.syntax.Data_Name name, hydra.ext.scala.syntax.Template template) {
+  public Pkg_Object (java.util.List<hydra.ext.scala.syntax.Mod> mods, hydra.ext.scala.syntax.Data_Name name, hydra.ext.scala.syntax.Template template) {
     this.mods = mods;
     this.name = name;
     this.template = template;
@@ -49,18 +49,24 @@ public class Pkg_Object implements Serializable, Comparable<Pkg_Object> {
   @SuppressWarnings("unchecked")
   public int compareTo(Pkg_Object other) {
     int cmp = 0;
-    cmp = ((Comparable) mods).compareTo(other.mods);
+    cmp = hydra.util.Comparing.compare(
+      mods,
+      other.mods);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) template).compareTo(other.template);
+    return hydra.util.Comparing.compare(
+      template,
+      other.template);
   }
 
-  public Pkg_Object withMods(hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods) {
+  public Pkg_Object withMods(java.util.List<hydra.ext.scala.syntax.Mod> mods) {
     return new Pkg_Object(mods, name, template);
   }
 

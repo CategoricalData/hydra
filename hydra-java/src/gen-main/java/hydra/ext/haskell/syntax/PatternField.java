@@ -51,11 +51,15 @@ public class PatternField implements Serializable, Comparable<PatternField> {
   @SuppressWarnings("unchecked")
   public int compareTo(PatternField other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) pattern).compareTo(other.pattern);
+    return hydra.util.Comparing.compare(
+      pattern,
+      other.pattern);
   }
 
   public PatternField withName(hydra.ext.haskell.syntax.Name name) {

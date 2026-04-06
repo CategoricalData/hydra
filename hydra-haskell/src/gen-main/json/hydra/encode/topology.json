@@ -32,11 +32,11 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                        "body": {"variable": "hydra.lib.lists.map"},
                                                         "type": {"literal": {"integer": {"int32": {}}}}}},
                                                     "type": {"variable": "hydra.core.Term"}}}}}}}},
                                       "typeName": "hydra.core.Term"}},
-                                  "domain": [{"list": {"literal": {"integer": {"int32": {}}}}}],
+                                  "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
                                   "parameter": "xs"}}},
                             "function": {
                               "application": {
@@ -49,29 +49,26 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
-                                                "body": {"function": {"primitive": "hydra.lib.maps.bimap"}},
+                                                "body": {"variable": "hydra.lib.maps.bimap"},
                                                 "type": {"literal": {"integer": {"int32": {}}}}}},
                                             "type": {"variable": "hydra.core.Term"}}},
                                         "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
                                     "type": {"variable": "hydra.core.Term"}}}}}}}}}},
                   "typeName": "hydra.core.Term"}},
-              "domain": [
-                {
-                  "map": {
-                    "keys": {"literal": {"integer": {"int32": {}}}},
-                    "values": {"list": {"literal": {"integer": {"int32": {}}}}}}}],
+              "domain": {
+                "map": {
+                  "keys": {"literal": {"integer": {"int32": {}}}},
+                  "values": {"list": {"literal": {"integer": {"int32": {}}}}}}},
               "parameter": "m"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.core.Term"},
-                "domain": {
-                  "map": {
-                    "keys": {"literal": {"integer": {"int32": {}}}},
-                    "values": {"list": {"literal": {"integer": {"int32": {}}}}}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {
+                "map": {
+                  "keys": {"literal": {"integer": {"int32": {}}}},
+                  "values": {"list": {"literal": {"integer": {"int32": {}}}}}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.encode.topology.tarjanState",
@@ -132,7 +129,7 @@
                                                                   "typeName": "hydra.core.IntegerValue"}}},
                                                             "typeName": "hydra.core.Literal"}}},
                                                       "typeName": "hydra.core.Term"}},
-                                                  "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                  "domain": {"literal": {"integer": {"int32": {}}}},
                                                   "parameter": "x"}}}}}}],
                                     "typeName": "hydra.core.Field"}},
                                 {
@@ -184,7 +181,7 @@
                                                                                       "typeName": "hydra.core.IntegerValue"}}},
                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                           "typeName": "hydra.core.Term"}},
-                                                                      "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                                      "domain": {"literal": {"integer": {"int32": {}}}},
                                                                       "parameter": "x"}}},
                                                                 "function": {
                                                                   "application": {
@@ -197,17 +194,16 @@
                                                                               "typeApplication": {
                                                                                 "body": {
                                                                                   "typeApplication": {
-                                                                                    "body": {"function": {"primitive": "hydra.lib.maps.bimap"}},
+                                                                                    "body": {"variable": "hydra.lib.maps.bimap"},
                                                                                     "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                                             "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                         "type": {"variable": "hydra.core.Term"}}}}}}}}}},
                                                       "typeName": "hydra.core.Term"}},
-                                                  "domain": [
-                                                    {
-                                                      "map": {
-                                                        "keys": {"literal": {"integer": {"int32": {}}}},
-                                                        "values": {"literal": {"integer": {"int32": {}}}}}}],
+                                                  "domain": {
+                                                    "map": {
+                                                      "keys": {"literal": {"integer": {"int32": {}}}},
+                                                      "values": {"literal": {"integer": {"int32": {}}}}}},
                                                   "parameter": "m"}}}}}}],
                                     "typeName": "hydra.core.Field"}},
                                 {
@@ -259,7 +255,7 @@
                                                                                       "typeName": "hydra.core.IntegerValue"}}},
                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                           "typeName": "hydra.core.Term"}},
-                                                                      "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                                      "domain": {"literal": {"integer": {"int32": {}}}},
                                                                       "parameter": "x"}}},
                                                                 "function": {
                                                                   "application": {
@@ -272,17 +268,16 @@
                                                                               "typeApplication": {
                                                                                 "body": {
                                                                                   "typeApplication": {
-                                                                                    "body": {"function": {"primitive": "hydra.lib.maps.bimap"}},
+                                                                                    "body": {"variable": "hydra.lib.maps.bimap"},
                                                                                     "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                                             "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                         "type": {"variable": "hydra.core.Term"}}}}}}}}}},
                                                       "typeName": "hydra.core.Term"}},
-                                                  "domain": [
-                                                    {
-                                                      "map": {
-                                                        "keys": {"literal": {"integer": {"int32": {}}}},
-                                                        "values": {"literal": {"integer": {"int32": {}}}}}}],
+                                                  "domain": {
+                                                    "map": {
+                                                      "keys": {"literal": {"integer": {"int32": {}}}},
+                                                      "values": {"literal": {"integer": {"int32": {}}}}}},
                                                   "parameter": "m"}}}}}}],
                                     "typeName": "hydra.core.Field"}},
                                 {
@@ -322,11 +317,11 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                        "body": {"variable": "hydra.lib.lists.map"},
                                                                         "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                     "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                       "typeName": "hydra.core.Term"}},
-                                                  "domain": [{"list": {"literal": {"integer": {"int32": {}}}}}],
+                                                  "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
                                                   "parameter": "xs"}}}}}}],
                                     "typeName": "hydra.core.Field"}},
                                 {
@@ -366,11 +361,11 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.sets.map"}},
+                                                                        "body": {"variable": "hydra.lib.sets.map"},
                                                                         "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                     "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                       "typeName": "hydra.core.Term"}},
-                                                  "domain": [{"set": {"literal": {"integer": {"int32": {}}}}}],
+                                                  "domain": {"set": {"literal": {"integer": {"int32": {}}}}},
                                                   "parameter": "s"}}}}}}],
                                     "typeName": "hydra.core.Field"}},
                                 {
@@ -422,35 +417,33 @@
                                                                                       "typeApplication": {
                                                                                         "body": {
                                                                                           "typeApplication": {
-                                                                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                            "body": {"variable": "hydra.lib.lists.map"},
                                                                                             "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                         "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                                           "typeName": "hydra.core.Term"}},
-                                                                      "domain": [{"list": {"literal": {"integer": {"int32": {}}}}}],
+                                                                      "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
                                                                       "parameter": "xs"}}},
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                        "body": {"variable": "hydra.lib.lists.map"},
                                                                         "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
                                                                     "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                       "typeName": "hydra.core.Term"}},
-                                                  "domain": [{"list": {"list": {"literal": {"integer": {"int32": {}}}}}}],
+                                                  "domain": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}},
                                                   "parameter": "xs"}}}}}}],
                                     "typeName": "hydra.core.Field"}}]}}],
                         "typeName": "hydra.core.Record"}}},
                   "typeName": "hydra.core.Term"}},
-              "domain": [{"variable": "hydra.topology.TarjanState"}],
+              "domain": {"variable": "hydra.topology.TarjanState"},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.core.Term"},
-                "domain": {"variable": "hydra.topology.TarjanState"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.topology.TarjanState"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.encode.topology.vertex",
@@ -471,17 +464,15 @@
                               "typeName": "hydra.core.IntegerValue"}}},
                         "typeName": "hydra.core.Literal"}}},
                   "typeName": "hydra.core.Term"}},
-              "domain": [{"literal": {"integer": {"int32": {}}}}],
+              "domain": {"literal": {"integer": {"int32": {}}}},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.core.Term"},
-                "domain": {"literal": {"integer": {"int32": {}}}}}},
-            "variables": []}]}}],
-  "description": ["Term encoders for hydra.topology"],
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"literal": {"integer": {"int32": {}}}}}},
+          "variables": []}}}],
+  "description": "Term encoders for hydra.topology",
   "namespace": "hydra.encode.topology",
   "termDependencies": ["hydra.encode.core"],
   "typeDependencies": ["hydra.topology"]}

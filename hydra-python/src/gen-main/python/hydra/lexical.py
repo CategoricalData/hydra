@@ -122,7 +122,7 @@ def fields_of(t: hydra.core.Type) -> frozenlist[hydra.core.FieldType]:
             case _:
                 return ()
 
-def get_field(cx: hydra.context.Context, m: FrozenDict[hydra.core.Name, T0], fname: hydra.core.Name, decode: Callable[[T0], Either[hydra.context.InContext[hydra.errors.Error], T1]]) -> Either[hydra.context.InContext[hydra.errors.Error], T0]:
+def get_field(cx: hydra.context.Context, m: FrozenDict[hydra.core.Name, T0], fname: hydra.core.Name, decode: Callable[[T0], Either[hydra.context.InContext[hydra.errors.Error], T1]]) -> Either[hydra.context.InContext[hydra.errors.Error], T1]:
     return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected field ", fname.value), " not found")))), cx))), decode, hydra.lib.maps.lookup(fname, m))
 
 def graph_to_bindings(g: hydra.graph.Graph) -> frozenlist[hydra.core.Binding]:

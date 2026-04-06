@@ -34,6 +34,8 @@ public class LocalVariableDeclarationStatement implements Serializable, Comparab
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(LocalVariableDeclarationStatement other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

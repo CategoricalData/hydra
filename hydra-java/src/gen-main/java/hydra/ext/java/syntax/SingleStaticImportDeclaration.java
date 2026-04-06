@@ -42,11 +42,15 @@ public class SingleStaticImportDeclaration implements Serializable, Comparable<S
   @SuppressWarnings("unchecked")
   public int compareTo(SingleStaticImportDeclaration other) {
     int cmp = 0;
-    cmp = ((Comparable) typeName).compareTo(other.typeName);
+    cmp = hydra.util.Comparing.compare(
+      typeName,
+      other.typeName);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) identifier).compareTo(other.identifier);
+    return hydra.util.Comparing.compare(
+      identifier,
+      other.identifier);
   }
 
   public SingleStaticImportDeclaration withTypeName(hydra.ext.java.syntax.TypeName typeName) {

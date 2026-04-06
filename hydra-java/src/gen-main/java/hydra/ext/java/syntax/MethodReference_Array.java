@@ -34,6 +34,8 @@ public class MethodReference_Array implements Serializable, Comparable<MethodRef
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(MethodReference_Array other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

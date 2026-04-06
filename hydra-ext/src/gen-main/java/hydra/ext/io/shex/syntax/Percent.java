@@ -42,11 +42,15 @@ public class Percent implements Serializable, Comparable<Percent> {
   @SuppressWarnings("unchecked")
   public int compareTo(Percent other) {
     int cmp = 0;
-    cmp = ((Comparable) Hex).compareTo(other.Hex);
+    cmp = hydra.util.Comparing.compare(
+      Hex,
+      other.Hex);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) Hex2).compareTo(other.Hex2);
+    return hydra.util.Comparing.compare(
+      Hex2,
+      other.Hex2);
   }
 
   public Percent withHex(hydra.ext.io.shex.syntax.Hex Hex) {

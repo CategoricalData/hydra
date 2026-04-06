@@ -71,19 +71,27 @@ public class HaskellModuleMetadata implements Serializable, Comparable<HaskellMo
   @SuppressWarnings("unchecked")
   public int compareTo(HaskellModuleMetadata other) {
     int cmp = 0;
-    cmp = ((Comparable) usesByteString).compareTo(other.usesByteString);
+    cmp = hydra.util.Comparing.compare(
+      usesByteString,
+      other.usesByteString);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) usesInt).compareTo(other.usesInt);
+    cmp = hydra.util.Comparing.compare(
+      usesInt,
+      other.usesInt);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) usesMap).compareTo(other.usesMap);
+    cmp = hydra.util.Comparing.compare(
+      usesMap,
+      other.usesMap);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) usesSet).compareTo(other.usesSet);
+    return hydra.util.Comparing.compare(
+      usesSet,
+      other.usesSet);
   }
 
   public HaskellModuleMetadata withUsesByteString(Boolean usesByteString) {

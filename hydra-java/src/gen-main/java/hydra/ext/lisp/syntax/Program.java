@@ -33,19 +33,19 @@ public class Program implements Serializable, Comparable<Program> {
   /**
    * Import/require declarations
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.ImportDeclaration> imports;
+  public final java.util.List<hydra.ext.lisp.syntax.ImportDeclaration> imports;
 
   /**
    * Export/provide declarations
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.ExportDeclaration> exports;
+  public final java.util.List<hydra.ext.lisp.syntax.ExportDeclaration> exports;
 
   /**
    * The top-level forms in the program
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.TopLevelFormWithComments> forms;
+  public final java.util.List<hydra.ext.lisp.syntax.TopLevelFormWithComments> forms;
 
-  public Program (hydra.ext.lisp.syntax.Dialect dialect, hydra.util.Maybe<hydra.ext.lisp.syntax.ModuleDeclaration> module, hydra.util.ConsList<hydra.ext.lisp.syntax.ImportDeclaration> imports, hydra.util.ConsList<hydra.ext.lisp.syntax.ExportDeclaration> exports, hydra.util.ConsList<hydra.ext.lisp.syntax.TopLevelFormWithComments> forms) {
+  public Program (hydra.ext.lisp.syntax.Dialect dialect, hydra.util.Maybe<hydra.ext.lisp.syntax.ModuleDeclaration> module, java.util.List<hydra.ext.lisp.syntax.ImportDeclaration> imports, java.util.List<hydra.ext.lisp.syntax.ExportDeclaration> exports, java.util.List<hydra.ext.lisp.syntax.TopLevelFormWithComments> forms) {
     this.dialect = dialect;
     this.module = module;
     this.imports = imports;
@@ -81,23 +81,33 @@ public class Program implements Serializable, Comparable<Program> {
   @SuppressWarnings("unchecked")
   public int compareTo(Program other) {
     int cmp = 0;
-    cmp = ((Comparable) dialect).compareTo(other.dialect);
+    cmp = hydra.util.Comparing.compare(
+      dialect,
+      other.dialect);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) module).compareTo(other.module);
+    cmp = hydra.util.Comparing.compare(
+      module,
+      other.module);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) imports).compareTo(other.imports);
+    cmp = hydra.util.Comparing.compare(
+      imports,
+      other.imports);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) exports).compareTo(other.exports);
+    cmp = hydra.util.Comparing.compare(
+      exports,
+      other.exports);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) forms).compareTo(other.forms);
+    return hydra.util.Comparing.compare(
+      forms,
+      other.forms);
   }
 
   public Program withDialect(hydra.ext.lisp.syntax.Dialect dialect) {
@@ -108,15 +118,15 @@ public class Program implements Serializable, Comparable<Program> {
     return new Program(dialect, module, imports, exports, forms);
   }
 
-  public Program withImports(hydra.util.ConsList<hydra.ext.lisp.syntax.ImportDeclaration> imports) {
+  public Program withImports(java.util.List<hydra.ext.lisp.syntax.ImportDeclaration> imports) {
     return new Program(dialect, module, imports, exports, forms);
   }
 
-  public Program withExports(hydra.util.ConsList<hydra.ext.lisp.syntax.ExportDeclaration> exports) {
+  public Program withExports(java.util.List<hydra.ext.lisp.syntax.ExportDeclaration> exports) {
     return new Program(dialect, module, imports, exports, forms);
   }
 
-  public Program withForms(hydra.util.ConsList<hydra.ext.lisp.syntax.TopLevelFormWithComments> forms) {
+  public Program withForms(java.util.List<hydra.ext.lisp.syntax.TopLevelFormWithComments> forms) {
     return new Program(dialect, module, imports, exports, forms);
   }
 }

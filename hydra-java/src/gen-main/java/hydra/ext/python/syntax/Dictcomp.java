@@ -42,11 +42,15 @@ public class Dictcomp implements Serializable, Comparable<Dictcomp> {
   @SuppressWarnings("unchecked")
   public int compareTo(Dictcomp other) {
     int cmp = 0;
-    cmp = ((Comparable) kvpair).compareTo(other.kvpair);
+    cmp = hydra.util.Comparing.compare(
+      kvpair,
+      other.kvpair);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) forIfClauses).compareTo(other.forIfClauses);
+    return hydra.util.Comparing.compare(
+      forIfClauses,
+      other.forIfClauses);
   }
 
   public Dictcomp withKvpair(hydra.ext.python.syntax.Kvpair kvpair) {

@@ -49,15 +49,21 @@ public class SimpleTypeParameter implements Serializable, Comparable<SimpleTypeP
   @SuppressWarnings("unchecked")
   public int compareTo(SimpleTypeParameter other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) bound).compareTo(other.bound);
+    cmp = hydra.util.Comparing.compare(
+      bound,
+      other.bound);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) default_).compareTo(other.default_);
+    return hydra.util.Comparing.compare(
+      default_,
+      other.default_);
   }
 
   public SimpleTypeParameter withName(hydra.ext.python.syntax.Name name) {

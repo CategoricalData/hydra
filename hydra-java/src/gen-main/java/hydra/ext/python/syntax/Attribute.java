@@ -9,9 +9,9 @@ public class Attribute implements Serializable, Comparable<Attribute> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.Name> value;
+  public final java.util.List<hydra.ext.python.syntax.Name> value;
 
-  public Attribute (hydra.util.ConsList<hydra.ext.python.syntax.Name> value) {
+  public Attribute (java.util.List<hydra.ext.python.syntax.Name> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class Attribute implements Serializable, Comparable<Attribute> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Attribute other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

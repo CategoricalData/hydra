@@ -42,11 +42,15 @@ public class RelationalExpression_GreaterThan implements Serializable, Comparabl
   @SuppressWarnings("unchecked")
   public int compareTo(RelationalExpression_GreaterThan other) {
     int cmp = 0;
-    cmp = ((Comparable) lhs).compareTo(other.lhs);
+    cmp = hydra.util.Comparing.compare(
+      lhs,
+      other.lhs);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) rhs).compareTo(other.rhs);
+    return hydra.util.Comparing.compare(
+      rhs,
+      other.rhs);
   }
 
   public RelationalExpression_GreaterThan withLhs(hydra.ext.java.syntax.RelationalExpression lhs) {

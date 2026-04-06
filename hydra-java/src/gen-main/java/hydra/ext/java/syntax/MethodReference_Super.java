@@ -13,13 +13,13 @@ public class MethodReference_Super implements Serializable, Comparable<MethodRef
 
   public static final hydra.core.Name SUPER = new hydra.core.Name("super");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments;
+  public final java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments;
 
   public final hydra.ext.java.syntax.Identifier identifier;
 
   public final Boolean super_;
 
-  public MethodReference_Super (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.Identifier identifier, Boolean super_) {
+  public MethodReference_Super (java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.Identifier identifier, Boolean super_) {
     this.typeArguments = typeArguments;
     this.identifier = identifier;
     this.super_ = super_;
@@ -49,18 +49,24 @@ public class MethodReference_Super implements Serializable, Comparable<MethodRef
   @SuppressWarnings("unchecked")
   public int compareTo(MethodReference_Super other) {
     int cmp = 0;
-    cmp = ((Comparable) typeArguments).compareTo(other.typeArguments);
+    cmp = hydra.util.Comparing.compare(
+      typeArguments,
+      other.typeArguments);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) identifier).compareTo(other.identifier);
+    cmp = hydra.util.Comparing.compare(
+      identifier,
+      other.identifier);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) super_).compareTo(other.super_);
+    return hydra.util.Comparing.compare(
+      super_,
+      other.super_);
   }
 
-  public MethodReference_Super withTypeArguments(hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments) {
+  public MethodReference_Super withTypeArguments(java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     return new MethodReference_Super(typeArguments, identifier, super_);
   }
 

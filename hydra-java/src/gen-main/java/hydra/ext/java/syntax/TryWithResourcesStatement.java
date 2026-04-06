@@ -56,19 +56,27 @@ public class TryWithResourcesStatement implements Serializable, Comparable<TryWi
   @SuppressWarnings("unchecked")
   public int compareTo(TryWithResourcesStatement other) {
     int cmp = 0;
-    cmp = ((Comparable) resourceSpecification).compareTo(other.resourceSpecification);
+    cmp = hydra.util.Comparing.compare(
+      resourceSpecification,
+      other.resourceSpecification);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) block).compareTo(other.block);
+    cmp = hydra.util.Comparing.compare(
+      block,
+      other.block);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) catches).compareTo(other.catches);
+    cmp = hydra.util.Comparing.compare(
+      catches,
+      other.catches);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) finally_).compareTo(other.finally_);
+    return hydra.util.Comparing.compare(
+      finally_,
+      other.finally_);
   }
 
   public TryWithResourcesStatement withResourceSpecification(hydra.ext.java.syntax.ResourceSpecification resourceSpecification) {

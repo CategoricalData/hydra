@@ -19,11 +19,11 @@ public class Data_ApplyInfix implements Serializable, Comparable<Data_ApplyInfix
 
   public final hydra.ext.scala.syntax.Data_Name op;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Type> targs;
+  public final java.util.List<hydra.ext.scala.syntax.Type> targs;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Data> args;
+  public final java.util.List<hydra.ext.scala.syntax.Data> args;
 
-  public Data_ApplyInfix (hydra.ext.scala.syntax.Data lhs, hydra.ext.scala.syntax.Data_Name op, hydra.util.ConsList<hydra.ext.scala.syntax.Type> targs, hydra.util.ConsList<hydra.ext.scala.syntax.Data> args) {
+  public Data_ApplyInfix (hydra.ext.scala.syntax.Data lhs, hydra.ext.scala.syntax.Data_Name op, java.util.List<hydra.ext.scala.syntax.Type> targs, java.util.List<hydra.ext.scala.syntax.Data> args) {
     this.lhs = lhs;
     this.op = op;
     this.targs = targs;
@@ -56,19 +56,27 @@ public class Data_ApplyInfix implements Serializable, Comparable<Data_ApplyInfix
   @SuppressWarnings("unchecked")
   public int compareTo(Data_ApplyInfix other) {
     int cmp = 0;
-    cmp = ((Comparable) lhs).compareTo(other.lhs);
+    cmp = hydra.util.Comparing.compare(
+      lhs,
+      other.lhs);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) op).compareTo(other.op);
+    cmp = hydra.util.Comparing.compare(
+      op,
+      other.op);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) targs).compareTo(other.targs);
+    cmp = hydra.util.Comparing.compare(
+      targs,
+      other.targs);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) args).compareTo(other.args);
+    return hydra.util.Comparing.compare(
+      args,
+      other.args);
   }
 
   public Data_ApplyInfix withLhs(hydra.ext.scala.syntax.Data lhs) {
@@ -79,11 +87,11 @@ public class Data_ApplyInfix implements Serializable, Comparable<Data_ApplyInfix
     return new Data_ApplyInfix(lhs, op, targs, args);
   }
 
-  public Data_ApplyInfix withTargs(hydra.util.ConsList<hydra.ext.scala.syntax.Type> targs) {
+  public Data_ApplyInfix withTargs(java.util.List<hydra.ext.scala.syntax.Type> targs) {
     return new Data_ApplyInfix(lhs, op, targs, args);
   }
 
-  public Data_ApplyInfix withArgs(hydra.util.ConsList<hydra.ext.scala.syntax.Data> args) {
+  public Data_ApplyInfix withArgs(java.util.List<hydra.ext.scala.syntax.Data> args) {
     return new Data_ApplyInfix(lhs, op, targs, args);
   }
 }

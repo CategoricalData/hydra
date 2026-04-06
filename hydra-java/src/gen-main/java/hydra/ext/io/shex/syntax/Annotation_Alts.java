@@ -68,7 +68,9 @@ public abstract class Annotation_Alts implements Serializable, Comparable<Annota
         return tagCmp;
       }
       Iri o = (Iri) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class Annotation_Alts implements Serializable, Comparable<Annota
         return tagCmp;
       }
       Literal o = (Literal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

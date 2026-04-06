@@ -15,15 +15,15 @@ public class Decl_Type implements Serializable, Comparable<Decl_Type> {
 
   public static final hydra.core.Name BOUNDS = new hydra.core.Name("bounds");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods;
+  public final java.util.List<hydra.ext.scala.syntax.Mod> mods;
 
   public final hydra.ext.scala.syntax.Type_Name name;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams;
+  public final java.util.List<hydra.ext.scala.syntax.Type_Param> tparams;
 
   public final hydra.ext.scala.syntax.TypeBounds bounds;
 
-  public Decl_Type (hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods, hydra.ext.scala.syntax.Type_Name name, hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams, hydra.ext.scala.syntax.TypeBounds bounds) {
+  public Decl_Type (java.util.List<hydra.ext.scala.syntax.Mod> mods, hydra.ext.scala.syntax.Type_Name name, java.util.List<hydra.ext.scala.syntax.Type_Param> tparams, hydra.ext.scala.syntax.TypeBounds bounds) {
     this.mods = mods;
     this.name = name;
     this.tparams = tparams;
@@ -56,22 +56,30 @@ public class Decl_Type implements Serializable, Comparable<Decl_Type> {
   @SuppressWarnings("unchecked")
   public int compareTo(Decl_Type other) {
     int cmp = 0;
-    cmp = ((Comparable) mods).compareTo(other.mods);
+    cmp = hydra.util.Comparing.compare(
+      mods,
+      other.mods);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) tparams).compareTo(other.tparams);
+    cmp = hydra.util.Comparing.compare(
+      tparams,
+      other.tparams);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) bounds).compareTo(other.bounds);
+    return hydra.util.Comparing.compare(
+      bounds,
+      other.bounds);
   }
 
-  public Decl_Type withMods(hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods) {
+  public Decl_Type withMods(java.util.List<hydra.ext.scala.syntax.Mod> mods) {
     return new Decl_Type(mods, name, tparams, bounds);
   }
 
@@ -79,7 +87,7 @@ public class Decl_Type implements Serializable, Comparable<Decl_Type> {
     return new Decl_Type(mods, name, tparams, bounds);
   }
 
-  public Decl_Type withTparams(hydra.util.ConsList<hydra.ext.scala.syntax.Type_Param> tparams) {
+  public Decl_Type withTparams(java.util.List<hydra.ext.scala.syntax.Type_Param> tparams) {
     return new Decl_Type(mods, name, tparams, bounds);
   }
 

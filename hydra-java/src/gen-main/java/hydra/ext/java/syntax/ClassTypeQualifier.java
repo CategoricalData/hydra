@@ -111,7 +111,9 @@ public abstract class ClassTypeQualifier implements Serializable, Comparable<Cla
         return tagCmp;
       }
       Package_ o = (Package_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -151,7 +153,9 @@ public abstract class ClassTypeQualifier implements Serializable, Comparable<Cla
         return tagCmp;
       }
       Parent o = (Parent) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

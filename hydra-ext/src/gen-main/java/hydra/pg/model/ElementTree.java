@@ -16,9 +16,9 @@ public class ElementTree<V> implements Serializable, Comparable<ElementTree<V>> 
 
   public final hydra.pg.model.Element<V> self;
 
-  public final hydra.util.ConsList<hydra.pg.model.ElementTree<V>> dependencies;
+  public final java.util.List<hydra.pg.model.ElementTree<V>> dependencies;
 
-  public ElementTree (hydra.pg.model.Element<V> self, hydra.util.ConsList<hydra.pg.model.ElementTree<V>> dependencies) {
+  public ElementTree (hydra.pg.model.Element<V> self, java.util.List<hydra.pg.model.ElementTree<V>> dependencies) {
     this.self = self;
     this.dependencies = dependencies;
   }
@@ -45,18 +45,22 @@ public class ElementTree<V> implements Serializable, Comparable<ElementTree<V>> 
   @SuppressWarnings("unchecked")
   public int compareTo(ElementTree other) {
     int cmp = 0;
-    cmp = ((Comparable) self).compareTo(other.self);
+    cmp = hydra.util.Comparing.compare(
+      self,
+      other.self);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) dependencies).compareTo(other.dependencies);
+    return hydra.util.Comparing.compare(
+      dependencies,
+      other.dependencies);
   }
 
   public ElementTree withSelf(hydra.pg.model.Element<V> self) {
     return new ElementTree(self, dependencies);
   }
 
-  public ElementTree withDependencies(hydra.util.ConsList<hydra.pg.model.ElementTree<V>> dependencies) {
+  public ElementTree withDependencies(java.util.List<hydra.pg.model.ElementTree<V>> dependencies) {
     return new ElementTree(self, dependencies);
   }
 }

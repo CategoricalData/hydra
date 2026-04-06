@@ -34,6 +34,8 @@ public class DelStatement implements Serializable, Comparable<DelStatement> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DelStatement other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

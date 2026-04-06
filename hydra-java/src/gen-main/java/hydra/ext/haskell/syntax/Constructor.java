@@ -74,7 +74,9 @@ public abstract class Constructor implements Serializable, Comparable<Constructo
         return tagCmp;
       }
       Ordinary o = (Ordinary) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -117,7 +119,9 @@ public abstract class Constructor implements Serializable, Comparable<Constructo
         return tagCmp;
       }
       Record o = (Record) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

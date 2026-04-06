@@ -42,11 +42,15 @@ public class IntegerRange implements Serializable, Comparable<IntegerRange> {
   @SuppressWarnings("unchecked")
   public int compareTo(IntegerRange other) {
     int cmp = 0;
-    cmp = ((Comparable) left).compareTo(other.left);
+    cmp = hydra.util.Comparing.compare(
+      left,
+      other.left);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) right).compareTo(other.right);
+    return hydra.util.Comparing.compare(
+      right,
+      other.right);
   }
 
   public IntegerRange withLeft(hydra.ext.org.apache.tinkerpop.gremlin.IntegerLiteral left) {

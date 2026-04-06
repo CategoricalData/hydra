@@ -34,6 +34,8 @@ public class Token implements Serializable, Comparable<Token> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Token other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

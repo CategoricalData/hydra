@@ -151,51 +151,75 @@ public class TrigonometricFunctionFeatures implements Serializable, Comparable<T
   @SuppressWarnings("unchecked")
   public int compareTo(TrigonometricFunctionFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) acos).compareTo(other.acos);
+    cmp = hydra.util.Comparing.compare(
+      acos,
+      other.acos);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) asin).compareTo(other.asin);
+    cmp = hydra.util.Comparing.compare(
+      asin,
+      other.asin);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) atan).compareTo(other.atan);
+    cmp = hydra.util.Comparing.compare(
+      atan,
+      other.atan);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) atan2).compareTo(other.atan2);
+    cmp = hydra.util.Comparing.compare(
+      atan2,
+      other.atan2);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) cos).compareTo(other.cos);
+    cmp = hydra.util.Comparing.compare(
+      cos,
+      other.cos);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) cot).compareTo(other.cot);
+    cmp = hydra.util.Comparing.compare(
+      cot,
+      other.cot);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) degrees).compareTo(other.degrees);
+    cmp = hydra.util.Comparing.compare(
+      degrees,
+      other.degrees);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) haversin).compareTo(other.haversin);
+    cmp = hydra.util.Comparing.compare(
+      haversin,
+      other.haversin);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) pi).compareTo(other.pi);
+    cmp = hydra.util.Comparing.compare(
+      pi,
+      other.pi);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) radians).compareTo(other.radians);
+    cmp = hydra.util.Comparing.compare(
+      radians,
+      other.radians);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) sin).compareTo(other.sin);
+    cmp = hydra.util.Comparing.compare(
+      sin,
+      other.sin);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) tan).compareTo(other.tan);
+    return hydra.util.Comparing.compare(
+      tan,
+      other.tan);
   }
 
   public TrigonometricFunctionFeatures withAcos(Boolean acos) {

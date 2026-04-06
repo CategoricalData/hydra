@@ -61,15 +61,21 @@ public class ProcedureCallFeatures implements Serializable, Comparable<Procedure
   @SuppressWarnings("unchecked")
   public int compareTo(ProcedureCallFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) inQueryCall).compareTo(other.inQueryCall);
+    cmp = hydra.util.Comparing.compare(
+      inQueryCall,
+      other.inQueryCall);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) standaloneCall).compareTo(other.standaloneCall);
+    cmp = hydra.util.Comparing.compare(
+      standaloneCall,
+      other.standaloneCall);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) yield).compareTo(other.yield);
+    return hydra.util.Comparing.compare(
+      yield,
+      other.yield);
   }
 
   public ProcedureCallFeatures withInQueryCall(Boolean inQueryCall) {

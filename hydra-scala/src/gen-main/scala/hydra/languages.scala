@@ -4,8 +4,6 @@ import hydra.coders.*
 
 import hydra.core.*
 
-import hydra.lib.sets
-
 lazy val hydraLanguage: hydra.coders.Language = {
   lazy val eliminationVariants: scala.collection.immutable.Set[hydra.variants.EliminationVariant] = hydra.lib.sets.fromList[hydra.variants.EliminationVariant](hydra.reflect.eliminationVariants)
   lazy val literalVariants: scala.collection.immutable.Set[hydra.variants.LiteralVariant] = hydra.lib.sets.fromList[hydra.variants.LiteralVariant](hydra.reflect.literalVariants)

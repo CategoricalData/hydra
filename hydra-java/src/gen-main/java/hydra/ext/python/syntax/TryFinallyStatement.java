@@ -42,11 +42,15 @@ public class TryFinallyStatement implements Serializable, Comparable<TryFinallyS
   @SuppressWarnings("unchecked")
   public int compareTo(TryFinallyStatement other) {
     int cmp = 0;
-    cmp = ((Comparable) body).compareTo(other.body);
+    cmp = hydra.util.Comparing.compare(
+      body,
+      other.body);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) finally_).compareTo(other.finally_);
+    return hydra.util.Comparing.compare(
+      finally_,
+      other.finally_);
   }
 
   public TryFinallyStatement withBody(hydra.ext.python.syntax.Block body) {

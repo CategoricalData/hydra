@@ -40,7 +40,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                            "body": {"variable": "hydra.lib.lists.map"},
                                                             "type": {"variable": "hydra.ext.org.graphviz.dot.EqualityPair"}}},
                                                         "type": {"variable": "hydra.ast.Expr"}}}}}}},
                                             "function": {
@@ -54,26 +54,24 @@
                                               "application": {
                                                 "argument": {"variable": "hydra.serialization.squareBrackets"},
                                                 "function": {"variable": "hydra.serialization.brackets"}}}}}}},
-                                    "domain": [{"list": {"variable": "hydra.ext.org.graphviz.dot.EqualityPair"}}],
+                                    "domain": {"list": {"variable": "hydra.ext.org.graphviz.dot.EqualityPair"}},
                                     "parameter": "alist"}}},
                               "function": {
                                 "typeApplication": {
                                   "body": {
                                     "typeApplication": {
-                                      "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                      "body": {"variable": "hydra.lib.lists.map"},
                                       "type": {"list": {"variable": "hydra.ext.org.graphviz.dot.EqualityPair"}}}},
                                   "type": {"variable": "hydra.ast.Expr"}}}}}}},
                       "function": {"variable": "hydra.serialization.spaceSep"}}},
-                  "domain": [{"variable": "hydra.ext.org.graphviz.dot.AttrList"}],
+                  "domain": {"variable": "hydra.ext.org.graphviz.dot.AttrList"},
                   "parameter": "al"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ast.Expr"},
-                "domain": {"variable": "hydra.ext.org.graphviz.dot.AttrList"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"variable": "hydra.ext.org.graphviz.dot.AttrList"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.graphviz.serde.writeAttrStmt",
@@ -99,11 +97,9 @@
                                 "function": {
                                   "elimination": {
                                     "record": {"field": "type", "typeName": "hydra.ext.org.graphviz.dot.AttrStmt"}}}}}},
-                          "type": [
-                            {
-                              "constraints": null,
-                              "type": {"variable": "hydra.ext.org.graphviz.dot.AttrType"},
-                              "variables": []}]},
+                          "type": {
+                            "type": {"variable": "hydra.ext.org.graphviz.dot.AttrType"},
+                            "variables": []}},
                         {
                           "name": "attr",
                           "term": {
@@ -115,11 +111,9 @@
                                     "record": {
                                       "field": "attributes",
                                       "typeName": "hydra.ext.org.graphviz.dot.AttrStmt"}}}}}},
-                          "type": [
-                            {
-                              "constraints": null,
-                              "type": {"variable": "hydra.ext.org.graphviz.dot.AttrList"},
-                              "variables": []}]}],
+                          "type": {
+                            "type": {"variable": "hydra.ext.org.graphviz.dot.AttrList"},
+                            "variables": []}}],
                       "body": {
                         "application": {
                           "argument": {
@@ -133,16 +127,14 @@
                                   "argument": {"variable": "attr"},
                                   "function": {"variable": "hydra.ext.graphviz.serde.writeAttrList"}}}]},
                           "function": {"variable": "hydra.serialization.spaceSep"}}}}},
-                  "domain": [{"variable": "hydra.ext.org.graphviz.dot.AttrStmt"}],
+                  "domain": {"variable": "hydra.ext.org.graphviz.dot.AttrStmt"},
                   "parameter": "as"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ast.Expr"},
-                "domain": {"variable": "hydra.ext.org.graphviz.dot.AttrStmt"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"variable": "hydra.ext.org.graphviz.dot.AttrStmt"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.graphviz.serde.writeAttrType",
@@ -172,7 +164,7 @@
                                           "application": {
                                             "argument": {"literal": {"string": "graph"}},
                                             "function": {"variable": "hydra.serialization.cst"}}},
-                                        "domain": [{"unit": {}}],
+                                        "domain": {"unit": {}},
                                         "parameter": "_"}}}},
                                 {
                                   "name": "node",
@@ -183,7 +175,7 @@
                                           "application": {
                                             "argument": {"literal": {"string": "node"}},
                                             "function": {"variable": "hydra.serialization.cst"}}},
-                                        "domain": [{"unit": {}}],
+                                        "domain": {"unit": {}},
                                         "parameter": "_"}}}},
                                 {
                                   "name": "edge",
@@ -194,20 +186,17 @@
                                           "application": {
                                             "argument": {"literal": {"string": "edge"}},
                                             "function": {"variable": "hydra.serialization.cst"}}},
-                                        "domain": [{"unit": {}}],
+                                        "domain": {"unit": {}},
                                         "parameter": "_"}}}}],
-                              "default": null,
                               "typeName": "hydra.ext.org.graphviz.dot.AttrType"}}}}}},
-                  "domain": [{"variable": "hydra.ext.org.graphviz.dot.AttrType"}],
+                  "domain": {"variable": "hydra.ext.org.graphviz.dot.AttrType"},
                   "parameter": "t"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ast.Expr"},
-                "domain": {"variable": "hydra.ext.org.graphviz.dot.AttrType"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"variable": "hydra.ext.org.graphviz.dot.AttrType"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.graphviz.serde.writeCompassPt",
@@ -237,7 +226,7 @@
                                           "application": {
                                             "argument": {"literal": {"string": "n"}},
                                             "function": {"variable": "hydra.serialization.cst"}}},
-                                        "domain": [{"unit": {}}],
+                                        "domain": {"unit": {}},
                                         "parameter": "_"}}}},
                                 {
                                   "name": "ne",
@@ -248,7 +237,7 @@
                                           "application": {
                                             "argument": {"literal": {"string": "ne"}},
                                             "function": {"variable": "hydra.serialization.cst"}}},
-                                        "domain": [{"unit": {}}],
+                                        "domain": {"unit": {}},
                                         "parameter": "_"}}}},
                                 {
                                   "name": "e",
@@ -259,7 +248,7 @@
                                           "application": {
                                             "argument": {"literal": {"string": "e"}},
                                             "function": {"variable": "hydra.serialization.cst"}}},
-                                        "domain": [{"unit": {}}],
+                                        "domain": {"unit": {}},
                                         "parameter": "_"}}}},
                                 {
                                   "name": "se",
@@ -270,7 +259,7 @@
                                           "application": {
                                             "argument": {"literal": {"string": "se"}},
                                             "function": {"variable": "hydra.serialization.cst"}}},
-                                        "domain": [{"unit": {}}],
+                                        "domain": {"unit": {}},
                                         "parameter": "_"}}}},
                                 {
                                   "name": "s",
@@ -281,7 +270,7 @@
                                           "application": {
                                             "argument": {"literal": {"string": "s"}},
                                             "function": {"variable": "hydra.serialization.cst"}}},
-                                        "domain": [{"unit": {}}],
+                                        "domain": {"unit": {}},
                                         "parameter": "_"}}}},
                                 {
                                   "name": "sw",
@@ -292,7 +281,7 @@
                                           "application": {
                                             "argument": {"literal": {"string": "sw"}},
                                             "function": {"variable": "hydra.serialization.cst"}}},
-                                        "domain": [{"unit": {}}],
+                                        "domain": {"unit": {}},
                                         "parameter": "_"}}}},
                                 {
                                   "name": "w",
@@ -303,7 +292,7 @@
                                           "application": {
                                             "argument": {"literal": {"string": "w"}},
                                             "function": {"variable": "hydra.serialization.cst"}}},
-                                        "domain": [{"unit": {}}],
+                                        "domain": {"unit": {}},
                                         "parameter": "_"}}}},
                                 {
                                   "name": "nw",
@@ -314,7 +303,7 @@
                                           "application": {
                                             "argument": {"literal": {"string": "nw"}},
                                             "function": {"variable": "hydra.serialization.cst"}}},
-                                        "domain": [{"unit": {}}],
+                                        "domain": {"unit": {}},
                                         "parameter": "_"}}}},
                                 {
                                   "name": "c",
@@ -325,7 +314,7 @@
                                           "application": {
                                             "argument": {"literal": {"string": "c"}},
                                             "function": {"variable": "hydra.serialization.cst"}}},
-                                        "domain": [{"unit": {}}],
+                                        "domain": {"unit": {}},
                                         "parameter": "_"}}}},
                                 {
                                   "name": "none",
@@ -336,20 +325,17 @@
                                           "application": {
                                             "argument": {"literal": {"string": "none"}},
                                             "function": {"variable": "hydra.serialization.cst"}}},
-                                        "domain": [{"unit": {}}],
+                                        "domain": {"unit": {}},
                                         "parameter": "_"}}}}],
-                              "default": null,
                               "typeName": "hydra.ext.org.graphviz.dot.CompassPt"}}}}}},
-                  "domain": [{"variable": "hydra.ext.org.graphviz.dot.CompassPt"}],
+                  "domain": {"variable": "hydra.ext.org.graphviz.dot.CompassPt"},
                   "parameter": "p"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ast.Expr"},
-                "domain": {"variable": "hydra.ext.org.graphviz.dot.CompassPt"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"variable": "hydra.ext.org.graphviz.dot.CompassPt"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.graphviz.serde.writeEdgeStmt",
@@ -377,11 +363,9 @@
                                       "function": {
                                         "elimination": {
                                           "record": {"field": "left", "typeName": "hydra.ext.org.graphviz.dot.EdgeStmt"}}}}}},
-                                "type": [
-                                  {
-                                    "constraints": null,
-                                    "type": {"variable": "hydra.ext.org.graphviz.dot.NodeOrSubgraph"},
-                                    "variables": []}]},
+                                "type": {
+                                  "type": {"variable": "hydra.ext.org.graphviz.dot.NodeOrSubgraph"},
+                                  "variables": []}},
                               {
                                 "name": "r",
                                 "term": {
@@ -391,11 +375,9 @@
                                       "function": {
                                         "elimination": {
                                           "record": {"field": "right", "typeName": "hydra.ext.org.graphviz.dot.EdgeStmt"}}}}}},
-                                "type": [
-                                  {
-                                    "constraints": null,
-                                    "type": {"list": {"variable": "hydra.ext.org.graphviz.dot.NodeOrSubgraph"}},
-                                    "variables": []}]},
+                                "type": {
+                                  "type": {"list": {"variable": "hydra.ext.org.graphviz.dot.NodeOrSubgraph"}},
+                                  "variables": []}},
                               {
                                 "name": "attr",
                                 "term": {
@@ -407,11 +389,9 @@
                                           "record": {
                                             "field": "attributes",
                                             "typeName": "hydra.ext.org.graphviz.dot.EdgeStmt"}}}}}},
-                                "type": [
-                                  {
-                                    "constraints": null,
-                                    "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.AttrList"}},
-                                    "variables": []}]},
+                                "type": {
+                                  "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.AttrList"}},
+                                  "variables": []}},
                               {
                                 "name": "arrow",
                                 "term": {
@@ -425,13 +405,9 @@
                                             "argument": {"variable": "directed"},
                                             "function": {
                                               "typeApplication": {
-                                                "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                "body": {"variable": "hydra.lib.logic.ifElse"},
                                                 "type": {"literal": {"string": {}}}}}}}}}}},
-                                "type": [
-                                  {
-                                    "constraints": null,
-                                    "type": {"literal": {"string": {}}},
-                                    "variables": []}]},
+                                "type": {"type": {"literal": {"string": {}}}, "variables": []}},
                               {
                                 "name": "rhsParts",
                                 "term": {
@@ -457,24 +433,20 @@
                                                             "application": {
                                                               "argument": {"variable": "directed"},
                                                               "function": {"variable": "hydra.ext.graphviz.serde.writeNodeOrSubgraph"}}}}}]},
-                                                  "domain": [{"variable": "hydra.ext.org.graphviz.dot.NodeOrSubgraph"}],
+                                                  "domain": {"variable": "hydra.ext.org.graphviz.dot.NodeOrSubgraph"},
                                                   "parameter": "n"}}},
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                    "body": {"variable": "hydra.lib.lists.map"},
                                                     "type": {"variable": "hydra.ext.org.graphviz.dot.NodeOrSubgraph"}}},
                                                 "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}},
                                     "function": {
                                       "typeApplication": {
-                                        "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                        "body": {"variable": "hydra.lib.lists.concat"},
                                         "type": {"variable": "hydra.ast.Expr"}}}}},
-                                "type": [
-                                  {
-                                    "constraints": null,
-                                    "type": {"list": {"variable": "hydra.ast.Expr"}},
-                                    "variables": []}]},
+                                "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                               {
                                 "name": "attrParts",
                                 "term": {
@@ -491,7 +463,7 @@
                                                     "application": {
                                                       "argument": {"variable": "a"},
                                                       "function": {"variable": "hydra.ext.graphviz.serde.writeAttrList"}}}]},
-                                              "domain": [{"variable": "hydra.ext.org.graphviz.dot.AttrList"}],
+                                              "domain": {"variable": "hydra.ext.org.graphviz.dot.AttrList"},
                                               "parameter": "a"}}},
                                         "function": {
                                           "application": {
@@ -501,14 +473,10 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                    "body": {"variable": "hydra.lib.maybes.maybe"},
                                                     "type": {"list": {"variable": "hydra.ast.Expr"}}}},
                                                 "type": {"variable": "hydra.ext.org.graphviz.dot.AttrList"}}}}}}}}},
-                                "type": [
-                                  {
-                                    "constraints": null,
-                                    "type": {"list": {"variable": "hydra.ast.Expr"}},
-                                    "variables": []}]}],
+                                "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                             "body": {
                               "application": {
                                 "argument": {
@@ -528,24 +496,22 @@
                                         {"variable": "attrParts"}]},
                                     "function": {
                                       "typeApplication": {
-                                        "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                        "body": {"variable": "hydra.lib.lists.concat"},
                                         "type": {"variable": "hydra.ast.Expr"}}}}},
                                 "function": {"variable": "hydra.serialization.spaceSep"}}}}},
-                        "domain": [{"variable": "hydra.ext.org.graphviz.dot.EdgeStmt"}],
+                        "domain": {"variable": "hydra.ext.org.graphviz.dot.EdgeStmt"},
                         "parameter": "es"}}},
-                  "domain": [{"literal": {"boolean": {}}}],
+                  "domain": {"literal": {"boolean": {}}},
                   "parameter": "directed"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.ast.Expr"},
-                    "domain": {"variable": "hydra.ext.org.graphviz.dot.EdgeStmt"}}},
-                "domain": {"literal": {"boolean": {}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.ast.Expr"},
+                  "domain": {"variable": "hydra.ext.org.graphviz.dot.EdgeStmt"}}},
+              "domain": {"literal": {"boolean": {}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.graphviz.serde.writeEqualityPair",
@@ -572,11 +538,9 @@
                                     "record": {
                                       "field": "left",
                                       "typeName": "hydra.ext.org.graphviz.dot.EqualityPair"}}}}}},
-                          "type": [
-                            {
-                              "constraints": null,
-                              "type": {"variable": "hydra.ext.org.graphviz.dot.Id"},
-                              "variables": []}]},
+                          "type": {
+                            "type": {"variable": "hydra.ext.org.graphviz.dot.Id"},
+                            "variables": []}},
                         {
                           "name": "r",
                           "term": {
@@ -588,11 +552,9 @@
                                     "record": {
                                       "field": "right",
                                       "typeName": "hydra.ext.org.graphviz.dot.EqualityPair"}}}}}},
-                          "type": [
-                            {
-                              "constraints": null,
-                              "type": {"variable": "hydra.ext.org.graphviz.dot.Id"},
-                              "variables": []}]}],
+                          "type": {
+                            "type": {"variable": "hydra.ext.org.graphviz.dot.Id"},
+                            "variables": []}}],
                       "body": {
                         "application": {
                           "argument": {
@@ -610,16 +572,14 @@
                                   "argument": {"variable": "r"},
                                   "function": {"variable": "hydra.ext.graphviz.serde.writeId"}}}]},
                           "function": {"variable": "hydra.serialization.spaceSep"}}}}},
-                  "domain": [{"variable": "hydra.ext.org.graphviz.dot.EqualityPair"}],
+                  "domain": {"variable": "hydra.ext.org.graphviz.dot.EqualityPair"},
                   "parameter": "eq"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ast.Expr"},
-                "domain": {"variable": "hydra.ext.org.graphviz.dot.EqualityPair"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"variable": "hydra.ext.org.graphviz.dot.EqualityPair"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.graphviz.serde.writeGraph",
@@ -644,11 +604,7 @@
                                 "function": {
                                   "elimination": {
                                     "record": {"field": "strict", "typeName": "hydra.ext.org.graphviz.dot.Graph"}}}}}},
-                          "type": [
-                            {
-                              "constraints": null,
-                              "type": {"literal": {"boolean": {}}},
-                              "variables": []}]},
+                          "type": {"type": {"literal": {"boolean": {}}}, "variables": []}},
                         {
                           "name": "directed",
                           "term": {
@@ -658,11 +614,7 @@
                                 "function": {
                                   "elimination": {
                                     "record": {"field": "directed", "typeName": "hydra.ext.org.graphviz.dot.Graph"}}}}}},
-                          "type": [
-                            {
-                              "constraints": null,
-                              "type": {"literal": {"boolean": {}}},
-                              "variables": []}]},
+                          "type": {"type": {"literal": {"boolean": {}}}, "variables": []}},
                         {
                           "name": "stmts",
                           "term": {
@@ -674,11 +626,9 @@
                                     "record": {
                                       "field": "statements",
                                       "typeName": "hydra.ext.org.graphviz.dot.Graph"}}}}}},
-                          "type": [
-                            {
-                              "constraints": null,
-                              "type": {"list": {"variable": "hydra.ext.org.graphviz.dot.Stmt"}},
-                              "variables": []}]},
+                          "type": {
+                            "type": {"list": {"variable": "hydra.ext.org.graphviz.dot.Stmt"}},
+                            "variables": []}},
                         {
                           "name": "graphKeyword",
                           "term": {
@@ -692,13 +642,9 @@
                                       "argument": {"variable": "directed"},
                                       "function": {
                                         "typeApplication": {
-                                          "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                          "body": {"variable": "hydra.lib.logic.ifElse"},
                                           "type": {"literal": {"string": {}}}}}}}}}}},
-                          "type": [
-                            {
-                              "constraints": null,
-                              "type": {"literal": {"string": {}}},
-                              "variables": []}]},
+                          "type": {"type": {"literal": {"string": {}}}, "variables": []}},
                         {
                           "name": "graphExpr",
                           "term": {
@@ -727,13 +673,9 @@
                                       "argument": {"variable": "strict"},
                                       "function": {
                                         "typeApplication": {
-                                          "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                          "body": {"variable": "hydra.lib.logic.ifElse"},
                                           "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
-                          "type": [
-                            {
-                              "constraints": null,
-                              "type": {"variable": "hydra.ast.Expr"},
-                              "variables": []}]},
+                          "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}},
                         {
                           "name": "body",
                           "term": {
@@ -753,7 +695,7 @@
                                             "typeApplication": {
                                               "body": {
                                                 "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                   "type": {"variable": "hydra.ext.org.graphviz.dot.Stmt"}}},
                                               "type": {"variable": "hydra.ast.Expr"}}}}}}},
                                   "function": {
@@ -770,25 +712,19 @@
                                     "application": {
                                       "argument": {"variable": "hydra.serialization.curlyBraces"},
                                       "function": {"variable": "hydra.serialization.brackets"}}}}}}},
-                          "type": [
-                            {
-                              "constraints": null,
-                              "type": {"variable": "hydra.ast.Expr"},
-                              "variables": []}]}],
+                          "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                       "body": {
                         "application": {
                           "argument": {"list": [{"variable": "graphExpr"}, {"variable": "body"}]},
                           "function": {"variable": "hydra.serialization.spaceSep"}}}}},
-                  "domain": [{"variable": "hydra.ext.org.graphviz.dot.Graph"}],
+                  "domain": {"variable": "hydra.ext.org.graphviz.dot.Graph"},
                   "parameter": "g"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ast.Expr"},
-                "domain": {"variable": "hydra.ext.org.graphviz.dot.Graph"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"variable": "hydra.ext.org.graphviz.dot.Graph"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.graphviz.serde.writeId",
@@ -814,18 +750,16 @@
                                   "function": {
                                     "function": {"elimination": {"wrap": "hydra.ext.org.graphviz.dot.Id"}}}}},
                               {"literal": {"string": "\""}}]},
-                          "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                          "function": {"variable": "hydra.lib.strings.cat"}}},
                       "function": {"variable": "hydra.serialization.cst"}}},
-                  "domain": [{"variable": "hydra.ext.org.graphviz.dot.Id"}],
+                  "domain": {"variable": "hydra.ext.org.graphviz.dot.Id"},
                   "parameter": "i"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ast.Expr"},
-                "domain": {"variable": "hydra.ext.org.graphviz.dot.Id"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"variable": "hydra.ext.org.graphviz.dot.Id"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.graphviz.serde.writeNodeId",
@@ -850,11 +784,9 @@
                                 "function": {
                                   "elimination": {
                                     "record": {"field": "id", "typeName": "hydra.ext.org.graphviz.dot.NodeId"}}}}}},
-                          "type": [
-                            {
-                              "constraints": null,
-                              "type": {"variable": "hydra.ext.org.graphviz.dot.Id"},
-                              "variables": []}]},
+                          "type": {
+                            "type": {"variable": "hydra.ext.org.graphviz.dot.Id"},
+                            "variables": []}},
                         {
                           "name": "mp",
                           "term": {
@@ -864,11 +796,9 @@
                                 "function": {
                                   "elimination": {
                                     "record": {"field": "port", "typeName": "hydra.ext.org.graphviz.dot.NodeId"}}}}}},
-                          "type": [
-                            {
-                              "constraints": null,
-                              "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.Port"}},
-                              "variables": []}]}],
+                          "type": {
+                            "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.Port"}},
+                            "variables": []}}],
                       "body": {
                         "application": {
                           "argument": {
@@ -883,7 +813,7 @@
                                           "function": {"variable": "hydra.ext.graphviz.serde.writeId"}}},
                                       "function": {
                                         "typeApplication": {
-                                          "body": {"function": {"primitive": "hydra.lib.maybes.pure"}},
+                                          "body": {"variable": "hydra.lib.maybes.pure"},
                                           "type": {"variable": "hydra.ast.Expr"}}}}},
                                   {
                                     "application": {
@@ -895,24 +825,22 @@
                                             "typeApplication": {
                                               "body": {
                                                 "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                  "body": {"variable": "hydra.lib.maybes.map"},
                                                   "type": {"variable": "hydra.ext.org.graphviz.dot.Port"}}},
                                               "type": {"variable": "hydra.ast.Expr"}}}}}}}]},
                               "function": {
                                 "typeApplication": {
-                                  "body": {"function": {"primitive": "hydra.lib.maybes.cat"}},
+                                  "body": {"variable": "hydra.lib.maybes.cat"},
                                   "type": {"variable": "hydra.ast.Expr"}}}}},
                           "function": {"variable": "hydra.serialization.noSep"}}}}},
-                  "domain": [{"variable": "hydra.ext.org.graphviz.dot.NodeId"}],
+                  "domain": {"variable": "hydra.ext.org.graphviz.dot.NodeId"},
                   "parameter": "nid"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ast.Expr"},
-                "domain": {"variable": "hydra.ext.org.graphviz.dot.NodeId"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"variable": "hydra.ext.org.graphviz.dot.NodeId"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.graphviz.serde.writeNodeOrSubgraph",
@@ -945,7 +873,7 @@
                                                 "application": {
                                                   "argument": {"variable": "n"},
                                                   "function": {"variable": "hydra.ext.graphviz.serde.writeNodeId"}}},
-                                              "domain": [{"variable": "hydra.ext.org.graphviz.dot.NodeId"}],
+                                              "domain": {"variable": "hydra.ext.org.graphviz.dot.NodeId"},
                                               "parameter": "n"}}}},
                                       {
                                         "name": "subgraph",
@@ -959,25 +887,22 @@
                                                     "application": {
                                                       "argument": {"variable": "directed"},
                                                       "function": {"variable": "hydra.ext.graphviz.serde.writeSubgraph"}}}}},
-                                              "domain": [{"variable": "hydra.ext.org.graphviz.dot.Subgraph"}],
+                                              "domain": {"variable": "hydra.ext.org.graphviz.dot.Subgraph"},
                                               "parameter": "sg"}}}}],
-                                    "default": null,
                                     "typeName": "hydra.ext.org.graphviz.dot.NodeOrSubgraph"}}}}}},
-                        "domain": [{"variable": "hydra.ext.org.graphviz.dot.NodeOrSubgraph"}],
+                        "domain": {"variable": "hydra.ext.org.graphviz.dot.NodeOrSubgraph"},
                         "parameter": "ns"}}},
-                  "domain": [{"literal": {"boolean": {}}}],
+                  "domain": {"literal": {"boolean": {}}},
                   "parameter": "directed"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.ast.Expr"},
-                    "domain": {"variable": "hydra.ext.org.graphviz.dot.NodeOrSubgraph"}}},
-                "domain": {"literal": {"boolean": {}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.ast.Expr"},
+                  "domain": {"variable": "hydra.ext.org.graphviz.dot.NodeOrSubgraph"}}},
+              "domain": {"literal": {"boolean": {}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.graphviz.serde.writeNodeStmt",
@@ -1002,11 +927,9 @@
                                 "function": {
                                   "elimination": {
                                     "record": {"field": "id", "typeName": "hydra.ext.org.graphviz.dot.NodeStmt"}}}}}},
-                          "type": [
-                            {
-                              "constraints": null,
-                              "type": {"variable": "hydra.ext.org.graphviz.dot.NodeId"},
-                              "variables": []}]},
+                          "type": {
+                            "type": {"variable": "hydra.ext.org.graphviz.dot.NodeId"},
+                            "variables": []}},
                         {
                           "name": "attr",
                           "term": {
@@ -1018,11 +941,9 @@
                                     "record": {
                                       "field": "attributes",
                                       "typeName": "hydra.ext.org.graphviz.dot.NodeStmt"}}}}}},
-                          "type": [
-                            {
-                              "constraints": null,
-                              "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.AttrList"}},
-                              "variables": []}]}],
+                          "type": {
+                            "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.AttrList"}},
+                            "variables": []}}],
                       "body": {
                         "application": {
                           "argument": {
@@ -1037,7 +958,7 @@
                                           "function": {"variable": "hydra.ext.graphviz.serde.writeNodeId"}}},
                                       "function": {
                                         "typeApplication": {
-                                          "body": {"function": {"primitive": "hydra.lib.maybes.pure"}},
+                                          "body": {"variable": "hydra.lib.maybes.pure"},
                                           "type": {"variable": "hydra.ast.Expr"}}}}},
                                   {
                                     "application": {
@@ -1049,24 +970,22 @@
                                             "typeApplication": {
                                               "body": {
                                                 "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                  "body": {"variable": "hydra.lib.maybes.map"},
                                                   "type": {"variable": "hydra.ext.org.graphviz.dot.AttrList"}}},
                                               "type": {"variable": "hydra.ast.Expr"}}}}}}}]},
                               "function": {
                                 "typeApplication": {
-                                  "body": {"function": {"primitive": "hydra.lib.maybes.cat"}},
+                                  "body": {"variable": "hydra.lib.maybes.cat"},
                                   "type": {"variable": "hydra.ast.Expr"}}}}},
                           "function": {"variable": "hydra.serialization.spaceSep"}}}}},
-                  "domain": [{"variable": "hydra.ext.org.graphviz.dot.NodeStmt"}],
+                  "domain": {"variable": "hydra.ext.org.graphviz.dot.NodeStmt"},
                   "parameter": "ns"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ast.Expr"},
-                "domain": {"variable": "hydra.ext.org.graphviz.dot.NodeStmt"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"variable": "hydra.ext.org.graphviz.dot.NodeStmt"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.graphviz.serde.writePort",
@@ -1091,11 +1010,9 @@
                                 "function": {
                                   "elimination": {
                                     "record": {"field": "id", "typeName": "hydra.ext.org.graphviz.dot.Port"}}}}}},
-                          "type": [
-                            {
-                              "constraints": null,
-                              "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.Id"}},
-                              "variables": []}]},
+                          "type": {
+                            "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.Id"}},
+                            "variables": []}},
                         {
                           "name": "mp",
                           "term": {
@@ -1105,11 +1022,9 @@
                                 "function": {
                                   "elimination": {
                                     "record": {"field": "position", "typeName": "hydra.ext.org.graphviz.dot.Port"}}}}}},
-                          "type": [
-                            {
-                              "constraints": null,
-                              "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.CompassPt"}},
-                              "variables": []}]},
+                          "type": {
+                            "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.CompassPt"}},
+                            "variables": []}},
                         {
                           "name": "pre",
                           "term": {
@@ -1130,7 +1045,7 @@
                                               "application": {
                                                 "argument": {"variable": "i"},
                                                 "function": {"variable": "hydra.ext.graphviz.serde.writeId"}}}]},
-                                        "domain": [{"variable": "hydra.ext.org.graphviz.dot.Id"}],
+                                        "domain": {"variable": "hydra.ext.org.graphviz.dot.Id"},
                                         "parameter": "i"}}},
                                   "function": {
                                     "application": {
@@ -1140,14 +1055,10 @@
                                         "typeApplication": {
                                           "body": {
                                             "typeApplication": {
-                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                               "type": {"list": {"variable": "hydra.ast.Expr"}}}},
                                           "type": {"variable": "hydra.ext.org.graphviz.dot.Id"}}}}}}}}},
-                          "type": [
-                            {
-                              "constraints": null,
-                              "type": {"list": {"variable": "hydra.ast.Expr"}},
-                              "variables": []}]},
+                          "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}},
                         {
                           "name": "suf",
                           "term": {
@@ -1168,7 +1079,7 @@
                                               "application": {
                                                 "argument": {"variable": "cp"},
                                                 "function": {"variable": "hydra.ext.graphviz.serde.writeCompassPt"}}}]},
-                                        "domain": [{"variable": "hydra.ext.org.graphviz.dot.CompassPt"}],
+                                        "domain": {"variable": "hydra.ext.org.graphviz.dot.CompassPt"},
                                         "parameter": "cp"}}},
                                   "function": {
                                     "application": {
@@ -1178,14 +1089,10 @@
                                         "typeApplication": {
                                           "body": {
                                             "typeApplication": {
-                                              "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                              "body": {"variable": "hydra.lib.maybes.maybe"},
                                               "type": {"list": {"variable": "hydra.ast.Expr"}}}},
                                           "type": {"variable": "hydra.ext.org.graphviz.dot.CompassPt"}}}}}}}}},
-                          "type": [
-                            {
-                              "constraints": null,
-                              "type": {"list": {"variable": "hydra.ast.Expr"}},
-                              "variables": []}]}],
+                          "type": {"type": {"list": {"variable": "hydra.ast.Expr"}}, "variables": []}}],
                       "body": {
                         "application": {
                           "argument": {
@@ -1193,19 +1100,17 @@
                               "argument": {"list": [{"variable": "pre"}, {"variable": "suf"}]},
                               "function": {
                                 "typeApplication": {
-                                  "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                  "body": {"variable": "hydra.lib.lists.concat"},
                                   "type": {"variable": "hydra.ast.Expr"}}}}},
                           "function": {"variable": "hydra.serialization.noSep"}}}}},
-                  "domain": [{"variable": "hydra.ext.org.graphviz.dot.Port"}],
+                  "domain": {"variable": "hydra.ext.org.graphviz.dot.Port"},
                   "parameter": "p"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ast.Expr"},
-                "domain": {"variable": "hydra.ext.org.graphviz.dot.Port"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"variable": "hydra.ext.org.graphviz.dot.Port"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.graphviz.serde.writeStmt",
@@ -1238,7 +1143,7 @@
                                                 "application": {
                                                   "argument": {"variable": "n"},
                                                   "function": {"variable": "hydra.ext.graphviz.serde.writeNodeStmt"}}},
-                                              "domain": [{"variable": "hydra.ext.org.graphviz.dot.NodeStmt"}],
+                                              "domain": {"variable": "hydra.ext.org.graphviz.dot.NodeStmt"},
                                               "parameter": "n"}}}},
                                       {
                                         "name": "edge",
@@ -1252,7 +1157,7 @@
                                                     "application": {
                                                       "argument": {"variable": "directed"},
                                                       "function": {"variable": "hydra.ext.graphviz.serde.writeEdgeStmt"}}}}},
-                                              "domain": [{"variable": "hydra.ext.org.graphviz.dot.EdgeStmt"}],
+                                              "domain": {"variable": "hydra.ext.org.graphviz.dot.EdgeStmt"},
                                               "parameter": "e"}}}},
                                       {
                                         "name": "attr",
@@ -1263,7 +1168,7 @@
                                                 "application": {
                                                   "argument": {"variable": "a"},
                                                   "function": {"variable": "hydra.ext.graphviz.serde.writeAttrStmt"}}},
-                                              "domain": [{"variable": "hydra.ext.org.graphviz.dot.AttrStmt"}],
+                                              "domain": {"variable": "hydra.ext.org.graphviz.dot.AttrStmt"},
                                               "parameter": "a"}}}},
                                       {
                                         "name": "equals",
@@ -1274,7 +1179,7 @@
                                                 "application": {
                                                   "argument": {"variable": "eq"},
                                                   "function": {"variable": "hydra.ext.graphviz.serde.writeEqualityPair"}}},
-                                              "domain": [{"variable": "hydra.ext.org.graphviz.dot.EqualityPair"}],
+                                              "domain": {"variable": "hydra.ext.org.graphviz.dot.EqualityPair"},
                                               "parameter": "eq"}}}},
                                       {
                                         "name": "subgraph",
@@ -1288,25 +1193,22 @@
                                                     "application": {
                                                       "argument": {"variable": "directed"},
                                                       "function": {"variable": "hydra.ext.graphviz.serde.writeSubgraph"}}}}},
-                                              "domain": [{"variable": "hydra.ext.org.graphviz.dot.Subgraph"}],
+                                              "domain": {"variable": "hydra.ext.org.graphviz.dot.Subgraph"},
                                               "parameter": "sg"}}}}],
-                                    "default": null,
                                     "typeName": "hydra.ext.org.graphviz.dot.Stmt"}}}}}},
-                        "domain": [{"variable": "hydra.ext.org.graphviz.dot.Stmt"}],
+                        "domain": {"variable": "hydra.ext.org.graphviz.dot.Stmt"},
                         "parameter": "s"}}},
-                  "domain": [{"literal": {"boolean": {}}}],
+                  "domain": {"literal": {"boolean": {}}},
                   "parameter": "directed"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.ast.Expr"},
-                    "domain": {"variable": "hydra.ext.org.graphviz.dot.Stmt"}}},
-                "domain": {"literal": {"boolean": {}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.ast.Expr"},
+                  "domain": {"variable": "hydra.ext.org.graphviz.dot.Stmt"}}},
+              "domain": {"literal": {"boolean": {}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.graphviz.serde.writeSubgraph",
@@ -1336,11 +1238,9 @@
                                           "record": {
                                             "field": "subgraphId",
                                             "typeName": "hydra.ext.org.graphviz.dot.Subgraph"}}}}}},
-                                "type": [
-                                  {
-                                    "constraints": null,
-                                    "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.SubgraphId"}},
-                                    "variables": []}]},
+                                "type": {
+                                  "type": {"maybe": {"variable": "hydra.ext.org.graphviz.dot.SubgraphId"}},
+                                  "variables": []}},
                               {
                                 "name": "stmts",
                                 "term": {
@@ -1352,11 +1252,9 @@
                                           "record": {
                                             "field": "statements",
                                             "typeName": "hydra.ext.org.graphviz.dot.Subgraph"}}}}}},
-                                "type": [
-                                  {
-                                    "constraints": null,
-                                    "type": {"list": {"variable": "hydra.ext.org.graphviz.dot.Stmt"}},
-                                    "variables": []}]},
+                                "type": {
+                                  "type": {"list": {"variable": "hydra.ext.org.graphviz.dot.Stmt"}},
+                                  "variables": []}},
                               {
                                 "name": "body",
                                 "term": {
@@ -1376,7 +1274,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                        "body": {"variable": "hydra.lib.lists.map"},
                                                         "type": {"variable": "hydra.ext.org.graphviz.dot.Stmt"}}},
                                                     "type": {"variable": "hydra.ast.Expr"}}}}}}},
                                         "function": {"variable": "hydra.serialization.spaceSep"}}},
@@ -1387,11 +1285,7 @@
                                           "application": {
                                             "argument": {"variable": "hydra.serialization.curlyBraces"},
                                             "function": {"variable": "hydra.serialization.brackets"}}}}}}},
-                                "type": [
-                                  {
-                                    "constraints": null,
-                                    "type": {"variable": "hydra.ast.Expr"},
-                                    "variables": []}]}],
+                                "type": {"type": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                             "body": {
                               "application": {
                                 "argument": {
@@ -1408,7 +1302,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                        "body": {"variable": "hydra.lib.maybes.map"},
                                                         "type": {"variable": "hydra.ext.org.graphviz.dot.SubgraphId"}}},
                                                     "type": {"variable": "hydra.ast.Expr"}}}}}}},
                                         {
@@ -1416,28 +1310,26 @@
                                             "argument": {"variable": "body"},
                                             "function": {
                                               "typeApplication": {
-                                                "body": {"function": {"primitive": "hydra.lib.maybes.pure"}},
+                                                "body": {"variable": "hydra.lib.maybes.pure"},
                                                 "type": {"variable": "hydra.ast.Expr"}}}}}]},
                                     "function": {
                                       "typeApplication": {
-                                        "body": {"function": {"primitive": "hydra.lib.maybes.cat"}},
+                                        "body": {"variable": "hydra.lib.maybes.cat"},
                                         "type": {"variable": "hydra.ast.Expr"}}}}},
                                 "function": {"variable": "hydra.serialization.spaceSep"}}}}},
-                        "domain": [{"variable": "hydra.ext.org.graphviz.dot.Subgraph"}],
+                        "domain": {"variable": "hydra.ext.org.graphviz.dot.Subgraph"},
                         "parameter": "sg"}}},
-                  "domain": [{"literal": {"boolean": {}}}],
+                  "domain": {"literal": {"boolean": {}}},
                   "parameter": "directed"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.ast.Expr"},
-                    "domain": {"variable": "hydra.ext.org.graphviz.dot.Subgraph"}}},
-                "domain": {"literal": {"boolean": {}}}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.ast.Expr"},
+                  "domain": {"variable": "hydra.ext.org.graphviz.dot.Subgraph"}}},
+              "domain": {"literal": {"boolean": {}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.graphviz.serde.writeSubgraphId",
@@ -1465,7 +1357,7 @@
                                       "function": {"variable": "hydra.serialization.cst"}}},
                                   "function": {
                                     "typeApplication": {
-                                      "body": {"function": {"primitive": "hydra.lib.maybes.pure"}},
+                                      "body": {"variable": "hydra.lib.maybes.pure"},
                                       "type": {"variable": "hydra.ast.Expr"}}}}},
                               {
                                 "application": {
@@ -1481,26 +1373,23 @@
                                         "typeApplication": {
                                           "body": {
                                             "typeApplication": {
-                                              "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                              "body": {"variable": "hydra.lib.maybes.map"},
                                               "type": {"variable": "hydra.ext.org.graphviz.dot.Id"}}},
                                           "type": {"variable": "hydra.ast.Expr"}}}}}}}]},
                           "function": {
                             "typeApplication": {
-                              "body": {"function": {"primitive": "hydra.lib.maybes.cat"}},
+                              "body": {"variable": "hydra.lib.maybes.cat"},
                               "type": {"variable": "hydra.ast.Expr"}}}}},
                       "function": {"variable": "hydra.serialization.spaceSep"}}},
-                  "domain": [{"variable": "hydra.ext.org.graphviz.dot.SubgraphId"}],
+                  "domain": {"variable": "hydra.ext.org.graphviz.dot.SubgraphId"},
                   "parameter": "sid"}}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.ast.Expr"},
-                "domain": {"variable": "hydra.ext.org.graphviz.dot.SubgraphId"}}},
-            "variables": []}]}}],
-  "description": [
-    "Serialization functions for converting Graphviz DOT AST to abstract expressions"],
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"variable": "hydra.ext.org.graphviz.dot.SubgraphId"}}},
+          "variables": []}}}],
+  "description": "Serialization functions for converting Graphviz DOT AST to abstract expressions",
   "namespace": "hydra.ext.graphviz.serde",
   "termDependencies": ["hydra.serialization"],
   "typeDependencies": [
@@ -1513,7 +1402,6 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
-    "hydra.error.module",
     "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",

@@ -266,7 +266,9 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
         return tagCmp;
       }
       Exactly o = (Exactly) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -309,7 +311,9 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
         return tagCmp;
       }
       AtLeast o = (AtLeast) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -352,7 +356,9 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
         return tagCmp;
       }
       Range o = (Range) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -51,16 +51,11 @@
                                                                                   "term": {
                                                                                     "union": {
                                                                                       "field": {
-                                                                                        "name": "function",
+                                                                                        "name": "variable",
                                                                                         "term": {
-                                                                                          "union": {
-                                                                                            "field": {
-                                                                                              "name": "primitive",
-                                                                                              "term": {
-                                                                                                "wrap": {
-                                                                                                  "body": {"literal": {"string": "hydra.lib.equality.equal"}},
-                                                                                                  "typeName": "hydra.core.Name"}}},
-                                                                                            "typeName": "hydra.core.Function"}}},
+                                                                                          "wrap": {
+                                                                                            "body": {"literal": {"string": "hydra.lib.equality.equal"}},
+                                                                                            "typeName": "hydra.core.Name"}}},
                                                                                       "typeName": "hydra.core.Term"}}},
                                                                                 {
                                                                                   "name": "argument",
@@ -85,16 +80,11 @@
                                                                                                               "term": {
                                                                                                                 "union": {
                                                                                                                   "field": {
-                                                                                                                    "name": "function",
+                                                                                                                    "name": "variable",
                                                                                                                     "term": {
-                                                                                                                      "union": {
-                                                                                                                        "field": {
-                                                                                                                          "name": "primitive",
-                                                                                                                          "term": {
-                                                                                                                            "wrap": {
-                                                                                                                              "body": {"literal": {"string": "hydra.lib.math.mod"}},
-                                                                                                                              "typeName": "hydra.core.Name"}}},
-                                                                                                                        "typeName": "hydra.core.Function"}}},
+                                                                                                                      "wrap": {
+                                                                                                                        "body": {"literal": {"string": "hydra.lib.math.mod"}},
+                                                                                                                        "typeName": "hydra.core.Name"}}},
                                                                                                                   "typeName": "hydra.core.Term"}}},
                                                                                                             {"name": "argument", "term": {"variable": "x"}}],
                                                                                                           "typeName": "hydra.core.Application"}}},
@@ -139,30 +129,28 @@
                                                           "typeName": "hydra.core.Term"}}}},
                                                   "type": {"variable": "t2"}}},
                                               "type": {"variable": "hydra.core.Term"}}},
-                                          "domain": [{"variable": "hydra.core.Term"}],
+                                          "domain": {"variable": "hydra.core.Term"},
                                           "parameter": "x"}}},
-                                    "domain": [{"variable": "t1"}],
+                                    "domain": {"variable": "t1"},
                                     "parameter": "g"}}},
-                              "domain": [{"variable": "t0"}],
+                              "domain": {"variable": "t0"},
                               "parameter": "cx"}}}}},
                     "parameter": "t2"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "function": {
-                        "codomain": {
-                          "either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.core.Term"}}},
-                        "domain": {"variable": "hydra.core.Term"}}},
-                    "domain": {"variable": "t1"}}},
-                "domain": {"variable": "t0"}}},
-            "variables": ["t0", "t1", "t2"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {
+                        "either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.core.Term"}}},
+                      "domain": {"variable": "hydra.core.Term"}}},
+                  "domain": {"variable": "t1"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1", "t2"]}}},
     {
       "term": {
         "name": "hydra.eval.lib.math.odd",
@@ -205,16 +193,11 @@
                                                                     "term": {
                                                                       "union": {
                                                                         "field": {
-                                                                          "name": "function",
+                                                                          "name": "variable",
                                                                           "term": {
-                                                                            "union": {
-                                                                              "field": {
-                                                                                "name": "primitive",
-                                                                                "term": {
-                                                                                  "wrap": {
-                                                                                    "body": {"literal": {"string": "hydra.lib.logic.not"}},
-                                                                                    "typeName": "hydra.core.Name"}}},
-                                                                              "typeName": "hydra.core.Function"}}},
+                                                                            "wrap": {
+                                                                              "body": {"literal": {"string": "hydra.lib.logic.not"}},
+                                                                              "typeName": "hydra.core.Name"}}},
                                                                         "typeName": "hydra.core.Term"}}},
                                                                   {
                                                                     "name": "argument",
@@ -230,16 +213,11 @@
                                                                                   "term": {
                                                                                     "union": {
                                                                                       "field": {
-                                                                                        "name": "function",
+                                                                                        "name": "variable",
                                                                                         "term": {
-                                                                                          "union": {
-                                                                                            "field": {
-                                                                                              "name": "primitive",
-                                                                                              "term": {
-                                                                                                "wrap": {
-                                                                                                  "body": {"literal": {"string": "hydra.lib.math.even"}},
-                                                                                                  "typeName": "hydra.core.Name"}}},
-                                                                                            "typeName": "hydra.core.Function"}}},
+                                                                                          "wrap": {
+                                                                                            "body": {"literal": {"string": "hydra.lib.math.even"}},
+                                                                                            "typeName": "hydra.core.Name"}}},
                                                                                       "typeName": "hydra.core.Term"}}},
                                                                                 {"name": "argument", "term": {"variable": "x"}}],
                                                                               "typeName": "hydra.core.Application"}}},
@@ -248,30 +226,28 @@
                                                           "typeName": "hydra.core.Term"}}}},
                                                   "type": {"variable": "t2"}}},
                                               "type": {"variable": "hydra.core.Term"}}},
-                                          "domain": [{"variable": "hydra.core.Term"}],
+                                          "domain": {"variable": "hydra.core.Term"},
                                           "parameter": "x"}}},
-                                    "domain": [{"variable": "t1"}],
+                                    "domain": {"variable": "t1"},
                                     "parameter": "g"}}},
-                              "domain": [{"variable": "t0"}],
+                              "domain": {"variable": "t0"},
                               "parameter": "cx"}}}}},
                     "parameter": "t2"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "function": {
-                        "codomain": {
-                          "either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.core.Term"}}},
-                        "domain": {"variable": "hydra.core.Term"}}},
-                    "domain": {"variable": "t1"}}},
-                "domain": {"variable": "t0"}}},
-            "variables": ["t0", "t1", "t2"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {
+                        "either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.core.Term"}}},
+                      "domain": {"variable": "hydra.core.Term"}}},
+                  "domain": {"variable": "t1"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1", "t2"]}}},
     {
       "term": {
         "name": "hydra.eval.lib.math.pred",
@@ -323,16 +299,11 @@
                                                                                   "term": {
                                                                                     "union": {
                                                                                       "field": {
-                                                                                        "name": "function",
+                                                                                        "name": "variable",
                                                                                         "term": {
-                                                                                          "union": {
-                                                                                            "field": {
-                                                                                              "name": "primitive",
-                                                                                              "term": {
-                                                                                                "wrap": {
-                                                                                                  "body": {"literal": {"string": "hydra.lib.math.sub"}},
-                                                                                                  "typeName": "hydra.core.Name"}}},
-                                                                                            "typeName": "hydra.core.Function"}}},
+                                                                                          "wrap": {
+                                                                                            "body": {"literal": {"string": "hydra.lib.math.sub"}},
+                                                                                            "typeName": "hydra.core.Name"}}},
                                                                                       "typeName": "hydra.core.Term"}}},
                                                                                 {"name": "argument", "term": {"variable": "x"}}],
                                                                               "typeName": "hydra.core.Application"}}},
@@ -357,30 +328,28 @@
                                                           "typeName": "hydra.core.Term"}}}},
                                                   "type": {"variable": "t2"}}},
                                               "type": {"variable": "hydra.core.Term"}}},
-                                          "domain": [{"variable": "hydra.core.Term"}],
+                                          "domain": {"variable": "hydra.core.Term"},
                                           "parameter": "x"}}},
-                                    "domain": [{"variable": "t1"}],
+                                    "domain": {"variable": "t1"},
                                     "parameter": "g"}}},
-                              "domain": [{"variable": "t0"}],
+                              "domain": {"variable": "t0"},
                               "parameter": "cx"}}}}},
                     "parameter": "t2"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "function": {
-                        "codomain": {
-                          "either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.core.Term"}}},
-                        "domain": {"variable": "hydra.core.Term"}}},
-                    "domain": {"variable": "t1"}}},
-                "domain": {"variable": "t0"}}},
-            "variables": ["t0", "t1", "t2"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {
+                        "either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.core.Term"}}},
+                      "domain": {"variable": "hydra.core.Term"}}},
+                  "domain": {"variable": "t1"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1", "t2"]}}},
     {
       "term": {
         "name": "hydra.eval.lib.math.succ",
@@ -432,16 +401,11 @@
                                                                                   "term": {
                                                                                     "union": {
                                                                                       "field": {
-                                                                                        "name": "function",
+                                                                                        "name": "variable",
                                                                                         "term": {
-                                                                                          "union": {
-                                                                                            "field": {
-                                                                                              "name": "primitive",
-                                                                                              "term": {
-                                                                                                "wrap": {
-                                                                                                  "body": {"literal": {"string": "hydra.lib.math.add"}},
-                                                                                                  "typeName": "hydra.core.Name"}}},
-                                                                                            "typeName": "hydra.core.Function"}}},
+                                                                                          "wrap": {
+                                                                                            "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                            "typeName": "hydra.core.Name"}}},
                                                                                       "typeName": "hydra.core.Term"}}},
                                                                                 {"name": "argument", "term": {"variable": "x"}}],
                                                                               "typeName": "hydra.core.Application"}}},
@@ -466,32 +430,29 @@
                                                           "typeName": "hydra.core.Term"}}}},
                                                   "type": {"variable": "t2"}}},
                                               "type": {"variable": "hydra.core.Term"}}},
-                                          "domain": [{"variable": "hydra.core.Term"}],
+                                          "domain": {"variable": "hydra.core.Term"},
                                           "parameter": "x"}}},
-                                    "domain": [{"variable": "t1"}],
+                                    "domain": {"variable": "t1"},
                                     "parameter": "g"}}},
-                              "domain": [{"variable": "t0"}],
+                              "domain": {"variable": "t0"},
                               "parameter": "cx"}}}}},
                     "parameter": "t2"}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "function": {
-                        "codomain": {
-                          "either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.core.Term"}}},
-                        "domain": {"variable": "hydra.core.Term"}}},
-                    "domain": {"variable": "t1"}}},
-                "domain": {"variable": "t0"}}},
-            "variables": ["t0", "t1", "t2"]}]}}],
-  "description": [
-    "Evaluation-level implementations of Math functions for the Hydra interpreter."],
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {
+                        "either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.core.Term"}}},
+                      "domain": {"variable": "hydra.core.Term"}}},
+                  "domain": {"variable": "t1"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1", "t2"]}}}],
+  "description": "Evaluation-level implementations of Math functions for the Hydra interpreter.",
   "namespace": "hydra.eval.lib.math",
   "termDependencies": [],
   "typeDependencies": [
@@ -503,7 +464,6 @@
     "hydra.core",
     "hydra.error.checking",
     "hydra.error.core",
-    "hydra.error.module",
     "hydra.error.packaging",
     "hydra.errors",
     "hydra.graph",

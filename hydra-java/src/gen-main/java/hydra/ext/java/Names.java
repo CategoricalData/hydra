@@ -31,13 +31,13 @@ public interface Names {
   }
 
   static hydra.util.Maybe<hydra.ext.java.syntax.PackageName> hydraCorePackageName() {
-    return hydra.util.Maybe.just(hydra.ext.java.Names.javaPackageName(hydra.util.ConsList.of(
+    return hydra.util.Maybe.just(hydra.ext.java.Names.javaPackageName(java.util.Arrays.asList(
       "hydra",
       "core")));
   }
 
   static hydra.util.Maybe<hydra.ext.java.syntax.PackageName> hydraUtilPackageName() {
-    return hydra.util.Maybe.just(hydra.ext.java.Names.javaPackageName(hydra.util.ConsList.of(
+    return hydra.util.Maybe.just(hydra.ext.java.Names.javaPackageName(java.util.Arrays.asList(
       "hydra",
       "util")));
   }
@@ -47,26 +47,26 @@ public interface Names {
   }
 
   static hydra.util.Maybe<hydra.ext.java.syntax.PackageName> javaLangPackageName() {
-    return hydra.util.Maybe.just(hydra.ext.java.Names.javaPackageName(hydra.util.ConsList.of(
+    return hydra.util.Maybe.just(hydra.ext.java.Names.javaPackageName(java.util.Arrays.asList(
       "java",
       "lang")));
   }
 
-  static hydra.ext.java.syntax.PackageName javaPackageName(hydra.util.ConsList<String> parts) {
+  static hydra.ext.java.syntax.PackageName javaPackageName(java.util.List<String> parts) {
     return new hydra.ext.java.syntax.PackageName(hydra.lib.lists.Map.apply(
       (java.util.function.Function<String, hydra.ext.java.syntax.Identifier>) (p -> new hydra.ext.java.syntax.Identifier(p)),
       parts));
   }
 
   static hydra.util.Maybe<hydra.ext.java.syntax.PackageName> javaUtilFunctionPackageName() {
-    return hydra.util.Maybe.just(hydra.ext.java.Names.javaPackageName(hydra.util.ConsList.of(
+    return hydra.util.Maybe.just(hydra.ext.java.Names.javaPackageName(java.util.Arrays.asList(
       "java",
       "util",
       "function")));
   }
 
   static hydra.util.Maybe<hydra.ext.java.syntax.PackageName> javaUtilPackageName() {
-    return hydra.util.Maybe.just(hydra.ext.java.Names.javaPackageName(hydra.util.ConsList.of(
+    return hydra.util.Maybe.just(hydra.ext.java.Names.javaPackageName(java.util.Arrays.asList(
       "java",
       "util")));
   }

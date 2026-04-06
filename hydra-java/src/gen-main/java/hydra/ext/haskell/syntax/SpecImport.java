@@ -44,9 +44,9 @@ public abstract class SpecImport implements Serializable, Comparable<SpecImport>
    * A list of imports to include
    */
   public static final class List extends hydra.ext.haskell.syntax.SpecImport implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.haskell.syntax.ImportExportSpec> value;
+    public final java.util.List<hydra.ext.haskell.syntax.ImportExportSpec> value;
 
-    public List (hydra.util.ConsList<hydra.ext.haskell.syntax.ImportExportSpec> value) {
+    public List (java.util.List<hydra.ext.haskell.syntax.ImportExportSpec> value) {
       this.value = value;
     }
 
@@ -74,7 +74,9 @@ public abstract class SpecImport implements Serializable, Comparable<SpecImport>
         return tagCmp;
       }
       List o = (List) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -87,9 +89,9 @@ public abstract class SpecImport implements Serializable, Comparable<SpecImport>
    * A list of imports to exclude
    */
   public static final class Hiding extends hydra.ext.haskell.syntax.SpecImport implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.haskell.syntax.ImportExportSpec> value;
+    public final java.util.List<hydra.ext.haskell.syntax.ImportExportSpec> value;
 
-    public Hiding (hydra.util.ConsList<hydra.ext.haskell.syntax.ImportExportSpec> value) {
+    public Hiding (java.util.List<hydra.ext.haskell.syntax.ImportExportSpec> value) {
       this.value = value;
     }
 
@@ -117,7 +119,9 @@ public abstract class SpecImport implements Serializable, Comparable<SpecImport>
         return tagCmp;
       }
       Hiding o = (Hiding) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

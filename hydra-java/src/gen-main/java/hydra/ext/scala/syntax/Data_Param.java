@@ -15,7 +15,7 @@ public class Data_Param implements Serializable, Comparable<Data_Param> {
 
   public static final hydra.core.Name DEFAULT = new hydra.core.Name("default");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods;
+  public final java.util.List<hydra.ext.scala.syntax.Mod> mods;
 
   public final hydra.ext.scala.syntax.Name name;
 
@@ -23,7 +23,7 @@ public class Data_Param implements Serializable, Comparable<Data_Param> {
 
   public final hydra.util.Maybe<hydra.ext.scala.syntax.Data> default_;
 
-  public Data_Param (hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods, hydra.ext.scala.syntax.Name name, hydra.util.Maybe<hydra.ext.scala.syntax.Type> decltpe, hydra.util.Maybe<hydra.ext.scala.syntax.Data> default_) {
+  public Data_Param (java.util.List<hydra.ext.scala.syntax.Mod> mods, hydra.ext.scala.syntax.Name name, hydra.util.Maybe<hydra.ext.scala.syntax.Type> decltpe, hydra.util.Maybe<hydra.ext.scala.syntax.Data> default_) {
     this.mods = mods;
     this.name = name;
     this.decltpe = decltpe;
@@ -56,22 +56,30 @@ public class Data_Param implements Serializable, Comparable<Data_Param> {
   @SuppressWarnings("unchecked")
   public int compareTo(Data_Param other) {
     int cmp = 0;
-    cmp = ((Comparable) mods).compareTo(other.mods);
+    cmp = hydra.util.Comparing.compare(
+      mods,
+      other.mods);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) decltpe).compareTo(other.decltpe);
+    cmp = hydra.util.Comparing.compare(
+      decltpe,
+      other.decltpe);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) default_).compareTo(other.default_);
+    return hydra.util.Comparing.compare(
+      default_,
+      other.default_);
   }
 
-  public Data_Param withMods(hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods) {
+  public Data_Param withMods(java.util.List<hydra.ext.scala.syntax.Mod> mods) {
     return new Data_Param(mods, name, decltpe, default_);
   }
 

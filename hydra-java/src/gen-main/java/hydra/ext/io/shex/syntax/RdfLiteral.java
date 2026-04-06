@@ -42,11 +42,15 @@ public class RdfLiteral implements Serializable, Comparable<RdfLiteral> {
   @SuppressWarnings("unchecked")
   public int compareTo(RdfLiteral other) {
     int cmp = 0;
-    cmp = ((Comparable) String_).compareTo(other.String_);
+    cmp = hydra.util.Comparing.compare(
+      String_,
+      other.String_);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) Alts).compareTo(other.Alts);
+    return hydra.util.Comparing.compare(
+      Alts,
+      other.Alts);
   }
 
   public RdfLiteral withString(hydra.ext.io.shex.syntax.String_ String_) {

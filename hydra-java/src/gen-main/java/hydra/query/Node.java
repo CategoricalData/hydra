@@ -82,7 +82,9 @@ public abstract class Node implements Serializable, Comparable<Node> {
         return tagCmp;
       }
       Term o = (Term) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -125,7 +127,9 @@ public abstract class Node implements Serializable, Comparable<Node> {
         return tagCmp;
       }
       Variable o = (Variable) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

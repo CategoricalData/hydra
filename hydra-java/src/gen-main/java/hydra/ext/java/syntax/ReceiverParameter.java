@@ -13,13 +13,13 @@ public class ReceiverParameter implements Serializable, Comparable<ReceiverParam
 
   public static final hydra.core.Name IDENTIFIER = new hydra.core.Name("identifier");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations;
+  public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
 
   public final hydra.ext.java.syntax.UnannType unannType;
 
   public final hydra.util.Maybe<hydra.ext.java.syntax.Identifier> identifier;
 
-  public ReceiverParameter (hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations, hydra.ext.java.syntax.UnannType unannType, hydra.util.Maybe<hydra.ext.java.syntax.Identifier> identifier) {
+  public ReceiverParameter (java.util.List<hydra.ext.java.syntax.Annotation> annotations, hydra.ext.java.syntax.UnannType unannType, hydra.util.Maybe<hydra.ext.java.syntax.Identifier> identifier) {
     this.annotations = annotations;
     this.unannType = unannType;
     this.identifier = identifier;
@@ -49,18 +49,24 @@ public class ReceiverParameter implements Serializable, Comparable<ReceiverParam
   @SuppressWarnings("unchecked")
   public int compareTo(ReceiverParameter other) {
     int cmp = 0;
-    cmp = ((Comparable) annotations).compareTo(other.annotations);
+    cmp = hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) unannType).compareTo(other.unannType);
+    cmp = hydra.util.Comparing.compare(
+      unannType,
+      other.unannType);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) identifier).compareTo(other.identifier);
+    return hydra.util.Comparing.compare(
+      identifier,
+      other.identifier);
   }
 
-  public ReceiverParameter withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {
+  public ReceiverParameter withAnnotations(java.util.List<hydra.ext.java.syntax.Annotation> annotations) {
     return new ReceiverParameter(annotations, unannType, identifier);
   }
 

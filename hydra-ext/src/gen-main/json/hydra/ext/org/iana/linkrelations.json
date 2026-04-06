@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.org.iana.linkrelations.LinkRelationType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1329,8 +1328,7 @@
                                 "string": "Points to the versioned resource from which this working copy was obtained. [RFC5829]"}}}],
                         "body": {"unit": {}}}}}]}}},
           "variables": []}}}],
-  "description": [
-    "All IANA Link Relation Types, as of 2022-10-11. See https://www.iana.org/assignments/link-relations/link-relations.xhtml"],
+  "description": "All IANA Link Relation Types, as of 2022-10-11. See https://www.iana.org/assignments/link-relations/link-relations.xhtml",
   "namespace": "hydra.ext.org.iana.linkrelations",
   "termDependencies": [],
   "typeDependencies": []}

@@ -42,11 +42,15 @@ public class ObjectHasValue implements Serializable, Comparable<ObjectHasValue> 
   @SuppressWarnings("unchecked")
   public int compareTo(ObjectHasValue other) {
     int cmp = 0;
-    cmp = ((Comparable) property).compareTo(other.property);
+    cmp = hydra.util.Comparing.compare(
+      property,
+      other.property);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) individual).compareTo(other.individual);
+    return hydra.util.Comparing.compare(
+      individual,
+      other.individual);
   }
 
   public ObjectHasValue withProperty(hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property) {

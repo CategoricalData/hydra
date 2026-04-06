@@ -6,14 +6,6 @@ import hydra.errors.*
 
 import hydra.testing.*
 
-import hydra.lib.eithers
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.strings
-
 def tag(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.testing.Tag] =
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.testing.Tag]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match

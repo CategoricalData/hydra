@@ -68,7 +68,9 @@ public abstract class PatternElement implements Serializable, Comparable<Pattern
         return tagCmp;
       }
       Chained o = (Chained) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class PatternElement implements Serializable, Comparable<Pattern
         return tagCmp;
       }
       Parenthesized o = (Parenthesized) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

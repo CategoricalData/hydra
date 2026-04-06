@@ -130,7 +130,9 @@ public abstract class TypeSpecifier implements Serializable, Comparable<TypeSpec
         return tagCmp;
       }
       Named o = (Named) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -173,7 +175,9 @@ public abstract class TypeSpecifier implements Serializable, Comparable<TypeSpec
         return tagCmp;
       }
       List o = (List) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -186,9 +190,9 @@ public abstract class TypeSpecifier implements Serializable, Comparable<TypeSpec
    * A function type (params and return)
    */
   public static final class Function extends hydra.ext.lisp.syntax.TypeSpecifier implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.lisp.syntax.TypeSpecifier> value;
+    public final java.util.List<hydra.ext.lisp.syntax.TypeSpecifier> value;
 
-    public Function (hydra.util.ConsList<hydra.ext.lisp.syntax.TypeSpecifier> value) {
+    public Function (java.util.List<hydra.ext.lisp.syntax.TypeSpecifier> value) {
       this.value = value;
     }
 
@@ -216,7 +220,9 @@ public abstract class TypeSpecifier implements Serializable, Comparable<TypeSpec
         return tagCmp;
       }
       Function o = (Function) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -259,7 +265,9 @@ public abstract class TypeSpecifier implements Serializable, Comparable<TypeSpec
         return tagCmp;
       }
       Maybe o = (Maybe) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -272,9 +280,9 @@ public abstract class TypeSpecifier implements Serializable, Comparable<TypeSpec
    * A map type (key and value type specifiers)
    */
   public static final class Map extends hydra.ext.lisp.syntax.TypeSpecifier implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.lisp.syntax.TypeSpecifier> value;
+    public final java.util.List<hydra.ext.lisp.syntax.TypeSpecifier> value;
 
-    public Map (hydra.util.ConsList<hydra.ext.lisp.syntax.TypeSpecifier> value) {
+    public Map (java.util.List<hydra.ext.lisp.syntax.TypeSpecifier> value) {
       this.value = value;
     }
 
@@ -302,7 +310,9 @@ public abstract class TypeSpecifier implements Serializable, Comparable<TypeSpec
         return tagCmp;
       }
       Map o = (Map) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -345,7 +355,9 @@ public abstract class TypeSpecifier implements Serializable, Comparable<TypeSpec
         return tagCmp;
       }
       Set o = (Set) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -358,9 +370,9 @@ public abstract class TypeSpecifier implements Serializable, Comparable<TypeSpec
    * A pair/tuple type (two type specifiers)
    */
   public static final class Pair extends hydra.ext.lisp.syntax.TypeSpecifier implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.lisp.syntax.TypeSpecifier> value;
+    public final java.util.List<hydra.ext.lisp.syntax.TypeSpecifier> value;
 
-    public Pair (hydra.util.ConsList<hydra.ext.lisp.syntax.TypeSpecifier> value) {
+    public Pair (java.util.List<hydra.ext.lisp.syntax.TypeSpecifier> value) {
       this.value = value;
     }
 
@@ -388,7 +400,9 @@ public abstract class TypeSpecifier implements Serializable, Comparable<TypeSpec
         return tagCmp;
       }
       Pair o = (Pair) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -401,9 +415,9 @@ public abstract class TypeSpecifier implements Serializable, Comparable<TypeSpec
    * An either/union type (two type specifiers)
    */
   public static final class Either extends hydra.ext.lisp.syntax.TypeSpecifier implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.lisp.syntax.TypeSpecifier> value;
+    public final java.util.List<hydra.ext.lisp.syntax.TypeSpecifier> value;
 
-    public Either (hydra.util.ConsList<hydra.ext.lisp.syntax.TypeSpecifier> value) {
+    public Either (java.util.List<hydra.ext.lisp.syntax.TypeSpecifier> value) {
       this.value = value;
     }
 
@@ -431,7 +445,9 @@ public abstract class TypeSpecifier implements Serializable, Comparable<TypeSpec
         return tagCmp;
       }
       Either o = (Either) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

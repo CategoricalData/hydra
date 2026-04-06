@@ -34,6 +34,8 @@ public class ImplicitProcedureInvocation implements Serializable, Comparable<Imp
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ImplicitProcedureInvocation other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

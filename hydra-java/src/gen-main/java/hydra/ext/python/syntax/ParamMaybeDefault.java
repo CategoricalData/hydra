@@ -49,15 +49,21 @@ public class ParamMaybeDefault implements Serializable, Comparable<ParamMaybeDef
   @SuppressWarnings("unchecked")
   public int compareTo(ParamMaybeDefault other) {
     int cmp = 0;
-    cmp = ((Comparable) param).compareTo(other.param);
+    cmp = hydra.util.Comparing.compare(
+      param,
+      other.param);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) default_).compareTo(other.default_);
+    cmp = hydra.util.Comparing.compare(
+      default_,
+      other.default_);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) typeComment).compareTo(other.typeComment);
+    return hydra.util.Comparing.compare(
+      typeComment,
+      other.typeComment);
   }
 
   public ParamMaybeDefault withParam(hydra.ext.python.syntax.Param param) {

@@ -84,35 +84,51 @@ public class Uchar_Sequence2 implements Serializable, Comparable<Uchar_Sequence2
   @SuppressWarnings("unchecked")
   public int compareTo(Uchar_Sequence2 other) {
     int cmp = 0;
-    cmp = ((Comparable) Hex).compareTo(other.Hex);
+    cmp = hydra.util.Comparing.compare(
+      Hex,
+      other.Hex);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) Hex2).compareTo(other.Hex2);
+    cmp = hydra.util.Comparing.compare(
+      Hex2,
+      other.Hex2);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) Hex3).compareTo(other.Hex3);
+    cmp = hydra.util.Comparing.compare(
+      Hex3,
+      other.Hex3);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) Hex4).compareTo(other.Hex4);
+    cmp = hydra.util.Comparing.compare(
+      Hex4,
+      other.Hex4);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) Hex5).compareTo(other.Hex5);
+    cmp = hydra.util.Comparing.compare(
+      Hex5,
+      other.Hex5);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) Hex6).compareTo(other.Hex6);
+    cmp = hydra.util.Comparing.compare(
+      Hex6,
+      other.Hex6);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) Hex7).compareTo(other.Hex7);
+    cmp = hydra.util.Comparing.compare(
+      Hex7,
+      other.Hex7);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) Hex8).compareTo(other.Hex8);
+    return hydra.util.Comparing.compare(
+      Hex8,
+      other.Hex8);
   }
 
   public Uchar_Sequence2 withHex(hydra.ext.io.shex.syntax.Hex Hex) {
