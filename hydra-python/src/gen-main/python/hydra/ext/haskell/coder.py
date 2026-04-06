@@ -400,9 +400,6 @@ def encode_function(depth: int, namespaces: hydra.packaging.Namespaces[hydra.ext
             body = lam.body
             return hydra.lib.eithers.bind(encode_term(depth, namespaces, body, cx, g), (lambda hbody: Right(hydra.ext.haskell.utils.hslambda(hydra.ext.haskell.utils.element_reference(namespaces, v), hbody))))
 
-        case hydra.core.FunctionPrimitive(value=name):
-            return Right(cast(hydra.ext.haskell.syntax.Expression, hydra.ext.haskell.syntax.ExpressionVariable(hydra.ext.haskell.utils.element_reference(namespaces, name))))
-
         case _:
             raise AssertionError("Unreachable: all variants handled")
 

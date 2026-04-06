@@ -7116,24 +7116,7 @@
                                                                 "argument": {"variable": "fcx"},
                                                                 "function": {"variable": "hydra.inference.inferTypeOfLambda"}}}}}}},
                                                     "domain": {"variable": "hydra.core.Lambda"},
-                                                    "parameter": "l"}}}},
-                                            {
-                                              "name": "primitive",
-                                              "term": {
-                                                "function": {
-                                                  "lambda": {
-                                                    "body": {
-                                                      "application": {
-                                                        "argument": {"variable": "name"},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {"variable": "cx"},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {"variable": "fcx"},
-                                                                "function": {"variable": "hydra.inference.inferTypeOfPrimitive"}}}}}}},
-                                                    "domain": {"variable": "hydra.core.Name"},
-                                                    "parameter": "name"}}}}],
+                                                    "parameter": "l"}}}}],
                                           "typeName": "hydra.core.Function"}}}}}},
                               "domain": {"variable": "hydra.core.Function"},
                               "parameter": "f"}}},
@@ -12804,12 +12787,7 @@
                                                                                           "application": {
                                                                                             "argument": {
                                                                                               "union": {
-                                                                                                "field": {
-                                                                                                  "name": "function",
-                                                                                                  "term": {
-                                                                                                    "union": {
-                                                                                                      "field": {"name": "primitive", "term": {"variable": "name"}},
-                                                                                                      "typeName": "hydra.core.Function"}}},
+                                                                                                "field": {"name": "variable", "term": {"variable": "name"}},
                                                                                                 "typeName": "hydra.core.Term"}},
                                                                                             "function": {
                                                                                               "application": {

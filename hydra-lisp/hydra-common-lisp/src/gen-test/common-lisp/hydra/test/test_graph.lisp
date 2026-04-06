@@ -24,5 +24,5 @@
             (test-schemas (cl:mapcar (cl:lambda (entry) (cl:list (cl:car entry) (cl:funcall type-to-ts (cl:cadr entry)))) (hydra_lib_maps_to_list hydra_test_test_graph_test_types)))
             (schema-types (hydra_lib_maps_from_list (cl:append kernel-schemas test-schemas)))
             (prim-map (hydra_lib_maps_from_list (cl:mapcar (cl:lambda (p) (cl:list (cl:car p) (cl:cdr p))) std-prims)))
-            (bound-terms (hydra_lib_maps_from_list (cl:append (cl:mapcar (cl:lambda (p) (cl:list (cl:car p) (cl:list :function (cl:list :primitive (cl:car p))))) std-prims) (annotation-bindings) (hydra_lib_maps_to_list hydra_test_test_graph_test_terms)))))
+            (bound-terms (hydra_lib_maps_from_list (cl:append (annotation-bindings) (hydra_lib_maps_to_list hydra_test_test_graph_test_terms)))))
     (cl:list (cl:cons :bound_terms bound-terms) (cl:cons :bound_types cl:nil) (cl:cons :class_constraints cl:nil) (cl:cons :lambda_variables cl:nil) (cl:cons :metadata cl:nil) (cl:cons :primitives prim-map) (cl:cons :schema_types schema-types) (cl:cons :type_variables cl:nil))))

@@ -258,17 +258,6 @@
                                   "field": {"name": "lambda", "term": {"unit": {}}},
                                   "typeName": "hydra.variants.FunctionVariant"}},
                               "domain": {"variable": "hydra.core.Lambda"},
-                              "parameter": "_"}}}},
-                      {
-                        "name": "primitive",
-                        "term": {
-                          "function": {
-                            "lambda": {
-                              "body": {
-                                "union": {
-                                  "field": {"name": "primitive", "term": {"unit": {}}},
-                                  "typeName": "hydra.variants.FunctionVariant"}},
-                              "domain": {"variable": "hydra.core.Name"},
                               "parameter": "_"}}}}],
                     "typeName": "hydra.core.Function"}}}}}},
         "type": {
@@ -297,10 +286,6 @@
                 {
                   "union": {
                     "field": {"name": "lambda", "term": {"unit": {}}},
-                    "typeName": "hydra.variants.FunctionVariant"}},
-                {
-                  "union": {
-                    "field": {"name": "primitive", "term": {"unit": {}}},
                     "typeName": "hydra.variants.FunctionVariant"}}]}}},
         "type": {
           "type": {"list": {"variable": "hydra.variants.FunctionVariant"}},

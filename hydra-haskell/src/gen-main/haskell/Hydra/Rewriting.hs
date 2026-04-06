@@ -421,7 +421,6 @@ rewriteTerm f term0 =
                                 Core.lambdaParameter = (Core.lambdaParameter v0),
                                 Core.lambdaDomain = (Core.lambdaDomain v0),
                                 Core.lambdaBody = (recurse (Core.lambdaBody v0))})
-                              Core.FunctionPrimitive v0 -> Core.FunctionPrimitive v0
                     forLet =
                             \lt ->
                               let mapBinding =
@@ -521,7 +520,6 @@ rewriteTermM f term0 =
                                       Core.lambdaParameter = v,
                                       Core.lambdaDomain = d,
                                       Core.lambdaBody = rbody}))))
-                                  Core.FunctionPrimitive v1 -> Right (Core.FunctionPrimitive v1)
                     in (Eithers.bind (forFun v0) (\rfun -> Right (Core.TermFunction rfun)))
                   Core.TermLet v0 ->
                     let bindings = Core.letBindings v0
@@ -593,7 +591,6 @@ rewriteTermWithContext f cx0 term0 =
                                 Core.lambdaParameter = (Core.lambdaParameter v0),
                                 Core.lambdaDomain = (Core.lambdaDomain v0),
                                 Core.lambdaBody = (recurse (Core.lambdaBody v0))})
-                              Core.FunctionPrimitive v0 -> Core.FunctionPrimitive v0
                     forLet =
                             \lt ->
                               let mapBinding =
@@ -680,7 +677,6 @@ rewriteTermWithContextM f cx0 term0 =
                                   Core.lambdaParameter = v,
                                   Core.lambdaDomain = d,
                                   Core.lambdaBody = rbody}))))
-                              Core.FunctionPrimitive v0 -> Right (Core.FunctionPrimitive v0)
                     mapBinding =
                             \b -> Eithers.bind (recurse (Core.bindingTerm b)) (\v -> Right (Core.Binding {
                               Core.bindingName = (Core.bindingName b),

@@ -76,11 +76,6 @@ public interface Variants {
               (java.util.function.Function<java.lang.Void, hydra.variants.FunctionVariant>) (t -> new hydra.variants.FunctionVariant.Lambda()),
               hydra.extract.Core.decodeUnit(
                 cx,
-                input)))))),
-            (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.FunctionVariant>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.FunctionVariant>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.FunctionVariant>>>(new hydra.core.Name("primitive"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.variants.FunctionVariant>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<java.lang.Void, hydra.variants.FunctionVariant>) (t -> new hydra.variants.FunctionVariant.Primitive()),
-              hydra.extract.Core.decodeUnit(
-                cx,
                 input)))))))));
           return hydra.lib.maybes.Maybe.applyLazy(
             () -> hydra.util.Either.<hydra.errors.DecodingError, hydra.variants.FunctionVariant>left(new hydra.errors.DecodingError(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(

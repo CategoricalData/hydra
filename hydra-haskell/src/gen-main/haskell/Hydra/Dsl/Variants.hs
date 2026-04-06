@@ -49,14 +49,6 @@ functionVariantLambda =
         Core.fieldName = (Core.Name "lambda"),
         Core.fieldTerm = Core.TermUnit}}))
 
-functionVariantPrimitive :: Phantoms.TTerm Variants.FunctionVariant
-functionVariantPrimitive =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.variants.FunctionVariant"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "primitive"),
-        Core.fieldTerm = Core.TermUnit}}))
-
 literalVariantBinary :: Phantoms.TTerm Variants.LiteralVariant
 literalVariantBinary =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {

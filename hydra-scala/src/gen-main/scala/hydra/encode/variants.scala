@@ -19,8 +19,6 @@ def functionVariant(v1: hydra.variants.FunctionVariant): hydra.core.Term =
      hydra.core.Field("elimination", hydra.core.Term.unit)))
   case hydra.variants.FunctionVariant.lambda => hydra.core.Term.union(hydra.core.Injection("hydra.variants.FunctionVariant",
      hydra.core.Field("lambda", hydra.core.Term.unit)))
-  case hydra.variants.FunctionVariant.primitive => hydra.core.Term.union(hydra.core.Injection("hydra.variants.FunctionVariant",
-     hydra.core.Field("primitive", hydra.core.Term.unit)))
 
 def literalVariant(v1: hydra.variants.LiteralVariant): hydra.core.Term =
   v1 match

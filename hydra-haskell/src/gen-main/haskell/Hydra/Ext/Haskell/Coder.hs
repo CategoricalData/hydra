@@ -227,7 +227,6 @@ encodeFunction depth namespaces fun cx g =
         let v = Core.lambdaParameter v0
             body = Core.lambdaBody v0
         in (Eithers.bind (encodeTerm depth namespaces body cx g) (\hbody -> Right (Utils.hslambda (Utils.elementReference namespaces v) hbody)))
-      Core.FunctionPrimitive v0 -> Right (Syntax.ExpressionVariable (Utils.elementReference namespaces v0))
 
 -- | Encode a Hydra literal as a Haskell expression
 encodeLiteral :: Core.Literal -> Context.Context -> Either (Context.InContext Errors.Error) Syntax.Expression

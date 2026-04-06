@@ -28,7 +28,7 @@ def python_language() -> hydra.coders.Language:
         return hydra.lib.sets.from_list((hydra.core.FloatType.BIGFLOAT, hydra.core.FloatType.FLOAT64))
     @lru_cache(1)
     def function_variants() -> frozenset[hydra.variants.FunctionVariant]:
-        return hydra.lib.sets.from_list((hydra.variants.FunctionVariant.ELIMINATION, hydra.variants.FunctionVariant.LAMBDA, hydra.variants.FunctionVariant.PRIMITIVE))
+        return hydra.lib.sets.from_list((hydra.variants.FunctionVariant.ELIMINATION, hydra.variants.FunctionVariant.LAMBDA))
     @lru_cache(1)
     def integer_types() -> frozenset[hydra.core.IntegerType]:
         return hydra.lib.sets.from_list((hydra.core.IntegerType.BIGINT,))

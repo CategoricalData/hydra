@@ -18,9 +18,9 @@
 
 (defvar hydra_reflect_float_value_type (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :bigfloat) (funcall (lambda (_) (list :bigfloat nil)) match_value)) ((equal (car match_target) :float32) (funcall (lambda (_) (list :float32 nil)) match_value)) ((equal (car match_target) :float64) (funcall (lambda (_) (list :float64 nil)) match_value)))) (cadr match_target))))
 
-(defvar hydra_reflect_function_variant (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :elimination) (funcall (lambda (_) (list :elimination nil)) match_value)) ((equal (car match_target) :lambda) (funcall (lambda (_) (list :lambda nil)) match_value)) ((equal (car match_target) :primitive) (funcall (lambda (_) (list :primitive nil)) match_value)))) (cadr match_target))))
+(defvar hydra_reflect_function_variant (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :elimination) (funcall (lambda (_) (list :elimination nil)) match_value)) ((equal (car match_target) :lambda) (funcall (lambda (_) (list :lambda nil)) match_value)))) (cadr match_target))))
 
-(defvar hydra_reflect_function_variants (list (list :elimination nil) (list :lambda nil) (list :primitive nil)))
+(defvar hydra_reflect_function_variants (list (list :elimination nil) (list :lambda nil)))
 
 (defvar hydra_reflect_integer_type_is_signed (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :bigint) (funcall (lambda (_) t) match_value)) ((equal (car match_target) :int8) (funcall (lambda (_) t) match_value)) ((equal (car match_target) :int16) (funcall (lambda (_) t) match_value)) ((equal (car match_target) :int32) (funcall (lambda (_) t) match_value)) ((equal (car match_target) :int64) (funcall (lambda (_) t) match_value)) ((equal (car match_target) :uint8) (funcall (lambda (_) nil) match_value)) ((equal (car match_target) :uint16) (funcall (lambda (_) nil) match_value)) ((equal (car match_target) :uint32) (funcall (lambda (_) nil) match_value)) ((equal (car match_target) :uint64) (funcall (lambda (_) nil) match_value)))) (cadr match_target))))
 

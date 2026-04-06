@@ -95,43 +95,33 @@ public interface Core {
             }
 
             @Override
-            public hydra.util.Maybe<hydra.error.core.InvalidTermError> visit(hydra.core.Term.Function f) {
-              return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
-                @Override
-                public hydra.util.Maybe<hydra.error.core.InvalidTermError> otherwise(hydra.core.Function instance) {
-                  return (hydra.util.Maybe<hydra.error.core.InvalidTermError>) (hydra.util.Maybe.<hydra.error.core.InvalidTermError>nothing());
-                }
+            public hydra.util.Maybe<hydra.error.core.InvalidTermError> visit(hydra.core.Term.Variable primName) {
+              return hydra.lib.logic.IfElse.lazy(
+                hydra.lib.equality.Equal.apply(
+                  (primName).value.value,
+                  "hydra.lib.logic.ifElse"),
+                () -> (arg).accept(new hydra.core.Term.PartialVisitor<>() {
+                  @Override
+                  public hydra.util.Maybe<hydra.error.core.InvalidTermError> otherwise(hydra.core.Term instance) {
+                    return (hydra.util.Maybe<hydra.error.core.InvalidTermError>) (hydra.util.Maybe.<hydra.error.core.InvalidTermError>nothing());
+                  }
 
-                @Override
-                public hydra.util.Maybe<hydra.error.core.InvalidTermError> visit(hydra.core.Function.Primitive primName) {
-                  return hydra.lib.logic.IfElse.lazy(
-                    hydra.lib.equality.Equal.apply(
-                      (primName).value.value,
-                      "hydra.lib.logic.ifElse"),
-                    () -> (arg).accept(new hydra.core.Term.PartialVisitor<>() {
+                  @Override
+                  public hydra.util.Maybe<hydra.error.core.InvalidTermError> visit(hydra.core.Term.Literal lit) {
+                    return (lit).value.accept(new hydra.core.Literal.PartialVisitor<>() {
                       @Override
-                      public hydra.util.Maybe<hydra.error.core.InvalidTermError> otherwise(hydra.core.Term instance) {
+                      public hydra.util.Maybe<hydra.error.core.InvalidTermError> otherwise(hydra.core.Literal instance) {
                         return (hydra.util.Maybe<hydra.error.core.InvalidTermError>) (hydra.util.Maybe.<hydra.error.core.InvalidTermError>nothing());
                       }
 
                       @Override
-                      public hydra.util.Maybe<hydra.error.core.InvalidTermError> visit(hydra.core.Term.Literal lit) {
-                        return (lit).value.accept(new hydra.core.Literal.PartialVisitor<>() {
-                          @Override
-                          public hydra.util.Maybe<hydra.error.core.InvalidTermError> otherwise(hydra.core.Literal instance) {
-                            return (hydra.util.Maybe<hydra.error.core.InvalidTermError>) (hydra.util.Maybe.<hydra.error.core.InvalidTermError>nothing());
-                          }
-
-                          @Override
-                          public hydra.util.Maybe<hydra.error.core.InvalidTermError> visit(hydra.core.Literal.Boolean_ boolVal) {
-                            return hydra.util.Maybe.just(new hydra.error.core.InvalidTermError.ConstantCondition(new hydra.error.core.ConstantConditionError(path, (boolVal).value)));
-                          }
-                        });
+                      public hydra.util.Maybe<hydra.error.core.InvalidTermError> visit(hydra.core.Literal.Boolean_ boolVal) {
+                        return hydra.util.Maybe.just(new hydra.error.core.InvalidTermError.ConstantCondition(new hydra.error.core.ConstantConditionError(path, (boolVal).value)));
                       }
-                    }),
-                    () -> (hydra.util.Maybe<hydra.error.core.InvalidTermError>) (hydra.util.Maybe.<hydra.error.core.InvalidTermError>nothing()));
-                }
-              });
+                    });
+                  }
+                }),
+                () -> (hydra.util.Maybe<hydra.error.core.InvalidTermError>) (hydra.util.Maybe.<hydra.error.core.InvalidTermError>nothing()));
             }
           }),
           (fun).accept(new hydra.core.Term.PartialVisitor<>() {
@@ -345,16 +335,6 @@ public interface Core {
                     dom,
                     (java.util.function.Function<hydra.core.Name, hydra.util.Maybe<hydra.error.core.InvalidTermError>>) (uvName -> hydra.util.Maybe.just(new hydra.error.core.InvalidTermError.UndefinedTypeVariableInLambdaDomain(new hydra.error.core.UndefinedTypeVariableInLambdaDomainError(path, uvName))))))),
                 () -> (hydra.util.Maybe<hydra.error.core.InvalidTermError>) (hydra.util.Maybe.<hydra.error.core.InvalidTermError>nothing()))));
-          }
-
-          @Override
-          public hydra.util.Maybe<hydra.error.core.InvalidTermError> visit(hydra.core.Function.Primitive primName) {
-            return hydra.lib.logic.IfElse.lazy(
-              hydra.lib.maybes.IsJust.apply(hydra.lib.maps.Lookup.apply(
-                (primName).value,
-                (cx).primitives)),
-              () -> (hydra.util.Maybe<hydra.error.core.InvalidTermError>) (hydra.util.Maybe.<hydra.error.core.InvalidTermError>nothing()),
-              () -> hydra.util.Maybe.just(new hydra.error.core.InvalidTermError.UnknownPrimitiveName(new hydra.error.core.UnknownPrimitiveNameError(path, (primName).value))));
           }
 
           @Override

@@ -228,9 +228,7 @@ def function(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.D
        (input: hydra.core.Term) =>
       hydra.lib.eithers.map[hydra.core.Elimination, hydra.core.Function, hydra.errors.DecodingError]((t: hydra.core.Elimination) => hydra.core.Function.elimination(t))(hydra.decode.core.elimination(cx)(input))),
          Tuple2("lambda", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.core.Lambda, hydra.core.Function, hydra.errors.DecodingError]((t: hydra.core.Lambda) => hydra.core.Function.lambda(t))(hydra.decode.core.lambda(cx)(input))),
-         Tuple2("primitive", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[hydra.core.Name, hydra.core.Function, hydra.errors.DecodingError]((t: hydra.core.Name) => hydra.core.Function.primitive(t))(hydra.decode.core.name(cx)(input)))))
+      hydra.lib.eithers.map[hydra.core.Lambda, hydra.core.Function, hydra.errors.DecodingError]((t: hydra.core.Lambda) => hydra.core.Function.lambda(t))(hydra.decode.core.lambda(cx)(input)))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.core.Function], (hydra.core.Term) => Either[hydra.errors.DecodingError,
        hydra.core.Function]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.core.Function])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,

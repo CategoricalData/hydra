@@ -264,7 +264,6 @@ def termDependencyNames(binds: Boolean)(withPrims: Boolean)(withNoms: Boolean)(t
       hydra.lib.logic.ifElse[scala.collection.immutable.Set[hydra.core.Name]](binds)(hydra.lib.sets.insert[hydra.core.Name](name)(names))(names)
     term match
       case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-        case hydra.core.Function.primitive(v_Function_primitive_name) => prim(v_Function_primitive_name)
         case hydra.core.Function.elimination(v_Function_elimination_e) => v_Function_elimination_e match
           case hydra.core.Elimination.record(v_Elimination_record_proj) => nominal(v_Elimination_record_proj.typeName)
           case hydra.core.Elimination.union(v_Elimination_union_caseStmt) => nominal(v_Elimination_union_caseStmt.typeName)

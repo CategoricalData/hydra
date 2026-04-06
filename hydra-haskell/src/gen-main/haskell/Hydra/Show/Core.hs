@@ -128,7 +128,6 @@ function f =
     case f of
       Core.FunctionElimination v0 -> elimination v0
       Core.FunctionLambda v0 -> lambda v0
-      Core.FunctionPrimitive v0 -> Strings.cat2 (Core.unName v0) "!"
 
 -- | Show an injection as a string
 injection :: Core.Injection -> String

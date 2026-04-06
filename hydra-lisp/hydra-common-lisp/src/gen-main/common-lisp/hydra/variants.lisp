@@ -6,7 +6,7 @@
 
 (cl:defvar hydra_variants_elimination_variant-variants (cl:list :record :union :wrap))
 
-(cl:defvar hydra_variants_function_variant-variants (cl:list :elimination :lambda :primitive))
+(cl:defvar hydra_variants_function_variant-variants (cl:list :elimination :lambda))
 
 (cl:defvar hydra_variants_literal_variant-variants (cl:list :binary :boolean :float :integer :string))
 

@@ -59,14 +59,12 @@ def checkTerm(typed: Boolean)(path: hydra.paths.SubtermPath)(cx: hydra.graph.Gra
     {
       lazy val arg: hydra.core.Term = (v_Term_application_app.argument)
       hydra.validate.core.firstError(Seq(fun match
-        case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-          case hydra.core.Function.primitive(v_Function_primitive_primName) => hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTermError]](hydra.lib.equality.equal[scala.Predef.String](v_Function_primitive_primName)("hydra.lib.logic.ifElse"))(arg match
-            case hydra.core.Term.literal(v_Term_literal_lit) => v_Term_literal_lit match
-              case hydra.core.Literal.boolean(v_Literal_boolean_boolVal) => Some(hydra.error.core.InvalidTermError.constantCondition(hydra.error.core.ConstantConditionError(path,
-                 v_Literal_boolean_boolVal)))
-              case _ => None
-            case _ => None)(None)
-          case _ => None
+        case hydra.core.Term.variable(v_Term_variable_primName) => hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTermError]](hydra.lib.equality.equal[scala.Predef.String](v_Term_variable_primName)("hydra.lib.logic.ifElse"))(arg match
+          case hydra.core.Term.literal(v_Term_literal_lit) => v_Term_literal_lit match
+            case hydra.core.Literal.boolean(v_Literal_boolean_boolVal) => Some(hydra.error.core.InvalidTermError.constantCondition(hydra.error.core.ConstantConditionError(path,
+               v_Literal_boolean_boolVal)))
+            case _ => None
+          case _ => None)(None)
         case _ => None, fun match
         case hydra.core.Term.variable(v_Term_variable_funName) => arg match
           case hydra.core.Term.variable(v_Term_variable_argName) => hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTermError]](hydra.lib.equality.equal[hydra.core.Name](v_Term_variable_funName)(v_Term_variable_argName))(Some(hydra.error.core.InvalidTermError.selfApplication(hydra.error.core.SelfApplicationError(path,
@@ -139,9 +137,6 @@ def checkTerm(typed: Boolean)(path: hydra.paths.SubtermPath)(cx: hydra.graph.Gra
         Some(hydra.error.core.InvalidTermError.undefinedTypeVariableInLambdaDomain(hydra.error.core.UndefinedTypeVariableInLambdaDomainError(path,
            uvName))))))(None)))
     }
-    case hydra.core.Function.primitive(v_Function_primitive_primName) => hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTermError]](hydra.lib.maybes.isJust[hydra.graph.Primitive](hydra.lib.maps.lookup[hydra.core.Name,
-       hydra.graph.Primitive](v_Function_primitive_primName)(cx.primitives)))(None)(Some(hydra.error.core.InvalidTermError.unknownPrimitiveName(hydra.error.core.UnknownPrimitiveNameError(path,
-       v_Function_primitive_primName))))
     case hydra.core.Function.elimination(v_Function_elimination_elim) => v_Function_elimination_elim match
       case hydra.core.Elimination.record(v_Elimination_record_proj) => {
         lazy val tname: hydra.core.Name = (v_Elimination_record_proj.typeName)

@@ -131,9 +131,6 @@ def check_term(typed: bool, path: hydra.paths.SubtermPath, cx: hydra.graph.Graph
                 param_name = lam.parameter
                 return first_error((hydra.lib.logic.if_else(hydra.lib.maybes.is_just(hydra.lib.maps.lookup(param_name, cx.bound_terms)), (lambda : Just(cast(hydra.error.core.InvalidTermError, hydra.error.core.InvalidTermErrorTermVariableShadowing(hydra.error.core.TermVariableShadowingError(path, param_name))))), (lambda : Nothing())), hydra.lib.logic.if_else(is_valid_name(param_name), (lambda : Nothing()), (lambda : Just(cast(hydra.error.core.InvalidTermError, hydra.error.core.InvalidTermErrorInvalidLambdaParameterName(hydra.error.core.InvalidLambdaParameterNameError(path, param_name)))))), hydra.lib.logic.if_else(typed, (lambda : hydra.lib.maybes.cases(lam.domain, (lambda : Nothing()), (lambda dom: check_undefined_type_variables_in_type(path, cx, dom, (lambda uv_name: Just(cast(hydra.error.core.InvalidTermError, hydra.error.core.InvalidTermErrorUndefinedTypeVariableInLambdaDomain(hydra.error.core.UndefinedTypeVariableInLambdaDomainError(path, uv_name))))))))), (lambda : Nothing()))))
 
-            case hydra.core.FunctionPrimitive(value=prim_name):
-                return hydra.lib.logic.if_else(hydra.lib.maybes.is_just(hydra.lib.maps.lookup(prim_name, cx.primitives)), (lambda : Nothing()), (lambda : Just(cast(hydra.error.core.InvalidTermError, hydra.error.core.InvalidTermErrorUnknownPrimitiveName(hydra.error.core.UnknownPrimitiveNameError(path, prim_name))))))
-
             case hydra.core.FunctionElimination(value=elim):
                 return _hoist_hydra_validate_core_check_term_1(path, elim)
 
@@ -171,33 +168,26 @@ def check_term(typed: bool, path: hydra.paths.SubtermPath, cx: hydra.graph.Graph
                         return Nothing()
             def _hoist_arg_body_3(v1):
                 match v1:
-                    case hydra.core.FunctionPrimitive(value=prim_name):
+                    case hydra.core.TermVariable(value=prim_name):
                         return hydra.lib.logic.if_else(hydra.lib.equality.equal(prim_name.value, "hydra.lib.logic.ifElse"), (lambda : _hoist_arg_body_2(arg)), (lambda : Nothing()))
 
                     case _:
                         return Nothing()
-            def _hoist_arg_body_4(v1):
-                match v1:
-                    case hydra.core.TermFunction(value=f):
-                        return _hoist_arg_body_3(f)
-
-                    case _:
-                        return Nothing()
-            def _hoist_arg_body_5(fun_name, v1):
+            def _hoist_arg_body_4(fun_name, v1):
                 match v1:
                     case hydra.core.TermVariable(value=arg_name):
                         return hydra.lib.logic.if_else(hydra.lib.equality.equal(fun_name, arg_name), (lambda : Just(cast(hydra.error.core.InvalidTermError, hydra.error.core.InvalidTermErrorSelfApplication(hydra.error.core.SelfApplicationError(path, fun_name))))), (lambda : Nothing()))
 
                     case _:
                         return Nothing()
-            def _hoist_arg_body_6(v1):
+            def _hoist_arg_body_5(v1):
                 match v1:
                     case hydra.core.TermVariable(value=fun_name):
-                        return _hoist_arg_body_5(fun_name, arg)
+                        return _hoist_arg_body_4(fun_name, arg)
 
                     case _:
                         return Nothing()
-            def _hoist_arg_body_7(v1):
+            def _hoist_arg_body_6(v1):
                 match v1:
                     case hydra.core.FunctionLambda(value=lam):
                         param = lam.parameter
@@ -213,14 +203,14 @@ def check_term(typed: bool, path: hydra.paths.SubtermPath, cx: hydra.graph.Graph
 
                     case _:
                         return Nothing()
-            def _hoist_arg_body_8(v1):
+            def _hoist_arg_body_7(v1):
                 match v1:
                     case hydra.core.TermFunction(value=f):
-                        return _hoist_arg_body_7(f)
+                        return _hoist_arg_body_6(f)
 
                     case _:
                         return Nothing()
-            def _hoist_arg_body_9(unwrap_name, v1):
+            def _hoist_arg_body_8(unwrap_name, v1):
                 match v1:
                     case hydra.core.TermWrap(value=wt):
                         wrap_name = wt.type_name
@@ -228,28 +218,28 @@ def check_term(typed: bool, path: hydra.paths.SubtermPath, cx: hydra.graph.Graph
 
                     case _:
                         return Nothing()
-            def _hoist_arg_body_10(v1):
+            def _hoist_arg_body_9(v1):
                 match v1:
                     case hydra.core.EliminationWrap(value=unwrap_name):
-                        return _hoist_arg_body_9(unwrap_name, arg)
+                        return _hoist_arg_body_8(unwrap_name, arg)
+
+                    case _:
+                        return Nothing()
+            def _hoist_arg_body_10(v1):
+                match v1:
+                    case hydra.core.FunctionElimination(value=elim):
+                        return _hoist_arg_body_9(elim)
 
                     case _:
                         return Nothing()
             def _hoist_arg_body_11(v1):
                 match v1:
-                    case hydra.core.FunctionElimination(value=elim):
-                        return _hoist_arg_body_10(elim)
-
-                    case _:
-                        return Nothing()
-            def _hoist_arg_body_12(v1):
-                match v1:
                     case hydra.core.TermFunction(value=f):
-                        return _hoist_arg_body_11(f)
+                        return _hoist_arg_body_10(f)
 
                     case _:
                         return Nothing()
-            return first_error((_hoist_arg_body_4(fun), _hoist_arg_body_6(fun), _hoist_arg_body_8(fun), _hoist_arg_body_12(fun)))
+            return first_error((_hoist_arg_body_3(fun), _hoist_arg_body_5(fun), _hoist_arg_body_7(fun), _hoist_arg_body_11(fun)))
 
         case hydra.core.TermRecord(value=rec):
             tname = rec.type_name

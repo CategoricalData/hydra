@@ -324,13 +324,6 @@ public interface Coder {
               v),
             hbody))));
       }
-
-      @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.Expression> visit(hydra.core.Function.Primitive name) {
-        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.syntax.Expression>right(new hydra.ext.haskell.syntax.Expression.Variable(hydra.ext.haskell.Utils.elementReference(
-          namespaces,
-          (name).value)));
-      }
     });
   }
 

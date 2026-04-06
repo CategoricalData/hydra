@@ -183,14 +183,6 @@ def type_of_literal(cx: hydra.context.Context, tx: hydra.graph.Graph, type_args:
         return cast(hydra.core.Type, hydra.core.TypeLiteral(hydra.reflect.literal_type(lit)))
     return hydra.lib.eithers.bind(apply_type_arguments_to_type(cx, tx, type_args, t()), (lambda applied: Right((applied, cx))))
 
-def type_of_primitive(cx: hydra.context.Context, tx: hydra.graph.Graph, type_args: frozenlist[hydra.core.Type], name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.errors.Error], tuple[hydra.core.Type, hydra.context.Context]]:
-    r"""Reconstruct the type of a primitive function (Either/Context version)."""
-
-    @lru_cache(1)
-    def raw_ts() -> Maybe[hydra.core.TypeScheme]:
-        return hydra.lib.maybes.map((lambda _p: _p.type), hydra.lib.maps.lookup(name, tx.primitives))
-    return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorUndefinedTermVariable(hydra.error.core.UndefinedTermVariableError(hydra.paths.SubtermPath(()), name))), cx))), (lambda ts_raw: (inst_result := hydra.resolution.instantiate_type_scheme(cx, ts_raw), ts := hydra.lib.pairs.first(inst_result), cx2 := hydra.lib.pairs.second(inst_result), t := hydra.scoping.type_scheme_to_f_type(ts), hydra.lib.eithers.bind(apply_type_arguments_to_type(cx2, tx, type_args, t), (lambda applied: Right((applied, cx2)))))[4]), raw_ts())
-
 def type_of_projection(cx: hydra.context.Context, tx: hydra.graph.Graph, type_args: frozenlist[hydra.core.Type], p: hydra.core.Projection) -> Either[hydra.context.InContext[hydra.errors.Error], tuple[hydra.core.Type, hydra.context.Context]]:
     r"""Reconstruct the type of a record projection (Either/Context version)."""
 
@@ -253,9 +245,6 @@ def type_of(cx: hydra.context.Context, tx: hydra.graph.Graph, type_args: frozenl
 
             case hydra.core.FunctionLambda(value=v12):
                 return type_of_lambda(cx1(), tx, type_args, v12)
-
-            case hydra.core.FunctionPrimitive(value=v12):
-                return type_of_primitive(cx1(), tx, type_args, v12)
 
             case _:
                 raise AssertionError("Unreachable: all variants handled")
@@ -512,6 +501,14 @@ def type_lists_effectively_equal(tx: hydra.graph.Graph, tlist1: frozenlist[hydra
     r"""Check whether two lists of types are effectively equal, disregarding type aliases."""
 
     return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(tlist1), hydra.lib.lists.length(tlist2)), (lambda : hydra.lib.lists.foldl(hydra.lib.logic.and_, True, hydra.lib.lists.zip_with((lambda v1, v2: types_effectively_equal(tx, v1, v2)), tlist1, tlist2))), (lambda : False))
+
+def type_of_primitive(cx: hydra.context.Context, tx: hydra.graph.Graph, type_args: frozenlist[hydra.core.Type], name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.errors.Error], tuple[hydra.core.Type, hydra.context.Context]]:
+    r"""Reconstruct the type of a primitive function (Either/Context version)."""
+
+    @lru_cache(1)
+    def raw_ts() -> Maybe[hydra.core.TypeScheme]:
+        return hydra.lib.maybes.map((lambda _p: _p.type), hydra.lib.maps.lookup(name, tx.primitives))
+    return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorUndefinedTermVariable(hydra.error.core.UndefinedTermVariableError(hydra.paths.SubtermPath(()), name))), cx))), (lambda ts_raw: (inst_result := hydra.resolution.instantiate_type_scheme(cx, ts_raw), ts := hydra.lib.pairs.first(inst_result), cx2 := hydra.lib.pairs.second(inst_result), t := hydra.scoping.type_scheme_to_f_type(ts), hydra.lib.eithers.bind(apply_type_arguments_to_type(cx2, tx, type_args, t), (lambda applied: Right((applied, cx2)))))[4]), raw_ts())
 
 def type_of_term(cx: hydra.context.Context, g: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Type]:
     r"""Check the type of a term."""

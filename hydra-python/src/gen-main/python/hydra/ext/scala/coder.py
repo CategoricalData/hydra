@@ -614,9 +614,6 @@ def encode_function(cx: hydra.context.Context, g: hydra.graph.Graph, meta: Froze
                 return hydra.lib.maybes.bind(raw_mdom, (lambda dom: (free_vars := hydra.variables.free_variables_in_type(dom), unqualified_free_vars := hydra.lib.sets.from_list(hydra.lib.lists.filter((lambda n: hydra.lib.logic.not_(hydra.lib.lists.elem(46, hydra.lib.strings.to_list(n.value)))), hydra.lib.sets.to_list(free_vars))), unresolved_vars := hydra.lib.sets.difference(unqualified_free_vars, g.type_variables), hydra.lib.logic.if_else(hydra.lib.sets.null(unresolved_vars), (lambda : Just(dom)), (lambda : Nothing())))[3]))
             return hydra.lib.eithers.bind(encode_term(cx, g, body), (lambda sbody: hydra.lib.eithers.bind(hydra.lib.maybes.maybe((lambda : find_sdom(cx, g, meta)), (lambda dom: hydra.lib.eithers.bind(encode_type(cx, g, dom), (lambda sdom: Right(Just(sdom))))), mdom()), (lambda sdom: Right(hydra.ext.scala.utils.slambda(v(), sbody, sdom))))))
 
-        case hydra.core.FunctionPrimitive(value=name):
-            return Right(hydra.ext.scala.utils.sprim(name))
-
         case hydra.core.FunctionElimination(value=e):
             return _hoist_hydra_ext_scala_coder_encode_function_1(arg, cx, g, meta, e)
 
@@ -737,9 +734,6 @@ def encode_term(cx: hydra.context.Context, g: hydra.graph.Graph, term0: hydra.co
             substituted_body = body_after_type_lambdas()
             def _hoist_collect_type_args_body_1(v1):
                 match v1:
-                    case hydra.core.FunctionPrimitive(value=pname):
-                        return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda targ: encode_type(cx, g, targ)), type_args()), (lambda stype_args: (in_scope_type_var_names := hydra.lib.sets.from_list(hydra.lib.lists.map((lambda n: hydra.formatting.capitalize(n.value)), hydra.lib.sets.to_list(g.type_variables))), has_forall_residual := (_hoist_has_forall_residual_1 := (lambda v12: (lambda tv: (tv_name := tv.name.value, hydra.lib.logic.and_(hydra.lib.logic.not_(hydra.lib.lists.elem(46, hydra.lib.strings.to_list(tv_name))), hydra.lib.logic.not_(hydra.lib.sets.member(tv_name, in_scope_type_var_names))))[1])(v12.value) if isinstance(v12, hydra.ext.scala.syntax.TypeVar) else False), hydra.lib.logic.not_(hydra.lib.lists.null(hydra.lib.lists.filter((lambda st: _hoist_has_forall_residual_1(st)), stype_args))))[1], hydra.lib.logic.if_else(has_forall_residual, (lambda : Right(hydra.ext.scala.utils.sprim(pname))), (lambda : Right(hydra.ext.scala.utils.sapply_types(hydra.ext.scala.utils.sprim(pname), stype_args)))))[2]))
-
                     case hydra.core.FunctionElimination():
                         return encode_term(cx, g, substituted_body)
 

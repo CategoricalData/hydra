@@ -40,11 +40,6 @@ functionVariant x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "lambda"),
           Core.fieldTerm = Core.TermUnit}})
-      Variants.FunctionVariantPrimitive -> Core.TermUnion (Core.Injection {
-        Core.injectionTypeName = (Core.Name "hydra.variants.FunctionVariant"),
-        Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "primitive"),
-          Core.fieldTerm = Core.TermUnit}})
 
 literalVariant :: Variants.LiteralVariant -> Core.Term
 literalVariant x =

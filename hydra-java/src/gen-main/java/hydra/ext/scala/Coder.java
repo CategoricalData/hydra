@@ -405,11 +405,6 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.scala.syntax.Data> visit(hydra.core.Function.Primitive name) {
-        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.scala.syntax.Data>right(hydra.ext.scala.Utils.sprim((name).value));
-      }
-
-      @Override
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.scala.syntax.Data> visit(hydra.core.Function.Elimination e) {
         return (e).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
           @Override
@@ -869,48 +864,6 @@ public interface Coder {
                   cx,
                   g,
                   substitutedBody);
-              }
-
-              @Override
-              public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.scala.syntax.Data> visit(hydra.core.Function.Primitive pname) {
-                return hydra.lib.eithers.Bind.apply(
-                  hydra.lib.eithers.MapList.apply(
-                    (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.scala.syntax.Type>>) (targ -> hydra.ext.scala.Coder.encodeType(
-                      cx,
-                      g,
-                      targ)),
-                    typeArgs.get()),
-                  (java.util.function.Function<java.util.List<hydra.ext.scala.syntax.Type>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.scala.syntax.Data>>) (stypeArgs -> {
-                    hydra.util.Lazy<java.util.Set<String>> inScopeTypeVarNames = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
-                      (java.util.function.Function<hydra.core.Name, String>) (n -> hydra.Formatting.capitalize((n).value)),
-                      hydra.lib.sets.ToList.apply((g).typeVariables))));
-                    hydra.util.Lazy<Boolean> hasForallResidual = new hydra.util.Lazy<>(() -> hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply(hydra.lib.lists.Filter.apply(
-                      (java.util.function.Function<hydra.ext.scala.syntax.Type, Boolean>) (st -> (st).accept(new hydra.ext.scala.syntax.Type.PartialVisitor<>() {
-                        @Override
-                        public Boolean otherwise(hydra.ext.scala.syntax.Type instance) {
-                          return false;
-                        }
-
-                        @Override
-                        public Boolean visit(hydra.ext.scala.syntax.Type.Var tv) {
-                          String tvName = (tv).value.name.value;
-                          return hydra.lib.logic.And.apply(
-                            hydra.lib.logic.Not.apply(hydra.lib.lists.Elem.apply(
-                              46,
-                              hydra.lib.strings.ToList.apply(tvName))),
-                            hydra.lib.logic.Not.apply(hydra.lib.sets.Member.apply(
-                              tvName,
-                              inScopeTypeVarNames.get())));
-                        }
-                      })),
-                      stypeArgs))));
-                    return hydra.lib.logic.IfElse.lazy(
-                      hasForallResidual.get(),
-                      () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.scala.syntax.Data>right(hydra.ext.scala.Utils.sprim((pname).value)),
-                      () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.scala.syntax.Data>right(hydra.ext.scala.Utils.sapplyTypes(
-                        hydra.ext.scala.Utils.sprim((pname).value),
-                        stypeArgs)));
-                  }));
               }
 
               @Override

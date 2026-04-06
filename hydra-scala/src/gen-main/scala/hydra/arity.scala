@@ -8,7 +8,6 @@ def functionArity(v1: hydra.core.Function): Int =
   v1 match
   case hydra.core.Function.elimination(v_Function_elimination__) => 1
   case hydra.core.Function.lambda(v_Function_lambda_arg_) => hydra.lib.math.add(1)(hydra.arity.termArity(`v_Function_lambda_arg_`.body))
-  case hydra.core.Function.primitive(v_Function_primitive__) => 42
 
 def primitiveArity(`arg_`: hydra.graph.Primitive): Int = hydra.arity.typeArity(`arg_`.`type`.`type`)
 

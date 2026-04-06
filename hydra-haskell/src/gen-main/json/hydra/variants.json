@@ -30,8 +30,7 @@
               "body": {
                 "union": [
                   {"name": "elimination", "type": {"unit": {}}},
-                  {"name": "lambda", "type": {"unit": {}}},
-                  {"name": "primitive", "type": {"unit": {}}}]}}},
+                  {"name": "lambda", "type": {"unit": {}}}]}}},
           "variables": []}}},
     {
       "type": {

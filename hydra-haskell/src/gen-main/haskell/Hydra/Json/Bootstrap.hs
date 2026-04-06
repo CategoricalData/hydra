@@ -590,13 +590,7 @@ typesByName =
             Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
               Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Lambda")),
               Core.annotatedTypeAnnotation = (M.fromList [
-                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A function abstraction (lambda)")))])}))},
-          Core.FieldType {
-            Core.fieldTypeName = (Core.Name "primitive"),
-            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Name")),
-              Core.annotatedTypeAnnotation = (M.fromList [
-                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A reference to a built-in (primitive) function")))])}))}]),
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A function abstraction (lambda)")))])}))}]),
         Core.annotatedTypeAnnotation = (M.fromList [
           (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A function")))])}))),
       (Core.Name "hydra.core.FunctionType", (Core.TypeAnnotated (Core.AnnotatedType {

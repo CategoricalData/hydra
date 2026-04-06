@@ -57,9 +57,6 @@ def term_dependency_names(binds: bool, with_prims: bool, with_noms: bool, term0:
                     raise AssertionError("Unreachable: all variants handled")
         def _hoist_var_body_2(v1):
             match v1:
-                case hydra.core.FunctionPrimitive(value=name):
-                    return prim(name)
-
                 case hydra.core.FunctionElimination(value=e):
                     return _hoist_var_body_1(e)
 

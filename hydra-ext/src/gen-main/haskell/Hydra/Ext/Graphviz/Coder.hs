@@ -117,7 +117,6 @@ termLabel compact namespaces term =
               (Names.compactName namespaces v2),
               "}"])
             _ -> simpleLabel "?"
-          Core.FunctionPrimitive v1 -> (Names.compactName namespaces v1, nodeStylePrimitive)
           _ -> simpleLabel "?"
         Core.TermLet _ -> simpleLabel "let"
         Core.TermList _ -> simpleLabel (Logic.ifElse compact "[]" "list")
