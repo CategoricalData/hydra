@@ -128,10 +128,16 @@
 (def hydra_lib_literals_show_float (fn [x] (haskell-show-float x)))
 (def hydra_lib_literals_show_float32
   (fn [x]
-    ;; Parse at float precision then format with Haskell rules
-    (let [s (Float/toString (float x))
-          d (Double/parseDouble s)]
-      (haskell-show-float d))))
+    ;; Handle NaN/Inf before casting (Clojure's `float` throws on Infinity)
+    (let [dx (double x)]
+      (cond
+        (Double/isNaN dx) "NaN"
+        (Double/isInfinite dx) (if (pos? dx) "Infinity" "-Infinity")
+        :else
+          ;; Parse at float precision then format with Haskell rules
+          (let [s (Float/toString (float dx))
+                d (Double/parseDouble s)]
+            (haskell-show-float d))))))
 (def hydra_lib_literals_show_float64 (fn [x] (haskell-show-float x)))
 (def hydra_lib_literals_show_int (fn [x] (str x)))
 (def hydra_lib_literals_show_int8 (fn [x] (str x)))

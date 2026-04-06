@@ -100,6 +100,7 @@ module_ = Module ns definitions
       toDefinition dotOp,
       toDefinition functionArrowOp,
       toDefinition matchOp,
+      toDefinition scalaFloatLiteralText,
       toDefinition writeCase,
       toDefinition writeData_FunctionData,
       toDefinition writeData_Name,
@@ -382,6 +383,20 @@ writeInit = define "writeInit" $
   lambda "init" $
     writeType @@ (project Scala._Init Scala._Init_tpe @@ var "init")
 
+-- | Convert a showFloat32/showFloat64 result into valid Scala source syntax,
+-- mapping NaN and ±Infinity to {Float,Double}.{NaN,PositiveInfinity,NegativeInfinity}.
+-- The 'prefix' is "Float" or "Double"; 'suffix' is "f" (Float) or "" (Double).
+scalaFloatLiteralText :: TTermDefinition (String -> String -> String -> String)
+scalaFloatLiteralText = define "scalaFloatLiteralText" $
+  lambda "prefix" $ lambda "suffix" $ lambda "s" $
+    Logic.ifElse (Equality.equal (var "s") (string "NaN"))
+      (Strings.cat2 (var "prefix") (string ".NaN")) $
+    Logic.ifElse (Equality.equal (var "s") (string "Infinity"))
+      (Strings.cat2 (var "prefix") (string ".PositiveInfinity")) $
+    Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
+      (Strings.cat2 (var "prefix") (string ".NegativeInfinity"))
+      (Strings.cat2 (var "s") (var "suffix"))
+
 writeLit :: TTermDefinition (Scala.Lit -> Expr)
 writeLit = define "writeLit" $
   doc "Convert a literal to an expression" $
@@ -392,8 +407,10 @@ writeLit = define "writeLit" $
       Scala._Lit_short>>: lambda "i" $ Serialization.cst @@ (Strings.cat2 (Literals.showInt16 (var "i")) (string ".toShort")),
       Scala._Lit_int>>: lambda "i" $ Serialization.cst @@ (Literals.showInt32 (var "i")),
       Scala._Lit_long>>: lambda "i" $ Serialization.cst @@ (Strings.cat2 (Literals.showInt64 (var "i")) (string "L")),
-      Scala._Lit_float>>: lambda "f" $ Serialization.cst @@ (Strings.cat2 (Literals.showFloat32 (var "f")) (string "f")),
-      Scala._Lit_double>>: lambda "f" $ Serialization.cst @@ (Literals.showFloat64 (var "f")),
+      Scala._Lit_float>>: lambda "f" $
+        Serialization.cst @@ (scalaFloatLiteralText @@ string "Float" @@ string "f" @@ Literals.showFloat32 (var "f")),
+      Scala._Lit_double>>: lambda "f" $
+        Serialization.cst @@ (scalaFloatLiteralText @@ string "Double" @@ string "" @@ Literals.showFloat64 (var "f")),
       Scala._Lit_unit>>: constant $ Serialization.cst @@ string "()",
       Scala._Lit_string>>: lambda "s" $ Serialization.cst @@ Strings.cat2 (string "\"") (Strings.cat2 (JavaSerdeSource.escapeJavaString @@ var "s") (string "\"")),
       Name "bytes">>: lambda "bs" $

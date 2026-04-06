@@ -11,6 +11,9 @@ lazy val functionArrowOp: hydra.ast.Op = hydra.serialization.op("=>")(hydra.lib.
 lazy val matchOp: hydra.ast.Op = hydra.ast.Op("match", hydra.ast.Padding(hydra.ast.Ws.space, hydra.ast.Ws.breakAndIndent("  ")),
    0, hydra.ast.Associativity.none)
 
+def scalaFloatLiteralText(prefix: scala.Predef.String)(suffix: scala.Predef.String)(s: scala.Predef.String): scala.Predef.String =
+  hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](s)("NaN"))(hydra.lib.strings.cat2(prefix)(".NaN"))(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](s)("Infinity"))(hydra.lib.strings.cat2(prefix)(".PositiveInfinity"))(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](s)("-Infinity"))(hydra.lib.strings.cat2(prefix)(".NegativeInfinity"))(hydra.lib.strings.cat2(s)(suffix))))
+
 def writeCase(c: hydra.ext.scala.syntax.Case): hydra.ast.Expr =
   {
   lazy val pat: hydra.ext.scala.syntax.Pat = (c.pat)
@@ -188,8 +191,8 @@ def writeLit(lit: hydra.ext.scala.syntax.Lit): hydra.ast.Expr =
   case hydra.ext.scala.syntax.Lit.short(v_Lit_short_i) => hydra.serialization.cst(hydra.lib.strings.cat2(hydra.lib.literals.showInt16(v_Lit_short_i))(".toShort"))
   case hydra.ext.scala.syntax.Lit.int(v_Lit_int_i) => hydra.serialization.cst(hydra.lib.literals.showInt32(v_Lit_int_i))
   case hydra.ext.scala.syntax.Lit.long(v_Lit_long_i) => hydra.serialization.cst(hydra.lib.strings.cat2(hydra.lib.literals.showInt64(v_Lit_long_i))("L"))
-  case hydra.ext.scala.syntax.Lit.float(v_Lit_float_f) => hydra.serialization.cst(hydra.lib.strings.cat2(hydra.lib.literals.showFloat32(v_Lit_float_f))("f"))
-  case hydra.ext.scala.syntax.Lit.double(v_Lit_double_f) => hydra.serialization.cst(hydra.lib.literals.showFloat64(v_Lit_double_f))
+  case hydra.ext.scala.syntax.Lit.float(v_Lit_float_f) => hydra.serialization.cst(hydra.ext.scala.serde.scalaFloatLiteralText("Float")("f")(hydra.lib.literals.showFloat32(v_Lit_float_f)))
+  case hydra.ext.scala.syntax.Lit.double(v_Lit_double_f) => hydra.serialization.cst(hydra.ext.scala.serde.scalaFloatLiteralText("Double")("")(hydra.lib.literals.showFloat64(v_Lit_double_f)))
   case hydra.ext.scala.syntax.Lit.unit => hydra.serialization.cst("()")
   case hydra.ext.scala.syntax.Lit.string(v_Lit_string_s) => hydra.serialization.cst(hydra.lib.strings.cat2("\"")(hydra.lib.strings.cat2(hydra.ext.java.serde.escapeJavaString(v_Lit_string_s))("\"")))
   case hydra.ext.scala.syntax.Lit.bytes(v_Lit_bytes_bs) => hydra.serialization.cst(hydra.lib.strings.cat2("Array[Byte](")(hydra.lib.strings.cat2(hydra.lib.strings.intercalate(", ")(hydra.lib.lists.map[Int,

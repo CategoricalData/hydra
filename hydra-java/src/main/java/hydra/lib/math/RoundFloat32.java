@@ -43,6 +43,9 @@ public class RoundFloat32 extends PrimitiveFunction {
     }
 
     public static float apply(int n, float x) {
+        if (Float.isNaN(x) || Float.isInfinite(x)) {
+            return x;
+        }
         if (x == 0) {
             return 0.0f;
         }

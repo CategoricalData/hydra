@@ -11,6 +11,9 @@ def escapeJavaString(s: scala.Predef.String): scala.Predef.String =
 def hexDigit(n: Int): Int =
   hydra.lib.logic.ifElse[Int](hydra.lib.equality.lt[Int](n)(10))(hydra.lib.math.add(n)(48))(hydra.lib.math.add(hydra.lib.math.sub(n)(10))(65))
 
+def javaFloatLiteralText(s: scala.Predef.String): scala.Predef.String =
+  hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](s)("NaN"))("Double.NaN")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](s)("Infinity"))("Double.POSITIVE_INFINITY")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](s)("-Infinity"))("Double.NEGATIVE_INFINITY")(s)))
+
 def javaUnicodeEscape(n: Int): scala.Predef.String =
   hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.gt[Int](n)(65535))({
   lazy val `n_`: Int = hydra.lib.math.sub(n)(65536)
@@ -447,7 +450,8 @@ def writeFieldModifier(m: hydra.ext.java.syntax.FieldModifier): hydra.ast.Expr =
   case hydra.ext.java.syntax.FieldModifier.transient => hydra.serialization.cst("transient")
   case hydra.ext.java.syntax.FieldModifier.volatile => hydra.serialization.cst("volatile")
 
-def writeFloatingPointLiteral(fl: hydra.ext.java.syntax.FloatingPointLiteral): hydra.ast.Expr = hydra.serialization.cst(hydra.lib.literals.showBigfloat(fl))
+def writeFloatingPointLiteral(fl: hydra.ext.java.syntax.FloatingPointLiteral): hydra.ast.Expr =
+  hydra.serialization.cst(hydra.ext.java.serde.javaFloatLiteralText(hydra.lib.literals.showBigfloat(fl)))
 
 def writeFloatingPointType(ft: hydra.ext.java.syntax.FloatingPointType): hydra.ast.Expr =
   ft match

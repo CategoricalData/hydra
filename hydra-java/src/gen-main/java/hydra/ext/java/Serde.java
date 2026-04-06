@@ -75,6 +75,25 @@ public interface Serde {
         65));
   }
 
+  static String javaFloatLiteralText(String s) {
+    return hydra.lib.logic.IfElse.lazy(
+      hydra.lib.equality.Equal.apply(
+        s,
+        "NaN"),
+      () -> "Double.NaN",
+      () -> hydra.lib.logic.IfElse.lazy(
+        hydra.lib.equality.Equal.apply(
+          s,
+          "Infinity"),
+        () -> "Double.POSITIVE_INFINITY",
+        () -> hydra.lib.logic.IfElse.lazy(
+          hydra.lib.equality.Equal.apply(
+            s,
+            "-Infinity"),
+          () -> "Double.NEGATIVE_INFINITY",
+          () -> s)));
+  }
+
   static String javaUnicodeEscape(Integer n) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Gt.apply(
@@ -1119,7 +1138,7 @@ public interface Serde {
   }
 
   static hydra.ast.Expr writeFloatingPointLiteral(hydra.ext.java.syntax.FloatingPointLiteral fl) {
-    return hydra.Serialization.cst(hydra.lib.literals.ShowBigfloat.apply((fl).value));
+    return hydra.Serialization.cst(hydra.ext.java.Serde.javaFloatLiteralText(hydra.lib.literals.ShowBigfloat.apply((fl).value)));
   }
 
   static hydra.ast.Expr writeFloatingPointType(hydra.ext.java.syntax.FloatingPointType ft) {

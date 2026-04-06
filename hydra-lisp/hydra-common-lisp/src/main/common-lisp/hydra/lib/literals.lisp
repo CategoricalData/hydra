@@ -195,21 +195,29 @@
           (list :nothing)))))
 
 ;; read_float32 :: String -> Maybe Float
-;; Parse a string to a float32 (Float).
+;; Parse a string to a float32 (Float). Handles NaN/Infinity sentinels.
 (defvar hydra_lib_literals_read_float32
   (lambda (s)
-    (let ((n (ignore-errors (read-from-string s))))
-      (if (and n (numberp n))
-          (list :just (float (float n 1.0f0) 1.0d0))
-          (list :nothing)))))
+    (cond
+      ((string= s "NaN") (list :just +hydra-nan+))
+      ((string= s "Infinity") (list :just +hydra-pos-inf+))
+      ((string= s "-Infinity") (list :just +hydra-neg-inf+))
+      (t (let ((n (ignore-errors (read-from-string s))))
+           (if (and n (numberp n))
+               (list :just (float (float n 1.0f0) 1.0d0))
+               (list :nothing)))))))
 
 ;; read_float64 :: String -> Maybe Float64
-;; Parse a string to a float64 (Double).
+;; Parse a string to a float64 (Double). Handles NaN/Infinity sentinels.
 (defvar hydra_lib_literals_read_float64
   (lambda (s)
-    (handler-case (let ((*read-default-float-format* 'double-float))
-                    (list :just (coerce (read-from-string s) 'double-float)))
-      (error () (list :nothing)))))
+    (cond
+      ((string= s "NaN") (list :just +hydra-nan+))
+      ((string= s "Infinity") (list :just +hydra-pos-inf+))
+      ((string= s "-Infinity") (list :just +hydra-neg-inf+))
+      (t (handler-case (let ((*read-default-float-format* 'double-float))
+                         (list :just (coerce (read-from-string s) 'double-float)))
+           (error () (list :nothing)))))))
 
 ;; read_int :: String -> Maybe Int
 ;; Parse a string to an int.
@@ -341,9 +349,19 @@
       (t s))))
 
 ;; Helper for Haskell-compatible float show
+(defun hydra--float-nan-p (x)
+  (not (= x x)))
+
+(defun hydra--float-inf-p (x)
+  (and (not (hydra--float-nan-p x))
+       (or (> x most-positive-double-float)
+           (< x most-negative-double-float))))
+
 (defun haskell-show-float (x)
   "Format a double-float in Haskell's show style."
   (cond
+    ((hydra--float-nan-p x) "NaN")
+    ((hydra--float-inf-p x) (if (> x 0) "Infinity" "-Infinity"))
     ((= x 0.0d0) "0.0")
     ((and (/= x 0.0d0)
           (or (< (abs x) 0.1d0) (>= (abs x) 1.0d7)))
@@ -362,6 +380,8 @@
 (defun haskell-show-float-single (x)
   "Format a single-float in Haskell's show style."
   (cond
+    ((hydra--float-nan-p x) "NaN")
+    ((hydra--float-inf-p x) (if (> x 0) "Infinity" "-Infinity"))
     ((= x 0.0f0) "0.0")
     ((and (/= x 0.0f0)
           (or (< (abs x) 0.1f0) (>= (abs x) 1.0f7)))

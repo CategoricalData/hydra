@@ -7,6 +7,7 @@ module Hydra.Ext.Lisp.Serde where
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Ext.Lisp.Syntax as Syntax
 import qualified Hydra.Formatting as Formatting
+import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
@@ -316,6 +317,24 @@ fieldAccessToExpr d fa =
             field],
           target])
 
+formatLispFloat :: Syntax.Dialect -> Double -> String
+formatLispFloat d v =
+
+      let s = Literals.showBigfloat v
+      in (Logic.ifElse (Equality.equal s "NaN") (case d of
+        Syntax.DialectClojure -> "Double/NaN"
+        Syntax.DialectScheme -> "+nan.0"
+        Syntax.DialectCommonLisp -> "+hydra-nan+"
+        Syntax.DialectEmacsLisp -> "0.0e+NaN") (Logic.ifElse (Equality.equal s "Infinity") (case d of
+        Syntax.DialectClojure -> "Double/POSITIVE_INFINITY"
+        Syntax.DialectScheme -> "+inf.0"
+        Syntax.DialectCommonLisp -> "+hydra-pos-inf+"
+        Syntax.DialectEmacsLisp -> "1.0e+INF") (Logic.ifElse (Equality.equal s "-Infinity") (case d of
+        Syntax.DialectClojure -> "Double/NEGATIVE_INFINITY"
+        Syntax.DialectScheme -> "-inf.0"
+        Syntax.DialectCommonLisp -> "+hydra-neg-inf+"
+        Syntax.DialectEmacsLisp -> "-1.0e+INF") s)))
+
 functionDefinitionToExpr :: Syntax.Dialect -> Syntax.FunctionDefinition -> Ast.Expr
 functionDefinitionToExpr d fdef =
 
@@ -556,7 +575,7 @@ literalToExpr :: Syntax.Dialect -> Syntax.Literal -> Ast.Expr
 literalToExpr d lit =
     case lit of
       Syntax.LiteralInteger v0 -> Serialization.cst (Literals.showBigint (Syntax.integerLiteralValue v0))
-      Syntax.LiteralFloat v0 -> Serialization.cst (Literals.showBigfloat (Syntax.floatLiteralValue v0))
+      Syntax.LiteralFloat v0 -> Serialization.cst (formatLispFloat d (Syntax.floatLiteralValue v0))
       Syntax.LiteralString v0 ->
         let e1 = Strings.intercalate "\\\\" (Strings.splitOn "\\" v0)
         in case d of

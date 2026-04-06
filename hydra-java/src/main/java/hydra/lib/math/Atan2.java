@@ -65,6 +65,11 @@ public class Atan2 extends PrimitiveFunction {
      * @return the arctangent
      */
     public static Double apply(Double y, Double x) {
+        // Match Haskell: atan2 returns NaN when both arguments are infinite
+        // (Java's Math.atan2 returns ±pi/4 or ±3pi/4 in these cases).
+        if (Double.isInfinite(y) && Double.isInfinite(x)) {
+            return Double.NaN;
+        }
         return Math.atan2(y, x);
     }
 }

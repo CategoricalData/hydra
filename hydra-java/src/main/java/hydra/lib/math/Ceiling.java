@@ -7,11 +7,9 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.function.Function;
 
-import static hydra.dsl.Types.bigint;
 import static hydra.dsl.Types.float64;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
@@ -22,7 +20,13 @@ import hydra.util.Either;
 
 
 /**
- * Rounds up to the nearest integer.
+ * Rounds up to the nearest integer, returned as a float.
+ * <p>
+ * DIVERGENCE FROM HASKELL: Haskell's Prelude.ceiling returns an Integer, which
+ * cannot represent NaN or Inf; its behavior on those inputs is undefined and
+ * produces nonsensical gigantic integers. Hydra returns a Float64 so that NaN
+ * and ±Inf propagate naturally per IEEE 754, matching the conventions of C,
+ * Java's Math.ceil, Go, Rust, and JavaScript.
  */
 public class Ceiling extends PrimitiveFunction {
     /**
@@ -39,7 +43,7 @@ public class Ceiling extends PrimitiveFunction {
      */
     @Override
     public TypeScheme type() {
-        return scheme(function(float64(), bigint()));
+        return scheme(function(float64(), float64()));
     }
 
     /**
@@ -48,15 +52,19 @@ public class Ceiling extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((arg0) -> Terms.bigint(apply(arg0)), hydra.extract.Core.float64(cx, graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((arg0) -> Terms.float64(apply(arg0)), hydra.extract.Core.float64(cx, graph, args.get(0)));
     }
 
     /**
-     * Rounds up to the nearest integer.
+     * Rounds up to the nearest integer, returned as a float.
+     * NaN and ±Inf inputs are returned unchanged.
      * @param x the value
      * @return the ceiling value
      */
-    public static BigInteger apply(Double x) {
-        return BigInteger.valueOf((long) Math.ceil(x));
+    public static Double apply(Double x) {
+        if (Double.isNaN(x) || Double.isInfinite(x)) {
+            return x;
+        }
+        return Math.ceil(x);
     }
 }

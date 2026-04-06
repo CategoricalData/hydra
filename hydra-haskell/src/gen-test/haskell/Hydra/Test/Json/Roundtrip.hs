@@ -111,6 +111,48 @@ allTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "float32 NaN",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> Core_.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)) (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (0/0)))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (0/0)))))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "float32 positive infinity",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> Core_.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)) (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (1/0)))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (1/0)))))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "float32 negative infinity",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> Core_.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)) (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (-1/0)))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (-1/0)))))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "float64 NaN",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> Core_.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)) (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (0/0)))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (0/0)))))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "float64 positive infinity",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> Core_.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)) (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (1/0)))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (1/0)))))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "float64 negative infinity",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> Core_.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64)) (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-1/0)))))),
+                Testing.universalTestCaseExpected = (Core_.term (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (-1/0)))))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string simple",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> Core_.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeString) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeLiteral Core.LiteralTypeString) (Core.TermLiteral (Core.LiteralString "hello")))),

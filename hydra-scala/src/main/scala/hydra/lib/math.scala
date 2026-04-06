@@ -6,18 +6,28 @@ object math:
   def acosh(x: Double): Double = scala.math.log(x + scala.math.sqrt(x * x - 1))
   def add(x: Int)(y: Int): Int = x + y
   def asin(x: Double): Double = scala.math.asin(x)
-  def asinh(x: Double): Double = scala.math.log(x + scala.math.sqrt(x * x + 1))
+  def asinh(x: Double): Double =
+    // Special-case infinities: asinh(±Inf) = ±Inf (naive formula gives NaN for -Inf).
+    if x.isInfinite then x else scala.math.log(x + scala.math.sqrt(x * x + 1))
   def atan(x: Double): Double = scala.math.atan(x)
-  def atan2(y: Double)(x: Double): Double = scala.math.atan2(y, x)
+  def atan2(y: Double)(x: Double): Double =
+    // Match Haskell: atan2 returns NaN when both arguments are infinite
+    // (Scala/Java's atan2 returns ±pi/4 or ±3pi/4 in these cases).
+    if y.isInfinite && x.isInfinite then Double.NaN else scala.math.atan2(y, x)
   def atanh(x: Double): Double = 0.5 * scala.math.log((1 + x) / (1 - x))
-  def ceiling(x: Double): BigInt = BigDecimal(scala.math.ceil(x)).toBigInt
+  // DIVERGENCE FROM HASKELL: returns a Double, not a BigInt, so that NaN/Inf
+  // propagate naturally per IEEE 754 (matching C, Java, Go, Rust, JavaScript).
+  def ceiling(x: Double): Double =
+    if x.isNaN || x.isInfinite then x else scala.math.ceil(x)
   def cos(x: Double): Double = scala.math.cos(x)
   def cosh(x: Double): Double = scala.math.cosh(x)
   def div(x: Int)(y: Int): Int = if y == 0 then 0 else Math.floorDiv(x, y)
   def e: Double = scala.math.E
   def even(x: Int): Boolean = x % 2 == 0
   def exp(x: Double): Double = scala.math.exp(x)
-  def floor(x: Double): BigInt = BigDecimal(scala.math.floor(x)).toBigInt
+  // DIVERGENCE FROM HASKELL: returns a Double, not a BigInt (see ceiling).
+  def floor(x: Double): Double =
+    if x.isNaN || x.isInfinite then x else scala.math.floor(x)
   def log(x: Double): Double = scala.math.log(x)
   def logBase(base: Double)(x: Double): Double = scala.math.log(x) / scala.math.log(base)
   def max(x: Int)(y: Int): Int = scala.math.max(x, y)
@@ -37,8 +47,12 @@ object math:
   def range(start: Int)(end: Int): Seq[Int] = (start to end).toSeq
   def rem(x: Int)(y: Int): Int = if y == 0 then 0 else x % y
   // Haskell uses half-even (banker's) rounding
-  def round(x: Double): BigInt = BigDecimal(x).setScale(0, BigDecimal.RoundingMode.HALF_EVEN).toBigInt
+  // DIVERGENCE FROM HASKELL: returns a Double, not a BigInt (see ceiling).
+  def round(x: Double): Double =
+    if x.isNaN || x.isInfinite then x
+    else BigDecimal(x).setScale(0, BigDecimal.RoundingMode.HALF_EVEN).toDouble
   // Round to n significant digits (not decimal places)
+  // Returns NaN/Inf inputs unchanged (no rounding is possible).
   def roundBigfloat(precision: Int)(x: BigDecimal): BigDecimal =
     if x == 0 then BigDecimal(0.0)
     else
@@ -46,12 +60,14 @@ object math:
       val factor = scala.math.pow(10, precision - 1 - scala.math.floor(scala.math.log10(scala.math.abs(d))))
       BigDecimal(scala.math.round(d * factor) / factor)
   def roundFloat(precision: Int)(x: Double): Double =
-    if x == 0 then 0.0
+    if x.isNaN || x.isInfinite then x
+    else if x == 0 then 0.0
     else
       val factor = scala.math.pow(10, precision - 1 - scala.math.floor(scala.math.log10(scala.math.abs(x))))
       scala.math.round(x * factor) / factor
   def roundFloat32(precision: Int)(x: Float): Float =
-    roundFloat(precision)(x.toDouble).toFloat
+    if x.isNaN || x.isInfinite then x
+    else roundFloat(precision)(x.toDouble).toFloat
   def roundFloat64(precision: Int)(x: Double): Double =
     roundFloat(precision)(x)
   def signum(x: Int): Int = x.sign
@@ -62,4 +78,8 @@ object math:
   def succ(x: Int): Int = x + 1
   def tan(x: Double): Double = scala.math.tan(x)
   def tanh(x: Double): Double = scala.math.tanh(x)
-  def truncate(x: Double): BigInt = BigDecimal(x).toBigInt
+  // DIVERGENCE FROM HASKELL: returns a Double, not a BigInt (see ceiling).
+  def truncate(x: Double): Double =
+    if x.isNaN || x.isInfinite then x
+    else if x >= 0 then scala.math.floor(x)
+    else scala.math.ceil(x)
