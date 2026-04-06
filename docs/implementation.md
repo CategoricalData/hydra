@@ -26,10 +26,11 @@ organization rather than abstract foundations.
 2. [Type modules](#type-modules)
 3. [DSL system](#dsl-system)
 4. [Primitive functions](#primitive-functions)
-5. [Cross-language compilation (coders)](#cross-language-compilation-coders)
-6. [The bootstrap process](#the-bootstrap-process)
-7. [Extending Hydra](#extending-hydra)
-8. [Appendix: Build scripts and executables](#appendix-build-scripts-and-executables)
+5. [Variable resolution and graphs](#variable-resolution-and-graphs)
+6. [Cross-language compilation (coders)](#cross-language-compilation-coders)
+7. [The bootstrap process](#the-bootstrap-process)
+8. [Extending Hydra](#extending-hydra)
+9. [Appendix: Build scripts and executables](#appendix-build-scripts-and-executables)
 
 ---
 
@@ -742,6 +743,84 @@ This provides:
 - Explicit error handling with short-circuit semantics
 - Debug traces via `Context` parameter
 - No hidden state — all context is passed explicitly
+
+---
+
+## Variable resolution and graphs
+
+All named references in Hydra use `TermVariable`.
+At runtime, the reduction engine resolves each variable name through the `Graph`,
+which holds three separate namespaces.
+
+### The Graph structure
+
+A `Graph` contains (among other fields):
+
+| Field | Type | Contents |
+|-------|------|----------|
+| `graphBoundTerms` | `Map Name Term` | Module-level definitions (element bindings, let-bound variables) |
+| `graphPrimitives` | `Map Name Primitive` | Built-in primitive functions and constants |
+| `graphBoundTypes` | `Map Name TypeScheme` | Type schemes for bound terms |
+
+Lambda-bound variables are not stored in the graph; they are resolved structurally
+during beta-reduction.
+
+### Resolution order
+
+When `reduceTerm` encounters a `TermVariable`, it resolves the name in this order:
+
+1. **`graphBoundTerms`** — module definitions, let-bound variables.
+   If found, the binding's term is recursively reduced.
+2. **`graphPrimitives`** — built-in functions and constants.
+   If found, the primitive is applied with arity-based argument collection.
+3. **Lambda-bound** — the variable was introduced by a lambda parameter.
+   It remains as-is (a free variable in the current scope).
+
+This means module bindings shadow primitives, and primitives shadow lambda-bound variables.
+In practice, names don't collide: module definitions use qualified names like `hydra.core.Term`,
+while primitives use the `hydra.lib.*` namespace.
+
+### Construction-time shadowing
+
+As a safety mechanism, `buildGraph` filters `graphBoundTerms` and `graphBoundTypes`
+against `graphPrimitives` at construction time.
+Any binding whose name matches a primitive is removed from the graph.
+This ensures primitives always take priority by construction,
+not just by resolution order.
+
+### Assembling primitives: `graphWithPrimitives`
+
+The `hydra.lexical.graphWithPrimitives` function creates a graph
+with primitives assembled from two lists:
+
+```
+graphWithPrimitives :: [Primitive] -> [Primitive] -> Graph
+graphWithPrimitives builtIn userProvided = ...
+```
+
+User-provided primitives shadow built-in ones (left-biased map union).
+This enables:
+- **Language implementers** to override kernel primitives with optimized host-language versions.
+- **Users** to provide domain-specific primitive functions alongside the standard library.
+
+The bootstrap graph (`Hydra.Dsl.Bootstrap.bootstrapGraph` in Haskell) uses the standard
+libraries directly.
+Test runners and custom applications can use `graphWithPrimitives` to inject additional primitives.
+
+### Built-in primitives vs. user-defined functions
+
+**Built-in primitives** (`graphPrimitives`) are implemented natively in the host language.
+Each `Primitive` carries a name, a type scheme, and an `implementation` function that maps
+a list of `Term` arguments to a result `Term`.
+See [Primitive functions](#primitive-functions) above.
+
+**User-defined functions** (`graphBoundTerms`) are Hydra terms — typically lambdas or
+compositions of other terms.
+They are defined in modules and resolved by name just like primitives,
+but they are reduced by the Hydra reduction engine rather than calling native code.
+
+Both are referenced the same way in Hydra source code: as `TermVariable` with a qualified name.
+The distinction is invisible to Hydra programs.
 
 ---
 
