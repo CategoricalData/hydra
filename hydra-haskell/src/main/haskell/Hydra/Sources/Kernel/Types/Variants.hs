@@ -39,8 +39,7 @@ functionVariant = define "FunctionVariant" $
   doc "The identifier of a function constructor" $
   T.enum [
     "elimination",
-    "lambda",
-    "primitive"]
+    "lambda"]
 
 literalVariant :: Binding
 literalVariant = define "LiteralVariant" $

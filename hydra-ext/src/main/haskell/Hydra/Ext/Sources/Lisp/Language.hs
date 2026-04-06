@@ -150,8 +150,7 @@ lispLanguage = define "lispLanguage" $
       Core.floatTypeFloat64], -- double-precision float (native in all dialects)
     "functionVariants">: Sets.fromList $ list [
       Variants.functionVariantElimination, -- case/cond dispatch, field projection
-      Variants.functionVariantLambda, -- fn/lambda
-      Variants.functionVariantPrimitive], -- calls to primitive functions
+      Variants.functionVariantLambda], -- fn/lambda
     "integerTypes">: Sets.fromList $ list [
       Core.integerTypeBigint], -- all four dialects have arbitrary-precision integers
     "termVariants">: Sets.fromList $ list [

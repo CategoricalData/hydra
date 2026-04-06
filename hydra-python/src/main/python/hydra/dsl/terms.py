@@ -17,7 +17,6 @@ from hydra.core import (
     FloatValue,
     FunctionElimination,
     FunctionLambda,
-    FunctionPrimitive,
     Injection,
     IntegerValue,
     Lambda,
@@ -444,7 +443,7 @@ def primitive(name: Name) -> Term:
 
     Example: primitive(Name("hydra.lib.strings.length"))
     """
-    return TermFunction(FunctionPrimitive(name))
+    return TermVariable(name)
 
 
 def project(tname: Name, fname: Name) -> Term:

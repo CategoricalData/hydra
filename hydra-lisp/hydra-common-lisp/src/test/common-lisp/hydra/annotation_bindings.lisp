@@ -8,7 +8,7 @@
 (cl:defun t-app (fun arg)
   (cl:list :application (make-hydra_core_application :function fun :argument arg)))
 (cl:defun t-prim (name)
-  (cl:list :function (cl:list :primitive name)))
+  (cl:list :variable name))
 (cl:defun t-let (name val body)
   (cl:list :let (make-hydra_core_let
                   :bindings (cl:list (make-hydra_core_binding :name name :term val :type cl:nil))

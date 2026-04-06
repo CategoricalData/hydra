@@ -37,12 +37,12 @@ hydraTermToStlc context term = case term of
 --      Core.FunctionElimination elm -> case elm of
 --        EliminationRecord (Projection tname fname) -> Right $ ExprProj
       Core.FunctionLambda (Core.Lambda (Core.Name v) _ body) -> Abs <$> pure v <*> toStlc body
-      Core.FunctionPrimitive name -> do
-        prim <- case M.lookup name prims of
-          Nothing -> Left $ "no such primitive: " ++ Core.unName name
-          Just p -> Right p
-        ts <- hydraTypeSchemeToStlc $ Graph.primitiveType prim
-        return $ Const $ PrimTyped $ TypedPrimitive name ts
+    Core.TermVariable name -> do
+      prim <- case M.lookup name prims of
+        Nothing -> Left $ "no such primitive: " ++ Core.unName name
+        Just p -> Right p
+      ts <- hydraTypeSchemeToStlc $ Graph.primitiveType prim
+      return $ Const $ PrimTyped $ TypedPrimitive name ts
     Core.TermLet (Core.Let bindings env) -> Letrec <$> CM.mapM bindingToStlc bindings <*> toStlc env
       where
         bindingToStlc (Core.Binding (Core.Name v) term _) = do
@@ -110,7 +110,7 @@ toTerm expr = case expr of
     _ -> Core.TermApplication $ Core.Application (toTerm e1) (toTerm e2)
   FConst prim -> case prim of
     PrimLiteral lit -> Core.TermLiteral lit
-    PrimTyped (TypedPrimitive name _) -> Core.TermFunction $ Core.FunctionPrimitive name
+    PrimTyped (TypedPrimitive name _) -> Core.TermVariable name
     Nil -> Core.TermList []
     Pair -> Terms.lambdas ["a", "b"] $ Terms.pair (Terms.var "a") (Terms.var "b")
     TT -> Core.TermUnit

@@ -546,8 +546,6 @@ encodeFunction = def "encodeFunction" $
         "param" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.lambdaParameter (var "lam"))) $
         "body" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ Core.lambdaBody (var "lam")) $
           right (rustClosure @@ list [var "param"] @@ var "body"),
-      _Function_primitive>>: lambda "name" $
-        right (rustExprPath @@ Core.unName (var "name")),
       _Function_elimination>>: lambda "elim" $
         encodeElimination @@ var "cx" @@ var "g" @@ var "elim" @@ nothing]
 

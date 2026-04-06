@@ -455,13 +455,9 @@
          (prim-entries (funcall hydra_lib_maps_to_list all-prims))
          (bound-terms
            (funcall hydra_lib_maps_from_list
-             (append
-               (mapcar (lambda (entry)
-                         (list (first entry) (list :function (list :primitive (first entry)))))
-                       prim-entries)
                (list
                  (list "hydra.monads.emptyContext" (list :unit))
-                 (list "hydra.lexical.emptyGraph" (list :unit)))))))
+                 (list "hydra.lexical.emptyGraph" (list :unit))))))
     (list (cons :bound_terms bound-terms)
           (cons :bound_types hydra_lib_maps_empty)
           (cons :class_constraints hydra_lib_maps_empty)
