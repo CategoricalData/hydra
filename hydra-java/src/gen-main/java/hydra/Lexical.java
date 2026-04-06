@@ -20,9 +20,20 @@ public interface Lexical {
       hydra.lib.maps.Filter.apply(
         (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, Boolean>) (mt -> hydra.lib.maybes.IsJust.apply(mt)),
         environment)));
-    return new hydra.graph.Graph(hydra.lib.maps.Union.apply(
+    hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Term>> mergedTerms = new hydra.util.Lazy<>(() -> hydra.lib.maps.Union.apply(
       elementTerms.get(),
-      letTerms.get()), elementTypes.get(), (java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())), hydra.lib.sets.FromList.apply(hydra.lib.maps.Keys.apply(hydra.lib.maps.Filter.apply(
+      letTerms.get()));
+    hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Term>> filteredTerms = new hydra.util.Lazy<>(() -> hydra.lib.maps.FilterWithKey.apply(
+      (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, Boolean>>) (k -> (java.util.function.Function<hydra.core.Term, Boolean>) (_v -> hydra.lib.logic.Not.apply(hydra.lib.maps.Member.apply(
+        k,
+        primitives)))),
+      mergedTerms.get()));
+    hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.TypeScheme>> filteredTypes = new hydra.util.Lazy<>(() -> hydra.lib.maps.FilterWithKey.apply(
+      (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.TypeScheme, Boolean>>) (k -> (java.util.function.Function<hydra.core.TypeScheme, Boolean>) (_v -> hydra.lib.logic.Not.apply(hydra.lib.maps.Member.apply(
+        k,
+        primitives)))),
+      elementTypes.get()));
+    return new hydra.graph.Graph(filteredTerms.get(), filteredTypes.get(), (java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())), hydra.lib.sets.FromList.apply(hydra.lib.maps.Keys.apply(hydra.lib.maps.Filter.apply(
       (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, Boolean>) (mt -> hydra.lib.maybes.IsNothing.apply(mt)),
       environment))), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), primitives, (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()));
   }
@@ -166,6 +177,19 @@ public interface Lexical {
           (g).boundTypes));
       }),
       hydra.lib.maps.ToList.apply((g).boundTerms));
+  }
+
+  static hydra.graph.Graph graphWithPrimitives(java.util.List<hydra.graph.Primitive> builtIn, java.util.List<hydra.graph.Primitive> userProvided) {
+    java.util.function.Function<java.util.List<hydra.graph.Primitive>, java.util.Map<hydra.core.Name, hydra.graph.Primitive>> toMap = (java.util.function.Function<java.util.List<hydra.graph.Primitive>, java.util.Map<hydra.core.Name, hydra.graph.Primitive>>) (ps -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.graph.Primitive, hydra.util.Pair<hydra.core.Name, hydra.graph.Primitive>>) (p -> (hydra.util.Pair<hydra.core.Name, hydra.graph.Primitive>) ((hydra.util.Pair<hydra.core.Name, hydra.graph.Primitive>) (new hydra.util.Pair<hydra.core.Name, hydra.graph.Primitive>((p).name, p)))),
+      ps)));
+    hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.graph.Primitive>> prims = new hydra.util.Lazy<>(() -> hydra.lib.maps.Union.apply(
+      (toMap).apply(userProvided),
+      (toMap).apply(builtIn)));
+    return hydra.Lexical.buildGraph(
+      (java.util.List<hydra.core.Binding>) (java.util.Collections.<hydra.core.Binding>emptyList()),
+      (java.util.Map<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((java.util.Map<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
+      prims.get());
   }
 
   static hydra.util.Maybe<hydra.core.Binding> lookupBinding(hydra.graph.Graph graph, hydra.core.Name name) {

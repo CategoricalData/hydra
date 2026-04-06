@@ -31,11 +31,14 @@ buildGraph elements environment primitives =
 
       let elementTerms = Maps.fromList (Lists.map (\b -> (Core.bindingName b, (Core.bindingTerm b))) elements)
           letTerms = Maps.map (\mt -> Maybes.fromJust mt) (Maps.filter (\mt -> Maybes.isJust mt) environment)
+          mergedTerms = Maps.union elementTerms letTerms
+          filteredTerms = Maps.filterWithKey (\k -> \_v -> Logic.not (Maps.member k primitives)) mergedTerms
           elementTypes =
                   Maps.fromList (Maybes.cat (Lists.map (\b -> Maybes.map (\ts -> (Core.bindingName b, ts)) (Core.bindingType b)) elements))
+          filteredTypes = Maps.filterWithKey (\k -> \_v -> Logic.not (Maps.member k primitives)) elementTypes
       in Graph.Graph {
-        Graph.graphBoundTerms = (Maps.union elementTerms letTerms),
-        Graph.graphBoundTypes = elementTypes,
+        Graph.graphBoundTerms = filteredTerms,
+        Graph.graphBoundTypes = filteredTypes,
         Graph.graphClassConstraints = Maps.empty,
         Graph.graphLambdaVariables = (Sets.fromList (Maps.keys (Maps.filter (\mt -> Maybes.isNothing mt) environment))),
         Graph.graphMetadata = Maps.empty,
@@ -142,6 +145,14 @@ graphToBindings g =
         Core.bindingName = name,
         Core.bindingTerm = term,
         Core.bindingType = (Maps.lookup name (Graph.graphBoundTypes g))}) (Maps.toList (Graph.graphBoundTerms g))
+
+-- | Build a graph with primitives assembled from built-in and user-provided lists. User-provided primitives shadow built-in ones.
+graphWithPrimitives :: [Graph.Primitive] -> [Graph.Primitive] -> Graph.Graph
+graphWithPrimitives builtIn userProvided =
+
+      let toMap = \ps -> Maps.fromList (Lists.map (\p -> (Graph.primitiveName p, p)) ps)
+          prims = Maps.union (toMap userProvided) (toMap builtIn)
+      in (buildGraph [] Maps.empty prims)
 
 -- | Look up a binding in a graph by name
 lookupBinding :: Graph.Graph -> Core.Name -> Maybe Core.Binding
