@@ -394,9 +394,6 @@
          (bound-terms
           (funcall hydra_lib_maps_from_list
                    (append
-                    (mapcar (lambda (entry)
-                              (list (car entry) (list :function (list :primitive (car entry)))))
-                            prim-entries)
                     (when (fboundp 'hydra-annotation-bindings)
                       (hydra-annotation-bindings))
                     (list

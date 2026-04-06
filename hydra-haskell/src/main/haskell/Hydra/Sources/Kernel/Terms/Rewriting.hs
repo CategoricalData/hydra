@@ -595,8 +595,7 @@ rewriteTerm = define "rewriteTerm" $ "f" ~> "term0" ~>
       _Function_lambda>>: "l" ~> Core.functionLambda $ Core.lambda
         (Core.lambdaParameter $ var "l")
         (Core.lambdaDomain $ var "l")
-        (var "recurse" @@ (Core.lambdaBody $ var "l")),
-      _Function_primitive>>: "name" ~> Core.functionPrimitive $ var "name"]) $
+        (var "recurse" @@ (Core.lambdaBody $ var "l"))]) $
     "forLet" <~ ("lt" ~>
       "mapBinding" <~ ("b" ~> Core.binding
         (Core.bindingName $ var "b")
@@ -701,8 +700,7 @@ rewriteTermM = define "rewriteTermM" $
             "d" <~ Core.lambdaDomain (var "l") $
             "body" <~ Core.lambdaBody (var "l") $
             "rbody" <<~ var "recurse" @@ var "body" $
-            right $ Core.functionLambda $ Core.lambda (var "v") (var "d") (var "rbody"),
-          _Function_primitive>>: "name" ~> right $ Core.functionPrimitive $ var "name"]) $
+            right $ Core.functionLambda $ Core.lambda (var "v") (var "d") (var "rbody")]) $
         "rfun" <<~ var "forFun" @@ var "fun" $
         right $ Core.termFunction $ var "rfun",
       _Term_let>>: "lt" ~>
@@ -778,8 +776,7 @@ rewriteTermWithContext = define "rewriteTermWithContext" $
       _Function_lambda>>: "l" ~> Core.functionLambda $ Core.lambda
         (Core.lambdaParameter $ var "l")
         (Core.lambdaDomain $ var "l")
-        (var "recurse" @@ (Core.lambdaBody $ var "l")),
-      _Function_primitive>>: "name" ~> Core.functionPrimitive $ var "name"]) $
+        (var "recurse" @@ (Core.lambdaBody $ var "l"))]) $
     "forLet" <~ ("lt" ~>
       "mapBinding" <~ ("b" ~> Core.binding
         (Core.bindingName $ var "b")
@@ -867,8 +864,7 @@ rewriteTermWithContextM = define "rewriteTermWithContextM" $
         "d" <~ Core.lambdaDomain (var "l") $
         "body" <~ Core.lambdaBody (var "l") $
         "rbody" <<~ var "recurse" @@ var "body" $
-        right $ Core.functionLambda $ Core.lambda (var "v") (var "d") (var "rbody"),
-      _Function_primitive>>: "name" ~> right $ Core.functionPrimitive $ var "name"]) $
+        right $ Core.functionLambda $ Core.lambda (var "v") (var "d") (var "rbody")]) $
     "mapBinding" <~ ("b" ~>
       "v" <<~ var "recurse" @@ (Core.bindingTerm $ var "b") $
       right $ Core.binding (Core.bindingName $ var "b") (var "v") (Core.bindingType $ var "b")) $

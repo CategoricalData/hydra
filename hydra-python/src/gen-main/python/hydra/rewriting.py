@@ -677,9 +677,6 @@ def rewrite_term(f: Callable[[Callable[[hydra.core.Term], hydra.core.Term], hydr
                 case hydra.core.FunctionLambda(value=l):
                     return cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(l.parameter, l.domain, recurse(l.body))))
 
-                case hydra.core.FunctionPrimitive(value=name):
-                    return cast(hydra.core.Function, hydra.core.FunctionPrimitive(name))
-
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
         def for_let(lt: hydra.core.Let) -> hydra.core.Let:
@@ -805,9 +802,6 @@ def rewrite_term_m(f: Callable[[
                                     body = l.body
                                     return hydra.lib.eithers.bind(recurse(body), (lambda rbody: Right(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(v, d, rbody))))))
 
-                                case hydra.core.FunctionPrimitive(value=name):
-                                    return Right(cast(hydra.core.Function, hydra.core.FunctionPrimitive(name)))
-
                                 case _:
                                     raise AssertionError("Unreachable: all variants handled")
                         return _hoist_for_fun_1(fun2)
@@ -906,9 +900,6 @@ def rewrite_term_with_context(f: Callable[[
 
                     case hydra.core.FunctionLambda(value=l):
                         return cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(l.parameter, l.domain, recurse(l.body))))
-
-                    case hydra.core.FunctionPrimitive(value=name):
-                        return cast(hydra.core.Function, hydra.core.FunctionPrimitive(name))
 
                     case _:
                         raise AssertionError("Unreachable: all variants handled")
@@ -1026,9 +1017,6 @@ def rewrite_term_with_context_m(f: Callable[[
                         d = l.domain
                         body = l.body
                         return hydra.lib.eithers.bind(recurse(body), (lambda rbody: Right(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(v, d, rbody))))))
-
-                    case hydra.core.FunctionPrimitive(value=name):
-                        return Right(cast(hydra.core.Function, hydra.core.FunctionPrimitive(name)))
 
                     case _:
                         raise AssertionError("Unreachable: all variants handled")

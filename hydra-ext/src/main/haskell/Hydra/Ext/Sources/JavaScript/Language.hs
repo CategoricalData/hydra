@@ -108,8 +108,7 @@ javaScriptLanguage = define "javaScriptLanguage" $
       Core.floatTypeFloat64],
     "functionVariants">: Sets.fromList $ list [
       Variants.functionVariantElimination,
-      Variants.functionVariantLambda,
-      Variants.functionVariantPrimitive],
+      Variants.functionVariantLambda],
     "integerTypes">: Sets.fromList $ list [
       -- JavaScript number can safely represent integers up to 2^53-1
       -- For larger integers, BigInt must be used

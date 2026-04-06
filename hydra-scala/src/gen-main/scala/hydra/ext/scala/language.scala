@@ -14,7 +14,7 @@ lazy val scalaLanguage: hydra.coders.Language = {
   lazy val floatTypes: scala.collection.immutable.Set[hydra.core.FloatType] = hydra.lib.sets.fromList[hydra.core.FloatType](Seq(hydra.core.FloatType.bigfloat,
      hydra.core.FloatType.float32, hydra.core.FloatType.float64))
   lazy val functionVariants: scala.collection.immutable.Set[hydra.variants.FunctionVariant] = hydra.lib.sets.fromList[hydra.variants.FunctionVariant](Seq(hydra.variants.FunctionVariant.elimination,
-     hydra.variants.FunctionVariant.lambda, hydra.variants.FunctionVariant.primitive))
+     hydra.variants.FunctionVariant.lambda))
   lazy val integerTypes: scala.collection.immutable.Set[hydra.core.IntegerType] = hydra.lib.sets.fromList[hydra.core.IntegerType](Seq(hydra.core.IntegerType.bigint,
      hydra.core.IntegerType.int8, hydra.core.IntegerType.int16, hydra.core.IntegerType.int32, hydra.core.IntegerType.int64,
      hydra.core.IntegerType.uint8, hydra.core.IntegerType.uint16, hydra.core.IntegerType.uint32, hydra.core.IntegerType.uint64))

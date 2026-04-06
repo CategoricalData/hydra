@@ -36,11 +36,6 @@ public interface Variants {
       public hydra.core.Term visit(hydra.variants.FunctionVariant.Lambda y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.FunctionVariant"), new hydra.core.Field(new hydra.core.Name("lambda"), new hydra.core.Term.Unit())));
       }
-
-      @Override
-      public hydra.core.Term visit(hydra.variants.FunctionVariant.Primitive y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.FunctionVariant"), new hydra.core.Field(new hydra.core.Name("primitive"), new hydra.core.Term.Unit())));
-      }
     });
   }
 

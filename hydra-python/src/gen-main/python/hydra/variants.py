@@ -26,8 +26,6 @@ class FunctionVariant(Enum):
 
     LAMBDA = hydra.core.Name("lambda")
 
-    PRIMITIVE = hydra.core.Name("primitive")
-
 FunctionVariant.TYPE_ = hydra.core.Name("hydra.variants.FunctionVariant")
 
 class LiteralVariant(Enum):

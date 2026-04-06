@@ -82,8 +82,6 @@ def etaExpandTerm(tx0: hydra.graph.Graph)(term0: hydra.core.Term): hydra.core.Te
     case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
       case hydra.core.Function.elimination(v_Function_elimination__) => 1
       case hydra.core.Function.lambda(v_Function_lambda__) => 0
-      case hydra.core.Function.primitive(v_Function_primitive_name) => hydra.lib.maybes.maybe[Int, hydra.core.TypeScheme](0)(hydra.arity.typeSchemeArity)(hydra.lib.maps.lookup[hydra.core.Name,
-         hydra.core.TypeScheme](v_Function_primitive_name)(primTypes))
     case hydra.core.Term.let(v_Term_let_l) => termArityWithContext(hydra.scoping.extendGraphForLet((_x: hydra.graph.Graph) => (_2: hydra.core.Binding) => None)(tx)(v_Term_let_l))(v_Term_let_l.body)
     case hydra.core.Term.typeLambda(v_Term_typeLambda_tl) => termArityWithContext(hydra.scoping.extendGraphForTypeLambda(tx)(v_Term_typeLambda_tl))(v_Term_typeLambda_tl.body)
     case hydra.core.Term.typeApplication(v_Term_typeApplication_tat) => termArityWithContext(tx)(v_Term_typeApplication_tat.body)
@@ -163,10 +161,7 @@ def etaExpandTerm(tx0: hydra.graph.Graph)(term0: hydra.core.Term): hydra.core.Te
     def termHeadType(tx2: hydra.graph.Graph)(trm2: hydra.core.Term): Option[hydra.core.Type] =
       trm2 match
       case hydra.core.Term.annotated(v_Term_annotated_at2) => termHeadType(tx2)(v_Term_annotated_at2.body)
-      case hydra.core.Term.function(v_Term_function_f2) => v_Term_function_f2 match
-        case hydra.core.Function.primitive(v_Function_primitive_pn2) => hydra.lib.maybes.map[hydra.core.TypeScheme,
-           hydra.core.Type](hydra.scoping.typeSchemeToFType)(hydra.lib.maps.lookup[hydra.core.Name, hydra.core.TypeScheme](v_Function_primitive_pn2)(primTypes))
-        case _ => None
+      case hydra.core.Term.function(v_Term_function__) => None
       case hydra.core.Term.let(v_Term_let_l2) => termHeadType(hydra.scoping.extendGraphForLet((_x: hydra.graph.Graph) => (_2: hydra.core.Binding) => None)(tx2)(v_Term_let_l2))(v_Term_let_l2.body)
       case hydra.core.Term.typeLambda(v_Term_typeLambda_tl2) => termHeadType(hydra.scoping.extendGraphForTypeLambda(tx2)(v_Term_typeLambda_tl2))(v_Term_typeLambda_tl2.body)
       case hydra.core.Term.typeApplication(v_Term_typeApplication_tat2) => hydra.lib.maybes.bind[hydra.core.Type,
@@ -245,14 +240,6 @@ def etaExpandTerm(tx0: hydra.graph.Graph)(term0: hydra.core.Term): hydra.core.Te
                 expand(false)(args)(arty)(None)(result)
               }
             }
-          }
-        }
-        case hydra.core.Function.primitive(v_Function_primitive_pn) => {
-          lazy val arty: Int = termArityWithContext(tx)(term)
-          {
-            lazy val primType: Option[hydra.core.Type] = hydra.lib.maybes.map[hydra.core.TypeScheme, hydra.core.Type]((ts: hydra.core.TypeScheme) => (ts.`type`))(hydra.lib.maps.lookup[hydra.core.Name,
-               hydra.core.TypeScheme](v_Function_primitive_pn)(primTypes))
-            expand(false)(args)(arty)(primType)(term)
           }
         }
       case hydra.core.Term.let(v_Term_let_lt) => {
@@ -346,8 +333,6 @@ def etaExpandTypedTerm(cx: hydra.context.Context)(tx0: hydra.graph.Graph)(term0:
           lazy val txl: hydra.graph.Graph = hydra.scoping.extendGraphForLambda(tx3)(v_Function_lambda_l)
           arityOf(txl)(v_Function_lambda_l.body)
         }
-        case hydra.core.Function.primitive(v_Function_primitive_name) => hydra.lib.eithers.map[hydra.core.TypeScheme,
-           Int, hydra.context.InContext[hydra.errors.Error]]((_ts: hydra.core.TypeScheme) => hydra.arity.typeSchemeArity(_ts))(hydra.lexical.requirePrimitiveType(cx)(tx3)(v_Function_primitive_name))
       term2 match
         case hydra.core.Term.annotated(v_Term_annotated_at) => arityOf(tx2)(v_Term_annotated_at.body)
         case hydra.core.Term.function(v_Term_function_f) => forFunction(tx2)(v_Term_function_f)
@@ -457,7 +442,6 @@ def etaExpansionArity(graph: hydra.graph.Graph)(term: hydra.core.Term): Int =
   case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
     case hydra.core.Function.elimination(v_Function_elimination__) => 1
     case hydra.core.Function.lambda(v_Function_lambda__) => 0
-    case hydra.core.Function.primitive(v_Function_primitive_name) => hydra.arity.primitiveArity(hydra.lib.maybes.fromJust[hydra.graph.Primitive](hydra.lexical.lookupPrimitive(graph)(v_Function_primitive_name)))
   case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => hydra.reduction.etaExpansionArity(graph)(v_Term_typeLambda_ta.body)
   case hydra.core.Term.typeApplication(v_Term_typeApplication_tt) => hydra.reduction.etaExpansionArity(graph)(v_Term_typeApplication_tt.body)
   case hydra.core.Term.variable(v_Term_variable_name) => hydra.lib.maybes.maybe[Int, hydra.core.TypeScheme](0)((ts: hydra.core.TypeScheme) => hydra.arity.typeArity(ts.`type`))(hydra.lib.maybes.bind[hydra.core.Binding,
@@ -584,12 +568,6 @@ def reduceTerm(cx: hydra.context.Context)(graph: hydra.graph.Graph)(eager: Boole
            hydra.core.Term]](hydra.lib.lists.`null`[hydra.core.Term](args))(Right(original))(forElimination(v_Function_elimination_elm)(args))
         case hydra.core.Function.lambda(v_Function_lambda_l) => hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error],
            hydra.core.Term]](hydra.lib.lists.`null`[hydra.core.Term](args))(Right(original))(forLambda(v_Function_lambda_l)(args))
-        case hydra.core.Function.primitive(v_Function_primitive_name) => hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error],
-           hydra.graph.Primitive, hydra.core.Term](hydra.lexical.requirePrimitive(cx)(graph)(v_Function_primitive_name))((prim: hydra.graph.Primitive) =>
-          {
-          lazy val arity: Int = hydra.arity.primitiveArity(prim)
-          hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]](hydra.lib.equality.gt[Int](arity)(hydra.lib.lists.length[hydra.core.Term](args)))(Right(applyToArguments(original)(args)))(forPrimitive(prim)(arity)(args))
-        })
       case hydra.core.Term.variable(v_Term_variable_v) => {
         lazy val mBinding: Option[hydra.core.Binding] = hydra.lexical.lookupBinding(graph)(v_Term_variable_v)
         hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term], hydra.core.Binding]({
@@ -659,7 +637,6 @@ def termIsValue(term: hydra.core.Term): Boolean =
       case hydra.core.Elimination.union(v_Elimination_union_cs) => hydra.lib.logic.and(checkFields(v_Elimination_union_cs.cases))(hydra.lib.maybes.maybe[Boolean,
          hydra.core.Term](true)(hydra.reduction.termIsValue)(v_Elimination_union_cs.default))
     case hydra.core.Function.lambda(v_Function_lambda_l) => hydra.reduction.termIsValue(v_Function_lambda_l.body)
-    case hydra.core.Function.primitive(v_Function_primitive__) => true
   hydra.strip.deannotateTerm(term) match
     case hydra.core.Term.application(v_Term_application__) => false
     case hydra.core.Term.either(v_Term_either_e) => hydra.lib.eithers.either[hydra.core.Term, hydra.core.Term,

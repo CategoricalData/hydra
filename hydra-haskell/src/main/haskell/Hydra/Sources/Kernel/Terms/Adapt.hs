@@ -515,8 +515,7 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
       _Function_lambda>>: "l" ~> Core.functionLambda $ Core.lambda
         (Core.lambdaParameter $ var "l")
         (Core.lambdaDomain $ var "l")
-        (var "go" @@ (Core.lambdaBody $ var "l")),
-      _Function_primitive>>: "name" ~> Core.functionPrimitive $ var "name"]) $
+        (var "go" @@ (Core.lambdaBody $ var "l"))]) $
     "forLet" <~ ("lt" ~>
       "mapBinding" <~ ("b" ~> Core.binding
         (Core.bindingName $ var "b")

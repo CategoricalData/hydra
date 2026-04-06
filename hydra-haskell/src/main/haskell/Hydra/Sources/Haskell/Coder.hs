@@ -359,9 +359,7 @@ encodeFunction = haskellCoderDefinition "encodeFunction" $
         "v">: Core.lambdaParameter $ var "lam",
         "body">: Core.lambdaBody $ var "lam"] $
         "hbody" <<~ encodeTerm @@ var "depth" @@ var "namespaces" @@ var "body" @@ var "cx" @@ var "g" $
-          right $ HaskellUtils.hslambda @@ (HaskellUtils.elementReference @@ var "namespaces" @@ var "v") @@ var "hbody",
-      _Function_primitive>>: "name" ~>
-        right $ inject H._Expression H._Expression_variable $ HaskellUtils.elementReference @@ var "namespaces" @@ var "name"]
+          right $ HaskellUtils.hslambda @@ (HaskellUtils.elementReference @@ var "namespaces" @@ var "v") @@ var "hbody"]
 
 encodeLiteral :: TTermDefinition (Literal -> Context -> Either (InContext Error) H.Expression)
 encodeLiteral = haskellCoderDefinition "encodeLiteral" $

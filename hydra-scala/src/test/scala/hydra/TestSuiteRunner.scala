@@ -58,7 +58,7 @@ object TestSuiteRunner {
     Term.variable(name)
 
   private def primitive(name: String): Term =
-    Term.function(Function.primitive(name))
+    Term.variable(name)
 
   private def matchTerm(typeName: String, default: Option[Term], fields: Field*): Term =
     Term.function(Function.elimination(Elimination.union(CaseStatement(typeName, default, fields.toSeq))))
@@ -380,16 +380,8 @@ object TestSuiteRunner {
     // Bound terms
     val boundTerms = scala.collection.mutable.Map.empty[hydra.core.Name, hydra.core.Term]
 
-    // Bridge primitives as term bindings
-    val excludedNames = Set(
-      "hydra.annotations.setTermAnnotation",
-      "hydra.annotations.setTermDescription",
-      "hydra.rewriting.deannotateTerm")
-    for ((name, _) <- primitives) {
-      if (!excludedNames.contains(name)) {
-        boundTerms += (name -> Term.function(Function.primitive(name)))
-      }
-    }
+    // Primitives are resolved via graphPrimitives, not boundTerms.
+    // No need to bridge them as term bindings.
 
     // Kernel constants needed by annotation and other tests
     def nameConstant(s: String): hydra.core.Term =

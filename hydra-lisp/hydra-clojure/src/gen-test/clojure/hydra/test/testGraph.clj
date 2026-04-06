@@ -25,7 +25,7 @@
         test-schemas (into {} (map (fn [[k v]] [k (type-to-ts v)]) test-types-list))
         schema-types (merge kernel-schemas test-schemas)
         bound-terms (merge
-          (into {} (map (fn [[k _]] [k (list :function (list :primitive k))]) std-prims))
+          ;; Primitives are resolved via graphPrimitives, not boundTerms.
           (into {} (annotation-bindings))
           (into {} (seq hydra_test_test_graph_test_terms)))]
     {:bound_terms bound-terms

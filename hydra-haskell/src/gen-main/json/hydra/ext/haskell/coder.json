@@ -2647,37 +2647,7 @@
                                                                                     "type": {"variable": "hydra.ext.haskell.syntax.Expression"}}},
                                                                                 "type": {"variable": "hydra.ext.haskell.syntax.Expression"}}}}}}}}},
                                                                 "domain": {"variable": "hydra.core.Lambda"},
-                                                                "parameter": "lam"}}}},
-                                                        {
-                                                          "name": "primitive",
-                                                          "term": {
-                                                            "function": {
-                                                              "lambda": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "either": {
-                                                                            "@right": {
-                                                                              "union": {
-                                                                                "field": {
-                                                                                  "name": "variable",
-                                                                                  "term": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "name"},
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "argument": {"variable": "namespaces"},
-                                                                                          "function": {"variable": "hydra.ext.haskell.utils.elementReference"}}}}}},
-                                                                                "typeName": "hydra.ext.haskell.syntax.Expression"}}}},
-                                                                        "type": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                    "type": {"variable": "hydra.ext.haskell.syntax.Expression"}}},
-                                                                "domain": {"variable": "hydra.core.Name"},
-                                                                "parameter": "name"}}}}],
+                                                                "parameter": "lam"}}}}],
                                                       "typeName": "hydra.core.Function"}}}}}},
                                           "domain": {"variable": "hydra.graph.Graph"},
                                           "parameter": "g"}}},

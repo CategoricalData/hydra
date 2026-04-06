@@ -325,10 +325,7 @@ public interface Bootstrap {
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("An elimination for any of a few term variants")))))))),
           new hydra.core.FieldType(new hydra.core.Name("lambda"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Lambda")), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A function abstraction (lambda)")))))))),
-          new hydra.core.FieldType(new hydra.core.Name("primitive"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A reference to a built-in (primitive) function")))))))))), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A function abstraction (lambda)")))))))))), new java.util.TreeMap(java.util.Map.ofEntries(java.util.Map.entry(
           new hydra.core.Name("description"),
           new hydra.core.Term.Literal(new hydra.core.Literal.String_("A function")))))))),
       java.util.Map.entry(

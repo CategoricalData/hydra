@@ -329,7 +329,6 @@ termDependencyNames = define "termDependencyNames" $
       (Just $ var "names") [
       _Term_function>>: "f" ~> cases _Function (var "f")
         (Just $ var "names") [
-        _Function_primitive>>: "name" ~> var "prim" @@ var "name",
         _Function_elimination>>: "e" ~> cases _Elimination (var "e")
           Nothing [
           _Elimination_record>>: "proj" ~> var "nominal" @@ (Core.projectionTypeName $ var "proj"),

@@ -199,8 +199,7 @@ function cx raw =
             variantMap =
                     Maps.fromList [
                       (Core.Name "elimination", (\input -> Eithers.map (\t -> Core.FunctionElimination t) (elimination cx input))),
-                      (Core.Name "lambda", (\input -> Eithers.map (\t -> Core.FunctionLambda t) (lambda cx input))),
-                      (Core.Name "primitive", (\input -> Eithers.map (\t -> Core.FunctionPrimitive t) (name cx input)))]
+                      (Core.Name "lambda", (\input -> Eithers.map (\t -> Core.FunctionLambda t) (lambda cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),

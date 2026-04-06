@@ -87,18 +87,8 @@ public class TestSuiteRunner {
         // Build bound terms map from test terms + primitive bridges + kernel constants
         Map<Name, Term> boundTerms = new HashMap<>();
 
-        // Bridge all primitives as term bindings
-        Set<String> excludedNames = new HashSet<>();
-        excludedNames.add("hydra.annotations.setTermAnnotation");
-        excludedNames.add("hydra.annotations.setTermDescription");
-        excludedNames.add("hydra.rewriting.deannotateTerm");
-        for (PrimitiveFunction prim : Libraries.standardPrimitives()) {
-            String primName = prim.name().value;
-            if (!excludedNames.contains(primName)) {
-                boundTerms.put(prim.name(),
-                    new Term.Function(new hydra.core.Function.Primitive(prim.name())));
-            }
-        }
+        // Primitives are resolved via graphPrimitives, not boundTerms.
+        // No need to bridge them as term bindings.
 
         // Add non-primitive kernel constants needed by annotation source module
         boundTerms.put(new Name("hydra.constants.key_classes"),

@@ -242,9 +242,7 @@ data Function =
   -- | An elimination for any of a few term variants
   FunctionElimination Elimination |
   -- | A function abstraction (lambda)
-  FunctionLambda Lambda |
-  -- | A reference to a built-in (primitive) function
-  FunctionPrimitive Name
+  FunctionLambda Lambda
   deriving (Eq, Ord, Read, Show)
 
 _Function = Name "hydra.core.Function"
@@ -252,8 +250,6 @@ _Function = Name "hydra.core.Function"
 _Function_elimination = Name "elimination"
 
 _Function_lambda = Name "lambda"
-
-_Function_primitive = Name "primitive"
 
 -- | A function type, also known as an arrow type
 data FunctionType =

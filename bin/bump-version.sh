@@ -1,14 +1,42 @@
 #!/usr/bin/env bash
+set -euo pipefail
+
 # Propagate the version from the VERSION file to all implementation config files.
 #
 # Usage:
 #   bin/bump-version.sh          # Read VERSION and patch all config files
 #   bin/bump-version.sh 0.13.0   # Set VERSION to 0.13.0 and patch all config files
+#   bin/bump-version.sh --help   # Show this help
 
-set -euo pipefail
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+REPO_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 
-REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+source "$REPO_ROOT/bin/lib/common.sh"
+
 VERSION_FILE="$REPO_ROOT/VERSION"
+
+case "${1:-}" in
+    --help|-h)
+        echo "Usage: $0 [NEW_VERSION]"
+        echo ""
+        echo "Propagate the version from the VERSION file to all implementation config files."
+        echo ""
+        echo "If NEW_VERSION is provided, it is written to VERSION first."
+        echo ""
+        echo "Files patched:"
+        echo "  hydra-haskell/package.yaml"
+        echo "  hydra-ext/package.yaml"
+        echo "  hydra-ext/demos/bootstrapping/resources/haskell/package.yaml"
+        echo "  build.gradle"
+        echo "  hydra-ext/demos/bootstrapping/resources/java/build.gradle"
+        echo "  hydra-scala/build.sbt"
+        echo "  hydra-python/pyproject.toml"
+        echo "  hydra-ext/demos/bootstrapping/resources/python/pyproject.toml"
+        echo "  pixi.toml"
+        echo "  README.md"
+        exit 0
+        ;;
+esac
 
 if [ $# -ge 1 ]; then
     echo "$1" > "$VERSION_FILE"
@@ -17,20 +45,19 @@ fi
 VERSION=$(tr -d '[:space:]' < "$VERSION_FILE")
 
 if [ -z "$VERSION" ]; then
-    echo "Error: VERSION file is empty"
-    exit 1
+    die "VERSION file is empty"
 fi
 
 # Validate format
 if ! echo "$VERSION" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
-    echo "Error: '$VERSION' does not look like a version (expected X.Y.Z)"
-    exit 1
+    die "'$VERSION' does not look like a version (expected X.Y.Z)"
 fi
 
 echo "Setting version to $VERSION"
 echo
 
 # Files to patch: (file, sed pattern)
+# Verifies the pattern actually matched by checking content before and after.
 patch() {
     local file="$1"
     local pattern="$2"
@@ -41,10 +68,18 @@ patch() {
         return
     fi
 
-    if sed -i '' "$pattern" "$file" 2>/dev/null; then
-        echo "  OK    $relpath"
+    local before
+    before=$(cat "$file")
+    if ! sed_inplace "$pattern" "$file" 2>/dev/null; then
+        echo "  FAIL  $relpath (sed error)"
+        return 1
+    fi
+    local after
+    after=$(cat "$file")
+    if [ "$before" = "$after" ]; then
+        echo "  NOOP  $relpath (no match or already $VERSION)"
     else
-        echo "  FAIL  $relpath"
+        echo "  OK    $relpath"
     fi
 }
 
@@ -83,9 +118,10 @@ patch "$REPO_ROOT/pixi.toml" \
 # README.md: version references
 patch "$REPO_ROOT/README.md" \
     "s/The current release is \*\*[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\*\*/The current release is \*\*$VERSION\*\*/"
-# Also patch Maven coordinates (hydra-java:X.Y.Z and hydra-ext:X.Y.Z)
-sed -i '' "s/hydra-java:[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*/hydra-java:$VERSION/" "$REPO_ROOT/README.md" 2>/dev/null
-sed -i '' "s/hydra-ext:[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*/hydra-ext:$VERSION/" "$REPO_ROOT/README.md" 2>/dev/null
+patch "$REPO_ROOT/README.md" \
+    "s/hydra-java:[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*/hydra-java:$VERSION/"
+patch "$REPO_ROOT/README.md" \
+    "s/hydra-ext:[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*/hydra-ext:$VERSION/"
 
 echo
 echo "Done. Verify with: git diff"

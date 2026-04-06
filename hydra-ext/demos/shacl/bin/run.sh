@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 #
 # Orchestrator script for the SHACL RDF demo.
 #
@@ -11,8 +12,7 @@
 #   --hosts LANG,...     Run only specified hosts (default: haskell)
 #   --tag TAG            Append a tag to the run directory name
 #   --skip-validate      Skip pyshacl validation step
-
-set -euo pipefail
+#   --help               Show this help message
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HYDRA_EXT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
@@ -32,27 +32,15 @@ while [ $# -gt 0 ]; do
     --tag) TAG="$2"; shift 2 ;;
     --tag=*) TAG="${1#--tag=}"; shift ;;
     --skip-validate) SKIP_VALIDATE=true; shift ;;
+    --help|-h)
+      sed -n '4,15p' "$0" | sed 's/^# //; s/^#//'
+      exit 0
+      ;;
     *)
-      echo "Unknown argument: $1" >&2
-      echo "Usage: $0 [--hosts LANG,...] [--tag TAG] [--skip-validate]" >&2
-      exit 1
+      die "Unknown argument: $1 (try --help)"
       ;;
   esac
 done
-
-# Colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-CYAN='\033[0;36m'
-BOLD='\033[1m'
-NC='\033[0m'
-
-header() { echo ""; echo -e "${BOLD}${CYAN}=== $1 ===${NC}"; }
-
-extract_time() {
-  grep 'HYDRA_TIME_MS=' "$1" 2>/dev/null | sed 's/.*HYDRA_TIME_MS=//' || echo "?"
-}
 
 IFS=',' read -ra ENABLED_HOSTS <<< "$HOSTS"
 
@@ -69,7 +57,7 @@ run_host() {
   echo "skipped" > "$RUN_DIR/$host/_status"
   echo "—" > "$RUN_DIR/$host/_time"
 
-  header "Running $host driver"
+  demo_header "Running $host driver"
 
   local out_dir="$RUN_DIR/$host/output"
   mkdir -p "$out_dir"
@@ -117,7 +105,7 @@ done
 # ============================================================================
 
 if [ "$SKIP_VALIDATE" = false ]; then
-  header "SHACL Validation (pyshacl)"
+  demo_header "SHACL Validation (pyshacl)"
 
   # Find the first host with output
   SHAPES_FILE=""
@@ -181,7 +169,7 @@ fi
 # ============================================================================
 
 if [ ${#ENABLED_HOSTS[@]} -gt 1 ]; then
-  header "Comparison"
+  demo_header "Comparison"
 
   MATCH=true
   NUM_HOSTS=${#ENABLED_HOSTS[@]}
@@ -226,15 +214,7 @@ fi
 # Summary
 # ============================================================================
 
-header "Summary"
-
-format_status() {
-  case "$1" in
-    ok)      printf "${GREEN}OK${NC}";;
-    error)   printf "${RED}FAIL${NC}";;
-    skipped) printf "${YELLOW}SKIP${NC}";;
-  esac
-}
+demo_header "Summary"
 
 printf "  %-12s %-14s %-12s\n" "Host" "Status" "Time (ms)"
 printf "  %-12s %-14s %-12s\n" "----" "------" "---------"

@@ -95,10 +95,9 @@ public class TermsTest {
         assertEquals(name("Location"), ((Term.Union) bayAreaLocation).value.typeName);
         assertEquals(name("latlon"), ((Term.Union) bayAreaLocation).value.field.name);
 
-        assertTrue(Strings.length() instanceof Term.Function);
-        assertTrue(((Term.Function) Strings.length()).value instanceof Function.Primitive);
+        assertTrue(Strings.length() instanceof Term.Variable);
         assertEquals(name("hydra.lib.strings.length"),
-                ((Function.Primitive) ((Term.Function) Strings.length()).value).value);
+                ((Term.Variable) Strings.length()).value);
 
         assertTrue(cat3 instanceof Term.Function);
         assertTrue(((Term.Function) cat3).value instanceof Function.Lambda);

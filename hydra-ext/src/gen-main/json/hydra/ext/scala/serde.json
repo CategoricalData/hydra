@@ -126,124 +126,6 @@
         "type": {"type": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.ext.scala.serde.scalaFloatLiteralText",
-        "term": {
-          "function": {
-            "lambda": {
-              "body": {
-                "function": {
-                  "lambda": {
-                    "body": {
-                      "function": {
-                        "lambda": {
-                          "body": {
-                            "application": {
-                              "argument": {
-                                "application": {
-                                  "argument": {
-                                    "application": {
-                                      "argument": {
-                                        "application": {
-                                          "argument": {"variable": "suffix"},
-                                          "function": {
-                                            "application": {
-                                              "argument": {"variable": "s"},
-                                              "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                      "function": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"literal": {"string": ".NegativeInfinity"}},
-                                              "function": {
-                                                "application": {
-                                                  "argument": {"variable": "prefix"},
-                                                  "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                          "function": {
-                                            "application": {
-                                              "argument": {
-                                                "application": {
-                                                  "argument": {"literal": {"string": "-Infinity"}},
-                                                  "function": {
-                                                    "application": {
-                                                      "argument": {"variable": "s"},
-                                                      "function": {
-                                                        "typeApplication": {
-                                                          "body": {"variable": "hydra.lib.equality.equal"},
-                                                          "type": {"literal": {"string": {}}}}}}}}},
-                                              "function": {
-                                                "typeApplication": {
-                                                  "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                  "type": {"literal": {"string": {}}}}}}}}}}},
-                                  "function": {
-                                    "application": {
-                                      "argument": {
-                                        "application": {
-                                          "argument": {"literal": {"string": ".PositiveInfinity"}},
-                                          "function": {
-                                            "application": {
-                                              "argument": {"variable": "prefix"},
-                                              "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                      "function": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"literal": {"string": "Infinity"}},
-                                              "function": {
-                                                "application": {
-                                                  "argument": {"variable": "s"},
-                                                  "function": {
-                                                    "typeApplication": {
-                                                      "body": {"variable": "hydra.lib.equality.equal"},
-                                                      "type": {"literal": {"string": {}}}}}}}}},
-                                          "function": {
-                                            "typeApplication": {
-                                              "body": {"variable": "hydra.lib.logic.ifElse"},
-                                              "type": {"literal": {"string": {}}}}}}}}}}},
-                              "function": {
-                                "application": {
-                                  "argument": {
-                                    "application": {
-                                      "argument": {"literal": {"string": ".NaN"}},
-                                      "function": {
-                                        "application": {
-                                          "argument": {"variable": "prefix"},
-                                          "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                  "function": {
-                                    "application": {
-                                      "argument": {
-                                        "application": {
-                                          "argument": {"literal": {"string": "NaN"}},
-                                          "function": {
-                                            "application": {
-                                              "argument": {"variable": "s"},
-                                              "function": {
-                                                "typeApplication": {
-                                                  "body": {"variable": "hydra.lib.equality.equal"},
-                                                  "type": {"literal": {"string": {}}}}}}}}},
-                                      "function": {
-                                        "typeApplication": {
-                                          "body": {"variable": "hydra.lib.logic.ifElse"},
-                                          "type": {"literal": {"string": {}}}}}}}}}}},
-                          "domain": {"literal": {"string": {}}},
-                          "parameter": "s"}}},
-                    "domain": {"literal": {"string": {}}},
-                    "parameter": "suffix"}}},
-              "domain": {"literal": {"string": {}}},
-              "parameter": "prefix"}}},
-        "type": {
-          "type": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"literal": {"string": {}}},
-                      "domain": {"literal": {"string": {}}}}},
-                  "domain": {"literal": {"string": {}}}}},
-              "domain": {"literal": {"string": {}}}}},
-          "variables": []}}},
-    {
-      "term": {
         "name": "hydra.ext.scala.serde.writeCase",
         "term": {
           "annotated": {
@@ -2518,17 +2400,14 @@
                                           "application": {
                                             "argument": {
                                               "application": {
-                                                "argument": {
-                                                  "application": {
-                                                    "argument": {"variable": "f"},
-                                                    "function": {"variable": "hydra.lib.literals.showFloat32"}}},
+                                                "argument": {"literal": {"string": "f"}},
                                                 "function": {
                                                   "application": {
-                                                    "argument": {"literal": {"string": "f"}},
-                                                    "function": {
+                                                    "argument": {
                                                       "application": {
-                                                        "argument": {"literal": {"string": "Float"}},
-                                                        "function": {"variable": "hydra.ext.scala.serde.scalaFloatLiteralText"}}}}}}},
+                                                        "argument": {"variable": "f"},
+                                                        "function": {"variable": "hydra.lib.literals.showFloat32"}}},
+                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                             "function": {"variable": "hydra.serialization.cst"}}},
                                         "domain": {"literal": {"float": {"float32": {}}}},
                                         "parameter": "f"}}}},
@@ -2541,17 +2420,8 @@
                                           "application": {
                                             "argument": {
                                               "application": {
-                                                "argument": {
-                                                  "application": {
-                                                    "argument": {"variable": "f"},
-                                                    "function": {"variable": "hydra.lib.literals.showFloat64"}}},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {"literal": {"string": ""}},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {"literal": {"string": "Double"}},
-                                                        "function": {"variable": "hydra.ext.scala.serde.scalaFloatLiteralText"}}}}}}},
+                                                "argument": {"variable": "f"},
+                                                "function": {"variable": "hydra.lib.literals.showFloat64"}}},
                                             "function": {"variable": "hydra.serialization.cst"}}},
                                         "domain": {"literal": {"float": {"float64": {}}}},
                                         "parameter": "f"}}}},

@@ -36,5 +36,5 @@
          (test-schemas (mapcar (lambda (entry) (list (car entry) (funcall type-to-ts (cadr entry)))) (hydra_lib_maps_to_list hydra_test_test_graph_test_types)))
          (schema-types (hydra_lib_maps_from_list (append kernel-schemas test-schemas)))
          (prim-map (hydra_lib_maps_from_list (mapcar (lambda (p) (list (car p) (cdr p))) std-prims)))
-         (bound-terms (hydra_lib_maps_from_list (append (mapcar (lambda (p) (list (car p) (list :function (list :primitive (car p))))) std-prims) (hydra-annotation-bindings) (hydra_lib_maps_to_list hydra_test_test_graph_test_terms)))))
+         (bound-terms (hydra_lib_maps_from_list (append (hydra-annotation-bindings) (hydra_lib_maps_to_list hydra_test_test_graph_test_terms)))))
     (list (cons :bound_terms bound-terms) (cons :bound_types nil) (cons :class_constraints nil) (cons :lambda_variables nil) (cons :metadata nil) (cons :primitives prim-map) (cons :schema_types schema-types) (cons :type_variables nil))))

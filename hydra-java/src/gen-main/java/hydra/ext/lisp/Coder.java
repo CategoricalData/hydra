@@ -339,13 +339,6 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression> visit(hydra.core.Function.Primitive name) {
-        return hydra.util.Either.<T2, hydra.ext.lisp.syntax.Expression>right(hydra.ext.lisp.Coder.lispVar(hydra.Formatting.convertCaseCamelOrUnderscoreToLowerSnake(hydra.Formatting.sanitizeWithUnderscores(
-          hydra.ext.lisp.Language.lispReservedWords(),
-          (name).value.value))));
-      }
-
-      @Override
       public hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression> visit(hydra.core.Function.Elimination elim) {
         return hydra.ext.lisp.Coder.<T0, T1, T2>encodeElimination(
           dialect,
@@ -1187,23 +1180,6 @@ public interface Coder {
       @Override
       public Boolean otherwise(hydra.core.Term instance) {
         return false;
-      }
-
-      @Override
-      public Boolean visit(hydra.core.Term.Function f) {
-        return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
-          @Override
-          public Boolean otherwise(hydra.core.Function instance) {
-            return false;
-          }
-
-          @Override
-          public Boolean visit(hydra.core.Function.Primitive name) {
-            return hydra.lib.equality.Equal.apply(
-              (name).value.value,
-              primName);
-          }
-        });
       }
 
       @Override

@@ -3630,88 +3630,6 @@
                                                                                                       "domain": {"variable": "hydra.core.Elimination"},
                                                                                                       "parameter": "elm"}}}},
                                                                                               {
-                                                                                                "name": "primitive",
-                                                                                                "term": {
-                                                                                                  "function": {
-                                                                                                    "lambda": {
-                                                                                                      "body": {
-                                                                                                        "let": {
-                                                                                                          "bindings": [
-                                                                                                            {
-                                                                                                              "name": "wrappedArgs",
-                                                                                                              "term": {
-                                                                                                                "application": {
-                                                                                                                  "argument": {"variable": "hargs"},
-                                                                                                                  "function": {
-                                                                                                                    "application": {
-                                                                                                                      "argument": {"variable": "name"},
-                                                                                                                      "function": {"variable": "hydra.ext.python.coder.wrapLazyArguments"}}}}},
-                                                                                                              "type": {
-                                                                                                                "type": {"list": {"variable": "hydra.ext.python.syntax.Expression"}},
-                                                                                                                "variables": []}}],
-                                                                                                          "body": {
-                                                                                                            "application": {
-                                                                                                              "argument": {
-                                                                                                                "function": {
-                                                                                                                  "lambda": {
-                                                                                                                    "body": {
-                                                                                                                      "typeApplication": {
-                                                                                                                        "body": {
-                                                                                                                          "typeApplication": {
-                                                                                                                            "body": {
-                                                                                                                              "either": {
-                                                                                                                                "@right": {
-                                                                                                                                  "typeApplication": {
-                                                                                                                                    "body": {
-                                                                                                                                      "typeApplication": {
-                                                                                                                                        "body": {
-                                                                                                                                          "pair": {"@first": {"variable": "expr"}, "@second": {"variable": "rargs"}}},
-                                                                                                                                        "type": {"variable": "hydra.ext.python.syntax.Expression"}}},
-                                                                                                                                    "type": {"list": {"variable": "hydra.ext.python.syntax.Expression"}}}}}},
-                                                                                                                            "type": {
-                                                                                                                              "application": {
-                                                                                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                                                                                "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                                                                        "type": {
-                                                                                                                          "pair": {
-                                                                                                                            "first": {"variable": "hydra.ext.python.syntax.Expression"},
-                                                                                                                            "second": {"list": {"variable": "hydra.ext.python.syntax.Expression"}}}}}},
-                                                                                                                    "domain": {"variable": "hydra.ext.python.syntax.Expression"},
-                                                                                                                    "parameter": "expr"}}},
-                                                                                                              "function": {
-                                                                                                                "application": {
-                                                                                                                  "argument": {
-                                                                                                                    "application": {
-                                                                                                                      "argument": {"variable": "wrappedArgs"},
-                                                                                                                      "function": {
-                                                                                                                        "application": {
-                                                                                                                          "argument": {"variable": "name"},
-                                                                                                                          "function": {
-                                                                                                                            "application": {
-                                                                                                                              "argument": {"variable": "env"},
-                                                                                                                              "function": {
-                                                                                                                                "application": {
-                                                                                                                                  "argument": {"variable": "cx"},
-                                                                                                                                  "function": {"variable": "hydra.ext.python.coder.encodeVariable"}}}}}}}}},
-                                                                                                                  "function": {
-                                                                                                                    "typeApplication": {
-                                                                                                                      "body": {
-                                                                                                                        "typeApplication": {
-                                                                                                                          "body": {
-                                                                                                                            "typeApplication": {
-                                                                                                                              "body": {"variable": "hydra.lib.eithers.bind"},
-                                                                                                                              "type": {
-                                                                                                                                "application": {
-                                                                                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                                                                          "type": {"variable": "hydra.ext.python.syntax.Expression"}}},
-                                                                                                                      "type": {
-                                                                                                                        "pair": {
-                                                                                                                          "first": {"variable": "hydra.ext.python.syntax.Expression"},
-                                                                                                                          "second": {"list": {"variable": "hydra.ext.python.syntax.Expression"}}}}}}}}}}}},
-                                                                                                      "domain": {"variable": "hydra.core.Name"},
-                                                                                                      "parameter": "name"}}}},
-                                                                                              {
                                                                                                 "name": "lambda",
                                                                                                 "term": {
                                                                                                   "function": {
@@ -10497,29 +10415,6 @@
                                                                 "type": {"variable": "hydra.ext.python.syntax.Expression"}}}}}}},
                                                     "domain": {"variable": "hydra.core.Lambda"},
                                                     "parameter": "lam"}}}},
-                                            {
-                                              "name": "primitive",
-                                              "term": {
-                                                "function": {
-                                                  "lambda": {
-                                                    "body": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "typeApplication": {
-                                                            "body": {"list": []},
-                                                            "type": {"variable": "hydra.ext.python.syntax.Expression"}}},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {"variable": "name"},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {"variable": "env"},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "cx"},
-                                                                    "function": {"variable": "hydra.ext.python.coder.encodeVariable"}}}}}}}}},
-                                                    "domain": {"variable": "hydra.core.Name"},
-                                                    "parameter": "name"}}}},
                                             {
                                               "name": "elimination",
                                               "term": {
@@ -26265,55 +26160,7 @@
                                                       "argument": {"literal": {"integer": {"int32": 1}}},
                                                       "function": {"variable": "hydra.lib.math.add"}}}}},
                                               "domain": {"variable": "hydra.core.Lambda"},
-                                              "parameter": "lam"}}}},
-                                      {
-                                        "name": "primitive",
-                                        "term": {
-                                          "function": {
-                                            "lambda": {
-                                              "body": {
-                                                "application": {
-                                                  "argument": {
-                                                    "application": {
-                                                      "argument": {
-                                                        "application": {
-                                                          "argument": {"variable": "graph"},
-                                                          "function": {
-                                                            "function": {
-                                                              "elimination": {"record": {"field": "primitives", "typeName": "hydra.graph.Graph"}}}}}},
-                                                      "function": {
-                                                        "application": {
-                                                          "argument": {"variable": "name"},
-                                                          "function": {
-                                                            "typeApplication": {
-                                                              "body": {
-                                                                "typeApplication": {
-                                                                  "body": {"variable": "hydra.lib.maps.lookup"},
-                                                                  "type": {"variable": "hydra.core.Name"}}},
-                                                              "type": {"variable": "hydra.graph.Primitive"}}}}}}},
-                                                  "function": {
-                                                    "application": {
-                                                      "argument": {
-                                                        "function": {
-                                                          "lambda": {
-                                                            "body": {
-                                                              "application": {
-                                                                "argument": {"variable": "prim"},
-                                                                "function": {"variable": "hydra.arity.primitiveArity"}}},
-                                                            "domain": {"variable": "hydra.graph.Primitive"},
-                                                            "parameter": "prim"}}},
-                                                      "function": {
-                                                        "application": {
-                                                          "argument": {"literal": {"integer": {"int32": 0}}},
-                                                          "function": {
-                                                            "typeApplication": {
-                                                              "body": {
-                                                                "typeApplication": {
-                                                                  "body": {"variable": "hydra.lib.maybes.maybe"},
-                                                                  "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                              "type": {"variable": "hydra.graph.Primitive"}}}}}}}}},
-                                              "domain": {"variable": "hydra.core.Name"},
-                                              "parameter": "name"}}}}],
+                                              "parameter": "lam"}}}}],
                                     "default": {"literal": {"integer": {"int32": 0}}},
                                     "typeName": "hydra.core.Function"}}}}}},
                         "domain": {"variable": "hydra.core.Function"},

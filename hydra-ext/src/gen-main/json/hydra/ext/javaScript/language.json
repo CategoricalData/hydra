@@ -101,10 +101,6 @@
                             {
                               "union": {
                                 "field": {"name": "lambda", "term": {"unit": {}}},
-                                "typeName": "hydra.variants.FunctionVariant"}},
-                            {
-                              "union": {
-                                "field": {"name": "primitive", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.FunctionVariant"}}]},
                         "function": {
                           "typeApplication": {

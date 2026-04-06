@@ -435,9 +435,6 @@ def push_type_apps_inward(term: hydra.core.Term) -> hydra.core.Term:
                 case hydra.core.FunctionLambda(value=l):
                     return cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(l.parameter, l.domain, go(l.body))))
 
-                case hydra.core.FunctionPrimitive(value=name):
-                    return cast(hydra.core.Function, hydra.core.FunctionPrimitive(name))
-
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
         def for_let(lt: hydra.core.Let) -> hydra.core.Let:

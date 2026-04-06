@@ -25,8 +25,7 @@ _EliminationVariant_wrap = Core.Name "wrap"
 -- | The identifier of a function constructor
 data FunctionVariant =
   FunctionVariantElimination  |
-  FunctionVariantLambda  |
-  FunctionVariantPrimitive
+  FunctionVariantLambda
   deriving (Eq, Ord, Read, Show)
 
 _FunctionVariant = Core.Name "hydra.variants.FunctionVariant"
@@ -34,8 +33,6 @@ _FunctionVariant = Core.Name "hydra.variants.FunctionVariant"
 _FunctionVariant_elimination = Core.Name "elimination"
 
 _FunctionVariant_lambda = Core.Name "lambda"
-
-_FunctionVariant_primitive = Core.Name "primitive"
 
 -- | The identifier of a literal constructor
 data LiteralVariant =

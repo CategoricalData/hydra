@@ -30,9 +30,6 @@ def function_variant(v1: hydra.variants.FunctionVariant) -> hydra.core.Term:
         case hydra.variants.FunctionVariant.LAMBDA:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.FunctionVariant"), hydra.core.Field(hydra.core.Name("lambda"), cast(hydra.core.Term, hydra.core.TermUnit())))))
 
-        case hydra.variants.FunctionVariant.PRIMITIVE:
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.FunctionVariant"), hydra.core.Field(hydra.core.Name("primitive"), cast(hydra.core.Term, hydra.core.TermUnit())))))
-
         case _:
             raise AssertionError("Unreachable: all variants handled")
 

@@ -205,7 +205,6 @@ encodeFunction cx g meta fun arg =
                           unresolvedVars = Sets.difference unqualifiedFreeVars (Graph.graphTypeVariables g)
                       in (Logic.ifElse (Sets.null unresolvedVars) (Just dom) Nothing))
         in (Eithers.bind (encodeTerm cx g body) (\sbody -> Eithers.bind (Maybes.maybe (findSdom cx g meta) (\dom -> Eithers.bind (encodeType cx g dom) (\sdom -> Right (Just sdom))) mdom) (\sdom -> Right (Utils.slambda v sbody sdom))))
-      Core.FunctionPrimitive v0 -> Right (Utils.sprim v0)
       Core.FunctionElimination v0 -> case v0 of
         Core.EliminationWrap _ -> Maybes.maybe (Eithers.bind (findSdom cx g meta) (\sdom -> Right (Utils.slambda "x" (Utils.sname "x") sdom))) (\a -> encodeTerm cx g a) arg
         Core.EliminationRecord v1 ->
@@ -378,16 +377,6 @@ encodeTerm cx g term0 =
               substitutedBody = bodyAfterTypeLambdas
           in case (Strip.deannotateTerm substitutedBody) of
             Core.TermFunction v1 -> case v1 of
-              Core.FunctionPrimitive v2 -> Eithers.bind (Eithers.mapList (\targ -> encodeType cx g targ) typeArgs) (\stypeArgs ->
-                let inScopeTypeVarNames =
-                        Sets.fromList (Lists.map (\n -> Formatting.capitalize (Core.unName n)) (Sets.toList (Graph.graphTypeVariables g)))
-                    hasForallResidual =
-                            Logic.not (Lists.null (Lists.filter (\st -> case st of
-                              Syntax.TypeVar v3 ->
-                                let tvName = Syntax.type_NameValue (Syntax.type_VarName v3)
-                                in (Logic.and (Logic.not (Lists.elem 46 (Strings.toList tvName))) (Logic.not (Sets.member tvName inScopeTypeVarNames)))
-                              _ -> False) stypeArgs))
-                in (Logic.ifElse hasForallResidual (Right (Utils.sprim v2)) (Right (Utils.sapplyTypes (Utils.sprim v2) stypeArgs))))
               Core.FunctionElimination _ -> encodeTerm cx g substitutedBody
               _ -> encodeTerm cx g substitutedBody
             Core.TermVariable v1 -> Maybes.cases (Maps.lookup v1 (Graph.graphPrimitives g)) (encodeTerm cx g substitutedBody) (\_prim -> Eithers.bind (Eithers.mapList (\targ -> encodeType cx g targ) typeArgs) (\stypeArgs ->

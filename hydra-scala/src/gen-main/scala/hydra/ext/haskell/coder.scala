@@ -184,7 +184,6 @@ def encodeFunction(depth: Int)(namespaces: hydra.packaging.Namespaces[hydra.ext.
        hydra.ext.haskell.syntax.Expression](hydra.ext.haskell.coder.encodeTerm(depth)(namespaces)(body)(cx)(g))((hbody: hydra.ext.haskell.syntax.Expression) =>
       Right(hydra.ext.haskell.utils.hslambda(hydra.ext.haskell.utils.elementReference(namespaces)(v))(hbody)))
   }
-  case hydra.core.Function.primitive(v_Function_primitive_name) => Right(hydra.ext.haskell.syntax.Expression.variable(hydra.ext.haskell.utils.elementReference(namespaces)(v_Function_primitive_name)))
 
 def encodeLiteral(l: hydra.core.Literal)(cx: hydra.context.Context): Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.haskell.syntax.Expression] =
   l match

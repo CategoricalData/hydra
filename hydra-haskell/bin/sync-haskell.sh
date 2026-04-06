@@ -1,22 +1,21 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+set -euo pipefail
 
 # Script to regenerate all Haskell artifacts from Hydra sources and run tests.
 #
-# This is the Haskell equivalent of hydra-ext/bin/sync-java.sh and sync-python.sh.
+# This is the Haskell counterpart to the hydra-ext/bin/sync-*.sh scripts.
 # It ensures hydra-haskell is in a fully consistent state by regenerating all
 # generated Haskell code in the correct order, with rebuilds between phases
 # (since each phase writes .hs files that subsequent phases depend on).
 #
-# Phases:
-#   1. Generate kernel modules (mainModules -> mainModules)
-#   2. Generate kernel test modules (mainModules -> testModules)
-#   3. Generate eval lib modules (mainModules -> evalLibModules)
-#   4. Generate encoder/decoder source modules (kernelTypesModules)
+# Steps:
+#   1. Generate kernel modules
+#   2. Generate kernel test modules
+#   3. Generate eval lib modules
+#   4. Generate encoder/decoder source modules
 #   5. Regenerate kernel modules (to pick up new encoder/decoder sources)
-
-#   7. Export and verify JSON kernel
-#   8. Run tests
+#   6. Export and verify JSON kernel
+#   7. Run tests (unless --quick)
 #
 # Prerequisites:
 #   - Stack is installed and configured
@@ -26,6 +25,12 @@ set -e
 #   ./bin/sync-haskell.sh          # Full sync (all steps including tests)
 #   ./bin/sync-haskell.sh --quick  # Skip tests (for faster iteration)
 #   ./bin/sync-haskell.sh --help   # Show this help
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+HYDRA_HASKELL_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
+HYDRA_ROOT_DIR="$( cd "$HYDRA_HASKELL_DIR/.." && pwd )"
+
+source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 
 QUICK_MODE=false
 
@@ -50,34 +55,24 @@ for arg in "$@"; do
             echo "  3. Generate eval lib modules"
             echo "  4. Generate encoder/decoder source modules"
             echo "  5. Regenerate kernel modules (picks up new encoder/decoder sources)"
-            
-            echo "  7. Export and verify JSON kernel"
-            echo "  8. Run tests (unless --quick)"
+            echo "  6. Export and verify JSON kernel"
+            echo "  7. Run tests (unless --quick)"
             exit 0
+            ;;
+        *)
+            die "Unknown argument: $arg (try --help)"
             ;;
     esac
 done
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-HYDRA_HASKELL_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
-
 cd "$HYDRA_HASKELL_DIR"
 
-# RTS flags to avoid stack overflow during generation
-RTS_FLAGS="+RTS -K256M -A32M -RTS"
+TOTAL_STEPS=7
 
-TOTAL_STEPS=8
-if [ "$QUICK_MODE" = true ]; then
-    TOTAL_STEPS=7
-fi
-
-echo "=========================================="
-echo "Synchronizing Hydra-Haskell"
-echo "=========================================="
+banner2 "Synchronizing Hydra-Haskell (from DSL)"
 echo ""
 
-# Phase 1: Generate kernel modules
-echo "Step 1/$TOTAL_STEPS: Generating kernel modules..."
+step 1 $TOTAL_STEPS "Generating kernel modules"
 echo ""
 stack build hydra:exe:update-haskell-kernel
 stack exec update-haskell-kernel -- $RTS_FLAGS
@@ -92,72 +87,47 @@ echo ""
 echo "Applying Haskell serde bootstrap patch (NaN/Inf)..."
 bash "$SCRIPT_DIR/patch-haskell-serde.sh"
 
-# Rebuild to pick up newly generated kernel files
 echo ""
-echo "Rebuilding..."
+echo "  Rebuilding..."
 stack build
 
-# Phase 2: Generate kernel test modules
-echo ""
-echo "Step 2/$TOTAL_STEPS: Generating kernel test modules..."
+step 2 $TOTAL_STEPS "Generating kernel test modules"
 echo ""
 stack build hydra:exe:update-kernel-tests
 stack exec update-kernel-tests -- $RTS_FLAGS
 
-if [ $? -ne 0 ]; then
-    echo "ERROR: Kernel test generation failed"
-    exit 1
+# Patch TestGraph.hs to use TestEnv (real graph with primitives) instead of emptyGraph
+TESTGRAPH="src/gen-test/haskell/Hydra/Test/TestGraph.hs"
+if [ -f "$TESTGRAPH" ]; then
+    echo "  Post-processing: patching TestGraph.hs..."
+    sed_inplace 's/import qualified Hydra.Lexical as Lexical$/import qualified Hydra.Lexical as Lexical\nimport qualified Hydra.Test.TestEnv as TestEnv/' "$TESTGRAPH"
+    sed_inplace 's/testGraph = Lexical.emptyGraph/testGraph = TestEnv.testGraph testTypes/' "$TESTGRAPH"
+    sed_inplace 's/testContext = Lexical.emptyContext/testContext = TestEnv.testContext/' "$TESTGRAPH"
 fi
 
-# Patch TestGraph.hs to use TestEnv (real graph with primitives) instead of emptyGraph
-echo "Patching TestGraph.hs..."
-TESTGRAPH="src/gen-test/haskell/Hydra/Test/TestGraph.hs"
-sed -i '' 's/import qualified Hydra.Lexical as Lexical$/import qualified Hydra.Lexical as Lexical\nimport qualified Hydra.Test.TestEnv as TestEnv/' "$TESTGRAPH"
-sed -i '' 's/testGraph = Lexical.emptyGraph/testGraph = TestEnv.testGraph testTypes/' "$TESTGRAPH"
-sed -i '' 's/testContext = Lexical.emptyContext/testContext = TestEnv.testContext/' "$TESTGRAPH"
-
-# Rebuild to pick up newly generated test files
 echo ""
-echo "Rebuilding..."
+echo "  Rebuilding..."
 stack build
 
-# Phase 3: Generate eval lib modules
-echo ""
-echo "Step 3/$TOTAL_STEPS: Generating eval lib modules..."
+step 3 $TOTAL_STEPS "Generating eval lib modules"
 echo ""
 stack build hydra:exe:update-haskell-eval-lib
 stack exec update-haskell-eval-lib -- $RTS_FLAGS
 
-if [ $? -ne 0 ]; then
-    echo "ERROR: Eval lib generation failed"
-    exit 1
-fi
-
-# Rebuild to pick up newly generated eval lib files
 echo ""
-echo "Rebuilding..."
+echo "  Rebuilding..."
 stack build
 
-# Phase 4: Generate encoder/decoder source modules
-echo ""
-echo "Step 4/$TOTAL_STEPS: Generating encoder/decoder source modules..."
+step 4 $TOTAL_STEPS "Generating encoder/decoder source modules"
 echo ""
 stack build hydra:exe:update-haskell-sources
 stack exec update-haskell-sources -- $RTS_FLAGS
 
-if [ $? -ne 0 ]; then
-    echo "ERROR: Encoder/decoder source generation failed"
-    exit 1
-fi
-
-# Rebuild to pick up encoder/decoder source modules (they change the library)
 echo ""
-echo "Rebuilding..."
+echo "  Rebuilding..."
 stack build
 
-# Phase 5: Regenerate kernel modules (to be consistent with new encoder/decoder sources)
-echo ""
-echo "Step 5/$TOTAL_STEPS: Regenerating kernel modules (post encoder/decoder)..."
+step 5 $TOTAL_STEPS "Regenerating kernel modules (post encoder/decoder)"
 echo ""
 stack exec update-haskell-kernel -- $RTS_FLAGS
 
@@ -171,71 +141,20 @@ echo ""
 echo "Reapplying Haskell serde bootstrap patch (NaN/Inf)..."
 bash "$SCRIPT_DIR/patch-haskell-serde.sh"
 
-# Rebuild with the final kernel
 echo ""
-echo "Rebuilding..."
+echo "  Rebuilding..."
 stack build
 
-# Note: generation tests removed in favor of universal test cases
-
-# Phase 7: Export and verify JSON
-# All main modules (kernel + eval lib + ext) are exported to JSON.
-# Test modules are exported to JSON for use by Java/Python test generation.
-# Only kernel modules are round-trip verified (loaded back and compared).
+step 6 $TOTAL_STEPS "Exporting and verifying JSON"
 echo ""
-echo "Step 7/$TOTAL_STEPS: Exporting and verifying JSON..."
-echo ""
-stack build hydra:exe:update-json-main hydra:exe:update-json-test hydra:exe:verify-json-kernel
-#stack build hydra:exe:update-json-kernel hydra:exe:update-json-main hydra:exe:update-json-test hydra:exe:verify-json-kernel
-#stack exec update-json-kernel -- $RTS_FLAGS
-#
-#if [ $? -ne 0 ]; then
-#    echo "ERROR: JSON kernel export failed"
-#    exit 1
-#fi
-
+stack build hydra:exe:update-json-main hydra:exe:update-json-test hydra:exe:verify-json-kernel hydra:exe:update-json-manifest
 stack exec update-json-main -- $RTS_FLAGS
-
-if [ $? -ne 0 ]; then
-    echo "ERROR: JSON main export failed"
-    exit 1
-fi
-
 stack exec update-json-test -- $RTS_FLAGS
-
-if [ $? -ne 0 ]; then
-    echo "ERROR: JSON test export failed"
-    exit 1
-fi
-
 stack exec verify-json-kernel -- $RTS_FLAGS
-
-if [ $? -ne 0 ]; then
-    echo "ERROR: JSON kernel verification failed"
-    exit 1
-fi
-
-# Phase 7b: Generate JSON manifest
-echo ""
-echo "Step 7b/$TOTAL_STEPS: Generating JSON manifest..."
-echo ""
-stack build hydra:exe:update-json-manifest
 stack exec update-json-manifest
 
-if [ $? -ne 0 ]; then
-    echo "ERROR: JSON manifest generation failed"
-    exit 1
-fi
-
-echo ""
-echo "=========================================="
-echo "Generation complete!"
-echo "=========================================="
-
-# Phase 8: Run tests
 if [ "$QUICK_MODE" = false ]; then
-    echo ""
-    echo "Step 8/$TOTAL_STEPS: Running tests..."
+    step 7 $TOTAL_STEPS "Running tests"
     echo ""
 
     TEST_LOG="$HYDRA_HASKELL_DIR/test-output.log"
@@ -246,26 +165,22 @@ if [ "$QUICK_MODE" = false ]; then
         echo ""
         echo "All tests passed!"
     else
-        echo ""
-        echo "WARNING: Some tests failed (exit code $TEST_RESULT). See $TEST_LOG"
+        warn "Some tests failed (exit code $TEST_RESULT). See $TEST_LOG"
     fi
 else
-    echo ""
-    echo "Step 8/$TOTAL_STEPS: Skipped (--quick mode)"
+    step 7 $TOTAL_STEPS "Skipped (--quick mode)"
 fi
 
-# Phase 9: Regenerate the lexicon
+# Regenerate the lexicon
 echo ""
-echo "Regenerating lexicon..."
-stack ghci hydra:lib --ghci-options='-e ":m Hydra.Generation" -e "writeLexiconToStandardPath"' 2>&1 | grep -E "^Lexicon|^Error"
+echo "  Regenerating lexicon..."
+stack ghci hydra:lib --ghci-options='-e ":m Hydra.Generation" -e "writeLexiconToStandardPath"' 2>&1 | grep -E "^Lexicon|^Error" || true
 
 echo ""
-echo "=========================================="
 echo "Checking for new files..."
-echo "=========================================="
 echo ""
 
-NEW_FILES=$(git status --porcelain src/gen-main/haskell src/gen-test/haskell src/gen-main/json 2>/dev/null | grep "^??" | awk '{print $2}')
+NEW_FILES=$(git status --porcelain src/gen-main/haskell src/gen-test/haskell src/gen-main/json 2>/dev/null | grep "^??" | awk '{print $2}' || true)
 
 if [ -n "$NEW_FILES" ]; then
     echo "New files were created. You may want to run:"
@@ -283,7 +198,4 @@ else
     echo "No new files created."
 fi
 
-echo ""
-echo "=========================================="
-echo "Sync complete!"
-echo "=========================================="
+banner2_done "Hydra-Haskell sync complete!"

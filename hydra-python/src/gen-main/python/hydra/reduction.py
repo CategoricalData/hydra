@@ -128,9 +128,6 @@ def eta_expand_term(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra.cor
                 case hydra.core.FunctionLambda():
                     return 0
 
-                case hydra.core.FunctionPrimitive(value=name):
-                    return hydra.lib.maybes.maybe((lambda : 0), (lambda x1: hydra.arity.type_scheme_arity(x1)), hydra.lib.maps.lookup(name, prim_types()))
-
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
         match term:
@@ -208,14 +205,7 @@ def eta_expand_term(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra.cor
         def recurse(tx1: hydra.graph.Graph, term1: hydra.core.Term) -> hydra.core.Term:
             return rewrite_with_args((), tx1, term1)
         def term_head_type(tx2: hydra.graph.Graph, trm2: hydra.core.Term):
-            def _hoist_term_head_type_1(v1):
-                match v1:
-                    case hydra.core.FunctionPrimitive(value=pn2):
-                        return hydra.lib.maybes.map((lambda x1: hydra.scoping.type_scheme_to_f_type(x1)), hydra.lib.maps.lookup(pn2, prim_types()))
-
-                    case _:
-                        return Nothing()
-            def _hoist_term_head_type_2(htyp2, tat2, v1):
+            def _hoist_term_head_type_1(htyp2, tat2, v1):
                 match v1:
                     case hydra.core.TypeForall(value=ft2):
                         return Just(hydra.variables.replace_free_type_variable(ft2.parameter, tat2.type, ft2.body))
@@ -226,8 +216,8 @@ def eta_expand_term(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra.cor
                 case hydra.core.TermAnnotated(value=at2):
                     return term_head_type(tx2, at2.body)
 
-                case hydra.core.TermFunction(value=f2):
-                    return _hoist_term_head_type_1(f2)
+                case hydra.core.TermFunction():
+                    return Nothing()
 
                 case hydra.core.TermLet(value=l2):
                     return term_head_type(hydra.scoping.extend_graph_for_let((lambda _, _2: Nothing()), tx2, l2), l2.body)
@@ -236,7 +226,7 @@ def eta_expand_term(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra.cor
                     return term_head_type(hydra.scoping.extend_graph_for_type_lambda(tx2, tl2), tl2.body)
 
                 case hydra.core.TermTypeApplication(value=tat2):
-                    return hydra.lib.maybes.bind(term_head_type(tx2, tat2.body), (lambda htyp2: _hoist_term_head_type_2(htyp2, tat2, htyp2)))
+                    return hydra.lib.maybes.bind(term_head_type(tx2, tat2.body), (lambda htyp2: _hoist_term_head_type_1(htyp2, tat2, htyp2)))
 
                 case hydra.core.TermVariable(value=vn2):
                     return hydra.lib.maybes.map((lambda x1: hydra.scoping.type_scheme_to_f_type(x1)), hydra.lib.maps.lookup(vn2, tx2.bound_types))
@@ -329,15 +319,6 @@ def eta_expand_term(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra.cor
                     def arty() -> int:
                         return term_arity_with_context(tx, result())
                     return expand(False, args, arty(), Nothing(), result())
-
-                case hydra.core.FunctionPrimitive(value=pn):
-                    @lru_cache(1)
-                    def arty() -> int:
-                        return term_arity_with_context(tx, term)
-                    @lru_cache(1)
-                    def prim_type() -> Maybe[hydra.core.Type]:
-                        return hydra.lib.maybes.map((lambda ts: ts.type), hydra.lib.maps.lookup(pn, prim_types()))
-                    return expand(False, args, arty(), prim_type(), term)
 
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
@@ -459,9 +440,6 @@ def eta_expand_typed_term(cx: hydra.context.Context, tx0: hydra.graph.Graph, ter
                                 return hydra.scoping.extend_graph_for_lambda(tx3, l)
                             return arity_of(txl(), l.body)
 
-                        case hydra.core.FunctionPrimitive(value=name):
-                            return hydra.lib.eithers.map((lambda _ts: hydra.arity.type_scheme_arity(_ts)), hydra.lexical.require_primitive_type(cx, tx3, name))
-
                         case _:
                             raise AssertionError("Unreachable: all variants handled")
                 match term2:
@@ -559,16 +537,13 @@ def eta_expand_typed_term(cx: hydra.context.Context, tx0: hydra.graph.Graph, ter
     return hydra.rewriting.rewrite_term_with_context_m((lambda v1, v2, v3: rewrite(True, False, (), v1, v2, v3)), tx0, term0)
 
 def eta_expansion_arity(graph: hydra.graph.Graph, term: hydra.core.Term):
-    def _hoist_hydra_reduction_eta_expansion_arity_1(graph, v1):
+    def _hoist_hydra_reduction_eta_expansion_arity_1(v1):
         match v1:
             case hydra.core.FunctionElimination():
                 return 1
 
             case hydra.core.FunctionLambda():
                 return 0
-
-            case hydra.core.FunctionPrimitive(value=name):
-                return hydra.arity.primitive_arity(hydra.lib.maybes.from_just(hydra.lexical.lookup_primitive(graph, name)))
 
             case _:
                 raise AssertionError("Unreachable: all variants handled")
@@ -580,7 +555,7 @@ def eta_expansion_arity(graph: hydra.graph.Graph, term: hydra.core.Term):
             return hydra.lib.math.sub(eta_expansion_arity(graph, app.function), 1)
 
         case hydra.core.TermFunction(value=f):
-            return _hoist_hydra_reduction_eta_expansion_arity_1(graph, f)
+            return _hoist_hydra_reduction_eta_expansion_arity_1(f)
 
         case hydra.core.TermTypeLambda(value=ta):
             return eta_expansion_arity(graph, ta.body)
@@ -722,9 +697,6 @@ def reduce_term(cx: hydra.context.Context, graph: hydra.graph.Graph, eager: bool
                 case hydra.core.FunctionLambda(value=l):
                     return hydra.lib.logic.if_else(hydra.lib.lists.null(args), (lambda : Right(original)), (lambda : for_lambda(l, args)))
 
-                case hydra.core.FunctionPrimitive(value=name):
-                    return hydra.lib.eithers.bind(hydra.lexical.require_primitive(cx, graph, name), (lambda prim: (arity := hydra.arity.primitive_arity(prim), hydra.lib.logic.if_else(hydra.lib.equality.gt(arity, hydra.lib.lists.length(args)), (lambda : Right(apply_to_arguments(original, args))), (lambda : for_primitive(prim, arity, args))))[1]))
-
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
         match stripped():
@@ -799,9 +771,6 @@ def term_is_value(term: hydra.core.Term) -> bool:
 
             case hydra.core.FunctionLambda(value=l):
                 return term_is_value(l.body)
-
-            case hydra.core.FunctionPrimitive():
-                return True
 
             case _:
                 raise AssertionError("Unreachable: all variants handled")

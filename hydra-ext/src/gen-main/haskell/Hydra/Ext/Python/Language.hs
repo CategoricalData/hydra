@@ -46,8 +46,7 @@ pythonLanguage =
     functionVariants =
         Sets.fromList [
           Variants.FunctionVariantElimination,
-          Variants.FunctionVariantLambda,
-          Variants.FunctionVariantPrimitive]
+          Variants.FunctionVariantLambda]
     integerTypes = Sets.fromList [
       Core.IntegerTypeBigint]
     termVariants =

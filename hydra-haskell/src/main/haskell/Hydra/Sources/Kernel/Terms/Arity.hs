@@ -76,9 +76,7 @@ functionArity = define "functionArity" $
   doc "Find the arity (expected number of arguments) of a function" $
   match _Function Nothing [
     _Function_elimination>>: constant (int32 1),
-    _Function_lambda>>: (lambda "i" $ Math.add (int32 1) (var "i")) <.> (termArity <.> unaryFunction Core.lambdaBody),
-    _Function_primitive>>: constant $
-      doc "TODO: This function needs to be monadic, so we can look up the primitive" (int32 42)]
+    _Function_lambda>>: (lambda "i" $ Math.add (int32 1) (var "i")) <.> (termArity <.> unaryFunction Core.lambdaBody)]
 
 primitiveArity :: TTermDefinition (Primitive -> Int)
 primitiveArity = define "primitiveArity" $

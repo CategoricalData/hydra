@@ -331,16 +331,6 @@ public interface Reduction {
           public Integer visit(hydra.core.Function.Lambda ignored) {
             return 0;
           }
-
-          @Override
-          public Integer visit(hydra.core.Function.Primitive name) {
-            return hydra.lib.maybes.Maybe.applyLazy(
-              () -> 0,
-              hydra.Arity::typeSchemeArity,
-              hydra.lib.maps.Lookup.apply(
-                (name).value,
-                primTypes.get()));
-          }
         });
       }
 
@@ -396,22 +386,8 @@ public interface Reduction {
         }
 
         @Override
-        public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.Function f2) {
-          return (f2).value.accept(new hydra.core.Function.PartialVisitor<>() {
-            @Override
-            public hydra.util.Maybe<hydra.core.Type> otherwise(hydra.core.Function instance) {
-              return (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing());
-            }
-
-            @Override
-            public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Function.Primitive pn2) {
-              return hydra.lib.maybes.Map.apply(
-                hydra.Scoping::typeSchemeToFType,
-                hydra.lib.maps.Lookup.apply(
-                  (pn2).value,
-                  primTypes.get()));
-            }
-          });
+        public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.Function ignored) {
+          return (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing());
         }
 
         @Override
@@ -565,17 +541,6 @@ public interface Reduction {
               Integer arty = termArityWithContext.get().apply(tx).apply(result);
               return (expand).apply(false).apply(args).apply(arty).apply((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing())).apply(result);
             }
-
-            @Override
-            public hydra.core.Term visit(hydra.core.Function.Primitive pn) {
-              Integer arty = termArityWithContext.get().apply(tx).apply(term);
-              hydra.util.Lazy<hydra.util.Maybe<hydra.core.Type>> primType = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Map.apply(
-                (java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type>) (ts -> (ts).type),
-                hydra.lib.maps.Lookup.apply(
-                  (pn).value,
-                  primTypes.get())));
-              return (expand).apply(false).apply(args).apply(arty).apply(primType.get()).apply(term);
-            }
           });
         }
 
@@ -703,16 +668,6 @@ public interface Reduction {
               tx3,
               (l).value);
             return arityOf.get().apply(txl).apply((l).value.body);
-          }
-
-          @Override
-          public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, Integer> visit(hydra.core.Function.Primitive name) {
-            return hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<hydra.core.TypeScheme, Integer>) (_ts -> hydra.Arity.typeSchemeArity(_ts)),
-              hydra.Lexical.requirePrimitiveType(
-                cx,
-                tx3,
-                (name).value));
           }
         })));
         return (term2).accept(new hydra.core.Term.PartialVisitor<>() {
@@ -1003,13 +958,6 @@ public interface Reduction {
           public Integer visit(hydra.core.Function.Lambda ignored) {
             return 0;
           }
-
-          @Override
-          public Integer visit(hydra.core.Function.Primitive name) {
-            return hydra.Arity.primitiveArity(hydra.lib.maybes.FromJust.apply(hydra.Lexical.lookupPrimitive(
-              graph,
-              (name).value)));
-          }
         });
       }
 
@@ -1284,24 +1232,6 @@ public interface Reduction {
                 () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(original),
                 () -> (forLambda).apply((l).value).apply(args));
             }
-
-            @Override
-            public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term> visit(hydra.core.Function.Primitive name) {
-              return hydra.lib.eithers.Bind.apply(
-                hydra.Lexical.requirePrimitive(
-                  cx,
-                  graph,
-                  (name).value),
-                (java.util.function.Function<hydra.graph.Primitive, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>>) (prim -> {
-                  Integer arity = hydra.Arity.primitiveArity(prim);
-                  return hydra.lib.logic.IfElse.lazy(
-                    hydra.lib.equality.Gt.apply(
-                      arity,
-                      hydra.lib.lists.Length.apply(args)),
-                    () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Term>right(applyToArguments.get().apply(original).apply(args)),
-                    () -> (forPrimitive).apply(prim).apply(arity).apply(args));
-                }));
-            }
           });
         }
 
@@ -1449,11 +1379,6 @@ public interface Reduction {
       @Override
       public Boolean visit(hydra.core.Function.Lambda l) {
         return hydra.Reduction.termIsValue((l).value.body);
-      }
-
-      @Override
-      public Boolean visit(hydra.core.Function.Primitive ignored) {
-        return true;
       }
     }));
     return hydra.Strip.deannotateTerm(term).accept(new hydra.core.Term.PartialVisitor<>() {

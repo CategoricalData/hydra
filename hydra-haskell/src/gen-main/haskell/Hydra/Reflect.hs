@@ -56,15 +56,13 @@ functionVariant x =
     case x of
       Core.FunctionElimination _ -> Variants.FunctionVariantElimination
       Core.FunctionLambda _ -> Variants.FunctionVariantLambda
-      Core.FunctionPrimitive _ -> Variants.FunctionVariantPrimitive
 
 -- | All function variants (constructors), in a canonical order
 functionVariants :: [Variants.FunctionVariant]
 functionVariants =
     [
       Variants.FunctionVariantElimination,
-      Variants.FunctionVariantLambda,
-      Variants.FunctionVariantPrimitive]
+      Variants.FunctionVariantLambda]
 
 -- | Find whether a given integer type is signed (true) or unsigned (false)
 integerTypeIsSigned :: Core.IntegerType -> Bool

@@ -224,9 +224,7 @@ termLabel = define "termLabel" $
                   string "unwrap_{",
                   Names.compactName @@ var "namespaces" @@ var "name",
                   string "}"])]
-              @@ var "e",
-          _Function_primitive>>: "name" ~>
-            pair (Names.compactName @@ var "namespaces" @@ var "name") nodeStylePrimitive]
+              @@ var "e"]
           @@ var "f",
       _Term_let>>: constant $ var "simpleLabel" @@ string "let",
       _Term_list>>: constant $ var "simpleLabel" @@ (Logic.ifElse (var "compact") (string "[]") (string "list")),

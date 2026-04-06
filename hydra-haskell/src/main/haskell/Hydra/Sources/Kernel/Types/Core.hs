@@ -234,10 +234,7 @@ function = define "Function" $
       elimination,
     "lambda">:
       doc "A function abstraction (lambda)"
-      lambda,
-    "primitive">:
-      doc "A reference to a built-in (primitive) function"
-      name]
+      lambda]
 
 functionType :: Binding
 functionType = define "FunctionType" $
