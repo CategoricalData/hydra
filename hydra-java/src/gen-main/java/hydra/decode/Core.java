@@ -664,11 +664,6 @@ public interface Core {
               (java.util.function.Function<hydra.core.Lambda, hydra.core.Function>) (t -> new hydra.core.Function.Lambda(t)),
               hydra.decode.Core.lambda(
                 cx,
-                input)))))),
-            (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Function>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Function>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Function>>>(new hydra.core.Name("primitive"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Function>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<hydra.core.Name, hydra.core.Function>) (t -> new hydra.core.Function.Primitive(t)),
-              hydra.decode.Core.name(
-                cx,
                 input)))))))));
           return hydra.lib.maybes.Maybe.applyLazy(
             () -> hydra.util.Either.<hydra.errors.DecodingError, hydra.core.Function>left(new hydra.errors.DecodingError(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(

@@ -110,8 +110,7 @@ goLanguage = define "goLanguage" $
     -- Go supports all three function variants
     "functionVariants">: Sets.fromList $ list [
       Variants.functionVariantElimination,
-      Variants.functionVariantLambda,
-      Variants.functionVariantPrimitive],
+      Variants.functionVariantLambda],
     -- Go has all standard integer types plus big.Int from math/big
     "integerTypes">: Sets.fromList $ list [
       Core.integerTypeBigint, -- math/big.Int

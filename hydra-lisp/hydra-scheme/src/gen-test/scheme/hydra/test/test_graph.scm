@@ -18,7 +18,7 @@
          (schema-types (hydra_lib_maps_from_list (append kernel-schemas test-schemas)))
          (test-terms (map (lambda (entry) (list (car entry) (cdr entry))) (hydra_lib_maps_to_list hydra_test_test_graph_test_terms)))
          (bound-terms (append
-           (map (lambda (pair) (list (car pair) (list (quote function) (list (quote primitive) (car pair))))) all-prims)
+           ;; Primitives are resolved via graphPrimitives, not boundTerms.
            (annotation-bindings)
            (list (list "hydra.monads.emptyContext" (list (quote unit) (list)))
                  (list "hydra.lexical.emptyGraph" (list (quote unit) (list))))

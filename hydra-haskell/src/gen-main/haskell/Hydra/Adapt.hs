@@ -525,7 +525,6 @@ pushTypeAppsInward term =
                                     Core.lambdaParameter = (Core.lambdaParameter v0),
                                     Core.lambdaDomain = (Core.lambdaDomain v0),
                                     Core.lambdaBody = (go (Core.lambdaBody v0))})
-                                  Core.FunctionPrimitive v0 -> Core.FunctionPrimitive v0
                         forLet =
                                 \lt ->
                                   let mapBinding =

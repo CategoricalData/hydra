@@ -161,6 +161,8 @@ module_ = Module ns definitions
       toDefinition encodeDefinitions,
       toDefinition encodeElimination,
       toDefinition encodeFunction,
+      toDefinition encodeFunctionPrimitiveByName,
+      toDefinition encodeNullaryPrimitiveByName,
       toDefinition encodeLiteral,
       toDefinition encodeLiteral_encodeFloat,
       toDefinition encodeLiteral_encodeInteger,
@@ -1887,10 +1889,6 @@ encodeApplication = def "encodeApplication" $
     "deannotatedFun" <~ (Strip.deannotateTerm @@ var "fun") $
     "calleeName" <~ (cases _Term (var "deannotatedFun")
       (Just nothing) [
-      _Term_function>>: lambda "f" $
-        cases _Function (var "f")
-          (Just nothing) [
-          _Function_primitive>>: lambda "n" $ just (var "n")],
       _Term_variable>>: lambda "n" $ just (var "n")]) $
     -- Annotate lambda args if we have a callee name
     "annotatedArgs" <<~ (Maybes.cases (var "calleeName")
@@ -1900,18 +1898,6 @@ encodeApplication = def "encodeApplication" $
     cases _Term (var "deannotatedFun")
       (Just $ encodeApplication_fallback @@ var "env" @@ var "aliases" @@ var "g" @@ var "typeApps"
         @@ (Core.applicationFunction (var "app")) @@ (Core.applicationArgument (var "app")) @@ var "cx" @@ var "g") [
-      _Term_function>>: lambda "f" $
-        cases _Function (var "f")
-          (Just $ encodeApplication_fallback @@ var "env" @@ var "aliases" @@ var "g" @@ var "typeApps"
-            @@ (Core.applicationFunction (var "app")) @@ (Core.applicationArgument (var "app")) @@ var "cx" @@ var "g") [
-          _Function_primitive>>: lambda "name" $
-            "hargs" <~ Lists.take (var "arity") (var "annotatedArgs") $
-            "rargs" <~ Lists.drop (var "arity") (var "annotatedArgs") $
-            "initialCall" <<~ (functionCall @@ var "env" @@ true @@ var "name" @@ var "hargs" @@ (list ([] :: [TTerm Type])) @@ var "cx" @@ var "g") $
-            Eithers.foldl (lambda "acc" $ lambda "h" $
-              "jarg" <<~ (encodeTerm @@ var "env" @@ var "h" @@ var "cx" @@ var "g") $
-              right (applyJavaArg @@ var "acc" @@ var "jarg"))
-              (var "initialCall") (var "rargs")],
       _Term_variable>>: lambda "name" $
         -- If the variable resolves to a primitive, handle it like FunctionPrimitive
         Logic.ifElse (Maybes.isJust (Maps.lookup (var "name") (Graph.graphPrimitives (var "g"))))
@@ -2113,6 +2099,62 @@ encodeElimination = def "encodeElimination" $
           -- With arg: field access
           (lambda "jarg" $ var "withArg" @@ var "jarg"))]
 
+-- | Encode a primitive reference (by name) with function-type arity, as a method reference or curried wrapper.
+encodeFunctionPrimitiveByName :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Type -> Name -> Context -> Graph -> Either (InContext Error) Java.Expression)
+encodeFunctionPrimitiveByName = def "encodeFunctionPrimitiveByName" $
+  lambda "env" $ lambda "dom" $ lambda "cod" $ lambda "name" $
+    "cx" ~> "g" ~>
+    "aliases" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env") $
+    "classWithApply" <~ (JavaDsl.unIdentifier (elementJavaIdentifier @@ true @@ false @@ var "aliases" @@ var "name")) $
+    "suffix" <~ Strings.cat2 (string ".") (asTerm JavaNamesSource.applyMethodName) $
+    "className" <~ Strings.fromList (Lists.take
+      (Math.sub (Strings.length (var "classWithApply")) (Strings.length (var "suffix")))
+      (Strings.toList (var "classWithApply"))) $
+    "arity" <~ (Arity.typeArity @@ (inject _Type _Type_function (record _FunctionType [
+      _FunctionType_domain>>: var "dom",
+      _FunctionType_codomain>>: var "cod"]))) $
+    Logic.ifElse (Equality.lte (var "arity") (int32 1))
+      (right (JavaUtilsSource.javaIdentifierToJavaExpression @@
+        (JavaDsl.identifier (Strings.cat (list [var "className", string "::", asTerm JavaNamesSource.applyMethodName])))))
+      ("paramNames" <~ Lists.map
+        (lambda "i" $ wrap _Name (Strings.cat2 (string "p") (Literals.showInt32 (var "i"))))
+        (Math.range (int32 0) (Math.sub (var "arity") (int32 1))) $
+        "paramExprs" <~ Lists.map
+          (lambda "p" $ JavaUtilsSource.javaIdentifierToJavaExpression @@ (JavaUtilsSource.variableToJavaIdentifier @@ var "p"))
+          (var "paramNames") $
+        "classId" <~ JavaDsl.identifier (var "className") $
+        "call" <~ (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
+          (JavaUtilsSource.methodInvocationStatic @@ var "classId" @@ JavaDsl.identifier (asTerm JavaNamesSource.applyMethodName) @@ var "paramExprs")) $
+        "curried" <~ (buildCurriedLambda @@ var "paramNames" @@ var "call") $
+        "jtype" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ (inject _Type _Type_function (record _FunctionType [
+          _FunctionType_domain>>: var "dom",
+          _FunctionType_codomain>>: var "cod"])) @@ var "cx" @@ var "g") $
+        "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jtype" @@ var "cx") $
+        right (JavaUtilsSource.javaCastExpressionToJavaExpression @@
+          (JavaUtilsSource.javaCastExpression @@ var "rt" @@ (JavaUtilsSource.javaExpressionToJavaUnaryExpression @@ var "curried"))))
+
+-- | Encode a nullary primitive reference (by name) as a Java expression.
+encodeNullaryPrimitiveByName :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Name -> Context -> Graph -> Either (InContext Error) Java.Expression)
+encodeNullaryPrimitiveByName = def "encodeNullaryPrimitiveByName" $
+  lambda "env" $ lambda "typ" $ lambda "name" $
+    "cx" ~> "g" ~>
+    "aliases" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env") $
+    "targs" <<~ (encodeNullaryConstant_typeArgsFromReturnType @@ var "aliases" @@ var "typ" @@ var "cx" @@ var "g") $
+    Logic.ifElse (Lists.null (var "targs"))
+      ("header" <~ (inject Java._MethodInvocation_Header Java._MethodInvocation_Header_simple
+        (wrap Java._MethodName
+          (elementJavaIdentifier @@ boolean True @@ boolean False @@ var "aliases" @@ var "name"))) $
+       right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
+         (record Java._MethodInvocation [
+           Java._MethodInvocation_header>>: var "header",
+           Java._MethodInvocation_arguments>>: list ([] :: [TTerm Java.Expression])])))
+      ("fullName" <~ (unwrap Java._Identifier @@ (elementJavaIdentifier @@ boolean True @@ boolean False @@ var "aliases" @@ var "name")) $
+       "parts" <~ Strings.splitOn (string ".") (var "fullName") $
+       "className" <~ JavaDsl.identifier (Strings.intercalate (string ".") (Lists.init (var "parts"))) $
+       "methodName" <~ JavaDsl.identifier (Lists.last (var "parts")) $
+       right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
+         (JavaUtilsSource.methodInvocationStaticWithTypeArgs @@ var "className" @@ var "methodName" @@ var "targs" @@ (list ([] :: [TTerm Java.Expression])))))
+
 -- | Encode a function.
 encodeFunction :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type -> Type -> Function -> Context -> Graph -> Either (InContext Error) Java.Expression)
 encodeFunction = def "encodeFunction" $
@@ -2186,39 +2228,7 @@ encodeFunction = def "encodeFunction" $
                       "lam1" <~ (JavaUtilsSource.javaLambda @@ var "lambdaVar" @@ var "innerJavaLambda") $
                       applyCastIfSafe @@ var "aliases" @@ (inject _Type _Type_function (record _FunctionType [
                         _FunctionType_domain>>: var "dom",
-                        _FunctionType_codomain>>: var "cod"])) @@ var "lam1" @@ var "cx" @@ var "g"]]])),
-
-      -- FunctionPrimitive: method reference or curried wrapper
-      _Function_primitive>>: lambda "name" $
-        "classWithApply" <~ (JavaDsl.unIdentifier (elementJavaIdentifier @@ true @@ false @@ var "aliases" @@ var "name")) $
-        "suffix" <~ Strings.cat2 (string ".") (asTerm JavaNamesSource.applyMethodName) $
-        "className" <~ Strings.fromList (Lists.take
-          (Math.sub (Strings.length (var "classWithApply")) (Strings.length (var "suffix")))
-          (Strings.toList (var "classWithApply"))) $
-        "arity" <~ (Arity.typeArity @@ (inject _Type _Type_function (record _FunctionType [
-          _FunctionType_domain>>: var "dom",
-          _FunctionType_codomain>>: var "cod"]))) $
-        Logic.ifElse (Equality.lte (var "arity") (int32 1))
-          -- Single-arg: method reference
-          (right (JavaUtilsSource.javaIdentifierToJavaExpression @@
-            (JavaDsl.identifier (Strings.cat (list [var "className", string "::", asTerm JavaNamesSource.applyMethodName])))))
-          -- Multi-arg: curried lambda wrapper
-          ("paramNames" <~ Lists.map
-            (lambda "i" $ wrap _Name (Strings.cat2 (string "p") (Literals.showInt32 (var "i"))))
-            (Math.range (int32 0) (Math.sub (var "arity") (int32 1))) $
-            "paramExprs" <~ Lists.map
-              (lambda "p" $ JavaUtilsSource.javaIdentifierToJavaExpression @@ (JavaUtilsSource.variableToJavaIdentifier @@ var "p"))
-              (var "paramNames") $
-            "classId" <~ JavaDsl.identifier (var "className") $
-            "call" <~ (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
-              (JavaUtilsSource.methodInvocationStatic @@ var "classId" @@ JavaDsl.identifier (asTerm JavaNamesSource.applyMethodName) @@ var "paramExprs")) $
-            "curried" <~ (buildCurriedLambda @@ var "paramNames" @@ var "call") $
-            "jtype" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ (inject _Type _Type_function (record _FunctionType [
-              _FunctionType_domain>>: var "dom",
-              _FunctionType_codomain>>: var "cod"])) @@ var "cx" @@ var "g") $
-            "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jtype" @@ var "cx") $
-            right (JavaUtilsSource.javaCastExpressionToJavaExpression @@
-              (JavaUtilsSource.javaCastExpression @@ var "rt" @@ (JavaUtilsSource.javaExpressionToJavaUnaryExpression @@ var "curried"))))]
+                        _FunctionType_codomain>>: var "cod"])) @@ var "lam1" @@ var "cx" @@ var "g"]]]))]
 
 -- | Encode a literal value to a Java expression
 encodeLiteral :: TTermDefinition (Literal -> Java.Expression)
@@ -2399,27 +2409,7 @@ encodeNullaryConstant :: TTermDefinition (JavaHelpers.JavaEnvironment -> Type ->
 encodeNullaryConstant = def "encodeNullaryConstant" $
   lambda "env" $ lambda "typ" $ lambda "fun" $
     "cx" ~> "g" ~>
-    "aliases" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env") $
-    cases _Function (var "fun")
-      (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "unexpected ") (Strings.cat2 (string "nullary function") (Strings.cat2 (string " in ") (ShowCore.function @@ var "fun")))) (var "cx")) [
-      _Function_primitive>>: "name" ~>
-        "targs" <<~ (encodeNullaryConstant_typeArgsFromReturnType @@ var "aliases" @@ var "typ" @@ var "cx" @@ var "g") $
-        Logic.ifElse (Lists.null (var "targs"))
-          -- Simple call without type arguments
-          ("header" <~ (inject Java._MethodInvocation_Header Java._MethodInvocation_Header_simple
-            (wrap Java._MethodName
-              (elementJavaIdentifier @@ boolean True @@ boolean False @@ var "aliases" @@ var "name"))) $
-           right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
-             (record Java._MethodInvocation [
-               Java._MethodInvocation_header>>: var "header",
-               Java._MethodInvocation_arguments>>: list ([] :: [TTerm Java.Expression])])))
-          -- Call with type arguments: split "ClassName.apply" into class and method
-          ("fullName" <~ (unwrap Java._Identifier @@ (elementJavaIdentifier @@ boolean True @@ boolean False @@ var "aliases" @@ var "name")) $
-           "parts" <~ Strings.splitOn (string ".") (var "fullName") $
-           "className" <~ JavaDsl.identifier (Strings.intercalate (string ".") (Lists.init (var "parts"))) $
-           "methodName" <~ JavaDsl.identifier (Lists.last (var "parts")) $
-           right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
-             (JavaUtilsSource.methodInvocationStaticWithTypeArgs @@ var "className" @@ var "methodName" @@ var "targs" @@ (list ([] :: [TTerm Java.Expression])))))]
+    Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "unexpected ") (Strings.cat2 (string "nullary function") (Strings.cat2 (string " in ") (ShowCore.function @@ var "fun")))) (var "cx")
 
 -- | Extract type arguments from the return type for generic method calls
 encodeNullaryConstant_typeArgsFromReturnType :: TTermDefinition (JavaHelpers.Aliases -> Type -> Context -> Graph -> Either (InContext Error) [Java.TypeArgument])
@@ -2963,11 +2953,10 @@ encodeTermInternal = def "encodeTermInternal" $
             "typ" <<~ (Maybes.cases (var "mt")
               (Checking.typeOfTerm @@ var "cx" @@ var "g" @@ var "term")
               (lambda "t" $ right (var "t"))) $
-            "primFun" <~ inject _Function _Function_primitive (var "name") $
             cases _Type (Strip.deannotateType @@ var "typ")
-              (Just $ encodeNullaryConstant @@ var "env" @@ var "typ" @@ var "primFun" @@ var "cx" @@ var "g") [
+              (Just $ encodeNullaryPrimitiveByName @@ var "env" @@ var "typ" @@ var "name" @@ var "cx" @@ var "g") [
               _Type_function>>: lambda "ft" $
-                encodeFunction @@ var "env" @@ (Core.functionTypeDomain (var "ft")) @@ (Core.functionTypeCodomain (var "ft")) @@ var "primFun" @@ var "cx" @@ var "g"]),
+                encodeFunctionPrimitiveByName @@ var "env" @@ (Core.functionTypeDomain (var "ft")) @@ (Core.functionTypeCodomain (var "ft")) @@ var "name" @@ var "cx" @@ var "g"]),
 
       -- TermUnit: emit null
       _Term_unit>>: lambda "_" $

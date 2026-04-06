@@ -4001,31 +4001,6 @@
                                                     "domain": {"variable": "hydra.core.Lambda"},
                                                     "parameter": "lam"}}}},
                                             {
-                                              "name": "primitive",
-                                              "term": {
-                                                "function": {
-                                                  "lambda": {
-                                                    "body": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {
-                                                              "either": {
-                                                                "@right": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "name"},
-                                                                        "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
-                                                                    "function": {"variable": "hydra.ext.rust.coder.rustExprPath"}}}}},
-                                                            "type": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                "function": {"variable": "hydra.context.InContext"}}}}},
-                                                        "type": {"variable": "hydra.ext.rust.syntax.Expression"}}},
-                                                    "domain": {"variable": "hydra.core.Name"},
-                                                    "parameter": "name"}}}},
-                                            {
                                               "name": "elimination",
                                               "term": {
                                                 "function": {

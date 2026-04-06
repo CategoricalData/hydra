@@ -148,11 +148,6 @@ public interface Core {
       public hydra.core.Term visit(hydra.core.Function.Lambda y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Function"), new hydra.core.Field(new hydra.core.Name("lambda"), hydra.encode.Core.lambda((y).value))));
       }
-
-      @Override
-      public hydra.core.Term visit(hydra.core.Function.Primitive y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Function"), new hydra.core.Field(new hydra.core.Name("primitive"), hydra.encode.Core.name((y).value))));
-      }
     });
   }
 

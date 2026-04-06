@@ -44,7 +44,7 @@
 
 (def hydra_encode_core_forall_type (fn [x] (list :record (->hydra_core_record "hydra.core.ForallType" (list (->hydra_core_field "parameter" (hydra_encode_core_name ((fn [v] (:parameter v)) x))) (->hydra_core_field "body" (hydra_encode_core_type ((fn [v] (:body v)) x))))))))
 
-(def hydra_encode_core_function (fn [match_target] ((fn [match_value] (cond (= (first match_target) :elimination) ((fn [y] (list :union (->hydra_core_injection "hydra.core.Function" (->hydra_core_field "elimination" (hydra_encode_core_elimination y))))) match_value) (= (first match_target) :lambda) ((fn [y] (list :union (->hydra_core_injection "hydra.core.Function" (->hydra_core_field "lambda" (hydra_encode_core_lambda y))))) match_value) (= (first match_target) :primitive) ((fn [y] (list :union (->hydra_core_injection "hydra.core.Function" (->hydra_core_field "primitive" (hydra_encode_core_name y))))) match_value))) (second match_target))))
+(def hydra_encode_core_function (fn [match_target] ((fn [match_value] (cond (= (first match_target) :elimination) ((fn [y] (list :union (->hydra_core_injection "hydra.core.Function" (->hydra_core_field "elimination" (hydra_encode_core_elimination y))))) match_value) (= (first match_target) :lambda) ((fn [y] (list :union (->hydra_core_injection "hydra.core.Function" (->hydra_core_field "lambda" (hydra_encode_core_lambda y))))) match_value))) (second match_target))))
 
 (def hydra_encode_core_function_type (fn [x] (list :record (->hydra_core_record "hydra.core.FunctionType" (list (->hydra_core_field "domain" (hydra_encode_core_type ((fn [v] (:domain v)) x))) (->hydra_core_field "codomain" (hydra_encode_core_type ((fn [v] (:codomain v)) x))))))))
 

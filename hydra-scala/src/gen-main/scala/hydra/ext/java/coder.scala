@@ -1152,29 +1152,12 @@ def encodeApplication(env: hydra.ext.java.environment.JavaEnvironment)(app: hydr
       lazy val deannotatedFun: hydra.core.Term = hydra.strip.deannotateTerm(fun)
       {
         lazy val calleeName: Option[hydra.core.Name] = deannotatedFun match
-          case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-            case hydra.core.Function.primitive(v_Function_primitive_n) => Some(v_Function_primitive_n)
-            case _ => None
           case hydra.core.Term.variable(v_Term_variable_n) => Some(v_Term_variable_n)
           case _ => None
         hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Seq[hydra.core.Term], hydra.ext.java.syntax.Expression](hydra.lib.maybes.cases[hydra.core.Name,
            Either[hydra.context.InContext[hydra.errors.Error], Seq[hydra.core.Term]]](calleeName)(Right(args))((cname: hydra.core.Name) =>
           hydra.ext.java.coder.annotateLambdaArgs(cname)(typeApps)(args)(cx)(g)))((annotatedArgs: Seq[hydra.core.Term]) =>
           deannotatedFun match
-          case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-            case hydra.core.Function.primitive(v_Function_primitive_name) => {
-              lazy val hargs: Seq[hydra.core.Term] = hydra.lib.lists.take[hydra.core.Term](arity)(annotatedArgs)
-              {
-                lazy val rargs: Seq[hydra.core.Term] = hydra.lib.lists.drop[hydra.core.Term](arity)(annotatedArgs)
-                hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.ext.java.syntax.Expression,
-                   hydra.ext.java.syntax.Expression](hydra.ext.java.coder.functionCall(env)(true)(v_Function_primitive_name)(hargs)(Seq())(cx)(g))((initialCall: hydra.ext.java.syntax.Expression) =>
-                  hydra.lib.eithers.foldl[hydra.ext.java.syntax.Expression, hydra.core.Term, hydra.context.InContext[hydra.errors.Error]]((acc: hydra.ext.java.syntax.Expression) =>
-                  (h: hydra.core.Term) =>
-                  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.ext.java.syntax.Expression,
-                     hydra.ext.java.syntax.Expression](hydra.ext.java.coder.encodeTerm(env)(h)(cx)(g))((jarg: hydra.ext.java.syntax.Expression) => Right(hydra.ext.java.coder.applyJavaArg(acc)(jarg))))(initialCall)(rargs))
-              }
-            }
-            case _ => hydra.ext.java.coder.encodeApplication_fallback(env)(aliases)(g)(typeApps)(app.function)(app.argument)(cx)(g)
           case hydra.core.Term.variable(v_Term_variable_name) => hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error],
              hydra.ext.java.syntax.Expression]](hydra.lib.maybes.isJust[hydra.graph.Primitive](hydra.lib.maps.lookup[hydra.core.Name,
              hydra.graph.Primitive](v_Term_variable_name)(g.primitives)))({
@@ -1489,43 +1472,41 @@ def encodeFunction(env: hydra.ext.java.environment.JavaEnvironment)(dom: hydra.c
           })
       }
     })
-    case hydra.core.Function.primitive(v_Function_primitive_name) => {
-      lazy val classWithApply: scala.Predef.String = hydra.ext.java.coder.elementJavaIdentifier(true)(false)(aliases)(v_Function_primitive_name)
+    case _ => Right(hydra.ext.java.coder.encodeLiteral(hydra.core.Literal.string(hydra.lib.strings.cat2("Unimplemented function variant: ")(hydra.show.core.function(fun)))))
+}
+
+def encodeFunctionPrimitiveByName(env: hydra.ext.java.environment.JavaEnvironment)(dom: hydra.core.Type)(cod: hydra.core.Type)(name: hydra.core.Name)(cx: hydra.context.Context)(g: hydra.graph.Graph): Either[hydra.context.InContext[hydra.errors.Error],
+   hydra.ext.java.syntax.Expression] =
+  {
+  lazy val aliases: hydra.ext.java.environment.Aliases = (env.aliases)
+  lazy val classWithApply: scala.Predef.String = hydra.ext.java.coder.elementJavaIdentifier(true)(false)(aliases)(name)
+  lazy val suffix: scala.Predef.String = hydra.lib.strings.cat2(".")(hydra.ext.java.names.applyMethodName)
+  lazy val className: scala.Predef.String = hydra.lib.strings.fromList(hydra.lib.lists.take[Int](hydra.lib.math.sub(hydra.lib.strings.length(classWithApply))(hydra.lib.strings.length(suffix)))(hydra.lib.strings.toList(classWithApply)))
+  lazy val arity: Int = hydra.arity.typeArity(hydra.core.Type.function(hydra.core.FunctionType(dom, cod)))
+  hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.java.syntax.Expression]](hydra.lib.equality.lte[Int](arity)(1))(Right(hydra.ext.java.utils.javaIdentifierToJavaExpression(hydra.lib.strings.cat(Seq(className,
+     "::", hydra.ext.java.names.applyMethodName)))))({
+    lazy val paramNames: Seq[hydra.core.Name] = hydra.lib.lists.map[Int, hydra.core.Name]((i: Int) => hydra.lib.strings.cat2("p")(hydra.lib.literals.showInt32(i)))(hydra.lib.math.range(0)(hydra.lib.math.sub(arity)(1)))
+    {
+      lazy val paramExprs: Seq[hydra.ext.java.syntax.Expression] = hydra.lib.lists.map[hydra.core.Name,
+         hydra.ext.java.syntax.Expression]((p: hydra.core.Name) =>
+        hydra.ext.java.utils.javaIdentifierToJavaExpression(hydra.ext.java.utils.variableToJavaIdentifier(p)))(paramNames)
       {
-        lazy val suffix: scala.Predef.String = hydra.lib.strings.cat2(".")(hydra.ext.java.names.applyMethodName)
+        lazy val classId: hydra.ext.java.syntax.Identifier = className
         {
-          lazy val className: scala.Predef.String = hydra.lib.strings.fromList(hydra.lib.lists.take[Int](hydra.lib.math.sub(hydra.lib.strings.length(classWithApply))(hydra.lib.strings.length(suffix)))(hydra.lib.strings.toList(classWithApply)))
+          lazy val call: hydra.ext.java.syntax.Expression = hydra.ext.java.utils.javaMethodInvocationToJavaExpression(hydra.ext.java.utils.methodInvocationStatic(classId)(hydra.ext.java.names.applyMethodName)(paramExprs))
           {
-            lazy val arity: Int = hydra.arity.typeArity(hydra.core.Type.function(hydra.core.FunctionType(dom, cod)))
-            hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.java.syntax.Expression]](hydra.lib.equality.lte[Int](arity)(1))(Right(hydra.ext.java.utils.javaIdentifierToJavaExpression(hydra.lib.strings.cat(Seq(className,
-               "::", hydra.ext.java.names.applyMethodName)))))({
-              lazy val paramNames: Seq[hydra.core.Name] = hydra.lib.lists.map[Int, hydra.core.Name]((i: Int) => hydra.lib.strings.cat2("p")(hydra.lib.literals.showInt32(i)))(hydra.lib.math.range(0)(hydra.lib.math.sub(arity)(1)))
-              {
-                lazy val paramExprs: Seq[hydra.ext.java.syntax.Expression] = hydra.lib.lists.map[hydra.core.Name,
-                   hydra.ext.java.syntax.Expression]((p: hydra.core.Name) =>
-                  hydra.ext.java.utils.javaIdentifierToJavaExpression(hydra.ext.java.utils.variableToJavaIdentifier(p)))(paramNames)
-                {
-                  lazy val classId: hydra.ext.java.syntax.Identifier = className
-                  {
-                    lazy val call: hydra.ext.java.syntax.Expression = hydra.ext.java.utils.javaMethodInvocationToJavaExpression(hydra.ext.java.utils.methodInvocationStatic(classId)(hydra.ext.java.names.applyMethodName)(paramExprs))
-                    {
-                      lazy val curried: hydra.ext.java.syntax.Expression = hydra.ext.java.coder.buildCurriedLambda(paramNames)(call)
-                      hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.ext.java.syntax.Type,
-                         hydra.ext.java.syntax.Expression](hydra.ext.java.coder.encodeType(aliases)(hydra.lib.sets.empty[hydra.core.Name])(hydra.core.Type.function(hydra.core.FunctionType(dom,
-                         cod)))(cx)(g))((jtype: hydra.ext.java.syntax.Type) =>
-                        hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.ext.java.syntax.ReferenceType,
-                           hydra.ext.java.syntax.Expression](hydra.ext.java.utils.javaTypeToJavaReferenceType(jtype)(cx))((rt: hydra.ext.java.syntax.ReferenceType) =>
-                        Right(hydra.ext.java.utils.javaCastExpressionToJavaExpression(hydra.ext.java.utils.javaCastExpression(rt)(hydra.ext.java.utils.javaExpressionToJavaUnaryExpression(curried))))))
-                    }
-                  }
-                }
-              }
-            })
+            lazy val curried: hydra.ext.java.syntax.Expression = hydra.ext.java.coder.buildCurriedLambda(paramNames)(call)
+            hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.ext.java.syntax.Type,
+               hydra.ext.java.syntax.Expression](hydra.ext.java.coder.encodeType(aliases)(hydra.lib.sets.empty[hydra.core.Name])(hydra.core.Type.function(hydra.core.FunctionType(dom,
+               cod)))(cx)(g))((jtype: hydra.ext.java.syntax.Type) =>
+              hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.ext.java.syntax.ReferenceType,
+                 hydra.ext.java.syntax.Expression](hydra.ext.java.utils.javaTypeToJavaReferenceType(jtype)(cx))((rt: hydra.ext.java.syntax.ReferenceType) =>
+              Right(hydra.ext.java.utils.javaCastExpressionToJavaExpression(hydra.ext.java.utils.javaCastExpression(rt)(hydra.ext.java.utils.javaExpressionToJavaUnaryExpression(curried))))))
           }
         }
       }
     }
-    case _ => Right(hydra.ext.java.coder.encodeLiteral(hydra.core.Literal.string(hydra.lib.strings.cat2("Unimplemented function variant: ")(hydra.show.core.function(fun)))))
+  })
 }
 
 def encodeLiteral(lit: hydra.core.Literal): hydra.ext.java.syntax.Expression =
@@ -1591,32 +1572,10 @@ def encodeLiteral_litExp(l: hydra.ext.java.syntax.Literal): hydra.ext.java.synta
 def encodeLiteral_primCast(pt: hydra.ext.java.syntax.PrimitiveType)(expr: hydra.ext.java.syntax.Expression): hydra.ext.java.syntax.Expression =
   hydra.ext.java.utils.javaCastExpressionToJavaExpression(hydra.ext.java.utils.javaCastPrimitive(pt)(hydra.ext.java.utils.javaExpressionToJavaUnaryExpression(expr)))
 
-def encodeNullaryConstant(env: hydra.ext.java.environment.JavaEnvironment)(typ: hydra.core.Type)(fun: hydra.core.Function)(cx: hydra.context.Context)(g: hydra.graph.Graph): Either[hydra.context.InContext[hydra.errors.Error],
-   hydra.ext.java.syntax.Expression] =
-  {
-  lazy val aliases: hydra.ext.java.environment.Aliases = (env.aliases)
-  fun match
-    case hydra.core.Function.primitive(v_Function_primitive_name) => hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error],
-       Seq[hydra.ext.java.syntax.TypeArgument], hydra.ext.java.syntax.Expression](hydra.ext.java.coder.encodeNullaryConstant_typeArgsFromReturnType(aliases)(typ)(cx)(g))((targs: Seq[hydra.ext.java.syntax.TypeArgument]) =>
-      hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.java.syntax.Expression]](hydra.lib.lists.`null`[hydra.ext.java.syntax.TypeArgument](targs))({
-      lazy val header: hydra.ext.java.syntax.MethodInvocation_Header = hydra.ext.java.syntax.MethodInvocation_Header.simple(hydra.ext.java.coder.elementJavaIdentifier(true)(false)(aliases)(v_Function_primitive_name))
-      Right(hydra.ext.java.utils.javaMethodInvocationToJavaExpression(hydra.ext.java.syntax.MethodInvocation(header, Seq())))
-    })({
-      lazy val fullName: scala.Predef.String = hydra.ext.java.coder.elementJavaIdentifier(true)(false)(aliases)(v_Function_primitive_name)
-      {
-        lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(fullName)
-        {
-          lazy val className: hydra.ext.java.syntax.Identifier = hydra.lib.strings.intercalate(".")(hydra.lib.lists.init[scala.Predef.String](parts))
-          {
-            lazy val methodName: hydra.ext.java.syntax.Identifier = hydra.lib.lists.last[scala.Predef.String](parts)
-            Right(hydra.ext.java.utils.javaMethodInvocationToJavaExpression(hydra.ext.java.utils.methodInvocationStaticWithTypeArgs(className)(methodName)(targs)(Seq())))
-          }
-        }
-      }
-    }))
-    case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2("unexpected ")(hydra.lib.strings.cat2("nullary function")(hydra.lib.strings.cat2(" in ")(hydra.show.core.function(fun))))),
-       cx))
-}
+def encodeNullaryConstant[T0, T1, T2, T3](env: T0)(typ: T1)(fun: hydra.core.Function)(cx: hydra.context.Context)(g: T2): Either[hydra.context.InContext[hydra.errors.Error],
+   T3] =
+  Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2("unexpected ")(hydra.lib.strings.cat2("nullary function")(hydra.lib.strings.cat2(" in ")(hydra.show.core.function(fun))))),
+     cx))
 
 def encodeNullaryConstant_typeArgsFromReturnType(aliases: hydra.ext.java.environment.Aliases)(t: hydra.core.Type)(cx: hydra.context.Context)(g: hydra.graph.Graph): Either[hydra.context.InContext[hydra.errors.Error],
    Seq[hydra.ext.java.syntax.TypeArgument]] =
@@ -1642,6 +1601,30 @@ def encodeNullaryConstant_typeArgsFromReturnType(aliases: hydra.ext.java.environ
        Seq[hydra.ext.java.syntax.TypeArgument]](hydra.ext.java.utils.javaTypeToJavaReferenceType(jvt)(cx))((rv: hydra.ext.java.syntax.ReferenceType) =>
     Right(Seq(hydra.ext.java.syntax.TypeArgument.reference(rk), hydra.ext.java.syntax.TypeArgument.reference(rv)))))))
   case _ => Right(Seq())
+
+def encodeNullaryPrimitiveByName(env: hydra.ext.java.environment.JavaEnvironment)(typ: hydra.core.Type)(name: hydra.core.Name)(cx: hydra.context.Context)(g: hydra.graph.Graph): Either[hydra.context.InContext[hydra.errors.Error],
+   hydra.ext.java.syntax.Expression] =
+  {
+  lazy val aliases: hydra.ext.java.environment.Aliases = (env.aliases)
+  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Seq[hydra.ext.java.syntax.TypeArgument],
+     hydra.ext.java.syntax.Expression](hydra.ext.java.coder.encodeNullaryConstant_typeArgsFromReturnType(aliases)(typ)(cx)(g))((targs: Seq[hydra.ext.java.syntax.TypeArgument]) =>
+    hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.java.syntax.Expression]](hydra.lib.lists.`null`[hydra.ext.java.syntax.TypeArgument](targs))({
+    lazy val header: hydra.ext.java.syntax.MethodInvocation_Header = hydra.ext.java.syntax.MethodInvocation_Header.simple(hydra.ext.java.coder.elementJavaIdentifier(true)(false)(aliases)(name))
+    Right(hydra.ext.java.utils.javaMethodInvocationToJavaExpression(hydra.ext.java.syntax.MethodInvocation(header, Seq())))
+  })({
+    lazy val fullName: scala.Predef.String = hydra.ext.java.coder.elementJavaIdentifier(true)(false)(aliases)(name)
+    {
+      lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(fullName)
+      {
+        lazy val className: hydra.ext.java.syntax.Identifier = hydra.lib.strings.intercalate(".")(hydra.lib.lists.init[scala.Predef.String](parts))
+        {
+          lazy val methodName: hydra.ext.java.syntax.Identifier = hydra.lib.lists.last[scala.Predef.String](parts)
+          Right(hydra.ext.java.utils.javaMethodInvocationToJavaExpression(hydra.ext.java.utils.methodInvocationStaticWithTypeArgs(className)(methodName)(targs)(Seq())))
+        }
+      }
+    }
+  }))
+}
 
 def encodeTerm(env: hydra.ext.java.environment.JavaEnvironment)(term: hydra.core.Term)(cx: hydra.context.Context)(g: hydra.graph.Graph): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.ext.java.syntax.Expression] = hydra.ext.java.coder.encodeTermInternal(env)(Seq())(Seq())(term)(cx)(g)
@@ -2232,12 +2215,9 @@ def encodeTermInternal(env: hydra.ext.java.environment.JavaEnvironment)(anns: Se
          cx))((__a: Option[hydra.core.Type]) => __a)(hydra.annotations.getType(g)(combinedAnns)))((mt: Option[hydra.core.Type]) =>
         hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Type, hydra.ext.java.syntax.Expression](hydra.lib.maybes.cases[hydra.core.Type,
            Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Type]](mt)(hydra.checking.typeOfTerm(cx)(g)(term))((t: hydra.core.Type) => Right(t)))((typ: hydra.core.Type) =>
-        {
-        lazy val primFun: hydra.core.Function = hydra.core.Function.primitive(v_Term_variable_name)
         hydra.strip.deannotateType(typ) match
-          case hydra.core.Type.function(v_Type_function_ft) => hydra.ext.java.coder.encodeFunction(env)(v_Type_function_ft.domain)(v_Type_function_ft.codomain)(primFun)(cx)(g)
-          case _ => hydra.ext.java.coder.encodeNullaryConstant(env)(typ)(primFun)(cx)(g)
-      }))
+        case hydra.core.Type.function(v_Type_function_ft) => hydra.ext.java.coder.encodeFunctionPrimitiveByName(env)(v_Type_function_ft.domain)(v_Type_function_ft.codomain)(v_Term_variable_name)(cx)(g)
+        case _ => hydra.ext.java.coder.encodeNullaryPrimitiveByName(env)(typ)(v_Term_variable_name)(cx)(g)))
     })
     case hydra.core.Term.unit => Right(hydra.ext.java.utils.javaLiteralToJavaExpression(hydra.ext.java.syntax.Literal.`null`))
     case hydra.core.Term.wrap(v_Term_wrap_wt) => hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error],

@@ -106,8 +106,7 @@ pythonLanguage = define "pythonLanguage" $
       Core.floatTypeFloat64], -- float
     "functionVariants">: Sets.fromList $ list [
       Variants.functionVariantElimination,
-      Variants.functionVariantLambda,
-      Variants.functionVariantPrimitive],
+      Variants.functionVariantLambda],
     "integerTypes">: Sets.fromList $ list [
       Core.integerTypeBigint], -- Python has only one built-in integer type
     "termVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported

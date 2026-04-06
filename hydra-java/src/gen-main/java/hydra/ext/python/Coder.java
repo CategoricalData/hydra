@@ -486,20 +486,6 @@ public interface Coder {
           }
 
           @Override
-          public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>> visit(hydra.core.Function.Primitive name) {
-            java.util.List<hydra.ext.python.syntax.Expression> wrappedArgs = hydra.ext.python.Coder.wrapLazyArguments(
-              (name).value,
-              hargs);
-            return hydra.lib.eithers.Bind.apply(
-              hydra.ext.python.Coder.encodeVariable(
-                cx,
-                env,
-                (name).value,
-                wrappedArgs),
-              (java.util.function.Function<hydra.ext.python.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>>) (expr -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>>right((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) ((hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>) (new hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>(expr, rargs))))));
-          }
-
-          @Override
           public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Expression>>> visit(hydra.core.Function.Lambda ignored) {
             return hydra.lib.eithers.Bind.apply(
               hydra.ext.python.Coder.encodeTermInline(
@@ -1425,15 +1411,6 @@ public interface Coder {
                     })));
               }));
           }));
-      }
-
-      @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Expression> visit(hydra.core.Function.Primitive name) {
-        return hydra.ext.python.Coder.encodeVariable(
-          cx,
-          env,
-          (name).value,
-          (java.util.List<hydra.ext.python.syntax.Expression>) (java.util.Collections.<hydra.ext.python.syntax.Expression>emptyList()));
       }
 
       @Override
@@ -4010,16 +3987,6 @@ public interface Coder {
           hydra.ext.python.Coder.termArityWithPrimitives(
             graph,
             (lam).value.body));
-      }
-
-      @Override
-      public Integer visit(hydra.core.Function.Primitive name) {
-        return hydra.lib.maybes.Maybe.applyLazy(
-          () -> 0,
-          (java.util.function.Function<hydra.graph.Primitive, Integer>) (prim -> hydra.Arity.primitiveArity(prim)),
-          hydra.lib.maps.Lookup.apply(
-            (name).value,
-            (graph).primitives));
       }
     });
   }

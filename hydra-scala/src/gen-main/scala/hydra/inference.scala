@@ -671,7 +671,6 @@ def inferTypeOfFunction(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(f: hy
   f match
   case hydra.core.Function.elimination(v_Function_elimination_elm) => hydra.inference.inferTypeOfElimination(fcx)(cx)(v_Function_elimination_elm)
   case hydra.core.Function.lambda(v_Function_lambda_l) => hydra.inference.inferTypeOfLambda(fcx)(cx)(v_Function_lambda_l)
-  case hydra.core.Function.primitive(v_Function_primitive_name) => hydra.inference.inferTypeOfPrimitive(fcx)(cx)(v_Function_primitive_name)
 
 def inferTypeOfInjection(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(injection: hydra.core.Injection): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.typing.InferenceResult] =
@@ -1210,7 +1209,7 @@ def inferTypeOfPrimitive(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(name
       {
         lazy val constraints: Map[hydra.core.Name, hydra.core.TypeVariableMetadata] = hydra.lib.maybes.fromMaybe[Map[hydra.core.Name,
            hydra.core.TypeVariableMetadata]](hydra.lib.maps.empty[hydra.core.Name, hydra.core.TypeVariableMetadata])(ts.constraints)
-        Right(hydra.inference.yieldCheckedWithConstraints(fcx2)(hydra.inference.buildTypeApplicationTerm(ts.variables)(hydra.core.Term.function(hydra.core.Function.primitive(name))))(ts.`type`)(hydra.substitution.idTypeSubst)(constraints))
+        Right(hydra.inference.yieldCheckedWithConstraints(fcx2)(hydra.inference.buildTypeApplicationTerm(ts.variables)(hydra.core.Term.variable(name)))(ts.`type`)(hydra.substitution.idTypeSubst)(constraints))
       }
     }
   }

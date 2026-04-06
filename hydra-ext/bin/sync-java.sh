@@ -1,5 +1,5 @@
-#!/bin/bash
-set -eo pipefail
+#!/usr/bin/env bash
+set -euo pipefail
 
 # Script to synchronize Hydra-Java with the source of truth in Hydra-Haskell/Hydra-Ext.
 #
@@ -17,6 +17,13 @@ set -eo pipefail
 #   ./bin/sync-java.sh          # Full sync (all steps)
 #   ./bin/sync-java.sh --quick  # Skip tests (for faster iteration)
 #   ./bin/sync-java.sh --help   # Show this help
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+HYDRA_EXT_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
+HYDRA_ROOT_DIR="$( cd "$HYDRA_EXT_DIR/.." && pwd )"
+HYDRA_JAVA_DIR="$HYDRA_ROOT_DIR/hydra-java"
+
+source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 
 QUICK_MODE=false
 
@@ -38,107 +45,88 @@ for arg in "$@"; do
             echo "Steps performed:"
             echo "  1. Build executable"
             echo "  2. Generate Java main modules and tests from JSON"
-            echo "  3. Generate ext Java modules (PG model, decoders, etc.)"
-            echo "  4. Build and test Java (unless --quick)"
-            echo "  5. Report new files to git add"
+            echo "  3. Generate ext Java modules into hydra-ext"
+            echo "  4. Generate ext Java modules into hydra-java"
+            echo "  5. Build and test Java (unless --quick)"
+            echo "  6. Report new files to git add"
             exit 0
+            ;;
+        *)
+            die "Unknown argument: $arg (try --help)"
             ;;
     esac
 done
 
-echo "=========================================="
-echo "Synchronizing Hydra-Java"
-echo "=========================================="
+banner2 "Synchronizing Hydra-Java"
 echo ""
 
 # Warn if running an x86_64 JDK under Rosetta on Apple Silicon (causes ~20x slowdown)
 if [ "$(uname -s)" = "Darwin" ] && [ "$(uname -m)" = "arm64" ]; then
     JAVA_CMD="${JAVA_HOME:+$JAVA_HOME/bin/}java"
     if command -v "$JAVA_CMD" > /dev/null 2>&1 && file "$(command -v "$JAVA_CMD")" | grep -q x86_64; then
-        echo "WARNING: x86_64 JDK detected on Apple Silicon. This runs under Rosetta 2"
-        echo "  and will be ~20x slower than a native arm64 JDK."
-        echo "  Current JDK: $("$JAVA_CMD" -version 2>&1 | head -1)"
-        echo ""
+        warn "x86_64 JDK detected on Apple Silicon. This runs under Rosetta 2 and will be ~20x slower than a native arm64 JDK."
+        warn "Current JDK: $("$JAVA_CMD" -version 2>&1 | head -1)"
     fi
 fi
 
-# Get the directory where this script is located
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-HYDRA_EXT_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
-HYDRA_ROOT_DIR="$( cd "$HYDRA_EXT_DIR/.." && pwd )"
-HYDRA_JAVA_DIR="$HYDRA_ROOT_DIR/hydra-java"
-
 cd "$HYDRA_EXT_DIR"
 
-# RTS flags to avoid stack overflow during generation
-RTS_FLAGS="+RTS -K256M -A32M -RTS"
+TOTAL_STEPS=6
 
-echo "Step 1/6: Building executable..."
+step 1 $TOTAL_STEPS "Building executable"
 echo ""
 stack build hydra-ext:exe:bootstrap-from-json
 
+step 2 $TOTAL_STEPS "Generating Java main modules and tests from JSON"
 echo ""
-echo "Step 2/6: Generating Java main modules and tests from JSON..."
-echo ""
-stack exec bootstrap-from-json -- --target java --include-coders --include-dsls --include-tests $RTS_FLAGS || {
-    echo "WARNING: Java test generation had errors (some polymorphic types not supported). Continuing..."
-}
+stack exec bootstrap-from-json -- --target java --include-coders --include-dsls --include-tests $RTS_FLAGS || \
+    warn "Java test generation had errors (some polymorphic types not supported). Continuing..."
 
 # Patch TestGraph.java to use TestEnv (real graph with primitives) instead of emptyGraph
-echo "Patching TestGraph.java..."
 TESTGRAPH="../hydra-java/src/gen-test/java/hydra/test/TestGraph.java"
 if [ -f "$TESTGRAPH" ]; then
-    sed -i '' 's/return hydra.Lexical.emptyGraph();/return hydra.TestEnv.testGraph();/' "$TESTGRAPH"
-    sed -i '' 's/return hydra.Lexical.emptyContext();/return hydra.TestEnv.testContext();/' "$TESTGRAPH"
+    echo "  Post-processing: patching TestGraph.java..."
+    sed_inplace 's/return hydra.Lexical.emptyGraph();/return hydra.TestEnv.testGraph();/' "$TESTGRAPH"
+    sed_inplace 's/return hydra.Lexical.emptyContext();/return hydra.TestEnv.testContext();/' "$TESTGRAPH"
 fi
 
-echo ""
-echo "Step 3/6: Generating ext Java modules into hydra-ext from JSON..."
+step 3 $TOTAL_STEPS "Generating ext Java modules into hydra-ext from JSON"
 echo ""
 stack exec bootstrap-from-json -- --target java --output . --include-coders --ext-only $RTS_FLAGS
 
-echo ""
-echo "Step 4/6: Generating ext Java modules into hydra-java from JSON..."
+step 4 $TOTAL_STEPS "Generating ext Java modules into hydra-java from JSON"
 echo ""
 stack exec bootstrap-from-json -- --target java --output "$HYDRA_JAVA_DIR" --include-coders --ext-only $RTS_FLAGS
 
 # Patch Lisp Coder.java for PartialVisitor type inference issue in encodeTermDefinition
-# Only patches the specific lines where TopLevelFormWithComments appears as both Either params
-echo "Patching Lisp Coder.java..."
 LISPCODER="../hydra-java/src/gen-main/java/hydra/ext/lisp/Coder.java"
 if [ -f "$LISPCODER" ]; then
-    sed -i '' 's/Either<hydra.ext.lisp.syntax.TopLevelFormWithComments, hydra.ext.lisp.syntax.TopLevelFormWithComments> otherwise/Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments> otherwise/' "$LISPCODER"
-    sed -i '' 's/Either<hydra.ext.lisp.syntax.TopLevelFormWithComments, hydra.ext.lisp.syntax.TopLevelFormWithComments> visit/Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments> visit/' "$LISPCODER"
+    echo "  Post-processing: patching Lisp Coder.java..."
+    sed_inplace 's/Either<hydra.ext.lisp.syntax.TopLevelFormWithComments, hydra.ext.lisp.syntax.TopLevelFormWithComments> otherwise/Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments> otherwise/' "$LISPCODER"
+    sed_inplace 's/Either<hydra.ext.lisp.syntax.TopLevelFormWithComments, hydra.ext.lisp.syntax.TopLevelFormWithComments> visit/Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments> visit/' "$LISPCODER"
 fi
 
 if [ "$QUICK_MODE" = false ]; then
-    echo ""
-    echo "Step 5/6: Building and testing Java..."
+    step 5 $TOTAL_STEPS "Building and testing Java"
     echo ""
 
     cd "$HYDRA_ROOT_DIR"
 
     ./gradlew :hydra-java:compileJava :hydra-ext:compileJava
-    ./gradlew :hydra-java:compileTestJava :hydra-ext:compileTestJava || {
-        echo "WARNING: Java test compilation had errors. Continuing..."
-    }
-    ./gradlew :hydra-java:test :hydra-ext:test || {
-        echo "WARNING: Some Java tests failed. Continuing..."
-    }
+    ./gradlew :hydra-java:compileTestJava :hydra-ext:compileTestJava || \
+        warn "Java test compilation had errors. Continuing..."
+    ./gradlew :hydra-java:test :hydra-ext:test || \
+        warn "Some Java tests failed. Continuing..."
 
     cd "$HYDRA_EXT_DIR"
 else
-    echo ""
-    echo "Step 5/6: Skipped (--quick mode)"
+    step 5 $TOTAL_STEPS "Skipped (--quick mode)"
 fi
 
-echo ""
-echo "Step 6/6: Checking for new files..."
+step 6 $TOTAL_STEPS "Checking for new files"
 echo ""
 
-HYDRA_EXT_JAVA_DIR="$HYDRA_EXT_DIR"
-
-for CHECK_DIR in "$HYDRA_JAVA_DIR" "$HYDRA_EXT_JAVA_DIR"; do
+for CHECK_DIR in "$HYDRA_JAVA_DIR" "$HYDRA_EXT_DIR"; do
     cd "$CHECK_DIR"
     LABEL=$(basename "$CHECK_DIR")
 
@@ -162,7 +150,4 @@ for CHECK_DIR in "$HYDRA_JAVA_DIR" "$HYDRA_EXT_JAVA_DIR"; do
     fi
 done
 
-echo ""
-echo "=========================================="
-echo "Sync complete!"
-echo "=========================================="
+banner2_done "Hydra-Java sync complete!"

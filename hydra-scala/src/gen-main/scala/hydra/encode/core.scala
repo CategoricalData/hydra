@@ -77,8 +77,6 @@ def function(v1: hydra.core.Function): hydra.core.Term =
      hydra.core.Field("elimination", hydra.encode.core.elimination(v_Function_elimination_y))))
   case hydra.core.Function.lambda(v_Function_lambda_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Function",
      hydra.core.Field("lambda", hydra.encode.core.lambda(v_Function_lambda_y))))
-  case hydra.core.Function.primitive(v_Function_primitive_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Function",
-     hydra.core.Field("primitive", hydra.encode.core.name(v_Function_primitive_y))))
 
 def functionType(x: hydra.core.FunctionType): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.core.FunctionType", Seq(hydra.core.Field("domain", hydra.encode.core.`type`(x.domain)),

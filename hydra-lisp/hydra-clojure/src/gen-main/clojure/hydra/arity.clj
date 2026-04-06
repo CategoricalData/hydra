@@ -4,7 +4,7 @@
 
 (declare hydra_arity_function_arity hydra_arity_term_arity hydra_arity_type_arity hydra_arity_primitive_arity hydra_arity_type_scheme_arity hydra_arity_uncurry_type)
 
-(def hydra_arity_function_arity (fn [match_target] ((fn [match_value] (cond (= (first match_target) :elimination) ((fn [_] 1) match_value) (= (first match_target) :lambda) ((fn [arg_] ((fn [i] ((hydra_lib_math_add 1) i)) ((fn [arg_2] (hydra_arity_term_arity ((fn [v] (:body v)) arg_2))) arg_))) match_value) (= (first match_target) :primitive) ((fn [_] 42) match_value))) (second match_target))))
+(def hydra_arity_function_arity (fn [match_target] ((fn [match_value] (cond (= (first match_target) :elimination) ((fn [_] 1) match_value) (= (first match_target) :lambda) ((fn [arg_] ((fn [i] ((hydra_lib_math_add 1) i)) ((fn [arg_2] (hydra_arity_term_arity ((fn [v] (:body v)) arg_2))) arg_))) match_value))) (second match_target))))
 
 (def hydra_arity_term_arity (fn [match_target] ((fn [match_value] (cond (= (first match_target) :application) ((fn [arg_] ((fn [arg_2] ((fn [xapp] ((hydra_lib_math_sub xapp) 1)) (hydra_arity_term_arity arg_2))) ((fn [v] (:function v)) arg_))) match_value) (= (first match_target) :function) (hydra_arity_function_arity match_value) :else 0)) (second match_target))))
 

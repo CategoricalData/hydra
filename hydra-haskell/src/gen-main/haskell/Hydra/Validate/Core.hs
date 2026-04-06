@@ -76,15 +76,13 @@ checkTerm typed path cx term =
             arg = Core.applicationArgument v0
         in (firstError [
           case fun of
-            Core.TermFunction v1 -> case v1 of
-              Core.FunctionPrimitive v2 -> Logic.ifElse (Equality.equal (Core.unName v2) "hydra.lib.logic.ifElse") (case arg of
-                Core.TermLiteral v3 -> case v3 of
-                  Core.LiteralBoolean v4 -> Just (Core_.InvalidTermErrorConstantCondition (Core_.ConstantConditionError {
-                    Core_.constantConditionErrorLocation = path,
-                    Core_.constantConditionErrorValue = v4}))
-                  _ -> Nothing
-                _ -> Nothing) Nothing
-              _ -> Nothing
+            Core.TermVariable v1 -> Logic.ifElse (Equality.equal (Core.unName v1) "hydra.lib.logic.ifElse") (case arg of
+              Core.TermLiteral v2 -> case v2 of
+                Core.LiteralBoolean v3 -> Just (Core_.InvalidTermErrorConstantCondition (Core_.ConstantConditionError {
+                  Core_.constantConditionErrorLocation = path,
+                  Core_.constantConditionErrorValue = v3}))
+                _ -> Nothing
+              _ -> Nothing) Nothing
             _ -> Nothing,
           case fun of
             Core.TermVariable v1 -> case arg of
@@ -155,9 +153,6 @@ checkTerm typed path cx term =
             (Logic.ifElse typed (Maybes.cases (Core.lambdaDomain v1) Nothing (\dom -> checkUndefinedTypeVariablesInType path cx dom (\uvName -> Just (Core_.InvalidTermErrorUndefinedTypeVariableInLambdaDomain (Core_.UndefinedTypeVariableInLambdaDomainError {
               Core_.undefinedTypeVariableInLambdaDomainErrorLocation = path,
               Core_.undefinedTypeVariableInLambdaDomainErrorName = uvName}))))) Nothing)])
-        Core.FunctionPrimitive v1 -> Logic.ifElse (Maybes.isJust (Maps.lookup v1 (Graph.graphPrimitives cx))) Nothing (Just (Core_.InvalidTermErrorUnknownPrimitiveName (Core_.UnknownPrimitiveNameError {
-          Core_.unknownPrimitiveNameErrorLocation = path,
-          Core_.unknownPrimitiveNameErrorName = v1})))
         Core.FunctionElimination v1 -> case v1 of
           Core.EliminationRecord v2 ->
             let tname = Core.projectionTypeName v2

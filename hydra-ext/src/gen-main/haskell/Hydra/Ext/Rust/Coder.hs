@@ -115,7 +115,6 @@ encodeFunction cx g fun =
         let param = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.lambdaParameter v0))
         in (Eithers.bind (encodeTerm cx g (Core.lambdaBody v0)) (\body -> Right (rustClosure [
           param] body)))
-      Core.FunctionPrimitive v0 -> Right (rustExprPath (Core.unName v0))
       Core.FunctionElimination v0 -> encodeElimination cx g v0 Nothing
 
 encodeLiteral :: Core.Literal -> Syntax.Expression

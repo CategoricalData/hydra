@@ -1,5 +1,5 @@
-#!/bin/bash
-set -eo pipefail
+#!/usr/bin/env bash
+set -euo pipefail
 
 # Script to regenerate hydra-ext's Haskell gen-main, JSON exports, and ext Java from Hydra sources.
 #
@@ -19,6 +19,12 @@ set -eo pipefail
 #   ./bin/sync-ext.sh          # Full sync
 #   ./bin/sync-ext.sh --help   # Show this help
 
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+HYDRA_EXT_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
+HYDRA_ROOT_DIR="$( cd "$HYDRA_EXT_DIR/.." && pwd )"
+
+source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
+
 for arg in "$@"; do
     case $arg in
         --help|-h)
@@ -34,23 +40,20 @@ for arg in "$@"; do
             echo "  5. Export ext modules to JSON"
             exit 0
             ;;
+        *)
+            die "Unknown argument: $arg (try --help)"
+            ;;
     esac
 done
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-HYDRA_EXT_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
-HYDRA_ROOT_DIR="$( cd "$HYDRA_EXT_DIR/.." && pwd )"
-
 cd "$HYDRA_EXT_DIR"
 
-RTS_FLAGS="+RTS -K256M -A32M -RTS"
-
-echo "=========================================="
-echo "Synchronizing Hydra-Ext"
-echo "=========================================="
+banner2 "Synchronizing Hydra-Ext"
 echo ""
 
-echo "Step 1/5: Building executables..."
+TOTAL_STEPS=5
+
+step 1 $TOTAL_STEPS "Building executables"
 echo ""
 stack build \
     hydra-ext:exe:update-ext-sources \
@@ -58,35 +61,28 @@ stack build \
     hydra-ext:exe:update-json-ext \
     hydra-ext:exe:bootstrap-from-json
 
-echo ""
-echo "Step 2/5: Generating ext encoder/decoder source modules..."
+step 2 $TOTAL_STEPS "Generating ext encoder/decoder source modules"
 echo ""
 stack exec update-ext-sources -- $RTS_FLAGS
 
 # Rebuild to pick up new encoder/decoder source modules
 echo ""
-echo "Rebuilding..."
+echo "  Rebuilding..."
 stack build
 
-echo ""
-echo "Step 3/5: Generating Haskell ext modules..."
+step 3 $TOTAL_STEPS "Generating Haskell ext modules"
 echo ""
 stack exec update-haskell-ext-main -- $RTS_FLAGS
 
 # Clean up empty generated files (produced for modules with no DSL output)
-find src/gen-main/haskell -name "*.hs" -empty -delete 2>/dev/null
+find src/gen-main/haskell -name "*.hs" -empty -delete 2>/dev/null || true
 
-echo ""
-echo "Step 4/5: Rebuilding..."
+step 4 $TOTAL_STEPS "Rebuilding"
 echo ""
 stack build
 
-echo ""
-echo "Step 5/5: Exporting ext modules to JSON..."
+step 5 $TOTAL_STEPS "Exporting ext modules to JSON"
 echo ""
 stack exec update-json-ext -- $RTS_FLAGS
 
-echo ""
-echo "=========================================="
-echo "Sync complete!"
-echo "=========================================="
+banner2_done "Hydra-Ext sync complete!"

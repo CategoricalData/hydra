@@ -558,7 +558,6 @@ def pushTypeAppsInward(term: hydra.core.Term): hydra.core.Term =
       case hydra.core.Function.elimination(v_Function_elimination_elm) => hydra.core.Function.elimination(forElimination(v_Function_elimination_elm))
       case hydra.core.Function.lambda(v_Function_lambda_l) => hydra.core.Function.lambda(hydra.core.Lambda(v_Function_lambda_l.parameter,
          (v_Function_lambda_l.domain), go(v_Function_lambda_l.body)))
-      case hydra.core.Function.primitive(v_Function_primitive_name) => hydra.core.Function.primitive(v_Function_primitive_name)
     def forLet(lt: hydra.core.Let): hydra.core.Let =
       {
       def mapBinding(b: hydra.core.Binding): hydra.core.Binding = hydra.core.Binding(b.name, go(b.term), (b.`type`))

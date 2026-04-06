@@ -12,7 +12,7 @@
 (defun hydra--t-app (fun arg)
   (list :application (make-hydra_core_application :function fun :argument arg)))
 (defun hydra--t-prim (name)
-  (list :function (list :primitive name)))
+  (list :variable name))
 (defun hydra--t-let (name val body)
   (list :let (make-hydra_core_let
                :bindings (list (make-hydra_core_binding :name name :term val :type nil))

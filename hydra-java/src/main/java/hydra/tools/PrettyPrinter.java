@@ -108,11 +108,6 @@ public class PrettyPrinter {
                     term(lam.body).accept(sb);
                 };
             }
-
-            @Override
-            public Consumer<StringBuilder> visit(Function.Primitive instance) {
-                return sb -> sb.append(shortName(instance.value)).append("!");
-            }
         });
     }
 

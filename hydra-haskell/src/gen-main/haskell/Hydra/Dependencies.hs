@@ -255,7 +255,6 @@ termDependencyNames binds withPrims withNoms term0 =
                     var = \name -> Logic.ifElse binds (Sets.insert name names) names
                 in case term of
                   Core.TermFunction v0 -> case v0 of
-                    Core.FunctionPrimitive v1 -> prim v1
                     Core.FunctionElimination v1 -> case v1 of
                       Core.EliminationRecord v2 -> nominal (Core.projectionTypeName v2)
                       Core.EliminationUnion v2 -> nominal (Core.caseStatementTypeName v2)

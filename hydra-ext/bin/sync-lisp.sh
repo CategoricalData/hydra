@@ -1,5 +1,5 @@
-#!/bin/bash
-set -eo pipefail
+#!/usr/bin/env bash
+set -euo pipefail
 
 # Script to regenerate Lisp code for all four dialects from Hydra sources.
 #
@@ -53,10 +53,9 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_EXT_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
 HYDRA_ROOT_DIR="$( cd "$HYDRA_EXT_DIR/.." && pwd )"
 
-cd "$HYDRA_EXT_DIR"
+source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 
-# RTS flags to avoid stack overflow during generation
-RTS_FLAGS="+RTS -K256M -A32M -RTS"
+cd "$HYDRA_EXT_DIR"
 
 # Parse dialect list
 IFS=',' read -ra DIALECT_LIST <<< "$DIALECTS"
@@ -76,23 +75,21 @@ for d in "${DIALECT_LIST[@]}"; do
     case "$d" in
         clojure|common-lisp|emacs-lisp|scheme) ;;
         *)
-            echo "Error: Unknown dialect '$d'. Valid dialects: clojure, common-lisp, emacs-lisp, scheme"
-            exit 1
+            die "Unknown dialect '$d'. Valid dialects: clojure, common-lisp, emacs-lisp, scheme"
             ;;
     esac
 done
 
-echo "=========================================="
-echo "Synchronizing Lisp (${DIALECT_LIST[*]})"
-echo "=========================================="
+banner2 "Synchronizing Lisp (${DIALECT_LIST[*]})"
 echo ""
 
-echo "Step 1: Building generate-lisp executable..."
+TOTAL_STEPS=3
+
+step 1 $TOTAL_STEPS "Building generate-lisp executable"
 echo ""
 stack build hydra-ext:exe:generate-lisp
 
-echo ""
-echo "Step 2: Generating Lisp code..."
+step 2 $TOTAL_STEPS "Generating Lisp code"
 echo ""
 # generate-lisp generates all four dialects; we run it once
 # and let the user's --dialects flag control which tests to run
@@ -152,7 +149,7 @@ SCMEOF
          (schema-types (hydra_lib_maps_from_list (append kernel-schemas test-schemas)))
          (test-terms (map (lambda (entry) (list (car entry) (cdr entry))) (hydra_lib_maps_to_list hydra_test_test_graph_test_terms)))
          (bound-terms (append
-           (map (lambda (pair) (list (car pair) (list (quote function) (list (quote primitive) (car pair))))) all-prims)
+           ;; Primitives are resolved via graphPrimitives, not boundTerms.
            (annotation-bindings)
            (list (list "hydra.monads.emptyContext" (list (quote unit) (list)))
                  (list "hydra.lexical.emptyGraph" (list (quote unit) (list))))
@@ -190,7 +187,7 @@ if [ -f "$CLJ_TESTGRAPH" ]; then
         test-schemas (into {} (map (fn [[k v]] [k (type-to-ts v)]) test-types-list))
         schema-types (merge kernel-schemas test-schemas)
         bound-terms (merge
-          (into {} (map (fn [[k _]] [k (list :function (list :primitive k))]) std-prims))
+          ;; Primitives are resolved via graphPrimitives, not boundTerms.
           (into {} (annotation-bindings))
           (into {} (seq hydra_test_test_graph_test_terms)))]
     {:bound_terms bound-terms
@@ -222,7 +219,7 @@ if [ -f "$CL_TESTGRAPH" ]; then
             (test-schemas (cl:mapcar (cl:lambda (entry) (cl:list (cl:car entry) (cl:funcall type-to-ts (cl:cadr entry)))) (hydra_lib_maps_to_list hydra_test_test_graph_test_types)))
             (schema-types (hydra_lib_maps_from_list (cl:append kernel-schemas test-schemas)))
             (prim-map (hydra_lib_maps_from_list (cl:mapcar (cl:lambda (p) (cl:list (cl:car p) (cl:cdr p))) std-prims)))
-            (bound-terms (hydra_lib_maps_from_list (cl:append (cl:mapcar (cl:lambda (p) (cl:list (cl:car p) (cl:list :function (cl:list :primitive (cl:car p))))) std-prims) (annotation-bindings) (hydra_lib_maps_to_list hydra_test_test_graph_test_terms)))))
+            (bound-terms (hydra_lib_maps_from_list (cl:append (annotation-bindings) (hydra_lib_maps_to_list hydra_test_test_graph_test_terms)))))
     (cl:list (cl:cons :bound_terms bound-terms) (cl:cons :bound_types cl:nil) (cl:cons :class_constraints cl:nil) (cl:cons :lambda_variables cl:nil) (cl:cons :metadata cl:nil) (cl:cons :primitives prim-map) (cl:cons :schema_types schema-types) (cl:cons :type_variables cl:nil))))
 CLEOF
 fi
@@ -245,14 +242,13 @@ if [ -f "$EL_TESTGRAPH" ]; then
          (test-schemas (mapcar (lambda (entry) (list (car entry) (funcall type-to-ts (cadr entry)))) (hydra_lib_maps_to_list hydra_test_test_graph_test_types)))
          (schema-types (hydra_lib_maps_from_list (append kernel-schemas test-schemas)))
          (prim-map (hydra_lib_maps_from_list (mapcar (lambda (p) (list (car p) (cdr p))) std-prims)))
-         (bound-terms (hydra_lib_maps_from_list (append (mapcar (lambda (p) (list (car p) (list :function (list :primitive (car p))))) std-prims) (hydra-annotation-bindings) (hydra_lib_maps_to_list hydra_test_test_graph_test_terms)))))
+         (bound-terms (hydra_lib_maps_from_list (append (hydra-annotation-bindings) (hydra_lib_maps_to_list hydra_test_test_graph_test_terms)))))
     (list (cons :bound_terms bound-terms) (cons :bound_types nil) (cons :class_constraints nil) (cons :lambda_variables nil) (cons :metadata nil) (cons :primitives prim-map) (cons :schema_types schema-types) (cons :type_variables nil))))
 ELEOF
 fi
 
 if [ "$QUICK_MODE" = false ]; then
-    echo ""
-    echo "Step 3: Running tests..."
+    step 3 $TOTAL_STEPS "Running tests"
     echo ""
 
     for dialect in "${DIALECT_LIST[@]}"; do
@@ -268,8 +264,7 @@ if [ "$QUICK_MODE" = false ]; then
         echo ""
     done
 else
-    echo ""
-    echo "Step 3: Skipped (--quick mode)"
+    step 3 $TOTAL_STEPS "Skipped (--quick mode)"
 fi
 
 # Report new files
@@ -287,7 +282,4 @@ for dialect in "${DIALECT_LIST[@]}"; do
     fi
 done
 
-echo ""
-echo "=========================================="
-echo "Lisp sync complete!"
-echo "=========================================="
+banner2_done "Hydra-Lisp sync complete!"

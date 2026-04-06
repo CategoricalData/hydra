@@ -990,18 +990,9 @@ encodeApplication env app cx g0 =
             deannotatedFun = Strip.deannotateTerm fun
             calleeName =
                     case deannotatedFun of
-                      Core.TermFunction v0 -> case v0 of
-                        Core.FunctionPrimitive v1 -> Just v1
-                        _ -> Nothing
                       Core.TermVariable v0 -> Just v0
                       _ -> Nothing
         in (Eithers.bind (Maybes.cases calleeName (Right args) (\cname -> annotateLambdaArgs cname typeApps args cx g)) (\annotatedArgs -> case deannotatedFun of
-          Core.TermFunction v0 -> case v0 of
-            Core.FunctionPrimitive v1 ->
-              let hargs = Lists.take arity annotatedArgs
-                  rargs = Lists.drop arity annotatedArgs
-              in (Eithers.bind (functionCall env True v1 hargs [] cx g) (\initialCall -> Eithers.foldl (\acc -> \h -> Eithers.bind (encodeTerm env h cx g) (\jarg -> Right (applyJavaArg acc jarg))) initialCall rargs))
-            _ -> encodeApplication_fallback env aliases g typeApps (Core.applicationFunction app) (Core.applicationArgument app) cx g
           Core.TermVariable v0 -> Logic.ifElse (Maybes.isJust (Maps.lookup v0 (Graph.graphPrimitives g))) (
             let hargs = Lists.take arity annotatedArgs
                 rargs = Lists.drop arity annotatedArgs
@@ -1167,29 +1158,33 @@ encodeFunction env dom cod fun cx g =
                   in (applyCastIfSafe aliases (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = dom,
                     Core.functionTypeCodomain = cod})) lam1 cx g)))))))
-        Core.FunctionPrimitive v0 ->
-          let classWithApply = Syntax.unIdentifier (elementJavaIdentifier True False aliases v0)
-              suffix = Strings.cat2 "." Names.applyMethodName
-              className =
-                      Strings.fromList (Lists.take (Math.sub (Strings.length classWithApply) (Strings.length suffix)) (Strings.toList classWithApply))
-              arity =
-                      Arity.typeArity (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = dom,
-                        Core.functionTypeCodomain = cod}))
-          in (Logic.ifElse (Equality.lte arity 1) (Right (Utils.javaIdentifierToJavaExpression (Syntax.Identifier (Strings.cat [
-            className,
-            "::",
-            Names.applyMethodName])))) (
-            let paramNames = Lists.map (\i -> Core.Name (Strings.cat2 "p" (Literals.showInt32 i))) (Math.range 0 (Math.sub arity 1))
-                paramExprs = Lists.map (\p -> Utils.javaIdentifierToJavaExpression (Utils.variableToJavaIdentifier p)) paramNames
-                classId = Syntax.Identifier className
-                call =
-                        Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic classId (Syntax.Identifier Names.applyMethodName) paramExprs)
-                curried = buildCurriedLambda paramNames call
-            in (Eithers.bind (encodeType aliases Sets.empty (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = dom,
-              Core.functionTypeCodomain = cod})) cx g) (\jtype -> Eithers.bind (Utils.javaTypeToJavaReferenceType jtype cx) (\rt -> Right (Utils.javaCastExpressionToJavaExpression (Utils.javaCastExpression rt (Utils.javaExpressionToJavaUnaryExpression curried))))))))
         _ -> Right (encodeLiteral (Core.LiteralString (Strings.cat2 "Unimplemented function variant: " (Core___.function fun))))
+
+encodeFunctionPrimitiveByName :: Environment_.JavaEnvironment -> Core.Type -> Core.Type -> Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeFunctionPrimitiveByName env dom cod name cx g =
+
+      let aliases = Environment_.javaEnvironmentAliases env
+          classWithApply = Syntax.unIdentifier (elementJavaIdentifier True False aliases name)
+          suffix = Strings.cat2 "." Names.applyMethodName
+          className =
+                  Strings.fromList (Lists.take (Math.sub (Strings.length classWithApply) (Strings.length suffix)) (Strings.toList classWithApply))
+          arity =
+                  Arity.typeArity (Core.TypeFunction (Core.FunctionType {
+                    Core.functionTypeDomain = dom,
+                    Core.functionTypeCodomain = cod}))
+      in (Logic.ifElse (Equality.lte arity 1) (Right (Utils.javaIdentifierToJavaExpression (Syntax.Identifier (Strings.cat [
+        className,
+        "::",
+        Names.applyMethodName])))) (
+        let paramNames = Lists.map (\i -> Core.Name (Strings.cat2 "p" (Literals.showInt32 i))) (Math.range 0 (Math.sub arity 1))
+            paramExprs = Lists.map (\p -> Utils.javaIdentifierToJavaExpression (Utils.variableToJavaIdentifier p)) paramNames
+            classId = Syntax.Identifier className
+            call =
+                    Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic classId (Syntax.Identifier Names.applyMethodName) paramExprs)
+            curried = buildCurriedLambda paramNames call
+        in (Eithers.bind (encodeType aliases Sets.empty (Core.TypeFunction (Core.FunctionType {
+          Core.functionTypeDomain = dom,
+          Core.functionTypeCodomain = cod})) cx g) (\jtype -> Eithers.bind (Utils.javaTypeToJavaReferenceType jtype cx) (\rt -> Right (Utils.javaCastExpressionToJavaExpression (Utils.javaCastExpression rt (Utils.javaExpressionToJavaUnaryExpression curried))))))))
 
 encodeLiteral :: Core.Literal -> Syntax.Expression
 encodeLiteral lit =
@@ -1267,24 +1262,11 @@ encodeLiteral_primCast :: Syntax.PrimitiveType -> Syntax.Expression -> Syntax.Ex
 encodeLiteral_primCast pt expr =
     Utils.javaCastExpressionToJavaExpression (Utils.javaCastPrimitive pt (Utils.javaExpressionToJavaUnaryExpression expr))
 
-encodeNullaryConstant :: Environment_.JavaEnvironment -> Core.Type -> Core.Function -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeNullaryConstant :: t0 -> t1 -> Core.Function -> Context.Context -> t2 -> Either (Context.InContext Errors.Error) t3
 encodeNullaryConstant env typ fun cx g =
-
-      let aliases = Environment_.javaEnvironmentAliases env
-      in case fun of
-        Core.FunctionPrimitive v0 -> Eithers.bind (encodeNullaryConstant_typeArgsFromReturnType aliases typ cx g) (\targs -> Logic.ifElse (Lists.null targs) (
-          let header = Syntax.MethodInvocation_HeaderSimple (Syntax.MethodName (elementJavaIdentifier True False aliases v0))
-          in (Right (Utils.javaMethodInvocationToJavaExpression (Syntax.MethodInvocation {
-            Syntax.methodInvocationHeader = header,
-            Syntax.methodInvocationArguments = []})))) (
-          let fullName = Syntax.unIdentifier (elementJavaIdentifier True False aliases v0)
-              parts = Strings.splitOn "." fullName
-              className = Syntax.Identifier (Strings.intercalate "." (Lists.init parts))
-              methodName = Syntax.Identifier (Lists.last parts)
-          in (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs className methodName targs [])))))
-        _ -> Left (Context.InContext {
-          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected " (Strings.cat2 "nullary function" (Strings.cat2 " in " (Core___.function fun)))))),
-          Context.inContextContext = cx})
+    Left (Context.InContext {
+      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected " (Strings.cat2 "nullary function" (Strings.cat2 " in " (Core___.function fun)))))),
+      Context.inContextContext = cx})
 
 encodeNullaryConstant_typeArgsFromReturnType :: Environment_.Aliases -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) [Syntax.TypeArgument]
 encodeNullaryConstant_typeArgsFromReturnType aliases t cx g =
@@ -1299,6 +1281,21 @@ encodeNullaryConstant_typeArgsFromReturnType aliases t cx g =
         Syntax.TypeArgumentReference rk,
         (Syntax.TypeArgumentReference rv)]))))
       _ -> Right []
+
+encodeNullaryPrimitiveByName :: Environment_.JavaEnvironment -> Core.Type -> Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
+encodeNullaryPrimitiveByName env typ name cx g =
+
+      let aliases = Environment_.javaEnvironmentAliases env
+      in (Eithers.bind (encodeNullaryConstant_typeArgsFromReturnType aliases typ cx g) (\targs -> Logic.ifElse (Lists.null targs) (
+        let header = Syntax.MethodInvocation_HeaderSimple (Syntax.MethodName (elementJavaIdentifier True False aliases name))
+        in (Right (Utils.javaMethodInvocationToJavaExpression (Syntax.MethodInvocation {
+          Syntax.methodInvocationHeader = header,
+          Syntax.methodInvocationArguments = []})))) (
+        let fullName = Syntax.unIdentifier (elementJavaIdentifier True False aliases name)
+            parts = Strings.splitOn "." fullName
+            className = Syntax.Identifier (Strings.intercalate "." (Lists.init parts))
+            methodName = Syntax.Identifier (Lists.last parts)
+        in (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs className methodName targs []))))))
 
 encodeTerm :: Environment_.JavaEnvironment -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeTerm env term cx g = encodeTermInternal env [] [] term cx g
@@ -1549,11 +1546,9 @@ encodeTermInternal env anns tyapps term cx g0 =
           let combinedAnns = Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns
           in (Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
             Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
-            Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mt -> Eithers.bind (Maybes.cases mt (Checking.typeOfTerm cx g term) (\t -> Right t)) (\typ ->
-            let primFun = Core.FunctionPrimitive v0
-            in case (Strip.deannotateType typ) of
-              Core.TypeFunction v1 -> encodeFunction env (Core.functionTypeDomain v1) (Core.functionTypeCodomain v1) primFun cx g
-              _ -> encodeNullaryConstant env typ primFun cx g))))
+            Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mt -> Eithers.bind (Maybes.cases mt (Checking.typeOfTerm cx g term) (\t -> Right t)) (\typ -> case (Strip.deannotateType typ) of
+            Core.TypeFunction v1 -> encodeFunctionPrimitiveByName env (Core.functionTypeDomain v1) (Core.functionTypeCodomain v1) v0 cx g
+            _ -> encodeNullaryPrimitiveByName env typ v0 cx g))))
         Core.TermUnit -> Right (Utils.javaLiteralToJavaExpression Syntax.LiteralNull)
         Core.TermWrap v0 -> Eithers.bind (encode (Core.wrappedTermBody v0)) (\jarg -> Right (Utils.javaConstructorCall (Utils.javaConstructorName (Utils.nameToJavaName aliases (Core.wrappedTermTypeName v0)) Nothing) [
           jarg] Nothing))

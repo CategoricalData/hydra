@@ -217,7 +217,6 @@ typeOf cx tx typeArgs term =
             Core.EliminationUnion v2 -> typeOfCaseStatement cx1 tx typeArgs v2
             Core.EliminationWrap v2 -> typeOfUnwrap cx1 tx typeArgs v2
           Core.FunctionLambda v1 -> typeOfLambda cx1 tx typeArgs v1
-          Core.FunctionPrimitive v1 -> typeOfPrimitive cx1 tx typeArgs v1
         Core.TermLet v0 -> typeOfLet cx1 tx typeArgs v0
         Core.TermList v0 -> typeOfList cx1 tx typeArgs v0
         Core.TermLiteral v0 -> typeOfLiteral cx1 tx typeArgs v0

@@ -204,7 +204,6 @@ def typeOf(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq[hydra
         case hydra.core.Elimination.union(v_Elimination_union_v1) => hydra.checking.typeOfCaseStatement(cx1)(tx)(typeArgs)(v_Elimination_union_v1)
         case hydra.core.Elimination.wrap(v_Elimination_wrap_v1) => hydra.checking.typeOfUnwrap(cx1)(tx)(typeArgs)(v_Elimination_wrap_v1)
       case hydra.core.Function.lambda(v_Function_lambda_v1) => hydra.checking.typeOfLambda(cx1)(tx)(typeArgs)(v_Function_lambda_v1)
-      case hydra.core.Function.primitive(v_Function_primitive_v1) => hydra.checking.typeOfPrimitive(cx1)(tx)(typeArgs)(v_Function_primitive_v1)
     case hydra.core.Term.let(v_Term_let_v1) => hydra.checking.typeOfLet(cx1)(tx)(typeArgs)(v_Term_let_v1)
     case hydra.core.Term.list(v_Term_list_v1) => hydra.checking.typeOfList(cx1)(tx)(typeArgs)(v_Term_list_v1)
     case hydra.core.Term.literal(v_Term_literal_v1) => hydra.checking.typeOfLiteral(cx1)(tx)(typeArgs)(v_Term_literal_v1)

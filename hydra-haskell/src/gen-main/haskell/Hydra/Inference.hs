@@ -477,7 +477,6 @@ inferTypeOfFunction fcx cx f =
     case f of
       Core.FunctionElimination v0 -> inferTypeOfElimination fcx cx v0
       Core.FunctionLambda v0 -> inferTypeOfLambda fcx cx v0
-      Core.FunctionPrimitive v0 -> inferTypeOfPrimitive fcx cx v0
 
 -- | Infer the type of a union injection (Either version)
 inferTypeOfInjection :: Context.Context -> Graph.Graph -> Core.Injection -> Either (Context.InContext Errors.Error) Typing_.InferenceResult
@@ -820,7 +819,7 @@ inferTypeOfPrimitive fcx cx name =
           ts = Pairs.first tsResult
           fcx2 = Pairs.second tsResult
           constraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints ts)
-      in (Right (yieldCheckedWithConstraints fcx2 (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermFunction (Core.FunctionPrimitive name))) (Core.typeSchemeType ts) Substitution.idTypeSubst constraints))) (Maybes.map Graph.primitiveType (Maps.lookup name (Graph.graphPrimitives cx)))
+      in (Right (yieldCheckedWithConstraints fcx2 (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermVariable name)) (Core.typeSchemeType ts) Substitution.idTypeSubst constraints))) (Maybes.map Graph.primitiveType (Maps.lookup name (Graph.graphPrimitives cx)))
 
 -- | Infer the type of a record projection (Either version)
 inferTypeOfProjection :: Context.Context -> Graph.Graph -> Core.Projection -> Either (Context.InContext Errors.Error) Typing_.InferenceResult

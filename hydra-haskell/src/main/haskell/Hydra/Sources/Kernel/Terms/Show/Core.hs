@@ -195,8 +195,7 @@ function = define "function" $
   doc "Show a function as a string" $
   "f" ~> cases _Function (var "f") Nothing [
     _Function_elimination>>: elimination,
-    _Function_lambda>>: lambda,
-    _Function_primitive>>: "name" ~> Strings.cat2 (unwrap _Name @@ var "name") (string "!")]
+    _Function_lambda>>: lambda]
 
 injection :: TTermDefinition (Injection -> String)
 injection = define "injection" $

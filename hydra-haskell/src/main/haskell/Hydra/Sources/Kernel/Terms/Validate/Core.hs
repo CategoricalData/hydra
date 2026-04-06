@@ -169,19 +169,17 @@ checkTerm = define "checkTerm" $
       firstError @@ list [
         -- T13. ConstantConditionError: ifElse applied to a literal boolean
         cases _Term (var "fun") (Just noError) [
-          _Term_function>>: "f" ~>
-            cases _Function (var "f") (Just noError) [
-              _Function_primitive>>: "primName" ~>
-                Logic.ifElse (Equality.equal (Core.unName $ var "primName") (string "hydra.lib.logic.ifElse"))
-                  (cases _Term (var "arg") (Just noError) [
-                    _Term_literal>>: "lit" ~>
-                      cases _Literal (var "lit") (Just noError) [
-                        _Literal_boolean>>: "boolVal" ~>
-                          mkJust $ inject _InvalidTermError _InvalidTermError_constantCondition $
-                            record _ConstantConditionError [
-                              _ConstantConditionError_location>>: var "path",
-                              _ConstantConditionError_value>>: var "boolVal"]]])
-                  noError]],
+          _Term_variable>>: "primName" ~>
+            Logic.ifElse (Equality.equal (Core.unName $ var "primName") (string "hydra.lib.logic.ifElse"))
+              (cases _Term (var "arg") (Just noError) [
+                _Term_literal>>: "lit" ~>
+                  cases _Literal (var "lit") (Just noError) [
+                    _Literal_boolean>>: "boolVal" ~>
+                      mkJust $ inject _InvalidTermError _InvalidTermError_constantCondition $
+                        record _ConstantConditionError [
+                          _ConstantConditionError_location>>: var "path",
+                          _ConstantConditionError_value>>: var "boolVal"]]])
+              noError],
         -- T15. SelfApplicationError: (TermVariable x) applied to (TermVariable x)
         cases _Term (var "fun") (Just noError) [
           _Term_variable>>: "funName" ~>
@@ -328,15 +326,6 @@ checkTerm = define "checkTerm" $
                         _UndefinedTypeVariableInLambdaDomainError_location>>: var "path",
                         _UndefinedTypeVariableInLambdaDomainError_name>>: var "uvName"])))
               noError],
-        -- T22. UnknownPrimitiveNameError
-        _Function_primitive>>: "primName" ~>
-          Logic.ifElse
-            (Maybes.isJust $ Maps.lookup (var "primName") (Graph.graphPrimitives $ var "cx"))
-            noError
-            (mkJust $ inject _InvalidTermError _InvalidTermError_unknownPrimitiveName $
-              record _UnknownPrimitiveNameError [
-                _UnknownPrimitiveNameError_location>>: var "path",
-                _UnknownPrimitiveNameError_name>>: var "primName"]),
         -- Elimination checks
         _Function_elimination>>: "elim" ~>
           cases _Elimination (var "elim") (Just noError) [

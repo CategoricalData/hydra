@@ -503,7 +503,6 @@ def rewriteTerm(f: ((hydra.core.Term => hydra.core.Term) => hydra.core.Term => h
       case hydra.core.Function.elimination(v_Function_elimination_elm) => hydra.core.Function.elimination(forElimination(v_Function_elimination_elm))
       case hydra.core.Function.lambda(v_Function_lambda_l) => hydra.core.Function.lambda(hydra.core.Lambda(v_Function_lambda_l.parameter,
          (v_Function_lambda_l.domain), recurse(v_Function_lambda_l.body)))
-      case hydra.core.Function.primitive(v_Function_primitive_name) => hydra.core.Function.primitive(v_Function_primitive_name)
     def forLet(lt: hydra.core.Let): hydra.core.Let =
       {
       def mapBinding(b: hydra.core.Binding): hydra.core.Binding = hydra.core.Binding(b.name, recurse(b.term), (b.`type`))
@@ -612,7 +611,6 @@ def rewriteTermM[T0](f: ((hydra.core.Term => Either[T0, hydra.core.Term]) => hyd
                 }
               }
             }
-            case hydra.core.Function.primitive(v_Function_primitive_name) => Right(hydra.core.Function.primitive(v_Function_primitive_name))
           hydra.lib.eithers.bind[T1, hydra.core.Function, hydra.core.Term](forFun(v_Term_function_fun))((rfun: hydra.core.Function) => Right(hydra.core.Term.function(rfun)))
         }
       }
@@ -704,7 +702,6 @@ def rewriteTermWithContext[T0](f: ((T0 => hydra.core.Term => hydra.core.Term) =>
       case hydra.core.Function.elimination(v_Function_elimination_elm) => hydra.core.Function.elimination(forElimination(v_Function_elimination_elm))
       case hydra.core.Function.lambda(v_Function_lambda_l) => hydra.core.Function.lambda(hydra.core.Lambda(v_Function_lambda_l.parameter,
          (v_Function_lambda_l.domain), recurse(v_Function_lambda_l.body)))
-      case hydra.core.Function.primitive(v_Function_primitive_name) => hydra.core.Function.primitive(v_Function_primitive_name)
     def forLet(lt: hydra.core.Let): hydra.core.Let =
       {
       def mapBinding(b: hydra.core.Binding): hydra.core.Binding = hydra.core.Binding(b.name, recurse(b.term), (b.`type`))
@@ -796,7 +793,6 @@ def rewriteTermWithContextM[T0, T1](f: ((T0 => hydra.core.Term => Either[T1, hyd
           }
         }
       }
-      case hydra.core.Function.primitive(v_Function_primitive_name) => Right(hydra.core.Function.primitive(v_Function_primitive_name))
     def mapBinding(b: hydra.core.Binding): Either[T3, hydra.core.Binding] =
       hydra.lib.eithers.bind[T3, hydra.core.Term, hydra.core.Binding](recurse(b.term))((v: hydra.core.Term) => Right(hydra.core.Binding(b.name, v, (b.`type`))))
     term match

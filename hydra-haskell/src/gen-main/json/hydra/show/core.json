@@ -653,24 +653,7 @@
                                 {
                                   "name": "elimination",
                                   "term": {"variable": "hydra.show.core.elimination"}},
-                                {"name": "lambda", "term": {"variable": "hydra.show.core.lambda"}},
-                                {
-                                  "name": "primitive",
-                                  "term": {
-                                    "function": {
-                                      "lambda": {
-                                        "body": {
-                                          "application": {
-                                            "argument": {"literal": {"string": "!"}},
-                                            "function": {
-                                              "application": {
-                                                "argument": {
-                                                  "application": {
-                                                    "argument": {"variable": "name"},
-                                                    "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
-                                                "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                        "domain": {"variable": "hydra.core.Name"},
-                                        "parameter": "name"}}}}],
+                                {"name": "lambda", "term": {"variable": "hydra.show.core.lambda"}}],
                               "typeName": "hydra.core.Function"}}}}}},
                   "domain": {"variable": "hydra.core.Function"},
                   "parameter": "f"}}}}},

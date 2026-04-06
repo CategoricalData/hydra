@@ -299,9 +299,6 @@ encodeApplicationInner cx env fun hargs rargs =
                   allArgs = Lists.concat2 restArgs rargs
               in (Logic.ifElse (Lists.null allArgs) (Right (valueExpr, [])) (Right (Utils.functionCall (Utils.pyExpressionToPyPrimary valueExpr) allArgs, [])))
             _ -> defaultCase
-          Core.FunctionPrimitive v1 ->
-            let wrappedArgs = wrapLazyArguments v1 hargs
-            in (Eithers.bind (encodeVariable cx env v1 wrappedArgs) (\expr -> Right (expr, rargs)))
           Core.FunctionLambda _ -> Eithers.bind (encodeTermInline cx env False fun) (\pfun -> Right (Utils.functionCall (Utils.pyExpressionToPyPrimary pfun) hargs, rargs))
           _ -> defaultCase
         Core.TermVariable v0 ->
@@ -739,7 +736,6 @@ encodeFunction cx env f =
                 indexedExpr = Utils.primaryWithExpressionSlices (Utils.pyExpressionToPyPrimary tupleExpr) [
                       indexValue]
             in (Right (makeUncurriedLambda pparams (Utils.pyPrimaryToPyExpression indexedExpr)))))))))
-      Core.FunctionPrimitive v0 -> encodeVariable cx env v0 []
       Core.FunctionElimination v0 -> case v0 of
         Core.EliminationRecord v1 ->
           let fname = Core.projectionField v1
@@ -1627,7 +1623,6 @@ functionArityWithPrimitives graph f =
     case f of
       Core.FunctionElimination _ -> 1
       Core.FunctionLambda v0 -> Math.add 1 (termArityWithPrimitives graph (Core.lambdaBody v0))
-      Core.FunctionPrimitive v0 -> Maybes.maybe 0 (\prim -> Arity.primitiveArity prim) (Maps.lookup v0 (Graph.graphPrimitives graph))
       _ -> 0
 
 -- | Extract lambdas and their bodies from a term

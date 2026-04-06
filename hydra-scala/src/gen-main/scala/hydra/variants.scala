@@ -10,7 +10,6 @@ enum EliminationVariant :
 enum FunctionVariant :
    case elimination extends FunctionVariant
    case lambda extends FunctionVariant
-   case primitive extends FunctionVariant
 
 enum LiteralVariant :
    case binary extends LiteralVariant

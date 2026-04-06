@@ -144,25 +144,6 @@ def free_variables_in_context(cx: hydra.graph.Graph) -> frozenset[hydra.core.Nam
 
     return hydra.lib.lists.foldl((lambda x1, x2: hydra.lib.sets.union(x1, x2)), hydra.lib.sets.empty(), hydra.lib.lists.map((lambda x1: hydra.variables.free_variables_in_type_scheme_simple(x1)), hydra.lib.maps.elems(cx.bound_types)))
 
-def yield_checked_with_constraints(fcx: hydra.context.Context, term: hydra.core.Term, typ: hydra.core.Type, subst: hydra.typing.TypeSubst, constraints: FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]) -> hydra.typing.InferenceResult:
-    r"""Create a checked inference result with class constraints."""
-
-    @lru_cache(1)
-    def iterm() -> hydra.core.Term:
-        return hydra.substitution.subst_types_in_term(subst, term)
-    @lru_cache(1)
-    def itype() -> hydra.core.Type:
-        return hydra.substitution.subst_in_type(subst, typ)
-    @lru_cache(1)
-    def iconstraints() -> FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]:
-        return hydra.substitution.subst_in_class_constraints(subst, constraints)
-    return hydra.typing.InferenceResult(iterm(), itype(), subst, iconstraints(), fcx)
-
-def infer_type_of_primitive(fcx: hydra.context.Context, cx: hydra.graph.Graph, name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.typing.InferenceResult]:
-    r"""Infer the type of a primitive function (Either version)."""
-
-    return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2("No such primitive: ", name.value)))), fcx))), (lambda scheme: (ts_result := hydra.resolution.instantiate_type_scheme(fcx, scheme), ts := hydra.lib.pairs.first(ts_result), fcx2 := hydra.lib.pairs.second(ts_result), constraints := hydra.lib.maybes.from_maybe((lambda : hydra.lib.maps.empty()), ts.constraints), Right(yield_checked_with_constraints(fcx2, build_type_application_term(ts.variables, cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(name))))), ts.type, hydra.substitution.id_type_subst(), constraints)))[4]), hydra.lib.maybes.map((lambda v1: v1.type), hydra.lib.maps.lookup(name, cx.primitives)))
-
 def is_unbound(cx: hydra.graph.Graph, v: hydra.core.Name) -> bool:
     r"""Check if a variable is unbound in context."""
 
@@ -197,6 +178,20 @@ def infer_type_of_unit(fcx: hydra.context.Context) -> hydra.typing.InferenceResu
     r"""The trivial inference rule for the unit term."""
 
     return hydra.typing.InferenceResult(cast(hydra.core.Term, hydra.core.TermUnit()), cast(hydra.core.Type, hydra.core.TypeUnit()), hydra.substitution.id_type_subst(), hydra.lib.maps.empty(), fcx)
+
+def yield_checked_with_constraints(fcx: hydra.context.Context, term: hydra.core.Term, typ: hydra.core.Type, subst: hydra.typing.TypeSubst, constraints: FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]) -> hydra.typing.InferenceResult:
+    r"""Create a checked inference result with class constraints."""
+
+    @lru_cache(1)
+    def iterm() -> hydra.core.Term:
+        return hydra.substitution.subst_types_in_term(subst, term)
+    @lru_cache(1)
+    def itype() -> hydra.core.Type:
+        return hydra.substitution.subst_in_type(subst, typ)
+    @lru_cache(1)
+    def iconstraints() -> FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]:
+        return hydra.substitution.subst_in_class_constraints(subst, constraints)
+    return hydra.typing.InferenceResult(iterm(), itype(), subst, iconstraints(), fcx)
 
 def infer_type_of_variable(fcx: hydra.context.Context, cx: hydra.graph.Graph, name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of a variable (Either version)."""
@@ -283,9 +278,6 @@ def infer_type_of_function(fcx: hydra.context.Context, cx: hydra.graph.Graph, f:
 
         case hydra.core.FunctionLambda(value=l):
             return infer_type_of_lambda(fcx, cx, l)
-
-        case hydra.core.FunctionPrimitive(value=name):
-            return infer_type_of_primitive(fcx, cx, name)
 
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -604,6 +596,11 @@ def infer_type_of(fcx: hydra.context.Context, cx: hydra.graph.Graph, term: hydra
     def let_term() -> hydra.core.Term:
         return cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let((hydra.core.Binding(hydra.core.Name("ignoredVariableName"), term, Nothing()),), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("ignoredBody")))))))
     return hydra.lib.eithers.bind(infer_type_of_term(fcx, cx, let_term(), "infer type of term"), (lambda result: (fcx2 := result.context, hydra.lib.eithers.bind(finalize_inferred_term(fcx2, cx, result.term), (lambda finalized: hydra.lib.eithers.bind(hydra.extract.core.let(fcx2, cx, finalized), (lambda let_result: (bindings := let_result.bindings, hydra.lib.logic.if_else(hydra.lib.equality.equal(1, hydra.lib.lists.length(bindings)), (lambda : (binding := hydra.lib.lists.head(bindings), (term1 := binding.term, (mts := binding.type, hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("Expected a type scheme"))), fcx2))), (lambda ts: Right(((term1, ts), fcx2))), mts))[1])[1])[1]), (lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat(("Expected a single binding with a type scheme, but got: ", hydra.lib.literals.show_int32(hydra.lib.lists.length(bindings)), " bindings"))))), fcx2)))))[1])))))[1]))
+
+def infer_type_of_primitive(fcx: hydra.context.Context, cx: hydra.graph.Graph, name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.typing.InferenceResult]:
+    r"""Infer the type of a primitive function (Either version)."""
+
+    return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2("No such primitive: ", name.value)))), fcx))), (lambda scheme: (ts_result := hydra.resolution.instantiate_type_scheme(fcx, scheme), ts := hydra.lib.pairs.first(ts_result), fcx2 := hydra.lib.pairs.second(ts_result), constraints := hydra.lib.maybes.from_maybe((lambda : hydra.lib.maps.empty()), ts.constraints), Right(yield_checked_with_constraints(fcx2, build_type_application_term(ts.variables, cast(hydra.core.Term, hydra.core.TermVariable(name))), ts.type, hydra.substitution.id_type_subst(), constraints)))[4]), hydra.lib.maybes.map((lambda v1: v1.type), hydra.lib.maps.lookup(name, cx.primitives)))
 
 def show_inference_result(result: hydra.typing.InferenceResult) -> str:
     r"""Show an inference result for debugging."""

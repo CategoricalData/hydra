@@ -778,30 +778,7 @@
                                                                                                   "type": {"literal": {"string": {}}}}}}},
                                                                                           "typeName": "hydra.core.Elimination"}}}}}},
                                                                               "domain": {"variable": "hydra.core.Elimination"},
-                                                                              "parameter": "e"}}}},
-                                                                      {
-                                                                        "name": "primitive",
-                                                                        "term": {
-                                                                          "function": {
-                                                                            "lambda": {
-                                                                              "body": {
-                                                                                "typeApplication": {
-                                                                                  "body": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {
-                                                                                        "pair": {
-                                                                                          "@first": {
-                                                                                            "application": {
-                                                                                              "argument": {"variable": "name"},
-                                                                                              "function": {
-                                                                                                "application": {
-                                                                                                  "argument": {"variable": "namespaces"},
-                                                                                                  "function": {"variable": "hydra.names.compactName"}}}}},
-                                                                                          "@second": {"variable": "hydra.ext.graphviz.coder.nodeStylePrimitive"}}},
-                                                                                      "type": {"literal": {"string": {}}}}},
-                                                                                  "type": {"literal": {"string": {}}}}},
-                                                                              "domain": {"variable": "hydra.core.Name"},
-                                                                              "parameter": "name"}}}}],
+                                                                              "parameter": "e"}}}}],
                                                                     "default": {
                                                                       "application": {
                                                                         "argument": {"literal": {"string": "?"}},

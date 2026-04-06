@@ -607,111 +607,91 @@
                                                                                     "union": {
                                                                                       "cases": [
                                                                                         {
-                                                                                          "name": "function",
+                                                                                          "name": "variable",
                                                                                           "term": {
                                                                                             "function": {
                                                                                               "lambda": {
                                                                                                 "body": {
                                                                                                   "application": {
-                                                                                                    "argument": {"variable": "f"},
+                                                                                                    "argument": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"maybe": null},
+                                                                                                        "type": {"variable": "hydra.error.core.InvalidTermError"}}},
                                                                                                     "function": {
-                                                                                                      "function": {
-                                                                                                        "elimination": {
-                                                                                                          "union": {
-                                                                                                            "cases": [
-                                                                                                              {
-                                                                                                                "name": "primitive",
-                                                                                                                "term": {
-                                                                                                                  "function": {
-                                                                                                                    "lambda": {
-                                                                                                                      "body": {
-                                                                                                                        "application": {
-                                                                                                                          "argument": {
-                                                                                                                            "typeApplication": {
-                                                                                                                              "body": {"maybe": null},
-                                                                                                                              "type": {"variable": "hydra.error.core.InvalidTermError"}}},
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "arg"},
+                                                                                                            "function": {
+                                                                                                              "function": {
+                                                                                                                "elimination": {
+                                                                                                                  "union": {
+                                                                                                                    "cases": [
+                                                                                                                      {
+                                                                                                                        "name": "literal",
+                                                                                                                        "term": {
                                                                                                                           "function": {
-                                                                                                                            "application": {
-                                                                                                                              "argument": {
+                                                                                                                            "lambda": {
+                                                                                                                              "body": {
                                                                                                                                 "application": {
-                                                                                                                                  "argument": {"variable": "arg"},
+                                                                                                                                  "argument": {"variable": "lit"},
                                                                                                                                   "function": {
                                                                                                                                     "function": {
                                                                                                                                       "elimination": {
                                                                                                                                         "union": {
                                                                                                                                           "cases": [
                                                                                                                                             {
-                                                                                                                                              "name": "literal",
+                                                                                                                                              "name": "boolean",
                                                                                                                                               "term": {
                                                                                                                                                 "function": {
                                                                                                                                                   "lambda": {
                                                                                                                                                     "body": {
-                                                                                                                                                      "application": {
-                                                                                                                                                        "argument": {"variable": "lit"},
-                                                                                                                                                        "function": {
-                                                                                                                                                          "function": {
-                                                                                                                                                            "elimination": {
-                                                                                                                                                              "union": {
-                                                                                                                                                                "cases": [
-                                                                                                                                                                  {
-                                                                                                                                                                    "name": "boolean",
-                                                                                                                                                                    "term": {
-                                                                                                                                                                      "function": {
-                                                                                                                                                                        "lambda": {
-                                                                                                                                                                          "body": {
-                                                                                                                                                                            "maybe": {
-                                                                                                                                                                              "union": {
-                                                                                                                                                                                "field": {
-                                                                                                                                                                                  "name": "constantCondition",
-                                                                                                                                                                                  "term": {
-                                                                                                                                                                                    "record": {
-                                                                                                                                                                                      "fields": [
-                                                                                                                                                                                        {"name": "location", "term": {"variable": "path"}},
-                                                                                                                                                                                        {"name": "value", "term": {"variable": "boolVal"}}],
-                                                                                                                                                                                      "typeName": "hydra.error.core.ConstantConditionError"}}},
-                                                                                                                                                                                "typeName": "hydra.error.core.InvalidTermError"}}},
-                                                                                                                                                                          "domain": {"literal": {"boolean": {}}},
-                                                                                                                                                                          "parameter": "boolVal"}}}}],
-                                                                                                                                                                "default": {
-                                                                                                                                                                  "typeApplication": {
-                                                                                                                                                                    "body": {"maybe": null},
-                                                                                                                                                                    "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                                                                                                                                "typeName": "hydra.core.Literal"}}}}}},
-                                                                                                                                                    "domain": {"variable": "hydra.core.Literal"},
-                                                                                                                                                    "parameter": "lit"}}}}],
+                                                                                                                                                      "maybe": {
+                                                                                                                                                        "union": {
+                                                                                                                                                          "field": {
+                                                                                                                                                            "name": "constantCondition",
+                                                                                                                                                            "term": {
+                                                                                                                                                              "record": {
+                                                                                                                                                                "fields": [
+                                                                                                                                                                  {"name": "location", "term": {"variable": "path"}},
+                                                                                                                                                                  {"name": "value", "term": {"variable": "boolVal"}}],
+                                                                                                                                                                "typeName": "hydra.error.core.ConstantConditionError"}}},
+                                                                                                                                                          "typeName": "hydra.error.core.InvalidTermError"}}},
+                                                                                                                                                    "domain": {"literal": {"boolean": {}}},
+                                                                                                                                                    "parameter": "boolVal"}}}}],
                                                                                                                                           "default": {
                                                                                                                                             "typeApplication": {
                                                                                                                                               "body": {"maybe": null},
                                                                                                                                               "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                                                                                                          "typeName": "hydra.core.Term"}}}}}},
-                                                                                                                              "function": {
-                                                                                                                                "application": {
-                                                                                                                                  "argument": {
-                                                                                                                                    "application": {
-                                                                                                                                      "argument": {"literal": {"string": "hydra.lib.logic.ifElse"}},
-                                                                                                                                      "function": {
-                                                                                                                                        "application": {
-                                                                                                                                          "argument": {
-                                                                                                                                            "application": {
-                                                                                                                                              "argument": {"variable": "primName"},
-                                                                                                                                              "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
-                                                                                                                                          "function": {
-                                                                                                                                            "typeApplication": {
-                                                                                                                                              "body": {"variable": "hydra.lib.equality.equal"},
-                                                                                                                                              "type": {"literal": {"string": {}}}}}}}}},
-                                                                                                                                  "function": {
-                                                                                                                                    "typeApplication": {
-                                                                                                                                      "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                                                                                      "type": {"maybe": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
-                                                                                                                      "domain": {"variable": "hydra.core.Name"},
-                                                                                                                      "parameter": "primName"}}}}],
-                                                                                                            "default": {
+                                                                                                                                          "typeName": "hydra.core.Literal"}}}}}},
+                                                                                                                              "domain": {"variable": "hydra.core.Literal"},
+                                                                                                                              "parameter": "lit"}}}}],
+                                                                                                                    "default": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {"maybe": null},
+                                                                                                                        "type": {"variable": "hydra.error.core.InvalidTermError"}}},
+                                                                                                                    "typeName": "hydra.core.Term"}}}}}},
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "argument": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"literal": {"string": "hydra.lib.logic.ifElse"}},
+                                                                                                                "function": {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {"variable": "primName"},
+                                                                                                                        "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
+                                                                                                                    "function": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {"variable": "hydra.lib.equality.equal"},
+                                                                                                                        "type": {"literal": {"string": {}}}}}}}}},
+                                                                                                            "function": {
                                                                                                               "typeApplication": {
-                                                                                                                "body": {"maybe": null},
-                                                                                                                "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                                                                            "typeName": "hydra.core.Function"}}}}}},
-                                                                                                "domain": {"variable": "hydra.core.Function"},
-                                                                                                "parameter": "f"}}}}],
+                                                                                                                "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                                                                "type": {"maybe": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
+                                                                                                "domain": {"variable": "hydra.core.Name"},
+                                                                                                "parameter": "primName"}}}}],
                                                                                       "default": {
                                                                                         "typeApplication": {
                                                                                           "body": {"maybe": null},
@@ -1644,63 +1624,6 @@
                                                                                             "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}},
                                                                                 "domain": {"variable": "hydra.core.Lambda"},
                                                                                 "parameter": "lam"}}}},
-                                                                        {
-                                                                          "name": "primitive",
-                                                                          "term": {
-                                                                            "function": {
-                                                                              "lambda": {
-                                                                                "body": {
-                                                                                  "application": {
-                                                                                    "argument": {
-                                                                                      "maybe": {
-                                                                                        "union": {
-                                                                                          "field": {
-                                                                                            "name": "unknownPrimitiveName",
-                                                                                            "term": {
-                                                                                              "record": {
-                                                                                                "fields": [
-                                                                                                  {"name": "location", "term": {"variable": "path"}},
-                                                                                                  {"name": "name", "term": {"variable": "primName"}}],
-                                                                                                "typeName": "hydra.error.core.UnknownPrimitiveNameError"}}},
-                                                                                          "typeName": "hydra.error.core.InvalidTermError"}}},
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "argument": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {"maybe": null},
-                                                                                            "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {
-                                                                                              "application": {
-                                                                                                "argument": {
-                                                                                                  "application": {
-                                                                                                    "argument": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"variable": "cx"},
-                                                                                                        "function": {
-                                                                                                          "function": {
-                                                                                                            "elimination": {"record": {"field": "primitives", "typeName": "hydra.graph.Graph"}}}}}},
-                                                                                                    "function": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"variable": "primName"},
-                                                                                                        "function": {
-                                                                                                          "typeApplication": {
-                                                                                                            "body": {
-                                                                                                              "typeApplication": {
-                                                                                                                "body": {"variable": "hydra.lib.maps.lookup"},
-                                                                                                                "type": {"variable": "hydra.core.Name"}}},
-                                                                                                            "type": {"variable": "hydra.graph.Primitive"}}}}}}},
-                                                                                                "function": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {"variable": "hydra.lib.maybes.isJust"},
-                                                                                                    "type": {"variable": "hydra.graph.Primitive"}}}}},
-                                                                                            "function": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                                                "type": {"maybe": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
-                                                                                "domain": {"variable": "hydra.core.Name"},
-                                                                                "parameter": "primName"}}}},
                                                                         {
                                                                           "name": "elimination",
                                                                           "term": {

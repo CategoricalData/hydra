@@ -17,8 +17,7 @@ public interface Language {
       new hydra.core.FloatType.Float64())));
     hydra.util.Lazy<java.util.Set<hydra.variants.FunctionVariant>> functionVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.variants.FunctionVariant.Elimination(),
-      new hydra.variants.FunctionVariant.Lambda(),
-      new hydra.variants.FunctionVariant.Primitive())));
+      new hydra.variants.FunctionVariant.Lambda())));
     hydra.util.Lazy<java.util.Set<hydra.core.IntegerType>> integerTypes = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.core.IntegerType.Bigint(),
       new hydra.core.IntegerType.Int8(),

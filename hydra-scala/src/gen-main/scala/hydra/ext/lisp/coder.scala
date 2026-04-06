@@ -148,7 +148,6 @@ def encodeFunction[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0)(g
     lazy val param: scala.Predef.String = hydra.formatting.convertCaseCamelOrUnderscoreToLowerSnake(hydra.formatting.sanitizeWithUnderscores(hydra.ext.lisp.language.lispReservedWords)(v_Function_lambda_lam.parameter))
     hydra.lib.eithers.bind[T2, hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression](hydra.ext.lisp.coder.encodeTerm(dialect)(cx)(g)(v_Function_lambda_lam.body))((body: hydra.ext.lisp.syntax.Expression) => Right(hydra.ext.lisp.coder.lispLambdaExpr(Seq(param))(body)))
   }
-  case hydra.core.Function.primitive(v_Function_primitive_name) => Right(hydra.ext.lisp.coder.lispVar(hydra.formatting.convertCaseCamelOrUnderscoreToLowerSnake(hydra.formatting.sanitizeWithUnderscores(hydra.ext.lisp.language.lispReservedWords)(v_Function_primitive_name))))
   case hydra.core.Function.elimination(v_Function_elimination_elim) => hydra.ext.lisp.coder.encodeElimination(dialect)(cx)(g)(v_Function_elimination_elim)(None)
 
 def encodeLetAsLambdaApp[T0, T1, T2](dialect: hydra.ext.lisp.syntax.Dialect)(cx: T0)(g: T1)(bindings: Seq[hydra.core.Binding])(body: hydra.core.Term): Either[T2,
@@ -465,9 +464,6 @@ def isLazy3ArgPrimitive(name: hydra.core.Name): Boolean = hydra.lib.equality.equ
 
 def isPrimitiveRef(primName: scala.Predef.String)(term: hydra.core.Term): Boolean =
   term match
-  case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-    case hydra.core.Function.primitive(v_Function_primitive_name) => hydra.lib.equality.equal[scala.Predef.String](v_Function_primitive_name)(primName)
-    case _ => false
   case hydra.core.Term.variable(v_Term_variable_name) => hydra.lib.equality.equal[scala.Predef.String](v_Term_variable_name)(primName)
   case hydra.core.Term.annotated(v_Term_annotated_at) => hydra.ext.lisp.coder.isPrimitiveRef(primName)(v_Term_annotated_at.body)
   case hydra.core.Term.typeApplication(v_Term_typeApplication_ta) => hydra.ext.lisp.coder.isPrimitiveRef(primName)(v_Term_typeApplication_ta.body)

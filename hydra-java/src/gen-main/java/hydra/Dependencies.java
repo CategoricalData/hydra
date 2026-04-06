@@ -459,11 +459,6 @@ public interface Dependencies {
             }
 
             @Override
-            public java.util.Set<hydra.core.Name> visit(hydra.core.Function.Primitive name) {
-              return (prim).apply((name).value);
-            }
-
-            @Override
             public java.util.Set<hydra.core.Name> visit(hydra.core.Function.Elimination e) {
               return (e).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
                 @Override

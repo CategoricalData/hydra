@@ -209,11 +209,6 @@ function x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "lambda"),
           Core.fieldTerm = (lambda v0)}})
-      Core.FunctionPrimitive v0 -> Core.TermUnion (Core.Injection {
-        Core.injectionTypeName = (Core.Name "hydra.core.Function"),
-        Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "primitive"),
-          Core.fieldTerm = (name v0)}})
 
 functionType :: Core.FunctionType -> Core.Term
 functionType x =
