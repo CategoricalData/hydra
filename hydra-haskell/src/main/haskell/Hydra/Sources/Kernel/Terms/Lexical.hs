@@ -2,7 +2,7 @@
 module Hydra.Sources.Kernel.Terms.Lexical where
 
 -- Standard imports for kernel terms modules
-import Hydra.Kernel hiding (buildGraph, chooseUniqueName, dereferenceSchemaType, dereferenceVariable, elementsToGraph, emptyContext, emptyGraph, fieldsOf, getField, graphToBindings, lookupBinding, lookupPrimitive, lookupTerm, matchEnum, matchRecord, matchUnion, matchUnitField, requireBinding, requirePrimitive, requirePrimitiveType, requireTerm, resolveTerm, stripAndDereferenceTerm, stripAndDereferenceTermEither)
+import Hydra.Kernel hiding (buildGraph, chooseUniqueName, dereferenceSchemaType, dereferenceVariable, elementsToGraph, emptyContext, emptyGraph, fieldsOf, getField, graphToBindings, graphWithPrimitives, lookupBinding, lookupPrimitive, lookupTerm, matchEnum, matchRecord, matchUnion, matchUnitField, requireBinding, requirePrimitive, requirePrimitiveType, requireTerm, resolveTerm, stripAndDereferenceTerm, stripAndDereferenceTermEither)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
@@ -82,6 +82,7 @@ module_ = Module ns definitions
       toDefinition graphToBindings,
       toDefinition fieldsOf,
       toDefinition getField,
+      toDefinition graphWithPrimitives,
       toDefinition lookupBinding,
       toDefinition lookupPrimitive,
       toDefinition lookupTerm,
@@ -101,6 +102,8 @@ formatError :: TTerm (InContext Error -> String)
 formatError = "ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic")
 
 -- | Build a Graph from element bindings, environment, and primitives.
+-- Construction-time shadowing: any bound term or type whose name matches a primitive is removed,
+-- so primitives always take priority by construction.
 buildGraph :: TTermDefinition ([Binding] -> M.Map Name (Maybe Term) -> M.Map Name Primitive -> Graph)
 buildGraph = define "buildGraph" $
   doc "Build a Graph from element bindings, environment, and primitives" $
@@ -110,13 +113,19 @@ buildGraph = define "buildGraph" $
     pair (Core.bindingName (var "b")) (Core.bindingTerm (var "b"))) (var "elements")) $
   "letTerms" <~ Maps.map ("mt" ~> Maybes.fromJust (var "mt"))
     (Maps.filter ("mt" ~> Maybes.isJust (var "mt")) (var "environment")) $
+  "mergedTerms" <~ Maps.union (var "elementTerms") (var "letTerms") $
+  -- Construction-time shadowing: remove any binding whose name matches a primitive
+  "filteredTerms" <~ Maps.filterWithKey ("k" ~> "_v" ~>
+    Logic.not (Maps.member (var "k") (var "primitives"))) (var "mergedTerms") $
   -- boundTypes: extract bindingType from each element (preserving TypeScheme with constraints)
   "elementTypes" <~ Maps.fromList (Maybes.cat (Lists.map ("b" ~>
     Maybes.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts"))
       (Core.bindingType (var "b"))) (var "elements"))) $
+  "filteredTypes" <~ Maps.filterWithKey ("k" ~> "_v" ~>
+    Logic.not (Maps.member (var "k") (var "primitives"))) (var "elementTypes") $
   Graph.graph
-    (Maps.union (var "elementTerms") (var "letTerms"))
-    (var "elementTypes")
+    (var "filteredTerms")
+    (var "filteredTypes")
     Maps.empty
     (Sets.fromList (Maps.keys (Maps.filter ("mt" ~> Maybes.isNothing (var "mt")) (var "environment"))))
     Maps.empty
@@ -220,6 +229,15 @@ getField = define "getField" $
     (Ctx.failInContext (Error.errorOther $ Error.otherError ((string "expected field ") ++ (Core.unName (var "fname")) ++ (string " not found"))) (var "cx"))
     (var "decode")
     (Maps.lookup (var "fname") (var "m"))
+
+graphWithPrimitives :: TTermDefinition ([Primitive] -> [Primitive] -> Graph)
+graphWithPrimitives = define "graphWithPrimitives" $
+  doc "Build a graph with primitives assembled from built-in and user-provided lists. User-provided primitives shadow built-in ones." $
+  "builtIn" ~> "userProvided" ~>
+  "toMap" <~ ("ps" ~> Maps.fromList (Lists.map ("p" ~>
+    pair (Graph.primitiveName (var "p")) (var "p")) (var "ps"))) $
+  "prims" <~ Maps.union (var "toMap" @@ var "userProvided") (var "toMap" @@ var "builtIn") $
+  buildGraph @@ list ([] :: [TTerm Binding]) @@ Maps.empty @@ var "prims"
 
 lookupBinding :: TTermDefinition (Graph -> Name -> Maybe Binding)
 lookupBinding = define "lookupBinding" $
