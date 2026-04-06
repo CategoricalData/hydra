@@ -17,11 +17,10 @@ import hydra.pg.model.PropertyType;
 import hydra.pg.model.Vertex;
 import hydra.pg.model.VertexLabel;
 import hydra.pg.model.VertexType;
-import hydra.util.ConsList;
-import hydra.util.PersistentMap;
-
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Decodes PG model objects from the JSON format produced by hydra.encode.pg.model + hydra.json.encode.
@@ -38,12 +37,12 @@ import java.util.List;
 class JsonPgDecoder {
 
     static GraphSchema<LiteralType> decodeGraphSchema(Value json) {
-        PersistentMap<String, Value> obj = expectObject(json);
-        PersistentMap<VertexLabel, VertexType<LiteralType>> vertices = decodeMap(
+        Map<String, Value> obj = expectObject(json);
+        Map<VertexLabel, VertexType<LiteralType>> vertices = decodeMap(
                 requireField(obj, "vertices"),
                 v -> new VertexLabel(expectString(v)),
                 v -> decodeVertexType(v));
-        PersistentMap<EdgeLabel, EdgeType<LiteralType>> edges = decodeMap(
+        Map<EdgeLabel, EdgeType<LiteralType>> edges = decodeMap(
                 requireField(obj, "edges"),
                 v -> new EdgeLabel(expectString(v)),
                 v -> decodeEdgeType(v));
@@ -51,12 +50,12 @@ class JsonPgDecoder {
     }
 
     static Graph<Literal> decodeGraph(Value json) {
-        PersistentMap<String, Value> obj = expectObject(json);
-        PersistentMap<Literal, Vertex<Literal>> vertices = decodeMap(
+        Map<String, Value> obj = expectObject(json);
+        Map<Literal, Vertex<Literal>> vertices = decodeMap(
                 requireField(obj, "vertices"),
                 JsonPgDecoder::decodeLiteral,
                 JsonPgDecoder::decodeVertex);
-        PersistentMap<Literal, Edge<Literal>> edges = decodeMap(
+        Map<Literal, Edge<Literal>> edges = decodeMap(
                 requireField(obj, "edges"),
                 JsonPgDecoder::decodeLiteral,
                 JsonPgDecoder::decodeEdge);
@@ -64,29 +63,29 @@ class JsonPgDecoder {
     }
 
     private static VertexType<LiteralType> decodeVertexType(Value json) {
-        PersistentMap<String, Value> obj = expectObject(json);
+        Map<String, Value> obj = expectObject(json);
         VertexLabel label = new VertexLabel(expectString(requireField(obj, "label")));
         LiteralType id = decodeLiteralType(requireField(obj, "id"));
-        ConsList<PropertyType<LiteralType>> properties = decodeList(
+        List<PropertyType<LiteralType>> properties = decodeList(
                 requireField(obj, "properties"),
                 JsonPgDecoder::decodePropertyType);
         return new VertexType<>(label, id, properties);
     }
 
     private static EdgeType<LiteralType> decodeEdgeType(Value json) {
-        PersistentMap<String, Value> obj = expectObject(json);
+        Map<String, Value> obj = expectObject(json);
         EdgeLabel label = new EdgeLabel(expectString(requireField(obj, "label")));
         LiteralType id = decodeLiteralType(requireField(obj, "id"));
         VertexLabel out = new VertexLabel(expectString(requireField(obj, "out")));
         VertexLabel in = new VertexLabel(expectString(requireField(obj, "in")));
-        ConsList<PropertyType<LiteralType>> properties = decodeList(
+        List<PropertyType<LiteralType>> properties = decodeList(
                 requireField(obj, "properties"),
                 JsonPgDecoder::decodePropertyType);
         return new EdgeType<>(label, id, out, in, properties);
     }
 
     private static PropertyType<LiteralType> decodePropertyType(Value json) {
-        PersistentMap<String, Value> obj = expectObject(json);
+        Map<String, Value> obj = expectObject(json);
         PropertyKey key = new PropertyKey(expectString(requireField(obj, "key")));
         LiteralType value = decodeLiteralType(requireField(obj, "value"));
         boolean required = expectBoolean(requireField(obj, "required"));
@@ -94,10 +93,10 @@ class JsonPgDecoder {
     }
 
     private static Vertex<Literal> decodeVertex(Value json) {
-        PersistentMap<String, Value> obj = expectObject(json);
+        Map<String, Value> obj = expectObject(json);
         VertexLabel label = new VertexLabel(expectString(requireField(obj, "label")));
         Literal id = decodeLiteral(requireField(obj, "id"));
-        PersistentMap<PropertyKey, Literal> properties = decodeMap(
+        Map<PropertyKey, Literal> properties = decodeMap(
                 requireField(obj, "properties"),
                 v -> new PropertyKey(expectString(v)),
                 JsonPgDecoder::decodeLiteral);
@@ -105,12 +104,12 @@ class JsonPgDecoder {
     }
 
     private static Edge<Literal> decodeEdge(Value json) {
-        PersistentMap<String, Value> obj = expectObject(json);
+        Map<String, Value> obj = expectObject(json);
         EdgeLabel label = new EdgeLabel(expectString(requireField(obj, "label")));
         Literal id = decodeLiteral(requireField(obj, "id"));
         Literal out = decodeLiteral(requireField(obj, "out"));
         Literal in = decodeLiteral(requireField(obj, "in"));
-        PersistentMap<PropertyKey, Literal> properties = decodeMap(
+        Map<PropertyKey, Literal> properties = decodeMap(
                 requireField(obj, "properties"),
                 v -> new PropertyKey(expectString(v)),
                 JsonPgDecoder::decodeLiteral);
@@ -118,7 +117,7 @@ class JsonPgDecoder {
     }
 
     static LiteralType decodeLiteralType(Value json) {
-        PersistentMap<String, Value> obj = expectObject(json);
+        Map<String, Value> obj = expectObject(json);
         if (obj.get("binary") != null) return new LiteralType.Binary();
         if (obj.get("boolean") != null) return new LiteralType.Boolean_();
         if (obj.get("string") != null) return new LiteralType.String_();
@@ -128,7 +127,7 @@ class JsonPgDecoder {
     }
 
     private static FloatType decodeFloatType(Value json) {
-        PersistentMap<String, Value> obj = expectObject(json);
+        Map<String, Value> obj = expectObject(json);
         if (obj.get("bigfloat") != null) return new FloatType.Bigfloat();
         if (obj.get("float32") != null) return new FloatType.Float32();
         if (obj.get("float64") != null) return new FloatType.Float64();
@@ -136,7 +135,7 @@ class JsonPgDecoder {
     }
 
     private static IntegerType decodeIntegerType(Value json) {
-        PersistentMap<String, Value> obj = expectObject(json);
+        Map<String, Value> obj = expectObject(json);
         if (obj.get("bigint") != null) return new IntegerType.Bigint();
         if (obj.get("int8") != null) return new IntegerType.Int8();
         if (obj.get("int16") != null) return new IntegerType.Int16();
@@ -150,7 +149,7 @@ class JsonPgDecoder {
     }
 
     static Literal decodeLiteral(Value json) {
-        PersistentMap<String, Value> obj = expectObject(json);
+        Map<String, Value> obj = expectObject(json);
         if (obj.get("binary") != null) return new Literal.Binary(expectString(obj.get("binary")).getBytes(java.nio.charset.StandardCharsets.UTF_8));
         if (obj.get("boolean") != null) return new Literal.Boolean_(expectBoolean(obj.get("boolean")));
         if (obj.get("string") != null) return new Literal.String_(expectString(obj.get("string")));
@@ -160,7 +159,7 @@ class JsonPgDecoder {
     }
 
     private static FloatValue decodeFloatValue(Value json) {
-        PersistentMap<String, Value> obj = expectObject(json);
+        Map<String, Value> obj = expectObject(json);
         if (obj.get("bigfloat") != null) return new FloatValue.Bigfloat(expectNumber(obj.get("bigfloat")));
         if (obj.get("float32") != null) return new FloatValue.Float32(expectNumber(obj.get("float32")).floatValue());
         if (obj.get("float64") != null) return new FloatValue.Float64(expectNumber(obj.get("float64")).doubleValue());
@@ -168,7 +167,7 @@ class JsonPgDecoder {
     }
 
     private static IntegerValue decodeIntegerValue(Value json) {
-        PersistentMap<String, Value> obj = expectObject(json);
+        Map<String, Value> obj = expectObject(json);
         if (obj.get("bigint") != null) return new IntegerValue.Bigint(expectNumber(obj.get("bigint")).toBigInteger());
         if (obj.get("int8") != null) return new IntegerValue.Int8(expectNumber(obj.get("int8")).byteValue());
         if (obj.get("int16") != null) return new IntegerValue.Int16(expectNumber(obj.get("int16")).shortValue());
@@ -183,37 +182,37 @@ class JsonPgDecoder {
 
     // -- Helpers --
 
-    private static <K, V> PersistentMap<K, V> decodeMap(Value json,
+    private static <K, V> Map<K, V> decodeMap(Value json,
             java.util.function.Function<Value, K> decodeKey,
             java.util.function.Function<Value, V> decodeValue) {
-        ConsList<Value> arr = expectArray(json);
-        PersistentMap<K, V> result = PersistentMap.empty();
+        List<Value> arr = expectArray(json);
+        Map<K, V> result = new LinkedHashMap<>();
         for (Value entry : arr) {
-            PersistentMap<String, Value> entryObj = expectObject(entry);
+            Map<String, Value> entryObj = expectObject(entry);
             K key = decodeKey.apply(requireField(entryObj, "@key"));
             V value = decodeValue.apply(requireField(entryObj, "@value"));
-            result = result.insert(key, value);
+            result.put(key, value);
         }
         return result;
     }
 
-    private static <T> ConsList<T> decodeList(Value json, java.util.function.Function<Value, T> decode) {
-        ConsList<Value> arr = expectArray(json);
+    private static <T> List<T> decodeList(Value json, java.util.function.Function<Value, T> decode) {
+        List<Value> arr = expectArray(json);
         List<T> result = new ArrayList<>();
         for (Value v : arr) {
             result.add(decode.apply(v));
         }
-        return ConsList.fromList(result);
+        return result;
     }
 
-    private static PersistentMap<String, Value> expectObject(Value json) {
+    private static Map<String, Value> expectObject(Value json) {
         if (json instanceof Value.Object_) {
             return ((Value.Object_) json).value;
         }
         throw new RuntimeException("Expected JSON object, got " + json.getClass().getSimpleName());
     }
 
-    private static ConsList<Value> expectArray(Value json) {
+    private static List<Value> expectArray(Value json) {
         if (json instanceof Value.Array) {
             return ((Value.Array) json).value;
         }
@@ -241,7 +240,7 @@ class JsonPgDecoder {
         throw new RuntimeException("Expected JSON number, got " + json.getClass().getSimpleName());
     }
 
-    private static Value requireField(PersistentMap<String, Value> obj, String name) {
+    private static Value requireField(Map<String, Value> obj, String name) {
         Value value = obj.get(name);
         if (value == null) {
             throw new RuntimeException("Missing required field: " + name);

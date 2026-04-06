@@ -106,12 +106,12 @@ avroEnvironmentNs :: Namespace
 avroEnvironmentNs = Namespace "hydra.ext.avro.environment"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [ExtractCore.ns, Strip.ns]
     (avroEnvironmentNs:AvroSchema.ns:jsonModelNs:KernelTypes.kernelTypesNamespaces) $
     Just "Avro-to-Hydra adapter for converting Avro schemas and data to Hydra types and terms"
   where
-    elements = [
+    definitions = [
       toDefinition avro_foreignKey,
       toDefinition avro_primaryKey,
       toDefinition emptyAvroEnvironment,
@@ -239,9 +239,10 @@ avroHydraAdapter = define "avroHydraAdapter" $
         (Coders.adapter (boolean False) (var "schema") (var "typ") (Coders.coder (var "encode") (var "decode")))
         (var "env")),
     -- doubleToInt: truncate a JSON number (bigfloat) to int32 (toward zero)
-    "doubleToInt">: lambda "d" $ Literals.bigintToInt32 (Math.truncate (Literals.bigfloatToFloat64 (var "d"))),
+    -- Math.truncate returns Float64 (divergence from Haskell); convert back to bigfloat before bigint.
+    "doubleToInt">: lambda "d" $ Literals.bigintToInt32 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 (var "d"))))),
     -- doubleToLong: truncate a JSON number (bigfloat) to int64 (toward zero)
-    "doubleToLong">: lambda "d" $ Literals.bigintToInt64 (Math.truncate (Literals.bigfloatToFloat64 (var "d")))] $
+    "doubleToLong">: lambda "d" $ Literals.bigintToInt64 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 (var "d")))))] $
     cases Avro._Schema (var "schema") Nothing [
       -- SchemaArray
       Avro._Schema_array>>: lambda "arr" $

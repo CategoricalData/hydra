@@ -12,6 +12,7 @@ import Hydra.Sources.Libraries
 import           Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
 import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
@@ -43,12 +44,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.lisp.serde"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Constants.ns, Formatting.ns, Serialization.ns]
     (LispSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Lisp serializer: converts Lisp AST to concrete syntax for Clojure, Emacs Lisp, Common Lisp, or Scheme"
   where
-    elements = [
+    definitions = [
       toDefinition andExpressionToExpr,
       toDefinition applicationToExpr,
       toDefinition caseExpressionToExpr,
@@ -65,6 +66,7 @@ module_ = Module ns elements
       toDefinition expressionToExpr,
       toDefinition falseExpr,
       toDefinition fieldAccessToExpr,
+      toDefinition formatLispFloat,
       toDefinition functionDefinitionToExpr,
       toDefinition ifExpressionToExpr,
       toDefinition importDeclarationToExpr,
@@ -643,6 +645,32 @@ listLiteralToExpr = define "listLiteralToExpr" $
         (list [Serialization.cst @@ (listKeyword @@ var "d")])
         (var "elems")))
 
+-- | Format a bigfloat value as a dialect-specific literal string.
+-- Special values (NaN, ±Infinity) use dialect-specific syntax.
+formatLispFloat :: TTermDefinition (L.Dialect -> Double -> String)
+formatLispFloat = define "formatLispFloat" $
+  lambda "d" $ lambda "v" $
+    "s" <~ Literals.showBigfloat (var "v") $
+    Logic.ifElse (Equality.equal (var "s") (string "NaN"))
+      (cases L._Dialect (var "d") Nothing [
+        L._Dialect_clojure>>: constant $ string "Double/NaN",
+        L._Dialect_scheme>>: constant $ string "+nan.0",
+        L._Dialect_commonLisp>>: constant $ string "+hydra-nan+",
+        L._Dialect_emacsLisp>>: constant $ string "0.0e+NaN"]) $
+    Logic.ifElse (Equality.equal (var "s") (string "Infinity"))
+      (cases L._Dialect (var "d") Nothing [
+        L._Dialect_clojure>>: constant $ string "Double/POSITIVE_INFINITY",
+        L._Dialect_scheme>>: constant $ string "+inf.0",
+        L._Dialect_commonLisp>>: constant $ string "+hydra-pos-inf+",
+        L._Dialect_emacsLisp>>: constant $ string "1.0e+INF"]) $
+    Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
+      (cases L._Dialect (var "d") Nothing [
+        L._Dialect_clojure>>: constant $ string "Double/NEGATIVE_INFINITY",
+        L._Dialect_scheme>>: constant $ string "-inf.0",
+        L._Dialect_commonLisp>>: constant $ string "+hydra-neg-inf+",
+        L._Dialect_emacsLisp>>: constant $ string "-1.0e+INF"])
+      (var "s")
+
 -- | Serialize a literal value
 literalToExpr :: TTermDefinition (L.Dialect -> L.Literal -> Expr)
 literalToExpr = define "literalToExpr" $
@@ -651,7 +679,7 @@ literalToExpr = define "literalToExpr" $
       L._Literal_integer>>: lambda "i" $
         Serialization.cst @@ (Literals.showBigint (project L._IntegerLiteral L._IntegerLiteral_value @@ var "i")),
       L._Literal_float>>: lambda "f" $
-        Serialization.cst @@ (Literals.showBigfloat (project L._FloatLiteral L._FloatLiteral_value @@ var "f")),
+        Serialization.cst @@ (formatLispFloat @@ var "d" @@ (project L._FloatLiteral L._FloatLiteral_value @@ var "f")),
       L._Literal_string>>: lambda "s" $
         -- Escape backslashes first, then control characters and double-quotes.
         -- Common Lisp does not support \n, \t, \r escape sequences in strings,

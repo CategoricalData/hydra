@@ -107,12 +107,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.avro.encoder"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [ExtractCore.ns, Strip.ns]
     (avroEnvironmentNs:AvroSchema.ns:jsonModelNs:KernelTypes.kernelTypesNamespaces) $
     Just "Hydra-to-Avro encoder: converts Hydra types and terms to Avro schemas and JSON values"
   where
-    elements = [
+    definitions = [
       toDefinition buildAvroField,
       toDefinition emptyEncodeEnvironment,
       toDefinition encodeType,
@@ -471,7 +471,7 @@ integerAdapter = define "integerAdapter" $
                 _Literal_integer>>: lambda "iv" $ right (inject JM._Value JM._Value_number (integerValueToDouble @@ var "iv"))]])
         @@ (lambda "_cx" $ lambda "j" $
           cases JM._Value (var "j") Nothing [
-            JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt64 (Literals.bigintToInt64 (Math.truncate (Literals.bigfloatToFloat64 (var "d")))))))])) [
+            JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt64 (Literals.bigintToInt64 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 (var "d")))))))))])) [
     _IntegerType_int32>>: constant $
       var "simple"
         @@ inject Avro._Schema Avro._Schema_primitive (injectUnit Avro._Primitive Avro._Primitive_int)
@@ -481,7 +481,7 @@ integerAdapter = define "integerAdapter" $
             (ExtractCore.int32 @@ var "cx" @@ Graph.emptyGraph @@ var "t"))
         @@ (lambda "_cx" $ lambda "j" $
           cases JM._Value (var "j") Nothing [
-            JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt32 (Literals.bigintToInt32 (Math.truncate (Literals.bigfloatToFloat64 (var "d")))))))]),
+            JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt32 (Literals.bigintToInt32 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 (var "d")))))))))]),
     _IntegerType_int64>>: constant $
       var "simple"
         @@ inject Avro._Schema Avro._Schema_primitive (injectUnit Avro._Primitive Avro._Primitive_long)
@@ -491,7 +491,7 @@ integerAdapter = define "integerAdapter" $
             (ExtractCore.int64 @@ var "cx" @@ Graph.emptyGraph @@ var "t"))
         @@ (lambda "_cx" $ lambda "j" $
           cases JM._Value (var "j") Nothing [
-            JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt64 (Literals.bigintToInt64 (Math.truncate (Literals.bigfloatToFloat64 (var "d")))))))])]
+            JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt64 (Literals.bigintToInt64 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 (var "d")))))))))])]
 
 integerValueToDouble :: TTermDefinition (IntegerValue -> Double)
 integerValueToDouble = define "integerValueToDouble" $

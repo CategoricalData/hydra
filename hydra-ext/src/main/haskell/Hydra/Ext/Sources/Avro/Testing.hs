@@ -28,10 +28,10 @@ local :: String -> Type
 local = typeref ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [] [Core.ns, AvroSchema.ns, JsonModel.ns] $
+module_ = Module ns (map toTypeDef definitions) [] [Core.ns, AvroSchema.ns, JsonModel.ns] $
     Just "Test case types for the bidirectional Avro coder"
   where
-    elements = [
+    definitions = [
       typeLevelForwardTestCase,
       typeLevelReverseTestCase,
       typeLevelRoundTripAvroTestCase,

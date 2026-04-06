@@ -93,7 +93,7 @@ ns :: Namespace
 ns = Namespace "hydra.ext.haskell.serde"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Constants.ns, Serialization.ns, HaskellOperators.ns]
     (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just ("Haskell operator precendence and associativity are drawn from:\n"
@@ -102,7 +102,7 @@ module_ = Module ns elements
       <> "Operator names are drawn (loosely) from:\n"
       <> "https://stackoverflow.com/questions/7746894/are-there-pronounceable-names-for-common-haskell-operators")
   where
-    elements = [
+    definitions = [
       toDefinition alternativeToExpr,
       toDefinition applicationExpressionToExpr,
       toDefinition applicationPatternToExpr,
@@ -441,6 +441,14 @@ lambdaExpressionToExpr = haskellSerdeDefinition "lambdaExpressionToExpr" $
 --      H._Literal_string>>: lambda "s" $ Literals.showString $ var "s"]
 
 
+-- KNOWN LIMITATION: when generating Haskell source from Double/Float values,
+-- NaN and Infinity come through as "NaN"/"Infinity"/"-Infinity" (from Haskell's Show),
+-- which are not valid Haskell literals. The gen-main/haskell/Hydra/Ext/Haskell/Serde.hs
+-- includes a bootstrap patch that emits (0/0), (1/0), and (-1/0) in those cases.
+-- If this DSL source is regenerated, the patch in the generated Serde.hs MUST be
+-- restored via bin/patch-haskell-serde.sh — otherwise test-suite generation will
+-- emit uncompilable Haskell for primitives that produce NaN/Inf outputs.
+-- See feature_312_float_tests.
 literalToExpr :: TTermDefinition (H.Literal -> Expr)
 literalToExpr = haskellSerdeDefinition "literalToExpr" $
   doc "Convert a literal value to an AST expression" $

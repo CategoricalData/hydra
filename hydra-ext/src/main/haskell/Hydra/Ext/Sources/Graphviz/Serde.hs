@@ -90,12 +90,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.graphviz.serde"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Serialization.ns]
     (DotSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Serialization functions for converting Graphviz DOT AST to abstract expressions"
   where
-    elements = [
+    definitions = [
       toDefinition writeAttrList,
       toDefinition writeAttrStmt,
       toDefinition writeAttrType,

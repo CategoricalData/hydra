@@ -59,12 +59,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     []
     kernelTypesNamespaces $
     Just ("Evaluation-level implementations of Math functions for the Hydra interpreter.")
   where
-    elements = [
+    definitions = [
       toDefinition even_,
       toDefinition odd_,
       toDefinition pred_,
@@ -79,10 +79,10 @@ even_ = define "even" $
   "x" ~>
   right $ Core.termApplication $ Core.application
     (Core.termApplication $ Core.application
-      (Core.termFunction $ Core.functionPrimitive $ encodedName _equality_equal)
+      (Core.termVariable $ encodedName _equality_equal)
       (Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
-          (Core.termFunction $ Core.functionPrimitive $ encodedName _math_mod)
+          (Core.termVariable $ encodedName _math_mod)
           (var "x"))
         (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ MetaLiterals.int32 2)))
     (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ MetaLiterals.int32 0)
@@ -95,9 +95,9 @@ odd_ = define "odd" $
   "cx" ~> "g" ~>
   "x" ~>
   right $ Core.termApplication $ Core.application
-    (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_not)
+    (Core.termVariable $ encodedName _logic_not)
     (Core.termApplication $ Core.application
-      (Core.termFunction $ Core.functionPrimitive $ encodedName _math_even)
+      (Core.termVariable $ encodedName _math_even)
       (var "x"))
 
 -- | Interpreter-friendly predecessor.
@@ -109,7 +109,7 @@ pred_ = define "pred" $
   "x" ~>
   right $ Core.termApplication $ Core.application
     (Core.termApplication $ Core.application
-      (Core.termFunction $ Core.functionPrimitive $ encodedName _math_sub)
+      (Core.termVariable $ encodedName _math_sub)
       (var "x"))
     (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ MetaLiterals.int32 1)
 
@@ -128,6 +128,6 @@ succ_ = define "succ" $
   "x" ~>
   right $ Core.termApplication $ Core.application
     (Core.termApplication $ Core.application
-      (Core.termFunction $ Core.functionPrimitive $ encodedName _math_add)
+      (Core.termVariable $ encodedName _math_add)
       (var "x"))
     (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ MetaLiterals.int32 1)

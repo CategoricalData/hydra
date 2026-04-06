@@ -90,12 +90,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.pegasus.serde"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Formatting.ns, Serialization.ns]
     (PdlSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Serialization functions for converting Pegasus PDL AST to abstract expressions"
   where
-    elements = [
+    definitions = [
       toDefinition exprAnnotations,
       toDefinition exprEnumField,
       toDefinition exprImport,

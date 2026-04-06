@@ -94,12 +94,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [JsonEncode.ns, YamlModel.ns]
     KernelTypes.kernelTypesNamespaces $
     Just "JSON-to-YAML encoding. Converts JSON Values to YAML Nodes (always succeeds), and Hydra Terms to YAML Nodes via JSON."
   where
-    elements = [
+    definitions = [
       toDefinition jsonToYaml,
       toDefinition toYaml]
 
@@ -134,8 +134,8 @@ jsonToYaml = define "jsonToYaml" $
       Yaml.nodeScalar $ Yaml.scalarStr $ var "s"]
 
 -- | Encode a Hydra Term to a YAML Node via JSON.
-toYaml :: TTermDefinition (Term -> Either String YM.Node)
+toYaml :: TTermDefinition (M.Map Name Type -> Name -> Type -> Term -> Either String YM.Node)
 toYaml = define "toYaml" $
   doc "Encode a Hydra term to a YAML node via JSON encoding." $
-  "term" ~>
-  Eithers.map ("v" ~> jsonToYaml @@ var "v") (JsonEncode.toJson @@ var "term")
+  "types" ~> "tname" ~> "typ" ~> "term" ~>
+  Eithers.map ("v" ~> jsonToYaml @@ var "v") (JsonEncode.toJson @@ var "types" @@ var "tname" @@ var "typ" @@ var "term")
