@@ -23,6 +23,22 @@ import qualified Hydra.Test.TestEnv as TestEnv/' "$TESTGRAPH"
     sed -i '' 's/testContext = Lexical.emptyContext/testContext = TestEnv.testContext/' "$TESTGRAPH"
 fi
 
+# Patch NaN/Inf literals in generated Haskell test files.
+# Java and Python hosts emit "NaN", "Infinity", "(-Infinity)" which are not valid
+# Haskell literals. Replace with arithmetic expressions that evaluate to IEEE 754
+# special values. The Haskell host avoids this via patch-haskell-serde.sh.
+echo "Patching NaN/Inf in generated Haskell..."
+GEN_TEST_DIR="$OUTPUT_DIR/src/gen-test/haskell"
+if [ -d "$GEN_TEST_DIR" ]; then
+    find "$GEN_TEST_DIR" -name '*.hs' -exec grep -l 'NaN\|Infinity' {} \; | while read f; do
+        sed -i '' \
+            -e 's/ NaN)/ (0\/0))/g' \
+            -e 's/ Infinity)/ (1\/0))/g' \
+            -e 's/ (-Infinity))/ ((-1)\/0))/g' \
+            "$f"
+    done
+fi
+
 echo "Building Haskell target..."
 cd "$OUTPUT_DIR"
 stack build 2>&1

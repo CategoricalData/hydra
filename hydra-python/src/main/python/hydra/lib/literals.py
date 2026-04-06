@@ -11,6 +11,11 @@ def _format_float_like_haskell(x: float) -> str:
     Haskell uses exponential notation for small numbers (abs < 0.1, except 0).
     Uses repr() for full round-trip precision in all cases.
     """
+    import math
+    if math.isnan(x):
+        return "NaN"
+    if math.isinf(x):
+        return "-Infinity" if x < 0 else "Infinity"
     if x == 0.0:
         return "0.0"
 
@@ -310,7 +315,11 @@ def show_boolean(b: bool) -> str:
 
 def show_float32(x: float) -> str:
     """Convert a float32 (Float) to string."""
-    import struct
+    import struct, math
+    if math.isnan(x):
+        return "NaN"
+    if math.isinf(x):
+        return "-Infinity" if x < 0 else "Infinity"
     # Round-trip through float32 to get proper precision
     f32_bytes = struct.pack('f', x)
     f32 = struct.unpack('f', f32_bytes)[0]
