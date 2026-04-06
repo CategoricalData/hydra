@@ -37,12 +37,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.testGraph"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [TestTerms.ns, TestTypes.ns, Lexical.ns]
     kernelTypesNamespaces $
     Just ("A module defining the graph used in the test suite.")
   where
-   elements = [
+   definitions = [
      Phantoms.toDefinition testTerms,
      Phantoms.toDefinition testTypes,
      Phantoms.toDefinition testNamespace,

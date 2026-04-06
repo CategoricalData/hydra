@@ -1,7 +1,9 @@
 package hydra.pg.dsl;
 
 import hydra.pg.model.PropertyKey;
-import hydra.util.PersistentMap;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Abstract base class for building property graph elements (vertices or edges) with properties.
@@ -11,7 +13,7 @@ import hydra.util.PersistentMap;
  * @param <B> the concrete builder type (for fluent API)
  */
 public abstract class ElementBuilder<V, S, B extends ElementBuilder<V, S, B>> {
-    protected PersistentMap<PropertyKey, V> properties = PersistentMap.empty();
+    protected Map<PropertyKey, V> properties = new HashMap<>();
 
     /**
      * Returns the concrete builder instance for fluent method chaining.
@@ -35,7 +37,7 @@ public abstract class ElementBuilder<V, S, B extends ElementBuilder<V, S, B>> {
      * @return this builder instance for fluent chaining
      */
     public B property(String key, V value) {
-        properties = properties.insert(new PropertyKey(key), value);
+        properties.put(new PropertyKey(key), value);
         return getThis();
     }
 }

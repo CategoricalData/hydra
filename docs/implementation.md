@@ -36,11 +36,11 @@ organization rather than abstract foundations.
 ## Architecture overview
 
 Hydra is a **strongly-typed functional programming language that executes in multiple language environments**.
-By design, developers can write Hydra source code in any of the supported host languages (Java, Python, Haskell)
-and cross-compile it to any other supported language.
+By design, developers can write Hydra source code in any of the supported host languages
+(Haskell, Java, Python, Scala, Lisp) and cross-compile it to any other supported language.
 [Hydra-Haskell](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell) serves as the source of truth
 for the **Hydra kernel** (the core type system and transformation infrastructure), but Hydra programs themselves
-can be written and executed in Java, Python, or any other supported implementation.
+can be written and executed in Java, Python, Scala, Lisp, or any other supported implementation.
 
 The implementation follows a layered architecture:
 
@@ -72,7 +72,7 @@ The implementation follows a layered architecture:
 ┌──────────────────────────────────────────────────────────────┐
 │         Coders (Cross-Language Transformations)              │
 │  Transform Hydra modules between language implementations    │
-│  Location: hydra-ext/src/main/haskell/Hydra/Ext/Staging/     │
+│  Location: hydra-ext/src/main/haskell/Hydra/Ext/     │
 │  Enable: Write in Java, compile to Python (or vice versa)    │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -175,13 +175,13 @@ import Hydra.Dsl.Types as Types
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 module_ :: Module
-module_ = Module ns elements termDeps typeDeps (Just description)
+module_ = Module ns (map toTypeDef definitions) termDeps typeDeps (Just description)
   where
     ns = Namespace "hydra.namespace"
     core = typeref $ moduleNamespace Core.module_
     def = datatype ns
 
-    elements = [
+    definitions = [
       def "TypeName1" $ doc "Description" $ definition1,
       def "TypeName2" $ doc "Description" $ definition2,
       -- ...
@@ -456,7 +456,7 @@ Here's a complete example showing DSL usage in type inference:
 
 ```haskell
 -- From Hydra.Sources.Kernel.Terms.Inference
-inferTypeOfEitherDef :: TBinding (InferenceContext -> Either Term Term -> Flow s InferenceResult)
+inferTypeOfEither :: TTermDefinition (Context -> Graph -> Either Term Term -> Either (InContext Error) InferenceResult)
 inferTypeOfEitherDef = define "inferTypeOfEither" $
   doc "Infer the type of an Either term" $
   "cx" ~> "e" ~>
@@ -759,7 +759,7 @@ to write Hydra code in their preferred language and compile it to any other supp
 ### Coder locations
 
 ```
-hydra-ext/src/main/haskell/Hydra/Ext/Staging/
+hydra-ext/src/main/haskell/Hydra/Ext/
 ├── Java/           # Full OOP with generics
 ├── Python/         # Dynamic with dataclasses
 ├── Cpp/            # Systems language with templates
@@ -1225,7 +1225,7 @@ See the
 [Extending Hydra Core recipe](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/extending-hydra-core.md).
 
 **Target languages**: Add support for new programming languages by implementing a coder (term/type encoding),
-serializer (AST to text), and language constraint definitions in `hydra-ext/src/main/haskell/Hydra/Ext/Staging/`.
+serializer (AST to text), and language constraint definitions in `hydra-ext/src/main/haskell/Hydra/Ext/`.
 
 **Standard libraries**: Create new library modules by defining types in `Sources/Kernel/Types/`,
 implementing native functions in `Lib/`, registering primitives, and creating DSL wrappers.
@@ -1274,7 +1274,7 @@ implementing native functions in `Lib/`, registering primitives, and creating DS
 
 ### Code generators
 
-[`hydra-ext/src/main/haskell/Hydra/Ext/Staging/`](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/src/main/haskell/Hydra/Ext/Staging)
+[`hydra-ext/src/main/haskell/Hydra/Ext/`](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/src/main/haskell/Hydra/Ext)
 ```
 ├── Java/               # Java coder
 ├── Python/             # Python coder

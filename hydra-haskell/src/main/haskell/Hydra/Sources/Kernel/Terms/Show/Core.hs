@@ -58,12 +58,12 @@ ns :: Namespace
 ns = Namespace "hydra.show.core"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     []
     kernelTypesNamespaces $
     Just "String representations of hydra.core types"
   where
-   elements = [
+   definitions = [
      toDefinition readTerm, -- TODO: move this to hydra.read.core
      toDefinition binding,
      toDefinition elimination,

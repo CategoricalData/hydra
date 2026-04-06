@@ -8,8 +8,6 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Pair;
 
-import hydra.util.ConsList;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -43,7 +41,7 @@ public class PartitionEithers extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((ConsList<hydra.util.Either<Term, Term>> eithers) -> {
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((java.util.List<hydra.util.Either<Term, Term>> eithers) -> {
                 ArrayList<Term> lefts = new ArrayList<>();
                 ArrayList<Term> rights = new ArrayList<>();
                 for (hydra.util.Either<Term, Term> e : eithers) {
@@ -61,7 +59,7 @@ public class PartitionEithers extends PrimitiveFunction {
                         }
                     });
                 }
-                return Terms.pair(new Term.List(ConsList.fromList(lefts)), new Term.List(ConsList.fromList(rights)));
+                return Terms.pair(new Term.List(lefts), new Term.List(rights));
             }, hydra.extract.Core.listOf(cx, arg -> hydra.extract.Core.eitherTerm(cx, t -> Either.right(t), t -> Either.right(t), graph, arg), graph, args.get(0)));
     }
 
@@ -73,7 +71,7 @@ public class PartitionEithers extends PrimitiveFunction {
      * @param eithers the list of Either values to partition
      * @return a tuple containing the list of Left values and the list of Right values
      */
-    public static <A, B> Pair<ConsList<A>, ConsList<B>> apply(ConsList<hydra.util.Either<A, B>> eithers) {
+    public static <A, B> Pair<List<A>, List<B>> apply(List<hydra.util.Either<A, B>> eithers) {
         ArrayList<A> lefts = new ArrayList<>();
         ArrayList<B> rights = new ArrayList<>();
         for (hydra.util.Either<A, B> either : eithers) {
@@ -83,6 +81,6 @@ public class PartitionEithers extends PrimitiveFunction {
                 rights.add(((hydra.util.Either.Right<A, B>) either).value);
             }
         }
-        return new Pair<>(ConsList.fromList(lefts), ConsList.fromList(rights));
+        return new Pair<>(lefts, rights);
     }
 }

@@ -8,9 +8,8 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.PersistentMap;
-
 import java.util.Collections;
+import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -58,7 +57,7 @@ public class Empty extends PrimitiveFunction {
      * @param <V> the value type
      * @return the empty map
      */
-    public static <K, V> PersistentMap<K, V> apply() {
-        return PersistentMap.empty();
+    public static <K, V> Map<K, V> apply() {
+        return Collections.emptyMap();
     }
 }

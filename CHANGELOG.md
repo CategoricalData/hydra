@@ -10,6 +10,20 @@ The format is inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- **Java: standard collection interfaces in generated code** (#313).
+  Generated Java classes now use `java.util.List`, `java.util.Map`, and `java.util.Set`
+  in field types and constructor parameters, instead of the internal `ConsList`,
+  `PersistentMap`, and `PersistentSet` classes.
+  The internal classes remain available in `hydra.util` for use by primitive implementations.
+  Generated `compareTo` methods use `hydra.util.Comparing.compare()` for safe comparison
+  of collection-typed fields.
+
+---
+
 ## [0.14.0] - 2026-03-29
 
 Major release adding four new complete Hydra implementations — Scala (#273),

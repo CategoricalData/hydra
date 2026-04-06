@@ -77,7 +77,7 @@ ns :: Namespace
 ns = Namespace "hydra.ext.protobuf.coder"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [moduleNamespace ProtobufSerdeSource.module_, moduleNamespace ProtobufLanguageSource.module_,
       Formatting.ns, Names.ns, Rewriting.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Lexical.ns, Serialization.ns,
       Annotations.ns, Constants.ns, ExtractCore.ns, Adapt.ns, ShowCore.ns, ShowError.ns,
@@ -85,7 +85,7 @@ module_ = Module ns elements
     (ProtobufEnvironment.ns:Proto3Syntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Protobuf code generator: converts Hydra modules to Protocol Buffers v3 definitions"
   where
-    elements = [
+    definitions = [
       toDefinition key_proto_field_index,
       toDefinition err,
       toDefinition unexpectedE,

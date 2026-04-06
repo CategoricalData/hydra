@@ -87,6 +87,11 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+# Apply bootstrap patch for NaN/Inf emission in Haskell serde
+echo ""
+echo "Applying Haskell serde bootstrap patch (NaN/Inf)..."
+bash "$SCRIPT_DIR/patch-haskell-serde.sh"
+
 # Rebuild to pick up newly generated kernel files
 echo ""
 echo "Rebuilding..."
@@ -160,6 +165,11 @@ if [ $? -ne 0 ]; then
     echo "ERROR: Kernel regeneration failed"
     exit 1
 fi
+
+# Reapply bootstrap patch after kernel regeneration
+echo ""
+echo "Reapplying Haskell serde bootstrap patch (NaN/Inf)..."
+bash "$SCRIPT_DIR/patch-haskell-serde.sh"
 
 # Rebuild with the final kernel
 echo ""

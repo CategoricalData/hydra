@@ -842,7 +842,7 @@ object Libraries:
       s"$ns.atanh" -> mkPrimImpl(s"$ns.atanh", tMono(tFun(tFloat64, tFloat64)),
         impl1(a => mkFloat64(math.atanh(exFloat64(a))))),
       s"$ns.ceiling" -> mkPrimImpl(s"$ns.ceiling", tMono(tFun(tFloat64, tBigint)),
-        impl1(a => mkBigint(math.ceiling(exFloat64(a))))),
+        impl1(a => mkFloat64(math.ceiling(exFloat64(a))))),
       s"$ns.cos" -> mkPrimImpl(s"$ns.cos", tMono(tFun(tFloat64, tFloat64)),
         impl1(a => mkFloat64(math.cos(exFloat64(a))))),
       s"$ns.cosh" -> mkPrimImpl(s"$ns.cosh", tMono(tFun(tFloat64, tFloat64)),
@@ -852,7 +852,7 @@ object Libraries:
       s"$ns.exp" -> mkPrimImpl(s"$ns.exp", tMono(tFun(tFloat64, tFloat64)),
         impl1(a => mkFloat64(math.exp(exFloat64(a))))),
       s"$ns.floor" -> mkPrimImpl(s"$ns.floor", tMono(tFun(tFloat64, tBigint)),
-        impl1(a => mkBigint(math.floor(exFloat64(a))))),
+        impl1(a => mkFloat64(math.floor(exFloat64(a))))),
       s"$ns.log" -> mkPrimImpl(s"$ns.log", tMono(tFun(tFloat64, tFloat64)),
         impl1(a => mkFloat64(math.log(exFloat64(a))))),
       s"$ns.logBase" -> mkPrimImpl(s"$ns.logBase", tMono(tFun(tFloat64, tFun(tFloat64, tFloat64))),
@@ -862,7 +862,7 @@ object Libraries:
       s"$ns.pow" -> mkPrimImpl(s"$ns.pow", tMono(tFun(tFloat64, tFun(tFloat64, tFloat64))),
         impl2((a, b) => mkFloat64(math.pow(exFloat64(a))(exFloat64(b))))),
       s"$ns.round" -> mkPrimImpl(s"$ns.round", tMono(tFun(tFloat64, tBigint)),
-        impl1(a => mkBigint(math.round(exFloat64(a))))),
+        impl1(a => mkFloat64(math.round(exFloat64(a))))),
       s"$ns.roundBigfloat" -> mkPrimImpl(s"$ns.roundBigfloat", tMono(tFun(tInt32, tFun(tBigfloat, tBigfloat))),
         impl2((p, x) => mkBigfloat(math.roundBigfloat(exInt32(p))(exBigfloat(x))))),
       s"$ns.roundFloat32" -> mkPrimImpl(s"$ns.roundFloat32", tMono(tFun(tInt32, tFun(tFloat32, tFloat32))),
@@ -880,7 +880,7 @@ object Libraries:
       s"$ns.tanh" -> mkPrimImpl(s"$ns.tanh", tMono(tFun(tFloat64, tFloat64)),
         impl1(a => mkFloat64(math.tanh(exFloat64(a))))),
       s"$ns.truncate" -> mkPrimImpl(s"$ns.truncate", tMono(tFun(tFloat64, tBigint)),
-        impl1(a => mkBigint(math.truncate(exFloat64(a))))),
+        impl1(a => mkFloat64(math.truncate(exFloat64(a))))),
     )
 
   // ===== Maybes primitives =====

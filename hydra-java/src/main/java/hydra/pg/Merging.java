@@ -17,9 +17,6 @@ import hydra.pg.model.Vertex;
 import hydra.pg.model.VertexLabel;
 import hydra.pg.model.VertexType;
 
-import hydra.util.ConsList;
-import hydra.util.PersistentMap;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -182,7 +179,7 @@ public class Merging {
      */
     private static <V> Either<String, V> applyCoderEncode(StatelessCoder<V, V> coder, V value) {
         hydra.context.Context cx = new hydra.context.Context(
-            hydra.util.ConsList.empty(), hydra.util.ConsList.empty(), hydra.util.PersistentMap.empty());
+            new ArrayList<>(), new ArrayList<>(), new HashMap<>());
         hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, V> result = coder.encode.apply(cx).apply(value);
         if (result.isRight()) {
             return Either.right(((Either.Right<hydra.context.InContext<hydra.errors.Error_>, V>) result).value);
@@ -196,7 +193,7 @@ public class Merging {
      */
     private static <V> Either<String, V> applyCoderDecode(StatelessCoder<V, V> coder, V value) {
         hydra.context.Context cx = new hydra.context.Context(
-            hydra.util.ConsList.empty(), hydra.util.ConsList.empty(), hydra.util.PersistentMap.empty());
+            new ArrayList<>(), new ArrayList<>(), new HashMap<>());
         hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, V> result = coder.decode.apply(cx).apply(value);
         if (result.isRight()) {
             return Either.right(((Either.Right<hydra.context.InContext<hydra.errors.Error_>, V>) result).value);
@@ -209,27 +206,27 @@ public class Merging {
         VertexType<T> type,
         IdAdapters<T, V> idAdapters,
         Set<PropertyKey> unifiedPropertyKeys) {
-        StatelessCoder<PersistentMap<PropertyKey, V>, PersistentMap<PropertyKey, V>> propertiesCoder
+        StatelessCoder<Map<PropertyKey, V>, Map<PropertyKey, V>> propertiesCoder
             = constructPropertiesCoder(type.label.value, unifiedPropertyKeys);
 
         return new StatelessCoder<Vertex<V>, Vertex<V>>(
             v -> {
                 Either<String, V> idResult = applyCoderEncode(idAdapters.forVertexId.apply(type.label), v.id);
                 if (idResult.isLeft()) return Either.left(((Either.Left<String, V>) idResult).value);
-                Either<String, PersistentMap<PropertyKey, V>> propsResult = applyCoderEncode(propertiesCoder, v.properties);
-                if (propsResult.isLeft()) return Either.left(((Either.Left<String, PersistentMap<PropertyKey, V>>) propsResult).value);
+                Either<String, Map<PropertyKey, V>> propsResult = applyCoderEncode(propertiesCoder, v.properties);
+                if (propsResult.isLeft()) return Either.left(((Either.Left<String, Map<PropertyKey, V>>) propsResult).value);
                 return Either.right(new Vertex<V>(v.label,
                     ((Either.Right<String, V>) idResult).value,
-                    ((Either.Right<String, PersistentMap<PropertyKey, V>>) propsResult).value));
+                    ((Either.Right<String, Map<PropertyKey, V>>) propsResult).value));
             },
             v -> {
                 Either<String, V> idResult = applyCoderDecode(idAdapters.forVertexId.apply(type.label), v.id);
                 if (idResult.isLeft()) return Either.left(((Either.Left<String, V>) idResult).value);
-                Either<String, PersistentMap<PropertyKey, V>> propsResult = applyCoderDecode(propertiesCoder, v.properties);
-                if (propsResult.isLeft()) return Either.left(((Either.Left<String, PersistentMap<PropertyKey, V>>) propsResult).value);
+                Either<String, Map<PropertyKey, V>> propsResult = applyCoderDecode(propertiesCoder, v.properties);
+                if (propsResult.isLeft()) return Either.left(((Either.Left<String, Map<PropertyKey, V>>) propsResult).value);
                 return Either.right(new Vertex<V>(v.label,
                     ((Either.Right<String, V>) idResult).value,
-                    ((Either.Right<String, PersistentMap<PropertyKey, V>>) propsResult).value));
+                    ((Either.Right<String, Map<PropertyKey, V>>) propsResult).value));
             });
     }
 
@@ -237,7 +234,7 @@ public class Merging {
         EdgeType<T> type,
         IdAdapters<T, V> idAdapters,
         Set<PropertyKey> unifiedPropertyKeys) {
-        StatelessCoder<PersistentMap<PropertyKey, V>, PersistentMap<PropertyKey, V>> propertiesCoder
+        StatelessCoder<Map<PropertyKey, V>, Map<PropertyKey, V>> propertiesCoder
             = constructPropertiesCoder(type.label.value, unifiedPropertyKeys);
 
         return new StatelessCoder<Edge<V>, Edge<V>>(
@@ -248,13 +245,13 @@ public class Merging {
                 if (outResult.isLeft()) return Either.left(((Either.Left<String, V>) outResult).value);
                 Either<String, V> inResult = applyCoderEncode(idAdapters.forVertexId.apply(type.in), e.in);
                 if (inResult.isLeft()) return Either.left(((Either.Left<String, V>) inResult).value);
-                Either<String, PersistentMap<PropertyKey, V>> propsResult = applyCoderEncode(propertiesCoder, e.properties);
-                if (propsResult.isLeft()) return Either.left(((Either.Left<String, PersistentMap<PropertyKey, V>>) propsResult).value);
+                Either<String, Map<PropertyKey, V>> propsResult = applyCoderEncode(propertiesCoder, e.properties);
+                if (propsResult.isLeft()) return Either.left(((Either.Left<String, Map<PropertyKey, V>>) propsResult).value);
                 return Either.right(new Edge<V>(e.label,
                     ((Either.Right<String, V>) idResult).value,
                     ((Either.Right<String, V>) outResult).value,
                     ((Either.Right<String, V>) inResult).value,
-                    ((Either.Right<String, PersistentMap<PropertyKey, V>>) propsResult).value));
+                    ((Either.Right<String, Map<PropertyKey, V>>) propsResult).value));
             },
             e -> {
                 Either<String, V> idResult = applyCoderDecode(idAdapters.forEdgeId.apply(type.label), e.id);
@@ -263,36 +260,36 @@ public class Merging {
                 if (outResult.isLeft()) return Either.left(((Either.Left<String, V>) outResult).value);
                 Either<String, V> inResult = applyCoderDecode(idAdapters.forVertexId.apply(type.in), e.in);
                 if (inResult.isLeft()) return Either.left(((Either.Left<String, V>) inResult).value);
-                Either<String, PersistentMap<PropertyKey, V>> propsResult = applyCoderDecode(propertiesCoder, e.properties);
-                if (propsResult.isLeft()) return Either.left(((Either.Left<String, PersistentMap<PropertyKey, V>>) propsResult).value);
+                Either<String, Map<PropertyKey, V>> propsResult = applyCoderDecode(propertiesCoder, e.properties);
+                if (propsResult.isLeft()) return Either.left(((Either.Left<String, Map<PropertyKey, V>>) propsResult).value);
                 return Either.right(new Edge<V>(e.label,
                     ((Either.Right<String, V>) idResult).value,
                     ((Either.Right<String, V>) outResult).value,
                     ((Either.Right<String, V>) inResult).value,
-                    ((Either.Right<String, PersistentMap<PropertyKey, V>>) propsResult).value));
+                    ((Either.Right<String, Map<PropertyKey, V>>) propsResult).value));
             });
     }
 
-    private static <V> StatelessCoder<PersistentMap<PropertyKey, V>, PersistentMap<PropertyKey, V>> constructPropertiesCoder(
+    private static <V> StatelessCoder<Map<PropertyKey, V>, Map<PropertyKey, V>> constructPropertiesCoder(
         String label,
         Set<PropertyKey> unifiedPropertyKeys) {
-        Function<PersistentMap<PropertyKey, V>, Either<String, PersistentMap<PropertyKey, V>>> encode = before -> {
-            PersistentMap<PropertyKey, V> after = PersistentMap.empty();
+        Function<Map<PropertyKey, V>, Either<String, Map<PropertyKey, V>>> encode = before -> {
+            Map<PropertyKey, V> after = new HashMap<>();
             for (Map.Entry<PropertyKey, V> entry : before.entrySet()) {
-                after = after.insert(encodePropertyKey(label, entry.getKey(), unifiedPropertyKeys), entry.getValue());
+                after.put(encodePropertyKey(label, entry.getKey(), unifiedPropertyKeys), entry.getValue());
             }
             return Either.right(after);
         };
 
-        Function<PersistentMap<PropertyKey, V>, Either<String, PersistentMap<PropertyKey, V>>> decode = before -> {
-            PersistentMap<PropertyKey, V> after = PersistentMap.empty();
+        Function<Map<PropertyKey, V>, Either<String, Map<PropertyKey, V>>> decode = before -> {
+            Map<PropertyKey, V> after = new HashMap<>();
             for (Map.Entry<PropertyKey, V> entry : before.entrySet()) {
-                after = after.insert(decodePropertyKey(label, entry.getKey(), unifiedPropertyKeys), entry.getValue());
+                after.put(decodePropertyKey(label, entry.getKey(), unifiedPropertyKeys), entry.getValue());
             }
             return Either.right(after);
         };
 
-        return new StatelessCoder<PersistentMap<PropertyKey, V>, PersistentMap<PropertyKey, V>>(encode, decode);
+        return new StatelessCoder<Map<PropertyKey, V>, Map<PropertyKey, V>>(encode, decode);
     }
 
     private static <V, T, L> Map<L, StatelessCoder<V, V>> constructCoders(
@@ -352,7 +349,7 @@ public class Merging {
         MergedEntity<List<PropertyType<T>>> mergedProps = mergePropertyTypes(
             types, t -> t.label, l -> l.value, t -> new ArrayList<>(t.properties), unifyIdenticalTypes);
         VertexType<T> type = new VertexType<T>(DEFAULT_VERTEX_LABEL, idAdapters.mergedVertexIdType,
-            ConsList.fromList(mergedProps.entity));
+            mergedProps.entity);
         return new MergedEntity<VertexType<T>>(type, mergedProps.unifiedProperties);
     }
 
@@ -363,7 +360,7 @@ public class Merging {
             types, t -> t.label, l -> l.value, t -> new ArrayList<>(t.properties), unifyIdenticalTypes);
         EdgeType<T> type = new EdgeType<T>(DEFAULT_EDGE_LABEL, idAdapters.mergedEdgeIdType,
             DEFAULT_VERTEX_LABEL, DEFAULT_VERTEX_LABEL,
-            ConsList.fromList(mergedProps.entity));
+            mergedProps.entity);
         return new MergedEntity<EdgeType<T>>(type, mergedProps.unifiedProperties);
     }
 

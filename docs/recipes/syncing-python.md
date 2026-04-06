@@ -37,7 +37,7 @@ All Haskell tests must pass before proceeding.
 
 ## Quick sync (recommended)
 
-The simplest way to synchronize everything (Haskell, Ext, Java, and Python) is using the top-level script:
+The simplest way to synchronize everything (Haskell, Ext, Java, Python, Scala, and Lisp) is using the top-level script:
 
 ```bash
 ./bin/sync-all.sh              # from repo root; or --quick to skip tests

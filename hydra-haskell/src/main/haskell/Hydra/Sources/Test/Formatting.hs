@@ -24,12 +24,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.formatting"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [TestGraph.ns, FormattingModule.ns]
     kernelTypesNamespaces
     (Just "Test cases for string formatting and case conversion")
   where
-    elements = [
+    definitions = [
       Phantoms.toDefinition allTests,
       Phantoms.toDefinition caseConversionTests]
 

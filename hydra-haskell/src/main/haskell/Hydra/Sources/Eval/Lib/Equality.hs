@@ -58,12 +58,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     []
     kernelTypesNamespaces $
     Just ("Evaluation-level implementations of Equality functions for the Hydra interpreter.")
   where
-    elements = [
+    definitions = [
       toDefinition identity_,
       toDefinition max_,
       toDefinition min_]
@@ -87,10 +87,10 @@ max_ = define "max" $
   right $ Core.termApplication $ Core.application
     (Core.termApplication $ Core.application
       (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+        (Core.termVariable $ encodedName _logic_ifElse)
         (Core.termApplication $ Core.application
           (Core.termApplication $ Core.application
-            (Core.termFunction $ Core.functionPrimitive $ encodedName _equality_gte)
+            (Core.termVariable $ encodedName _equality_gte)
             (var "x"))
           (var "y")))
       (var "x"))
@@ -106,10 +106,10 @@ min_ = define "min" $
   right $ Core.termApplication $ Core.application
     (Core.termApplication $ Core.application
       (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+        (Core.termVariable $ encodedName _logic_ifElse)
         (Core.termApplication $ Core.application
           (Core.termApplication $ Core.application
-            (Core.termFunction $ Core.functionPrimitive $ encodedName _equality_lte)
+            (Core.termVariable $ encodedName _equality_lte)
             (var "x"))
           (var "y")))
       (var "x"))

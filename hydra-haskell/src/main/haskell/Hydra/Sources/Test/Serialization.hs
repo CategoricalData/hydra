@@ -32,12 +32,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.serialization"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Serialization.ns]
     kernelTypesNamespaces
     (Just "Test cases for AST serialization")
   where
-    elements = [
+    definitions = [
       Phantoms.toDefinition arrowOp,
       Phantoms.toDefinition gtOp,
       Phantoms.toDefinition plusOp,

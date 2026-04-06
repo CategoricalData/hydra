@@ -64,12 +64,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [ExtractCore.ns, Reduction.ns, ShowCore.ns]
     kernelTypesNamespaces $
     Just ("Evaluation-level implementations of List functions for the Hydra interpreter.")
   where
-    elements = [
+    definitions = [
       toDefinition apply_,
       toDefinition bind_,
       toDefinition concat2_,
@@ -118,7 +118,7 @@ bind_ = define "bind" $
   "listTerm" ~> "funTerm" ~>
   "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
   right $ Core.termApplication $ Core.application
-    (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat)
+    (Core.termVariable $ encodedName _lists_concat)
     (Core.termList $ Lists.map
       ("el" ~> Core.termApplication $ Core.application (var "funTerm") (var "el"))
       (var "elements"))
@@ -132,7 +132,7 @@ concat2_ = define "concat2" $
   "list1" ~> "list2" ~>
   -- Build: concat [list1, list2]
   right $ Core.termApplication $ Core.application
-    (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat)
+    (Core.termVariable $ encodedName _lists_concat)
     (Core.termList $ list [var "list1", var "list2"])
 
 -- | Interpreter-friendly dropWhile for List terms.
@@ -144,10 +144,10 @@ dropWhile_ = define "dropWhile" $
   "predTerm" ~> "listTerm" ~>
   -- Build: snd (span predTerm listTerm) - delegate to span primitive
   right $ Core.termApplication $ Core.application
-    (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_second)
+    (Core.termVariable $ encodedName _pairs_second)
     (Core.termApplication $ Core.application
       (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_span)
+        (Core.termVariable $ encodedName _lists_span)
         (var "predTerm"))
       (var "listTerm"))
 
@@ -161,12 +161,12 @@ filter_ = define "filter" $
   "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
   -- Build: concat (map (\el -> ifElse (pred el) [el] []) elements)
   right $ Core.termApplication $ Core.application
-    (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat)
+    (Core.termVariable $ encodedName _lists_concat)
     (Core.termList $ Lists.map
       ("el" ~> Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
           (Core.termApplication $ Core.application
-            (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+            (Core.termVariable $ encodedName _logic_ifElse)
             (Core.termApplication $ Core.application (var "predTerm") (var "el")))
           (Core.termList $ Lists.pure (var "el")))
         (Core.termList $ list ([] :: [TTerm Term])))
@@ -181,10 +181,10 @@ find_ = define "find" $
   "predTerm" ~> "listTerm" ~>
   -- Build: safeHead (filter predTerm listTerm) - delegate to filter and safeHead
   right $ Core.termApplication $ Core.application
-    (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_safeHead)
+    (Core.termVariable $ encodedName _lists_safeHead)
     (Core.termApplication $ Core.application
       (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_filter)
+        (Core.termVariable $ encodedName _lists_filter)
         (var "predTerm"))
       (var "listTerm"))
 
@@ -269,23 +269,23 @@ partition_ = define "partition" $
     ("acc" ~> "el" ~>
       -- Extract state components
       "yeses" <~ (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_first)
+        (Core.termVariable $ encodedName _pairs_first)
         (var "acc")) $
       "nos" <~ (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_second)
+        (Core.termVariable $ encodedName _pairs_second)
         (var "acc")) $
       -- Build ifElse (pred el) trueCase falseCase
       Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
           (Core.termApplication $ Core.application
-            (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+            (Core.termVariable $ encodedName _logic_ifElse)
             -- condition: pred el
             (Core.termApplication $ Core.application (var "predTerm") (var "el")))
           -- true branch: (append yeses [el], nos)
           (Core.termPair $ pair
             (Core.termApplication $ Core.application
               (Core.termApplication $ Core.application
-                (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat2)
+                (Core.termVariable $ encodedName _lists_concat2)
                 (var "yeses"))
               (Core.termList $ list [var "el"]))
             (var "nos")))
@@ -294,7 +294,7 @@ partition_ = define "partition" $
           (var "yeses")
           (Core.termApplication $ Core.application
             (Core.termApplication $ Core.application
-              (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat2)
+              (Core.termVariable $ encodedName _lists_concat2)
               (var "nos"))
             (Core.termList $ list [var "el"]))))
     (var "initialState")
@@ -319,12 +319,12 @@ sortOn_ = define "sortOn" $
       -- Build the split using span with predicate: \y -> lte (proj y) (proj x)
       "splitResult" <~ (Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
-          (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_span)
+          (Core.termVariable $ encodedName _lists_span)
           -- predicate lambda: \y -> lte (proj y) (proj x) -- use lte for stable sort
           (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "y") nothing $
             Core.termApplication $ Core.application
               (Core.termApplication $ Core.application
-                (Core.termFunction $ Core.functionPrimitive $ encodedName _equality_lte)
+                (Core.termVariable $ encodedName _equality_lte)
                 (Core.termApplication $ Core.application
                   (var "projTerm")
                   (Core.termVariable $ wrap _Name $ string "y")))
@@ -332,18 +332,18 @@ sortOn_ = define "sortOn" $
         (var "sorted")) $
       -- Build: concat [before, [x], after]
       "before" <~ (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_first)
+        (Core.termVariable $ encodedName _pairs_first)
         (var "splitResult")) $
       "after" <~ (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_second)
+        (Core.termVariable $ encodedName _pairs_second)
         (var "splitResult")) $
       Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
-          (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat2)
+          (Core.termVariable $ encodedName _lists_concat2)
           (var "before"))
         (Core.termApplication $ Core.application
           (Core.termApplication $ Core.application
-            (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_cons)
+            (Core.termVariable $ encodedName _lists_cons)
             (var "x"))
           (var "after")))
     (Core.termList $ list ([] :: [TTerm Term]))
@@ -373,26 +373,26 @@ span_ = define "span" $
     ("acc" ~> "el" ~>
       -- Extract state components using term-level pairs
       "takingLeft" <~ (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_first)
+        (Core.termVariable $ encodedName _pairs_first)
         (var "acc")) $
       "right" <~ (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_second)
+        (Core.termVariable $ encodedName _pairs_second)
         (var "acc")) $
       "taking" <~ (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_first)
+        (Core.termVariable $ encodedName _pairs_first)
         (var "takingLeft")) $
       "left" <~ (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_second)
+        (Core.termVariable $ encodedName _pairs_second)
         (var "takingLeft")) $
       -- Build ifElse (and taking (pred el)) trueCase falseCase
       Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
           (Core.termApplication $ Core.application
-            (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+            (Core.termVariable $ encodedName _logic_ifElse)
             -- condition: and taking (pred el)
             (Core.termApplication $ Core.application
               (Core.termApplication $ Core.application
-                (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_and)
+                (Core.termVariable $ encodedName _logic_and)
                 (var "taking"))
               (Core.termApplication $ Core.application (var "predTerm") (var "el"))))
           -- true branch: ((true, append left [el]), right)
@@ -401,7 +401,7 @@ span_ = define "span" $
               (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean True)
               (Core.termApplication $ Core.application
                 (Core.termApplication $ Core.application
-                  (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat2)
+                  (Core.termVariable $ encodedName _lists_concat2)
                   (var "left"))
                 (Core.termList $ list [var "el"])))
             (var "right")))
@@ -412,7 +412,7 @@ span_ = define "span" $
             (var "left"))
           (Core.termApplication $ Core.application
             (Core.termApplication $ Core.application
-              (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat2)
+              (Core.termVariable $ encodedName _lists_concat2)
               (var "right"))
             (Core.termList $ list [var "el"]))))
     (var "initialState")
@@ -420,12 +420,12 @@ span_ = define "span" $
   -- Extract result: (snd (fst finalState), snd finalState)
   right $ Core.termPair $ pair
     (Core.termApplication $ Core.application
-      (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_second)
+      (Core.termVariable $ encodedName _pairs_second)
       (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_first)
+        (Core.termVariable $ encodedName _pairs_first)
         (var "finalState")))
     (Core.termApplication $ Core.application
-      (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_second)
+      (Core.termVariable $ encodedName _pairs_second)
       (var "finalState"))
 
 -- | Interpreter-friendly zipWith for List terms.
@@ -456,12 +456,12 @@ elem_ = define "elem" $
   "x" ~> "listTerm" ~>
   -- Build: isJust (find (equal x) listTerm)
   right $ Core.termApplication $ Core.application
-    (Core.termFunction $ Core.functionPrimitive $ encodedName _maybes_isJust)
+    (Core.termVariable $ encodedName _maybes_isJust)
     (Core.termApplication $ Core.application
       (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_find)
+        (Core.termVariable $ encodedName _lists_find)
         (Core.termApplication $ Core.application
-          (Core.termFunction $ Core.functionPrimitive $ encodedName _equality_equal)
+          (Core.termVariable $ encodedName _equality_equal)
           (var "x")))
       (var "listTerm"))
 
@@ -479,9 +479,9 @@ group_ = define "group" $
   right $ Core.termApplication $ Core.application flushFn foldExpr
   where
     -- Helper: build a primitive application
-    prim1 n x = Core.termApplication $ Core.application (Core.termFunction $ Core.functionPrimitive $ encodedName n) x
-    prim2 n x y = Core.termApplication $ Core.application (Core.termApplication $ Core.application (Core.termFunction $ Core.functionPrimitive $ encodedName n) x) y
-    prim3 n x y z = Core.termApplication $ Core.application (Core.termApplication $ Core.application (Core.termApplication $ Core.application (Core.termFunction $ Core.functionPrimitive $ encodedName n) x) y) z
+    prim1 n x = Core.termApplication $ Core.application (Core.termVariable $ encodedName n) x
+    prim2 n x y = Core.termApplication $ Core.application (Core.termApplication $ Core.application (Core.termVariable $ encodedName n) x) y
+    prim3 n x y z = Core.termApplication $ Core.application (Core.termApplication $ Core.application (Core.termApplication $ Core.application (Core.termVariable $ encodedName n) x) y) z
     -- Helper: term-level variable
     tv s = Core.termVariable $ wrap _Name $ string s
     -- Helper: term-level lambda
@@ -535,10 +535,10 @@ intercalate_ = define "intercalate" $
   "sep" ~> "listsTerm" ~>
   -- Build: concat (intersperse sep listsTerm)
   right $ Core.termApplication $ Core.application
-    (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat)
+    (Core.termVariable $ encodedName _lists_concat)
     (Core.termApplication $ Core.application
       (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_intersperse)
+        (Core.termVariable $ encodedName _lists_intersperse)
         (var "sep"))
       (var "listsTerm"))
 
@@ -585,23 +585,23 @@ nub_ = define "nub" $
   right $ Core.termApplication $ Core.application
     (Core.termApplication $ Core.application
       (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_foldl)
+        (Core.termVariable $ encodedName _lists_foldl)
         -- fold function: \acc x -> ifElse (elem x acc) acc (concat2 acc [x])
         (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "acc") nothing $
           Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "x") nothing $
             Core.termApplication $ Core.application
               (Core.termApplication $ Core.application
                 (Core.termApplication $ Core.application
-                  (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+                  (Core.termVariable $ encodedName _logic_ifElse)
                   (Core.termApplication $ Core.application
                     (Core.termApplication $ Core.application
-                      (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_elem)
+                      (Core.termVariable $ encodedName _lists_elem)
                       (Core.termVariable $ wrap _Name $ string "x"))
                     (Core.termVariable $ wrap _Name $ string "acc")))
                 (Core.termVariable $ wrap _Name $ string "acc"))
               (Core.termApplication $ Core.application
                 (Core.termApplication $ Core.application
-                  (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat2)
+                  (Core.termVariable $ encodedName _lists_concat2)
                   (Core.termVariable $ wrap _Name $ string "acc"))
                 (Core.termList $ list [Core.termVariable $ wrap _Name $ string "x"]))))
       -- initial: []
@@ -628,12 +628,12 @@ replicate_ = define "replicate" $
   -- Build: map (\_ -> x) (range 1 n)  -- range is inclusive, so range 1 n has n elements
   right $ Core.termApplication $ Core.application
     (Core.termApplication $ Core.application
-      (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_map)
+      (Core.termVariable $ encodedName _lists_map)
       (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "_") nothing $
         var "x"))
     (Core.termApplication $ Core.application
       (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _math_range)
+        (Core.termVariable $ encodedName _math_range)
         (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ MetaLiterals.int32 1))
       (var "n"))
 
@@ -669,6 +669,6 @@ sort_ = define "sort" $
   -- Build: sortOn identity listTerm
   right $ Core.termApplication $ Core.application
     (Core.termApplication $ Core.application
-      (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_sortOn)
-      (Core.termFunction $ Core.functionPrimitive $ encodedName _equality_identity))
+      (Core.termVariable $ encodedName _lists_sortOn)
+      (Core.termVariable $ encodedName _equality_identity))
     (var "listTerm")

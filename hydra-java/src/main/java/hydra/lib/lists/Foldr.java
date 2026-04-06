@@ -8,8 +8,7 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.ConsList;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -63,7 +62,7 @@ public class Foldr extends PrimitiveFunction {
      * @param mapping the binary function (element -&gt; accumulator -&gt; accumulator)
      * @return a curried function for folding
      */
-    public static <X, Y> Function<Y, Function<ConsList<X>, Y>> apply(Function<X, Function<Y, Y>> mapping) {
+    public static <X, Y> Function<Y, Function<List<X>, Y>> apply(Function<X, Function<Y, Y>> mapping) {
         return y -> xs -> apply(mapping, y, xs);
     }
 
@@ -75,7 +74,7 @@ public class Foldr extends PrimitiveFunction {
      * @param init the initial accumulator value
      * @return a function that takes a list and returns the folded result
      */
-    public static <X, Y> Function<ConsList<X>, Y> apply(Function<X, Function<Y, Y>> mapping, Y init) {
+    public static <X, Y> Function<List<X>, Y> apply(Function<X, Function<Y, Y>> mapping, Y init) {
         return xs -> apply(mapping, init, xs);
     }
 
@@ -89,7 +88,12 @@ public class Foldr extends PrimitiveFunction {
      * @param xs the list to fold
      * @return the final accumulated result
      */
-    public static <X, Y> Y apply(Function<X, Function<Y, Y>> mapping, Y init, ConsList<X> xs) {
-        return xs.foldr((x, acc) -> mapping.apply(x).apply(acc), init);
+    public static <X, Y> Y apply(Function<X, Function<Y, Y>> mapping, Y init, List<X> xs) {
+        ArrayList<X> indexed = new ArrayList<>(xs);
+        Y acc = init;
+        for (int i = indexed.size() - 1; i >= 0; i--) {
+            acc = mapping.apply(indexed.get(i)).apply(acc);
+        }
+        return acc;
     }
 }

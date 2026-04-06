@@ -57,15 +57,16 @@ lambda v body = Core.termFunction $ Core.functionLambda $ Core.lambda (Core.name
 constant :: TTerm Term -> TTerm Term
 constant = lambda ignoredVariable
 
--- | Create a reference to a primitive function
+-- | Create a reference to a primitive function.
+-- Uses termVariable; the name resolves via graphPrimitives fallthrough.
 primitive :: Name -> TTerm Term
-primitive name = Core.termFunction $ Core.functionPrimitive $ Core.nameLift name
+primitive name = Core.termVariable $ Core.nameLift name
 
 -- TODO: this is probably equivalent to `primitive`.
 -- | Create a reference to a primitive function using encodedName
 -- (for primitives that need namespace encoding)
 primitiveEncoded :: Name -> TTerm Term
-primitiveEncoded name = Core.termFunction $ Core.functionPrimitive $ P.encodedName name
+primitiveEncoded name = Core.termVariable $ P.encodedName name
 
 --------------------------------------------------------------------------------
 -- Projections and eliminations

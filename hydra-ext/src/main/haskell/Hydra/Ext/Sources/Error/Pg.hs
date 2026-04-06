@@ -19,10 +19,10 @@ pg :: String -> Type
 pg = typeref PgModel.ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [] [PgModel.ns] $
+module_ = Module ns (map toTypeDef definitions) [] [PgModel.ns] $
     Just "Error types for property graph validation"
   where
-    elements = [
+    definitions = [
       invalidEdgeError,
       invalidElementPropertyError,
       invalidGraphEdgeError,

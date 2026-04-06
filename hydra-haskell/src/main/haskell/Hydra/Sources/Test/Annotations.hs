@@ -39,10 +39,10 @@ ns :: Namespace
 ns = Namespace "hydra.test.annotations"
 
 module_ :: Module
-module_ = Module ns elements [Annotations.ns, Lexical.ns, Namespace "hydra.reduction", Namespace "hydra.show.core"] [] $
+module_ = Module ns definitions [Annotations.ns, Lexical.ns, Namespace "hydra.reduction", Namespace "hydra.show.core"] [] $
     Just "Test cases for hydra.annotations functions"
   where
-    elements = [Phantoms.toDefinition allTests]
+    definitions = [Phantoms.toDefinition allTests]
 
 
 -- | Annotation eval case: like annEvalCase but tagged as disabled because these tests

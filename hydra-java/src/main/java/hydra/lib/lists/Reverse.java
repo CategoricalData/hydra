@@ -8,8 +8,8 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.ConsList;
-
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
@@ -38,7 +38,7 @@ public class Reverse extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<ConsList<Term>, Term>) l -> Terms.list(Reverse.apply(l)), hydra.extract.Core.list(cx, graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<List<Term>, Term>) l -> Terms.list(Reverse.apply(l)), hydra.extract.Core.list(cx, graph, args.get(0)));
     }
 
     /**
@@ -47,7 +47,9 @@ public class Reverse extends PrimitiveFunction {
      * @param list the list to reverse
      * @return a new list with elements in reverse order
      */
-    public static <X> ConsList<X> apply(ConsList<X> list) {
-        return list.reverse();
+    public static <X> List<X> apply(List<X> list) {
+        ArrayList<X> result = new ArrayList<>(list);
+        Collections.reverse(result);
+        return result;
     }
 }

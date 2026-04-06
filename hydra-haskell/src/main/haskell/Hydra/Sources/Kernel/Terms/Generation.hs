@@ -87,7 +87,7 @@ ns :: Namespace
 ns = Namespace "hydra.codegen"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Adapt.ns, Annotations.ns, Inference.ns, JsonDecode.ns, Lexical.ns, Names.ns,
      Environment.ns, ShowCore.ns, ShowError.ns, Strip.ns,
      Namespace "hydra.decoding", Namespace "hydra.encoding",
@@ -96,7 +96,7 @@ module_ = Module ns elements
     kernelTypesNamespaces $
     Just "Pure code generation pipeline for bootstrapping Hydra across languages."
   where
-    elements = [
+    definitions = [
       toDefinition namespaceToPath,
       toDefinition transitiveDeps,
       toDefinition moduleTermDepsTransitive,
@@ -431,13 +431,15 @@ generateLexicon = define "generateLexicon" $
 
 -- | Convert a Module to a JSON string.
 -- Encodes the Module as a Term, converts to JSON, then serializes to a string.
-moduleToJson :: TTermDefinition (Module -> Either String String)
+-- The schema map is used to resolve type variables during type-directed encoding.
+moduleToJson :: TTermDefinition (M.Map Name Type -> Module -> Either String String)
 moduleToJson = define "moduleToJson" $
   doc "Convert a Module to a JSON string" $
-  "m" ~>
+  "schemaMap" ~> "m" ~>
   "term" <~ encoderFor _Module @@ var "m" $
+  "modType" <~ Core.typeVariable (wrap _Name (string "hydra.packaging.Module")) $
   Eithers.map ("json" ~> var "hydra.json.writer.printJson" @@ var "json")
-    (var "hydra.json.encode.toJson" @@ var "term")
+    (var "hydra.json.encode.toJson" @@ var "schemaMap" @@ Core.nameLift _Module @@ var "modType" @@ var "term")
 
 -- | Perform type inference on a set of modules and reconstruct the target modules
 -- with inferred types. Type-only modules (containing only native type definitions)

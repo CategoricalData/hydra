@@ -8,8 +8,7 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.PersistentMap;
-
+import java.util.TreeMap;
 import java.util.List;
 import java.util.function.Function;
 
@@ -52,7 +51,7 @@ public class MapKeys extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph ->
             hydra.lib.eithers.Bind.apply(hydra.extract.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(1)), mp -> {
-                java.util.LinkedHashMap<Term, Term> result = new java.util.LinkedHashMap<>();
+                java.util.TreeMap<Term, Term> result = new java.util.TreeMap<>();
                 for (java.util.Map.Entry<Term, Term> e : mp.entrySet()) {
                     Either<InContext<Error_>, Term> r = hydra.Reduction.reduceTerm(
                         hydra.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), e.getKey()));
@@ -71,7 +70,7 @@ public class MapKeys extends PrimitiveFunction {
      * @param mapping the function to apply to each key
      * @return a function that takes a map and returns the map with transformed keys
      */
-    public static <K1, K2, V> Function<PersistentMap<K1, V>, PersistentMap<K2, V>> apply(Function<K1, K2> mapping) {
+    public static <K1, K2, V> Function<java.util.Map<K1, V>, java.util.Map<K2, V>> apply(Function<K1, K2> mapping) {
         return (arg) -> apply(mapping, arg);
     }
 
@@ -84,11 +83,10 @@ public class MapKeys extends PrimitiveFunction {
      * @param arg the input map
      * @return the map with transformed keys
      */
-    @SuppressWarnings("unchecked")
-    public static <K1, K2, V> PersistentMap<K2, V> apply(Function<K1, K2> mapping, PersistentMap<K1, V> arg) {
-        PersistentMap result = PersistentMap.empty();
+    public static <K1, K2, V> java.util.Map<K2, V> apply(Function<K1, K2> mapping, java.util.Map<K1, V> arg) {
+        java.util.Map<K2, V> result = new TreeMap<>();
         for (java.util.Map.Entry<K1, V> e : arg.entrySet()) {
-            result = result.insert((Comparable) mapping.apply(e.getKey()), e.getValue());
+            result.put(mapping.apply(e.getKey()), e.getValue());
         }
         return result;
     }

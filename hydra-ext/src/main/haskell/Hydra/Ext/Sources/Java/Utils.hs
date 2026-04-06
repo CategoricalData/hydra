@@ -49,12 +49,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.java.utils"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [moduleNamespace JavaLanguageSource.module_, JavaNamesSource.ns, JavaSerdeSource.ns, Formatting.ns, Names.ns, Serialization.ns]
     (JavaEnvironmentSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Java utilities for constructing Java syntax trees"
   where
-    elements = [
+    definitions = [
       toDefinition addExpressions,
       toDefinition addInScopeVar,
       toDefinition addInScopeVars,

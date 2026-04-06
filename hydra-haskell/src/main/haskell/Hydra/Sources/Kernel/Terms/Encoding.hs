@@ -70,12 +70,12 @@ ns :: Namespace
 ns = Namespace "hydra.encoding"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Annotations.ns, moduleNamespace DecodeCore.module_, Formatting.ns, Names.ns, Predicates.ns, Rewriting.ns]
     kernelTypesNamespaces $
     Just "Functions for generating term encoders from type modules"
   where
-    elements = [
+    definitions = [
       toDefinition encodeBinding,
       toDefinition encodeBindingName,
       toDefinition encoderCollectForallVariables,

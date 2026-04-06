@@ -129,7 +129,7 @@ echo "Patching Scheme test_graph.scm..."
 SCHEME_TESTGRAPH="$HYDRA_ROOT_DIR/hydra-lisp/hydra-scheme/src/gen-test/scheme/hydra/test/test_graph.scm"
 if [ -f "$SCHEME_TESTGRAPH" ]; then
     # Add required imports for building graph with primitives
-    sed -i '' 's|(import (scheme base) (hydra core) (hydra lexical) (hydra lib maps) (hydra module) (hydra test test_terms) (hydra test test_types))|(import (scheme base) (hydra core) (hydra context) (hydra graph) (hydra lexical) (hydra lib libraries) (hydra lib maps) (hydra module) (hydra rewriting) (hydra scoping) (hydra json bootstrap) (hydra test test_terms) (hydra test test_types))|' "$SCHEME_TESTGRAPH"
+    sed -i '' 's|(import (scheme base) (hydra core) (hydra lexical) (hydra lib maps) (hydra packaging) (hydra test test_terms) (hydra test test_types))|(import (scheme base) (hydra core) (hydra context) (hydra graph) (hydra lexical) (hydra lib libraries) (hydra lib maps) (hydra packaging) (hydra rewriting) (hydra scoping) (hydra json bootstrap) (hydra test test_terms) (hydra test test_types))|' "$SCHEME_TESTGRAPH"
     # Delete the empty context and graph defs
     sed -i '' '/^(define hydra_test_test_graph_test_context hydra_lexical_empty_context)/d' "$SCHEME_TESTGRAPH"
     sed -i '' '/^(define hydra_test_test_graph_test_graph hydra_lexical_empty_graph)/d' "$SCHEME_TESTGRAPH"
