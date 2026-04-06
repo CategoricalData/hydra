@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 #
 # Orchestrator script for the GenPG RDF/SHACL demo.
 #
@@ -11,8 +12,7 @@
 #   --hosts LANG,...     Run only specified hosts (default: haskell,java,python)
 #   --tag TAG            Append a tag to the run directory name
 #   --skip-validate      Skip pyshacl validation step
-
-set -euo pipefail
+#   --help               Show this help message
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HYDRA_EXT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
@@ -32,27 +32,19 @@ while [ $# -gt 0 ]; do
     --tag) TAG="$2"; shift 2 ;;
     --tag=*) TAG="${1#--tag=}"; shift ;;
     --skip-validate) SKIP_VALIDATE=true; shift ;;
+    --help|-h)
+      sed -n '4,15p' "$0" | sed 's/^# //; s/^#//'
+      exit 0
+      ;;
     sales|health) DATASET="$1"; shift ;;
     *)
-      echo "Unknown argument: $1" >&2
-      echo "Usage: $0 [--hosts LANG,...] [--tag TAG] [--skip-validate] [sales|health]" >&2
-      exit 1
+      die "Unknown argument: $1 (try --help)"
       ;;
   esac
 done
 
 DATASET="${DATASET:-sales}"
 DATASET_CAP="$(echo "$DATASET" | awk '{print toupper(substr($0,1,1)) substr($0,2)}')"
-
-# Colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-CYAN='\033[0;36m'
-BOLD='\033[1m'
-NC='\033[0m'
-
-header() { echo ""; echo -e "${BOLD}${CYAN}=== $1 ===${NC}"; }
 
 IFS=',' read -ra ENABLED_HOSTS <<< "$HOSTS"
 
@@ -66,15 +58,11 @@ RUN_DIR=$(create_run_dir /tmp/hydra-genpg-rdf "$TAG")
 # Build
 # ============================================================================
 
-header "Building"
+demo_header "Building"
 cd "$REPO_ROOT"
 ./gradlew :hydra-ext:compileJava --quiet 2>&1
 
-JAVA_DIRS="$REPO_ROOT/hydra-ext/build/classes/java/main:$REPO_ROOT/hydra-java/build/classes/java/main"
-JAVA_DEPS="$(find "$HOME/.gradle/caches" -name 'commons-text-*.jar' -not -name '*sources*' 2>/dev/null | head -1)"
-JAVA_DEPS="$JAVA_DEPS:$(find "$HOME/.gradle/caches" -name 'commons-csv-*.jar' -not -name '*sources*' 2>/dev/null | head -1)"
-JAVA_DEPS="$JAVA_DEPS:$(find "$HOME/.gradle/caches" -name 'commons-lang3-*.jar' -not -name '*sources*' 2>/dev/null | head -1)"
-JAVA_CP="$JAVA_DIRS:$JAVA_DEPS"
+JAVA_CP="$(build_java_classpath commons-text commons-csv commons-lang3)"
 
 echo "Dataset: $DATASET"
 echo "Input:   $HYDRA_EXT_ROOT/demos/genpg/data/sources/$DATASET/"
@@ -89,7 +77,7 @@ run_host() {
   mkdir -p "$RUN_DIR/$host"
   echo "skipped" > "$RUN_DIR/$host/_status"
 
-  header "Running $host driver"
+  demo_header "Running $host driver"
   cd "$HYDRA_EXT_ROOT"
 
   local out_prefix="$RUN_DIR/$host/$DATASET"
@@ -157,7 +145,7 @@ done
 # ============================================================================
 
 if [ "$SKIP_VALIDATE" = false ]; then
-  header "SHACL Validation (pyshacl)"
+  demo_header "SHACL Validation (pyshacl)"
 
   # Find pyshacl
   PYSHACL=""
@@ -215,7 +203,7 @@ fi
 # ============================================================================
 
 if [ ${#ENABLED_HOSTS[@]} -gt 1 ]; then
-  header "Comparison"
+  demo_header "Comparison"
 
   for suffix in shapes data invalid; do
     i=0
@@ -244,22 +232,14 @@ fi
 # Summary
 # ============================================================================
 
-header "Summary"
-
-format_status() {
-  case "$1" in
-    ok)      printf "${GREEN}OK${NC}";;
-    error)   printf "${RED}FAIL${NC}";;
-    skipped) printf "${YELLOW}SKIP${NC}";;
-  esac
-}
+demo_header "Summary"
 
 printf "  %-12s %-14s %-12s\n" "Host" "Status" "Time (ms)"
 printf "  %-12s %-14s %-12s\n" "----" "------" "---------"
 
 for host in "${ENABLED_HOSTS[@]}"; do
   status=$(cat "$RUN_DIR/$host/_status" 2>/dev/null || echo "skipped")
-  time_ms=$(grep 'HYDRA_TIME_MS=' "$RUN_DIR/$host/stderr.txt" 2>/dev/null | sed 's/.*HYDRA_TIME_MS=//' || echo "—")
+  time_ms=$(extract_time "$RUN_DIR/$host/stderr.txt")
   printf "  %-12s " "$host"
   format_status "$status"
   printf "       %-12s\n" "$time_ms"

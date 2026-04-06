@@ -1,5 +1,5 @@
-#!/bin/bash
-set -eo pipefail
+#!/usr/bin/env bash
+set -euo pipefail
 
 # Script to regenerate Lisp code for all four dialects from Hydra sources.
 #
@@ -53,10 +53,9 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_EXT_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
 HYDRA_ROOT_DIR="$( cd "$HYDRA_EXT_DIR/.." && pwd )"
 
-cd "$HYDRA_EXT_DIR"
+source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 
-# RTS flags to avoid stack overflow during generation
-RTS_FLAGS="+RTS -K256M -A32M -RTS"
+cd "$HYDRA_EXT_DIR"
 
 # Parse dialect list
 IFS=',' read -ra DIALECT_LIST <<< "$DIALECTS"
@@ -76,23 +75,21 @@ for d in "${DIALECT_LIST[@]}"; do
     case "$d" in
         clojure|common-lisp|emacs-lisp|scheme) ;;
         *)
-            echo "Error: Unknown dialect '$d'. Valid dialects: clojure, common-lisp, emacs-lisp, scheme"
-            exit 1
+            die "Unknown dialect '$d'. Valid dialects: clojure, common-lisp, emacs-lisp, scheme"
             ;;
     esac
 done
 
-echo "=========================================="
-echo "Synchronizing Lisp (${DIALECT_LIST[*]})"
-echo "=========================================="
+banner2 "Synchronizing Lisp (${DIALECT_LIST[*]})"
 echo ""
 
-echo "Step 1: Building generate-lisp executable..."
+TOTAL_STEPS=3
+
+step 1 $TOTAL_STEPS "Building generate-lisp executable"
 echo ""
 stack build hydra-ext:exe:generate-lisp
 
-echo ""
-echo "Step 2: Generating Lisp code..."
+step 2 $TOTAL_STEPS "Generating Lisp code"
 echo ""
 # generate-lisp generates all four dialects; we run it once
 # and let the user's --dialects flag control which tests to run
@@ -251,8 +248,7 @@ ELEOF
 fi
 
 if [ "$QUICK_MODE" = false ]; then
-    echo ""
-    echo "Step 3: Running tests..."
+    step 3 $TOTAL_STEPS "Running tests"
     echo ""
 
     for dialect in "${DIALECT_LIST[@]}"; do
@@ -268,8 +264,7 @@ if [ "$QUICK_MODE" = false ]; then
         echo ""
     done
 else
-    echo ""
-    echo "Step 3: Skipped (--quick mode)"
+    step 3 $TOTAL_STEPS "Skipped (--quick mode)"
 fi
 
 # Report new files
@@ -287,7 +282,4 @@ for dialect in "${DIALECT_LIST[@]}"; do
     fi
 done
 
-echo ""
-echo "=========================================="
-echo "Lisp sync complete!"
-echo "=========================================="
+banner2_done "Hydra-Lisp sync complete!"
