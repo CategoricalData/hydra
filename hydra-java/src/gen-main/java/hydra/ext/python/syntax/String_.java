@@ -42,11 +42,15 @@ public class String_ implements Serializable, Comparable<String_> {
   @SuppressWarnings("unchecked")
   public int compareTo(String_ other) {
     int cmp = 0;
-    cmp = ((Comparable) value).compareTo(other.value);
+    cmp = hydra.util.Comparing.compare(
+      value,
+      other.value);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) quoteStyle).compareTo(other.quoteStyle);
+    return hydra.util.Comparing.compare(
+      quoteStyle,
+      other.quoteStyle);
   }
 
   public String_ withValue(String value) {

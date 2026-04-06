@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.org.apache.avro.schema.Array",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -15,7 +14,6 @@
       "type": {
         "name": "hydra.ext.org.apache.avro.schema.Enum",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -45,7 +43,6 @@
       "type": {
         "name": "hydra.ext.org.apache.avro.schema.Field",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -126,7 +123,6 @@
       "type": {
         "name": "hydra.ext.org.apache.avro.schema.Fixed",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -144,7 +140,6 @@
       "type": {
         "name": "hydra.ext.org.apache.avro.schema.Map",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -155,7 +150,6 @@
       "type": {
         "name": "hydra.ext.org.apache.avro.schema.Named",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -219,7 +213,6 @@
       "type": {
         "name": "hydra.ext.org.apache.avro.schema.NamedType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -236,7 +229,6 @@
       "type": {
         "name": "hydra.ext.org.apache.avro.schema.Order",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "ascending", "type": {"unit": {}}},
@@ -247,7 +239,6 @@
       "type": {
         "name": "hydra.ext.org.apache.avro.schema.Primitive",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -327,7 +318,6 @@
       "type": {
         "name": "hydra.ext.org.apache.avro.schema.Record",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -344,7 +334,6 @@
       "type": {
         "name": "hydra.ext.org.apache.avro.schema.Schema",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -377,12 +366,10 @@
       "type": {
         "name": "hydra.ext.org.apache.avro.schema.Union",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.org.apache.avro.schema.Schema"}}},
           "variables": []}}}],
-  "description": [
-    "A model for Avro schemas. Based on the Avro 1.11.1 specification:\n  https://avro.apache.org/docs/1.11.1/specification"],
+  "description": "A model for Avro schemas. Based on the Avro 1.11.1 specification:\n  https://avro.apache.org/docs/1.11.1/specification",
   "namespace": "hydra.ext.org.apache.avro.schema",
   "termDependencies": ["hydra.json.model"],
   "typeDependencies": ["hydra.core"]}

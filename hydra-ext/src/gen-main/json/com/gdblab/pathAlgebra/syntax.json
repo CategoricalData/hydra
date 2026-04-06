@@ -3,43 +3,27 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Number",
-        "type": {
-          "constraints": null,
-          "type": {"literal": {"integer": {"bigint": {}}}},
-          "variables": []}}},
+        "type": {"type": {"literal": {"integer": {"bigint": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Text",
-        "type": {
-          "constraints": null,
-          "type": {"literal": {"string": {}}},
-          "variables": []}}},
+        "type": {"type": {"literal": {"string": {}}}, "variables": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Label",
-        "type": {
-          "constraints": null,
-          "type": {"literal": {"string": {}}},
-          "variables": []}}},
+        "type": {"type": {"literal": {"string": {}}}, "variables": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Variable",
-        "type": {
-          "constraints": null,
-          "type": {"literal": {"string": {}}},
-          "variables": []}}},
+        "type": {"type": {"literal": {"string": {}}}, "variables": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.PathName",
-        "type": {
-          "constraints": null,
-          "type": {"literal": {"string": {}}},
-          "variables": []}}},
+        "type": {"type": {"literal": {"string": {}}}, "variables": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.PathQuery",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -62,7 +46,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Projection",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -79,7 +62,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.PartProj",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "all", "type": {"unit": {}}},
@@ -91,7 +73,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.GroupProj",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "all", "type": {"unit": {}}},
@@ -103,7 +84,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.PathProj",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "all", "type": {"unit": {}}},
@@ -115,7 +95,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.RestrictorExt",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "walk", "type": {"unit": {}}},
@@ -128,21 +107,18 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.OrderBy",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "com.gdblab.pathAlgebra.syntax.OrderByOption"}},
           "variables": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.GroupBy",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "com.gdblab.pathAlgebra.syntax.GroupByOption"}},
           "variables": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.OrderByOption",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "partition", "type": {"unit": {}}},
@@ -157,7 +133,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.GroupByOption",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "source", "type": {"unit": {}}},
@@ -172,7 +147,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.PathPattern",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -196,7 +170,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.NodePattern",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -207,7 +180,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.EdgePattern",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -221,7 +193,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.EdgeDirection",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "outgoing", "type": {"unit": {}}},
@@ -232,7 +203,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Rpq",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -267,7 +237,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Plus",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -281,7 +250,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Star",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -295,7 +263,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Concatenation",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -309,7 +276,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Alternation",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -323,14 +289,12 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.RpqRestrictor",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "com.gdblab.pathAlgebra.syntax.RestrictorExt"}},
           "variables": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.ComplexCondition",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -344,7 +308,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.CompoundComplexCondition",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -361,7 +324,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Condition",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -378,7 +340,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.CompareSym",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "equal", "type": {"unit": {}}},
@@ -392,7 +353,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Function",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -409,7 +369,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.SimpleFunction",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -423,7 +382,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.NestedFunction",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -437,7 +395,6 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.ComplexFunction",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -454,14 +411,12 @@
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.BoolOp",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "and", "type": {"unit": {}}},
               {"name": "or", "type": {"unit": {}}}]},
           "variables": []}}}],
-  "description": [
-    "A syntax model for the path algebra grammar by Angles et al. See the paper \"Path-based Algebraic Foundations of Graph Query Languages\" and the ANTLR grammar at https://github.com/pathalgebra/AlgebraParser"],
+  "description": "A syntax model for the path algebra grammar by Angles et al. See the paper \"Path-based Algebraic Foundations of Graph Query Languages\" and the ANTLR grammar at https://github.com/pathalgebra/AlgebraParser",
   "namespace": "com.gdblab.pathAlgebra.syntax",
   "termDependencies": ["hydra.core"],
   "typeDependencies": ["hydra.core"]}

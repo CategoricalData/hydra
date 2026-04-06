@@ -51,11 +51,15 @@ public class TypeVariableShadowingInTypeLambdaError implements Serializable, Com
   @SuppressWarnings("unchecked")
   public int compareTo(TypeVariableShadowingInTypeLambdaError other) {
     int cmp = 0;
-    cmp = ((Comparable) location).compareTo(other.location);
+    cmp = hydra.util.Comparing.compare(
+      location,
+      other.location);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) name).compareTo(other.name);
+    return hydra.util.Comparing.compare(
+      name,
+      other.name);
   }
 
   public TypeVariableShadowingInTypeLambdaError withLocation(hydra.paths.SubtermPath location) {

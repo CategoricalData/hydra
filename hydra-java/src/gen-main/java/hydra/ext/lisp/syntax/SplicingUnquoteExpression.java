@@ -40,6 +40,8 @@ public class SplicingUnquoteExpression implements Serializable, Comparable<Splic
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(SplicingUnquoteExpression other) {
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 }

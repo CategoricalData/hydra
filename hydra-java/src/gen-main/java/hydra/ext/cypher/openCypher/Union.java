@@ -42,11 +42,15 @@ public class Union implements Serializable, Comparable<Union> {
   @SuppressWarnings("unchecked")
   public int compareTo(Union other) {
     int cmp = 0;
-    cmp = ((Comparable) all).compareTo(other.all);
+    cmp = hydra.util.Comparing.compare(
+      all,
+      other.all);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) query).compareTo(other.query);
+    return hydra.util.Comparing.compare(
+      query,
+      other.query);
   }
 
   public Union withAll(Boolean all) {

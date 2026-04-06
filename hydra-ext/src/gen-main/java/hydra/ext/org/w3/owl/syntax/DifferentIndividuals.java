@@ -11,11 +11,11 @@ public class DifferentIndividuals implements Serializable, Comparable<DifferentI
 
   public static final hydra.core.Name INDIVIDUALS = new hydra.core.Name("individuals");
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Individual> individuals;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.Individual> individuals;
 
-  public DifferentIndividuals (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Individual> individuals) {
+  public DifferentIndividuals (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, java.util.List<hydra.ext.org.w3.owl.syntax.Individual> individuals) {
     this.annotations = annotations;
     this.individuals = individuals;
   }
@@ -42,18 +42,22 @@ public class DifferentIndividuals implements Serializable, Comparable<DifferentI
   @SuppressWarnings("unchecked")
   public int compareTo(DifferentIndividuals other) {
     int cmp = 0;
-    cmp = ((Comparable) annotations).compareTo(other.annotations);
+    cmp = hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) individuals).compareTo(other.individuals);
+    return hydra.util.Comparing.compare(
+      individuals,
+      other.individuals);
   }
 
-  public DifferentIndividuals withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public DifferentIndividuals withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new DifferentIndividuals(annotations, individuals);
   }
 
-  public DifferentIndividuals withIndividuals(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Individual> individuals) {
+  public DifferentIndividuals withIndividuals(java.util.List<hydra.ext.org.w3.owl.syntax.Individual> individuals) {
     return new DifferentIndividuals(annotations, individuals);
   }
 }

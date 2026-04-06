@@ -18,31 +18,25 @@
                               "argument": {"variable": "checks"},
                               "function": {
                                 "typeApplication": {
-                                  "body": {"function": {"primitive": "hydra.lib.maybes.cat"}},
+                                  "body": {"variable": "hydra.lib.maybes.cat"},
                                   "type": {"variable": "t0"}}}}},
-                          "type": [
-                            {
-                              "constraints": null,
-                              "type": {"list": {"variable": "t0"}},
-                              "variables": []}]}],
+                          "type": {"type": {"list": {"variable": "t0"}}, "variables": []}}],
                       "body": {
                         "application": {
                           "argument": {"variable": "errors"},
                           "function": {
                             "typeApplication": {
-                              "body": {"function": {"primitive": "hydra.lib.lists.safeHead"}},
+                              "body": {"variable": "hydra.lib.lists.safeHead"},
                               "type": {"variable": "t0"}}}}}}},
-                  "domain": [{"list": {"maybe": {"variable": "t0"}}}],
+                  "domain": {"list": {"maybe": {"variable": "t0"}}},
                   "parameter": "checks"}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"maybe": {"variable": "t0"}},
-                "domain": {"list": {"maybe": {"variable": "t0"}}}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"maybe": {"variable": "t0"}},
+              "domain": {"list": {"maybe": {"variable": "t0"}}}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.validate.pg.validateEdge",
@@ -81,11 +75,7 @@
                                                                   "function": {
                                                                     "elimination": {"record": {"field": "label", "typeName": "hydra.pg.model.EdgeType"}}}},
                                                                 "type": {"variable": "t0"}}}}},
-                                                        "type": [
-                                                          {
-                                                            "constraints": null,
-                                                            "type": {"variable": "hydra.pg.model.EdgeLabel"},
-                                                            "variables": []}]},
+                                                        "type": {"type": {"variable": "hydra.pg.model.EdgeLabel"}, "variables": []}},
                                                       {
                                                         "name": "actual",
                                                         "term": {
@@ -97,24 +87,19 @@
                                                                   "function": {
                                                                     "elimination": {"record": {"field": "label", "typeName": "hydra.pg.model.Edge"}}}},
                                                                 "type": {"variable": "t1"}}}}},
-                                                        "type": [
-                                                          {
-                                                            "constraints": null,
-                                                            "type": {"variable": "hydra.pg.model.EdgeLabel"},
-                                                            "variables": []}]}],
+                                                        "type": {"type": {"variable": "hydra.pg.model.EdgeLabel"}, "variables": []}}],
                                                     "body": {
                                                       "application": {
                                                         "argument": {
-                                                          "maybe": [
-                                                            {
-                                                              "union": {
-                                                                "field": {
-                                                                  "name": "label",
-                                                                  "term": {
-                                                                    "record": {
-                                                                      "fields": [{"name": "label", "term": {"variable": "actual"}}],
-                                                                      "typeName": "hydra.error.pg.NoSuchEdgeLabelError"}}},
-                                                                "typeName": "hydra.error.pg.InvalidEdgeError"}}]},
+                                                          "maybe": {
+                                                            "union": {
+                                                              "field": {
+                                                                "name": "label",
+                                                                "term": {
+                                                                  "record": {
+                                                                    "fields": [{"name": "label", "term": {"variable": "actual"}}],
+                                                                    "typeName": "hydra.error.pg.NoSuchEdgeLabelError"}}},
+                                                              "typeName": "hydra.error.pg.InvalidEdgeError"}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {
@@ -137,17 +122,15 @@
                                                                             "function": {"function": {"elimination": {"wrap": "hydra.pg.model.EdgeLabel"}}}}},
                                                                         "function": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                                            "body": {"variable": "hydra.lib.equality.equal"},
                                                                             "type": {"literal": {"string": {}}}}}}}}},
                                                                 "function": {
                                                                   "typeApplication": {
-                                                                    "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                     "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}}}}}}}}}}}},
-                                                "type": [
-                                                  {
-                                                    "constraints": null,
-                                                    "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}},
-                                                    "variables": []}]},
+                                                "type": {
+                                                  "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}},
+                                                  "variables": []}},
                                               {
                                                 "name": "checkId",
                                                 "term": {
@@ -184,20 +167,18 @@
                                                                 "union": {
                                                                   "field": {"name": "id", "term": {"variable": "err"}},
                                                                   "typeName": "hydra.error.pg.InvalidEdgeError"}},
-                                                              "domain": [{"variable": "hydra.error.pg.InvalidValueError"}],
+                                                              "domain": {"variable": "hydra.error.pg.InvalidValueError"},
                                                               "parameter": "err"}}},
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {
                                                               "typeApplication": {
-                                                                "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                                "body": {"variable": "hydra.lib.maybes.map"},
                                                                 "type": {"variable": "hydra.error.pg.InvalidValueError"}}},
                                                             "type": {"variable": "hydra.error.pg.InvalidEdgeError"}}}}}}},
-                                                "type": [
-                                                  {
-                                                    "constraints": null,
-                                                    "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}},
-                                                    "variables": []}]},
+                                                "type": {
+                                                  "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}},
+                                                  "variables": []}},
                                               {
                                                 "name": "checkProperties",
                                                 "term": {
@@ -244,20 +225,18 @@
                                                                 "union": {
                                                                   "field": {"name": "property", "term": {"variable": "err"}},
                                                                   "typeName": "hydra.error.pg.InvalidEdgeError"}},
-                                                              "domain": [{"variable": "hydra.error.pg.InvalidElementPropertyError"}],
+                                                              "domain": {"variable": "hydra.error.pg.InvalidElementPropertyError"},
                                                               "parameter": "err"}}},
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {
                                                               "typeApplication": {
-                                                                "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                                "body": {"variable": "hydra.lib.maybes.map"},
                                                                 "type": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}},
                                                             "type": {"variable": "hydra.error.pg.InvalidEdgeError"}}}}}}},
-                                                "type": [
-                                                  {
-                                                    "constraints": null,
-                                                    "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}},
-                                                    "variables": []}]},
+                                                "type": {
+                                                  "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}},
+                                                  "variables": []}},
                                               {
                                                 "name": "checkOut",
                                                 "term": {
@@ -290,28 +269,27 @@
                                                                             "body": {
                                                                               "application": {
                                                                                 "argument": {
-                                                                                  "maybe": [
-                                                                                    {
-                                                                                      "union": {
-                                                                                        "field": {
-                                                                                          "name": "outVertexLabel",
-                                                                                          "term": {
-                                                                                            "record": {
-                                                                                              "fields": [
-                                                                                                {
-                                                                                                  "name": "expected",
-                                                                                                  "term": {
-                                                                                                    "application": {
-                                                                                                      "argument": {"variable": "typ"},
-                                                                                                      "function": {
-                                                                                                        "typeApplication": {
-                                                                                                          "body": {
-                                                                                                            "function": {
-                                                                                                              "elimination": {"record": {"field": "out", "typeName": "hydra.pg.model.EdgeType"}}}},
-                                                                                                          "type": {"variable": "t0"}}}}}},
-                                                                                                {"name": "actual", "term": {"variable": "label"}}],
-                                                                                              "typeName": "hydra.error.pg.WrongVertexLabelError"}}},
-                                                                                        "typeName": "hydra.error.pg.InvalidEdgeError"}}]},
+                                                                                  "maybe": {
+                                                                                    "union": {
+                                                                                      "field": {
+                                                                                        "name": "outVertexLabel",
+                                                                                        "term": {
+                                                                                          "record": {
+                                                                                            "fields": [
+                                                                                              {
+                                                                                                "name": "expected",
+                                                                                                "term": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "typ"},
+                                                                                                    "function": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "function": {
+                                                                                                            "elimination": {"record": {"field": "out", "typeName": "hydra.pg.model.EdgeType"}}}},
+                                                                                                        "type": {"variable": "t0"}}}}}},
+                                                                                              {"name": "actual", "term": {"variable": "label"}}],
+                                                                                            "typeName": "hydra.error.pg.WrongVertexLabelError"}}},
+                                                                                      "typeName": "hydra.error.pg.InvalidEdgeError"}}},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {
@@ -342,34 +320,32 @@
                                                                                                     "function": {"function": {"elimination": {"wrap": "hydra.pg.model.VertexLabel"}}}}},
                                                                                                 "function": {
                                                                                                   "typeApplication": {
-                                                                                                    "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                                                                    "body": {"variable": "hydra.lib.equality.equal"},
                                                                                                     "type": {"literal": {"string": {}}}}}}}}},
                                                                                         "function": {
                                                                                           "typeApplication": {
-                                                                                            "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                                             "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}}}}}}}}}},
-                                                                            "domain": [{"variable": "hydra.pg.model.VertexLabel"}],
+                                                                            "domain": {"variable": "hydra.pg.model.VertexLabel"},
                                                                             "parameter": "label"}}},
                                                                       "function": {
                                                                         "application": {
                                                                           "argument": {
-                                                                            "maybe": [
-                                                                              {
-                                                                                "union": {
-                                                                                  "field": {"name": "outVertexNotFound", "term": {"unit": {}}},
-                                                                                  "typeName": "hydra.error.pg.InvalidEdgeError"}}]},
+                                                                            "maybe": {
+                                                                              "union": {
+                                                                                "field": {"name": "outVertexNotFound", "term": {"unit": {}}},
+                                                                                "typeName": "hydra.error.pg.InvalidEdgeError"}}},
                                                                           "function": {
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                  "body": {"variable": "hydra.lib.maybes.maybe"},
                                                                                   "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}}}},
                                                                               "type": {"variable": "hydra.pg.model.VertexLabel"}}}}}}}}},
-                                                              "domain": [
-                                                                {
-                                                                  "function": {
-                                                                    "codomain": {"maybe": {"variable": "hydra.pg.model.VertexLabel"}},
-                                                                    "domain": {"variable": "t1"}}}],
+                                                              "domain": {
+                                                                "function": {
+                                                                  "codomain": {"maybe": {"variable": "hydra.pg.model.VertexLabel"}},
+                                                                  "domain": {"variable": "t1"}}},
                                                               "parameter": "f"}}},
                                                         "function": {
                                                           "application": {
@@ -381,17 +357,15 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "typeApplication": {
-                                                                    "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                    "body": {"variable": "hydra.lib.maybes.maybe"},
                                                                     "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}}}},
                                                                 "type": {
                                                                   "function": {
                                                                     "codomain": {"maybe": {"variable": "hydra.pg.model.VertexLabel"}},
                                                                     "domain": {"variable": "t1"}}}}}}}}}}},
-                                                "type": [
-                                                  {
-                                                    "constraints": null,
-                                                    "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}},
-                                                    "variables": []}]},
+                                                "type": {
+                                                  "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}},
+                                                  "variables": []}},
                                               {
                                                 "name": "checkIn",
                                                 "term": {
@@ -424,28 +398,27 @@
                                                                             "body": {
                                                                               "application": {
                                                                                 "argument": {
-                                                                                  "maybe": [
-                                                                                    {
-                                                                                      "union": {
-                                                                                        "field": {
-                                                                                          "name": "inVertexLabel",
-                                                                                          "term": {
-                                                                                            "record": {
-                                                                                              "fields": [
-                                                                                                {
-                                                                                                  "name": "expected",
-                                                                                                  "term": {
-                                                                                                    "application": {
-                                                                                                      "argument": {"variable": "typ"},
-                                                                                                      "function": {
-                                                                                                        "typeApplication": {
-                                                                                                          "body": {
-                                                                                                            "function": {
-                                                                                                              "elimination": {"record": {"field": "in", "typeName": "hydra.pg.model.EdgeType"}}}},
-                                                                                                          "type": {"variable": "t0"}}}}}},
-                                                                                                {"name": "actual", "term": {"variable": "label"}}],
-                                                                                              "typeName": "hydra.error.pg.WrongVertexLabelError"}}},
-                                                                                        "typeName": "hydra.error.pg.InvalidEdgeError"}}]},
+                                                                                  "maybe": {
+                                                                                    "union": {
+                                                                                      "field": {
+                                                                                        "name": "inVertexLabel",
+                                                                                        "term": {
+                                                                                          "record": {
+                                                                                            "fields": [
+                                                                                              {
+                                                                                                "name": "expected",
+                                                                                                "term": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "typ"},
+                                                                                                    "function": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "function": {
+                                                                                                            "elimination": {"record": {"field": "in", "typeName": "hydra.pg.model.EdgeType"}}}},
+                                                                                                        "type": {"variable": "t0"}}}}}},
+                                                                                              {"name": "actual", "term": {"variable": "label"}}],
+                                                                                            "typeName": "hydra.error.pg.WrongVertexLabelError"}}},
+                                                                                      "typeName": "hydra.error.pg.InvalidEdgeError"}}},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {
@@ -476,34 +449,32 @@
                                                                                                     "function": {"function": {"elimination": {"wrap": "hydra.pg.model.VertexLabel"}}}}},
                                                                                                 "function": {
                                                                                                   "typeApplication": {
-                                                                                                    "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                                                                    "body": {"variable": "hydra.lib.equality.equal"},
                                                                                                     "type": {"literal": {"string": {}}}}}}}}},
                                                                                         "function": {
                                                                                           "typeApplication": {
-                                                                                            "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                                             "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}}}}}}}}}},
-                                                                            "domain": [{"variable": "hydra.pg.model.VertexLabel"}],
+                                                                            "domain": {"variable": "hydra.pg.model.VertexLabel"},
                                                                             "parameter": "label"}}},
                                                                       "function": {
                                                                         "application": {
                                                                           "argument": {
-                                                                            "maybe": [
-                                                                              {
-                                                                                "union": {
-                                                                                  "field": {"name": "inVertexNotFound", "term": {"unit": {}}},
-                                                                                  "typeName": "hydra.error.pg.InvalidEdgeError"}}]},
+                                                                            "maybe": {
+                                                                              "union": {
+                                                                                "field": {"name": "inVertexNotFound", "term": {"unit": {}}},
+                                                                                "typeName": "hydra.error.pg.InvalidEdgeError"}}},
                                                                           "function": {
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                  "body": {"variable": "hydra.lib.maybes.maybe"},
                                                                                   "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}}}},
                                                                               "type": {"variable": "hydra.pg.model.VertexLabel"}}}}}}}}},
-                                                              "domain": [
-                                                                {
-                                                                  "function": {
-                                                                    "codomain": {"maybe": {"variable": "hydra.pg.model.VertexLabel"}},
-                                                                    "domain": {"variable": "t1"}}}],
+                                                              "domain": {
+                                                                "function": {
+                                                                  "codomain": {"maybe": {"variable": "hydra.pg.model.VertexLabel"}},
+                                                                  "domain": {"variable": "t1"}}},
                                                               "parameter": "f"}}},
                                                         "function": {
                                                           "application": {
@@ -515,17 +486,15 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "typeApplication": {
-                                                                    "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                    "body": {"variable": "hydra.lib.maybes.maybe"},
                                                                     "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}}}},
                                                                 "type": {
                                                                   "function": {
                                                                     "codomain": {"maybe": {"variable": "hydra.pg.model.VertexLabel"}},
                                                                     "domain": {"variable": "t1"}}}}}}}}}}},
-                                                "type": [
-                                                  {
-                                                    "constraints": null,
-                                                    "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}},
-                                                    "variables": []}]}],
+                                                "type": {
+                                                  "type": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}},
+                                                  "variables": []}}],
                                             "body": {
                                               "application": {
                                                 "argument": {
@@ -539,69 +508,63 @@
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.validate.pg.checkAll"},
                                                     "type": {"variable": "hydra.error.pg.InvalidEdgeError"}}}}}}},
-                                        "domain": [
-                                          {
-                                            "application": {
-                                              "argument": {"variable": "t1"},
-                                              "function": {"variable": "hydra.pg.model.Edge"}}}],
+                                        "domain": {
+                                          "application": {
+                                            "argument": {"variable": "t1"},
+                                            "function": {"variable": "hydra.pg.model.Edge"}}},
                                         "parameter": "el"}}},
-                                  "domain": [
-                                    {
-                                      "application": {
-                                        "argument": {"variable": "t0"},
-                                        "function": {"variable": "hydra.pg.model.EdgeType"}}}],
+                                  "domain": {
+                                    "application": {
+                                      "argument": {"variable": "t0"},
+                                      "function": {"variable": "hydra.pg.model.EdgeType"}}},
                                   "parameter": "typ"}}},
-                            "domain": [
-                              {
-                                "maybe": {
-                                  "function": {
-                                    "codomain": {"maybe": {"variable": "hydra.pg.model.VertexLabel"}},
-                                    "domain": {"variable": "t1"}}}}],
+                            "domain": {
+                              "maybe": {
+                                "function": {
+                                  "codomain": {"maybe": {"variable": "hydra.pg.model.VertexLabel"}},
+                                  "domain": {"variable": "t1"}}}},
                             "parameter": "labelForVertexId"}}},
-                      "domain": [
-                        {
-                          "function": {
-                            "codomain": {
-                              "function": {
-                                "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidValueError"}},
-                                "domain": {"variable": "t1"}}},
-                            "domain": {"variable": "t0"}}}],
+                      "domain": {
+                        "function": {
+                          "codomain": {
+                            "function": {
+                              "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidValueError"}},
+                              "domain": {"variable": "t1"}}},
+                          "domain": {"variable": "t0"}}},
                       "parameter": "checkValue"}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "function": {
-                        "codomain": {
-                          "function": {
-                            "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}},
-                            "domain": {
-                              "application": {
-                                "argument": {"variable": "t1"},
-                                "function": {"variable": "hydra.pg.model.Edge"}}}}},
-                        "domain": {
-                          "application": {
-                            "argument": {"variable": "t0"},
-                            "function": {"variable": "hydra.pg.model.EdgeType"}}}}},
-                    "domain": {
-                      "maybe": {
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {
                         "function": {
-                          "codomain": {"maybe": {"variable": "hydra.pg.model.VertexLabel"}},
-                          "domain": {"variable": "t1"}}}}}},
-                "domain": {
-                  "function": {
-                    "codomain": {
+                          "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidEdgeError"}},
+                          "domain": {
+                            "application": {
+                              "argument": {"variable": "t1"},
+                              "function": {"variable": "hydra.pg.model.Edge"}}}}},
+                      "domain": {
+                        "application": {
+                          "argument": {"variable": "t0"},
+                          "function": {"variable": "hydra.pg.model.EdgeType"}}}}},
+                  "domain": {
+                    "maybe": {
                       "function": {
-                        "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidValueError"}},
-                        "domain": {"variable": "t1"}}},
-                    "domain": {"variable": "t0"}}}}},
-            "variables": ["t0", "t1"]}]}},
+                        "codomain": {"maybe": {"variable": "hydra.pg.model.VertexLabel"}},
+                        "domain": {"variable": "t1"}}}}}},
+              "domain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidValueError"}},
+                      "domain": {"variable": "t1"}}},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0", "t1"]}}},
     {
       "term": {
         "name": "hydra.validate.pg.validateGraph",
@@ -660,7 +623,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                            "body": {"variable": "hydra.lib.maps.lookup"},
                                                                             "type": {"variable": "hydra.pg.model.VertexLabel"}}},
                                                                         "type": {
                                                                           "application": {
@@ -721,81 +684,79 @@
                                                                                                   "type": {"variable": "t1"}}}},
                                                                                             "typeName": "hydra.error.pg.InvalidGraphError"}},
                                                                                         "type": {"variable": "t1"}}},
-                                                                                    "domain": [{"variable": "hydra.error.pg.InvalidVertexError"}],
+                                                                                    "domain": {"variable": "hydra.error.pg.InvalidVertexError"},
                                                                                     "parameter": "err"}}},
                                                                               "function": {
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                                                      "body": {"variable": "hydra.lib.maybes.map"},
                                                                                       "type": {"variable": "hydra.error.pg.InvalidVertexError"}}},
                                                                                   "type": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "t1"},
                                                                                       "function": {"variable": "hydra.error.pg.InvalidGraphError"}}}}}}}}},
-                                                                      "domain": [
-                                                                        {
-                                                                          "application": {
-                                                                            "argument": {"variable": "t0"},
-                                                                            "function": {"variable": "hydra.pg.model.VertexType"}}}],
+                                                                      "domain": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "t0"},
+                                                                          "function": {"variable": "hydra.pg.model.VertexType"}}},
                                                                       "parameter": "t"}}},
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {
-                                                                      "maybe": [
-                                                                        {
-                                                                          "typeApplication": {
-                                                                            "body": {
-                                                                              "union": {
-                                                                                "field": {
-                                                                                  "name": "vertex",
-                                                                                  "term": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {
-                                                                                        "record": {
-                                                                                          "fields": [
-                                                                                            {
-                                                                                              "name": "id",
-                                                                                              "term": {
-                                                                                                "application": {
-                                                                                                  "argument": {"variable": "el"},
-                                                                                                  "function": {
-                                                                                                    "typeApplication": {
-                                                                                                      "body": {
-                                                                                                        "function": {
-                                                                                                          "elimination": {"record": {"field": "id", "typeName": "hydra.pg.model.Vertex"}}}},
-                                                                                                      "type": {"variable": "t1"}}}}}},
-                                                                                            {
-                                                                                              "name": "error",
-                                                                                              "term": {
-                                                                                                "union": {
-                                                                                                  "field": {
-                                                                                                    "name": "label",
-                                                                                                    "term": {
-                                                                                                      "record": {
-                                                                                                        "fields": [
-                                                                                                          {
-                                                                                                            "name": "label",
-                                                                                                            "term": {
-                                                                                                              "application": {
-                                                                                                                "argument": {"variable": "el"},
-                                                                                                                "function": {
-                                                                                                                  "typeApplication": {
-                                                                                                                    "body": {
-                                                                                                                      "function": {
-                                                                                                                        "elimination": {"record": {"field": "label", "typeName": "hydra.pg.model.Vertex"}}}},
-                                                                                                                    "type": {"variable": "t1"}}}}}}],
-                                                                                                        "typeName": "hydra.error.pg.NoSuchVertexLabelError"}}},
-                                                                                                  "typeName": "hydra.error.pg.InvalidVertexError"}}}],
-                                                                                          "typeName": "hydra.error.pg.InvalidGraphVertexError"}},
-                                                                                      "type": {"variable": "t1"}}}},
-                                                                                "typeName": "hydra.error.pg.InvalidGraphError"}},
-                                                                            "type": {"variable": "t1"}}}]},
+                                                                      "maybe": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "union": {
+                                                                              "field": {
+                                                                                "name": "vertex",
+                                                                                "term": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "record": {
+                                                                                        "fields": [
+                                                                                          {
+                                                                                            "name": "id",
+                                                                                            "term": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "el"},
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "function": {
+                                                                                                        "elimination": {"record": {"field": "id", "typeName": "hydra.pg.model.Vertex"}}}},
+                                                                                                    "type": {"variable": "t1"}}}}}},
+                                                                                          {
+                                                                                            "name": "error",
+                                                                                            "term": {
+                                                                                              "union": {
+                                                                                                "field": {
+                                                                                                  "name": "label",
+                                                                                                  "term": {
+                                                                                                    "record": {
+                                                                                                      "fields": [
+                                                                                                        {
+                                                                                                          "name": "label",
+                                                                                                          "term": {
+                                                                                                            "application": {
+                                                                                                              "argument": {"variable": "el"},
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {
+                                                                                                                    "function": {
+                                                                                                                      "elimination": {"record": {"field": "label", "typeName": "hydra.pg.model.Vertex"}}}},
+                                                                                                                  "type": {"variable": "t1"}}}}}}],
+                                                                                                      "typeName": "hydra.error.pg.NoSuchVertexLabelError"}}},
+                                                                                                "typeName": "hydra.error.pg.InvalidVertexError"}}}],
+                                                                                        "typeName": "hydra.error.pg.InvalidGraphVertexError"}},
+                                                                                    "type": {"variable": "t1"}}}},
+                                                                              "typeName": "hydra.error.pg.InvalidGraphError"}},
+                                                                          "type": {"variable": "t1"}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                            "body": {"variable": "hydra.lib.maybes.maybe"},
                                                                             "type": {
                                                                               "maybe": {
                                                                                 "application": {
@@ -805,27 +766,24 @@
                                                                           "application": {
                                                                             "argument": {"variable": "t0"},
                                                                             "function": {"variable": "hydra.pg.model.VertexType"}}}}}}}}}}},
-                                                        "domain": [
-                                                          {
-                                                            "application": {
-                                                              "argument": {"variable": "t1"},
-                                                              "function": {"variable": "hydra.pg.model.Vertex"}}}],
+                                                        "domain": {
+                                                          "application": {
+                                                            "argument": {"variable": "t1"},
+                                                            "function": {"variable": "hydra.pg.model.Vertex"}}},
                                                         "parameter": "el"}}},
-                                                  "type": [
-                                                    {
-                                                      "constraints": null,
-                                                      "type": {
-                                                        "function": {
-                                                          "codomain": {
-                                                            "maybe": {
-                                                              "application": {
-                                                                "argument": {"variable": "t1"},
-                                                                "function": {"variable": "hydra.error.pg.InvalidGraphError"}}}},
-                                                          "domain": {
+                                                  "type": {
+                                                    "type": {
+                                                      "function": {
+                                                        "codomain": {
+                                                          "maybe": {
                                                             "application": {
                                                               "argument": {"variable": "t1"},
-                                                              "function": {"variable": "hydra.pg.model.Vertex"}}}}},
-                                                      "variables": []}]}],
+                                                              "function": {"variable": "hydra.error.pg.InvalidGraphError"}}}},
+                                                        "domain": {
+                                                          "application": {
+                                                            "argument": {"variable": "t1"},
+                                                            "function": {"variable": "hydra.pg.model.Vertex"}}}}},
+                                                    "variables": []}}],
                                               "body": {
                                                 "application": {
                                                   "argument": {
@@ -845,7 +803,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.maps.elems"}},
+                                                                  "body": {"variable": "hydra.lib.maps.elems"},
                                                                   "type": {"variable": "t1"}}},
                                                               "type": {
                                                                 "application": {
@@ -858,7 +816,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                   "type": {
                                                                     "application": {
                                                                       "argument": {"variable": "t1"},
@@ -875,15 +833,13 @@
                                                         "application": {
                                                           "argument": {"variable": "t1"},
                                                           "function": {"variable": "hydra.error.pg.InvalidGraphError"}}}}}}}}},
-                                          "type": [
-                                            {
-                                              "constraints": null,
-                                              "type": {
-                                                "maybe": {
-                                                  "application": {
-                                                    "argument": {"variable": "t1"},
-                                                    "function": {"variable": "hydra.error.pg.InvalidGraphError"}}}},
-                                              "variables": []}]},
+                                          "type": {
+                                            "type": {
+                                              "maybe": {
+                                                "application": {
+                                                  "argument": {"variable": "t1"},
+                                                  "function": {"variable": "hydra.error.pg.InvalidGraphError"}}}},
+                                            "variables": []}},
                                         {
                                           "name": "checkEdges",
                                           "term": {
@@ -923,7 +879,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                            "body": {"variable": "hydra.lib.maps.lookup"},
                                                                             "type": {"variable": "hydra.pg.model.EdgeLabel"}}},
                                                                         "type": {
                                                                           "application": {
@@ -987,81 +943,79 @@
                                                                                                   "type": {"variable": "t1"}}}},
                                                                                             "typeName": "hydra.error.pg.InvalidGraphError"}},
                                                                                         "type": {"variable": "t1"}}},
-                                                                                    "domain": [{"variable": "hydra.error.pg.InvalidEdgeError"}],
+                                                                                    "domain": {"variable": "hydra.error.pg.InvalidEdgeError"},
                                                                                     "parameter": "err"}}},
                                                                               "function": {
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                                                      "body": {"variable": "hydra.lib.maybes.map"},
                                                                                       "type": {"variable": "hydra.error.pg.InvalidEdgeError"}}},
                                                                                   "type": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "t1"},
                                                                                       "function": {"variable": "hydra.error.pg.InvalidGraphError"}}}}}}}}},
-                                                                      "domain": [
-                                                                        {
-                                                                          "application": {
-                                                                            "argument": {"variable": "t0"},
-                                                                            "function": {"variable": "hydra.pg.model.EdgeType"}}}],
+                                                                      "domain": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "t0"},
+                                                                          "function": {"variable": "hydra.pg.model.EdgeType"}}},
                                                                       "parameter": "t"}}},
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {
-                                                                      "maybe": [
-                                                                        {
-                                                                          "typeApplication": {
-                                                                            "body": {
-                                                                              "union": {
-                                                                                "field": {
-                                                                                  "name": "edge",
-                                                                                  "term": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {
-                                                                                        "record": {
-                                                                                          "fields": [
-                                                                                            {
-                                                                                              "name": "id",
-                                                                                              "term": {
-                                                                                                "application": {
-                                                                                                  "argument": {"variable": "el"},
-                                                                                                  "function": {
-                                                                                                    "typeApplication": {
-                                                                                                      "body": {
-                                                                                                        "function": {
-                                                                                                          "elimination": {"record": {"field": "id", "typeName": "hydra.pg.model.Edge"}}}},
-                                                                                                      "type": {"variable": "t1"}}}}}},
-                                                                                            {
-                                                                                              "name": "error",
-                                                                                              "term": {
-                                                                                                "union": {
-                                                                                                  "field": {
-                                                                                                    "name": "label",
-                                                                                                    "term": {
-                                                                                                      "record": {
-                                                                                                        "fields": [
-                                                                                                          {
-                                                                                                            "name": "label",
-                                                                                                            "term": {
-                                                                                                              "application": {
-                                                                                                                "argument": {"variable": "el"},
-                                                                                                                "function": {
-                                                                                                                  "typeApplication": {
-                                                                                                                    "body": {
-                                                                                                                      "function": {
-                                                                                                                        "elimination": {"record": {"field": "label", "typeName": "hydra.pg.model.Edge"}}}},
-                                                                                                                    "type": {"variable": "t1"}}}}}}],
-                                                                                                        "typeName": "hydra.error.pg.NoSuchEdgeLabelError"}}},
-                                                                                                  "typeName": "hydra.error.pg.InvalidEdgeError"}}}],
-                                                                                          "typeName": "hydra.error.pg.InvalidGraphEdgeError"}},
-                                                                                      "type": {"variable": "t1"}}}},
-                                                                                "typeName": "hydra.error.pg.InvalidGraphError"}},
-                                                                            "type": {"variable": "t1"}}}]},
+                                                                      "maybe": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "union": {
+                                                                              "field": {
+                                                                                "name": "edge",
+                                                                                "term": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "record": {
+                                                                                        "fields": [
+                                                                                          {
+                                                                                            "name": "id",
+                                                                                            "term": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "el"},
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "function": {
+                                                                                                        "elimination": {"record": {"field": "id", "typeName": "hydra.pg.model.Edge"}}}},
+                                                                                                    "type": {"variable": "t1"}}}}}},
+                                                                                          {
+                                                                                            "name": "error",
+                                                                                            "term": {
+                                                                                              "union": {
+                                                                                                "field": {
+                                                                                                  "name": "label",
+                                                                                                  "term": {
+                                                                                                    "record": {
+                                                                                                      "fields": [
+                                                                                                        {
+                                                                                                          "name": "label",
+                                                                                                          "term": {
+                                                                                                            "application": {
+                                                                                                              "argument": {"variable": "el"},
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {
+                                                                                                                    "function": {
+                                                                                                                      "elimination": {"record": {"field": "label", "typeName": "hydra.pg.model.Edge"}}}},
+                                                                                                                  "type": {"variable": "t1"}}}}}}],
+                                                                                                      "typeName": "hydra.error.pg.NoSuchEdgeLabelError"}}},
+                                                                                                "typeName": "hydra.error.pg.InvalidEdgeError"}}}],
+                                                                                        "typeName": "hydra.error.pg.InvalidGraphEdgeError"}},
+                                                                                    "type": {"variable": "t1"}}}},
+                                                                              "typeName": "hydra.error.pg.InvalidGraphError"}},
+                                                                          "type": {"variable": "t1"}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                            "body": {"variable": "hydra.lib.maybes.maybe"},
                                                                             "type": {
                                                                               "maybe": {
                                                                                 "application": {
@@ -1071,89 +1025,83 @@
                                                                           "application": {
                                                                             "argument": {"variable": "t0"},
                                                                             "function": {"variable": "hydra.pg.model.EdgeType"}}}}}}}}}}},
-                                                        "domain": [
-                                                          {
-                                                            "application": {
-                                                              "argument": {"variable": "t1"},
-                                                              "function": {"variable": "hydra.pg.model.Edge"}}}],
+                                                        "domain": {
+                                                          "application": {
+                                                            "argument": {"variable": "t1"},
+                                                            "function": {"variable": "hydra.pg.model.Edge"}}},
                                                         "parameter": "el"}}},
-                                                  "type": [
-                                                    {
-                                                      "constraints": null,
-                                                      "type": {
-                                                        "function": {
-                                                          "codomain": {
-                                                            "maybe": {
-                                                              "application": {
-                                                                "argument": {"variable": "t1"},
-                                                                "function": {"variable": "hydra.error.pg.InvalidGraphError"}}}},
-                                                          "domain": {
+                                                  "type": {
+                                                    "type": {
+                                                      "function": {
+                                                        "codomain": {
+                                                          "maybe": {
                                                             "application": {
                                                               "argument": {"variable": "t1"},
-                                                              "function": {"variable": "hydra.pg.model.Edge"}}}}},
-                                                      "variables": []}]},
+                                                              "function": {"variable": "hydra.error.pg.InvalidGraphError"}}}},
+                                                        "domain": {
+                                                          "application": {
+                                                            "argument": {"variable": "t1"},
+                                                            "function": {"variable": "hydra.pg.model.Edge"}}}}},
+                                                    "variables": []}},
                                                 {
                                                   "name": "labelForVertexId",
                                                   "term": {
-                                                    "maybe": [
-                                                      {
+                                                    "maybe": {
+                                                      "function": {
+                                                        "lambda": {
+                                                          "body": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "graph"},
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "function": {
+                                                                              "elimination": {"record": {"field": "vertices", "typeName": "hydra.pg.model.Graph"}}}},
+                                                                          "type": {"variable": "t1"}}}}},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "i"},
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {"variable": "hydra.lib.maps.lookup"},
+                                                                              "type": {"variable": "t1"}}},
+                                                                          "type": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "t1"},
+                                                                              "function": {"variable": "hydra.pg.model.Vertex"}}}}}}}}},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "function": {
+                                                                          "elimination": {"record": {"field": "label", "typeName": "hydra.pg.model.Vertex"}}}},
+                                                                      "type": {"variable": "t1"}}},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {"variable": "hydra.lib.maybes.map"},
+                                                                          "type": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "t1"},
+                                                                              "function": {"variable": "hydra.pg.model.Vertex"}}}}},
+                                                                      "type": {"variable": "hydra.pg.model.VertexLabel"}}}}}}},
+                                                          "domain": {"variable": "t1"},
+                                                          "parameter": "i"}}}},
+                                                  "type": {
+                                                    "type": {
+                                                      "maybe": {
                                                         "function": {
-                                                          "lambda": {
-                                                            "body": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "graph"},
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {
-                                                                              "function": {
-                                                                                "elimination": {"record": {"field": "vertices", "typeName": "hydra.pg.model.Graph"}}}},
-                                                                            "type": {"variable": "t1"}}}}},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "i"},
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {
-                                                                              "typeApplication": {
-                                                                                "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
-                                                                                "type": {"variable": "t1"}}},
-                                                                            "type": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "t1"},
-                                                                                "function": {"variable": "hydra.pg.model.Vertex"}}}}}}}}},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "function": {
-                                                                            "elimination": {"record": {"field": "label", "typeName": "hydra.pg.model.Vertex"}}}},
-                                                                        "type": {"variable": "t1"}}},
-                                                                    "function": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
-                                                                            "type": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "t1"},
-                                                                                "function": {"variable": "hydra.pg.model.Vertex"}}}}},
-                                                                        "type": {"variable": "hydra.pg.model.VertexLabel"}}}}}}},
-                                                            "domain": [{"variable": "t1"}],
-                                                            "parameter": "i"}}}]},
-                                                  "type": [
-                                                    {
-                                                      "constraints": null,
-                                                      "type": {
-                                                        "maybe": {
-                                                          "function": {
-                                                            "codomain": {"maybe": {"variable": "hydra.pg.model.VertexLabel"}},
-                                                            "domain": {"variable": "t1"}}}},
-                                                      "variables": []}]}],
+                                                          "codomain": {"maybe": {"variable": "hydra.pg.model.VertexLabel"}},
+                                                          "domain": {"variable": "t1"}}}},
+                                                    "variables": []}}],
                                               "body": {
                                                 "application": {
                                                   "argument": {
@@ -1173,7 +1121,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.maps.elems"}},
+                                                                  "body": {"variable": "hydra.lib.maps.elems"},
                                                                   "type": {"variable": "t1"}}},
                                                               "type": {
                                                                 "application": {
@@ -1186,7 +1134,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                   "type": {
                                                                     "application": {
                                                                       "argument": {"variable": "t1"},
@@ -1203,15 +1151,13 @@
                                                         "application": {
                                                           "argument": {"variable": "t1"},
                                                           "function": {"variable": "hydra.error.pg.InvalidGraphError"}}}}}}}}},
-                                          "type": [
-                                            {
-                                              "constraints": null,
-                                              "type": {
-                                                "maybe": {
-                                                  "application": {
-                                                    "argument": {"variable": "t1"},
-                                                    "function": {"variable": "hydra.error.pg.InvalidGraphError"}}}},
-                                              "variables": []}]}],
+                                          "type": {
+                                            "type": {
+                                              "maybe": {
+                                                "application": {
+                                                  "argument": {"variable": "t1"},
+                                                  "function": {"variable": "hydra.error.pg.InvalidGraphError"}}}},
+                                            "variables": []}}],
                                       "body": {
                                         "application": {
                                           "argument": {"list": [{"variable": "checkVertices"}, {"variable": "checkEdges"}]},
@@ -1222,59 +1168,55 @@
                                                 "application": {
                                                   "argument": {"variable": "t1"},
                                                   "function": {"variable": "hydra.error.pg.InvalidGraphError"}}}}}}}}},
-                                  "domain": [
-                                    {
-                                      "application": {
-                                        "argument": {"variable": "t1"},
-                                        "function": {"variable": "hydra.pg.model.Graph"}}}],
+                                  "domain": {
+                                    "application": {
+                                      "argument": {"variable": "t1"},
+                                      "function": {"variable": "hydra.pg.model.Graph"}}},
                                   "parameter": "graph"}}},
-                            "domain": [
-                              {
-                                "application": {
-                                  "argument": {"variable": "t0"},
-                                  "function": {"variable": "hydra.pg.model.GraphSchema"}}}],
+                            "domain": {
+                              "application": {
+                                "argument": {"variable": "t0"},
+                                "function": {"variable": "hydra.pg.model.GraphSchema"}}},
                             "parameter": "schema"}}},
-                      "domain": [
-                        {
-                          "function": {
-                            "codomain": {
-                              "function": {
-                                "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidValueError"}},
-                                "domain": {"variable": "t1"}}},
-                            "domain": {"variable": "t0"}}}],
+                      "domain": {
+                        "function": {
+                          "codomain": {
+                            "function": {
+                              "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidValueError"}},
+                              "domain": {"variable": "t1"}}},
+                          "domain": {"variable": "t0"}}},
                       "parameter": "checkValue"}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": [[{"@key": "t1", "@value": {"classes": ["ordering"]}}]],
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "function": {
-                        "codomain": {
-                          "maybe": {
-                            "application": {
-                              "argument": {"variable": "t1"},
-                              "function": {"variable": "hydra.error.pg.InvalidGraphError"}}}},
-                        "domain": {
+        "type": {
+          "constraints": [{"@key": "t1", "@value": {"classes": ["ordering"]}}],
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {
+                        "maybe": {
                           "application": {
                             "argument": {"variable": "t1"},
-                            "function": {"variable": "hydra.pg.model.Graph"}}}}},
-                    "domain": {
-                      "application": {
-                        "argument": {"variable": "t0"},
-                        "function": {"variable": "hydra.pg.model.GraphSchema"}}}}},
-                "domain": {
-                  "function": {
-                    "codomain": {
-                      "function": {
-                        "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidValueError"}},
-                        "domain": {"variable": "t1"}}},
-                    "domain": {"variable": "t0"}}}}},
-            "variables": ["t0", "t1"]}]}},
+                            "function": {"variable": "hydra.error.pg.InvalidGraphError"}}}},
+                      "domain": {
+                        "application": {
+                          "argument": {"variable": "t1"},
+                          "function": {"variable": "hydra.pg.model.Graph"}}}}},
+                  "domain": {
+                    "application": {
+                      "argument": {"variable": "t0"},
+                      "function": {"variable": "hydra.pg.model.GraphSchema"}}}}},
+              "domain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidValueError"}},
+                      "domain": {"variable": "t1"}}},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0", "t1"]}}},
     {
       "term": {
         "name": "hydra.validate.pg.validateProperties",
@@ -1309,7 +1251,7 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                              "body": {"variable": "hydra.lib.lists.map"},
                                                               "type": {
                                                                 "application": {
                                                                   "argument": {"variable": "t0"},
@@ -1319,11 +1261,9 @@
                                                 "typeApplication": {
                                                   "body": {"variable": "hydra.validate.pg.checkAll"},
                                                   "type": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}}}},
-                                          "type": [
-                                            {
-                                              "constraints": null,
-                                              "type": {"maybe": {"variable": "hydra.error.pg.InvalidElementPropertyError"}},
-                                              "variables": []}]},
+                                          "type": {
+                                            "type": {"maybe": {"variable": "hydra.error.pg.InvalidElementPropertyError"}},
+                                            "variables": []}},
                                         {
                                           "name": "checkType",
                                           "term": {
@@ -1360,7 +1300,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                                "body": {"variable": "hydra.lib.maps.lookup"},
                                                                                 "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                             "type": {"variable": "t1"}}}}}}},
                                                                 "function": {
@@ -1372,50 +1312,49 @@
                                                                             "typeApplication": {
                                                                               "body": {"maybe": null},
                                                                               "type": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}},
-                                                                          "domain": [{"variable": "t1"}],
+                                                                          "domain": {"variable": "t1"},
                                                                           "parameter": "_"}}},
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {
-                                                                          "maybe": [
-                                                                            {
-                                                                              "record": {
-                                                                                "fields": [
-                                                                                  {
-                                                                                    "name": "key",
-                                                                                    "term": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "t"},
-                                                                                        "function": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {
-                                                                                              "function": {
-                                                                                                "elimination": {
-                                                                                                  "record": {"field": "key", "typeName": "hydra.pg.model.PropertyType"}}}},
-                                                                                            "type": {"variable": "t2"}}}}}},
-                                                                                  {
-                                                                                    "name": "error",
-                                                                                    "term": {
-                                                                                      "union": {
-                                                                                        "field": {
-                                                                                          "name": "missingRequired",
-                                                                                          "term": {
-                                                                                            "application": {
-                                                                                              "argument": {"variable": "t"},
-                                                                                              "function": {
-                                                                                                "typeApplication": {
-                                                                                                  "body": {
-                                                                                                    "function": {
-                                                                                                      "elimination": {
-                                                                                                        "record": {"field": "key", "typeName": "hydra.pg.model.PropertyType"}}}},
-                                                                                                  "type": {"variable": "t2"}}}}}},
-                                                                                        "typeName": "hydra.error.pg.InvalidPropertyError"}}}],
-                                                                                "typeName": "hydra.error.pg.InvalidElementPropertyError"}}]},
+                                                                          "maybe": {
+                                                                            "record": {
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "key",
+                                                                                  "term": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "t"},
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {
+                                                                                            "function": {
+                                                                                              "elimination": {
+                                                                                                "record": {"field": "key", "typeName": "hydra.pg.model.PropertyType"}}}},
+                                                                                          "type": {"variable": "t2"}}}}}},
+                                                                                {
+                                                                                  "name": "error",
+                                                                                  "term": {
+                                                                                    "union": {
+                                                                                      "field": {
+                                                                                        "name": "missingRequired",
+                                                                                        "term": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "t"},
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "function": {
+                                                                                                    "elimination": {
+                                                                                                      "record": {"field": "key", "typeName": "hydra.pg.model.PropertyType"}}}},
+                                                                                                "type": {"variable": "t2"}}}}}},
+                                                                                      "typeName": "hydra.error.pg.InvalidPropertyError"}}}],
+                                                                              "typeName": "hydra.error.pg.InvalidElementPropertyError"}}},
                                                                         "function": {
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                "body": {"variable": "hydra.lib.maybes.maybe"},
                                                                                 "type": {"maybe": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}}},
                                                                             "type": {"variable": "t1"}}}}}}}}},
                                                             "function": {
@@ -1432,26 +1371,23 @@
                                                                         "type": {"variable": "t2"}}}}},
                                                                 "function": {
                                                                   "typeApplication": {
-                                                                    "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                     "type": {"maybe": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}}}}}}}}},
-                                                    "domain": [
-                                                      {
-                                                        "application": {
-                                                          "argument": {"variable": "t2"},
-                                                          "function": {"variable": "hydra.pg.model.PropertyType"}}}],
+                                                    "domain": {
+                                                      "application": {
+                                                        "argument": {"variable": "t2"},
+                                                        "function": {"variable": "hydra.pg.model.PropertyType"}}},
                                                     "parameter": "t"}}},
                                               "parameter": "t2"}},
-                                          "type": [
-                                            {
-                                              "constraints": null,
-                                              "type": {
-                                                "function": {
-                                                  "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidElementPropertyError"}},
-                                                  "domain": {
-                                                    "application": {
-                                                      "argument": {"variable": "t2"},
-                                                      "function": {"variable": "hydra.pg.model.PropertyType"}}}}},
-                                              "variables": ["t2"]}]},
+                                          "type": {
+                                            "type": {
+                                              "function": {
+                                                "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidElementPropertyError"}},
+                                                "domain": {
+                                                  "application": {
+                                                    "argument": {"variable": "t2"},
+                                                    "function": {"variable": "hydra.pg.model.PropertyType"}}}}},
+                                            "variables": ["t2"]}},
                                         {
                                           "name": "checkValues",
                                           "term": {
@@ -1497,17 +1433,16 @@
                                                                                         "type": {"variable": "t0"}}}}}}},
                                                                             "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                         "type": {"variable": "t0"}}},
-                                                                    "domain": [
-                                                                      {
-                                                                        "application": {
-                                                                          "argument": {"variable": "t0"},
-                                                                          "function": {"variable": "hydra.pg.model.PropertyType"}}}],
+                                                                    "domain": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "t0"},
+                                                                        "function": {"variable": "hydra.pg.model.PropertyType"}}},
                                                                     "parameter": "p"}}},
                                                               "function": {
                                                                 "typeApplication": {
                                                                   "body": {
                                                                     "typeApplication": {
-                                                                      "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                      "body": {"variable": "hydra.lib.lists.map"},
                                                                       "type": {
                                                                         "application": {
                                                                           "argument": {"variable": "t0"},
@@ -1520,17 +1455,15 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
+                                                              "body": {"variable": "hydra.lib.maps.fromList"},
                                                               "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                           "type": {"variable": "t0"}}}}},
-                                                  "type": [
-                                                    {
-                                                      "constraints": null,
-                                                      "type": {
-                                                        "map": {
-                                                          "keys": {"variable": "hydra.pg.model.PropertyKey"},
-                                                          "values": {"variable": "t0"}}},
-                                                      "variables": []}]},
+                                                  "type": {
+                                                    "type": {
+                                                      "map": {
+                                                        "keys": {"variable": "hydra.pg.model.PropertyKey"},
+                                                        "values": {"variable": "t0"}}},
+                                                    "variables": []}},
                                                 {
                                                   "name": "checkPair",
                                                   "term": {
@@ -1548,14 +1481,10 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                            "body": {"variable": "hydra.lib.pairs.first"},
                                                                             "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                         "type": {"variable": "t1"}}}}},
-                                                                "type": [
-                                                                  {
-                                                                    "constraints": null,
-                                                                    "type": {"variable": "hydra.pg.model.PropertyKey"},
-                                                                    "variables": []}]},
+                                                                "type": {"type": {"variable": "hydra.pg.model.PropertyKey"}, "variables": []}},
                                                               {
                                                                 "name": "val",
                                                                 "term": {
@@ -1565,10 +1494,10 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                            "body": {"variable": "hydra.lib.pairs.second"},
                                                                             "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                         "type": {"variable": "t1"}}}}},
-                                                                "type": [{"constraints": null, "type": {"variable": "t1"}, "variables": []}]}],
+                                                                "type": {"type": {"variable": "t1"}, "variables": []}}],
                                                             "body": {
                                                               "application": {
                                                                 "argument": {
@@ -1581,7 +1510,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                                "body": {"variable": "hydra.lib.maps.lookup"},
                                                                                 "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                             "type": {"variable": "t0"}}}}}}},
                                                                 "function": {
@@ -1614,56 +1543,52 @@
                                                                                                     "field": {"name": "invalidValue", "term": {"variable": "err"}},
                                                                                                     "typeName": "hydra.error.pg.InvalidPropertyError"}}}],
                                                                                             "typeName": "hydra.error.pg.InvalidElementPropertyError"}},
-                                                                                        "domain": [{"variable": "hydra.error.pg.InvalidValueError"}],
+                                                                                        "domain": {"variable": "hydra.error.pg.InvalidValueError"},
                                                                                         "parameter": "err"}}},
                                                                                   "function": {
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "typeApplication": {
-                                                                                          "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                                                          "body": {"variable": "hydra.lib.maybes.map"},
                                                                                           "type": {"variable": "hydra.error.pg.InvalidValueError"}}},
                                                                                       "type": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}}}}}},
-                                                                          "domain": [{"variable": "t0"}],
+                                                                          "domain": {"variable": "t0"},
                                                                           "parameter": "typ"}}},
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {
-                                                                          "maybe": [
-                                                                            {
-                                                                              "record": {
-                                                                                "fields": [
-                                                                                  {"name": "key", "term": {"variable": "key"}},
-                                                                                  {
-                                                                                    "name": "error",
-                                                                                    "term": {
-                                                                                      "union": {
-                                                                                        "field": {"name": "unexpectedKey", "term": {"variable": "key"}},
-                                                                                        "typeName": "hydra.error.pg.InvalidPropertyError"}}}],
-                                                                                "typeName": "hydra.error.pg.InvalidElementPropertyError"}}]},
+                                                                          "maybe": {
+                                                                            "record": {
+                                                                              "fields": [
+                                                                                {"name": "key", "term": {"variable": "key"}},
+                                                                                {
+                                                                                  "name": "error",
+                                                                                  "term": {
+                                                                                    "union": {
+                                                                                      "field": {"name": "unexpectedKey", "term": {"variable": "key"}},
+                                                                                      "typeName": "hydra.error.pg.InvalidPropertyError"}}}],
+                                                                              "typeName": "hydra.error.pg.InvalidElementPropertyError"}}},
                                                                         "function": {
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                "body": {"variable": "hydra.lib.maybes.maybe"},
                                                                                 "type": {"maybe": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}}},
                                                                             "type": {"variable": "t0"}}}}}}}}}}},
-                                                        "domain": [
-                                                          {
-                                                            "pair": {
-                                                              "first": {"variable": "hydra.pg.model.PropertyKey"},
-                                                              "second": {"variable": "t1"}}}],
+                                                        "domain": {
+                                                          "pair": {
+                                                            "first": {"variable": "hydra.pg.model.PropertyKey"},
+                                                            "second": {"variable": "t1"}}},
                                                         "parameter": "pair"}}},
-                                                  "type": [
-                                                    {
-                                                      "constraints": null,
-                                                      "type": {
-                                                        "function": {
-                                                          "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidElementPropertyError"}},
-                                                          "domain": {
-                                                            "pair": {
-                                                              "first": {"variable": "hydra.pg.model.PropertyKey"},
-                                                              "second": {"variable": "t1"}}}}},
-                                                      "variables": []}]}],
+                                                  "type": {
+                                                    "type": {
+                                                      "function": {
+                                                        "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidElementPropertyError"}},
+                                                        "domain": {
+                                                          "pair": {
+                                                            "first": {"variable": "hydra.pg.model.PropertyKey"},
+                                                            "second": {"variable": "t1"}}}}},
+                                                    "variables": []}}],
                                               "body": {
                                                 "application": {
                                                   "argument": {
@@ -1675,7 +1600,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.maps.toList"}},
+                                                                  "body": {"variable": "hydra.lib.maps.toList"},
                                                                   "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                               "type": {"variable": "t1"}}}}},
                                                       "function": {
@@ -1685,7 +1610,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                   "type": {
                                                                     "pair": {
                                                                       "first": {"variable": "hydra.pg.model.PropertyKey"},
@@ -1695,11 +1620,9 @@
                                                     "typeApplication": {
                                                       "body": {"variable": "hydra.validate.pg.checkAll"},
                                                       "type": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}}}}}},
-                                          "type": [
-                                            {
-                                              "constraints": null,
-                                              "type": {"maybe": {"variable": "hydra.error.pg.InvalidElementPropertyError"}},
-                                              "variables": []}]}],
+                                          "type": {
+                                            "type": {"maybe": {"variable": "hydra.error.pg.InvalidElementPropertyError"}},
+                                            "variables": []}}],
                                       "body": {
                                         "application": {
                                           "argument": {"list": [{"variable": "checkTypes"}, {"variable": "checkValues"}]},
@@ -1707,57 +1630,52 @@
                                             "typeApplication": {
                                               "body": {"variable": "hydra.validate.pg.checkAll"},
                                               "type": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}}}}}},
-                                  "domain": [
-                                    {
-                                      "map": {
-                                        "keys": {"variable": "hydra.pg.model.PropertyKey"},
-                                        "values": {"variable": "t1"}}}],
+                                  "domain": {
+                                    "map": {
+                                      "keys": {"variable": "hydra.pg.model.PropertyKey"},
+                                      "values": {"variable": "t1"}}},
                                   "parameter": "props"}}},
-                            "domain": [
-                              {
-                                "list": {
-                                  "application": {
-                                    "argument": {"variable": "t0"},
-                                    "function": {"variable": "hydra.pg.model.PropertyType"}}}}],
+                            "domain": {
+                              "list": {
+                                "application": {
+                                  "argument": {"variable": "t0"},
+                                  "function": {"variable": "hydra.pg.model.PropertyType"}}}},
                             "parameter": "types"}}},
-                      "domain": [
-                        {
-                          "function": {
-                            "codomain": {
-                              "function": {
-                                "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidValueError"}},
-                                "domain": {"variable": "t1"}}},
-                            "domain": {"variable": "t0"}}}],
+                      "domain": {
+                        "function": {
+                          "codomain": {
+                            "function": {
+                              "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidValueError"}},
+                              "domain": {"variable": "t1"}}},
+                          "domain": {"variable": "t0"}}},
                       "parameter": "checkValue"}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "function": {
-                        "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidElementPropertyError"}},
-                        "domain": {
-                          "map": {
-                            "keys": {"variable": "hydra.pg.model.PropertyKey"},
-                            "values": {"variable": "t1"}}}}},
-                    "domain": {
-                      "list": {
-                        "application": {
-                          "argument": {"variable": "t0"},
-                          "function": {"variable": "hydra.pg.model.PropertyType"}}}}}},
-                "domain": {
-                  "function": {
-                    "codomain": {
-                      "function": {
-                        "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidValueError"}},
-                        "domain": {"variable": "t1"}}},
-                    "domain": {"variable": "t0"}}}}},
-            "variables": ["t0", "t1"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidElementPropertyError"}},
+                      "domain": {
+                        "map": {
+                          "keys": {"variable": "hydra.pg.model.PropertyKey"},
+                          "values": {"variable": "t1"}}}}},
+                  "domain": {
+                    "list": {
+                      "application": {
+                        "argument": {"variable": "t0"},
+                        "function": {"variable": "hydra.pg.model.PropertyType"}}}}}},
+              "domain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidValueError"}},
+                      "domain": {"variable": "t1"}}},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0", "t1"]}}},
     {
       "term": {
         "name": "hydra.validate.pg.validateVertex",
@@ -1794,11 +1712,7 @@
                                                               "elimination": {
                                                                 "record": {"field": "label", "typeName": "hydra.pg.model.VertexType"}}}},
                                                           "type": {"variable": "t0"}}}}},
-                                                  "type": [
-                                                    {
-                                                      "constraints": null,
-                                                      "type": {"variable": "hydra.pg.model.VertexLabel"},
-                                                      "variables": []}]},
+                                                  "type": {"type": {"variable": "hydra.pg.model.VertexLabel"}, "variables": []}},
                                                 {
                                                   "name": "actual",
                                                   "term": {
@@ -1810,24 +1724,19 @@
                                                             "function": {
                                                               "elimination": {"record": {"field": "label", "typeName": "hydra.pg.model.Vertex"}}}},
                                                           "type": {"variable": "t1"}}}}},
-                                                  "type": [
-                                                    {
-                                                      "constraints": null,
-                                                      "type": {"variable": "hydra.pg.model.VertexLabel"},
-                                                      "variables": []}]}],
+                                                  "type": {"type": {"variable": "hydra.pg.model.VertexLabel"}, "variables": []}}],
                                               "body": {
                                                 "application": {
                                                   "argument": {
-                                                    "maybe": [
-                                                      {
-                                                        "union": {
-                                                          "field": {
-                                                            "name": "label",
-                                                            "term": {
-                                                              "record": {
-                                                                "fields": [{"name": "label", "term": {"variable": "actual"}}],
-                                                                "typeName": "hydra.error.pg.NoSuchVertexLabelError"}}},
-                                                          "typeName": "hydra.error.pg.InvalidVertexError"}}]},
+                                                    "maybe": {
+                                                      "union": {
+                                                        "field": {
+                                                          "name": "label",
+                                                          "term": {
+                                                            "record": {
+                                                              "fields": [{"name": "label", "term": {"variable": "actual"}}],
+                                                              "typeName": "hydra.error.pg.NoSuchVertexLabelError"}}},
+                                                        "typeName": "hydra.error.pg.InvalidVertexError"}}},
                                                   "function": {
                                                     "application": {
                                                       "argument": {
@@ -1850,17 +1759,15 @@
                                                                       "function": {"function": {"elimination": {"wrap": "hydra.pg.model.VertexLabel"}}}}},
                                                                   "function": {
                                                                     "typeApplication": {
-                                                                      "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                                      "body": {"variable": "hydra.lib.equality.equal"},
                                                                       "type": {"literal": {"string": {}}}}}}}}},
                                                           "function": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                              "body": {"variable": "hydra.lib.logic.ifElse"},
                                                               "type": {"maybe": {"variable": "hydra.error.pg.InvalidVertexError"}}}}}}}}}}}},
-                                          "type": [
-                                            {
-                                              "constraints": null,
-                                              "type": {"maybe": {"variable": "hydra.error.pg.InvalidVertexError"}},
-                                              "variables": []}]},
+                                          "type": {
+                                            "type": {"maybe": {"variable": "hydra.error.pg.InvalidVertexError"}},
+                                            "variables": []}},
                                         {
                                           "name": "checkId",
                                           "term": {
@@ -1897,20 +1804,18 @@
                                                           "union": {
                                                             "field": {"name": "id", "term": {"variable": "err"}},
                                                             "typeName": "hydra.error.pg.InvalidVertexError"}},
-                                                        "domain": [{"variable": "hydra.error.pg.InvalidValueError"}],
+                                                        "domain": {"variable": "hydra.error.pg.InvalidValueError"},
                                                         "parameter": "err"}}},
                                                   "function": {
                                                     "typeApplication": {
                                                       "body": {
                                                         "typeApplication": {
-                                                          "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                          "body": {"variable": "hydra.lib.maybes.map"},
                                                           "type": {"variable": "hydra.error.pg.InvalidValueError"}}},
                                                       "type": {"variable": "hydra.error.pg.InvalidVertexError"}}}}}}},
-                                          "type": [
-                                            {
-                                              "constraints": null,
-                                              "type": {"maybe": {"variable": "hydra.error.pg.InvalidVertexError"}},
-                                              "variables": []}]},
+                                          "type": {
+                                            "type": {"maybe": {"variable": "hydra.error.pg.InvalidVertexError"}},
+                                            "variables": []}},
                                         {
                                           "name": "checkProperties",
                                           "term": {
@@ -1958,20 +1863,18 @@
                                                           "union": {
                                                             "field": {"name": "property", "term": {"variable": "err"}},
                                                             "typeName": "hydra.error.pg.InvalidVertexError"}},
-                                                        "domain": [{"variable": "hydra.error.pg.InvalidElementPropertyError"}],
+                                                        "domain": {"variable": "hydra.error.pg.InvalidElementPropertyError"},
                                                         "parameter": "err"}}},
                                                   "function": {
                                                     "typeApplication": {
                                                       "body": {
                                                         "typeApplication": {
-                                                          "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                          "body": {"variable": "hydra.lib.maybes.map"},
                                                           "type": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}},
                                                       "type": {"variable": "hydra.error.pg.InvalidVertexError"}}}}}}},
-                                          "type": [
-                                            {
-                                              "constraints": null,
-                                              "type": {"maybe": {"variable": "hydra.error.pg.InvalidVertexError"}},
-                                              "variables": []}]}],
+                                          "type": {
+                                            "type": {"maybe": {"variable": "hydra.error.pg.InvalidVertexError"}},
+                                            "variables": []}}],
                                       "body": {
                                         "application": {
                                           "argument": {
@@ -1983,56 +1886,51 @@
                                             "typeApplication": {
                                               "body": {"variable": "hydra.validate.pg.checkAll"},
                                               "type": {"variable": "hydra.error.pg.InvalidVertexError"}}}}}}},
-                                  "domain": [
-                                    {
-                                      "application": {
-                                        "argument": {"variable": "t1"},
-                                        "function": {"variable": "hydra.pg.model.Vertex"}}}],
+                                  "domain": {
+                                    "application": {
+                                      "argument": {"variable": "t1"},
+                                      "function": {"variable": "hydra.pg.model.Vertex"}}},
                                   "parameter": "el"}}},
-                            "domain": [
-                              {
-                                "application": {
-                                  "argument": {"variable": "t0"},
-                                  "function": {"variable": "hydra.pg.model.VertexType"}}}],
+                            "domain": {
+                              "application": {
+                                "argument": {"variable": "t0"},
+                                "function": {"variable": "hydra.pg.model.VertexType"}}},
                             "parameter": "typ"}}},
-                      "domain": [
-                        {
-                          "function": {
-                            "codomain": {
-                              "function": {
-                                "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidValueError"}},
-                                "domain": {"variable": "t1"}}},
-                            "domain": {"variable": "t0"}}}],
+                      "domain": {
+                        "function": {
+                          "codomain": {
+                            "function": {
+                              "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidValueError"}},
+                              "domain": {"variable": "t1"}}},
+                          "domain": {"variable": "t0"}}},
                       "parameter": "checkValue"}}},
                 "parameter": "t1"}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {
-                      "function": {
-                        "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidVertexError"}},
-                        "domain": {
-                          "application": {
-                            "argument": {"variable": "t1"},
-                            "function": {"variable": "hydra.pg.model.Vertex"}}}}},
-                    "domain": {
-                      "application": {
-                        "argument": {"variable": "t0"},
-                        "function": {"variable": "hydra.pg.model.VertexType"}}}}},
-                "domain": {
-                  "function": {
-                    "codomain": {
-                      "function": {
-                        "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidValueError"}},
-                        "domain": {"variable": "t1"}}},
-                    "domain": {"variable": "t0"}}}}},
-            "variables": ["t0", "t1"]}]}}],
-  "description": ["Validation functions for property graphs"],
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidVertexError"}},
+                      "domain": {
+                        "application": {
+                          "argument": {"variable": "t1"},
+                          "function": {"variable": "hydra.pg.model.Vertex"}}}}},
+                  "domain": {
+                    "application": {
+                      "argument": {"variable": "t0"},
+                      "function": {"variable": "hydra.pg.model.VertexType"}}}}},
+              "domain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {"maybe": {"variable": "hydra.error.pg.InvalidValueError"}},
+                      "domain": {"variable": "t1"}}},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0", "t1"]}}}],
+  "description": "Validation functions for property graphs",
   "namespace": "hydra.validate.pg",
   "termDependencies": [],
   "typeDependencies": ["hydra.pg.model", "hydra.error.pg"]}

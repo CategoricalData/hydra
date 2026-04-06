@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.QueryList",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.org.apache.tinkerpop.gremlin.Query"}}},
           "variables": []}}},
@@ -12,7 +11,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.Query",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -30,7 +28,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceQuery",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -45,7 +42,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.RootTraversalQuery",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -61,7 +57,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalSource",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {
               "list": {
@@ -71,7 +66,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TransactionPart",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "begin", "type": {"unit": {}}},
@@ -82,7 +76,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.RootTraversal",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -102,7 +95,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceSelfMethod",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "withBulk", "type": {"literal": {"boolean": {}}}},
@@ -133,7 +125,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -150,7 +141,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.StringArgumentAndGenericLiteralArgument",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -165,7 +155,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.StringArgumentAndOptionalGenericLiteralArgument",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -181,7 +170,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceSpawnMethod",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -232,7 +220,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -247,7 +234,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.ServiceCall",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -262,7 +248,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.ServiceArguments",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -279,7 +264,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.ChainedTraversal",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -294,7 +278,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.ChainedTraversalElement",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -309,7 +292,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -328,7 +310,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TerminatedTraversal",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -343,7 +324,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -813,7 +793,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.StringArgumentOrNestedTraversal",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -827,7 +806,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndStringArgument",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -843,7 +821,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.StringArgumentAndOptionalStringLiteralVarargs",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -859,7 +836,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalSackMethodArgumentOrIntegerArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -874,7 +850,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.ByArgs",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -893,7 +868,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.ByOtherArgs",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -911,7 +885,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -929,7 +902,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.ChooseArgs",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -949,7 +921,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.PredicateTraversalArgument",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -968,7 +939,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversalArgument",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -987,7 +957,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.DedupArgs",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1004,7 +973,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.ScopeStringArgument",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1021,7 +989,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.PredicateOrTraversal",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1036,7 +1003,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1052,7 +1018,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.FromArgs",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1070,7 +1035,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.HasArgs",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1086,7 +1050,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargs",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1103,7 +1066,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1130,7 +1092,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgumentAndGenericLiteralArgument",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1146,7 +1107,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgumentAndTraversalPredicate",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1162,7 +1122,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.HasTraversalTokenArgs",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1178,7 +1137,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.HasTraversalTokenArgsRest",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1197,7 +1155,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalPredicate",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1213,7 +1170,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicateOrStringLiteralVarargs",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1230,7 +1186,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicateOrGenericLiteralArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1247,7 +1202,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.OptionArgs",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1274,7 +1228,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicateAndNestedTraversal",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1289,7 +1242,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1310,7 +1262,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalMergeArgumentAndNestedTraversal",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1325,7 +1276,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgumentAndNestedTraversal",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1340,7 +1290,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.PropertyArgs",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1365,7 +1314,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalCardinalityArgumentAndObjects",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1382,7 +1330,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1398,7 +1345,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.RangeArgs",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1417,7 +1363,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.OptionalStringArgumentAndNestedTraversal",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1432,7 +1377,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndIntegerArgument",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1448,7 +1392,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.SelectArgs",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1475,7 +1418,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.PopStringsArgument",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1491,7 +1433,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalPopArgumentAndNestedTraversal",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1506,7 +1447,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TailArgs",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1523,7 +1463,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.ToArgs",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1545,7 +1484,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.DirectionAndVarargs",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1562,7 +1500,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.ValueMapArgs",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1579,7 +1516,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.ValueMapBooleanArgs",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1596,7 +1532,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.WhereArgs",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1614,7 +1549,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.WhereWithPredicateArgs",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1630,7 +1564,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.WithArgs",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1645,7 +1578,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.WithArgsKeys",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1659,7 +1591,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.WithArgsValues",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1678,7 +1609,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.ConcatArgs",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1695,7 +1625,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.ReplaceArgs",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1716,7 +1645,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.SplitArgs",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1733,7 +1661,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.SubstringArgs",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1753,7 +1680,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.DateAddArgs",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1768,7 +1694,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.DateDiffArgs",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1782,7 +1707,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.StructureVertex",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "new", "type": {"literal": {"boolean": {}}}},
@@ -1798,7 +1722,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalStrategy",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "new", "type": {"literal": {"boolean": {}}}},
@@ -1814,7 +1737,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.Configuration",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1830,7 +1752,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.KeywordOrIdentifier",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1844,7 +1765,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalScope",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "local", "type": {"unit": {}}},
@@ -1854,7 +1774,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalToken",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "id", "type": {"unit": {}}},
@@ -1866,7 +1785,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalMerge",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "onCreate", "type": {"unit": {}}},
@@ -1878,7 +1796,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalOrder",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "incr", "type": {"unit": {}}},
@@ -1891,7 +1808,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalDirection",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "in", "type": {"unit": {}}},
@@ -1902,7 +1818,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalCardinality",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1919,7 +1834,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalColumn",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "keys", "type": {"unit": {}}},
@@ -1929,7 +1843,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalPop",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "first", "type": {"unit": {}}},
@@ -1941,7 +1854,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalOperator",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "addAll", "type": {"unit": {}}},
@@ -1960,7 +1872,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalPick",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "any", "type": {"unit": {}}},
@@ -1970,7 +1881,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalDT",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "second", "type": {"unit": {}}},
@@ -1982,7 +1892,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicate",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2073,7 +1982,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TwoTraversalPredicates",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2089,7 +1997,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalTerminalMethod",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "explain", "type": {"unit": {}}},
@@ -2108,14 +2015,12 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalSelfMethod",
         "type": {
-          "constraints": null,
           "type": {"union": [{"name": "discard", "type": {"unit": {}}}]},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalFunction",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2129,7 +2034,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.RangeArgument",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2145,7 +2049,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.WithOptionKeys",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2174,7 +2077,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.ConnectedComponentConstants",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "component", "type": {"unit": {}}},
@@ -2185,7 +2087,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.PageRankConstants",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "edges", "type": {"unit": {}}},
@@ -2196,7 +2097,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.PeerPressureConstants",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "edges", "type": {"unit": {}}},
@@ -2207,7 +2107,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.ShortestPathConstants",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "target", "type": {"unit": {}}},
@@ -2220,7 +2119,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.WithOptionsValues",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "tokens", "type": {"unit": {}}},
@@ -2237,7 +2135,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.IoOptionsKeys",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "reader", "type": {"unit": {}}},
@@ -2247,7 +2144,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.IoOptionsValues",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "gryo", "type": {"unit": {}}},
@@ -2258,7 +2154,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.BooleanArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "value", "type": {"literal": {"boolean": {}}}},
@@ -2270,7 +2165,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.IntegerArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2284,7 +2178,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.FloatArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2298,7 +2191,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.StringArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "value", "type": {"literal": {"string": {}}}},
@@ -2310,7 +2202,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "value", "type": {"maybe": {"literal": {"string": {}}}}},
@@ -2322,7 +2213,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.DateArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2336,7 +2226,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2350,7 +2239,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralListArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2365,7 +2253,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralMapArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2380,7 +2267,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralMapNullableArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2396,7 +2282,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.StructureVertexArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2410,7 +2295,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalCardinalityArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2425,7 +2309,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalColumnArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2439,7 +2322,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalDirectionArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2454,7 +2336,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalMergeArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2468,7 +2349,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalOrderArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2482,7 +2362,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalPopArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2496,7 +2375,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalSackMethodArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "value", "type": {"unit": {}}},
@@ -2508,7 +2386,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalScopeArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2522,7 +2399,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalTokenArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2536,7 +2412,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalComparatorArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2550,7 +2425,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalFunctionArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2565,7 +2439,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalBiFunctionArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2580,7 +2453,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.TraversalDTArgument",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2594,7 +2466,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralList",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {
               "list": {"variable": "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteral"}}},
@@ -2603,7 +2474,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralRange",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2617,7 +2487,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.IntegerRange",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -2631,7 +2500,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.StringRange",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "left", "type": {"literal": {"string": {}}}},
@@ -2641,7 +2509,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralSet",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {
               "list": {"variable": "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteral"}}},
@@ -2650,7 +2517,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralCollection",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {
               "list": {"variable": "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteral"}}},
@@ -2659,7 +2525,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteral",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2724,7 +2589,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralMap",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {
               "list": {"variable": "hydra.ext.org.apache.tinkerpop.gremlin.MapEntry"}}},
@@ -2733,7 +2597,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.MapEntry",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2747,7 +2610,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.MapKey",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "string", "type": {"literal": {"string": {}}}},
@@ -2784,21 +2646,18 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.IntegerLiteral",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"literal": {"integer": {"bigint": {}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.FloatLiteral",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"literal": {"float": {"bigfloat": {}}}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.NumericLiteral",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -2812,7 +2671,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.DateLiteral",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {
               "maybe": {"variable": "hydra.ext.org.apache.tinkerpop.gremlin.StringArgument"}}},
@@ -2821,7 +2679,6 @@
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.Keyword",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "edges", "type": {"unit": {}}},
@@ -2832,12 +2689,8 @@
     {
       "type": {
         "name": "hydra.ext.org.apache.tinkerpop.gremlin.Identifier",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}}],
-  "description": [
-    "A Gremlin model, based on the Gremlin ANTLR grammar (master branch, as of 2024-06-30)."],
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}}],
+  "description": "A Gremlin model, based on the Gremlin ANTLR grammar (master branch, as of 2024-06-30).",
   "namespace": "hydra.ext.org.apache.tinkerpop.gremlin",
   "termDependencies": ["hydra.core"],
   "typeDependencies": ["hydra.core"]}

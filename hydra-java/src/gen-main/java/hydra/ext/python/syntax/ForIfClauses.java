@@ -9,9 +9,9 @@ public class ForIfClauses implements Serializable, Comparable<ForIfClauses> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.ForIfClause> value;
+  public final java.util.List<hydra.ext.python.syntax.ForIfClause> value;
 
-  public ForIfClauses (hydra.util.ConsList<hydra.ext.python.syntax.ForIfClause> value) {
+  public ForIfClauses (java.util.List<hydra.ext.python.syntax.ForIfClause> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class ForIfClauses implements Serializable, Comparable<ForIfClauses> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ForIfClauses other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

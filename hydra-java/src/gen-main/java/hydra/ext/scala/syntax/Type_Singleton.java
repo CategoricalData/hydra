@@ -34,6 +34,8 @@ public class Type_Singleton implements Serializable, Comparable<Type_Singleton> 
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Type_Singleton other) {
-    return ((Comparable) ref).compareTo(other.ref);
+    return hydra.util.Comparing.compare(
+      ref,
+      other.ref);
   }
 }

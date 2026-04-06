@@ -15,15 +15,15 @@ public class ShapeDefinition implements Serializable, Comparable<ShapeDefinition
 
   public static final hydra.core.Name SEMANTIC_ACTIONS = new hydra.core.Name("SemanticActions");
 
-  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.ShapeDefinition_ListOfAlts_Elmt> listOfAlts;
+  public final java.util.List<hydra.ext.io.shex.syntax.ShapeDefinition_ListOfAlts_Elmt> listOfAlts;
 
   public final hydra.util.Maybe<hydra.ext.io.shex.syntax.TripleExpression> TripleExpression;
 
-  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation;
+  public final java.util.List<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation;
 
   public final hydra.ext.io.shex.syntax.SemanticActions SemanticActions;
 
-  public ShapeDefinition (hydra.util.ConsList<hydra.ext.io.shex.syntax.ShapeDefinition_ListOfAlts_Elmt> listOfAlts, hydra.util.Maybe<hydra.ext.io.shex.syntax.TripleExpression> TripleExpression, hydra.util.ConsList<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation, hydra.ext.io.shex.syntax.SemanticActions SemanticActions) {
+  public ShapeDefinition (java.util.List<hydra.ext.io.shex.syntax.ShapeDefinition_ListOfAlts_Elmt> listOfAlts, hydra.util.Maybe<hydra.ext.io.shex.syntax.TripleExpression> TripleExpression, java.util.List<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation, hydra.ext.io.shex.syntax.SemanticActions SemanticActions) {
     this.listOfAlts = listOfAlts;
     this.TripleExpression = TripleExpression;
     this.listOfAnnotation = listOfAnnotation;
@@ -56,22 +56,30 @@ public class ShapeDefinition implements Serializable, Comparable<ShapeDefinition
   @SuppressWarnings("unchecked")
   public int compareTo(ShapeDefinition other) {
     int cmp = 0;
-    cmp = ((Comparable) listOfAlts).compareTo(other.listOfAlts);
+    cmp = hydra.util.Comparing.compare(
+      listOfAlts,
+      other.listOfAlts);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) TripleExpression).compareTo(other.TripleExpression);
+    cmp = hydra.util.Comparing.compare(
+      TripleExpression,
+      other.TripleExpression);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) listOfAnnotation).compareTo(other.listOfAnnotation);
+    cmp = hydra.util.Comparing.compare(
+      listOfAnnotation,
+      other.listOfAnnotation);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) SemanticActions).compareTo(other.SemanticActions);
+    return hydra.util.Comparing.compare(
+      SemanticActions,
+      other.SemanticActions);
   }
 
-  public ShapeDefinition withListOfAlts(hydra.util.ConsList<hydra.ext.io.shex.syntax.ShapeDefinition_ListOfAlts_Elmt> listOfAlts) {
+  public ShapeDefinition withListOfAlts(java.util.List<hydra.ext.io.shex.syntax.ShapeDefinition_ListOfAlts_Elmt> listOfAlts) {
     return new ShapeDefinition(listOfAlts, TripleExpression, listOfAnnotation, SemanticActions);
   }
 
@@ -79,7 +87,7 @@ public class ShapeDefinition implements Serializable, Comparable<ShapeDefinition
     return new ShapeDefinition(listOfAlts, TripleExpression, listOfAnnotation, SemanticActions);
   }
 
-  public ShapeDefinition withListOfAnnotation(hydra.util.ConsList<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation) {
+  public ShapeDefinition withListOfAnnotation(java.util.List<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation) {
     return new ShapeDefinition(listOfAlts, TripleExpression, listOfAnnotation, SemanticActions);
   }
 

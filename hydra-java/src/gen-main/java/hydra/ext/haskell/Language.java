@@ -7,30 +7,30 @@ package hydra.ext.haskell;
  */
 public interface Language {
   static hydra.coders.Language haskellLanguage() {
-    hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.EliminationVariant>> eliminationVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(
+    hydra.util.Lazy<java.util.Set<hydra.variants.EliminationVariant>> eliminationVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.variants.EliminationVariant.Record(),
       new hydra.variants.EliminationVariant.Union(),
       new hydra.variants.EliminationVariant.Wrap())));
-    hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.FloatType>> floatTypes = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(
+    hydra.util.Lazy<java.util.Set<hydra.core.FloatType>> floatTypes = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.core.FloatType.Float32(),
       new hydra.core.FloatType.Float64())));
-    hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.FunctionVariant>> functionVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(
+    hydra.util.Lazy<java.util.Set<hydra.variants.FunctionVariant>> functionVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.variants.FunctionVariant.Elimination(),
       new hydra.variants.FunctionVariant.Lambda(),
       new hydra.variants.FunctionVariant.Primitive())));
-    hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.IntegerType>> integerTypes = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(
+    hydra.util.Lazy<java.util.Set<hydra.core.IntegerType>> integerTypes = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.core.IntegerType.Bigint(),
       new hydra.core.IntegerType.Int8(),
       new hydra.core.IntegerType.Int16(),
       new hydra.core.IntegerType.Int32(),
       new hydra.core.IntegerType.Int64())));
-    hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.LiteralVariant>> literalVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(
+    hydra.util.Lazy<java.util.Set<hydra.variants.LiteralVariant>> literalVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.variants.LiteralVariant.Binary(),
       new hydra.variants.LiteralVariant.Boolean_(),
       new hydra.variants.LiteralVariant.Float_(),
       new hydra.variants.LiteralVariant.Integer_(),
       new hydra.variants.LiteralVariant.String_())));
-    hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.TermVariant>> termVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(
+    hydra.util.Lazy<java.util.Set<hydra.variants.TermVariant>> termVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.variants.TermVariant.Annotated(),
       new hydra.variants.TermVariant.Application(),
       new hydra.variants.TermVariant.Either(),
@@ -47,7 +47,7 @@ public interface Language {
       new hydra.variants.TermVariant.Unit(),
       new hydra.variants.TermVariant.Variable(),
       new hydra.variants.TermVariant.Wrap())));
-    hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.TypeVariant>> typeVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(
+    hydra.util.Lazy<java.util.Set<hydra.variants.TypeVariant>> typeVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.Arrays.asList(
       new hydra.variants.TypeVariant.Annotated(),
       new hydra.variants.TypeVariant.Application(),
       new hydra.variants.TypeVariant.Either(),
@@ -72,8 +72,8 @@ public interface Language {
     return true;
   }
 
-  static hydra.util.PersistentSet<String> reservedWords() {
-    hydra.util.ConsList<String> keywordSymbols = hydra.util.ConsList.of(
+  static java.util.Set<String> reservedWords() {
+    java.util.List<String> keywordSymbols = java.util.Arrays.asList(
       "case",
       "class",
       "data",
@@ -97,7 +97,7 @@ public interface Language {
       "then",
       "type",
       "where");
-    hydra.util.ConsList<String> reservedSymbols = hydra.util.ConsList.of(
+    java.util.List<String> reservedSymbols = java.util.Arrays.asList(
       "Bool",
       "Double",
       "False",

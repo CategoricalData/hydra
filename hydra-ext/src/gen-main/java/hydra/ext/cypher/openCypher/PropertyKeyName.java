@@ -34,6 +34,8 @@ public class PropertyKeyName implements Serializable, Comparable<PropertyKeyName
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PropertyKeyName other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

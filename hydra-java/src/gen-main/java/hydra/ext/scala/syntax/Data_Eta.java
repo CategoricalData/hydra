@@ -34,6 +34,8 @@ public class Data_Eta implements Serializable, Comparable<Data_Eta> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Data_Eta other) {
-    return ((Comparable) expr).compareTo(other.expr);
+    return hydra.util.Comparing.compare(
+      expr,
+      other.expr);
   }
 }

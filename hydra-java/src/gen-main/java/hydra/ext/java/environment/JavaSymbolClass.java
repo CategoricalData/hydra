@@ -174,7 +174,9 @@ public abstract class JavaSymbolClass implements Serializable, Comparable<JavaSy
         return tagCmp;
       }
       HoistedLambda o = (HoistedLambda) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

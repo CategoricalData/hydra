@@ -34,6 +34,8 @@ public class NMTOKEN implements Serializable, Comparable<NMTOKEN> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(NMTOKEN other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

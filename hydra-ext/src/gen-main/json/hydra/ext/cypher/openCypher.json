@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.Query",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -18,7 +17,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.RegularQuery",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -32,7 +30,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.Union",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "all", "type": {"literal": {"boolean": {}}}},
@@ -44,7 +41,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.SingleQuery",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -58,7 +54,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.SinglePartQuery",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -75,7 +70,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.WithClause",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -92,7 +86,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.MultiPartQuery",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -106,7 +99,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.UpdatingClause",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -129,7 +121,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.ReadingClause",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -146,7 +137,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.Match",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "optional", "type": {"literal": {"boolean": {}}}},
@@ -161,7 +151,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.Unwind",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -175,7 +164,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.Merge",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -189,7 +177,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.MatchOrCreate",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "match", "type": {"unit": {}}},
@@ -199,7 +186,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.MergeAction",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -213,14 +199,12 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.Create",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.cypher.openCypher.Pattern"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.cypher.openCypher.Set",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.cypher.openCypher.SetItem"}}},
           "variables": []}}},
@@ -228,7 +212,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.SetItem",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -248,7 +231,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.PropertyEquals",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -262,7 +244,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.VariableEquals",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -276,7 +257,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.VariablePlusEquals",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -290,7 +270,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.VariableAndNodeLabels",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -304,7 +283,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.Delete",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "detach", "type": {"literal": {"boolean": {}}}},
@@ -316,7 +294,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.Remove",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.cypher.openCypher.RemoveItem"}}},
           "variables": []}}},
@@ -324,7 +301,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.RemoveItem",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -338,7 +314,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.InQueryCall",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -353,7 +328,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.ProcedureInvocation",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -369,7 +343,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.StarOrYieldItems",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "star", "type": {"unit": {}}},
@@ -381,7 +354,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.StandaloneCall",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -396,7 +368,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.YieldItems",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -410,7 +381,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.YieldItem",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -425,7 +395,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.With",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -439,14 +408,12 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.Return",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.cypher.openCypher.ProjectionBody"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.cypher.openCypher.ProjectionBody",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "distinct", "type": {"literal": {"boolean": {}}}},
@@ -467,7 +434,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.ProjectionItems",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "star", "type": {"literal": {"boolean": {}}}},
@@ -479,7 +445,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.ProjectionItem",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -493,7 +458,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.Order",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.cypher.openCypher.SortItem"}}},
           "variables": []}}},
@@ -501,21 +465,18 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.Skip",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.cypher.openCypher.Expression"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.cypher.openCypher.Limit",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.cypher.openCypher.Expression"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.cypher.openCypher.SortOrder",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "ascending", "type": {"unit": {}}},
@@ -525,7 +486,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.SortItem",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -539,14 +499,12 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.Where",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.cypher.openCypher.Expression"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.cypher.openCypher.Pattern",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.cypher.openCypher.PatternPart"}}},
           "variables": []}}},
@@ -554,7 +512,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.PatternPart",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -568,14 +525,12 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.AnonymousPatternPart",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.cypher.openCypher.PatternElement"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.cypher.openCypher.NodePatternChain",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -590,7 +545,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.PatternElement",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -604,7 +558,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.RelationshipsPattern",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -619,7 +572,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.NodePattern",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -636,7 +588,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.PatternElementChain",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -650,7 +601,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.RelationshipPattern",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "leftArrow", "type": {"literal": {"boolean": {}}}},
@@ -664,7 +614,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.RelationshipDetail",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -685,7 +634,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.Properties",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -699,7 +647,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.RelationshipTypes",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.cypher.openCypher.RelTypeName"}}},
           "variables": []}}},
@@ -707,22 +654,17 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.NodeLabels",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.cypher.openCypher.NodeLabel"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.cypher.openCypher.NodeLabel",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.cypher.openCypher.RangeLiteral",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -735,15 +677,11 @@
     {
       "type": {
         "name": "hydra.ext.cypher.openCypher.RelTypeName",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.cypher.openCypher.PropertyExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -757,14 +695,12 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.Expression",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.cypher.openCypher.OrExpression"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.cypher.openCypher.OrExpression",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.cypher.openCypher.XorExpression"}}},
           "variables": []}}},
@@ -772,7 +708,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.XorExpression",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.cypher.openCypher.AndExpression"}}},
           "variables": []}}},
@@ -780,7 +715,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.AndExpression",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.cypher.openCypher.NotExpression"}}},
           "variables": []}}},
@@ -788,7 +722,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.NotExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "not", "type": {"literal": {"boolean": {}}}},
@@ -800,7 +733,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.ComparisonExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -817,7 +749,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.ComparisonOperator",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "eq", "type": {"unit": {}}},
@@ -831,7 +762,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.PartialComparisonExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -846,7 +776,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.StringListNullPredicateExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -862,7 +791,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.StringListNullPredicateRightHandSide",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -879,7 +807,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.StringPredicateExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -893,7 +820,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.StringPredicateOperator",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "startsWith", "type": {"unit": {}}},
@@ -904,22 +830,17 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.ListPredicateExpression",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"variable": "hydra.ext.cypher.openCypher.AddOrSubtractExpression"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.cypher.openCypher.NullPredicateExpression",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"boolean": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"boolean": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.cypher.openCypher.AddOrSubtractExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -935,7 +856,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.AddOrSubtractRightHandSide",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -950,7 +870,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.AddOrSubtractOperator",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "add", "type": {"unit": {}}},
@@ -960,7 +879,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.MultiplyDivideModuloExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -976,7 +894,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.MultiplyDivideModuloRightHandSide",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -991,7 +908,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.MultiplyDivideModuloOperator",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "multiply", "type": {"unit": {}}},
@@ -1002,7 +918,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.PowerOfExpression",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {
               "list": {
@@ -1012,7 +927,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.UnaryAddOrSubtractExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1028,7 +942,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.ListOperatorExpressionOrPropertyLookup",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1042,7 +955,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.NonArithmeticOperatorExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1061,7 +973,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.RangeExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1075,7 +986,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.ListOperatorExpression",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1089,14 +999,12 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.PropertyLookup",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.cypher.openCypher.PropertyKeyName"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.cypher.openCypher.Atom",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1138,7 +1046,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.CaseExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1155,7 +1062,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.CaseAlternative",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1169,7 +1075,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.ListComprehension",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1183,7 +1088,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.PatternComprehension",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1203,7 +1107,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.Quantifier",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1217,7 +1120,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.QuantifierOperator",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "all", "type": {"unit": {}}},
@@ -1229,7 +1131,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.FilterExpression",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1243,7 +1144,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.PatternPredicate",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"variable": "hydra.ext.cypher.openCypher.RelationshipsPattern"}},
           "variables": []}}},
@@ -1251,14 +1151,12 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.ParenthesizedExpression",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.cypher.openCypher.Expression"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.cypher.openCypher.IdInColl",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1272,7 +1170,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.FunctionInvocation",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1287,7 +1184,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.QualifiedName",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "namespace", "type": {"literal": {"string": {}}}},
@@ -1297,7 +1193,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.PatternWhere",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1311,7 +1206,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.ExistentialSubquery",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1325,7 +1219,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.ExplicitProcedureInvocation",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1339,28 +1232,20 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.ImplicitProcedureInvocation",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.cypher.openCypher.QualifiedName"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.cypher.openCypher.ProcedureResultField",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.cypher.openCypher.Variable",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.cypher.openCypher.Literal",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "boolean", "type": {"literal": {"boolean": {}}}},
@@ -1382,7 +1267,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.NumberLiteral",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "double", "type": {"literal": {"float": {"float64": {}}}}},
@@ -1391,15 +1275,11 @@
     {
       "type": {
         "name": "hydra.ext.cypher.openCypher.StringLiteral",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.cypher.openCypher.ListLiteral",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.cypher.openCypher.Expression"}}},
           "variables": []}}},
@@ -1407,7 +1287,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.MapLiteral",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.cypher.openCypher.KeyValuePair"}}},
           "variables": []}}},
@@ -1415,7 +1294,6 @@
       "type": {
         "name": "hydra.ext.cypher.openCypher.KeyValuePair",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1428,22 +1306,17 @@
     {
       "type": {
         "name": "hydra.ext.cypher.openCypher.PropertyKeyName",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.cypher.openCypher.Parameter",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "symbolic", "type": {"literal": {"string": {}}}},
               {"name": "integer", "type": {"literal": {"integer": {"bigint": {}}}}}]},
           "variables": []}}}],
-  "description": [
-    "A Cypher model based on the OpenCypher specification (version 23), copyright Neo Technology, available at:\n  https://opencypher.org/resources/"],
+  "description": "A Cypher model based on the OpenCypher specification (version 23), copyright Neo Technology, available at:\n  https://opencypher.org/resources/",
   "namespace": "hydra.ext.cypher.openCypher",
   "termDependencies": ["hydra.core"],
   "typeDependencies": ["hydra.core"]}

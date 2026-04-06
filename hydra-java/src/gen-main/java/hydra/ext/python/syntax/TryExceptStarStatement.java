@@ -17,13 +17,13 @@ public class TryExceptStarStatement implements Serializable, Comparable<TryExcep
 
   public final hydra.ext.python.syntax.Block body;
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.ExceptStarBlock> excepts;
+  public final java.util.List<hydra.ext.python.syntax.ExceptStarBlock> excepts;
 
   public final hydra.util.Maybe<hydra.ext.python.syntax.Block> else_;
 
   public final hydra.util.Maybe<hydra.ext.python.syntax.Block> finally_;
 
-  public TryExceptStarStatement (hydra.ext.python.syntax.Block body, hydra.util.ConsList<hydra.ext.python.syntax.ExceptStarBlock> excepts, hydra.util.Maybe<hydra.ext.python.syntax.Block> else_, hydra.util.Maybe<hydra.ext.python.syntax.Block> finally_) {
+  public TryExceptStarStatement (hydra.ext.python.syntax.Block body, java.util.List<hydra.ext.python.syntax.ExceptStarBlock> excepts, hydra.util.Maybe<hydra.ext.python.syntax.Block> else_, hydra.util.Maybe<hydra.ext.python.syntax.Block> finally_) {
     this.body = body;
     this.excepts = excepts;
     this.else_ = else_;
@@ -56,26 +56,34 @@ public class TryExceptStarStatement implements Serializable, Comparable<TryExcep
   @SuppressWarnings("unchecked")
   public int compareTo(TryExceptStarStatement other) {
     int cmp = 0;
-    cmp = ((Comparable) body).compareTo(other.body);
+    cmp = hydra.util.Comparing.compare(
+      body,
+      other.body);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) excepts).compareTo(other.excepts);
+    cmp = hydra.util.Comparing.compare(
+      excepts,
+      other.excepts);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) else_).compareTo(other.else_);
+    cmp = hydra.util.Comparing.compare(
+      else_,
+      other.else_);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) finally_).compareTo(other.finally_);
+    return hydra.util.Comparing.compare(
+      finally_,
+      other.finally_);
   }
 
   public TryExceptStarStatement withBody(hydra.ext.python.syntax.Block body) {
     return new TryExceptStarStatement(body, excepts, else_, finally_);
   }
 
-  public TryExceptStarStatement withExcepts(hydra.util.ConsList<hydra.ext.python.syntax.ExceptStarBlock> excepts) {
+  public TryExceptStarStatement withExcepts(java.util.List<hydra.ext.python.syntax.ExceptStarBlock> excepts) {
     return new TryExceptStarStatement(body, excepts, else_, finally_);
   }
 

@@ -51,11 +51,15 @@ public class WrappedTerm implements Serializable, Comparable<WrappedTerm> {
   @SuppressWarnings("unchecked")
   public int compareTo(WrappedTerm other) {
     int cmp = 0;
-    cmp = ((Comparable) typeName).compareTo(other.typeName);
+    cmp = hydra.util.Comparing.compare(
+      typeName,
+      other.typeName);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
   public WrappedTerm withTypeName(hydra.core.Name typeName) {

@@ -42,11 +42,15 @@ public class TraversalSourceQuery implements Serializable, Comparable<TraversalS
   @SuppressWarnings("unchecked")
   public int compareTo(TraversalSourceQuery other) {
     int cmp = 0;
-    cmp = ((Comparable) source).compareTo(other.source);
+    cmp = hydra.util.Comparing.compare(
+      source,
+      other.source);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) transactionPart).compareTo(other.transactionPart);
+    return hydra.util.Comparing.compare(
+      transactionPart,
+      other.transactionPart);
   }
 
   public TraversalSourceQuery withSource(hydra.ext.org.apache.tinkerpop.gremlin.TraversalSource source) {

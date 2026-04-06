@@ -51,11 +51,15 @@ public class FieldWithComments implements Serializable, Comparable<FieldWithComm
   @SuppressWarnings("unchecked")
   public int compareTo(FieldWithComments other) {
     int cmp = 0;
-    cmp = ((Comparable) field).compareTo(other.field);
+    cmp = hydra.util.Comparing.compare(
+      field,
+      other.field);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) comments).compareTo(other.comments);
+    return hydra.util.Comparing.compare(
+      comments,
+      other.comments);
   }
 
   public FieldWithComments withField(hydra.ext.haskell.syntax.Field field) {

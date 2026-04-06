@@ -68,7 +68,9 @@ public abstract class AnnotationTypeElementModifier implements Serializable, Com
         return tagCmp;
       }
       Public o = (Public) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

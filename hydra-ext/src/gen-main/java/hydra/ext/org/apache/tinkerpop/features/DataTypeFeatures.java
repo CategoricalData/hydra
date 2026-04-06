@@ -211,75 +211,111 @@ public class DataTypeFeatures implements Serializable, Comparable<DataTypeFeatur
   @SuppressWarnings("unchecked")
   public int compareTo(DataTypeFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) supportsBooleanArrayValues).compareTo(other.supportsBooleanArrayValues);
+    cmp = hydra.util.Comparing.compare(
+      supportsBooleanArrayValues,
+      other.supportsBooleanArrayValues);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsBooleanValues).compareTo(other.supportsBooleanValues);
+    cmp = hydra.util.Comparing.compare(
+      supportsBooleanValues,
+      other.supportsBooleanValues);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsByteArrayValues).compareTo(other.supportsByteArrayValues);
+    cmp = hydra.util.Comparing.compare(
+      supportsByteArrayValues,
+      other.supportsByteArrayValues);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsByteValues).compareTo(other.supportsByteValues);
+    cmp = hydra.util.Comparing.compare(
+      supportsByteValues,
+      other.supportsByteValues);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsDoubleArrayValues).compareTo(other.supportsDoubleArrayValues);
+    cmp = hydra.util.Comparing.compare(
+      supportsDoubleArrayValues,
+      other.supportsDoubleArrayValues);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsDoubleValues).compareTo(other.supportsDoubleValues);
+    cmp = hydra.util.Comparing.compare(
+      supportsDoubleValues,
+      other.supportsDoubleValues);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsFloatArrayValues).compareTo(other.supportsFloatArrayValues);
+    cmp = hydra.util.Comparing.compare(
+      supportsFloatArrayValues,
+      other.supportsFloatArrayValues);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsFloatValues).compareTo(other.supportsFloatValues);
+    cmp = hydra.util.Comparing.compare(
+      supportsFloatValues,
+      other.supportsFloatValues);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsIntegerArrayValues).compareTo(other.supportsIntegerArrayValues);
+    cmp = hydra.util.Comparing.compare(
+      supportsIntegerArrayValues,
+      other.supportsIntegerArrayValues);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsIntegerValues).compareTo(other.supportsIntegerValues);
+    cmp = hydra.util.Comparing.compare(
+      supportsIntegerValues,
+      other.supportsIntegerValues);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsLongArrayValues).compareTo(other.supportsLongArrayValues);
+    cmp = hydra.util.Comparing.compare(
+      supportsLongArrayValues,
+      other.supportsLongArrayValues);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsLongValues).compareTo(other.supportsLongValues);
+    cmp = hydra.util.Comparing.compare(
+      supportsLongValues,
+      other.supportsLongValues);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsMapValues).compareTo(other.supportsMapValues);
+    cmp = hydra.util.Comparing.compare(
+      supportsMapValues,
+      other.supportsMapValues);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsMixedListValues).compareTo(other.supportsMixedListValues);
+    cmp = hydra.util.Comparing.compare(
+      supportsMixedListValues,
+      other.supportsMixedListValues);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsSerializableValues).compareTo(other.supportsSerializableValues);
+    cmp = hydra.util.Comparing.compare(
+      supportsSerializableValues,
+      other.supportsSerializableValues);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsStringArrayValues).compareTo(other.supportsStringArrayValues);
+    cmp = hydra.util.Comparing.compare(
+      supportsStringArrayValues,
+      other.supportsStringArrayValues);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsStringValues).compareTo(other.supportsStringValues);
+    cmp = hydra.util.Comparing.compare(
+      supportsStringValues,
+      other.supportsStringValues);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) supportsUniformListValues).compareTo(other.supportsUniformListValues);
+    return hydra.util.Comparing.compare(
+      supportsUniformListValues,
+      other.supportsUniformListValues);
   }
 
   public DataTypeFeatures withSupportsBooleanArrayValues(Boolean supportsBooleanArrayValues) {

@@ -76,7 +76,9 @@ public abstract class ConditionalExpression implements Serializable, Comparable<
         return tagCmp;
       }
       Simple o = (Simple) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class ConditionalExpression implements Serializable, Comparable<
         return tagCmp;
       }
       TernaryCond o = (TernaryCond) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class ConditionalExpression implements Serializable, Comparable<
         return tagCmp;
       }
       TernaryLambda o = (TernaryLambda) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

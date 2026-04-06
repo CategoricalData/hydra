@@ -61,15 +61,21 @@ public class Alternative implements Serializable, Comparable<Alternative> {
   @SuppressWarnings("unchecked")
   public int compareTo(Alternative other) {
     int cmp = 0;
-    cmp = ((Comparable) pattern).compareTo(other.pattern);
+    cmp = hydra.util.Comparing.compare(
+      pattern,
+      other.pattern);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) rhs).compareTo(other.rhs);
+    cmp = hydra.util.Comparing.compare(
+      rhs,
+      other.rhs);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) binds).compareTo(other.binds);
+    return hydra.util.Comparing.compare(
+      binds,
+      other.binds);
   }
 
   public Alternative withPattern(hydra.ext.haskell.syntax.Pattern pattern) {

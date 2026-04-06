@@ -42,11 +42,15 @@ public class LabeledStatement implements Serializable, Comparable<LabeledStateme
   @SuppressWarnings("unchecked")
   public int compareTo(LabeledStatement other) {
     int cmp = 0;
-    cmp = ((Comparable) identifier).compareTo(other.identifier);
+    cmp = hydra.util.Comparing.compare(
+      identifier,
+      other.identifier);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) statement).compareTo(other.statement);
+    return hydra.util.Comparing.compare(
+      statement,
+      other.statement);
   }
 
   public LabeledStatement withIdentifier(hydra.ext.java.syntax.Identifier identifier) {

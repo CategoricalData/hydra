@@ -11,11 +11,11 @@ public class FuncType implements Serializable, Comparable<FuncType> {
 
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
 
-  public final hydra.util.ConsList<hydra.ext.python.syntax.TypeExpression> type;
+  public final java.util.List<hydra.ext.python.syntax.TypeExpression> type;
 
   public final hydra.ext.python.syntax.Expression body;
 
-  public FuncType (hydra.util.ConsList<hydra.ext.python.syntax.TypeExpression> type, hydra.ext.python.syntax.Expression body) {
+  public FuncType (java.util.List<hydra.ext.python.syntax.TypeExpression> type, hydra.ext.python.syntax.Expression body) {
     this.type = type;
     this.body = body;
   }
@@ -42,14 +42,18 @@ public class FuncType implements Serializable, Comparable<FuncType> {
   @SuppressWarnings("unchecked")
   public int compareTo(FuncType other) {
     int cmp = 0;
-    cmp = ((Comparable) type).compareTo(other.type);
+    cmp = hydra.util.Comparing.compare(
+      type,
+      other.type);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
-  public FuncType withType(hydra.util.ConsList<hydra.ext.python.syntax.TypeExpression> type) {
+  public FuncType withType(java.util.List<hydra.ext.python.syntax.TypeExpression> type) {
     return new FuncType(type, body);
   }
 

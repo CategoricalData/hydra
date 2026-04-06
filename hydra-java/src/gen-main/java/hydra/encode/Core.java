@@ -7,7 +7,7 @@ package hydra.encode;
  */
 public interface Core {
   static hydra.core.Term annotatedTerm(hydra.core.AnnotatedTerm x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.AnnotatedTerm"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.AnnotatedTerm"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("body"), hydra.encode.Core.term((x).body)),
       new hydra.core.Field(new hydra.core.Name("annotation"), new hydra.core.Term.Map(hydra.lib.maps.Bimap.apply(
         hydra.encode.Core::name,
@@ -16,7 +16,7 @@ public interface Core {
   }
 
   static hydra.core.Term annotatedType(hydra.core.AnnotatedType x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.AnnotatedType"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.AnnotatedType"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("body"), hydra.encode.Core.type((x).body)),
       new hydra.core.Field(new hydra.core.Name("annotation"), new hydra.core.Term.Map(hydra.lib.maps.Bimap.apply(
         hydra.encode.Core::name,
@@ -25,19 +25,19 @@ public interface Core {
   }
 
   static hydra.core.Term application(hydra.core.Application x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Application"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Application"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("function"), hydra.encode.Core.term((x).function)),
       new hydra.core.Field(new hydra.core.Name("argument"), hydra.encode.Core.term((x).argument)))));
   }
 
   static hydra.core.Term applicationType(hydra.core.ApplicationType x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.ApplicationType"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.ApplicationType"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("function"), hydra.encode.Core.type((x).function)),
       new hydra.core.Field(new hydra.core.Name("argument"), hydra.encode.Core.type((x).argument)))));
   }
 
   static hydra.core.Term binding(hydra.core.Binding x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Binding"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Binding"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)),
       new hydra.core.Field(new hydra.core.Name("term"), hydra.encode.Core.term((x).term)),
       new hydra.core.Field(new hydra.core.Name("type"), new hydra.core.Term.Maybe(hydra.lib.maybes.Map.apply(
@@ -46,7 +46,7 @@ public interface Core {
   }
 
   static hydra.core.Term caseStatement(hydra.core.CaseStatement x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.CaseStatement"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.CaseStatement"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("typeName"), hydra.encode.Core.name((x).typeName)),
       new hydra.core.Field(new hydra.core.Name("default"), new hydra.core.Term.Maybe(hydra.lib.maybes.Map.apply(
         hydra.encode.Core::term,
@@ -57,7 +57,7 @@ public interface Core {
   }
 
   static hydra.core.Term eitherType(hydra.core.EitherType x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.EitherType"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.EitherType"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("left"), hydra.encode.Core.type((x).left)),
       new hydra.core.Field(new hydra.core.Name("right"), hydra.encode.Core.type((x).right)))));
   }
@@ -82,13 +82,13 @@ public interface Core {
   }
 
   static hydra.core.Term field(hydra.core.Field x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Field"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Field"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)),
       new hydra.core.Field(new hydra.core.Name("term"), hydra.encode.Core.term((x).term)))));
   }
 
   static hydra.core.Term fieldType(hydra.core.FieldType x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.FieldType"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.FieldType"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)),
       new hydra.core.Field(new hydra.core.Name("type"), hydra.encode.Core.type((x).type)))));
   }
@@ -132,7 +132,7 @@ public interface Core {
   }
 
   static hydra.core.Term forallType(hydra.core.ForallType x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.ForallType"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.ForallType"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("parameter"), hydra.encode.Core.name((x).parameter)),
       new hydra.core.Field(new hydra.core.Name("body"), hydra.encode.Core.type((x).body)))));
   }
@@ -157,13 +157,13 @@ public interface Core {
   }
 
   static hydra.core.Term functionType(hydra.core.FunctionType x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.FunctionType"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.FunctionType"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("domain"), hydra.encode.Core.type((x).domain)),
       new hydra.core.Field(new hydra.core.Name("codomain"), hydra.encode.Core.type((x).codomain)))));
   }
 
   static hydra.core.Term injection(hydra.core.Injection x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Injection"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Injection"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("typeName"), hydra.encode.Core.name((x).typeName)),
       new hydra.core.Field(new hydra.core.Name("field"), hydra.encode.Core.field((x).field)))));
   }
@@ -267,7 +267,7 @@ public interface Core {
   }
 
   static hydra.core.Term lambda(hydra.core.Lambda x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Lambda"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Lambda"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("parameter"), hydra.encode.Core.name((x).parameter)),
       new hydra.core.Field(new hydra.core.Name("domain"), new hydra.core.Term.Maybe(hydra.lib.maybes.Map.apply(
         hydra.encode.Core::type,
@@ -276,7 +276,7 @@ public interface Core {
   }
 
   static hydra.core.Term let(hydra.core.Let x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Let"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Let"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("bindings"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
         hydra.encode.Core::binding,
         (x).bindings))),
@@ -342,7 +342,7 @@ public interface Core {
   }
 
   static hydra.core.Term mapType(hydra.core.MapType x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.MapType"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.MapType"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("keys"), hydra.encode.Core.type((x).keys)),
       new hydra.core.Field(new hydra.core.Name("values"), hydra.encode.Core.type((x).values)))));
   }
@@ -352,19 +352,19 @@ public interface Core {
   }
 
   static hydra.core.Term pairType(hydra.core.PairType x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.PairType"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.PairType"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("first"), hydra.encode.Core.type((x).first)),
       new hydra.core.Field(new hydra.core.Name("second"), hydra.encode.Core.type((x).second)))));
   }
 
   static hydra.core.Term projection(hydra.core.Projection x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Projection"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Projection"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("typeName"), hydra.encode.Core.name((x).typeName)),
       new hydra.core.Field(new hydra.core.Name("field"), hydra.encode.Core.name((x).field)))));
   }
 
   static hydra.core.Term record(hydra.core.Record x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Record"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Record"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("typeName"), hydra.encode.Core.name((x).typeName)),
       new hydra.core.Field(new hydra.core.Name("fields"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
         hydra.encode.Core::field,
@@ -574,25 +574,25 @@ public interface Core {
   }
 
   static hydra.core.Term typeApplicationTerm(hydra.core.TypeApplicationTerm x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.TypeApplicationTerm"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.TypeApplicationTerm"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("body"), hydra.encode.Core.term((x).body)),
       new hydra.core.Field(new hydra.core.Name("type"), hydra.encode.Core.type((x).type)))));
   }
 
   static hydra.core.Term typeLambda(hydra.core.TypeLambda x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.TypeLambda"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.TypeLambda"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("parameter"), hydra.encode.Core.name((x).parameter)),
       new hydra.core.Field(new hydra.core.Name("body"), hydra.encode.Core.term((x).body)))));
   }
 
   static hydra.core.Term typeScheme(hydra.core.TypeScheme x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.TypeScheme"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.TypeScheme"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("variables"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
         hydra.encode.Core::name,
         (x).variables))),
       new hydra.core.Field(new hydra.core.Name("type"), hydra.encode.Core.type((x).type)),
       new hydra.core.Field(new hydra.core.Name("constraints"), new hydra.core.Term.Maybe(hydra.lib.maybes.Map.apply(
-        (java.util.function.Function<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>, hydra.core.Term>) (m -> new hydra.core.Term.Map(hydra.lib.maps.Bimap.apply(
+        (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>, hydra.core.Term>) (m -> new hydra.core.Term.Map(hydra.lib.maps.Bimap.apply(
           hydra.encode.Core::name,
           hydra.encode.Core::typeVariableMetadata,
           m))),
@@ -600,13 +600,13 @@ public interface Core {
   }
 
   static hydra.core.Term typeVariableMetadata(hydra.core.TypeVariableMetadata x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.TypeVariableMetadata"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("classes"), new hydra.core.Term.Set(hydra.lib.sets.Map.apply(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.TypeVariableMetadata"), java.util.Arrays.asList(new hydra.core.Field(new hydra.core.Name("classes"), new hydra.core.Term.Set(hydra.lib.sets.Map.apply(
       hydra.encode.Core::name,
       (x).classes))))));
   }
 
   static hydra.core.Term wrappedTerm(hydra.core.WrappedTerm x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.WrappedTerm"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.WrappedTerm"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("typeName"), hydra.encode.Core.name((x).typeName)),
       new hydra.core.Field(new hydra.core.Name("body"), hydra.encode.Core.term((x).body)))));
   }

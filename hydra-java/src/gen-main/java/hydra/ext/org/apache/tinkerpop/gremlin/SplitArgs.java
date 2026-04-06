@@ -42,11 +42,15 @@ public class SplitArgs implements Serializable, Comparable<SplitArgs> {
   @SuppressWarnings("unchecked")
   public int compareTo(SplitArgs other) {
     int cmp = 0;
-    cmp = ((Comparable) scope).compareTo(other.scope);
+    cmp = hydra.util.Comparing.compare(
+      scope,
+      other.scope);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) delimiter).compareTo(other.delimiter);
+    return hydra.util.Comparing.compare(
+      delimiter,
+      other.delimiter);
   }
 
   public SplitArgs withScope(hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.TraversalScopeArgument> scope) {

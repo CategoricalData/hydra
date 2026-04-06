@@ -42,11 +42,15 @@ public class Enumerator_Generator implements Serializable, Comparable<Enumerator
   @SuppressWarnings("unchecked")
   public int compareTo(Enumerator_Generator other) {
     int cmp = 0;
-    cmp = ((Comparable) pat).compareTo(other.pat);
+    cmp = hydra.util.Comparing.compare(
+      pat,
+      other.pat);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) rhs).compareTo(other.rhs);
+    return hydra.util.Comparing.compare(
+      rhs,
+      other.rhs);
   }
 
   public Enumerator_Generator withPat(hydra.ext.scala.syntax.Pat pat) {

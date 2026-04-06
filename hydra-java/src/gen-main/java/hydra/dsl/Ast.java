@@ -23,7 +23,7 @@ public interface Ast {
   }
 
   static hydra.phantoms.TTerm<hydra.ast.BlockStyle> blockStyle(hydra.phantoms.TTerm<hydra.util.Maybe<String>> indent, hydra.phantoms.TTerm<Boolean> newlineBeforeContent, hydra.phantoms.TTerm<Boolean> newlineAfterContent) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.BlockStyle"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.BlockStyle"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("indent"), (indent).value),
       new hydra.core.Field(new hydra.core.Name("newlineBeforeContent"), (newlineBeforeContent).value),
       new hydra.core.Field(new hydra.core.Name("newlineAfterContent"), (newlineAfterContent).value)))));
@@ -42,28 +42,28 @@ public interface Ast {
   }
 
   static hydra.phantoms.TTerm<hydra.ast.BlockStyle> blockStyleWithIndent(hydra.phantoms.TTerm<hydra.ast.BlockStyle> original, hydra.phantoms.TTerm<hydra.util.Maybe<String>> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.BlockStyle"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.BlockStyle"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("indent"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("newlineBeforeContent"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.BlockStyle"), new hydra.core.Name("newlineBeforeContent"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("newlineAfterContent"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.BlockStyle"), new hydra.core.Name("newlineAfterContent"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.BlockStyle> blockStyleWithNewlineAfterContent(hydra.phantoms.TTerm<hydra.ast.BlockStyle> original, hydra.phantoms.TTerm<Boolean> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.BlockStyle"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.BlockStyle"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("indent"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.BlockStyle"), new hydra.core.Name("indent"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("newlineBeforeContent"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.BlockStyle"), new hydra.core.Name("newlineBeforeContent"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("newlineAfterContent"), (newVal).value)))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.BlockStyle> blockStyleWithNewlineBeforeContent(hydra.phantoms.TTerm<hydra.ast.BlockStyle> original, hydra.phantoms.TTerm<Boolean> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.BlockStyle"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.BlockStyle"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("indent"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.BlockStyle"), new hydra.core.Name("indent"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("newlineBeforeContent"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("newlineAfterContent"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.BlockStyle"), new hydra.core.Name("newlineAfterContent"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.BracketExpr> bracketExpr(hydra.phantoms.TTerm<hydra.ast.Brackets> brackets, hydra.phantoms.TTerm<hydra.ast.Expr> enclosed, hydra.phantoms.TTerm<hydra.ast.BlockStyle> style) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.BracketExpr"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.BracketExpr"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("brackets"), (brackets).value),
       new hydra.core.Field(new hydra.core.Name("enclosed"), (enclosed).value),
       new hydra.core.Field(new hydra.core.Name("style"), (style).value)))));
@@ -82,28 +82,28 @@ public interface Ast {
   }
 
   static hydra.phantoms.TTerm<hydra.ast.BracketExpr> bracketExprWithBrackets(hydra.phantoms.TTerm<hydra.ast.BracketExpr> original, hydra.phantoms.TTerm<hydra.ast.Brackets> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.BracketExpr"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.BracketExpr"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("brackets"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("enclosed"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.BracketExpr"), new hydra.core.Name("enclosed"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("style"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.BracketExpr"), new hydra.core.Name("style"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.BracketExpr> bracketExprWithEnclosed(hydra.phantoms.TTerm<hydra.ast.BracketExpr> original, hydra.phantoms.TTerm<hydra.ast.Expr> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.BracketExpr"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.BracketExpr"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("brackets"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.BracketExpr"), new hydra.core.Name("brackets"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("enclosed"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("style"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.BracketExpr"), new hydra.core.Name("style"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.BracketExpr> bracketExprWithStyle(hydra.phantoms.TTerm<hydra.ast.BracketExpr> original, hydra.phantoms.TTerm<hydra.ast.BlockStyle> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.BracketExpr"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.BracketExpr"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("brackets"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.BracketExpr"), new hydra.core.Name("brackets"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("enclosed"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.BracketExpr"), new hydra.core.Name("enclosed"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("style"), (newVal).value)))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.Brackets> brackets(hydra.phantoms.TTerm<hydra.ast.Symbol> open, hydra.phantoms.TTerm<hydra.ast.Symbol> close) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Brackets"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Brackets"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("open"), (open).value),
       new hydra.core.Field(new hydra.core.Name("close"), (close).value)))));
   }
@@ -117,13 +117,13 @@ public interface Ast {
   }
 
   static hydra.phantoms.TTerm<hydra.ast.Brackets> bracketsWithClose(hydra.phantoms.TTerm<hydra.ast.Brackets> original, hydra.phantoms.TTerm<hydra.ast.Symbol> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Brackets"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Brackets"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("open"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.Brackets"), new hydra.core.Name("open"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("close"), (newVal).value)))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.Brackets> bracketsWithOpen(hydra.phantoms.TTerm<hydra.ast.Brackets> original, hydra.phantoms.TTerm<hydra.ast.Symbol> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Brackets"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Brackets"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("open"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("close"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.Brackets"), new hydra.core.Name("close"))))), (original).value)))))));
   }
@@ -157,7 +157,7 @@ public interface Ast {
   }
 
   static hydra.phantoms.TTerm<hydra.ast.IndentedExpression> indentedExpression(hydra.phantoms.TTerm<hydra.ast.IndentStyle> style, hydra.phantoms.TTerm<hydra.ast.Expr> expr) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.IndentedExpression"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.IndentedExpression"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("style"), (style).value),
       new hydra.core.Field(new hydra.core.Name("expr"), (expr).value)))));
   }
@@ -171,19 +171,19 @@ public interface Ast {
   }
 
   static hydra.phantoms.TTerm<hydra.ast.IndentedExpression> indentedExpressionWithExpr(hydra.phantoms.TTerm<hydra.ast.IndentedExpression> original, hydra.phantoms.TTerm<hydra.ast.Expr> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.IndentedExpression"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.IndentedExpression"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("style"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.IndentedExpression"), new hydra.core.Name("style"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("expr"), (newVal).value)))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.IndentedExpression> indentedExpressionWithStyle(hydra.phantoms.TTerm<hydra.ast.IndentedExpression> original, hydra.phantoms.TTerm<hydra.ast.IndentStyle> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.IndentedExpression"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.IndentedExpression"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("style"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("expr"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.IndentedExpression"), new hydra.core.Name("expr"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.Op> op(hydra.phantoms.TTerm<hydra.ast.Symbol> symbol, hydra.phantoms.TTerm<hydra.ast.Padding> padding, hydra.phantoms.TTerm<hydra.ast.Precedence> precedence, hydra.phantoms.TTerm<hydra.ast.Associativity> associativity) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Op"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Op"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("symbol"), (symbol).value),
       new hydra.core.Field(new hydra.core.Name("padding"), (padding).value),
       new hydra.core.Field(new hydra.core.Name("precedence"), (precedence).value),
@@ -195,7 +195,7 @@ public interface Ast {
   }
 
   static hydra.phantoms.TTerm<hydra.ast.OpExpr> opExpr(hydra.phantoms.TTerm<hydra.ast.Op> op, hydra.phantoms.TTerm<hydra.ast.Expr> lhs, hydra.phantoms.TTerm<hydra.ast.Expr> rhs) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.OpExpr"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.OpExpr"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("op"), (op).value),
       new hydra.core.Field(new hydra.core.Name("lhs"), (lhs).value),
       new hydra.core.Field(new hydra.core.Name("rhs"), (rhs).value)))));
@@ -214,21 +214,21 @@ public interface Ast {
   }
 
   static hydra.phantoms.TTerm<hydra.ast.OpExpr> opExprWithLhs(hydra.phantoms.TTerm<hydra.ast.OpExpr> original, hydra.phantoms.TTerm<hydra.ast.Expr> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.OpExpr"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.OpExpr"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("op"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.OpExpr"), new hydra.core.Name("op"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("lhs"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("rhs"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.OpExpr"), new hydra.core.Name("rhs"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.OpExpr> opExprWithOp(hydra.phantoms.TTerm<hydra.ast.OpExpr> original, hydra.phantoms.TTerm<hydra.ast.Op> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.OpExpr"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.OpExpr"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("op"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("lhs"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.OpExpr"), new hydra.core.Name("lhs"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("rhs"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.OpExpr"), new hydra.core.Name("rhs"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.OpExpr> opExprWithRhs(hydra.phantoms.TTerm<hydra.ast.OpExpr> original, hydra.phantoms.TTerm<hydra.ast.Expr> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.OpExpr"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.OpExpr"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("op"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.OpExpr"), new hydra.core.Name("op"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("lhs"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.OpExpr"), new hydra.core.Name("lhs"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("rhs"), (newVal).value)))));
@@ -247,7 +247,7 @@ public interface Ast {
   }
 
   static hydra.phantoms.TTerm<hydra.ast.Op> opWithAssociativity(hydra.phantoms.TTerm<hydra.ast.Op> original, hydra.phantoms.TTerm<hydra.ast.Associativity> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Op"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Op"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("symbol"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.Op"), new hydra.core.Name("symbol"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("padding"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.Op"), new hydra.core.Name("padding"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("precedence"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.Op"), new hydra.core.Name("precedence"))))), (original).value))),
@@ -255,7 +255,7 @@ public interface Ast {
   }
 
   static hydra.phantoms.TTerm<hydra.ast.Op> opWithPadding(hydra.phantoms.TTerm<hydra.ast.Op> original, hydra.phantoms.TTerm<hydra.ast.Padding> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Op"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Op"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("symbol"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.Op"), new hydra.core.Name("symbol"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("padding"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("precedence"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.Op"), new hydra.core.Name("precedence"))))), (original).value))),
@@ -263,7 +263,7 @@ public interface Ast {
   }
 
   static hydra.phantoms.TTerm<hydra.ast.Op> opWithPrecedence(hydra.phantoms.TTerm<hydra.ast.Op> original, hydra.phantoms.TTerm<hydra.ast.Precedence> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Op"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Op"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("symbol"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.Op"), new hydra.core.Name("symbol"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("padding"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.Op"), new hydra.core.Name("padding"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("precedence"), (newVal).value),
@@ -271,7 +271,7 @@ public interface Ast {
   }
 
   static hydra.phantoms.TTerm<hydra.ast.Op> opWithSymbol(hydra.phantoms.TTerm<hydra.ast.Op> original, hydra.phantoms.TTerm<hydra.ast.Symbol> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Op"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Op"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("symbol"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("padding"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.Op"), new hydra.core.Name("padding"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("precedence"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.Op"), new hydra.core.Name("precedence"))))), (original).value))),
@@ -279,7 +279,7 @@ public interface Ast {
   }
 
   static hydra.phantoms.TTerm<hydra.ast.Padding> padding(hydra.phantoms.TTerm<hydra.ast.Ws> left, hydra.phantoms.TTerm<hydra.ast.Ws> right) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Padding"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Padding"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("left"), (left).value),
       new hydra.core.Field(new hydra.core.Name("right"), (right).value)))));
   }
@@ -293,13 +293,13 @@ public interface Ast {
   }
 
   static hydra.phantoms.TTerm<hydra.ast.Padding> paddingWithLeft(hydra.phantoms.TTerm<hydra.ast.Padding> original, hydra.phantoms.TTerm<hydra.ast.Ws> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Padding"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Padding"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("left"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("right"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.Padding"), new hydra.core.Name("right"))))), (original).value)))))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.Padding> paddingWithRight(hydra.phantoms.TTerm<hydra.ast.Padding> original, hydra.phantoms.TTerm<hydra.ast.Ws> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Padding"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Padding"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("left"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.Padding"), new hydra.core.Name("left"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("right"), (newVal).value)))));
   }
@@ -308,13 +308,13 @@ public interface Ast {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.ast.Precedence"), (x).value)));
   }
 
-  static hydra.phantoms.TTerm<hydra.ast.SeqExpr> seqExpr(hydra.phantoms.TTerm<hydra.ast.Op> op, hydra.phantoms.TTerm<hydra.util.ConsList<hydra.ast.Expr>> elements) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.SeqExpr"), hydra.util.ConsList.of(
+  static hydra.phantoms.TTerm<hydra.ast.SeqExpr> seqExpr(hydra.phantoms.TTerm<hydra.ast.Op> op, hydra.phantoms.TTerm<java.util.List<hydra.ast.Expr>> elements) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.SeqExpr"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("op"), (op).value),
       new hydra.core.Field(new hydra.core.Name("elements"), (elements).value)))));
   }
 
-  static hydra.phantoms.TTerm<hydra.util.ConsList<hydra.ast.Expr>> seqExprElements(hydra.phantoms.TTerm<hydra.ast.SeqExpr> x) {
+  static hydra.phantoms.TTerm<java.util.List<hydra.ast.Expr>> seqExprElements(hydra.phantoms.TTerm<hydra.ast.SeqExpr> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.SeqExpr"), new hydra.core.Name("elements"))))), (x).value)));
   }
 
@@ -322,14 +322,14 @@ public interface Ast {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.SeqExpr"), new hydra.core.Name("op"))))), (x).value)));
   }
 
-  static hydra.phantoms.TTerm<hydra.ast.SeqExpr> seqExprWithElements(hydra.phantoms.TTerm<hydra.ast.SeqExpr> original, hydra.phantoms.TTerm<hydra.util.ConsList<hydra.ast.Expr>> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.SeqExpr"), hydra.util.ConsList.of(
+  static hydra.phantoms.TTerm<hydra.ast.SeqExpr> seqExprWithElements(hydra.phantoms.TTerm<hydra.ast.SeqExpr> original, hydra.phantoms.TTerm<java.util.List<hydra.ast.Expr>> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.SeqExpr"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("op"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.SeqExpr"), new hydra.core.Name("op"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("elements"), (newVal).value)))));
   }
 
   static hydra.phantoms.TTerm<hydra.ast.SeqExpr> seqExprWithOp(hydra.phantoms.TTerm<hydra.ast.SeqExpr> original, hydra.phantoms.TTerm<hydra.ast.Op> newVal) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.SeqExpr"), hydra.util.ConsList.of(
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.SeqExpr"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("op"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("elements"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.ast.SeqExpr"), new hydra.core.Name("elements"))))), (original).value)))))));
   }

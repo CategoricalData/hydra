@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.Type",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -27,7 +26,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.FieldRepetitionType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -73,7 +71,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.Statistics",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -117,7 +114,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.DecimalType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -135,7 +131,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.TimeUnit",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "millis", "type": {"unit": {}}},
@@ -146,7 +141,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.TimestampType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -166,7 +160,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.TimeType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -186,7 +179,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.IntType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -204,7 +196,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.LogicalType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -343,7 +334,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.SchemaElement",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -437,7 +427,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.Encoding",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -541,7 +530,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.CompressionCodec",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -588,7 +576,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.PageType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "dataPage", "type": {"unit": {}}},
@@ -600,7 +587,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.BoundaryOrder",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -619,7 +605,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.DataPageHeader",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -680,12 +665,11 @@
     {
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.IndexPageHeader",
-        "type": {"constraints": null, "type": {"record": []}, "variables": []}}},
+        "type": {"type": {"record": []}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.DictionaryPageHeader",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -730,7 +714,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.DataPageHeaderV2",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -827,7 +810,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.BloomFilterAlgorithm",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -850,7 +832,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.BloomFilterHash",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -875,7 +856,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.BloomFilterCompression",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -888,7 +868,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.BloomFilterHeader",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -942,7 +921,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.PageHeader",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1011,7 +989,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.KeyValue",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1027,7 +1004,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.SortingColumn",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1072,7 +1048,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.PageEncodingStats",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1115,7 +1090,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.ColumnMetaData",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1271,12 +1245,11 @@
     {
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.EncryptionWithFooterKey",
-        "type": {"constraints": null, "type": {"record": []}, "variables": []}}},
+        "type": {"type": {"record": []}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.EncryptionWithColumnKey",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1302,7 +1275,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.ColumnCryptoMetaData",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1318,7 +1290,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.ColumnChunk",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1415,7 +1386,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.RowGroup",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1499,7 +1469,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.ColumnOrder",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1526,7 +1495,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.PageLocation",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1565,7 +1533,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.OffsetIndex",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1585,7 +1552,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.ColumnIndex",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1646,7 +1612,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.AesGcmV1",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1683,7 +1648,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.AesGcmCtrV1",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1720,7 +1684,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.EncryptionAlgorithm",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1734,7 +1697,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.FileMetaData",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1845,7 +1807,6 @@
       "type": {
         "name": "hydra.ext.org.apache.parquet.format.FileCryptoMetaData",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -1879,8 +1840,7 @@
                                 "string": "Retrieval metadata of key used for encryption of footer, and (possibly) columns"}}}],
                         "body": {"maybe": {"literal": {"binary": {}}}}}}}]}}},
           "variables": []}}}],
-  "description": [
-    "A model for the Parquet format. Based on the Thrift-based specification at:\n  https://github.com/apache/parquet-format/blob/master/src/main/thrift/parquet.thrift"],
+  "description": "A model for the Parquet format. Based on the Thrift-based specification at:\n  https://github.com/apache/parquet-format/blob/master/src/main/thrift/parquet.thrift",
   "namespace": "hydra.ext.org.apache.parquet.format",
   "termDependencies": ["hydra.core"],
   "typeDependencies": ["hydra.core"]}

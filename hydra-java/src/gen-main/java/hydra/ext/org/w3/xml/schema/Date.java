@@ -34,6 +34,8 @@ public class Date implements Serializable, Comparable<Date> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Date other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

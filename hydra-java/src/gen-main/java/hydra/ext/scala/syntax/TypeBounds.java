@@ -42,11 +42,15 @@ public class TypeBounds implements Serializable, Comparable<TypeBounds> {
   @SuppressWarnings("unchecked")
   public int compareTo(TypeBounds other) {
     int cmp = 0;
-    cmp = ((Comparable) lo).compareTo(other.lo);
+    cmp = hydra.util.Comparing.compare(
+      lo,
+      other.lo);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) hi).compareTo(other.hi);
+    return hydra.util.Comparing.compare(
+      hi,
+      other.hi);
   }
 
   public TypeBounds withLo(hydra.util.Maybe<hydra.ext.scala.syntax.Type> lo) {

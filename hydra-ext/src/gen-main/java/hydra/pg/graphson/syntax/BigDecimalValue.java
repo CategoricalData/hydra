@@ -34,6 +34,8 @@ public class BigDecimalValue implements Serializable, Comparable<BigDecimalValue
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(BigDecimalValue other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

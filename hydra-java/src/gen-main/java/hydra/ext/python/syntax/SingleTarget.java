@@ -76,7 +76,9 @@ public abstract class SingleTarget implements Serializable, Comparable<SingleTar
         return tagCmp;
       }
       SubscriptAttributeTarget o = (SubscriptAttributeTarget) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class SingleTarget implements Serializable, Comparable<SingleTar
         return tagCmp;
       }
       Name o = (Name) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class SingleTarget implements Serializable, Comparable<SingleTar
         return tagCmp;
       }
       Parens o = (Parens) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

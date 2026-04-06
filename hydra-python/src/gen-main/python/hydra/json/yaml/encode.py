@@ -3,6 +3,7 @@
 r"""JSON-to-YAML encoding. Converts JSON Values to YAML Nodes (always succeeds), and Hydra Terms to YAML Nodes via JSON."""
 
 from __future__ import annotations
+from collections.abc import Callable
 from decimal import Decimal
 from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, frozenlist
@@ -41,7 +42,7 @@ def json_to_yaml(value: hydra.json.model.Value) -> hydra.ext.org.yaml.model.Node
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def to_yaml(term: hydra.core.Term) -> Either[str, hydra.ext.org.yaml.model.Node_]:
+def to_yaml(types: FrozenDict[hydra.core.Name, hydra.core.Type], tname: hydra.core.Name, typ: hydra.core.Type, term: hydra.core.Term) -> Either[str, hydra.ext.org.yaml.model.Node_]:
     r"""Encode a Hydra term to a YAML node via JSON encoding."""
 
-    return hydra.lib.eithers.map((lambda v: json_to_yaml(v)), hydra.json.encode.to_json(term))
+    return hydra.lib.eithers.map((lambda v: json_to_yaml(v)), hydra.json.encode.to_json(types, tname, typ, term))

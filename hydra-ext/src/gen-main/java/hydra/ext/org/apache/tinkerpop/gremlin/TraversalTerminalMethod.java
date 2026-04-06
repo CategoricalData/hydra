@@ -256,7 +256,9 @@ public abstract class TraversalTerminalMethod implements Serializable, Comparabl
         return tagCmp;
       }
       Next o = (Next) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

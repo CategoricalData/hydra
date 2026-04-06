@@ -6,7 +6,7 @@ package hydra.json.yaml;
  * YAML-to-JSON decoding. Converts YAML Nodes to JSON Values (may fail for non-JSON YAML), and YAML Nodes to Hydra Terms via JSON.
  */
 public interface Decode {
-  static hydra.util.Either<String, hydra.core.Term> fromYaml(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> types, hydra.core.Name tname, hydra.core.Type typ, hydra.ext.org.yaml.model.Node node) {
+  static hydra.util.Either<String, hydra.core.Term> fromYaml(java.util.Map<hydra.core.Name, hydra.core.Type> types, hydra.core.Name tname, hydra.core.Type typ, hydra.ext.org.yaml.model.Node node) {
     hydra.util.Either<String, hydra.json.model.Value> jsonResult = hydra.json.yaml.Decode.yamlToJson(node);
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<String, hydra.core.Term>>) (err -> hydra.util.Either.<String, hydra.core.Term>left(err)),
@@ -56,11 +56,11 @@ public interface Decode {
             }),
             keyResult.get());
         });
-        hydra.util.Lazy<hydra.util.Either<String, hydra.util.ConsList<hydra.util.Pair<String, hydra.json.model.Value>>>> entries = new hydra.util.Lazy<>(() -> hydra.lib.eithers.MapList.apply(
+        hydra.util.Lazy<hydra.util.Either<String, java.util.List<hydra.util.Pair<String, hydra.json.model.Value>>>> entries = new hydra.util.Lazy<>(() -> hydra.lib.eithers.MapList.apply(
           convertEntry,
           hydra.lib.maps.ToList.apply((m).value)));
         return hydra.lib.eithers.Map.apply(
-          (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<String, hydra.json.model.Value>>, hydra.json.model.Value>) (es -> new hydra.json.model.Value.Object_(hydra.lib.maps.FromList.apply(es))),
+          (java.util.function.Function<java.util.List<hydra.util.Pair<String, hydra.json.model.Value>>, hydra.json.model.Value>) (es -> new hydra.json.model.Value.Object_(hydra.lib.maps.FromList.apply(es))),
           entries.get());
       }
 
@@ -96,11 +96,11 @@ public interface Decode {
 
       @Override
       public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.ext.org.yaml.model.Node.Sequence nodes) {
-        hydra.util.Lazy<hydra.util.Either<String, hydra.util.ConsList<hydra.json.model.Value>>> results = new hydra.util.Lazy<>(() -> hydra.lib.eithers.MapList.apply(
+        hydra.util.Lazy<hydra.util.Either<String, java.util.List<hydra.json.model.Value>>> results = new hydra.util.Lazy<>(() -> hydra.lib.eithers.MapList.apply(
           (java.util.function.Function<hydra.ext.org.yaml.model.Node, hydra.util.Either<String, hydra.json.model.Value>>) (n -> hydra.json.yaml.Decode.yamlToJson(n)),
           (nodes).value));
         return hydra.lib.eithers.Map.apply(
-          (java.util.function.Function<hydra.util.ConsList<hydra.json.model.Value>, hydra.json.model.Value>) (vs -> new hydra.json.model.Value.Array(vs)),
+          (java.util.function.Function<java.util.List<hydra.json.model.Value>, hydra.json.model.Value>) (vs -> new hydra.json.model.Value.Array(vs)),
           results.get());
       }
     });

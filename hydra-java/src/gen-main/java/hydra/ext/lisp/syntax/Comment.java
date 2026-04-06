@@ -51,11 +51,15 @@ public class Comment implements Serializable, Comparable<Comment> {
   @SuppressWarnings("unchecked")
   public int compareTo(Comment other) {
     int cmp = 0;
-    cmp = ((Comparable) style).compareTo(other.style);
+    cmp = hydra.util.Comparing.compare(
+      style,
+      other.style);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) text).compareTo(other.text);
+    return hydra.util.Comparing.compare(
+      text,
+      other.text);
   }
 
   public Comment withStyle(hydra.ext.lisp.syntax.CommentStyle style) {

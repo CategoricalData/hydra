@@ -40,6 +40,8 @@ public class DuplicateModuleNamespaceError implements Serializable, Comparable<D
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DuplicateModuleNamespaceError other) {
-    return ((Comparable) namespace).compareTo(other.namespace);
+    return hydra.util.Comparing.compare(
+      namespace,
+      other.namespace);
   }
 }

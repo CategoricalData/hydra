@@ -128,7 +128,9 @@ public abstract class ImportSpec implements Serializable, Comparable<ImportSpec>
         return tagCmp;
       }
       Alias o = (Alias) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -141,9 +143,9 @@ public abstract class ImportSpec implements Serializable, Comparable<ImportSpec>
    * Import specific symbols: (:require [name :refer [sym1 sym2]]) in Clojure
    */
   public static final class Only extends hydra.ext.lisp.syntax.ImportSpec implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol> value;
+    public final java.util.List<hydra.ext.lisp.syntax.Symbol> value;
 
-    public Only (hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol> value) {
+    public Only (java.util.List<hydra.ext.lisp.syntax.Symbol> value) {
       this.value = value;
     }
 
@@ -171,7 +173,9 @@ public abstract class ImportSpec implements Serializable, Comparable<ImportSpec>
         return tagCmp;
       }
       Only o = (Only) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -184,9 +188,9 @@ public abstract class ImportSpec implements Serializable, Comparable<ImportSpec>
    * Import with renaming: list of (from, to) symbol pairs
    */
   public static final class Rename extends hydra.ext.lisp.syntax.ImportSpec implements Serializable {
-    public final hydra.util.ConsList<hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol>> value;
+    public final java.util.List<java.util.List<hydra.ext.lisp.syntax.Symbol>> value;
 
-    public Rename (hydra.util.ConsList<hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol>> value) {
+    public Rename (java.util.List<java.util.List<hydra.ext.lisp.syntax.Symbol>> value) {
       this.value = value;
     }
 
@@ -214,7 +218,9 @@ public abstract class ImportSpec implements Serializable, Comparable<ImportSpec>
         return tagCmp;
       }
       Rename o = (Rename) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -12,10 +12,10 @@ even :: t0 -> t1 -> Core.Term -> Either t2 Core.Term
 even cx g x =
     Right (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.equal"))),
+        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.equal")),
         Core.applicationArgument = (Core.TermApplication (Core.Application {
           Core.applicationFunction = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.mod"))),
+            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.mod")),
             Core.applicationArgument = x})),
           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))})),
       Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))
@@ -24,9 +24,9 @@ even cx g x =
 odd :: t0 -> t1 -> Core.Term -> Either t2 Core.Term
 odd cx g x =
     Right (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.not"))),
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.not")),
       Core.applicationArgument = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.even"))),
+        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.even")),
         Core.applicationArgument = x}))}))
 
 -- | Interpreter-friendly predecessor.
@@ -34,7 +34,7 @@ pred :: t0 -> t1 -> Core.Term -> Either t2 Core.Term
 pred cx g x =
     Right (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.sub"))),
+        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.sub")),
         Core.applicationArgument = x})),
       Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))
 
@@ -43,6 +43,6 @@ succ :: t0 -> t1 -> Core.Term -> Either t2 Core.Term
 succ cx g x =
     Right (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.add")),
         Core.applicationArgument = x})),
       Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))

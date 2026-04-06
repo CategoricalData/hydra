@@ -55,19 +55,27 @@ public class QualifiedValueShape implements Serializable, Comparable<QualifiedVa
   @SuppressWarnings("unchecked")
   public int compareTo(QualifiedValueShape other) {
     int cmp = 0;
-    cmp = ((Comparable) qualifiedValueShape).compareTo(other.qualifiedValueShape);
+    cmp = hydra.util.Comparing.compare(
+      qualifiedValueShape,
+      other.qualifiedValueShape);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) qualifiedMaxCount).compareTo(other.qualifiedMaxCount);
+    cmp = hydra.util.Comparing.compare(
+      qualifiedMaxCount,
+      other.qualifiedMaxCount);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) qualifiedMinCount).compareTo(other.qualifiedMinCount);
+    cmp = hydra.util.Comparing.compare(
+      qualifiedMinCount,
+      other.qualifiedMinCount);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) qualifiedValueShapesDisjoint).compareTo(other.qualifiedValueShapesDisjoint);
+    return hydra.util.Comparing.compare(
+      qualifiedValueShapesDisjoint,
+      other.qualifiedValueShapesDisjoint);
   }
 
   public QualifiedValueShape withQualifiedValueShape(hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.Shape> qualifiedValueShape) {

@@ -34,6 +34,8 @@ public class DateLiteral implements Serializable, Comparable<DateLiteral> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DateLiteral other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

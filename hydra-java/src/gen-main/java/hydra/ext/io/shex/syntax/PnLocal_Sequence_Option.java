@@ -11,11 +11,11 @@ public class PnLocal_Sequence_Option implements Serializable, Comparable<PnLocal
 
   public static final hydra.core.Name ALTS = new hydra.core.Name("alts");
 
-  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.PnLocal_Sequence_Option_ListOfAlts_Elmt> listOfAlts;
+  public final java.util.List<hydra.ext.io.shex.syntax.PnLocal_Sequence_Option_ListOfAlts_Elmt> listOfAlts;
 
   public final hydra.ext.io.shex.syntax.PnLocal_Sequence_Option_Alts alts;
 
-  public PnLocal_Sequence_Option (hydra.util.ConsList<hydra.ext.io.shex.syntax.PnLocal_Sequence_Option_ListOfAlts_Elmt> listOfAlts, hydra.ext.io.shex.syntax.PnLocal_Sequence_Option_Alts alts) {
+  public PnLocal_Sequence_Option (java.util.List<hydra.ext.io.shex.syntax.PnLocal_Sequence_Option_ListOfAlts_Elmt> listOfAlts, hydra.ext.io.shex.syntax.PnLocal_Sequence_Option_Alts alts) {
     this.listOfAlts = listOfAlts;
     this.alts = alts;
   }
@@ -42,14 +42,18 @@ public class PnLocal_Sequence_Option implements Serializable, Comparable<PnLocal
   @SuppressWarnings("unchecked")
   public int compareTo(PnLocal_Sequence_Option other) {
     int cmp = 0;
-    cmp = ((Comparable) listOfAlts).compareTo(other.listOfAlts);
+    cmp = hydra.util.Comparing.compare(
+      listOfAlts,
+      other.listOfAlts);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) alts).compareTo(other.alts);
+    return hydra.util.Comparing.compare(
+      alts,
+      other.alts);
   }
 
-  public PnLocal_Sequence_Option withListOfAlts(hydra.util.ConsList<hydra.ext.io.shex.syntax.PnLocal_Sequence_Option_ListOfAlts_Elmt> listOfAlts) {
+  public PnLocal_Sequence_Option withListOfAlts(java.util.List<hydra.ext.io.shex.syntax.PnLocal_Sequence_Option_ListOfAlts_Elmt> listOfAlts) {
     return new PnLocal_Sequence_Option(listOfAlts, alts);
   }
 

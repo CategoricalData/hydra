@@ -634,6 +634,24 @@
 
          0.479425538604:float64)))
 
+(deftest test-math-negsin-negsin-nan
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negsin-negsin--plusinf
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negsin-negsin--neginf
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
 ;; cos
 
 (deftest test-math-negcos-negcos-0
@@ -666,6 +684,24 @@
 
          0.87758256189:float64)))
 
+(deftest test-math-negcos-negcos-nan
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negcos-negcos--plusinf
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negcos-negcos--neginf
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
 ;; tan
 
 (deftest test-math-negtan-negtan-0
@@ -691,6 +727,24 @@
   (is (= 0.546302489844:float64
 
          0.546302489844:float64)))
+
+(deftest test-math-negtan-negtan-nan
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negtan-negtan--plusinf
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negtan-negtan--neginf
+
+  (is (= NaN:float64
+
+         NaN:float64)))
 
 ;; asin
 
@@ -718,6 +772,36 @@
 
          0.523598775598:float64)))
 
+(deftest test-math-negasin-negasin-below-domain
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negasin-negasin-above-domain
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negasin-negasin-nan
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negasin-negasin--plusinf
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negasin-negasin--neginf
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
 ;; acos
 
 (deftest test-math-negacos-negacos-1
@@ -744,6 +828,36 @@
 
          1.0471975512:float64)))
 
+(deftest test-math-negacos-negacos-below-domain
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negacos-negacos-above-domain
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negacos-negacos-nan
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negacos-negacos--plusinf
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negacos-negacos--neginf
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
 ;; atan
 
 (deftest test-math-negatan-negatan-0
@@ -763,6 +877,24 @@
   (is (= 0.463647609001:float64
 
          0.463647609001:float64)))
+
+(deftest test-math-negatan-negatan-nan
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negatan-negatan--plusinf
+
+  (is (= 1.57079632679:float64
+
+         1.57079632679:float64)))
+
+(deftest test-math-negatan-negatan--neginf
+
+  (is (= -1.57079632679:float64
+
+         -1.57079632679:float64)))
 
 ;; atan2
 
@@ -790,6 +922,66 @@
 
          0.643501108793:float64)))
 
+(deftest test-math-negatan2-negatan2-nan-1
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negatan2-negatan2--plusinf-1
+
+  (is (= 1.57079632679:float64
+
+         1.57079632679:float64)))
+
+(deftest test-math-negatan2-negatan2--neginf-1
+
+  (is (= -1.57079632679:float64
+
+         -1.57079632679:float64)))
+
+(deftest test-math-negatan2-negatan2-1-nan
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negatan2-negatan2-1--plusinf
+
+  (is (= 0.0:float64
+
+         0.0:float64)))
+
+(deftest test-math-negatan2-negatan2-1--neginf
+
+  (is (= 3.14159265359:float64
+
+         3.14159265359:float64)))
+
+(deftest test-math-negatan2-negatan2--plusinf--plusinf
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negatan2-negatan2--plusinf--neginf
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negatan2-negatan2--neginf--plusinf
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negatan2-negatan2--neginf--neginf
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
 ;; sinh
 
 (deftest test-math-negsinh-negsinh-0
@@ -809,6 +1001,24 @@
   (is (= 3.62686040785:float64
 
          3.62686040785:float64)))
+
+(deftest test-math-negsinh-negsinh-nan
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negsinh-negsinh--plusinf
+
+  (is (= Infinity:float64
+
+         Infinity:float64)))
+
+(deftest test-math-negsinh-negsinh--neginf
+
+  (is (= -Infinity:float64
+
+         -Infinity:float64)))
 
 ;; cosh
 
@@ -830,6 +1040,24 @@
 
          3.76219569108:float64)))
 
+(deftest test-math-negcosh-negcosh-nan
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negcosh-negcosh--plusinf
+
+  (is (= Infinity:float64
+
+         Infinity:float64)))
+
+(deftest test-math-negcosh-negcosh--neginf
+
+  (is (= Infinity:float64
+
+         Infinity:float64)))
+
 ;; tanh
 
 (deftest test-math-negtanh-negtanh-0
@@ -849,6 +1077,24 @@
   (is (= 0.46211715726:float64
 
          0.46211715726:float64)))
+
+(deftest test-math-negtanh-negtanh-nan
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negtanh-negtanh--plusinf
+
+  (is (= 1.0:float64
+
+         1.0:float64)))
+
+(deftest test-math-negtanh-negtanh--neginf
+
+  (is (= -1.0:float64
+
+         -1.0:float64)))
 
 ;; asinh
 
@@ -870,6 +1116,24 @@
 
          0.48121182506:float64)))
 
+(deftest test-math-negasinh-negasinh-nan
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negasinh-negasinh--plusinf
+
+  (is (= Infinity:float64
+
+         Infinity:float64)))
+
+(deftest test-math-negasinh-negasinh--neginf
+
+  (is (= -Infinity:float64
+
+         -Infinity:float64)))
+
 ;; acosh
 
 (deftest test-math-negacosh-negacosh-1
@@ -890,6 +1154,36 @@
 
          1.76274717404:float64)))
 
+(deftest test-math-negacosh-negacosh-below-domain
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negacosh-negacosh-negative
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negacosh-negacosh-nan
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negacosh-negacosh--plusinf
+
+  (is (= Infinity:float64
+
+         Infinity:float64)))
+
+(deftest test-math-negacosh-negacosh--neginf
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
 ;; atanh
 
 (deftest test-math-negatanh-negatanh-0
@@ -909,6 +1203,48 @@
   (is (= 0.100335347731:float64
 
          0.100335347731:float64)))
+
+(deftest test-math-negatanh-negatanh-upper-boundary
+
+  (is (= Infinity:float64
+
+         Infinity:float64)))
+
+(deftest test-math-negatanh-negatanh-lower-boundary
+
+  (is (= -Infinity:float64
+
+         -Infinity:float64)))
+
+(deftest test-math-negatanh-negatanh-above-domain
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negatanh-negatanh-below-domain
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negatanh-negatanh-nan
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negatanh-negatanh--plusinf
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negatanh-negatanh--neginf
+
+  (is (= NaN:float64
+
+         NaN:float64)))
 
 ;; exp
 
@@ -942,6 +1278,24 @@
 
          1.6487212707:float64)))
 
+(deftest test-math-negexp-negexp-nan
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negexp-negexp--plusinf
+
+  (is (= Infinity:float64
+
+         Infinity:float64)))
+
+(deftest test-math-negexp-negexp--neginf
+
+  (is (= 0.0:float64
+
+         0.0:float64)))
+
 ;; log
 
 (deftest test-math-neglog-neglog-1
@@ -967,6 +1321,36 @@
   (is (= 2.30258509299:float64
 
          2.30258509299:float64)))
+
+(deftest test-math-neglog-neglog-0
+
+  (is (= -Infinity:float64
+
+         -Infinity:float64)))
+
+(deftest test-math-neglog-neglog-negative
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-neglog-neglog-nan
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-neglog-neglog--plusinf
+
+  (is (= Infinity:float64
+
+         Infinity:float64)))
+
+(deftest test-math-neglog-neglog--neginf
+
+  (is (= NaN:float64
+
+         NaN:float64)))
 
 ;; logBase
 
@@ -1000,6 +1384,60 @@
 
          3.32192809489:float64)))
 
+(deftest test-math-neglogbase-neglogbase-10-0
+
+  (is (= -Infinity:float64
+
+         -Infinity:float64)))
+
+(deftest test-math-neglogbase-neglogbase-10-negative
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-neglogbase-neglogbase-negative-10
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-neglogbase-neglogbase-10-nan
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-neglogbase-neglogbase-10--plusinf
+
+  (is (= Infinity:float64
+
+         Infinity:float64)))
+
+(deftest test-math-neglogbase-neglogbase-10--neginf
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-neglogbase-neglogbase-nan-10
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-neglogbase-neglogbase--plusinf-10
+
+  (is (= 0.0:float64
+
+         0.0:float64)))
+
+(deftest test-math-neglogbase-neglogbase--neginf-10
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
 ;; pow
 
 (deftest test-math-negpow-neg2-3
@@ -1025,6 +1463,66 @@
   (is (= 1.41421356237:float64
 
          1.41421356237:float64)))
+
+(deftest test-math-negpow-neg0-0
+
+  (is (= 1.0:float64
+
+         1.0:float64)))
+
+(deftest test-math-negpow-neg0--neg1
+
+  (is (= Infinity:float64
+
+         Infinity:float64)))
+
+(deftest test-math-negpow-neg--neg1-0-dot5
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negpow-negnan-2
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negpow-neg-plusinf-2
+
+  (is (= Infinity:float64
+
+         Infinity:float64)))
+
+(deftest test-math-negpow-neg-neginf-2
+
+  (is (= Infinity:float64
+
+         Infinity:float64)))
+
+(deftest test-math-negpow-neg-plusinf--neg1
+
+  (is (= 0.0:float64
+
+         0.0:float64)))
+
+(deftest test-math-negpow-neg2-nan
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negpow-neg2--plusinf
+
+  (is (= Infinity:float64
+
+         Infinity:float64)))
+
+(deftest test-math-negpow-neg2--neginf
+
+  (is (= 0.0:float64
+
+         0.0:float64)))
 
 ;; sqrt
 
@@ -1058,89 +1556,167 @@
 
          1.73205080757:float64)))
 
+(deftest test-math-negsqrt-negsqrt-negative
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negsqrt-negsqrt-nan
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negsqrt-negsqrt--plusinf
+
+  (is (= Infinity:float64
+
+         Infinity:float64)))
+
+(deftest test-math-negsqrt-negsqrt--neginf
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
 ;; ceiling
 
 (deftest test-math-negceiling-negceiling-3-dot2
 
-  (is (= 4:bigint
+  (is (= 4.0:float64
 
-         4:bigint)))
+         4.0:float64)))
 
 (deftest test-math-negceiling-negceiling-3-dot0
 
-  (is (= 3:bigint
+  (is (= 3.0:float64
 
-         3:bigint)))
+         3.0:float64)))
 
 (deftest test-math-negceiling-negceiling--neg3-dot2
 
-  (is (= -3:bigint
+  (is (= -3.0:float64
 
-         -3:bigint)))
+         -3.0:float64)))
 
 (deftest test-math-negceiling-negceiling--neg3-dot0
 
-  (is (= -3:bigint
+  (is (= -3.0:float64
 
-         -3:bigint)))
+         -3.0:float64)))
+
+(deftest test-math-negceiling-negceiling-nan
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negceiling-negceiling--plusinf
+
+  (is (= Infinity:float64
+
+         Infinity:float64)))
+
+(deftest test-math-negceiling-negceiling--neginf
+
+  (is (= -Infinity:float64
+
+         -Infinity:float64)))
 
 ;; floor
 
 (deftest test-math-negfloor-negfloor-3-dot8
 
-  (is (= 3:bigint
+  (is (= 3.0:float64
 
-         3:bigint)))
+         3.0:float64)))
 
 (deftest test-math-negfloor-negfloor-3-dot0
 
-  (is (= 3:bigint
+  (is (= 3.0:float64
 
-         3:bigint)))
+         3.0:float64)))
 
 (deftest test-math-negfloor-negfloor--neg3-dot2
 
-  (is (= -4:bigint
+  (is (= -4.0:float64
 
-         -4:bigint)))
+         -4.0:float64)))
 
 (deftest test-math-negfloor-negfloor--neg3-dot0
 
-  (is (= -3:bigint
+  (is (= -3.0:float64
 
-         -3:bigint)))
+         -3.0:float64)))
+
+(deftest test-math-negfloor-negfloor-nan
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negfloor-negfloor--plusinf
+
+  (is (= Infinity:float64
+
+         Infinity:float64)))
+
+(deftest test-math-negfloor-negfloor--neginf
+
+  (is (= -Infinity:float64
+
+         -Infinity:float64)))
 
 ;; round
 
 (deftest test-math-neground-neground-3-dot4
 
-  (is (= 3:bigint
+  (is (= 3.0:float64
 
-         3:bigint)))
+         3.0:float64)))
 
 (deftest test-math-neground-neground-3-dot5
 
-  (is (= 4:bigint
+  (is (= 4.0:float64
 
-         4:bigint)))
+         4.0:float64)))
 
 (deftest test-math-neground-neground-3-dot6
 
-  (is (= 4:bigint
+  (is (= 4.0:float64
 
-         4:bigint)))
+         4.0:float64)))
 
 (deftest test-math-neground-neground--neg3-dot4
 
-  (is (= -3:bigint
+  (is (= -3.0:float64
 
-         -3:bigint)))
+         -3.0:float64)))
 
 (deftest test-math-neground-neground--neg3-dot5
 
-  (is (= -4:bigint
+  (is (= -4.0:float64
 
-         -4:bigint)))
+         -4.0:float64)))
+
+(deftest test-math-neground-neground-nan
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-neground-neground--plusinf
+
+  (is (= Infinity:float64
+
+         Infinity:float64)))
+
+(deftest test-math-neground-neground--neginf
+
+  (is (= -Infinity:float64
+
+         -Infinity:float64)))
 
 ;; roundBigfloat
 
@@ -1200,6 +1776,24 @@
 
          -1230.0:float32)))
 
+(deftest test-math-negroundfloat32-negnan
+
+  (is (= NaN:float32
+
+         NaN:float32)))
+
+(deftest test-math-negroundfloat32-neg-plusinf
+
+  (is (= Infinity:float32
+
+         Infinity:float32)))
+
+(deftest test-math-negroundfloat32-neg-neginf
+
+  (is (= -Infinity:float32
+
+         -Infinity:float32)))
+
 ;; roundFloat64
 
 (deftest test-math-negroundfloat64-negzero
@@ -1244,28 +1838,64 @@
 
          10.0:float64)))
 
+(deftest test-math-negroundfloat64-negnan
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negroundfloat64-neg-plusinf
+
+  (is (= Infinity:float64
+
+         Infinity:float64)))
+
+(deftest test-math-negroundfloat64-neg-neginf
+
+  (is (= -Infinity:float64
+
+         -Infinity:float64)))
+
 ;; truncate
 
 (deftest test-math-negtruncate-negtruncate-3-dot8
 
-  (is (= 3:bigint
+  (is (= 3.0:float64
 
-         3:bigint)))
+         3.0:float64)))
 
 (deftest test-math-negtruncate-negtruncate-3-dot2
 
-  (is (= 3:bigint
+  (is (= 3.0:float64
 
-         3:bigint)))
+         3.0:float64)))
 
 (deftest test-math-negtruncate-negtruncate--neg3-dot8
 
-  (is (= -3:bigint
+  (is (= -3.0:float64
 
-         -3:bigint)))
+         -3.0:float64)))
 
 (deftest test-math-negtruncate-negtruncate--neg3-dot2
 
-  (is (= -3:bigint
+  (is (= -3.0:float64
 
-         -3:bigint)))
+         -3.0:float64)))
+
+(deftest test-math-negtruncate-negtruncate-nan
+
+  (is (= NaN:float64
+
+         NaN:float64)))
+
+(deftest test-math-negtruncate-negtruncate--plusinf
+
+  (is (= Infinity:float64
+
+         Infinity:float64)))
+
+(deftest test-math-negtruncate-negtruncate--neginf
+
+  (is (= -Infinity:float64
+
+         -Infinity:float64)))

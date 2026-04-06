@@ -42,11 +42,15 @@ public class PnPrefix implements Serializable, Comparable<PnPrefix> {
   @SuppressWarnings("unchecked")
   public int compareTo(PnPrefix other) {
     int cmp = 0;
-    cmp = ((Comparable) PnCharsBase).compareTo(other.PnCharsBase);
+    cmp = hydra.util.Comparing.compare(
+      PnCharsBase,
+      other.PnCharsBase);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) Sequence).compareTo(other.Sequence);
+    return hydra.util.Comparing.compare(
+      Sequence,
+      other.Sequence);
   }
 
   public PnPrefix withPnCharsBase(hydra.ext.io.shex.syntax.PnCharsBase PnCharsBase) {

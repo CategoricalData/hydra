@@ -70,9 +70,9 @@ public abstract class NodeConstraint implements Serializable, Comparable<NodeCon
   }
 
   public static final class Sequence extends hydra.ext.io.shex.syntax.NodeConstraint implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.io.shex.syntax.XsFacet> value;
+    public final java.util.List<hydra.ext.io.shex.syntax.XsFacet> value;
 
-    public Sequence (hydra.util.ConsList<hydra.ext.io.shex.syntax.XsFacet> value) {
+    public Sequence (java.util.List<hydra.ext.io.shex.syntax.XsFacet> value) {
       this.value = value;
     }
 
@@ -100,7 +100,9 @@ public abstract class NodeConstraint implements Serializable, Comparable<NodeCon
         return tagCmp;
       }
       Sequence o = (Sequence) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -140,7 +142,9 @@ public abstract class NodeConstraint implements Serializable, Comparable<NodeCon
         return tagCmp;
       }
       Sequence2 o = (Sequence2) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -180,7 +184,9 @@ public abstract class NodeConstraint implements Serializable, Comparable<NodeCon
         return tagCmp;
       }
       Sequence3 o = (Sequence3) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -220,7 +226,9 @@ public abstract class NodeConstraint implements Serializable, Comparable<NodeCon
         return tagCmp;
       }
       Sequence4 o = (Sequence4) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -260,7 +268,9 @@ public abstract class NodeConstraint implements Serializable, Comparable<NodeCon
         return tagCmp;
       }
       Sequence5 o = (Sequence5) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -270,9 +280,9 @@ public abstract class NodeConstraint implements Serializable, Comparable<NodeCon
   }
 
   public static final class ListOfXsFacet extends hydra.ext.io.shex.syntax.NodeConstraint implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.io.shex.syntax.XsFacet> value;
+    public final java.util.List<hydra.ext.io.shex.syntax.XsFacet> value;
 
-    public ListOfXsFacet (hydra.util.ConsList<hydra.ext.io.shex.syntax.XsFacet> value) {
+    public ListOfXsFacet (java.util.List<hydra.ext.io.shex.syntax.XsFacet> value) {
       this.value = value;
     }
 
@@ -300,7 +310,9 @@ public abstract class NodeConstraint implements Serializable, Comparable<NodeCon
         return tagCmp;
       }
       ListOfXsFacet o = (ListOfXsFacet) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

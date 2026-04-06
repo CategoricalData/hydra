@@ -51,11 +51,15 @@ public class FieldUpdate implements Serializable, Comparable<FieldUpdate> {
   @SuppressWarnings("unchecked")
   public int compareTo(FieldUpdate other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 
   public FieldUpdate withName(hydra.ext.haskell.syntax.Name name) {

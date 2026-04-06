@@ -42,11 +42,15 @@ public class AwaitPrimary implements Serializable, Comparable<AwaitPrimary> {
   @SuppressWarnings("unchecked")
   public int compareTo(AwaitPrimary other) {
     int cmp = 0;
-    cmp = ((Comparable) await).compareTo(other.await);
+    cmp = hydra.util.Comparing.compare(
+      await,
+      other.await);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) primary).compareTo(other.primary);
+    return hydra.util.Comparing.compare(
+      primary,
+      other.primary);
   }
 
   public AwaitPrimary withAwait(Boolean await) {

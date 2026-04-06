@@ -42,11 +42,15 @@ public class MergeAction implements Serializable, Comparable<MergeAction> {
   @SuppressWarnings("unchecked")
   public int compareTo(MergeAction other) {
     int cmp = 0;
-    cmp = ((Comparable) action).compareTo(other.action);
+    cmp = hydra.util.Comparing.compare(
+      action,
+      other.action);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) set).compareTo(other.set);
+    return hydra.util.Comparing.compare(
+      set,
+      other.set);
   }
 
   public MergeAction withAction(hydra.ext.cypher.openCypher.MatchOrCreate action) {

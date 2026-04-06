@@ -42,11 +42,15 @@ public class AtpNameLn implements Serializable, Comparable<AtpNameLn> {
   @SuppressWarnings("unchecked")
   public int compareTo(AtpNameLn other) {
     int cmp = 0;
-    cmp = ((Comparable) PnameNs).compareTo(other.PnameNs);
+    cmp = hydra.util.Comparing.compare(
+      PnameNs,
+      other.PnameNs);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) PnLocal).compareTo(other.PnLocal);
+    return hydra.util.Comparing.compare(
+      PnLocal,
+      other.PnLocal);
   }
 
   public AtpNameLn withPnameNs(hydra.ext.io.shex.syntax.PnameNs PnameNs) {

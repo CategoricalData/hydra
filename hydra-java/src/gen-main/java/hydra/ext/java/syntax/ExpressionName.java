@@ -42,11 +42,15 @@ public class ExpressionName implements Serializable, Comparable<ExpressionName> 
   @SuppressWarnings("unchecked")
   public int compareTo(ExpressionName other) {
     int cmp = 0;
-    cmp = ((Comparable) qualifier).compareTo(other.qualifier);
+    cmp = hydra.util.Comparing.compare(
+      qualifier,
+      other.qualifier);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) identifier).compareTo(other.identifier);
+    return hydra.util.Comparing.compare(
+      identifier,
+      other.identifier);
   }
 
   public ExpressionName withQualifier(hydra.util.Maybe<hydra.ext.java.syntax.AmbiguousName> qualifier) {

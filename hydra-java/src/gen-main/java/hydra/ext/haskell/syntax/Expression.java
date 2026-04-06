@@ -202,7 +202,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Application o = (Application) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -245,7 +247,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Case o = (Case) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -288,7 +292,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       ConstructRecord o = (ConstructRecord) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -301,9 +307,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
    * A 'do' expression
    */
   public static final class Do extends hydra.ext.haskell.syntax.Expression implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.haskell.syntax.Statement> value;
+    public final java.util.List<hydra.ext.haskell.syntax.Statement> value;
 
-    public Do (hydra.util.ConsList<hydra.ext.haskell.syntax.Statement> value) {
+    public Do (java.util.List<hydra.ext.haskell.syntax.Statement> value) {
       this.value = value;
     }
 
@@ -331,7 +337,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Do o = (Do) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -374,7 +382,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       If o = (If) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -417,7 +427,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       InfixApplication o = (InfixApplication) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -460,7 +472,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Literal o = (Literal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -503,7 +517,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Lambda o = (Lambda) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -546,7 +562,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       LeftSection o = (LeftSection) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -589,7 +607,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Let o = (Let) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -602,9 +622,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
    * A list expression
    */
   public static final class List extends hydra.ext.haskell.syntax.Expression implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.haskell.syntax.Expression> value;
+    public final java.util.List<hydra.ext.haskell.syntax.Expression> value;
 
-    public List (hydra.util.ConsList<hydra.ext.haskell.syntax.Expression> value) {
+    public List (java.util.List<hydra.ext.haskell.syntax.Expression> value) {
       this.value = value;
     }
 
@@ -632,7 +652,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       List o = (List) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -675,7 +697,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Parens o = (Parens) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -718,7 +742,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       PrefixApplication o = (PrefixApplication) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -761,7 +787,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       RightSection o = (RightSection) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -774,9 +802,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
    * A tuple expression
    */
   public static final class Tuple extends hydra.ext.haskell.syntax.Expression implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.haskell.syntax.Expression> value;
+    public final java.util.List<hydra.ext.haskell.syntax.Expression> value;
 
-    public Tuple (hydra.util.ConsList<hydra.ext.haskell.syntax.Expression> value) {
+    public Tuple (java.util.List<hydra.ext.haskell.syntax.Expression> value) {
       this.value = value;
     }
 
@@ -804,7 +832,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Tuple o = (Tuple) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -847,7 +877,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       TypeSignature o = (TypeSignature) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -890,7 +922,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       UpdateRecord o = (UpdateRecord) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -933,7 +967,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Variable o = (Variable) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

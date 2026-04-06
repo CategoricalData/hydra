@@ -42,11 +42,15 @@ public class PrimitiveTypedValue implements Serializable, Comparable<PrimitiveTy
   @SuppressWarnings("unchecked")
   public int compareTo(PrimitiveTypedValue other) {
     int cmp = 0;
-    cmp = ((Comparable) type).compareTo(other.type);
+    cmp = hydra.util.Comparing.compare(
+      type,
+      other.type);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 
   public PrimitiveTypedValue withType(hydra.pg.graphson.syntax.TypeName type) {

@@ -14,11 +14,11 @@ public class Graph<V> implements Serializable, Comparable<Graph<V>> {
 
   public static final hydra.core.Name EDGES = new hydra.core.Name("edges");
 
-  public final hydra.util.PersistentMap<V, hydra.pg.model.Vertex<V>> vertices;
+  public final java.util.Map<V, hydra.pg.model.Vertex<V>> vertices;
 
-  public final hydra.util.PersistentMap<V, hydra.pg.model.Edge<V>> edges;
+  public final java.util.Map<V, hydra.pg.model.Edge<V>> edges;
 
-  public Graph (hydra.util.PersistentMap<V, hydra.pg.model.Vertex<V>> vertices, hydra.util.PersistentMap<V, hydra.pg.model.Edge<V>> edges) {
+  public Graph (java.util.Map<V, hydra.pg.model.Vertex<V>> vertices, java.util.Map<V, hydra.pg.model.Edge<V>> edges) {
     this.vertices = vertices;
     this.edges = edges;
   }
@@ -45,18 +45,22 @@ public class Graph<V> implements Serializable, Comparable<Graph<V>> {
   @SuppressWarnings("unchecked")
   public int compareTo(Graph other) {
     int cmp = 0;
-    cmp = ((Comparable) vertices).compareTo(other.vertices);
+    cmp = hydra.util.Comparing.compare(
+      vertices,
+      other.vertices);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) edges).compareTo(other.edges);
+    return hydra.util.Comparing.compare(
+      edges,
+      other.edges);
   }
 
-  public Graph withVertices(hydra.util.PersistentMap<V, hydra.pg.model.Vertex<V>> vertices) {
+  public Graph withVertices(java.util.Map<V, hydra.pg.model.Vertex<V>> vertices) {
     return new Graph(vertices, edges);
   }
 
-  public Graph withEdges(hydra.util.PersistentMap<V, hydra.pg.model.Edge<V>> edges) {
+  public Graph withEdges(java.util.Map<V, hydra.pg.model.Edge<V>> edges) {
     return new Graph(vertices, edges);
   }
 }

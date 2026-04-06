@@ -75,23 +75,33 @@ public class EdgeFeatures implements Serializable, Comparable<EdgeFeatures> {
   @SuppressWarnings("unchecked")
   public int compareTo(EdgeFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) elementFeatures).compareTo(other.elementFeatures);
+    cmp = hydra.util.Comparing.compare(
+      elementFeatures,
+      other.elementFeatures);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) properties).compareTo(other.properties);
+    cmp = hydra.util.Comparing.compare(
+      properties,
+      other.properties);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsAddEdges).compareTo(other.supportsAddEdges);
+    cmp = hydra.util.Comparing.compare(
+      supportsAddEdges,
+      other.supportsAddEdges);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) supportsRemoveEdges).compareTo(other.supportsRemoveEdges);
+    cmp = hydra.util.Comparing.compare(
+      supportsRemoveEdges,
+      other.supportsRemoveEdges);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) supportsUpsert).compareTo(other.supportsUpsert);
+    return hydra.util.Comparing.compare(
+      supportsUpsert,
+      other.supportsUpsert);
   }
 
   public EdgeFeatures withElementFeatures(hydra.ext.org.apache.tinkerpop.features.ElementFeatures elementFeatures) {

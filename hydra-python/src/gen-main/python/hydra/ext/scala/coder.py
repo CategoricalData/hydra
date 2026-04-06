@@ -750,6 +750,9 @@ def encode_term(cx: hydra.context.Context, g: hydra.graph.Graph, term0: hydra.co
                     case hydra.core.TermFunction(value=f):
                         return _hoist_collect_type_args_body_1(f)
 
+                    case hydra.core.TermVariable(value=pname):
+                        return hydra.lib.maybes.cases(hydra.lib.maps.lookup(pname, g.primitives), (lambda : encode_term(cx, g, substituted_body)), (lambda _prim: hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda targ: encode_type(cx, g, targ)), type_args()), (lambda stype_args: (in_scope_type_var_names := hydra.lib.sets.from_list(hydra.lib.lists.map((lambda n: hydra.formatting.capitalize(n.value)), hydra.lib.sets.to_list(g.type_variables))), has_forall_residual := (_hoist_has_forall_residual_1 := (lambda v12: (lambda tv: (tv_name := tv.name.value, hydra.lib.logic.and_(hydra.lib.logic.not_(hydra.lib.lists.elem(46, hydra.lib.strings.to_list(tv_name))), hydra.lib.logic.not_(hydra.lib.sets.member(tv_name, in_scope_type_var_names))))[1])(v12.value) if isinstance(v12, hydra.ext.scala.syntax.TypeVar) else False), hydra.lib.logic.not_(hydra.lib.lists.null(hydra.lib.lists.filter((lambda st: _hoist_has_forall_residual_1(st)), stype_args))))[1], hydra.lib.logic.if_else(has_forall_residual, (lambda : Right(hydra.ext.scala.utils.sprim(pname))), (lambda : Right(hydra.ext.scala.utils.sapply_types(hydra.ext.scala.utils.sprim(pname), stype_args)))))[2]))))
+
                     case _:
                         return encode_term(cx, g, substituted_body)
             return _hoist_collect_type_args_body_2(hydra.strip.deannotate_term(substituted_body))
@@ -888,13 +891,15 @@ def encode_term(cx: hydra.context.Context, g: hydra.graph.Graph, term0: hydra.co
             @lru_cache(1)
             def local_name() -> str:
                 return hydra.names.local_name_of(v2)
-            parts = hydra.lib.strings.split_on(".", full_name)
+            @lru_cache(1)
+            def parts() -> frozenlist[str]:
+                return hydra.lib.strings.split_on(".", full_name)
             @lru_cache(1)
             def num_parts() -> int:
-                return hydra.lib.lists.length(parts)
+                return hydra.lib.lists.length(parts())
             @lru_cache(1)
             def escaped() -> str:
-                return hydra.lib.logic.if_else(hydra.lib.equality.lte(num_parts(), 1), (lambda : hydra.ext.scala.utils.scala_escape_name(full_name)), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(num_parts(), 2), (lambda : hydra.lib.strings.cat2(hydra.lib.lists.head(parts), hydra.lib.strings.cat2(".", hydra.ext.scala.utils.scala_escape_name(local_name())))), (lambda : hydra.lib.strings.intercalate(".", hydra.lib.lists.concat2(hydra.lib.lists.take(hydra.lib.math.sub(num_parts(), 1), parts), (hydra.ext.scala.utils.scala_escape_name(local_name()),)))))))
+                return hydra.lib.logic.if_else(hydra.lib.equality.lte(num_parts(), 1), (lambda : hydra.ext.scala.utils.scala_escape_name(full_name)), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(num_parts(), 2), (lambda : hydra.lib.strings.cat2(hydra.lib.lists.head(parts()), hydra.lib.strings.cat2(".", hydra.ext.scala.utils.scala_escape_name(local_name())))), (lambda : hydra.lib.strings.intercalate(".", hydra.lib.lists.concat2(hydra.lib.lists.take(hydra.lib.math.sub(num_parts(), 1), parts()), (hydra.ext.scala.utils.scala_escape_name(local_name()),)))))))
             return Right(hydra.ext.scala.utils.sname(escaped()))
 
         case hydra.core.TermAnnotated(value=at):
@@ -1126,9 +1131,13 @@ def construct_module(cx: hydra.context.Context, g: hydra.graph.Graph, mod: hydra
     def term_defs() -> frozenlist[hydra.packaging.TermDefinition]:
         return hydra.lib.pairs.second(partitioned())
     ns_name = mod.namespace.value
-    pname = hydra.ext.scala.syntax.Data_Name(hydra.ext.scala.syntax.PredefString(hydra.lib.strings.intercalate(".", hydra.lib.strings.split_on(".", ns_name))))
-    pref = cast(hydra.ext.scala.syntax.Data_Ref, hydra.ext.scala.syntax.Data_RefName(pname))
-    return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda td: encode_type_definition(cx, g, td)), type_defs()), (lambda type_decl_stats: hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda td: encode_term_definition(cx, g, td)), term_defs()), (lambda term_decl_stats: hydra.lib.eithers.bind(find_imports(cx, g, mod), (lambda imports: Right(hydra.ext.scala.syntax.Pkg(pname, pref, hydra.lib.lists.concat((imports, type_decl_stats, term_decl_stats))))))))))
+    @lru_cache(1)
+    def pname() -> hydra.ext.scala.syntax.Data_Name:
+        return hydra.ext.scala.syntax.Data_Name(hydra.ext.scala.syntax.PredefString(hydra.lib.strings.intercalate(".", hydra.lib.strings.split_on(".", ns_name))))
+    @lru_cache(1)
+    def pref() -> hydra.ext.scala.syntax.Data_Ref:
+        return cast(hydra.ext.scala.syntax.Data_Ref, hydra.ext.scala.syntax.Data_RefName(pname()))
+    return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda td: encode_type_definition(cx, g, td)), type_defs()), (lambda type_decl_stats: hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda td: encode_term_definition(cx, g, td)), term_defs()), (lambda term_decl_stats: hydra.lib.eithers.bind(find_imports(cx, g, mod), (lambda imports: Right(hydra.ext.scala.syntax.Pkg(pname(), pref(), hydra.lib.lists.concat((imports, type_decl_stats, term_decl_stats))))))))))
 
 def encode_untype_application_term(cx: hydra.context.Context, g: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.scala.syntax.Data]:
     r"""Encode an untyped application term by first inferring types."""

@@ -74,7 +74,9 @@ public abstract class SExpression implements Serializable, Comparable<SExpressio
         return tagCmp;
       }
       Atom o = (Atom) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -87,9 +89,9 @@ public abstract class SExpression implements Serializable, Comparable<SExpressio
    * A list of S-expressions
    */
   public static final class List extends hydra.ext.lisp.syntax.SExpression implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.lisp.syntax.SExpression> value;
+    public final java.util.List<hydra.ext.lisp.syntax.SExpression> value;
 
-    public List (hydra.util.ConsList<hydra.ext.lisp.syntax.SExpression> value) {
+    public List (java.util.List<hydra.ext.lisp.syntax.SExpression> value) {
       this.value = value;
     }
 
@@ -117,7 +119,9 @@ public abstract class SExpression implements Serializable, Comparable<SExpressio
         return tagCmp;
       }
       List o = (List) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -68,7 +68,9 @@ public abstract class InnerTripleExpr implements Serializable, Comparable<InnerT
         return tagCmp;
       }
       MultiElementGroup o = (MultiElementGroup) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class InnerTripleExpr implements Serializable, Comparable<InnerT
         return tagCmp;
       }
       MultiElementOneOf o = (MultiElementOneOf) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

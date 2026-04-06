@@ -51,11 +51,15 @@ public class InvalidGraphVertexError<V> implements Serializable, Comparable<Inva
   @SuppressWarnings("unchecked")
   public int compareTo(InvalidGraphVertexError other) {
     int cmp = 0;
-    cmp = ((Comparable) id).compareTo(other.id);
+    cmp = hydra.util.Comparing.compare(
+      id,
+      other.id);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) error).compareTo(other.error);
+    return hydra.util.Comparing.compare(
+      error,
+      other.error);
   }
 
   public InvalidGraphVertexError withId(V id) {

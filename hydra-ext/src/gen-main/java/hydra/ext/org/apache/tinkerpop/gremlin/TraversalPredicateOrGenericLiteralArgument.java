@@ -68,7 +68,9 @@ public abstract class TraversalPredicateOrGenericLiteralArgument implements Seri
         return tagCmp;
       }
       Predicate o = (Predicate) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -78,9 +80,9 @@ public abstract class TraversalPredicateOrGenericLiteralArgument implements Seri
   }
 
   public static final class Literal extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicateOrGenericLiteralArgument implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
 
-    public Literal (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
+    public Literal (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
       this.value = value;
     }
 
@@ -108,7 +110,9 @@ public abstract class TraversalPredicateOrGenericLiteralArgument implements Seri
         return tagCmp;
       }
       Literal o = (Literal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

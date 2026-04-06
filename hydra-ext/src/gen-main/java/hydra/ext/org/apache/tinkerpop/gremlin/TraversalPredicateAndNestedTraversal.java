@@ -42,11 +42,15 @@ public class TraversalPredicateAndNestedTraversal implements Serializable, Compa
   @SuppressWarnings("unchecked")
   public int compareTo(TraversalPredicateAndNestedTraversal other) {
     int cmp = 0;
-    cmp = ((Comparable) predicate).compareTo(other.predicate);
+    cmp = hydra.util.Comparing.compare(
+      predicate,
+      other.predicate);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) traversal).compareTo(other.traversal);
+    return hydra.util.Comparing.compare(
+      traversal,
+      other.traversal);
   }
 
   public TraversalPredicateAndNestedTraversal withPredicate(hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicate predicate) {

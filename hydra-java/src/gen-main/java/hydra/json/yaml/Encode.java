@@ -44,9 +44,13 @@ public interface Encode {
     });
   }
 
-  static hydra.util.Either<String, hydra.ext.org.yaml.model.Node> toYaml(hydra.core.Term term) {
+  static hydra.util.Either<String, hydra.ext.org.yaml.model.Node> toYaml(java.util.Map<hydra.core.Name, hydra.core.Type> types, hydra.core.Name tname, hydra.core.Type typ, hydra.core.Term term) {
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<hydra.json.model.Value, hydra.ext.org.yaml.model.Node>) (v -> hydra.json.yaml.Encode.jsonToYaml(v)),
-      hydra.json.Encode.toJson(term));
+      hydra.json.Encode.toJson(
+        types,
+        tname,
+        typ,
+        term));
   }
 }

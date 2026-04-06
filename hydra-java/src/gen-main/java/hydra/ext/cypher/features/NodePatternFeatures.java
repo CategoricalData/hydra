@@ -81,23 +81,33 @@ public class NodePatternFeatures implements Serializable, Comparable<NodePattern
   @SuppressWarnings("unchecked")
   public int compareTo(NodePatternFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) multipleLabels).compareTo(other.multipleLabels);
+    cmp = hydra.util.Comparing.compare(
+      multipleLabels,
+      other.multipleLabels);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) parameter).compareTo(other.parameter);
+    cmp = hydra.util.Comparing.compare(
+      parameter,
+      other.parameter);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) propertyMap).compareTo(other.propertyMap);
+    cmp = hydra.util.Comparing.compare(
+      propertyMap,
+      other.propertyMap);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) variableNode).compareTo(other.variableNode);
+    cmp = hydra.util.Comparing.compare(
+      variableNode,
+      other.variableNode);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) wildcardLabel).compareTo(other.wildcardLabel);
+    return hydra.util.Comparing.compare(
+      wildcardLabel,
+      other.wildcardLabel);
   }
 
   public NodePatternFeatures withMultipleLabels(Boolean multipleLabels) {

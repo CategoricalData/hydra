@@ -61,15 +61,21 @@ public class PropertyType<T> implements Serializable, Comparable<PropertyType<T>
   @SuppressWarnings("unchecked")
   public int compareTo(PropertyType other) {
     int cmp = 0;
-    cmp = ((Comparable) key).compareTo(other.key);
+    cmp = hydra.util.Comparing.compare(
+      key,
+      other.key);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) value).compareTo(other.value);
+    cmp = hydra.util.Comparing.compare(
+      value,
+      other.value);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) required).compareTo(other.required);
+    return hydra.util.Comparing.compare(
+      required,
+      other.required);
   }
 
   public PropertyType withKey(hydra.pg.model.PropertyKey key) {

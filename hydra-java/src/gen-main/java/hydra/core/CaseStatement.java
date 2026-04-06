@@ -29,9 +29,9 @@ public class CaseStatement implements Serializable, Comparable<CaseStatement> {
   /**
    * A list of case alternatives, one per union field
    */
-  public final hydra.util.ConsList<hydra.core.Field> cases;
+  public final java.util.List<hydra.core.Field> cases;
 
-  public CaseStatement (hydra.core.Name typeName, hydra.util.Maybe<hydra.core.Term> default_, hydra.util.ConsList<hydra.core.Field> cases) {
+  public CaseStatement (hydra.core.Name typeName, hydra.util.Maybe<hydra.core.Term> default_, java.util.List<hydra.core.Field> cases) {
     this.typeName = typeName;
     this.default_ = default_;
     this.cases = cases;
@@ -61,15 +61,21 @@ public class CaseStatement implements Serializable, Comparable<CaseStatement> {
   @SuppressWarnings("unchecked")
   public int compareTo(CaseStatement other) {
     int cmp = 0;
-    cmp = ((Comparable) typeName).compareTo(other.typeName);
+    cmp = hydra.util.Comparing.compare(
+      typeName,
+      other.typeName);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) default_).compareTo(other.default_);
+    cmp = hydra.util.Comparing.compare(
+      default_,
+      other.default_);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) cases).compareTo(other.cases);
+    return hydra.util.Comparing.compare(
+      cases,
+      other.cases);
   }
 
   public CaseStatement withTypeName(hydra.core.Name typeName) {
@@ -80,7 +86,7 @@ public class CaseStatement implements Serializable, Comparable<CaseStatement> {
     return new CaseStatement(typeName, default_, cases);
   }
 
-  public CaseStatement withCases(hydra.util.ConsList<hydra.core.Field> cases) {
+  public CaseStatement withCases(java.util.List<hydra.core.Field> cases) {
     return new CaseStatement(typeName, default_, cases);
   }
 }

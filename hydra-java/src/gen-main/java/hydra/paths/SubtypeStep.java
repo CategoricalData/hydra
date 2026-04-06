@@ -734,7 +734,9 @@ public abstract class SubtypeStep implements Serializable, Comparable<SubtypeSte
         return tagCmp;
       }
       RecordField o = (RecordField) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -815,7 +817,9 @@ public abstract class SubtypeStep implements Serializable, Comparable<SubtypeSte
         return tagCmp;
       }
       UnionField o = (UnionField) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

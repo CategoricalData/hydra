@@ -40,6 +40,8 @@ public class NoSuchVertexLabelError implements Serializable, Comparable<NoSuchVe
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(NoSuchVertexLabelError other) {
-    return ((Comparable) label).compareTo(other.label);
+    return hydra.util.Comparing.compare(
+      label,
+      other.label);
   }
 }

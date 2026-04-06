@@ -189,7 +189,9 @@ public abstract class Cardinality implements Serializable, Comparable<Cardinalit
         return tagCmp;
       }
       RepeatRange o = (RepeatRange) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

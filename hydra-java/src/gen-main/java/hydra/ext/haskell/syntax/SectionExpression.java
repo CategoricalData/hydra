@@ -51,11 +51,15 @@ public class SectionExpression implements Serializable, Comparable<SectionExpres
   @SuppressWarnings("unchecked")
   public int compareTo(SectionExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) operator).compareTo(other.operator);
+    cmp = hydra.util.Comparing.compare(
+      operator,
+      other.operator);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) expression).compareTo(other.expression);
+    return hydra.util.Comparing.compare(
+      expression,
+      other.expression);
   }
 
   public SectionExpression withOperator(hydra.ext.haskell.syntax.Operator operator) {

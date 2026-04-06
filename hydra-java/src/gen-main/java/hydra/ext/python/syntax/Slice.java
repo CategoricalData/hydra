@@ -68,7 +68,9 @@ public abstract class Slice implements Serializable, Comparable<Slice> {
         return tagCmp;
       }
       Named o = (Named) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class Slice implements Serializable, Comparable<Slice> {
         return tagCmp;
       }
       Slice_ o = (Slice_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

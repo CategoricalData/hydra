@@ -71,19 +71,27 @@ public class ConflictingVariantNameError implements Serializable, Comparable<Con
   @SuppressWarnings("unchecked")
   public int compareTo(ConflictingVariantNameError other) {
     int cmp = 0;
-    cmp = ((Comparable) namespace).compareTo(other.namespace);
+    cmp = hydra.util.Comparing.compare(
+      namespace,
+      other.namespace);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) typeName).compareTo(other.typeName);
+    cmp = hydra.util.Comparing.compare(
+      typeName,
+      other.typeName);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) variantName).compareTo(other.variantName);
+    cmp = hydra.util.Comparing.compare(
+      variantName,
+      other.variantName);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) conflictingName).compareTo(other.conflictingName);
+    return hydra.util.Comparing.compare(
+      conflictingName,
+      other.conflictingName);
   }
 
   public ConflictingVariantNameError withNamespace(hydra.packaging.Namespace namespace) {

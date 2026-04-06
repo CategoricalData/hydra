@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.workflow.HydraSchemaSpec",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -40,7 +39,6 @@
       "type": {
         "name": "hydra.ext.workflow.SchemaSpec",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -86,7 +84,6 @@
       "type": {
         "name": "hydra.ext.workflow.TransformWorkflow",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -134,7 +131,7 @@
                             "@value": {"literal": {"string": "The destination directory"}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}}],
-  "description": ["A model for Hydra transformation workflows"],
+  "description": "A model for Hydra transformation workflows",
   "namespace": "hydra.ext.workflow",
   "termDependencies": ["hydra.graph", "hydra.packaging"],
   "typeDependencies": ["hydra.core"]}

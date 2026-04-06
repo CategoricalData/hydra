@@ -34,6 +34,8 @@ public class Defn_Object implements Serializable, Comparable<Defn_Object> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Defn_Object other) {
-    return ((Comparable) name).compareTo(other.name);
+    return hydra.util.Comparing.compare(
+      name,
+      other.name);
   }
 }

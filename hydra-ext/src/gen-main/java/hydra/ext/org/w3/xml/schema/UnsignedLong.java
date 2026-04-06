@@ -32,6 +32,8 @@ public class UnsignedLong implements Serializable, Comparable<UnsignedLong> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(UnsignedLong other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

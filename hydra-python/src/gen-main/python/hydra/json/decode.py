@@ -208,24 +208,27 @@ def from_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], tname: hydra.
             return hydra.lib.eithers.either((lambda err: Left(err)), (lambda arr: (decoded := hydra.lib.eithers.map_list((lambda x1: decode_elem(x1)), arr), hydra.lib.eithers.map((lambda elems: cast(hydra.core.Term, hydra.core.TermSet(hydra.lib.sets.from_list(elems)))), decoded))[1]), arr_result())
 
         case hydra.core.TypeMaybe(value=inner_type):
-            def decode_just(arr: frozenlist[hydra.json.model.Value]) -> Either[str, hydra.core.Term]:
-                return hydra.lib.eithers.map((lambda v: cast(hydra.core.Term, hydra.core.TermMaybe(Just(v)))), from_json(types, tname, inner_type, hydra.lib.lists.head(arr)))
-            def decode_maybe_array(arr: frozenlist[hydra.json.model.Value]) -> Either[str, hydra.core.Term]:
-                @lru_cache(1)
-                def len() -> int:
-                    return hydra.lib.lists.length(arr)
-                return hydra.lib.logic.if_else(hydra.lib.equality.equal(len(), 0), (lambda : Right(cast(hydra.core.Term, hydra.core.TermMaybe(Nothing())))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(len(), 1), (lambda : decode_just(arr)), (lambda : Left("expected single-element array for Just")))))
-            def _hoist_decode_maybe_array_body_1(v1):
+            @lru_cache(1)
+            def inner_stripped() -> hydra.core.Type:
+                return hydra.strip.deannotate_type(inner_type)
+            @lru_cache(1)
+            def is_nested_maybe():
+                def _hoist_is_nested_maybe_1(v1):
+                    match v1:
+                        case hydra.core.TypeMaybe():
+                            return True
+
+                        case _:
+                            return False
+                return _hoist_is_nested_maybe_1(inner_stripped())
+            def _hoist_is_nested_maybe_body_1(v1):
                 match v1:
                     case hydra.json.model.ValueNull():
                         return Right(cast(hydra.core.Term, hydra.core.TermMaybe(Nothing())))
 
-                    case hydra.json.model.ValueArray(value=arr):
-                        return decode_maybe_array(arr)
-
                     case _:
-                        return Left("expected null or single-element array for Maybe")
-            return _hoist_decode_maybe_array_body_1(value)
+                        return hydra.lib.eithers.map((lambda v: cast(hydra.core.Term, hydra.core.TermMaybe(Just(v)))), from_json(types, tname, inner_type, value))
+            return hydra.lib.logic.if_else(is_nested_maybe(), (lambda : (decode_just := (lambda arr: hydra.lib.eithers.map((lambda v: cast(hydra.core.Term, hydra.core.TermMaybe(Just(v)))), from_json(types, tname, inner_type, hydra.lib.lists.head(arr)))), (decode_maybe_array := (lambda arr: (len := hydra.lib.lists.length(arr), hydra.lib.logic.if_else(hydra.lib.equality.equal(len, 0), (lambda : Right(cast(hydra.core.Term, hydra.core.TermMaybe(Nothing())))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(len, 1), (lambda : decode_just(arr)), (lambda : Left("expected single-element array for Just"))))))[1]), (_hoist_decode_maybe_array_body_1 := (lambda v1: (lambda _: Right(cast(hydra.core.Term, hydra.core.TermMaybe(Nothing()))))(v1) if isinstance(v1, hydra.json.model.ValueNull) else (lambda arr: decode_maybe_array(arr))(v1.value) if isinstance(v1, hydra.json.model.ValueArray) else Left("expected null or single-element array for nested Maybe")), _hoist_decode_maybe_array_body_1(value))[1])[1])[1]), (lambda : _hoist_is_nested_maybe_body_1(value)))
 
         case hydra.core.TypeRecord(value=rt):
             @lru_cache(1)

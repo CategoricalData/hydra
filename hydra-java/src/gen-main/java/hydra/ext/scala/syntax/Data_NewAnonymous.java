@@ -34,6 +34,8 @@ public class Data_NewAnonymous implements Serializable, Comparable<Data_NewAnony
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Data_NewAnonymous other) {
-    return ((Comparable) templ).compareTo(other.templ);
+    return hydra.util.Comparing.compare(
+      templ,
+      other.templ);
   }
 }

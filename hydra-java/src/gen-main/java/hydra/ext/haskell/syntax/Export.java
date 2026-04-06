@@ -74,7 +74,9 @@ public abstract class Export implements Serializable, Comparable<Export> {
         return tagCmp;
       }
       Declaration o = (Declaration) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -117,7 +119,9 @@ public abstract class Export implements Serializable, Comparable<Export> {
         return tagCmp;
       }
       Module o = (Module) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

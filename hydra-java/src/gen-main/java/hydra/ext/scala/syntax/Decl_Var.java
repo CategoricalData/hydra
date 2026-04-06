@@ -13,13 +13,13 @@ public class Decl_Var implements Serializable, Comparable<Decl_Var> {
 
   public static final hydra.core.Name DECLTPE = new hydra.core.Name("decltpe");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods;
+  public final java.util.List<hydra.ext.scala.syntax.Mod> mods;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Pat> pats;
+  public final java.util.List<hydra.ext.scala.syntax.Pat> pats;
 
   public final hydra.ext.scala.syntax.Type decltpe;
 
-  public Decl_Var (hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods, hydra.util.ConsList<hydra.ext.scala.syntax.Pat> pats, hydra.ext.scala.syntax.Type decltpe) {
+  public Decl_Var (java.util.List<hydra.ext.scala.syntax.Mod> mods, java.util.List<hydra.ext.scala.syntax.Pat> pats, hydra.ext.scala.syntax.Type decltpe) {
     this.mods = mods;
     this.pats = pats;
     this.decltpe = decltpe;
@@ -49,22 +49,28 @@ public class Decl_Var implements Serializable, Comparable<Decl_Var> {
   @SuppressWarnings("unchecked")
   public int compareTo(Decl_Var other) {
     int cmp = 0;
-    cmp = ((Comparable) mods).compareTo(other.mods);
+    cmp = hydra.util.Comparing.compare(
+      mods,
+      other.mods);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) pats).compareTo(other.pats);
+    cmp = hydra.util.Comparing.compare(
+      pats,
+      other.pats);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) decltpe).compareTo(other.decltpe);
+    return hydra.util.Comparing.compare(
+      decltpe,
+      other.decltpe);
   }
 
-  public Decl_Var withMods(hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods) {
+  public Decl_Var withMods(java.util.List<hydra.ext.scala.syntax.Mod> mods) {
     return new Decl_Var(mods, pats, decltpe);
   }
 
-  public Decl_Var withPats(hydra.util.ConsList<hydra.ext.scala.syntax.Pat> pats) {
+  public Decl_Var withPats(java.util.List<hydra.ext.scala.syntax.Pat> pats) {
     return new Decl_Var(mods, pats, decltpe);
   }
 

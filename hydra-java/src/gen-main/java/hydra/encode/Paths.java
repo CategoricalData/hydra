@@ -7,14 +7,14 @@ package hydra.encode;
  */
 public interface Paths {
   static hydra.core.Term subtermEdge(hydra.paths.SubtermEdge x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermEdge"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermEdge"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("source"), hydra.encode.Paths.subtermNode((x).source)),
       new hydra.core.Field(new hydra.core.Name("path"), hydra.encode.Paths.subtermPath((x).path)),
       new hydra.core.Field(new hydra.core.Name("target"), hydra.encode.Paths.subtermNode((x).target)))));
   }
 
   static hydra.core.Term subtermGraph(hydra.paths.SubtermGraph x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermGraph"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermGraph"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("nodes"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
         hydra.encode.Paths::subtermNode,
         (x).nodes))),
@@ -24,7 +24,7 @@ public interface Paths {
   }
 
   static hydra.core.Term subtermNode(hydra.paths.SubtermNode x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermNode"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtermNode"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)),
       new hydra.core.Field(new hydra.core.Name("label"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).label))),
       new hydra.core.Field(new hydra.core.Name("id"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).id))))));
@@ -141,14 +141,14 @@ public interface Paths {
   }
 
   static hydra.core.Term subtypeEdge(hydra.paths.SubtypeEdge x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeEdge"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeEdge"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("source"), hydra.encode.Paths.subtypeNode((x).source)),
       new hydra.core.Field(new hydra.core.Name("path"), hydra.encode.Paths.subtypePath((x).path)),
       new hydra.core.Field(new hydra.core.Name("target"), hydra.encode.Paths.subtypeNode((x).target)))));
   }
 
   static hydra.core.Term subtypeGraph(hydra.paths.SubtypeGraph x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeGraph"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeGraph"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("nodes"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
         hydra.encode.Paths::subtypeNode,
         (x).nodes))),
@@ -158,7 +158,7 @@ public interface Paths {
   }
 
   static hydra.core.Term subtypeNode(hydra.paths.SubtypeNode x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeNode"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.paths.SubtypeNode"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)),
       new hydra.core.Field(new hydra.core.Name("label"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).label))),
       new hydra.core.Field(new hydra.core.Name("id"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).id))))));

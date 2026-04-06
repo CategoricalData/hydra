@@ -13,13 +13,13 @@ public class InverseObjectProperties implements Serializable, Comparable<Inverse
 
   public static final hydra.core.Name PROPERTY2 = new hydra.core.Name("property2");
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
 
   public final hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property1;
 
   public final hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property2;
 
-  public InverseObjectProperties (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property1, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property2) {
+  public InverseObjectProperties (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property1, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property2) {
     this.annotations = annotations;
     this.property1 = property1;
     this.property2 = property2;
@@ -49,18 +49,24 @@ public class InverseObjectProperties implements Serializable, Comparable<Inverse
   @SuppressWarnings("unchecked")
   public int compareTo(InverseObjectProperties other) {
     int cmp = 0;
-    cmp = ((Comparable) annotations).compareTo(other.annotations);
+    cmp = hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) property1).compareTo(other.property1);
+    cmp = hydra.util.Comparing.compare(
+      property1,
+      other.property1);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) property2).compareTo(other.property2);
+    return hydra.util.Comparing.compare(
+      property2,
+      other.property2);
   }
 
-  public InverseObjectProperties withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public InverseObjectProperties withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new InverseObjectProperties(annotations, property1, property2);
   }
 

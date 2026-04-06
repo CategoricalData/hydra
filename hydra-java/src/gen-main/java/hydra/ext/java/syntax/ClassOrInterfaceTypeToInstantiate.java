@@ -11,11 +11,11 @@ public class ClassOrInterfaceTypeToInstantiate implements Serializable, Comparab
 
   public static final hydra.core.Name TYPE_ARGUMENTS = new hydra.core.Name("typeArguments");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.AnnotatedIdentifier> identifiers;
+  public final java.util.List<hydra.ext.java.syntax.AnnotatedIdentifier> identifiers;
 
   public final hydra.util.Maybe<hydra.ext.java.syntax.TypeArgumentsOrDiamond> typeArguments;
 
-  public ClassOrInterfaceTypeToInstantiate (hydra.util.ConsList<hydra.ext.java.syntax.AnnotatedIdentifier> identifiers, hydra.util.Maybe<hydra.ext.java.syntax.TypeArgumentsOrDiamond> typeArguments) {
+  public ClassOrInterfaceTypeToInstantiate (java.util.List<hydra.ext.java.syntax.AnnotatedIdentifier> identifiers, hydra.util.Maybe<hydra.ext.java.syntax.TypeArgumentsOrDiamond> typeArguments) {
     this.identifiers = identifiers;
     this.typeArguments = typeArguments;
   }
@@ -42,14 +42,18 @@ public class ClassOrInterfaceTypeToInstantiate implements Serializable, Comparab
   @SuppressWarnings("unchecked")
   public int compareTo(ClassOrInterfaceTypeToInstantiate other) {
     int cmp = 0;
-    cmp = ((Comparable) identifiers).compareTo(other.identifiers);
+    cmp = hydra.util.Comparing.compare(
+      identifiers,
+      other.identifiers);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) typeArguments).compareTo(other.typeArguments);
+    return hydra.util.Comparing.compare(
+      typeArguments,
+      other.typeArguments);
   }
 
-  public ClassOrInterfaceTypeToInstantiate withIdentifiers(hydra.util.ConsList<hydra.ext.java.syntax.AnnotatedIdentifier> identifiers) {
+  public ClassOrInterfaceTypeToInstantiate withIdentifiers(java.util.List<hydra.ext.java.syntax.AnnotatedIdentifier> identifiers) {
     return new ClassOrInterfaceTypeToInstantiate(identifiers, typeArguments);
   }
 

@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.ShexDoc",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -22,7 +21,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.ShexDoc_Sequence_Option",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -36,7 +34,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.ShexDoc_Sequence_Option_Alts",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -50,7 +47,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.Directive",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -64,14 +60,12 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.BaseDecl",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.io.shex.syntax.IriRef"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.PrefixDecl",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -85,7 +79,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.NotStartAction",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -99,7 +92,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.NotStartAction_ShapeExprDecl",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -114,7 +106,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.NotStartAction_ShapeExprDecl_Alts",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -126,14 +117,12 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.StartActions",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"list": {"variable": "hydra.ext.io.shex.syntax.CodeDecl"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.Statement",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -147,21 +136,18 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.ShapeExpression",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.io.shex.syntax.ShapeOr"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.InlineShapeExpression",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.io.shex.syntax.InlineShapeOr"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.ShapeOr",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -175,7 +161,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.InlineShapeOr",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -189,7 +174,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.ShapeAnd",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -203,7 +187,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.InlineShapeAnd",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -217,7 +200,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.ShapeNot",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "NOT", "type": {"maybe": {"unit": {}}}},
@@ -229,7 +211,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.InlineShapeNot",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "NOT", "type": {"maybe": {"unit": {}}}},
@@ -241,7 +222,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.ShapeAtom",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -259,7 +239,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.ShapeAtom_Sequence",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -273,7 +252,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.InlineShapeAtom",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -291,7 +269,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.InlineShapeAtom_Sequence",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -305,7 +282,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.InlineShapeAtom_Sequence2",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -319,7 +295,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.ShapeOrRef",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -339,7 +314,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.InlineShapeOrRef",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -359,7 +333,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.NodeConstraint",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -385,7 +358,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.NodeConstraint_Sequence2",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -399,7 +371,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.NodeConstraint_Sequence3",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -413,7 +384,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.NodeConstraint_Sequence4",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -427,7 +397,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.NodeConstraint_Sequence5",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -441,7 +410,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.NonLiteralKind",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "IRI", "type": {"unit": {}}},
@@ -452,7 +420,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.XsFacet",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -466,7 +433,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.StringFacet",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -480,7 +446,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.StringFacet_Sequence",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -494,7 +459,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.StringLength",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "LENGTH", "type": {"unit": {}}},
@@ -505,7 +469,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.NumericFacet",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -519,7 +482,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.NumericFacet_Sequence",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -533,7 +495,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.NumericFacet_Sequence2",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -547,7 +508,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.NumericRange",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "MININCLUSIVE", "type": {"unit": {}}},
@@ -559,7 +519,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.NumericLength",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "TOTALDIGITS", "type": {"unit": {}}},
@@ -569,7 +528,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.ShapeDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -591,7 +549,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.ShapeDefinition_ListOfAlts_Elmt",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -606,7 +563,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.InlineShapeDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -622,7 +578,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -637,21 +592,18 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.ExtraPropertySet",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"list": {"variable": "hydra.ext.io.shex.syntax.Predicate"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.TripleExpression",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.io.shex.syntax.OneOfTripleExpr"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.OneOfTripleExpr",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -665,7 +617,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.MultiElementOneOf",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -679,7 +630,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.InnerTripleExpr",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -693,7 +643,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.GroupTripleExpr",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -707,7 +656,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.SingleElementGroup",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -719,7 +667,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.MultiElementGroup",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -734,7 +681,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.UnaryTripleExpr",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -748,7 +694,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.UnaryTripleExpr_Sequence",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -762,7 +707,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.UnaryTripleExpr_Sequence_Alts",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -776,7 +720,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.BracketedTripleExpr",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -796,7 +739,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.TripleConstraint",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -822,7 +764,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.Cardinality",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "Ast", "type": {"unit": {}}},
@@ -835,12 +776,11 @@
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.SenseFlags",
-        "type": {"constraints": null, "type": {"wrap": {"unit": {}}}, "variables": []}}},
+        "type": {"type": {"wrap": {"unit": {}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.ValueSet",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.io.shex.syntax.ValueSetValue"}}},
           "variables": []}}},
@@ -848,7 +788,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.ValueSetValue",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -862,7 +801,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.IriRange",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -876,7 +814,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.IriRange_Sequence",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "Iri", "type": {"variable": "hydra.ext.io.shex.syntax.Iri"}},
@@ -889,21 +826,18 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.Exclusion",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.io.shex.syntax.Iri"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.Include",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.io.shex.syntax.TripleExprLabel"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.Annotation",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -917,7 +851,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.Annotation_Alts",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "Iri", "type": {"variable": "hydra.ext.io.shex.syntax.Iri"}},
@@ -929,14 +862,12 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.SemanticActions",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"list": {"variable": "hydra.ext.io.shex.syntax.CodeDecl"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.CodeDecl",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "Iri", "type": {"variable": "hydra.ext.io.shex.syntax.Iri"}},
@@ -948,7 +879,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.CodeDecl_Alts",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -960,7 +890,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.Literal",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -977,7 +906,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.Predicate",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "Iri", "type": {"variable": "hydra.ext.io.shex.syntax.Iri"}},
@@ -989,14 +917,12 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.Datatype",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.io.shex.syntax.Iri"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.ShapeExprLabel",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "Iri", "type": {"variable": "hydra.ext.io.shex.syntax.Iri"}},
@@ -1008,7 +934,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.TripleExprLabel",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "Iri", "type": {"variable": "hydra.ext.io.shex.syntax.Iri"}},
@@ -1020,7 +945,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.NumericLiteral",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1037,7 +961,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.RdfLiteral",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1052,7 +975,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.RdfLiteral_Alts_Option",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1066,7 +988,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.BooleanLiteral",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "True", "type": {"unit": {}}},
@@ -1076,7 +997,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.String",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1096,7 +1016,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.Iri",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1110,7 +1029,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.PrefixedName",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1124,14 +1042,12 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.BlankNode",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"variable": "hydra.ext.io.shex.syntax.BlankNodeLabel"}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.IncludeSet",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.io.shex.syntax.ShapeExprLabel"}}},
           "variables": []}}},
@@ -1139,14 +1055,12 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.Code",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"list": {"variable": "hydra.ext.io.shex.syntax.Code_Elmt"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.Code_Elmt",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "regex", "type": {"literal": {"string": {}}}},
@@ -1159,7 +1073,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.RepeatRange",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1177,7 +1090,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.RepeatRange_Sequence_Option_Option_Option",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1188,12 +1100,11 @@
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.RdfType",
-        "type": {"constraints": null, "type": {"wrap": {"unit": {}}}, "variables": []}}},
+        "type": {"type": {"wrap": {"unit": {}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.IriRef",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.io.shex.syntax.IriRef_Elmt"}}},
           "variables": []}}},
@@ -1201,7 +1112,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.IriRef_Elmt",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "regex", "type": {"literal": {"string": {}}}},
@@ -1213,14 +1123,12 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.PnameNs",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"maybe": {"variable": "hydra.ext.io.shex.syntax.PnPrefix"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.PnameLn",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1234,14 +1142,12 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.AtpNameNs",
         "type": {
-          "constraints": null,
           "type": {"wrap": {"maybe": {"variable": "hydra.ext.io.shex.syntax.PnPrefix"}}},
           "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.AtpNameLn",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1255,7 +1161,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.Regexp",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1268,7 +1173,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.Regexp_ListOfAlts_Elmt",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "regex", "type": {"literal": {"string": {}}}},
@@ -1281,7 +1185,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.BlankNodeLabel",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1301,7 +1204,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.BlankNodeLabel_Alts",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1313,7 +1215,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1324,36 +1225,23 @@
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.LangTag",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.Integer",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.Decimal",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.Double",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.StringLiteral1",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.io.shex.syntax.StringLiteral1_Elmt"}}},
           "variables": []}}},
@@ -1361,7 +1249,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.StringLiteral1_Elmt",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "regex", "type": {"literal": {"string": {}}}},
@@ -1376,7 +1263,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.StringLiteral2",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {"list": {"variable": "hydra.ext.io.shex.syntax.StringLiteral2_Elmt"}}},
           "variables": []}}},
@@ -1384,7 +1270,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.StringLiteral2_Elmt",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "regex", "type": {"literal": {"string": {}}}},
@@ -1399,7 +1284,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.StringLiteralLong1",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {
               "list": {"variable": "hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt"}}},
@@ -1408,7 +1292,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1426,7 +1309,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt_Sequence",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1440,7 +1322,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "Apos", "type": {"unit": {}}},
@@ -1452,12 +1333,11 @@
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option_Sequence",
-        "type": {"constraints": null, "type": {"record": []}, "variables": []}}},
+        "type": {"type": {"record": []}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.StringLiteralLong2",
         "type": {
-          "constraints": null,
           "type": {
             "wrap": {
               "list": {"variable": "hydra.ext.io.shex.syntax.StringLiteralLong2_Elmt"}}},
@@ -1466,7 +1346,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.StringLiteralLong2_Elmt",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1484,7 +1363,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.StringLiteralLong2_Elmt_Sequence",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1498,7 +1376,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.StringLiteralLong2_Elmt_Sequence_Alts_Option",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "Quot", "type": {"unit": {}}},
@@ -1510,12 +1387,11 @@
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.StringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence",
-        "type": {"constraints": null, "type": {"record": []}, "variables": []}}},
+        "type": {"type": {"record": []}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.Uchar",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1529,7 +1405,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.Uchar_Sequence",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "Hex", "type": {"variable": "hydra.ext.io.shex.syntax.Hex"}},
@@ -1541,7 +1416,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.Uchar_Sequence2",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "Hex", "type": {"variable": "hydra.ext.io.shex.syntax.Hex"}},
@@ -1556,15 +1430,11 @@
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.Echar",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.PnCharsBase",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {"name": "regex", "type": {"literal": {"string": {}}}},
@@ -1574,7 +1444,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.PnCharsU",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1586,7 +1455,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.PnChars",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1599,7 +1467,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.PnPrefix",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1614,7 +1481,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.PnPrefix_Sequence_Option",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1628,7 +1494,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.PnPrefix_Sequence_Option_Alts",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1640,7 +1505,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.PnLocal",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1655,7 +1519,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.PnLocal_Alts",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1669,7 +1532,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.PnLocal_Sequence_Option",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -1685,7 +1547,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.PnLocal_Sequence_Option_ListOfAlts_Elmt",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1699,7 +1560,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.PnLocal_Sequence_Option_Alts",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1712,7 +1572,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.Plx",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -1726,7 +1585,6 @@
       "type": {
         "name": "hydra.ext.io.shex.syntax.Percent",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {"name": "Hex", "type": {"variable": "hydra.ext.io.shex.syntax.Hex"}},
@@ -1735,19 +1593,12 @@
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.Hex",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.io.shex.syntax.PnLocalEsc",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}}],
-  "description": [
-    "A Shex model. Based on the BNF at:\n  https://github.com/shexSpec/grammar/blob/master/bnf"],
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}}],
+  "description": "A Shex model. Based on the BNF at:\n  https://github.com/shexSpec/grammar/blob/master/bnf",
   "namespace": "hydra.ext.io.shex.syntax",
   "termDependencies": [],
   "typeDependencies": []}

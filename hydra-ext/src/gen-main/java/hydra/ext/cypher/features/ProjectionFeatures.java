@@ -101,31 +101,45 @@ public class ProjectionFeatures implements Serializable, Comparable<ProjectionFe
   @SuppressWarnings("unchecked")
   public int compareTo(ProjectionFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) limit).compareTo(other.limit);
+    cmp = hydra.util.Comparing.compare(
+      limit,
+      other.limit);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) orderBy).compareTo(other.orderBy);
+    cmp = hydra.util.Comparing.compare(
+      orderBy,
+      other.orderBy);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) projectDistinct).compareTo(other.projectDistinct);
+    cmp = hydra.util.Comparing.compare(
+      projectDistinct,
+      other.projectDistinct);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) projectAll).compareTo(other.projectAll);
+    cmp = hydra.util.Comparing.compare(
+      projectAll,
+      other.projectAll);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) projectAs).compareTo(other.projectAs);
+    cmp = hydra.util.Comparing.compare(
+      projectAs,
+      other.projectAs);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) skip).compareTo(other.skip);
+    cmp = hydra.util.Comparing.compare(
+      skip,
+      other.skip);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) sortOrder).compareTo(other.sortOrder);
+    return hydra.util.Comparing.compare(
+      sortOrder,
+      other.sortOrder);
   }
 
   public ProjectionFeatures withLimit(Boolean limit) {

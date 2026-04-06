@@ -63,23 +63,33 @@ public class ProjectionBody implements Serializable, Comparable<ProjectionBody> 
   @SuppressWarnings("unchecked")
   public int compareTo(ProjectionBody other) {
     int cmp = 0;
-    cmp = ((Comparable) distinct).compareTo(other.distinct);
+    cmp = hydra.util.Comparing.compare(
+      distinct,
+      other.distinct);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) projectionItems).compareTo(other.projectionItems);
+    cmp = hydra.util.Comparing.compare(
+      projectionItems,
+      other.projectionItems);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) order).compareTo(other.order);
+    cmp = hydra.util.Comparing.compare(
+      order,
+      other.order);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) skip).compareTo(other.skip);
+    cmp = hydra.util.Comparing.compare(
+      skip,
+      other.skip);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) limit).compareTo(other.limit);
+    return hydra.util.Comparing.compare(
+      limit,
+      other.limit);
   }
 
   public ProjectionBody withDistinct(Boolean distinct) {

@@ -51,11 +51,15 @@ public class UndefinedFieldError implements Serializable, Comparable<UndefinedFi
   @SuppressWarnings("unchecked")
   public int compareTo(UndefinedFieldError other) {
     int cmp = 0;
-    cmp = ((Comparable) fieldName).compareTo(other.fieldName);
+    cmp = hydra.util.Comparing.compare(
+      fieldName,
+      other.fieldName);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) typeName).compareTo(other.typeName);
+    return hydra.util.Comparing.compare(
+      typeName,
+      other.typeName);
   }
 
   public UndefinedFieldError withFieldName(hydra.core.Name fieldName) {

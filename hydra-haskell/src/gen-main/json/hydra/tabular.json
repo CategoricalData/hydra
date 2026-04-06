@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.tabular.ColumnType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -21,7 +20,6 @@
       "type": {
         "name": "hydra.tabular.DataRow",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -39,7 +37,6 @@
       "type": {
         "name": "hydra.tabular.HeaderRow",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -54,7 +51,6 @@
       "type": {
         "name": "hydra.tabular.Table",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -99,7 +95,6 @@
       "type": {
         "name": "hydra.tabular.TableType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -117,7 +112,7 @@
                     "name": "columns",
                     "type": {"list": {"variable": "hydra.tabular.ColumnType"}}}]}}},
           "variables": []}}}],
-  "description": ["A simple, untyped tabular data model, suitable for CSVs and TSVs"],
+  "description": "A simple, untyped tabular data model, suitable for CSVs and TSVs",
   "namespace": "hydra.tabular",
   "termDependencies": ["hydra.core", "hydra.relational"],
   "typeDependencies": ["hydra.core"]}

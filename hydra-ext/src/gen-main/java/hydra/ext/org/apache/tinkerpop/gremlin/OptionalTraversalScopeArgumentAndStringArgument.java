@@ -42,11 +42,15 @@ public class OptionalTraversalScopeArgumentAndStringArgument implements Serializ
   @SuppressWarnings("unchecked")
   public int compareTo(OptionalTraversalScopeArgumentAndStringArgument other) {
     int cmp = 0;
-    cmp = ((Comparable) scope).compareTo(other.scope);
+    cmp = hydra.util.Comparing.compare(
+      scope,
+      other.scope);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) string).compareTo(other.string);
+    return hydra.util.Comparing.compare(
+      string,
+      other.string);
   }
 
   public OptionalTraversalScopeArgumentAndStringArgument withScope(hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.TraversalScopeArgument> scope) {

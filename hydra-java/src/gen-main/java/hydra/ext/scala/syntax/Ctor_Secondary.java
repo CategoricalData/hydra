@@ -17,17 +17,17 @@ public class Ctor_Secondary implements Serializable, Comparable<Ctor_Secondary> 
 
   public static final hydra.core.Name STATS = new hydra.core.Name("stats");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods;
+  public final java.util.List<hydra.ext.scala.syntax.Mod> mods;
 
   public final hydra.ext.scala.syntax.Name name;
 
-  public final hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> paramss;
+  public final java.util.List<java.util.List<hydra.ext.scala.syntax.Data_Param>> paramss;
 
   public final hydra.ext.scala.syntax.Init init;
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Stat> stats;
+  public final java.util.List<hydra.ext.scala.syntax.Stat> stats;
 
-  public Ctor_Secondary (hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods, hydra.ext.scala.syntax.Name name, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> paramss, hydra.ext.scala.syntax.Init init, hydra.util.ConsList<hydra.ext.scala.syntax.Stat> stats) {
+  public Ctor_Secondary (java.util.List<hydra.ext.scala.syntax.Mod> mods, hydra.ext.scala.syntax.Name name, java.util.List<java.util.List<hydra.ext.scala.syntax.Data_Param>> paramss, hydra.ext.scala.syntax.Init init, java.util.List<hydra.ext.scala.syntax.Stat> stats) {
     this.mods = mods;
     this.name = name;
     this.paramss = paramss;
@@ -63,26 +63,36 @@ public class Ctor_Secondary implements Serializable, Comparable<Ctor_Secondary> 
   @SuppressWarnings("unchecked")
   public int compareTo(Ctor_Secondary other) {
     int cmp = 0;
-    cmp = ((Comparable) mods).compareTo(other.mods);
+    cmp = hydra.util.Comparing.compare(
+      mods,
+      other.mods);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) paramss).compareTo(other.paramss);
+    cmp = hydra.util.Comparing.compare(
+      paramss,
+      other.paramss);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) init).compareTo(other.init);
+    cmp = hydra.util.Comparing.compare(
+      init,
+      other.init);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) stats).compareTo(other.stats);
+    return hydra.util.Comparing.compare(
+      stats,
+      other.stats);
   }
 
-  public Ctor_Secondary withMods(hydra.util.ConsList<hydra.ext.scala.syntax.Mod> mods) {
+  public Ctor_Secondary withMods(java.util.List<hydra.ext.scala.syntax.Mod> mods) {
     return new Ctor_Secondary(mods, name, paramss, init, stats);
   }
 
@@ -90,7 +100,7 @@ public class Ctor_Secondary implements Serializable, Comparable<Ctor_Secondary> 
     return new Ctor_Secondary(mods, name, paramss, init, stats);
   }
 
-  public Ctor_Secondary withParamss(hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> paramss) {
+  public Ctor_Secondary withParamss(java.util.List<java.util.List<hydra.ext.scala.syntax.Data_Param>> paramss) {
     return new Ctor_Secondary(mods, name, paramss, init, stats);
   }
 
@@ -98,7 +108,7 @@ public class Ctor_Secondary implements Serializable, Comparable<Ctor_Secondary> 
     return new Ctor_Secondary(mods, name, paramss, init, stats);
   }
 
-  public Ctor_Secondary withStats(hydra.util.ConsList<hydra.ext.scala.syntax.Stat> stats) {
+  public Ctor_Secondary withStats(java.util.List<hydra.ext.scala.syntax.Stat> stats) {
     return new Ctor_Secondary(mods, name, paramss, init, stats);
   }
 }

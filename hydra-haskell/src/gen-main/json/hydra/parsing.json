@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.parsing.ParseError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -36,7 +35,6 @@
       "type": {
         "name": "hydra.parsing.ParseResult",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -78,7 +76,6 @@
       "type": {
         "name": "hydra.parsing.ParseSuccess",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -113,7 +110,6 @@
       "type": {
         "name": "hydra.parsing.Parser",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -134,7 +130,7 @@
                         "domain": {"literal": {"string": {}}}}}},
                   "parameter": "a"}}}},
           "variables": []}}}],
-  "description": ["Parser combinator types for text parsing"],
+  "description": "Parser combinator types for text parsing",
   "namespace": "hydra.parsing",
   "termDependencies": [],
   "typeDependencies": ["hydra.core"]}

@@ -68,7 +68,9 @@ public abstract class Resource implements Serializable, Comparable<Resource> {
         return tagCmp;
       }
       Iri o = (Iri) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class Resource implements Serializable, Comparable<Resource> {
         return tagCmp;
       }
       Bnode o = (Bnode) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

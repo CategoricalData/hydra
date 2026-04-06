@@ -68,7 +68,9 @@ public abstract class ProcedureInvocation implements Serializable, Comparable<Pr
         return tagCmp;
       }
       Explicit o = (Explicit) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class ProcedureInvocation implements Serializable, Comparable<Pr
         return tagCmp;
       }
       Implicit o = (Implicit) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

@@ -9,9 +9,9 @@ public class ObjectOneOf implements Serializable, Comparable<ObjectOneOf> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Individual> value;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.Individual> value;
 
-  public ObjectOneOf (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Individual> value) {
+  public ObjectOneOf (java.util.List<hydra.ext.org.w3.owl.syntax.Individual> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class ObjectOneOf implements Serializable, Comparable<ObjectOneOf> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ObjectOneOf other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

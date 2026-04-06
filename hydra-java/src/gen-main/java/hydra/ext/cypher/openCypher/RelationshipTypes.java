@@ -9,9 +9,9 @@ public class RelationshipTypes implements Serializable, Comparable<RelationshipT
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.RelTypeName> value;
+  public final java.util.List<hydra.ext.cypher.openCypher.RelTypeName> value;
 
-  public RelationshipTypes (hydra.util.ConsList<hydra.ext.cypher.openCypher.RelTypeName> value) {
+  public RelationshipTypes (java.util.List<hydra.ext.cypher.openCypher.RelTypeName> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class RelationshipTypes implements Serializable, Comparable<RelationshipT
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(RelationshipTypes other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

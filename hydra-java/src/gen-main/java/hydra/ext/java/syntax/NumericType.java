@@ -68,7 +68,9 @@ public abstract class NumericType implements Serializable, Comparable<NumericTyp
         return tagCmp;
       }
       Integral o = (Integral) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class NumericType implements Serializable, Comparable<NumericTyp
         return tagCmp;
       }
       FloatingPoint o = (FloatingPoint) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

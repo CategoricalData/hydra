@@ -68,7 +68,9 @@ public abstract class Parameter implements Serializable, Comparable<Parameter> {
         return tagCmp;
       }
       Symbolic o = (Symbolic) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -106,7 +108,9 @@ public abstract class Parameter implements Serializable, Comparable<Parameter> {
         return tagCmp;
       }
       Integer_ o = (Integer_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

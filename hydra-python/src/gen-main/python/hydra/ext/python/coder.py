@@ -892,7 +892,7 @@ def encode_application_inner(cx: hydra.context.Context, env: hydra.ext.python.en
             @lru_cache(1)
             def all_args() -> frozenlist[hydra.ext.python.syntax.Expression]:
                 return hydra.lib.lists.concat2(hargs, rargs)
-            return hydra.lib.maybes.maybe((lambda : hydra.lib.eithers.bind(encode_variable(cx, env, name, hargs), (lambda expr: Right((expr, rargs))))), (lambda el: hydra.lib.maybes.maybe((lambda : hydra.lib.eithers.bind(encode_variable(cx, env, name, hargs), (lambda expr: Right((expr, rargs))))), (lambda ts: (el_arity := hydra.arity.type_scheme_arity(ts), consume_count := hydra.lib.math.min(el_arity, hydra.lib.lists.length(all_args())), consumed_args := hydra.lib.lists.take(consume_count, all_args()), remaining_args := hydra.lib.lists.drop(consume_count, all_args()), hydra.lib.logic.if_else(hydra.lib.lists.null(consumed_args), (lambda : hydra.lib.eithers.bind(encode_variable(cx, env, name, ()), (lambda expr: Right((expr, rargs))))), (lambda : Right((hydra.ext.python.utils.function_call(hydra.ext.python.utils.py_name_to_py_primary(hydra.ext.python.names.encode_name(True, hydra.util.CaseConvention.LOWER_SNAKE, env, name)), consumed_args), remaining_args)))))[4]), el.type)), hydra.lexical.lookup_binding(g(), name))
+            return hydra.lib.maybes.cases(hydra.lib.maps.lookup(name, g().primitives), (lambda : hydra.lib.maybes.maybe((lambda : hydra.lib.eithers.bind(encode_variable(cx, env, name, hargs), (lambda expr: Right((expr, rargs))))), (lambda el: hydra.lib.maybes.maybe((lambda : hydra.lib.eithers.bind(encode_variable(cx, env, name, hargs), (lambda expr: Right((expr, rargs))))), (lambda ts: (el_arity := hydra.arity.type_scheme_arity(ts), consume_count := hydra.lib.math.min(el_arity, hydra.lib.lists.length(all_args())), consumed_args := hydra.lib.lists.take(consume_count, all_args()), remaining_args := hydra.lib.lists.drop(consume_count, all_args()), hydra.lib.logic.if_else(hydra.lib.lists.null(consumed_args), (lambda : hydra.lib.eithers.bind(encode_variable(cx, env, name, ()), (lambda expr: Right((expr, rargs))))), (lambda : Right((hydra.ext.python.utils.function_call(hydra.ext.python.utils.py_name_to_py_primary(hydra.ext.python.names.encode_name(True, hydra.util.CaseConvention.LOWER_SNAKE, env, name)), consumed_args), remaining_args)))))[4]), el.type)), hydra.lexical.lookup_binding(g(), name))), (lambda _prim: (wrapped_args := wrap_lazy_arguments(name, hargs), hydra.lib.eithers.bind(encode_variable(cx, env, name, wrapped_args), (lambda expr: Right((expr, rargs)))))[1]))
 
         case _:
             return default_case()
@@ -1045,7 +1045,7 @@ def variant_closed_pattern(env: hydra.ext.python.environment.PythonEnvironment, 
 
     return hydra.lib.logic.if_else(is_enum, (lambda : enum_variant_pattern(env, type_name, field_name)), (lambda : hydra.lib.logic.if_else(hydra.lib.logic.not_(should_capture), (lambda : class_variant_pattern_unit(py_variant_name)), (lambda : class_variant_pattern_with_capture(env, py_variant_name, var_name)))))
 
-def encode_case_block(cx: T0, env: hydra.ext.python.environment.PythonEnvironment, tname: hydra.core.Name, row_type: frozenlist[hydra.core.FieldType], is_enum: bool, encode_body: Callable[[hydra.ext.python.environment.PythonEnvironment, hydra.core.Term], Either[T1, frozenlist[hydra.ext.python.syntax.Statement]]], field: hydra.core.Field) -> Either[frozenlist[hydra.ext.python.syntax.Statement], hydra.ext.python.syntax.CaseBlock]:
+def encode_case_block(cx: T0, env: hydra.ext.python.environment.PythonEnvironment, tname: hydra.core.Name, row_type: frozenlist[hydra.core.FieldType], is_enum: bool, encode_body: Callable[[hydra.ext.python.environment.PythonEnvironment, hydra.core.Term], Either[T1, frozenlist[hydra.ext.python.syntax.Statement]]], field: hydra.core.Field) -> Either[T1, hydra.ext.python.syntax.CaseBlock]:
     r"""Encode a single case (Field) into a CaseBlock for a match statement."""
 
     fname = field.name
@@ -1090,7 +1090,7 @@ def encode_case_block(cx: T0, env: hydra.ext.python.environment.PythonEnvironmen
         return variant_closed_pattern(env2(), tname, fname, py_variant_name(), row_type, is_enum, v, should_capture())
     return hydra.lib.eithers.bind(encode_body(env2(), effective_body()), (lambda stmts: (py_body := hydra.ext.python.utils.indented_block(Nothing(), (stmts,)), Right(hydra.ext.python.syntax.CaseBlock(hydra.ext.python.utils.py_closed_pattern_to_py_patterns(pattern()), Nothing(), py_body)))[1]))
 
-def encode_default_case_block(encode_term: Callable[[T0], Either[T1, hydra.ext.python.syntax.Expression]], is_full: bool, mdflt: Maybe[T0], tname: hydra.core.Name) -> Either[hydra.ext.python.syntax.Statement, frozenlist[hydra.ext.python.syntax.CaseBlock]]:
+def encode_default_case_block(encode_term: Callable[[T0], Either[T1, hydra.ext.python.syntax.Expression]], is_full: bool, mdflt: Maybe[T0], tname: hydra.core.Name) -> Either[T1, frozenlist[hydra.ext.python.syntax.CaseBlock]]:
     r"""Encode the default (wildcard) case block for a match statement."""
 
     return hydra.lib.eithers.bind(hydra.lib.maybes.maybe((lambda : Right(hydra.lib.logic.if_else(is_full, (lambda : hydra.ext.python.utils.raise_assertion_error("Unreachable: all variants handled")), (lambda : hydra.ext.python.utils.raise_type_error(hydra.lib.strings.cat2("Unsupported ", hydra.names.local_name_of(tname))))))), (lambda d: hydra.lib.eithers.bind(encode_term(d), (lambda pyexpr: Right(hydra.ext.python.utils.return_single(pyexpr))))), mdflt), (lambda stmt: (patterns := hydra.ext.python.utils.py_closed_pattern_to_py_patterns(cast(hydra.ext.python.syntax.ClosedPattern, hydra.ext.python.syntax.ClosedPatternWildcard())), body := hydra.ext.python.utils.indented_block(Nothing(), ((stmt,),)), Right((hydra.ext.python.syntax.CaseBlock(patterns, Nothing(), body),)))[2]))
@@ -1462,7 +1462,7 @@ def encode_definition(cx: hydra.context.Context, env: hydra.ext.python.environme
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def encode_field(cx: T0, env: hydra.ext.python.environment.PythonEnvironment, field: hydra.core.Field, encode_term: Callable[[hydra.core.Term], Either[T1, T2]]) -> Either[tuple[hydra.ext.python.syntax.Name, T2], tuple[hydra.ext.python.syntax.Name, T2]]:
+def encode_field(cx: T0, env: hydra.ext.python.environment.PythonEnvironment, field: hydra.core.Field, encode_term: Callable[[hydra.core.Term], Either[T1, T2]]) -> Either[T1, tuple[hydra.ext.python.syntax.Name, T2]]:
     r"""Encode a field (name-value pair) to a Python (Name, Expression) pair."""
 
     fname = field.name

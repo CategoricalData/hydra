@@ -61,15 +61,21 @@ public class TriplePattern implements Serializable, Comparable<TriplePattern> {
   @SuppressWarnings("unchecked")
   public int compareTo(TriplePattern other) {
     int cmp = 0;
-    cmp = ((Comparable) subject).compareTo(other.subject);
+    cmp = hydra.util.Comparing.compare(
+      subject,
+      other.subject);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) predicate).compareTo(other.predicate);
+    cmp = hydra.util.Comparing.compare(
+      predicate,
+      other.predicate);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) object).compareTo(other.object);
+    return hydra.util.Comparing.compare(
+      object,
+      other.object);
   }
 
   public TriplePattern withSubject(hydra.query.Node subject) {

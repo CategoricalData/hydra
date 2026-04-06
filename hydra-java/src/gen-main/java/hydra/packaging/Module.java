@@ -28,24 +28,24 @@ public class Module implements Serializable, Comparable<Module> {
   /**
    * The definitions in this module
    */
-  public final hydra.util.ConsList<hydra.packaging.Definition> definitions;
+  public final java.util.List<hydra.packaging.Definition> definitions;
 
   /**
    * Any modules which the term expressions of this module directly depend upon
    */
-  public final hydra.util.ConsList<hydra.packaging.Namespace> termDependencies;
+  public final java.util.List<hydra.packaging.Namespace> termDependencies;
 
   /**
    * Any modules which the type expressions of this module directly depend upon
    */
-  public final hydra.util.ConsList<hydra.packaging.Namespace> typeDependencies;
+  public final java.util.List<hydra.packaging.Namespace> typeDependencies;
 
   /**
    * An optional human-readable description of the module
    */
   public final hydra.util.Maybe<String> description;
 
-  public Module (hydra.packaging.Namespace namespace, hydra.util.ConsList<hydra.packaging.Definition> definitions, hydra.util.ConsList<hydra.packaging.Namespace> termDependencies, hydra.util.ConsList<hydra.packaging.Namespace> typeDependencies, hydra.util.Maybe<String> description) {
+  public Module (hydra.packaging.Namespace namespace, java.util.List<hydra.packaging.Definition> definitions, java.util.List<hydra.packaging.Namespace> termDependencies, java.util.List<hydra.packaging.Namespace> typeDependencies, hydra.util.Maybe<String> description) {
     this.namespace = namespace;
     this.definitions = definitions;
     this.termDependencies = termDependencies;
@@ -81,38 +81,48 @@ public class Module implements Serializable, Comparable<Module> {
   @SuppressWarnings("unchecked")
   public int compareTo(Module other) {
     int cmp = 0;
-    cmp = ((Comparable) namespace).compareTo(other.namespace);
+    cmp = hydra.util.Comparing.compare(
+      namespace,
+      other.namespace);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) definitions).compareTo(other.definitions);
+    cmp = hydra.util.Comparing.compare(
+      definitions,
+      other.definitions);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) termDependencies).compareTo(other.termDependencies);
+    cmp = hydra.util.Comparing.compare(
+      termDependencies,
+      other.termDependencies);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) typeDependencies).compareTo(other.typeDependencies);
+    cmp = hydra.util.Comparing.compare(
+      typeDependencies,
+      other.typeDependencies);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) description).compareTo(other.description);
+    return hydra.util.Comparing.compare(
+      description,
+      other.description);
   }
 
   public Module withNamespace(hydra.packaging.Namespace namespace) {
     return new Module(namespace, definitions, termDependencies, typeDependencies, description);
   }
 
-  public Module withDefinitions(hydra.util.ConsList<hydra.packaging.Definition> definitions) {
+  public Module withDefinitions(java.util.List<hydra.packaging.Definition> definitions) {
     return new Module(namespace, definitions, termDependencies, typeDependencies, description);
   }
 
-  public Module withTermDependencies(hydra.util.ConsList<hydra.packaging.Namespace> termDependencies) {
+  public Module withTermDependencies(java.util.List<hydra.packaging.Namespace> termDependencies) {
     return new Module(namespace, definitions, termDependencies, typeDependencies, description);
   }
 
-  public Module withTypeDependencies(hydra.util.ConsList<hydra.packaging.Namespace> typeDependencies) {
+  public Module withTypeDependencies(java.util.List<hydra.packaging.Namespace> typeDependencies) {
     return new Module(namespace, definitions, termDependencies, typeDependencies, description);
   }
 

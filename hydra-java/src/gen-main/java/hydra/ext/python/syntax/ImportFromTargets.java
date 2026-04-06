@@ -46,9 +46,9 @@ public abstract class ImportFromTargets implements Serializable, Comparable<Impo
   }
 
   public static final class Simple extends hydra.ext.python.syntax.ImportFromTargets implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.python.syntax.ImportFromAsName> value;
+    public final java.util.List<hydra.ext.python.syntax.ImportFromAsName> value;
 
-    public Simple (hydra.util.ConsList<hydra.ext.python.syntax.ImportFromAsName> value) {
+    public Simple (java.util.List<hydra.ext.python.syntax.ImportFromAsName> value) {
       this.value = value;
     }
 
@@ -76,7 +76,9 @@ public abstract class ImportFromTargets implements Serializable, Comparable<Impo
         return tagCmp;
       }
       Simple o = (Simple) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -86,9 +88,9 @@ public abstract class ImportFromTargets implements Serializable, Comparable<Impo
   }
 
   public static final class Parens extends hydra.ext.python.syntax.ImportFromTargets implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.python.syntax.ImportFromAsName> value;
+    public final java.util.List<hydra.ext.python.syntax.ImportFromAsName> value;
 
-    public Parens (hydra.util.ConsList<hydra.ext.python.syntax.ImportFromAsName> value) {
+    public Parens (java.util.List<hydra.ext.python.syntax.ImportFromAsName> value) {
       this.value = value;
     }
 
@@ -116,7 +118,9 @@ public abstract class ImportFromTargets implements Serializable, Comparable<Impo
         return tagCmp;
       }
       Parens o = (Parens) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

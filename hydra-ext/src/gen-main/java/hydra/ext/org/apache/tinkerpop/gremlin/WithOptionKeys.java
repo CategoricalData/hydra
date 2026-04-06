@@ -108,7 +108,9 @@ public abstract class WithOptionKeys implements Serializable, Comparable<WithOpt
         return tagCmp;
       }
       ShortestPath o = (ShortestPath) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -148,7 +150,9 @@ public abstract class WithOptionKeys implements Serializable, Comparable<WithOpt
         return tagCmp;
       }
       ConnectedComponent o = (ConnectedComponent) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -188,7 +192,9 @@ public abstract class WithOptionKeys implements Serializable, Comparable<WithOpt
         return tagCmp;
       }
       PageRank o = (PageRank) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -228,7 +234,9 @@ public abstract class WithOptionKeys implements Serializable, Comparable<WithOpt
         return tagCmp;
       }
       PeerPressure o = (PeerPressure) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -268,7 +276,9 @@ public abstract class WithOptionKeys implements Serializable, Comparable<WithOpt
         return tagCmp;
       }
       Io o = (Io) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

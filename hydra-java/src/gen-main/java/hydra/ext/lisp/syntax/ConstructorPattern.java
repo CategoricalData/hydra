@@ -22,9 +22,9 @@ public class ConstructorPattern implements Serializable, Comparable<ConstructorP
   /**
    * The sub-patterns for constructor arguments
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.Pattern> arguments;
+  public final java.util.List<hydra.ext.lisp.syntax.Pattern> arguments;
 
-  public ConstructorPattern (hydra.ext.lisp.syntax.Symbol constructor, hydra.util.ConsList<hydra.ext.lisp.syntax.Pattern> arguments) {
+  public ConstructorPattern (hydra.ext.lisp.syntax.Symbol constructor, java.util.List<hydra.ext.lisp.syntax.Pattern> arguments) {
     this.constructor = constructor;
     this.arguments = arguments;
   }
@@ -51,18 +51,22 @@ public class ConstructorPattern implements Serializable, Comparable<ConstructorP
   @SuppressWarnings("unchecked")
   public int compareTo(ConstructorPattern other) {
     int cmp = 0;
-    cmp = ((Comparable) constructor).compareTo(other.constructor);
+    cmp = hydra.util.Comparing.compare(
+      constructor,
+      other.constructor);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) arguments).compareTo(other.arguments);
+    return hydra.util.Comparing.compare(
+      arguments,
+      other.arguments);
   }
 
   public ConstructorPattern withConstructor(hydra.ext.lisp.syntax.Symbol constructor) {
     return new ConstructorPattern(constructor, arguments);
   }
 
-  public ConstructorPattern withArguments(hydra.util.ConsList<hydra.ext.lisp.syntax.Pattern> arguments) {
+  public ConstructorPattern withArguments(java.util.List<hydra.ext.lisp.syntax.Pattern> arguments) {
     return new ConstructorPattern(constructor, arguments);
   }
 }

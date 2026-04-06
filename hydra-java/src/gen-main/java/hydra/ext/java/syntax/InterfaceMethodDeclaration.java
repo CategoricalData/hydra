@@ -13,13 +13,13 @@ public class InterfaceMethodDeclaration implements Serializable, Comparable<Inte
 
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.InterfaceMethodModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.InterfaceMethodModifier> modifiers;
 
   public final hydra.ext.java.syntax.MethodHeader header;
 
   public final hydra.ext.java.syntax.MethodBody body;
 
-  public InterfaceMethodDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.InterfaceMethodModifier> modifiers, hydra.ext.java.syntax.MethodHeader header, hydra.ext.java.syntax.MethodBody body) {
+  public InterfaceMethodDeclaration (java.util.List<hydra.ext.java.syntax.InterfaceMethodModifier> modifiers, hydra.ext.java.syntax.MethodHeader header, hydra.ext.java.syntax.MethodBody body) {
     this.modifiers = modifiers;
     this.header = header;
     this.body = body;
@@ -49,18 +49,24 @@ public class InterfaceMethodDeclaration implements Serializable, Comparable<Inte
   @SuppressWarnings("unchecked")
   public int compareTo(InterfaceMethodDeclaration other) {
     int cmp = 0;
-    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
+    cmp = hydra.util.Comparing.compare(
+      modifiers,
+      other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) header).compareTo(other.header);
+    cmp = hydra.util.Comparing.compare(
+      header,
+      other.header);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
-  public InterfaceMethodDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.InterfaceMethodModifier> modifiers) {
+  public InterfaceMethodDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.InterfaceMethodModifier> modifiers) {
     return new InterfaceMethodDeclaration(modifiers, header, body);
   }
 

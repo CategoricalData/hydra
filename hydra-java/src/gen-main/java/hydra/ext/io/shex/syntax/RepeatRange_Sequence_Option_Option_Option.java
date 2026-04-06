@@ -68,7 +68,9 @@ public abstract class RepeatRange_Sequence_Option_Option_Option implements Seria
         return tagCmp;
       }
       Integer_ o = (Integer_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

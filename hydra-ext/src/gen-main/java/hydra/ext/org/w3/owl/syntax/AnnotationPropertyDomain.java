@@ -13,13 +13,13 @@ public class AnnotationPropertyDomain implements Serializable, Comparable<Annota
 
   public static final hydra.core.Name IRI = new hydra.core.Name("iri");
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
 
   public final hydra.ext.org.w3.owl.syntax.AnnotationProperty property;
 
   public final hydra.ext.org.w3.rdf.syntax.Iri iri;
 
-  public AnnotationPropertyDomain (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.AnnotationProperty property, hydra.ext.org.w3.rdf.syntax.Iri iri) {
+  public AnnotationPropertyDomain (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.AnnotationProperty property, hydra.ext.org.w3.rdf.syntax.Iri iri) {
     this.annotations = annotations;
     this.property = property;
     this.iri = iri;
@@ -49,18 +49,24 @@ public class AnnotationPropertyDomain implements Serializable, Comparable<Annota
   @SuppressWarnings("unchecked")
   public int compareTo(AnnotationPropertyDomain other) {
     int cmp = 0;
-    cmp = ((Comparable) annotations).compareTo(other.annotations);
+    cmp = hydra.util.Comparing.compare(
+      annotations,
+      other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) property).compareTo(other.property);
+    cmp = hydra.util.Comparing.compare(
+      property,
+      other.property);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) iri).compareTo(other.iri);
+    return hydra.util.Comparing.compare(
+      iri,
+      other.iri);
   }
 
-  public AnnotationPropertyDomain withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public AnnotationPropertyDomain withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new AnnotationPropertyDomain(annotations, property, iri);
   }
 

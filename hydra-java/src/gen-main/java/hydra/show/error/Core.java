@@ -7,37 +7,37 @@ package hydra.show.error;
  */
 public interface Core {
   static String constantConditionError(hydra.error.core.ConstantConditionError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "constant condition: ifElse with literal ",
       hydra.lib.literals.ShowBoolean.apply((e).value)));
   }
 
   static String duplicateBindingError(hydra.error.core.DuplicateBindingError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "duplicate binding: ",
       (e).name.value));
   }
 
   static String duplicateFieldError(hydra.error.core.DuplicateFieldError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "duplicate field: ",
       (e).name.value));
   }
 
   static String duplicateRecordTypeFieldNamesError(hydra.error.core.DuplicateRecordTypeFieldNamesError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "duplicate field in record type: ",
       (e).name.value));
   }
 
   static String duplicateUnionTypeFieldNamesError(hydra.error.core.DuplicateUnionTypeFieldNamesError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "duplicate field in union type: ",
       (e).name.value));
   }
 
   static String emptyCaseStatementError(hydra.error.core.EmptyCaseStatementError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "empty case statement for type: ",
       (e).typeName.value));
   }
@@ -67,19 +67,19 @@ public interface Core {
   }
 
   static String invalidForallParameterNameError(hydra.error.core.InvalidForallParameterNameError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "invalid forall parameter name: ",
       (e).name.value));
   }
 
   static String invalidLambdaParameterNameError(hydra.error.core.InvalidLambdaParameterNameError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "invalid lambda parameter name: ",
       (e).name.value));
   }
 
   static String invalidLetBindingNameError(hydra.error.core.InvalidLetBindingNameError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "invalid let binding name: ",
       (e).name.value));
   }
@@ -277,13 +277,13 @@ public interface Core {
   }
 
   static String invalidTypeLambdaParameterNameError(hydra.error.core.InvalidTypeLambdaParameterNameError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "invalid type lambda parameter name: ",
       (e).name.value));
   }
 
   static String invalidTypeSchemeVariableNameError(hydra.error.core.InvalidTypeSchemeVariableNameError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "invalid type scheme variable name: ",
       (e).name.value));
   }
@@ -297,49 +297,49 @@ public interface Core {
   }
 
   static String nonComparableMapKeyTypeError(hydra.error.core.NonComparableMapKeyTypeError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "map key type contains a function type: ",
       hydra.show.Core.type((e).keyType)));
   }
 
   static String nonComparableSetElementTypeError(hydra.error.core.NonComparableSetElementTypeError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "set element type contains a function type: ",
       hydra.show.Core.type((e).elementType)));
   }
 
   static String redundantWrapUnwrapError(hydra.error.core.RedundantWrapUnwrapError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "redundant wrap/unwrap for type: ",
       (e).typeName.value));
   }
 
   static String selfApplicationError(hydra.error.core.SelfApplicationError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "self-application of variable: ",
       (e).name.value));
   }
 
   static String singleVariantUnionError(hydra.error.core.SingleVariantUnionError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "union type with single variant: ",
       (e).fieldName.value));
   }
 
   static String termVariableShadowingError(hydra.error.core.TermVariableShadowingError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "variable shadowing: ",
       (e).name.value));
   }
 
   static String typeVariableShadowingInForallError(hydra.error.core.TypeVariableShadowingInForallError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "type variable shadowing in forall: ",
       (e).name.value));
   }
 
   static String typeVariableShadowingInTypeLambdaError(hydra.error.core.TypeVariableShadowingInTypeLambdaError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "type variable shadowing in type lambda: ",
       (e).name.value));
   }
@@ -347,7 +347,7 @@ public interface Core {
   static String undefinedFieldError(hydra.error.core.UndefinedFieldError e) {
     hydra.core.Name fname = (e).fieldName;
     hydra.core.Name tname = (e).typeName;
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "no such field \"",
       (fname).value,
       "\" in type \"",
@@ -356,31 +356,31 @@ public interface Core {
   }
 
   static String undefinedTermVariableError(hydra.error.core.UndefinedTermVariableError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "undefined term variable: ",
       (e).name.value));
   }
 
   static String undefinedTypeVariableError(hydra.error.core.UndefinedTypeVariableError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "undefined type variable: ",
       (e).name.value));
   }
 
   static String undefinedTypeVariableInBindingTypeError(hydra.error.core.UndefinedTypeVariableInBindingTypeError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "undefined type variable in binding type: ",
       (e).name.value));
   }
 
   static String undefinedTypeVariableInLambdaDomainError(hydra.error.core.UndefinedTypeVariableInLambdaDomainError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "undefined type variable in lambda domain: ",
       (e).name.value));
   }
 
   static String undefinedTypeVariableInTypeApplicationError(hydra.error.core.UndefinedTypeVariableInTypeApplicationError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "undefined type variable in type application: ",
       (e).name.value));
   }
@@ -388,7 +388,7 @@ public interface Core {
   static String unexpectedTermVariantError(hydra.error.core.UnexpectedTermVariantError e) {
     hydra.core.Term actual = (e).actualTerm;
     hydra.variants.TermVariant expected = (e).expectedVariant;
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "expected ",
       hydra.show.Variants.termVariant(expected),
       " term but found ",
@@ -398,7 +398,7 @@ public interface Core {
   static String unexpectedTypeVariantError(hydra.error.core.UnexpectedTypeVariantError e) {
     hydra.core.Type actual = (e).actualType;
     hydra.variants.TypeVariant expected = (e).expectedVariant;
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "expected ",
       hydra.show.Variants.typeVariant(expected),
       " type but found ",
@@ -406,7 +406,7 @@ public interface Core {
   }
 
   static String unknownPrimitiveNameError(hydra.error.core.UnknownPrimitiveNameError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "unknown primitive: ",
       (e).name.value));
   }
@@ -416,7 +416,7 @@ public interface Core {
   }
 
   static String untypedTermVariableError(hydra.error.core.UntypedTermVariableError e) {
-    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+    return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       "untyped term variable: ",
       (e).name.value));
   }

@@ -34,6 +34,8 @@ public class Include implements Serializable, Comparable<Include> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Include other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

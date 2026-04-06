@@ -9,9 +9,9 @@ public class Data_PartialFunction implements Serializable, Comparable<Data_Parti
 
   public static final hydra.core.Name CASES = new hydra.core.Name("cases");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Case> cases;
+  public final java.util.List<hydra.ext.scala.syntax.Case> cases;
 
-  public Data_PartialFunction (hydra.util.ConsList<hydra.ext.scala.syntax.Case> cases) {
+  public Data_PartialFunction (java.util.List<hydra.ext.scala.syntax.Case> cases) {
     this.cases = cases;
   }
 
@@ -34,6 +34,8 @@ public class Data_PartialFunction implements Serializable, Comparable<Data_Parti
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Data_PartialFunction other) {
-    return ((Comparable) cases).compareTo(other.cases);
+    return hydra.util.Comparing.compare(
+      cases,
+      other.cases);
   }
 }

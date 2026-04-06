@@ -40,6 +40,8 @@ public class EmptyTermAnnotationError implements Serializable, Comparable<EmptyT
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(EmptyTermAnnotationError other) {
-    return ((Comparable) location).compareTo(other.location);
+    return hydra.util.Comparing.compare(
+      location,
+      other.location);
   }
 }

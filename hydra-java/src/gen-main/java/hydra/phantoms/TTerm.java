@@ -37,6 +37,8 @@ public class TTerm<A> implements Serializable, Comparable<TTerm<A>> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TTerm other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

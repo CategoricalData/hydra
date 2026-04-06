@@ -49,15 +49,21 @@ public class Data_TryWithHandler implements Serializable, Comparable<Data_TryWit
   @SuppressWarnings("unchecked")
   public int compareTo(Data_TryWithHandler other) {
     int cmp = 0;
-    cmp = ((Comparable) expr).compareTo(other.expr);
+    cmp = hydra.util.Comparing.compare(
+      expr,
+      other.expr);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) catchp).compareTo(other.catchp);
+    cmp = hydra.util.Comparing.compare(
+      catchp,
+      other.catchp);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) finallyp).compareTo(other.finallyp);
+    return hydra.util.Comparing.compare(
+      finallyp,
+      other.finallyp);
   }
 
   public Data_TryWithHandler withExpr(hydra.ext.scala.syntax.Data expr) {

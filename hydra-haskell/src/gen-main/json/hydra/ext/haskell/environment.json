@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.haskell.environment.HaskellModuleMetadata",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -59,7 +58,7 @@
                                 "string": "Whether the module uses Data.Set (S.Set, S.fromList, S.empty)"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}}],
-  "description": ["Environment types for Haskell code generation"],
+  "description": "Environment types for Haskell code generation",
   "namespace": "hydra.ext.haskell.environment",
   "termDependencies": [],
   "typeDependencies": []}

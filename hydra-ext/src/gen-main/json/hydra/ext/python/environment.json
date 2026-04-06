@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.python.environment.PythonVersion",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -20,7 +19,6 @@
       "type": {
         "name": "hydra.ext.python.environment.PythonEnvironment",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -111,7 +109,6 @@
       "type": {
         "name": "hydra.ext.python.environment.PythonModuleMetadata",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -168,7 +165,6 @@
       "type": {
         "name": "hydra.ext.python.environment.PyGraph",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -198,7 +194,7 @@
                             "@value": {"literal": {"string": "Accumulated module metadata"}}}],
                         "body": {"variable": "hydra.ext.python.environment.PythonModuleMetadata"}}}}]}}},
           "variables": []}}}],
-  "description": ["Environment types for Python code generation"],
+  "description": "Environment types for Python code generation",
   "namespace": "hydra.ext.python.environment",
   "termDependencies": [],
   "typeDependencies": [

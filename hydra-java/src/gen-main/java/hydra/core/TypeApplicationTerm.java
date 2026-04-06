@@ -51,11 +51,15 @@ public class TypeApplicationTerm implements Serializable, Comparable<TypeApplica
   @SuppressWarnings("unchecked")
   public int compareTo(TypeApplicationTerm other) {
     int cmp = 0;
-    cmp = ((Comparable) body).compareTo(other.body);
+    cmp = hydra.util.Comparing.compare(
+      body,
+      other.body);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) type).compareTo(other.type);
+    return hydra.util.Comparing.compare(
+      type,
+      other.type);
   }
 
   public TypeApplicationTerm withBody(hydra.core.Term body) {

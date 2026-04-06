@@ -68,7 +68,9 @@ public abstract class ByOtherArgs implements Serializable, Comparable<ByOtherArg
         return tagCmp;
       }
       Comparator o = (Comparator) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class ByOtherArgs implements Serializable, Comparable<ByOtherArg
         return tagCmp;
       }
       Other o = (Other) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

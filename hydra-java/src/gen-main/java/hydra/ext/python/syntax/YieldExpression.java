@@ -68,7 +68,9 @@ public abstract class YieldExpression implements Serializable, Comparable<YieldE
         return tagCmp;
       }
       From o = (From) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -78,9 +80,9 @@ public abstract class YieldExpression implements Serializable, Comparable<YieldE
   }
 
   public static final class Simple extends hydra.ext.python.syntax.YieldExpression implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.python.syntax.StarExpression> value;
+    public final java.util.List<hydra.ext.python.syntax.StarExpression> value;
 
-    public Simple (hydra.util.ConsList<hydra.ext.python.syntax.StarExpression> value) {
+    public Simple (java.util.List<hydra.ext.python.syntax.StarExpression> value) {
       this.value = value;
     }
 
@@ -108,7 +110,9 @@ public abstract class YieldExpression implements Serializable, Comparable<YieldE
         return tagCmp;
       }
       Simple o = (Simple) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

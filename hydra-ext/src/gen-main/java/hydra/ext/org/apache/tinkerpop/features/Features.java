@@ -63,15 +63,21 @@ public class Features implements Serializable, Comparable<Features> {
   @SuppressWarnings("unchecked")
   public int compareTo(Features other) {
     int cmp = 0;
-    cmp = ((Comparable) edge).compareTo(other.edge);
+    cmp = hydra.util.Comparing.compare(
+      edge,
+      other.edge);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) graph).compareTo(other.graph);
+    cmp = hydra.util.Comparing.compare(
+      graph,
+      other.graph);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) vertex).compareTo(other.vertex);
+    return hydra.util.Comparing.compare(
+      vertex,
+      other.vertex);
   }
 
   public Features withEdge(hydra.ext.org.apache.tinkerpop.features.EdgeFeatures edge) {

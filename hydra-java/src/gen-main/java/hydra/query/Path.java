@@ -82,7 +82,9 @@ public abstract class Path implements Serializable, Comparable<Path> {
         return tagCmp;
       }
       Step o = (Step) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -125,7 +127,9 @@ public abstract class Path implements Serializable, Comparable<Path> {
         return tagCmp;
       }
       Regex o = (Regex) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -168,7 +172,9 @@ public abstract class Path implements Serializable, Comparable<Path> {
         return tagCmp;
       }
       Inverse o = (Inverse) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

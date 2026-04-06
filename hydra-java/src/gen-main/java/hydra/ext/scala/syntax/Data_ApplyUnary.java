@@ -42,11 +42,15 @@ public class Data_ApplyUnary implements Serializable, Comparable<Data_ApplyUnary
   @SuppressWarnings("unchecked")
   public int compareTo(Data_ApplyUnary other) {
     int cmp = 0;
-    cmp = ((Comparable) op).compareTo(other.op);
+    cmp = hydra.util.Comparing.compare(
+      op,
+      other.op);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) arg).compareTo(other.arg);
+    return hydra.util.Comparing.compare(
+      arg,
+      other.arg);
   }
 
   public Data_ApplyUnary withOp(hydra.ext.scala.syntax.Data_Name op) {

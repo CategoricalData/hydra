@@ -42,11 +42,15 @@ public class AsPattern implements Serializable, Comparable<AsPattern> {
   @SuppressWarnings("unchecked")
   public int compareTo(AsPattern other) {
     int cmp = 0;
-    cmp = ((Comparable) pattern).compareTo(other.pattern);
+    cmp = hydra.util.Comparing.compare(
+      pattern,
+      other.pattern);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) as).compareTo(other.as);
+    return hydra.util.Comparing.compare(
+      as,
+      other.as);
   }
 
   public AsPattern withPattern(hydra.ext.python.syntax.OrPattern pattern) {

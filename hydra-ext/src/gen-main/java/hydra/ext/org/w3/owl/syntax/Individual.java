@@ -68,7 +68,9 @@ public abstract class Individual implements Serializable, Comparable<Individual>
         return tagCmp;
       }
       Named o = (Named) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class Individual implements Serializable, Comparable<Individual>
         return tagCmp;
       }
       Anonymous o = (Anonymous) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

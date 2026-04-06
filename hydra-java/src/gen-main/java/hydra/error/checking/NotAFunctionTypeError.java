@@ -40,6 +40,8 @@ public class NotAFunctionTypeError implements Serializable, Comparable<NotAFunct
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(NotAFunctionTypeError other) {
-    return ((Comparable) type).compareTo(other.type);
+    return hydra.util.Comparing.compare(
+      type,
+      other.type);
   }
 }

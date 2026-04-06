@@ -17,9 +17,9 @@ public class DataExactCardinality implements Serializable, Comparable<DataExactC
 
   public final hydra.ext.org.w3.owl.syntax.DataPropertyExpression property;
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DataRange> range;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.DataRange> range;
 
-  public DataExactCardinality (java.math.BigInteger bound, hydra.ext.org.w3.owl.syntax.DataPropertyExpression property, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DataRange> range) {
+  public DataExactCardinality (java.math.BigInteger bound, hydra.ext.org.w3.owl.syntax.DataPropertyExpression property, java.util.List<hydra.ext.org.w3.owl.syntax.DataRange> range) {
     this.bound = bound;
     this.property = property;
     this.range = range;
@@ -47,15 +47,21 @@ public class DataExactCardinality implements Serializable, Comparable<DataExactC
   @SuppressWarnings("unchecked")
   public int compareTo(DataExactCardinality other) {
     int cmp = 0;
-    cmp = ((Comparable) bound).compareTo(other.bound);
+    cmp = hydra.util.Comparing.compare(
+      bound,
+      other.bound);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) property).compareTo(other.property);
+    cmp = hydra.util.Comparing.compare(
+      property,
+      other.property);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) range).compareTo(other.range);
+    return hydra.util.Comparing.compare(
+      range,
+      other.range);
   }
 
   public DataExactCardinality withBound(java.math.BigInteger bound) {
@@ -66,7 +72,7 @@ public class DataExactCardinality implements Serializable, Comparable<DataExactC
     return new DataExactCardinality(bound, property, range);
   }
 
-  public DataExactCardinality withRange(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DataRange> range) {
+  public DataExactCardinality withRange(java.util.List<hydra.ext.org.w3.owl.syntax.DataRange> range) {
     return new DataExactCardinality(bound, property, range);
   }
 }

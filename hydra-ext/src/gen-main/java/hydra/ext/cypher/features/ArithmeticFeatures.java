@@ -91,27 +91,39 @@ public class ArithmeticFeatures implements Serializable, Comparable<ArithmeticFe
   @SuppressWarnings("unchecked")
   public int compareTo(ArithmeticFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) plus).compareTo(other.plus);
+    cmp = hydra.util.Comparing.compare(
+      plus,
+      other.plus);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) minus).compareTo(other.minus);
+    cmp = hydra.util.Comparing.compare(
+      minus,
+      other.minus);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) multiply).compareTo(other.multiply);
+    cmp = hydra.util.Comparing.compare(
+      multiply,
+      other.multiply);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) divide).compareTo(other.divide);
+    cmp = hydra.util.Comparing.compare(
+      divide,
+      other.divide);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) modulus).compareTo(other.modulus);
+    cmp = hydra.util.Comparing.compare(
+      modulus,
+      other.modulus);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) powerOf).compareTo(other.powerOf);
+    return hydra.util.Comparing.compare(
+      powerOf,
+      other.powerOf);
   }
 
   public ArithmeticFeatures withPlus(Boolean plus) {

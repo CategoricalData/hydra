@@ -76,7 +76,9 @@ public abstract class BlockStatement implements Serializable, Comparable<BlockSt
         return tagCmp;
       }
       LocalVariableDeclaration o = (LocalVariableDeclaration) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -116,7 +118,9 @@ public abstract class BlockStatement implements Serializable, Comparable<BlockSt
         return tagCmp;
       }
       Class_ o = (Class_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -156,7 +160,9 @@ public abstract class BlockStatement implements Serializable, Comparable<BlockSt
         return tagCmp;
       }
       Statement o = (Statement) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

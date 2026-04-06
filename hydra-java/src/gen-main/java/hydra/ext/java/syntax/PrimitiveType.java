@@ -68,7 +68,9 @@ public abstract class PrimitiveType implements Serializable, Comparable<Primitiv
         return tagCmp;
       }
       Numeric o = (Numeric) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

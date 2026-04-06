@@ -147,51 +147,46 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "typeApplication": {
-                                                                                              "body": {"function": {"primitive": "hydra.lib.maps.bimap"}},
+                                                                                              "body": {"variable": "hydra.lib.maps.bimap"},
                                                                                               "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                                           "type": {"variable": "hydra.core.Term"}}},
                                                                                       "type": {"variable": "t0"}}},
                                                                                   "type": {"variable": "hydra.core.Term"}}}}}}}}}},
                                                                 "typeName": "hydra.core.Term"}},
-                                                            "domain": [
-                                                              {
-                                                                "map": {
-                                                                  "keys": {"variable": "hydra.pg.model.PropertyKey"},
-                                                                  "values": {"variable": "t0"}}}],
+                                                            "domain": {
+                                                              "map": {
+                                                                "keys": {"variable": "hydra.pg.model.PropertyKey"},
+                                                                "values": {"variable": "t0"}}},
                                                             "parameter": "m"}}}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": [
-                          {
-                            "application": {
-                              "argument": {"variable": "t0"},
-                              "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}],
+                        "domain": {
+                          "application": {
+                            "argument": {"variable": "t0"},
+                            "function": {"variable": "hydra.pg.model.AdjacentEdge"}}},
                         "parameter": "x"}}},
-                  "domain": [
-                    {
-                      "function": {
-                        "codomain": {"variable": "hydra.core.Term"},
-                        "domain": {"variable": "t0"}}}],
+                  "domain": {
+                    "function": {
+                      "codomain": {"variable": "hydra.core.Term"},
+                      "domain": {"variable": "t0"}}},
                   "parameter": "v"}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {
-                      "application": {
-                        "argument": {"variable": "t0"},
-                        "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}}},
-                "domain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {"variable": "t0"}}}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {
+                    "application": {
+                      "argument": {"variable": "t0"},
+                      "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}}},
+              "domain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.encode.pg.model.direction",
@@ -241,12 +236,12 @@
                                                             "union": {
                                                               "field": {"name": "unit", "term": {"unit": {}}},
                                                               "typeName": "hydra.core.Term"}},
-                                                          "domain": [{"unit": {}}],
+                                                          "domain": {"unit": {}},
                                                           "parameter": "_"}}}}}}],
                                             "typeName": "hydra.core.Field"}}}],
                                     "typeName": "hydra.core.Injection"}}},
                               "typeName": "hydra.core.Term"}},
-                          "domain": [{"unit": {}}],
+                          "domain": {"unit": {}},
                           "parameter": "y"}}}},
                   {
                     "name": "in",
@@ -287,12 +282,12 @@
                                                             "union": {
                                                               "field": {"name": "unit", "term": {"unit": {}}},
                                                               "typeName": "hydra.core.Term"}},
-                                                          "domain": [{"unit": {}}],
+                                                          "domain": {"unit": {}},
                                                           "parameter": "_"}}}}}}],
                                             "typeName": "hydra.core.Field"}}}],
                                     "typeName": "hydra.core.Injection"}}},
                               "typeName": "hydra.core.Term"}},
-                          "domain": [{"unit": {}}],
+                          "domain": {"unit": {}},
                           "parameter": "y"}}}},
                   {
                     "name": "both",
@@ -335,12 +330,12 @@
                                                             "union": {
                                                               "field": {"name": "unit", "term": {"unit": {}}},
                                                               "typeName": "hydra.core.Term"}},
-                                                          "domain": [{"unit": {}}],
+                                                          "domain": {"unit": {}},
                                                           "parameter": "_"}}}}}}],
                                             "typeName": "hydra.core.Field"}}}],
                                     "typeName": "hydra.core.Injection"}}},
                               "typeName": "hydra.core.Term"}},
-                          "domain": [{"unit": {}}],
+                          "domain": {"unit": {}},
                           "parameter": "y"}}}},
                   {
                     "name": "undirected",
@@ -383,23 +378,20 @@
                                                             "union": {
                                                               "field": {"name": "unit", "term": {"unit": {}}},
                                                               "typeName": "hydra.core.Term"}},
-                                                          "domain": [{"unit": {}}],
+                                                          "domain": {"unit": {}},
                                                           "parameter": "_"}}}}}}],
                                             "typeName": "hydra.core.Field"}}}],
                                     "typeName": "hydra.core.Injection"}}},
                               "typeName": "hydra.core.Term"}},
-                          "domain": [{"unit": {}}],
+                          "domain": {"unit": {}},
                           "parameter": "y"}}}}],
-                "default": null,
                 "typeName": "hydra.pg.model.Direction"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.core.Term"},
-                "domain": {"variable": "hydra.pg.model.Direction"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.pg.model.Direction"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.encode.pg.model.edge",
@@ -566,51 +558,46 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "typeApplication": {
-                                                                                              "body": {"function": {"primitive": "hydra.lib.maps.bimap"}},
+                                                                                              "body": {"variable": "hydra.lib.maps.bimap"},
                                                                                               "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                                           "type": {"variable": "hydra.core.Term"}}},
                                                                                       "type": {"variable": "t0"}}},
                                                                                   "type": {"variable": "hydra.core.Term"}}}}}}}}}},
                                                                 "typeName": "hydra.core.Term"}},
-                                                            "domain": [
-                                                              {
-                                                                "map": {
-                                                                  "keys": {"variable": "hydra.pg.model.PropertyKey"},
-                                                                  "values": {"variable": "t0"}}}],
+                                                            "domain": {
+                                                              "map": {
+                                                                "keys": {"variable": "hydra.pg.model.PropertyKey"},
+                                                                "values": {"variable": "t0"}}},
                                                             "parameter": "m"}}}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": [
-                          {
-                            "application": {
-                              "argument": {"variable": "t0"},
-                              "function": {"variable": "hydra.pg.model.Edge"}}}],
+                        "domain": {
+                          "application": {
+                            "argument": {"variable": "t0"},
+                            "function": {"variable": "hydra.pg.model.Edge"}}},
                         "parameter": "x"}}},
-                  "domain": [
-                    {
-                      "function": {
-                        "codomain": {"variable": "hydra.core.Term"},
-                        "domain": {"variable": "t0"}}}],
+                  "domain": {
+                    "function": {
+                      "codomain": {"variable": "hydra.core.Term"},
+                      "domain": {"variable": "t0"}}},
                   "parameter": "v"}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {
-                      "application": {
-                        "argument": {"variable": "t0"},
-                        "function": {"variable": "hydra.pg.model.Edge"}}}}},
-                "domain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {"variable": "t0"}}}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {
+                    "application": {
+                      "argument": {"variable": "t0"},
+                      "function": {"variable": "hydra.pg.model.Edge"}}}}},
+              "domain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.encode.pg.model.edgeLabel",
@@ -650,20 +637,18 @@
                                                 "field": {"name": "string", "term": {"variable": "x"}},
                                                 "typeName": "hydra.core.Literal"}}},
                                           "typeName": "hydra.core.Term"}},
-                                      "domain": [{"literal": {"string": {}}}],
+                                      "domain": {"literal": {"string": {}}},
                                       "parameter": "x"}}}}}}],
                         "typeName": "hydra.core.WrappedTerm"}}},
                   "typeName": "hydra.core.Term"}},
-              "domain": [{"variable": "hydra.pg.model.EdgeLabel"}],
+              "domain": {"variable": "hydra.pg.model.EdgeLabel"},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.core.Term"},
-                "domain": {"variable": "hydra.pg.model.EdgeLabel"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.pg.model.EdgeLabel"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.encode.pg.model.edgeType",
@@ -830,53 +815,48 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                                   "type": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "t0"},
                                                                                       "function": {"variable": "hydra.pg.model.PropertyType"}}}}},
                                                                               "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                                 "typeName": "hydra.core.Term"}},
-                                                            "domain": [
-                                                              {
-                                                                "list": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "t0"},
-                                                                    "function": {"variable": "hydra.pg.model.PropertyType"}}}}],
+                                                            "domain": {
+                                                              "list": {
+                                                                "application": {
+                                                                  "argument": {"variable": "t0"},
+                                                                  "function": {"variable": "hydra.pg.model.PropertyType"}}}},
                                                             "parameter": "xs"}}}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": [
-                          {
-                            "application": {
-                              "argument": {"variable": "t0"},
-                              "function": {"variable": "hydra.pg.model.EdgeType"}}}],
+                        "domain": {
+                          "application": {
+                            "argument": {"variable": "t0"},
+                            "function": {"variable": "hydra.pg.model.EdgeType"}}},
                         "parameter": "x"}}},
-                  "domain": [
-                    {
-                      "function": {
-                        "codomain": {"variable": "hydra.core.Term"},
-                        "domain": {"variable": "t0"}}}],
+                  "domain": {
+                    "function": {
+                      "codomain": {"variable": "hydra.core.Term"},
+                      "domain": {"variable": "t0"}}},
                   "parameter": "t"}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {
-                      "application": {
-                        "argument": {"variable": "t0"},
-                        "function": {"variable": "hydra.pg.model.EdgeType"}}}}},
-                "domain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {"variable": "t0"}}}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {
+                    "application": {
+                      "argument": {"variable": "t0"},
+                      "function": {"variable": "hydra.pg.model.EdgeType"}}}}},
+              "domain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.encode.pg.model.element",
@@ -936,11 +916,10 @@
                                                           "typeName": "hydra.core.Field"}}}],
                                                   "typeName": "hydra.core.Injection"}}},
                                             "typeName": "hydra.core.Term"}},
-                                        "domain": [
-                                          {
-                                            "application": {
-                                              "argument": {"variable": "t0"},
-                                              "function": {"variable": "hydra.pg.model.Vertex"}}}],
+                                        "domain": {
+                                          "application": {
+                                            "argument": {"variable": "t0"},
+                                            "function": {"variable": "hydra.pg.model.Vertex"}}},
                                         "parameter": "y"}}}},
                                 {
                                   "name": "edge",
@@ -986,39 +965,34 @@
                                                           "typeName": "hydra.core.Field"}}}],
                                                   "typeName": "hydra.core.Injection"}}},
                                             "typeName": "hydra.core.Term"}},
-                                        "domain": [
-                                          {
-                                            "application": {
-                                              "argument": {"variable": "t0"},
-                                              "function": {"variable": "hydra.pg.model.Edge"}}}],
+                                        "domain": {
+                                          "application": {
+                                            "argument": {"variable": "t0"},
+                                            "function": {"variable": "hydra.pg.model.Edge"}}},
                                         "parameter": "y"}}}}],
-                              "default": null,
                               "typeName": "hydra.pg.model.Element"}}}},
                       "type": {"variable": "t0"}}},
-                  "domain": [
-                    {
-                      "function": {
-                        "codomain": {"variable": "hydra.core.Term"},
-                        "domain": {"variable": "t0"}}}],
+                  "domain": {
+                    "function": {
+                      "codomain": {"variable": "hydra.core.Term"},
+                      "domain": {"variable": "t0"}}},
                   "parameter": "v"}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {
-                      "application": {
-                        "argument": {"variable": "t0"},
-                        "function": {"variable": "hydra.pg.model.Element"}}}}},
-                "domain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {"variable": "t0"}}}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {
+                    "application": {
+                      "argument": {"variable": "t0"},
+                      "function": {"variable": "hydra.pg.model.Element"}}}}},
+              "domain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.encode.pg.model.elementKind",
@@ -1068,12 +1042,12 @@
                                                             "union": {
                                                               "field": {"name": "unit", "term": {"unit": {}}},
                                                               "typeName": "hydra.core.Term"}},
-                                                          "domain": [{"unit": {}}],
+                                                          "domain": {"unit": {}},
                                                           "parameter": "_"}}}}}}],
                                             "typeName": "hydra.core.Field"}}}],
                                     "typeName": "hydra.core.Injection"}}},
                               "typeName": "hydra.core.Term"}},
-                          "domain": [{"unit": {}}],
+                          "domain": {"unit": {}},
                           "parameter": "y"}}}},
                   {
                     "name": "edge",
@@ -1116,23 +1090,20 @@
                                                             "union": {
                                                               "field": {"name": "unit", "term": {"unit": {}}},
                                                               "typeName": "hydra.core.Term"}},
-                                                          "domain": [{"unit": {}}],
+                                                          "domain": {"unit": {}},
                                                           "parameter": "_"}}}}}}],
                                             "typeName": "hydra.core.Field"}}}],
                                     "typeName": "hydra.core.Injection"}}},
                               "typeName": "hydra.core.Term"}},
-                          "domain": [{"unit": {}}],
+                          "domain": {"unit": {}},
                           "parameter": "y"}}}}],
-                "default": null,
                 "typeName": "hydra.pg.model.ElementKind"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.core.Term"},
-                "domain": {"variable": "hydra.pg.model.ElementKind"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.pg.model.ElementKind"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.encode.pg.model.elementTree",
@@ -1238,53 +1209,48 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                                   "type": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "t0"},
                                                                                       "function": {"variable": "hydra.pg.model.ElementTree"}}}}},
                                                                               "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                                 "typeName": "hydra.core.Term"}},
-                                                            "domain": [
-                                                              {
-                                                                "list": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "t0"},
-                                                                    "function": {"variable": "hydra.pg.model.ElementTree"}}}}],
+                                                            "domain": {
+                                                              "list": {
+                                                                "application": {
+                                                                  "argument": {"variable": "t0"},
+                                                                  "function": {"variable": "hydra.pg.model.ElementTree"}}}},
                                                             "parameter": "xs"}}}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": [
-                          {
-                            "application": {
-                              "argument": {"variable": "t0"},
-                              "function": {"variable": "hydra.pg.model.ElementTree"}}}],
+                        "domain": {
+                          "application": {
+                            "argument": {"variable": "t0"},
+                            "function": {"variable": "hydra.pg.model.ElementTree"}}},
                         "parameter": "x"}}},
-                  "domain": [
-                    {
-                      "function": {
-                        "codomain": {"variable": "hydra.core.Term"},
-                        "domain": {"variable": "t0"}}}],
+                  "domain": {
+                    "function": {
+                      "codomain": {"variable": "hydra.core.Term"},
+                      "domain": {"variable": "t0"}}},
                   "parameter": "v"}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {
-                      "application": {
-                        "argument": {"variable": "t0"},
-                        "function": {"variable": "hydra.pg.model.ElementTree"}}}}},
-                "domain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {"variable": "t0"}}}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {
+                    "application": {
+                      "argument": {"variable": "t0"},
+                      "function": {"variable": "hydra.pg.model.ElementTree"}}}}},
+              "domain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.encode.pg.model.elementType",
@@ -1344,11 +1310,10 @@
                                                           "typeName": "hydra.core.Field"}}}],
                                                   "typeName": "hydra.core.Injection"}}},
                                             "typeName": "hydra.core.Term"}},
-                                        "domain": [
-                                          {
-                                            "application": {
-                                              "argument": {"variable": "t0"},
-                                              "function": {"variable": "hydra.pg.model.VertexType"}}}],
+                                        "domain": {
+                                          "application": {
+                                            "argument": {"variable": "t0"},
+                                            "function": {"variable": "hydra.pg.model.VertexType"}}},
                                         "parameter": "y"}}}},
                                 {
                                   "name": "edge",
@@ -1394,39 +1359,34 @@
                                                           "typeName": "hydra.core.Field"}}}],
                                                   "typeName": "hydra.core.Injection"}}},
                                             "typeName": "hydra.core.Term"}},
-                                        "domain": [
-                                          {
-                                            "application": {
-                                              "argument": {"variable": "t0"},
-                                              "function": {"variable": "hydra.pg.model.EdgeType"}}}],
+                                        "domain": {
+                                          "application": {
+                                            "argument": {"variable": "t0"},
+                                            "function": {"variable": "hydra.pg.model.EdgeType"}}},
                                         "parameter": "y"}}}}],
-                              "default": null,
                               "typeName": "hydra.pg.model.ElementType"}}}},
                       "type": {"variable": "t0"}}},
-                  "domain": [
-                    {
-                      "function": {
-                        "codomain": {"variable": "hydra.core.Term"},
-                        "domain": {"variable": "t0"}}}],
+                  "domain": {
+                    "function": {
+                      "codomain": {"variable": "hydra.core.Term"},
+                      "domain": {"variable": "t0"}}},
                   "parameter": "t"}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {
-                      "application": {
-                        "argument": {"variable": "t0"},
-                        "function": {"variable": "hydra.pg.model.ElementType"}}}}},
-                "domain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {"variable": "t0"}}}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {
+                    "application": {
+                      "argument": {"variable": "t0"},
+                      "function": {"variable": "hydra.pg.model.ElementType"}}}}},
+              "domain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.encode.pg.model.elementTypeTree",
@@ -1534,53 +1494,48 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                                   "type": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "t0"},
                                                                                       "function": {"variable": "hydra.pg.model.ElementTypeTree"}}}}},
                                                                               "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                                 "typeName": "hydra.core.Term"}},
-                                                            "domain": [
-                                                              {
-                                                                "list": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "t0"},
-                                                                    "function": {"variable": "hydra.pg.model.ElementTypeTree"}}}}],
+                                                            "domain": {
+                                                              "list": {
+                                                                "application": {
+                                                                  "argument": {"variable": "t0"},
+                                                                  "function": {"variable": "hydra.pg.model.ElementTypeTree"}}}},
                                                             "parameter": "xs"}}}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": [
-                          {
-                            "application": {
-                              "argument": {"variable": "t0"},
-                              "function": {"variable": "hydra.pg.model.ElementTypeTree"}}}],
+                        "domain": {
+                          "application": {
+                            "argument": {"variable": "t0"},
+                            "function": {"variable": "hydra.pg.model.ElementTypeTree"}}},
                         "parameter": "x"}}},
-                  "domain": [
-                    {
-                      "function": {
-                        "codomain": {"variable": "hydra.core.Term"},
-                        "domain": {"variable": "t0"}}}],
+                  "domain": {
+                    "function": {
+                      "codomain": {"variable": "hydra.core.Term"},
+                      "domain": {"variable": "t0"}}},
                   "parameter": "t"}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {
-                      "application": {
-                        "argument": {"variable": "t0"},
-                        "function": {"variable": "hydra.pg.model.ElementTypeTree"}}}}},
-                "domain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {"variable": "t0"}}}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {
+                    "application": {
+                      "argument": {"variable": "t0"},
+                      "function": {"variable": "hydra.pg.model.ElementTypeTree"}}}}},
+              "domain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.encode.pg.model.graph",
@@ -1661,7 +1616,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "typeApplication": {
-                                                                                              "body": {"function": {"primitive": "hydra.lib.maps.bimap"}},
+                                                                                              "body": {"variable": "hydra.lib.maps.bimap"},
                                                                                               "type": {"variable": "t0"}}},
                                                                                           "type": {"variable": "hydra.core.Term"}}},
                                                                                       "type": {
@@ -1670,14 +1625,13 @@
                                                                                           "function": {"variable": "hydra.pg.model.Vertex"}}}}},
                                                                                   "type": {"variable": "hydra.core.Term"}}}}}}}}}},
                                                                 "typeName": "hydra.core.Term"}},
-                                                            "domain": [
-                                                              {
-                                                                "map": {
-                                                                  "keys": {"variable": "t0"},
-                                                                  "values": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "t0"},
-                                                                      "function": {"variable": "hydra.pg.model.Vertex"}}}}}],
+                                                            "domain": {
+                                                              "map": {
+                                                                "keys": {"variable": "t0"},
+                                                                "values": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "t0"},
+                                                                    "function": {"variable": "hydra.pg.model.Vertex"}}}}},
                                                             "parameter": "m"}}}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
@@ -1732,7 +1686,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "typeApplication": {
-                                                                                              "body": {"function": {"primitive": "hydra.lib.maps.bimap"}},
+                                                                                              "body": {"variable": "hydra.lib.maps.bimap"},
                                                                                               "type": {"variable": "t0"}}},
                                                                                           "type": {"variable": "hydra.core.Term"}}},
                                                                                       "type": {
@@ -1741,48 +1695,44 @@
                                                                                           "function": {"variable": "hydra.pg.model.Edge"}}}}},
                                                                                   "type": {"variable": "hydra.core.Term"}}}}}}}}}},
                                                                 "typeName": "hydra.core.Term"}},
-                                                            "domain": [
-                                                              {
-                                                                "map": {
-                                                                  "keys": {"variable": "t0"},
-                                                                  "values": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "t0"},
-                                                                      "function": {"variable": "hydra.pg.model.Edge"}}}}}],
+                                                            "domain": {
+                                                              "map": {
+                                                                "keys": {"variable": "t0"},
+                                                                "values": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "t0"},
+                                                                    "function": {"variable": "hydra.pg.model.Edge"}}}}},
                                                             "parameter": "m"}}}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": [
-                          {
-                            "application": {
-                              "argument": {"variable": "t0"},
-                              "function": {"variable": "hydra.pg.model.Graph"}}}],
+                        "domain": {
+                          "application": {
+                            "argument": {"variable": "t0"},
+                            "function": {"variable": "hydra.pg.model.Graph"}}},
                         "parameter": "x"}}},
-                  "domain": [
-                    {
-                      "function": {
-                        "codomain": {"variable": "hydra.core.Term"},
-                        "domain": {"variable": "t0"}}}],
+                  "domain": {
+                    "function": {
+                      "codomain": {"variable": "hydra.core.Term"},
+                      "domain": {"variable": "t0"}}},
                   "parameter": "v"}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": [[{"@key": "t0", "@value": {"classes": ["ordering"]}}]],
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {
-                      "application": {
-                        "argument": {"variable": "t0"},
-                        "function": {"variable": "hydra.pg.model.Graph"}}}}},
-                "domain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {"variable": "t0"}}}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "constraints": [{"@key": "t0", "@value": {"classes": ["ordering"]}}],
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {
+                    "application": {
+                      "argument": {"variable": "t0"},
+                      "function": {"variable": "hydra.pg.model.Graph"}}}}},
+              "domain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.encode.pg.model.graphSchema",
@@ -1864,7 +1814,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "typeApplication": {
-                                                                                              "body": {"function": {"primitive": "hydra.lib.maps.bimap"}},
+                                                                                              "body": {"variable": "hydra.lib.maps.bimap"},
                                                                                               "type": {"variable": "hydra.pg.model.VertexLabel"}}},
                                                                                           "type": {"variable": "hydra.core.Term"}}},
                                                                                       "type": {
@@ -1873,14 +1823,13 @@
                                                                                           "function": {"variable": "hydra.pg.model.VertexType"}}}}},
                                                                                   "type": {"variable": "hydra.core.Term"}}}}}}}}}},
                                                                 "typeName": "hydra.core.Term"}},
-                                                            "domain": [
-                                                              {
-                                                                "map": {
-                                                                  "keys": {"variable": "hydra.pg.model.VertexLabel"},
-                                                                  "values": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "t0"},
-                                                                      "function": {"variable": "hydra.pg.model.VertexType"}}}}}],
+                                                            "domain": {
+                                                              "map": {
+                                                                "keys": {"variable": "hydra.pg.model.VertexLabel"},
+                                                                "values": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "t0"},
+                                                                    "function": {"variable": "hydra.pg.model.VertexType"}}}}},
                                                             "parameter": "m"}}}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
@@ -1936,7 +1885,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "typeApplication": {
-                                                                                              "body": {"function": {"primitive": "hydra.lib.maps.bimap"}},
+                                                                                              "body": {"variable": "hydra.lib.maps.bimap"},
                                                                                               "type": {"variable": "hydra.pg.model.EdgeLabel"}}},
                                                                                           "type": {"variable": "hydra.core.Term"}}},
                                                                                       "type": {
@@ -1945,48 +1894,43 @@
                                                                                           "function": {"variable": "hydra.pg.model.EdgeType"}}}}},
                                                                                   "type": {"variable": "hydra.core.Term"}}}}}}}}}},
                                                                 "typeName": "hydra.core.Term"}},
-                                                            "domain": [
-                                                              {
-                                                                "map": {
-                                                                  "keys": {"variable": "hydra.pg.model.EdgeLabel"},
-                                                                  "values": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "t0"},
-                                                                      "function": {"variable": "hydra.pg.model.EdgeType"}}}}}],
+                                                            "domain": {
+                                                              "map": {
+                                                                "keys": {"variable": "hydra.pg.model.EdgeLabel"},
+                                                                "values": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "t0"},
+                                                                    "function": {"variable": "hydra.pg.model.EdgeType"}}}}},
                                                             "parameter": "m"}}}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": [
-                          {
-                            "application": {
-                              "argument": {"variable": "t0"},
-                              "function": {"variable": "hydra.pg.model.GraphSchema"}}}],
+                        "domain": {
+                          "application": {
+                            "argument": {"variable": "t0"},
+                            "function": {"variable": "hydra.pg.model.GraphSchema"}}},
                         "parameter": "x"}}},
-                  "domain": [
-                    {
-                      "function": {
-                        "codomain": {"variable": "hydra.core.Term"},
-                        "domain": {"variable": "t0"}}}],
+                  "domain": {
+                    "function": {
+                      "codomain": {"variable": "hydra.core.Term"},
+                      "domain": {"variable": "t0"}}},
                   "parameter": "t"}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {
-                      "application": {
-                        "argument": {"variable": "t0"},
-                        "function": {"variable": "hydra.pg.model.GraphSchema"}}}}},
-                "domain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {"variable": "t0"}}}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {
+                    "application": {
+                      "argument": {"variable": "t0"},
+                      "function": {"variable": "hydra.pg.model.GraphSchema"}}}}},
+              "domain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.encode.pg.model.label",
@@ -2033,7 +1977,7 @@
                                             "typeName": "hydra.core.Field"}}}],
                                     "typeName": "hydra.core.Injection"}}},
                               "typeName": "hydra.core.Term"}},
-                          "domain": [{"variable": "hydra.pg.model.VertexLabel"}],
+                          "domain": {"variable": "hydra.pg.model.VertexLabel"},
                           "parameter": "y"}}}},
                   {
                     "name": "edge",
@@ -2073,18 +2017,15 @@
                                             "typeName": "hydra.core.Field"}}}],
                                     "typeName": "hydra.core.Injection"}}},
                               "typeName": "hydra.core.Term"}},
-                          "domain": [{"variable": "hydra.pg.model.EdgeLabel"}],
+                          "domain": {"variable": "hydra.pg.model.EdgeLabel"},
                           "parameter": "y"}}}}],
-                "default": null,
                 "typeName": "hydra.pg.model.Label"}}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.core.Term"},
-                "domain": {"variable": "hydra.pg.model.Label"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.pg.model.Label"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.encode.pg.model.lazyGraph",
@@ -2159,19 +2100,18 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                                   "type": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "t0"},
                                                                                       "function": {"variable": "hydra.pg.model.Vertex"}}}}},
                                                                               "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                                 "typeName": "hydra.core.Term"}},
-                                                            "domain": [
-                                                              {
-                                                                "list": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "t0"},
-                                                                    "function": {"variable": "hydra.pg.model.Vertex"}}}}],
+                                                            "domain": {
+                                                              "list": {
+                                                                "application": {
+                                                                  "argument": {"variable": "t0"},
+                                                                  "function": {"variable": "hydra.pg.model.Vertex"}}}},
                                                             "parameter": "xs"}}}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
@@ -2219,53 +2159,48 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                                   "type": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "t0"},
                                                                                       "function": {"variable": "hydra.pg.model.Edge"}}}}},
                                                                               "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                                 "typeName": "hydra.core.Term"}},
-                                                            "domain": [
-                                                              {
-                                                                "list": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "t0"},
-                                                                    "function": {"variable": "hydra.pg.model.Edge"}}}}],
+                                                            "domain": {
+                                                              "list": {
+                                                                "application": {
+                                                                  "argument": {"variable": "t0"},
+                                                                  "function": {"variable": "hydra.pg.model.Edge"}}}},
                                                             "parameter": "xs"}}}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": [
-                          {
-                            "application": {
-                              "argument": {"variable": "t0"},
-                              "function": {"variable": "hydra.pg.model.LazyGraph"}}}],
+                        "domain": {
+                          "application": {
+                            "argument": {"variable": "t0"},
+                            "function": {"variable": "hydra.pg.model.LazyGraph"}}},
                         "parameter": "x"}}},
-                  "domain": [
-                    {
-                      "function": {
-                        "codomain": {"variable": "hydra.core.Term"},
-                        "domain": {"variable": "t0"}}}],
+                  "domain": {
+                    "function": {
+                      "codomain": {"variable": "hydra.core.Term"},
+                      "domain": {"variable": "t0"}}},
                   "parameter": "v"}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {
-                      "application": {
-                        "argument": {"variable": "t0"},
-                        "function": {"variable": "hydra.pg.model.LazyGraph"}}}}},
-                "domain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {"variable": "t0"}}}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {
+                    "application": {
+                      "argument": {"variable": "t0"},
+                      "function": {"variable": "hydra.pg.model.LazyGraph"}}}}},
+              "domain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.encode.pg.model.property",
@@ -2344,36 +2279,32 @@
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": [
-                          {
-                            "application": {
-                              "argument": {"variable": "t0"},
-                              "function": {"variable": "hydra.pg.model.Property"}}}],
+                        "domain": {
+                          "application": {
+                            "argument": {"variable": "t0"},
+                            "function": {"variable": "hydra.pg.model.Property"}}},
                         "parameter": "x"}}},
-                  "domain": [
-                    {
-                      "function": {
-                        "codomain": {"variable": "hydra.core.Term"},
-                        "domain": {"variable": "t0"}}}],
+                  "domain": {
+                    "function": {
+                      "codomain": {"variable": "hydra.core.Term"},
+                      "domain": {"variable": "t0"}}},
                   "parameter": "v"}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {
-                      "application": {
-                        "argument": {"variable": "t0"},
-                        "function": {"variable": "hydra.pg.model.Property"}}}}},
-                "domain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {"variable": "t0"}}}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {
+                    "application": {
+                      "argument": {"variable": "t0"},
+                      "function": {"variable": "hydra.pg.model.Property"}}}}},
+              "domain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.encode.pg.model.propertyKey",
@@ -2413,20 +2344,18 @@
                                                 "field": {"name": "string", "term": {"variable": "x"}},
                                                 "typeName": "hydra.core.Literal"}}},
                                           "typeName": "hydra.core.Term"}},
-                                      "domain": [{"literal": {"string": {}}}],
+                                      "domain": {"literal": {"string": {}}},
                                       "parameter": "x"}}}}}}],
                         "typeName": "hydra.core.WrappedTerm"}}},
                   "typeName": "hydra.core.Term"}},
-              "domain": [{"variable": "hydra.pg.model.PropertyKey"}],
+              "domain": {"variable": "hydra.pg.model.PropertyKey"},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.core.Term"},
-                "domain": {"variable": "hydra.pg.model.PropertyKey"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.pg.model.PropertyKey"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.encode.pg.model.propertyType",
@@ -2540,41 +2469,37 @@
                                                                       "field": {"name": "boolean", "term": {"variable": "x"}},
                                                                       "typeName": "hydra.core.Literal"}}},
                                                                 "typeName": "hydra.core.Term"}},
-                                                            "domain": [{"literal": {"boolean": {}}}],
+                                                            "domain": {"literal": {"boolean": {}}},
                                                             "parameter": "x"}}}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": [
-                          {
-                            "application": {
-                              "argument": {"variable": "t0"},
-                              "function": {"variable": "hydra.pg.model.PropertyType"}}}],
+                        "domain": {
+                          "application": {
+                            "argument": {"variable": "t0"},
+                            "function": {"variable": "hydra.pg.model.PropertyType"}}},
                         "parameter": "x"}}},
-                  "domain": [
-                    {
-                      "function": {
-                        "codomain": {"variable": "hydra.core.Term"},
-                        "domain": {"variable": "t0"}}}],
+                  "domain": {
+                    "function": {
+                      "codomain": {"variable": "hydra.core.Term"},
+                      "domain": {"variable": "t0"}}},
                   "parameter": "t"}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {
-                      "application": {
-                        "argument": {"variable": "t0"},
-                        "function": {"variable": "hydra.pg.model.PropertyType"}}}}},
-                "domain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {"variable": "t0"}}}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {
+                    "application": {
+                      "argument": {"variable": "t0"},
+                      "function": {"variable": "hydra.pg.model.PropertyType"}}}}},
+              "domain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.encode.pg.model.vertex",
@@ -2696,51 +2621,46 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "typeApplication": {
-                                                                                              "body": {"function": {"primitive": "hydra.lib.maps.bimap"}},
+                                                                                              "body": {"variable": "hydra.lib.maps.bimap"},
                                                                                               "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                                           "type": {"variable": "hydra.core.Term"}}},
                                                                                       "type": {"variable": "t0"}}},
                                                                                   "type": {"variable": "hydra.core.Term"}}}}}}}}}},
                                                                 "typeName": "hydra.core.Term"}},
-                                                            "domain": [
-                                                              {
-                                                                "map": {
-                                                                  "keys": {"variable": "hydra.pg.model.PropertyKey"},
-                                                                  "values": {"variable": "t0"}}}],
+                                                            "domain": {
+                                                              "map": {
+                                                                "keys": {"variable": "hydra.pg.model.PropertyKey"},
+                                                                "values": {"variable": "t0"}}},
                                                             "parameter": "m"}}}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": [
-                          {
-                            "application": {
-                              "argument": {"variable": "t0"},
-                              "function": {"variable": "hydra.pg.model.Vertex"}}}],
+                        "domain": {
+                          "application": {
+                            "argument": {"variable": "t0"},
+                            "function": {"variable": "hydra.pg.model.Vertex"}}},
                         "parameter": "x"}}},
-                  "domain": [
-                    {
-                      "function": {
-                        "codomain": {"variable": "hydra.core.Term"},
-                        "domain": {"variable": "t0"}}}],
+                  "domain": {
+                    "function": {
+                      "codomain": {"variable": "hydra.core.Term"},
+                      "domain": {"variable": "t0"}}},
                   "parameter": "v"}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {
-                      "application": {
-                        "argument": {"variable": "t0"},
-                        "function": {"variable": "hydra.pg.model.Vertex"}}}}},
-                "domain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {"variable": "t0"}}}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {
+                    "application": {
+                      "argument": {"variable": "t0"},
+                      "function": {"variable": "hydra.pg.model.Vertex"}}}}},
+              "domain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.encode.pg.model.vertexLabel",
@@ -2780,20 +2700,18 @@
                                                 "field": {"name": "string", "term": {"variable": "x"}},
                                                 "typeName": "hydra.core.Literal"}}},
                                           "typeName": "hydra.core.Term"}},
-                                      "domain": [{"literal": {"string": {}}}],
+                                      "domain": {"literal": {"string": {}}},
                                       "parameter": "x"}}}}}}],
                         "typeName": "hydra.core.WrappedTerm"}}},
                   "typeName": "hydra.core.Term"}},
-              "domain": [{"variable": "hydra.pg.model.VertexLabel"}],
+              "domain": {"variable": "hydra.pg.model.VertexLabel"},
               "parameter": "x"}}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {"variable": "hydra.core.Term"},
-                "domain": {"variable": "hydra.pg.model.VertexLabel"}}},
-            "variables": []}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.pg.model.VertexLabel"}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.encode.pg.model.vertexType",
@@ -2915,53 +2833,48 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                                   "type": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "t0"},
                                                                                       "function": {"variable": "hydra.pg.model.PropertyType"}}}}},
                                                                               "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                                 "typeName": "hydra.core.Term"}},
-                                                            "domain": [
-                                                              {
-                                                                "list": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "t0"},
-                                                                    "function": {"variable": "hydra.pg.model.PropertyType"}}}}],
+                                                            "domain": {
+                                                              "list": {
+                                                                "application": {
+                                                                  "argument": {"variable": "t0"},
+                                                                  "function": {"variable": "hydra.pg.model.PropertyType"}}}},
                                                             "parameter": "xs"}}}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": [
-                          {
-                            "application": {
-                              "argument": {"variable": "t0"},
-                              "function": {"variable": "hydra.pg.model.VertexType"}}}],
+                        "domain": {
+                          "application": {
+                            "argument": {"variable": "t0"},
+                            "function": {"variable": "hydra.pg.model.VertexType"}}},
                         "parameter": "x"}}},
-                  "domain": [
-                    {
-                      "function": {
-                        "codomain": {"variable": "hydra.core.Term"},
-                        "domain": {"variable": "t0"}}}],
+                  "domain": {
+                    "function": {
+                      "codomain": {"variable": "hydra.core.Term"},
+                      "domain": {"variable": "t0"}}},
                   "parameter": "t"}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {
-                      "application": {
-                        "argument": {"variable": "t0"},
-                        "function": {"variable": "hydra.pg.model.VertexType"}}}}},
-                "domain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {"variable": "t0"}}}}},
-            "variables": ["t0"]}]}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {
+                    "application": {
+                      "argument": {"variable": "t0"},
+                      "function": {"variable": "hydra.pg.model.VertexType"}}}}},
+              "domain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.encode.pg.model.vertexWithAdjacentEdges",
@@ -3069,19 +2982,18 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                                   "type": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "t0"},
                                                                                       "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}}},
                                                                               "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                                 "typeName": "hydra.core.Term"}},
-                                                            "domain": [
-                                                              {
-                                                                "list": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "t0"},
-                                                                    "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}}],
+                                                            "domain": {
+                                                              "list": {
+                                                                "application": {
+                                                                  "argument": {"variable": "t0"},
+                                                                  "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}},
                                                             "parameter": "xs"}}}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
@@ -3132,54 +3044,49 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                                   "type": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "t0"},
                                                                                       "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}}},
                                                                               "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                                 "typeName": "hydra.core.Term"}},
-                                                            "domain": [
-                                                              {
-                                                                "list": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "t0"},
-                                                                    "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}}],
+                                                            "domain": {
+                                                              "list": {
+                                                                "application": {
+                                                                  "argument": {"variable": "t0"},
+                                                                  "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}},
                                                             "parameter": "xs"}}}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": [
-                          {
-                            "application": {
-                              "argument": {"variable": "t0"},
-                              "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}],
+                        "domain": {
+                          "application": {
+                            "argument": {"variable": "t0"},
+                            "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}},
                         "parameter": "x"}}},
-                  "domain": [
-                    {
-                      "function": {
-                        "codomain": {"variable": "hydra.core.Term"},
-                        "domain": {"variable": "t0"}}}],
+                  "domain": {
+                    "function": {
+                      "codomain": {"variable": "hydra.core.Term"},
+                      "domain": {"variable": "t0"}}},
                   "parameter": "v"}}},
             "parameter": "t0"}},
-        "type": [
-          {
-            "constraints": null,
-            "type": {
-              "function": {
-                "codomain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {
-                      "application": {
-                        "argument": {"variable": "t0"},
-                        "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}},
-                "domain": {
-                  "function": {
-                    "codomain": {"variable": "hydra.core.Term"},
-                    "domain": {"variable": "t0"}}}}},
-            "variables": ["t0"]}]}}],
-  "description": ["Term encoders for hydra.pg.model"],
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {
+                    "application": {
+                      "argument": {"variable": "t0"},
+                      "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}},
+              "domain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0"]}}}],
+  "description": "Term encoders for hydra.pg.model",
   "namespace": "hydra.encode.pg.model",
   "termDependencies": ["hydra.encode.core"],
   "typeDependencies": ["hydra.pg.model"]}

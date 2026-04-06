@@ -84,7 +84,9 @@ public abstract class ConstructorModifier implements Serializable, Comparable<Co
         return tagCmp;
       }
       Annotation o = (Annotation) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

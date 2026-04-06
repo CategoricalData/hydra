@@ -34,6 +34,8 @@ public class ID implements Serializable, Comparable<ID> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ID other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

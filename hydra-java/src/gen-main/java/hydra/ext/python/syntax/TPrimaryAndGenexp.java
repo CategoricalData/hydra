@@ -42,11 +42,15 @@ public class TPrimaryAndGenexp implements Serializable, Comparable<TPrimaryAndGe
   @SuppressWarnings("unchecked")
   public int compareTo(TPrimaryAndGenexp other) {
     int cmp = 0;
-    cmp = ((Comparable) primary).compareTo(other.primary);
+    cmp = hydra.util.Comparing.compare(
+      primary,
+      other.primary);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) genexp).compareTo(other.genexp);
+    return hydra.util.Comparing.compare(
+      genexp,
+      other.genexp);
   }
 
   public TPrimaryAndGenexp withPrimary(hydra.ext.python.syntax.TPrimary primary) {

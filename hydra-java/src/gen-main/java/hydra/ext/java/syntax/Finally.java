@@ -34,6 +34,8 @@ public class Finally implements Serializable, Comparable<Finally> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Finally other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

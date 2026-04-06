@@ -51,11 +51,15 @@ public class DuplicateBindingError implements Serializable, Comparable<Duplicate
   @SuppressWarnings("unchecked")
   public int compareTo(DuplicateBindingError other) {
     int cmp = 0;
-    cmp = ((Comparable) location).compareTo(other.location);
+    cmp = hydra.util.Comparing.compare(
+      location,
+      other.location);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) name).compareTo(other.name);
+    return hydra.util.Comparing.compare(
+      name,
+      other.name);
   }
 
   public DuplicateBindingError withLocation(hydra.paths.SubtermPath location) {

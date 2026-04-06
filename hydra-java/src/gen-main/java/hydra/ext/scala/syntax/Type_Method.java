@@ -11,11 +11,11 @@ public class Type_Method implements Serializable, Comparable<Type_Method> {
 
   public static final hydra.core.Name TPE = new hydra.core.Name("tpe");
 
-  public final hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> paramss;
+  public final java.util.List<java.util.List<hydra.ext.scala.syntax.Data_Param>> paramss;
 
   public final hydra.ext.scala.syntax.Type tpe;
 
-  public Type_Method (hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> paramss, hydra.ext.scala.syntax.Type tpe) {
+  public Type_Method (java.util.List<java.util.List<hydra.ext.scala.syntax.Data_Param>> paramss, hydra.ext.scala.syntax.Type tpe) {
     this.paramss = paramss;
     this.tpe = tpe;
   }
@@ -42,14 +42,18 @@ public class Type_Method implements Serializable, Comparable<Type_Method> {
   @SuppressWarnings("unchecked")
   public int compareTo(Type_Method other) {
     int cmp = 0;
-    cmp = ((Comparable) paramss).compareTo(other.paramss);
+    cmp = hydra.util.Comparing.compare(
+      paramss,
+      other.paramss);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) tpe).compareTo(other.tpe);
+    return hydra.util.Comparing.compare(
+      tpe,
+      other.tpe);
   }
 
-  public Type_Method withParamss(hydra.util.ConsList<hydra.util.ConsList<hydra.ext.scala.syntax.Data_Param>> paramss) {
+  public Type_Method withParamss(java.util.List<java.util.List<hydra.ext.scala.syntax.Data_Param>> paramss) {
     return new Type_Method(paramss, tpe);
   }
 

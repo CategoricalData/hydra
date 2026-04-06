@@ -103,7 +103,9 @@ public abstract class DataRange implements Serializable, Comparable<DataRange> {
         return tagCmp;
       }
       DataComplementOf o = (DataComplementOf) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -143,7 +145,9 @@ public abstract class DataRange implements Serializable, Comparable<DataRange> {
         return tagCmp;
       }
       DataIntersectionOf o = (DataIntersectionOf) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -183,7 +187,9 @@ public abstract class DataRange implements Serializable, Comparable<DataRange> {
         return tagCmp;
       }
       DataOneOf o = (DataOneOf) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -223,7 +229,9 @@ public abstract class DataRange implements Serializable, Comparable<DataRange> {
         return tagCmp;
       }
       DataUnionOf o = (DataUnionOf) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -263,7 +271,9 @@ public abstract class DataRange implements Serializable, Comparable<DataRange> {
         return tagCmp;
       }
       Datatype o = (Datatype) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -303,7 +313,9 @@ public abstract class DataRange implements Serializable, Comparable<DataRange> {
         return tagCmp;
       }
       DatatypeRestriction o = (DatatypeRestriction) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

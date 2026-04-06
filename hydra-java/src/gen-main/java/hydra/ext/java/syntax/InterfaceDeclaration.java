@@ -68,7 +68,9 @@ public abstract class InterfaceDeclaration implements Serializable, Comparable<I
         return tagCmp;
       }
       NormalInterface o = (NormalInterface) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class InterfaceDeclaration implements Serializable, Comparable<I
         return tagCmp;
       }
       AnnotationType o = (AnnotationType) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

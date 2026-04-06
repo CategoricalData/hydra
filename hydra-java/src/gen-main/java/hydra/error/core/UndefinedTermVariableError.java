@@ -51,11 +51,15 @@ public class UndefinedTermVariableError implements Serializable, Comparable<Unde
   @SuppressWarnings("unchecked")
   public int compareTo(UndefinedTermVariableError other) {
     int cmp = 0;
-    cmp = ((Comparable) location).compareTo(other.location);
+    cmp = hydra.util.Comparing.compare(
+      location,
+      other.location);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) name).compareTo(other.name);
+    return hydra.util.Comparing.compare(
+      name,
+      other.name);
   }
 
   public UndefinedTermVariableError withLocation(hydra.paths.SubtermPath location) {

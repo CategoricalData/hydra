@@ -74,7 +74,9 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
         return tagCmp;
       }
       XmlSchema o = (XmlSchema) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -114,7 +116,9 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
         return tagCmp;
       }
       Other o = (Other) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

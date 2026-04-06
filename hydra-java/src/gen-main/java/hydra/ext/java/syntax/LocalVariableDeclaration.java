@@ -13,13 +13,13 @@ public class LocalVariableDeclaration implements Serializable, Comparable<LocalV
 
   public static final hydra.core.Name DECLARATORS = new hydra.core.Name("declarators");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers;
 
   public final hydra.ext.java.syntax.LocalVariableType type;
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.VariableDeclarator> declarators;
+  public final java.util.List<hydra.ext.java.syntax.VariableDeclarator> declarators;
 
-  public LocalVariableDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.LocalVariableType type, hydra.util.ConsList<hydra.ext.java.syntax.VariableDeclarator> declarators) {
+  public LocalVariableDeclaration (java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.LocalVariableType type, java.util.List<hydra.ext.java.syntax.VariableDeclarator> declarators) {
     this.modifiers = modifiers;
     this.type = type;
     this.declarators = declarators;
@@ -49,18 +49,24 @@ public class LocalVariableDeclaration implements Serializable, Comparable<LocalV
   @SuppressWarnings("unchecked")
   public int compareTo(LocalVariableDeclaration other) {
     int cmp = 0;
-    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
+    cmp = hydra.util.Comparing.compare(
+      modifiers,
+      other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) type).compareTo(other.type);
+    cmp = hydra.util.Comparing.compare(
+      type,
+      other.type);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) declarators).compareTo(other.declarators);
+    return hydra.util.Comparing.compare(
+      declarators,
+      other.declarators);
   }
 
-  public LocalVariableDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers) {
+  public LocalVariableDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers) {
     return new LocalVariableDeclaration(modifiers, type, declarators);
   }
 
@@ -68,7 +74,7 @@ public class LocalVariableDeclaration implements Serializable, Comparable<LocalV
     return new LocalVariableDeclaration(modifiers, type, declarators);
   }
 
-  public LocalVariableDeclaration withDeclarators(hydra.util.ConsList<hydra.ext.java.syntax.VariableDeclarator> declarators) {
+  public LocalVariableDeclaration withDeclarators(java.util.List<hydra.ext.java.syntax.VariableDeclarator> declarators) {
     return new LocalVariableDeclaration(modifiers, type, declarators);
   }
 }

@@ -51,11 +51,15 @@ public class UnknownPrimitiveNameError implements Serializable, Comparable<Unkno
   @SuppressWarnings("unchecked")
   public int compareTo(UnknownPrimitiveNameError other) {
     int cmp = 0;
-    cmp = ((Comparable) location).compareTo(other.location);
+    cmp = hydra.util.Comparing.compare(
+      location,
+      other.location);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) name).compareTo(other.name);
+    return hydra.util.Comparing.compare(
+      name,
+      other.name);
   }
 
   public UnknownPrimitiveNameError withLocation(hydra.paths.SubtermPath location) {

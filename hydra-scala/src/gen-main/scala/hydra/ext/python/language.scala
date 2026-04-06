@@ -6,10 +6,6 @@ import hydra.core.*
 
 import hydra.variants.*
 
-import hydra.lib.lists
-
-import hydra.lib.sets
-
 lazy val pythonLanguage: hydra.coders.Language = {
   lazy val eliminationVariants: scala.collection.immutable.Set[hydra.variants.EliminationVariant] = hydra.lib.sets.fromList[hydra.variants.EliminationVariant](Seq(hydra.variants.EliminationVariant.record,
      hydra.variants.EliminationVariant.union, hydra.variants.EliminationVariant.wrap))

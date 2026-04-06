@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.error.pg.InvalidEdgeError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -81,7 +80,6 @@
       "type": {
         "name": "hydra.error.pg.InvalidElementPropertyError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -115,7 +113,6 @@
       "type": {
         "name": "hydra.error.pg.InvalidGraphEdgeError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -151,7 +148,6 @@
       "type": {
         "name": "hydra.error.pg.InvalidGraphError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -193,7 +189,6 @@
       "type": {
         "name": "hydra.error.pg.InvalidGraphVertexError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -229,7 +224,6 @@
       "type": {
         "name": "hydra.error.pg.InvalidPropertyError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -272,7 +266,6 @@
       "type": {
         "name": "hydra.error.pg.InvalidValueError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -306,7 +299,6 @@
       "type": {
         "name": "hydra.error.pg.InvalidVertexError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -349,7 +341,6 @@
       "type": {
         "name": "hydra.error.pg.NoSuchEdgeLabelError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -374,7 +365,6 @@
       "type": {
         "name": "hydra.error.pg.NoSuchVertexLabelError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -399,7 +389,6 @@
       "type": {
         "name": "hydra.error.pg.WrongVertexLabelError",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -428,7 +417,7 @@
                             "@value": {"literal": {"string": "The actual vertex label"}}}],
                         "body": {"variable": "hydra.pg.model.VertexLabel"}}}}]}}},
           "variables": []}}}],
-  "description": ["Error types for property graph validation"],
+  "description": "Error types for property graph validation",
   "namespace": "hydra.error.pg",
   "termDependencies": [],
   "typeDependencies": ["hydra.pg.model"]}

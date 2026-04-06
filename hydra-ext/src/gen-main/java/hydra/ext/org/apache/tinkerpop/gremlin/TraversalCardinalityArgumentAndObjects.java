@@ -13,9 +13,9 @@ public class TraversalCardinalityArgumentAndObjects implements Serializable, Com
 
   public final hydra.ext.org.apache.tinkerpop.gremlin.TraversalCardinalityArgument cardinality;
 
-  public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> objects;
+  public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> objects;
 
-  public TraversalCardinalityArgumentAndObjects (hydra.ext.org.apache.tinkerpop.gremlin.TraversalCardinalityArgument cardinality, hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> objects) {
+  public TraversalCardinalityArgumentAndObjects (hydra.ext.org.apache.tinkerpop.gremlin.TraversalCardinalityArgument cardinality, java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> objects) {
     this.cardinality = cardinality;
     this.objects = objects;
   }
@@ -42,18 +42,22 @@ public class TraversalCardinalityArgumentAndObjects implements Serializable, Com
   @SuppressWarnings("unchecked")
   public int compareTo(TraversalCardinalityArgumentAndObjects other) {
     int cmp = 0;
-    cmp = ((Comparable) cardinality).compareTo(other.cardinality);
+    cmp = hydra.util.Comparing.compare(
+      cardinality,
+      other.cardinality);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) objects).compareTo(other.objects);
+    return hydra.util.Comparing.compare(
+      objects,
+      other.objects);
   }
 
   public TraversalCardinalityArgumentAndObjects withCardinality(hydra.ext.org.apache.tinkerpop.gremlin.TraversalCardinalityArgument cardinality) {
     return new TraversalCardinalityArgumentAndObjects(cardinality, objects);
   }
 
-  public TraversalCardinalityArgumentAndObjects withObjects(hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> objects) {
+  public TraversalCardinalityArgumentAndObjects withObjects(java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> objects) {
     return new TraversalCardinalityArgumentAndObjects(cardinality, objects);
   }
 }

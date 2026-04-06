@@ -51,11 +51,15 @@ public class NonComparableSetElementTypeError implements Serializable, Comparabl
   @SuppressWarnings("unchecked")
   public int compareTo(NonComparableSetElementTypeError other) {
     int cmp = 0;
-    cmp = ((Comparable) location).compareTo(other.location);
+    cmp = hydra.util.Comparing.compare(
+      location,
+      other.location);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) elementType).compareTo(other.elementType);
+    return hydra.util.Comparing.compare(
+      elementType,
+      other.elementType);
   }
 
   public NonComparableSetElementTypeError withLocation(hydra.paths.SubtermPath location) {

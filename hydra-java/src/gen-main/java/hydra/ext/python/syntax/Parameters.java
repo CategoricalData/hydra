@@ -92,7 +92,9 @@ public abstract class Parameters implements Serializable, Comparable<Parameters>
         return tagCmp;
       }
       SlashNoDefault o = (SlashNoDefault) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -132,7 +134,9 @@ public abstract class Parameters implements Serializable, Comparable<Parameters>
         return tagCmp;
       }
       SlashWithDefault o = (SlashWithDefault) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -172,7 +176,9 @@ public abstract class Parameters implements Serializable, Comparable<Parameters>
         return tagCmp;
       }
       ParamNoDefault o = (ParamNoDefault) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -212,7 +218,9 @@ public abstract class Parameters implements Serializable, Comparable<Parameters>
         return tagCmp;
       }
       ParamWithDefault o = (ParamWithDefault) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -252,7 +260,9 @@ public abstract class Parameters implements Serializable, Comparable<Parameters>
         return tagCmp;
       }
       StarEtc o = (StarEtc) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

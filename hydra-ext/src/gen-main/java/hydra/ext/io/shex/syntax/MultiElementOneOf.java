@@ -13,9 +13,9 @@ public class MultiElementOneOf implements Serializable, Comparable<MultiElementO
 
   public final hydra.ext.io.shex.syntax.GroupTripleExpr GroupTripleExpr;
 
-  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.GroupTripleExpr> listOfSequence;
+  public final java.util.List<hydra.ext.io.shex.syntax.GroupTripleExpr> listOfSequence;
 
-  public MultiElementOneOf (hydra.ext.io.shex.syntax.GroupTripleExpr GroupTripleExpr, hydra.util.ConsList<hydra.ext.io.shex.syntax.GroupTripleExpr> listOfSequence) {
+  public MultiElementOneOf (hydra.ext.io.shex.syntax.GroupTripleExpr GroupTripleExpr, java.util.List<hydra.ext.io.shex.syntax.GroupTripleExpr> listOfSequence) {
     this.GroupTripleExpr = GroupTripleExpr;
     this.listOfSequence = listOfSequence;
   }
@@ -42,18 +42,22 @@ public class MultiElementOneOf implements Serializable, Comparable<MultiElementO
   @SuppressWarnings("unchecked")
   public int compareTo(MultiElementOneOf other) {
     int cmp = 0;
-    cmp = ((Comparable) GroupTripleExpr).compareTo(other.GroupTripleExpr);
+    cmp = hydra.util.Comparing.compare(
+      GroupTripleExpr,
+      other.GroupTripleExpr);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) listOfSequence).compareTo(other.listOfSequence);
+    return hydra.util.Comparing.compare(
+      listOfSequence,
+      other.listOfSequence);
   }
 
   public MultiElementOneOf withGroupTripleExpr(hydra.ext.io.shex.syntax.GroupTripleExpr GroupTripleExpr) {
     return new MultiElementOneOf(GroupTripleExpr, listOfSequence);
   }
 
-  public MultiElementOneOf withListOfSequence(hydra.util.ConsList<hydra.ext.io.shex.syntax.GroupTripleExpr> listOfSequence) {
+  public MultiElementOneOf withListOfSequence(java.util.List<hydra.ext.io.shex.syntax.GroupTripleExpr> listOfSequence) {
     return new MultiElementOneOf(GroupTripleExpr, listOfSequence);
   }
 }

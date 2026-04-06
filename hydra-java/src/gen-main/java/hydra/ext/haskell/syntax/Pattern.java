@@ -138,7 +138,9 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         return tagCmp;
       }
       Application o = (Application) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -181,7 +183,9 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         return tagCmp;
       }
       As o = (As) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -194,9 +198,9 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
    * A list pattern
    */
   public static final class List extends hydra.ext.haskell.syntax.Pattern implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.haskell.syntax.Pattern> value;
+    public final java.util.List<hydra.ext.haskell.syntax.Pattern> value;
 
-    public List (hydra.util.ConsList<hydra.ext.haskell.syntax.Pattern> value) {
+    public List (java.util.List<hydra.ext.haskell.syntax.Pattern> value) {
       this.value = value;
     }
 
@@ -224,7 +228,9 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         return tagCmp;
       }
       List o = (List) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -267,7 +273,9 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         return tagCmp;
       }
       Literal o = (Literal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -310,7 +318,9 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         return tagCmp;
       }
       Name o = (Name) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -353,7 +363,9 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         return tagCmp;
       }
       Parens o = (Parens) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -396,7 +408,9 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         return tagCmp;
       }
       Record o = (Record) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -409,9 +423,9 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
    * A tuple pattern
    */
   public static final class Tuple extends hydra.ext.haskell.syntax.Pattern implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.haskell.syntax.Pattern> value;
+    public final java.util.List<hydra.ext.haskell.syntax.Pattern> value;
 
-    public Tuple (hydra.util.ConsList<hydra.ext.haskell.syntax.Pattern> value) {
+    public Tuple (java.util.List<hydra.ext.haskell.syntax.Pattern> value) {
       this.value = value;
     }
 
@@ -439,7 +453,9 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         return tagCmp;
       }
       Tuple o = (Tuple) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -482,7 +498,9 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         return tagCmp;
       }
       Typed o = (Typed) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

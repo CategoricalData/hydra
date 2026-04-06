@@ -109,7 +109,7 @@ etaExpandTerm tx0 term0 =
                     Core.TermLet v0 -> termArityWithContext (Scoping.extendGraphForLet (\_ -> \_2 -> Nothing) tx v0) (Core.letBody v0)
                     Core.TermTypeLambda v0 -> termArityWithContext (Scoping.extendGraphForTypeLambda tx v0) (Core.typeLambdaBody v0)
                     Core.TermTypeApplication v0 -> termArityWithContext tx (Core.typeApplicationTermBody v0)
-                    Core.TermVariable v0 -> Maybes.maybe 0 Arity.typeArity (Maybes.map Scoping.typeSchemeToFType (Maps.lookup v0 (Graph.graphBoundTypes tx)))
+                    Core.TermVariable v0 -> Maybes.maybe (Maybes.maybe 0 Arity.typeSchemeArity (Maps.lookup v0 primTypes)) Arity.typeArity (Maybes.map Scoping.typeSchemeToFType (Maps.lookup v0 (Graph.graphBoundTypes tx)))
                     _ -> 0
           domainTypes =
                   \n -> \mt -> Logic.ifElse (Equality.lte n 0) [] (Maybes.maybe (Lists.map (\_ -> Nothing) (Math.range 1 n)) (\typ -> case typ of
@@ -529,7 +529,11 @@ reduceTerm cx graph eager term =
                           in (Logic.ifElse (Equality.gt arity (Lists.length args)) (Right (applyToArguments original args)) (forPrimitive prim arity args)))
                       Core.TermVariable v0 ->
                         let mBinding = Lexical.lookupBinding graph v0
-                        in (Maybes.maybe (Right (applyToArguments original args)) (\binding -> applyIfNullary eager2 (Core.bindingTerm binding) args) mBinding)
+                        in (Maybes.maybe (
+                          let mPrim = Lexical.lookupPrimitive graph v0
+                          in (Maybes.maybe (Right (applyToArguments original args)) (\prim ->
+                            let arity = Arity.primitiveArity prim
+                            in (Logic.ifElse (Equality.gt arity (Lists.length args)) (Right (applyToArguments original args)) (forPrimitive prim arity args))) mPrim)) (\binding -> applyIfNullary eager2 (Core.bindingTerm binding) args) mBinding)
                       Core.TermLet v0 ->
                         let bindings = Core.letBindings v0
                             body = Core.letBody v0

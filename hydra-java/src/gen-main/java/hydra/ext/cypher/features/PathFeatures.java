@@ -40,6 +40,8 @@ public class PathFeatures implements Serializable, Comparable<PathFeatures> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PathFeatures other) {
-    return ((Comparable) shortestPath).compareTo(other.shortestPath);
+    return hydra.util.Comparing.compare(
+      shortestPath,
+      other.shortestPath);
   }
 }

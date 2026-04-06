@@ -84,7 +84,9 @@ public abstract class PropertyArgs implements Serializable, Comparable<PropertyA
         return tagCmp;
       }
       CardinalityObjects o = (CardinalityObjects) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -94,9 +96,9 @@ public abstract class PropertyArgs implements Serializable, Comparable<PropertyA
   }
 
   public static final class Objects extends hydra.ext.org.apache.tinkerpop.gremlin.PropertyArgs implements Serializable {
-    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
+    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
 
-    public Objects (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
+    public Objects (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
       this.value = value;
     }
 
@@ -124,7 +126,9 @@ public abstract class PropertyArgs implements Serializable, Comparable<PropertyA
         return tagCmp;
       }
       Objects o = (Objects) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -164,7 +168,9 @@ public abstract class PropertyArgs implements Serializable, Comparable<PropertyA
         return tagCmp;
       }
       Object_ o = (Object_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +210,9 @@ public abstract class PropertyArgs implements Serializable, Comparable<PropertyA
         return tagCmp;
       }
       CardinalityObject o = (CardinalityObject) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

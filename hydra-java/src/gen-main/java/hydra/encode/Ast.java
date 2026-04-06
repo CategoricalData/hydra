@@ -31,7 +31,7 @@ public interface Ast {
   }
 
   static hydra.core.Term blockStyle(hydra.ast.BlockStyle x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.BlockStyle"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.BlockStyle"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("indent"), new hydra.core.Term.Maybe(hydra.lib.maybes.Map.apply(
         (java.util.function.Function<String, hydra.core.Term>) (x2 -> new hydra.core.Term.Literal(new hydra.core.Literal.String_(x2))),
         (x).indent))),
@@ -40,14 +40,14 @@ public interface Ast {
   }
 
   static hydra.core.Term bracketExpr(hydra.ast.BracketExpr x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.BracketExpr"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.BracketExpr"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("brackets"), hydra.encode.Ast.brackets((x).brackets)),
       new hydra.core.Field(new hydra.core.Name("enclosed"), hydra.encode.Ast.expr((x).enclosed)),
       new hydra.core.Field(new hydra.core.Name("style"), hydra.encode.Ast.blockStyle((x).style)))));
   }
 
   static hydra.core.Term brackets(hydra.ast.Brackets x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Brackets"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Brackets"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("open"), hydra.encode.Ast.symbol((x).open)),
       new hydra.core.Field(new hydra.core.Name("close"), hydra.encode.Ast.symbol((x).close)))));
   }
@@ -96,13 +96,13 @@ public interface Ast {
   }
 
   static hydra.core.Term indentedExpression(hydra.ast.IndentedExpression x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.IndentedExpression"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.IndentedExpression"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("style"), hydra.encode.Ast.indentStyle((x).style)),
       new hydra.core.Field(new hydra.core.Name("expr"), hydra.encode.Ast.expr((x).expr)))));
   }
 
   static hydra.core.Term op(hydra.ast.Op x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Op"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Op"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("symbol"), hydra.encode.Ast.symbol((x).symbol)),
       new hydra.core.Field(new hydra.core.Name("padding"), hydra.encode.Ast.padding((x).padding)),
       new hydra.core.Field(new hydra.core.Name("precedence"), hydra.encode.Ast.precedence((x).precedence)),
@@ -110,14 +110,14 @@ public interface Ast {
   }
 
   static hydra.core.Term opExpr(hydra.ast.OpExpr x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.OpExpr"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.OpExpr"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("op"), hydra.encode.Ast.op((x).op)),
       new hydra.core.Field(new hydra.core.Name("lhs"), hydra.encode.Ast.expr((x).lhs)),
       new hydra.core.Field(new hydra.core.Name("rhs"), hydra.encode.Ast.expr((x).rhs)))));
   }
 
   static hydra.core.Term padding(hydra.ast.Padding x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Padding"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.Padding"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("left"), hydra.encode.Ast.ws((x).left)),
       new hydra.core.Field(new hydra.core.Name("right"), hydra.encode.Ast.ws((x).right)))));
   }
@@ -127,7 +127,7 @@ public interface Ast {
   }
 
   static hydra.core.Term seqExpr(hydra.ast.SeqExpr x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.SeqExpr"), hydra.util.ConsList.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.SeqExpr"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("op"), hydra.encode.Ast.op((x).op)),
       new hydra.core.Field(new hydra.core.Name("elements"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
         hydra.encode.Ast::expr,

@@ -34,6 +34,8 @@ public class AnyType implements Serializable, Comparable<AnyType> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(AnyType other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

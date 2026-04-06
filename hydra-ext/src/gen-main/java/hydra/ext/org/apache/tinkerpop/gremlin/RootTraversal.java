@@ -17,9 +17,9 @@ public class RootTraversal implements Serializable, Comparable<RootTraversal> {
 
   public final hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceSpawnMethod spawnMethod;
 
-  public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.ChainedTraversalElement> chained;
+  public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.ChainedTraversalElement> chained;
 
-  public RootTraversal (hydra.ext.org.apache.tinkerpop.gremlin.TraversalSource source, hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceSpawnMethod spawnMethod, hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.ChainedTraversalElement> chained) {
+  public RootTraversal (hydra.ext.org.apache.tinkerpop.gremlin.TraversalSource source, hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceSpawnMethod spawnMethod, java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.ChainedTraversalElement> chained) {
     this.source = source;
     this.spawnMethod = spawnMethod;
     this.chained = chained;
@@ -49,15 +49,21 @@ public class RootTraversal implements Serializable, Comparable<RootTraversal> {
   @SuppressWarnings("unchecked")
   public int compareTo(RootTraversal other) {
     int cmp = 0;
-    cmp = ((Comparable) source).compareTo(other.source);
+    cmp = hydra.util.Comparing.compare(
+      source,
+      other.source);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) spawnMethod).compareTo(other.spawnMethod);
+    cmp = hydra.util.Comparing.compare(
+      spawnMethod,
+      other.spawnMethod);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) chained).compareTo(other.chained);
+    return hydra.util.Comparing.compare(
+      chained,
+      other.chained);
   }
 
   public RootTraversal withSource(hydra.ext.org.apache.tinkerpop.gremlin.TraversalSource source) {
@@ -68,7 +74,7 @@ public class RootTraversal implements Serializable, Comparable<RootTraversal> {
     return new RootTraversal(source, spawnMethod, chained);
   }
 
-  public RootTraversal withChained(hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.ChainedTraversalElement> chained) {
+  public RootTraversal withChained(java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.ChainedTraversalElement> chained) {
     return new RootTraversal(source, spawnMethod, chained);
   }
 }

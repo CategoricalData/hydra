@@ -42,11 +42,15 @@ public class ProjectionItem implements Serializable, Comparable<ProjectionItem> 
   @SuppressWarnings("unchecked")
   public int compareTo(ProjectionItem other) {
     int cmp = 0;
-    cmp = ((Comparable) expression).compareTo(other.expression);
+    cmp = hydra.util.Comparing.compare(
+      expression,
+      other.expression);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) variable).compareTo(other.variable);
+    return hydra.util.Comparing.compare(
+      variable,
+      other.variable);
   }
 
   public ProjectionItem withExpression(hydra.ext.cypher.openCypher.Expression expression) {

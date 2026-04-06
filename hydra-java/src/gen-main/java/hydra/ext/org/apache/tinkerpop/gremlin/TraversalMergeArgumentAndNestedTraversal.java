@@ -42,11 +42,15 @@ public class TraversalMergeArgumentAndNestedTraversal implements Serializable, C
   @SuppressWarnings("unchecked")
   public int compareTo(TraversalMergeArgumentAndNestedTraversal other) {
     int cmp = 0;
-    cmp = ((Comparable) merge).compareTo(other.merge);
+    cmp = hydra.util.Comparing.compare(
+      merge,
+      other.merge);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) traversal).compareTo(other.traversal);
+    return hydra.util.Comparing.compare(
+      traversal,
+      other.traversal);
   }
 
   public TraversalMergeArgumentAndNestedTraversal withMerge(hydra.ext.org.apache.tinkerpop.gremlin.TraversalMergeArgument merge) {

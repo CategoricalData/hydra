@@ -9,9 +9,9 @@ public class InclusiveOrExpression implements Serializable, Comparable<Inclusive
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.ExclusiveOrExpression> value;
+  public final java.util.List<hydra.ext.java.syntax.ExclusiveOrExpression> value;
 
-  public InclusiveOrExpression (hydra.util.ConsList<hydra.ext.java.syntax.ExclusiveOrExpression> value) {
+  public InclusiveOrExpression (java.util.List<hydra.ext.java.syntax.ExclusiveOrExpression> value) {
     this.value = value;
   }
 
@@ -34,6 +34,8 @@ public class InclusiveOrExpression implements Serializable, Comparable<Inclusive
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(InclusiveOrExpression other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

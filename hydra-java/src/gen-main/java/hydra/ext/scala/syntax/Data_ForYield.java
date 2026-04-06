@@ -9,9 +9,9 @@ public class Data_ForYield implements Serializable, Comparable<Data_ForYield> {
 
   public static final hydra.core.Name ENUMS = new hydra.core.Name("enums");
 
-  public final hydra.util.ConsList<hydra.ext.scala.syntax.Enumerator> enums;
+  public final java.util.List<hydra.ext.scala.syntax.Enumerator> enums;
 
-  public Data_ForYield (hydra.util.ConsList<hydra.ext.scala.syntax.Enumerator> enums) {
+  public Data_ForYield (java.util.List<hydra.ext.scala.syntax.Enumerator> enums) {
     this.enums = enums;
   }
 
@@ -34,6 +34,8 @@ public class Data_ForYield implements Serializable, Comparable<Data_ForYield> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Data_ForYield other) {
-    return ((Comparable) enums).compareTo(other.enums);
+    return hydra.util.Comparing.compare(
+      enums,
+      other.enums);
   }
 }

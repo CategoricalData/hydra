@@ -49,15 +49,21 @@ public class PredicateTraversalArgument implements Serializable, Comparable<Pred
   @SuppressWarnings("unchecked")
   public int compareTo(PredicateTraversalArgument other) {
     int cmp = 0;
-    cmp = ((Comparable) predicate).compareTo(other.predicate);
+    cmp = hydra.util.Comparing.compare(
+      predicate,
+      other.predicate);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) traversal1).compareTo(other.traversal1);
+    cmp = hydra.util.Comparing.compare(
+      traversal1,
+      other.traversal1);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) traversal2).compareTo(other.traversal2);
+    return hydra.util.Comparing.compare(
+      traversal2,
+      other.traversal2);
   }
 
   public PredicateTraversalArgument withPredicate(hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicate predicate) {

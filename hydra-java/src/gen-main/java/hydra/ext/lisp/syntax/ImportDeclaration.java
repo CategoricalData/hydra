@@ -51,11 +51,15 @@ public class ImportDeclaration implements Serializable, Comparable<ImportDeclara
   @SuppressWarnings("unchecked")
   public int compareTo(ImportDeclaration other) {
     int cmp = 0;
-    cmp = ((Comparable) module).compareTo(other.module);
+    cmp = hydra.util.Comparing.compare(
+      module,
+      other.module);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) spec).compareTo(other.spec);
+    return hydra.util.Comparing.compare(
+      spec,
+      other.spec);
   }
 
   public ImportDeclaration withModule(hydra.ext.lisp.syntax.NamespaceName module) {

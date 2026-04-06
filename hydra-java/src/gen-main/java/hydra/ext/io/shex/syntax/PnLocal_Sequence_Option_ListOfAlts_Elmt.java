@@ -84,7 +84,9 @@ public abstract class PnLocal_Sequence_Option_ListOfAlts_Elmt implements Seriali
         return tagCmp;
       }
       PnChars o = (PnChars) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -194,7 +196,9 @@ public abstract class PnLocal_Sequence_Option_ListOfAlts_Elmt implements Seriali
         return tagCmp;
       }
       Plx o = (Plx) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

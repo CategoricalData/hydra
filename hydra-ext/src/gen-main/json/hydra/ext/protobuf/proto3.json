@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.protobuf.proto3.Definition",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -18,7 +17,6 @@
       "type": {
         "name": "hydra.ext.protobuf.proto3.EnumDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -59,7 +57,6 @@
       "type": {
         "name": "hydra.ext.protobuf.proto3.EnumValue",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -99,15 +96,11 @@
     {
       "type": {
         "name": "hydra.ext.protobuf.proto3.EnumValueName",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.protobuf.proto3.Field",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -166,7 +159,6 @@
       "type": {
         "name": "hydra.ext.protobuf.proto3.FieldName",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -179,7 +171,6 @@
       "type": {
         "name": "hydra.ext.protobuf.proto3.FieldType",
         "type": {
-          "constraints": null,
           "type": {
             "union": [
               {
@@ -198,15 +189,11 @@
     {
       "type": {
         "name": "hydra.ext.protobuf.proto3.FileReference",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.protobuf.proto3.MapType",
         "type": {
-          "constraints": null,
           "type": {
             "record": [
               {
@@ -220,7 +207,6 @@
       "type": {
         "name": "hydra.ext.protobuf.proto3.MessageDefinition",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -261,7 +247,6 @@
       "type": {
         "name": "hydra.ext.protobuf.proto3.Option",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -296,15 +281,11 @@
     {
       "type": {
         "name": "hydra.ext.protobuf.proto3.PackageName",
-        "type": {
-          "constraints": null,
-          "type": {"wrap": {"literal": {"string": {}}}},
-          "variables": []}}},
+        "type": {"type": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.ext.protobuf.proto3.ProtoFile",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -332,7 +313,6 @@
       "type": {
         "name": "hydra.ext.protobuf.proto3.ScalarType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -361,7 +341,6 @@
       "type": {
         "name": "hydra.ext.protobuf.proto3.SimpleType",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -383,7 +362,6 @@
       "type": {
         "name": "hydra.ext.protobuf.proto3.TypeName",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -397,7 +375,6 @@
       "type": {
         "name": "hydra.ext.protobuf.proto3.TypeReference",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -410,7 +387,6 @@
       "type": {
         "name": "hydra.ext.protobuf.proto3.Value",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -422,8 +398,7 @@
                   {"name": "boolean", "type": {"literal": {"boolean": {}}}},
                   {"name": "string", "type": {"literal": {"string": {}}}}]}}},
           "variables": []}}}],
-  "description": [
-    "A model for Protocol Buffers v3 enum and message types, designed as a target for transformations.This model is loosely based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/type.proto, as well as the proto3 reference documentation"],
+  "description": "A model for Protocol Buffers v3 enum and message types, designed as a target for transformations.This model is loosely based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/type.proto, as well as the proto3 reference documentation",
   "namespace": "hydra.ext.protobuf.proto3",
   "termDependencies": ["hydra.core"],
   "typeDependencies": ["hydra.core"]}

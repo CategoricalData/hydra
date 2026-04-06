@@ -66,7 +66,9 @@ public abstract class ValueBinding implements Serializable, Comparable<ValueBind
         return tagCmp;
       }
       Simple o = (Simple) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

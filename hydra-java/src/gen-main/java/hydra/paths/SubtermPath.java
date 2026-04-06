@@ -12,9 +12,9 @@ public class SubtermPath implements Serializable, Comparable<SubtermPath> {
 
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
 
-  public final hydra.util.ConsList<hydra.paths.SubtermStep> value;
+  public final java.util.List<hydra.paths.SubtermStep> value;
 
-  public SubtermPath (hydra.util.ConsList<hydra.paths.SubtermStep> value) {
+  public SubtermPath (java.util.List<hydra.paths.SubtermStep> value) {
     this.value = value;
   }
 
@@ -37,6 +37,8 @@ public class SubtermPath implements Serializable, Comparable<SubtermPath> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(SubtermPath other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

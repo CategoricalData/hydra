@@ -51,11 +51,15 @@ public class Injection implements Serializable, Comparable<Injection> {
   @SuppressWarnings("unchecked")
   public int compareTo(Injection other) {
     int cmp = 0;
-    cmp = ((Comparable) typeName).compareTo(other.typeName);
+    cmp = hydra.util.Comparing.compare(
+      typeName,
+      other.typeName);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) field).compareTo(other.field);
+    return hydra.util.Comparing.compare(
+      field,
+      other.field);
   }
 
   public Injection withTypeName(hydra.core.Name typeName) {

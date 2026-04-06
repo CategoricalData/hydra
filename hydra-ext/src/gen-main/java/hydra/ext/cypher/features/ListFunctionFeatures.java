@@ -151,51 +151,75 @@ public class ListFunctionFeatures implements Serializable, Comparable<ListFuncti
   @SuppressWarnings("unchecked")
   public int compareTo(ListFunctionFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) keys).compareTo(other.keys);
+    cmp = hydra.util.Comparing.compare(
+      keys,
+      other.keys);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) labels).compareTo(other.labels);
+    cmp = hydra.util.Comparing.compare(
+      labels,
+      other.labels);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) nodes).compareTo(other.nodes);
+    cmp = hydra.util.Comparing.compare(
+      nodes,
+      other.nodes);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) range).compareTo(other.range);
+    cmp = hydra.util.Comparing.compare(
+      range,
+      other.range);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) reduce).compareTo(other.reduce);
+    cmp = hydra.util.Comparing.compare(
+      reduce,
+      other.reduce);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) relationships).compareTo(other.relationships);
+    cmp = hydra.util.Comparing.compare(
+      relationships,
+      other.relationships);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) reverse).compareTo(other.reverse);
+    cmp = hydra.util.Comparing.compare(
+      reverse,
+      other.reverse);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) tail).compareTo(other.tail);
+    cmp = hydra.util.Comparing.compare(
+      tail,
+      other.tail);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) toBooleanList).compareTo(other.toBooleanList);
+    cmp = hydra.util.Comparing.compare(
+      toBooleanList,
+      other.toBooleanList);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) toFloatList).compareTo(other.toFloatList);
+    cmp = hydra.util.Comparing.compare(
+      toFloatList,
+      other.toFloatList);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) toIntegerList).compareTo(other.toIntegerList);
+    cmp = hydra.util.Comparing.compare(
+      toIntegerList,
+      other.toIntegerList);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) toStringList).compareTo(other.toStringList);
+    return hydra.util.Comparing.compare(
+      toStringList,
+      other.toStringList);
   }
 
   public ListFunctionFeatures withKeys(Boolean keys) {

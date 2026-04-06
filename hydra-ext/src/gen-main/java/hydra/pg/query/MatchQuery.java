@@ -15,11 +15,11 @@ public class MatchQuery implements Serializable, Comparable<MatchQuery> {
 
   public final Boolean optional;
 
-  public final hydra.util.ConsList<hydra.pg.query.Projection> pattern;
+  public final java.util.List<hydra.pg.query.Projection> pattern;
 
   public final hydra.util.Maybe<hydra.pg.query.Expression> where;
 
-  public MatchQuery (Boolean optional, hydra.util.ConsList<hydra.pg.query.Projection> pattern, hydra.util.Maybe<hydra.pg.query.Expression> where) {
+  public MatchQuery (Boolean optional, java.util.List<hydra.pg.query.Projection> pattern, hydra.util.Maybe<hydra.pg.query.Expression> where) {
     this.optional = optional;
     this.pattern = pattern;
     this.where = where;
@@ -49,22 +49,28 @@ public class MatchQuery implements Serializable, Comparable<MatchQuery> {
   @SuppressWarnings("unchecked")
   public int compareTo(MatchQuery other) {
     int cmp = 0;
-    cmp = ((Comparable) optional).compareTo(other.optional);
+    cmp = hydra.util.Comparing.compare(
+      optional,
+      other.optional);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) pattern).compareTo(other.pattern);
+    cmp = hydra.util.Comparing.compare(
+      pattern,
+      other.pattern);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) where).compareTo(other.where);
+    return hydra.util.Comparing.compare(
+      where,
+      other.where);
   }
 
   public MatchQuery withOptional(Boolean optional) {
     return new MatchQuery(optional, pattern, where);
   }
 
-  public MatchQuery withPattern(hydra.util.ConsList<hydra.pg.query.Projection> pattern) {
+  public MatchQuery withPattern(java.util.List<hydra.pg.query.Projection> pattern) {
     return new MatchQuery(optional, pattern, where);
   }
 

@@ -15,11 +15,11 @@ public class ArrayCreationExpression_PrimitiveArray implements Serializable, Com
 
   public final hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type;
 
-  public final hydra.util.ConsList<hydra.ext.java.syntax.Dims> dims;
+  public final java.util.List<hydra.ext.java.syntax.Dims> dims;
 
   public final hydra.ext.java.syntax.ArrayInitializer array;
 
-  public ArrayCreationExpression_PrimitiveArray (hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type, hydra.util.ConsList<hydra.ext.java.syntax.Dims> dims, hydra.ext.java.syntax.ArrayInitializer array) {
+  public ArrayCreationExpression_PrimitiveArray (hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type, java.util.List<hydra.ext.java.syntax.Dims> dims, hydra.ext.java.syntax.ArrayInitializer array) {
     this.type = type;
     this.dims = dims;
     this.array = array;
@@ -49,22 +49,28 @@ public class ArrayCreationExpression_PrimitiveArray implements Serializable, Com
   @SuppressWarnings("unchecked")
   public int compareTo(ArrayCreationExpression_PrimitiveArray other) {
     int cmp = 0;
-    cmp = ((Comparable) type).compareTo(other.type);
+    cmp = hydra.util.Comparing.compare(
+      type,
+      other.type);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) dims).compareTo(other.dims);
+    cmp = hydra.util.Comparing.compare(
+      dims,
+      other.dims);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) array).compareTo(other.array);
+    return hydra.util.Comparing.compare(
+      array,
+      other.array);
   }
 
   public ArrayCreationExpression_PrimitiveArray withType(hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type) {
     return new ArrayCreationExpression_PrimitiveArray(type, dims, array);
   }
 
-  public ArrayCreationExpression_PrimitiveArray withDims(hydra.util.ConsList<hydra.ext.java.syntax.Dims> dims) {
+  public ArrayCreationExpression_PrimitiveArray withDims(java.util.List<hydra.ext.java.syntax.Dims> dims) {
     return new ArrayCreationExpression_PrimitiveArray(type, dims, array);
   }
 

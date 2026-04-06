@@ -34,6 +34,8 @@ public class Decimal implements Serializable, Comparable<Decimal> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Decimal other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

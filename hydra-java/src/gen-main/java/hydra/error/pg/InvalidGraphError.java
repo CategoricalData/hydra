@@ -74,7 +74,9 @@ public abstract class InvalidGraphError<V> implements Serializable, Comparable<I
         return tagCmp;
       }
       Edge o = (Edge) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -117,7 +119,9 @@ public abstract class InvalidGraphError<V> implements Serializable, Comparable<I
         return tagCmp;
       }
       Vertex o = (Vertex) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

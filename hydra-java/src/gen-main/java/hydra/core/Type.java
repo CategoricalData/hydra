@@ -194,7 +194,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Annotated o = (Annotated) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -237,7 +239,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Application o = (Application) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -280,7 +284,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Either o = (Either) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -323,7 +329,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Forall o = (Forall) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -366,7 +374,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Function o = (Function) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -409,7 +419,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       List o = (List) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -452,7 +464,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Literal o = (Literal) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -495,7 +509,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Map o = (Map) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -538,7 +554,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Maybe o = (Maybe) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -581,7 +599,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Pair o = (Pair) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -594,9 +614,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
    * A record type
    */
   public static final class Record extends hydra.core.Type implements Serializable {
-    public final hydra.util.ConsList<hydra.core.FieldType> value;
+    public final java.util.List<hydra.core.FieldType> value;
 
-    public Record (hydra.util.ConsList<hydra.core.FieldType> value) {
+    public Record (java.util.List<hydra.core.FieldType> value) {
       this.value = value;
     }
 
@@ -624,7 +644,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Record o = (Record) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -667,7 +689,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Set o = (Set) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -680,9 +704,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
    * A union type with field names
    */
   public static final class Union extends hydra.core.Type implements Serializable {
-    public final hydra.util.ConsList<hydra.core.FieldType> value;
+    public final java.util.List<hydra.core.FieldType> value;
 
-    public Union (hydra.util.ConsList<hydra.core.FieldType> value) {
+    public Union (java.util.List<hydra.core.FieldType> value) {
       this.value = value;
     }
 
@@ -710,7 +734,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Union o = (Union) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -791,7 +817,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Variable o = (Variable) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -872,7 +900,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Wrap o = (Wrap) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

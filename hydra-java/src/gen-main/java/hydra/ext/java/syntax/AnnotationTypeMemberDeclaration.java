@@ -84,7 +84,9 @@ public abstract class AnnotationTypeMemberDeclaration implements Serializable, C
         return tagCmp;
       }
       AnnotationType o = (AnnotationType) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -124,7 +126,9 @@ public abstract class AnnotationTypeMemberDeclaration implements Serializable, C
         return tagCmp;
       }
       Constant o = (Constant) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -164,7 +168,9 @@ public abstract class AnnotationTypeMemberDeclaration implements Serializable, C
         return tagCmp;
       }
       Class_ o = (Class_) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -204,7 +210,9 @@ public abstract class AnnotationTypeMemberDeclaration implements Serializable, C
         return tagCmp;
       }
       Interface o = (Interface) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

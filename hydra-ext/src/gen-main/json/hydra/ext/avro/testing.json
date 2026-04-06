@@ -4,7 +4,6 @@
       "type": {
         "name": "hydra.ext.avro.testing.TypeLevelForwardTestCase",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -49,7 +48,6 @@
       "type": {
         "name": "hydra.ext.avro.testing.TypeLevelReverseTestCase",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -94,7 +92,6 @@
       "type": {
         "name": "hydra.ext.avro.testing.TypeLevelRoundTripAvroTestCase",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -141,7 +138,6 @@
       "type": {
         "name": "hydra.ext.avro.testing.TypeLevelRoundTripHydraTestCase",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -188,7 +184,6 @@
       "type": {
         "name": "hydra.ext.avro.testing.TermLevelForwardTestCase",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -242,7 +237,6 @@
       "type": {
         "name": "hydra.ext.avro.testing.TermLevelReverseTestCase",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -297,7 +291,6 @@
       "type": {
         "name": "hydra.ext.avro.testing.TermLevelRoundTripJsonTestCase",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -353,7 +346,6 @@
       "type": {
         "name": "hydra.ext.avro.testing.TermLevelRoundTripTermTestCase",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -409,7 +401,6 @@
       "type": {
         "name": "hydra.ext.avro.testing.UnionTestCase",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -471,7 +462,6 @@
       "type": {
         "name": "hydra.ext.avro.testing.NameMappingTestCase",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -526,7 +516,6 @@
       "type": {
         "name": "hydra.ext.avro.testing.LossinessTestCase",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -595,7 +584,6 @@
       "type": {
         "name": "hydra.ext.avro.testing.SchemaSerializationTestCase",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -641,7 +629,6 @@
       "type": {
         "name": "hydra.ext.avro.testing.AvroTestCase",
         "type": {
-          "constraints": null,
           "type": {
             "annotated": {
               "annotation": [
@@ -772,7 +759,7 @@
                             "@value": {"literal": {"string": "Schema serialization to and from JSON"}}}],
                         "body": {"variable": "hydra.ext.avro.testing.SchemaSerializationTestCase"}}}}]}}},
           "variables": []}}}],
-  "description": ["Test case types for the bidirectional Avro coder"],
+  "description": "Test case types for the bidirectional Avro coder",
   "namespace": "hydra.ext.avro.testing",
   "termDependencies": [],
   "typeDependencies": ["hydra.core", "hydra.ext.org.apache.avro.schema", "hydra.json.model"]}

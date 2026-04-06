@@ -6,16 +6,6 @@ import hydra.testing.*
 
 import hydra.util.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.logic
-
-import hydra.lib.strings
-
 def buildJavaTestModule(testModule: hydra.packaging.Module)(testGroup: hydra.testing.TestGroup)(testBody: scala.Predef.String): scala.Predef.String =
   {
   lazy val `ns_`: hydra.packaging.Namespace = (testModule.namespace)

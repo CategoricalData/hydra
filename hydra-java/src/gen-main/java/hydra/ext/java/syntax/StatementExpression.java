@@ -108,7 +108,9 @@ public abstract class StatementExpression implements Serializable, Comparable<St
         return tagCmp;
       }
       Assignment o = (Assignment) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -148,7 +150,9 @@ public abstract class StatementExpression implements Serializable, Comparable<St
         return tagCmp;
       }
       PreIncrement o = (PreIncrement) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -188,7 +192,9 @@ public abstract class StatementExpression implements Serializable, Comparable<St
         return tagCmp;
       }
       PreDecrement o = (PreDecrement) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -228,7 +234,9 @@ public abstract class StatementExpression implements Serializable, Comparable<St
         return tagCmp;
       }
       PostIncrement o = (PostIncrement) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -268,7 +276,9 @@ public abstract class StatementExpression implements Serializable, Comparable<St
         return tagCmp;
       }
       PostDecrement o = (PostDecrement) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -308,7 +318,9 @@ public abstract class StatementExpression implements Serializable, Comparable<St
         return tagCmp;
       }
       MethodInvocation o = (MethodInvocation) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -348,7 +360,9 @@ public abstract class StatementExpression implements Serializable, Comparable<St
         return tagCmp;
       }
       ClassInstanceCreation o = (ClassInstanceCreation) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

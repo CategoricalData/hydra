@@ -6,7 +6,7 @@ package hydra.dsl.json;
  * DSL functions for hydra.json.model
  */
 public interface Model {
-  static hydra.phantoms.TTerm<hydra.json.model.Value> valueArray(hydra.phantoms.TTerm<hydra.util.ConsList<hydra.json.model.Value>> x) {
+  static hydra.phantoms.TTerm<hydra.json.model.Value> valueArray(hydra.phantoms.TTerm<java.util.List<hydra.json.model.Value>> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.json.model.Value"), new hydra.core.Field(new hydra.core.Name("array"), (x).value))));
   }
 
@@ -22,7 +22,7 @@ public interface Model {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.json.model.Value"), new hydra.core.Field(new hydra.core.Name("number"), (x).value))));
   }
 
-  static hydra.phantoms.TTerm<hydra.json.model.Value> valueObject(hydra.phantoms.TTerm<hydra.util.PersistentMap<String, hydra.json.model.Value>> x) {
+  static hydra.phantoms.TTerm<hydra.json.model.Value> valueObject(hydra.phantoms.TTerm<java.util.Map<String, hydra.json.model.Value>> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.json.model.Value"), new hydra.core.Field(new hydra.core.Name("object"), (x).value))));
   }
 

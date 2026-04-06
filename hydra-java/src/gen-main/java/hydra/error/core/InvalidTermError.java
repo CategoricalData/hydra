@@ -234,7 +234,9 @@ public abstract class InvalidTermError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       ConstantCondition o = (ConstantCondition) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -277,7 +279,9 @@ public abstract class InvalidTermError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       DuplicateBinding o = (DuplicateBinding) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -320,7 +324,9 @@ public abstract class InvalidTermError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       DuplicateField o = (DuplicateField) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -363,7 +369,9 @@ public abstract class InvalidTermError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       EmptyCaseStatement o = (EmptyCaseStatement) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -406,7 +414,9 @@ public abstract class InvalidTermError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       EmptyLetBindings o = (EmptyLetBindings) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -449,7 +459,9 @@ public abstract class InvalidTermError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       EmptyTermAnnotation o = (EmptyTermAnnotation) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -492,7 +504,9 @@ public abstract class InvalidTermError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       EmptyTypeNameInTerm o = (EmptyTypeNameInTerm) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -535,7 +549,9 @@ public abstract class InvalidTermError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       InvalidLambdaParameterName o = (InvalidLambdaParameterName) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -578,7 +594,9 @@ public abstract class InvalidTermError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       InvalidLetBindingName o = (InvalidLetBindingName) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -621,7 +639,9 @@ public abstract class InvalidTermError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       InvalidTypeLambdaParameterName o = (InvalidTypeLambdaParameterName) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -664,7 +684,9 @@ public abstract class InvalidTermError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       NestedTermAnnotation o = (NestedTermAnnotation) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -707,7 +729,9 @@ public abstract class InvalidTermError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       RedundantWrapUnwrap o = (RedundantWrapUnwrap) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -750,7 +774,9 @@ public abstract class InvalidTermError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       SelfApplication o = (SelfApplication) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -793,7 +819,9 @@ public abstract class InvalidTermError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       TermVariableShadowing o = (TermVariableShadowing) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -836,7 +864,9 @@ public abstract class InvalidTermError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       TypeVariableShadowingInTypeLambda o = (TypeVariableShadowingInTypeLambda) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -879,7 +909,9 @@ public abstract class InvalidTermError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       UndefinedTermVariable o = (UndefinedTermVariable) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -922,7 +954,9 @@ public abstract class InvalidTermError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       UndefinedTypeVariableInBindingType o = (UndefinedTypeVariableInBindingType) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -965,7 +999,9 @@ public abstract class InvalidTermError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       UndefinedTypeVariableInLambdaDomain o = (UndefinedTypeVariableInLambdaDomain) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1008,7 +1044,9 @@ public abstract class InvalidTermError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       UndefinedTypeVariableInTypeApplication o = (UndefinedTypeVariableInTypeApplication) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1051,7 +1089,9 @@ public abstract class InvalidTermError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       UnknownPrimitiveName o = (UnknownPrimitiveName) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1094,7 +1134,9 @@ public abstract class InvalidTermError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       UnnecessaryIdentityApplication o = (UnnecessaryIdentityApplication) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -1137,7 +1179,9 @@ public abstract class InvalidTermError implements Serializable, Comparable<Inval
         return tagCmp;
       }
       UntypedTermVariable o = (UntypedTermVariable) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

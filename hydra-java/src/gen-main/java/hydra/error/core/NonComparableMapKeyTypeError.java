@@ -51,11 +51,15 @@ public class NonComparableMapKeyTypeError implements Serializable, Comparable<No
   @SuppressWarnings("unchecked")
   public int compareTo(NonComparableMapKeyTypeError other) {
     int cmp = 0;
-    cmp = ((Comparable) location).compareTo(other.location);
+    cmp = hydra.util.Comparing.compare(
+      location,
+      other.location);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) keyType).compareTo(other.keyType);
+    return hydra.util.Comparing.compare(
+      keyType,
+      other.keyType);
   }
 
   public NonComparableMapKeyTypeError withLocation(hydra.paths.SubtermPath location) {

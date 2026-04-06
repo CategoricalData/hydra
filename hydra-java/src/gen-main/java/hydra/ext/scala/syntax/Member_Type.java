@@ -34,6 +34,8 @@ public class Member_Type implements Serializable, Comparable<Member_Type> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Member_Type other) {
-    return ((Comparable) name).compareTo(other.name);
+    return hydra.util.Comparing.compare(
+      name,
+      other.name);
   }
 }

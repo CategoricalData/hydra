@@ -40,6 +40,8 @@ public class NestedTermAnnotationError implements Serializable, Comparable<Neste
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(NestedTermAnnotationError other) {
-    return ((Comparable) location).compareTo(other.location);
+    return hydra.util.Comparing.compare(
+      location,
+      other.location);
   }
 }

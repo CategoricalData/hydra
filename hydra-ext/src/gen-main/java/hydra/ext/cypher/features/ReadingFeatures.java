@@ -61,15 +61,21 @@ public class ReadingFeatures implements Serializable, Comparable<ReadingFeatures
   @SuppressWarnings("unchecked")
   public int compareTo(ReadingFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) union).compareTo(other.union);
+    cmp = hydra.util.Comparing.compare(
+      union,
+      other.union);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) unionAll).compareTo(other.unionAll);
+    cmp = hydra.util.Comparing.compare(
+      unionAll,
+      other.unionAll);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) unwind).compareTo(other.unwind);
+    return hydra.util.Comparing.compare(
+      unwind,
+      other.unwind);
   }
 
   public ReadingFeatures withUnion(Boolean union) {

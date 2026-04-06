@@ -51,11 +51,15 @@ public class Field implements Serializable, Comparable<Field> {
   @SuppressWarnings("unchecked")
   public int compareTo(Field other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) type).compareTo(other.type);
+    return hydra.util.Comparing.compare(
+      type,
+      other.type);
   }
 
   public Field withName(hydra.ext.haskell.syntax.Name name) {

@@ -17,9 +17,9 @@ public class AdjacentEdge implements Serializable, Comparable<AdjacentEdge> {
 
   public final hydra.pg.graphson.syntax.Value vertexId;
 
-  public final hydra.util.PersistentMap<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.Value> properties;
+  public final java.util.Map<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.Value> properties;
 
-  public AdjacentEdge (hydra.pg.graphson.syntax.Value id, hydra.pg.graphson.syntax.Value vertexId, hydra.util.PersistentMap<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.Value> properties) {
+  public AdjacentEdge (hydra.pg.graphson.syntax.Value id, hydra.pg.graphson.syntax.Value vertexId, java.util.Map<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.Value> properties) {
     this.id = id;
     this.vertexId = vertexId;
     this.properties = properties;
@@ -49,15 +49,21 @@ public class AdjacentEdge implements Serializable, Comparable<AdjacentEdge> {
   @SuppressWarnings("unchecked")
   public int compareTo(AdjacentEdge other) {
     int cmp = 0;
-    cmp = ((Comparable) id).compareTo(other.id);
+    cmp = hydra.util.Comparing.compare(
+      id,
+      other.id);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) vertexId).compareTo(other.vertexId);
+    cmp = hydra.util.Comparing.compare(
+      vertexId,
+      other.vertexId);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) properties).compareTo(other.properties);
+    return hydra.util.Comparing.compare(
+      properties,
+      other.properties);
   }
 
   public AdjacentEdge withId(hydra.pg.graphson.syntax.Value id) {
@@ -68,7 +74,7 @@ public class AdjacentEdge implements Serializable, Comparable<AdjacentEdge> {
     return new AdjacentEdge(id, vertexId, properties);
   }
 
-  public AdjacentEdge withProperties(hydra.util.PersistentMap<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.Value> properties) {
+  public AdjacentEdge withProperties(java.util.Map<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.Value> properties) {
     return new AdjacentEdge(id, vertexId, properties);
   }
 }

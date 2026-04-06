@@ -61,15 +61,21 @@ public class TopLevelFormWithComments implements Serializable, Comparable<TopLev
   @SuppressWarnings("unchecked")
   public int compareTo(TopLevelFormWithComments other) {
     int cmp = 0;
-    cmp = ((Comparable) doc).compareTo(other.doc);
+    cmp = hydra.util.Comparing.compare(
+      doc,
+      other.doc);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) comment).compareTo(other.comment);
+    cmp = hydra.util.Comparing.compare(
+      comment,
+      other.comment);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) form).compareTo(other.form);
+    return hydra.util.Comparing.compare(
+      form,
+      other.form);
   }
 
   public TopLevelFormWithComments withDoc(hydra.util.Maybe<hydra.ext.lisp.syntax.Docstring> doc) {

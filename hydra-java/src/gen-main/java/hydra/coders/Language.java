@@ -51,11 +51,15 @@ public class Language implements Serializable, Comparable<Language> {
   @SuppressWarnings("unchecked")
   public int compareTo(Language other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) constraints).compareTo(other.constraints);
+    return hydra.util.Comparing.compare(
+      constraints,
+      other.constraints);
   }
 
   public Language withName(hydra.coders.LanguageName name) {

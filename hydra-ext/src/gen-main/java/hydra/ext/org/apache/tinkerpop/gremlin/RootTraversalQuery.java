@@ -42,11 +42,15 @@ public class RootTraversalQuery implements Serializable, Comparable<RootTraversa
   @SuppressWarnings("unchecked")
   public int compareTo(RootTraversalQuery other) {
     int cmp = 0;
-    cmp = ((Comparable) root).compareTo(other.root);
+    cmp = hydra.util.Comparing.compare(
+      root,
+      other.root);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) terminalMethod).compareTo(other.terminalMethod);
+    return hydra.util.Comparing.compare(
+      terminalMethod,
+      other.terminalMethod);
   }
 
   public RootTraversalQuery withRoot(hydra.ext.org.apache.tinkerpop.gremlin.RootTraversal root) {

@@ -37,6 +37,8 @@ public class UnannClassType implements Serializable, Comparable<UnannClassType> 
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(UnannClassType other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

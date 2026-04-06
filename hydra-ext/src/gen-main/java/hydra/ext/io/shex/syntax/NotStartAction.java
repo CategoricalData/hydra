@@ -68,7 +68,9 @@ public abstract class NotStartAction implements Serializable, Comparable<NotStar
         return tagCmp;
       }
       Start o = (Start) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class NotStartAction implements Serializable, Comparable<NotStar
         return tagCmp;
       }
       ShapeExprDecl o = (ShapeExprDecl) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

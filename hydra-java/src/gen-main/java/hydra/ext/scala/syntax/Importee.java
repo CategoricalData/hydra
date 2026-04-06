@@ -135,7 +135,9 @@ public abstract class Importee implements Serializable, Comparable<Importee> {
         return tagCmp;
       }
       Given o = (Given) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -210,7 +212,9 @@ public abstract class Importee implements Serializable, Comparable<Importee> {
         return tagCmp;
       }
       Name o = (Name) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -250,7 +254,9 @@ public abstract class Importee implements Serializable, Comparable<Importee> {
         return tagCmp;
       }
       Rename o = (Rename) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -290,7 +296,9 @@ public abstract class Importee implements Serializable, Comparable<Importee> {
         return tagCmp;
       }
       Unimport o = (Unimport) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

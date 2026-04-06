@@ -136,63 +136,93 @@ public class AnnotationSchema implements Serializable, Comparable<AnnotationSche
   @SuppressWarnings("unchecked")
   public int compareTo(AnnotationSchema other) {
     int cmp = 0;
-    cmp = ((Comparable) vertexLabel).compareTo(other.vertexLabel);
+    cmp = hydra.util.Comparing.compare(
+      vertexLabel,
+      other.vertexLabel);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) edgeLabel).compareTo(other.edgeLabel);
+    cmp = hydra.util.Comparing.compare(
+      edgeLabel,
+      other.edgeLabel);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) vertexId).compareTo(other.vertexId);
+    cmp = hydra.util.Comparing.compare(
+      vertexId,
+      other.vertexId);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) edgeId).compareTo(other.edgeId);
+    cmp = hydra.util.Comparing.compare(
+      edgeId,
+      other.edgeId);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) propertyKey).compareTo(other.propertyKey);
+    cmp = hydra.util.Comparing.compare(
+      propertyKey,
+      other.propertyKey);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) propertyValue).compareTo(other.propertyValue);
+    cmp = hydra.util.Comparing.compare(
+      propertyValue,
+      other.propertyValue);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) outVertex).compareTo(other.outVertex);
+    cmp = hydra.util.Comparing.compare(
+      outVertex,
+      other.outVertex);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) outVertexLabel).compareTo(other.outVertexLabel);
+    cmp = hydra.util.Comparing.compare(
+      outVertexLabel,
+      other.outVertexLabel);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) inVertex).compareTo(other.inVertex);
+    cmp = hydra.util.Comparing.compare(
+      inVertex,
+      other.inVertex);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) inVertexLabel).compareTo(other.inVertexLabel);
+    cmp = hydra.util.Comparing.compare(
+      inVertexLabel,
+      other.inVertexLabel);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) outEdge).compareTo(other.outEdge);
+    cmp = hydra.util.Comparing.compare(
+      outEdge,
+      other.outEdge);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) outEdgeLabel).compareTo(other.outEdgeLabel);
+    cmp = hydra.util.Comparing.compare(
+      outEdgeLabel,
+      other.outEdgeLabel);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) inEdge).compareTo(other.inEdge);
+    cmp = hydra.util.Comparing.compare(
+      inEdge,
+      other.inEdge);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) inEdgeLabel).compareTo(other.inEdgeLabel);
+    cmp = hydra.util.Comparing.compare(
+      inEdgeLabel,
+      other.inEdgeLabel);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) ignore).compareTo(other.ignore);
+    return hydra.util.Comparing.compare(
+      ignore,
+      other.ignore);
   }
 
   public AnnotationSchema withVertexLabel(String vertexLabel) {

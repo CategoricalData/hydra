@@ -4,18 +4,6 @@ import hydra.ast.*
 
 import hydra.ext.haskell.syntax.*
 
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maybes
-
-import hydra.lib.strings
-
 def alternativeToExpr(alt: hydra.ext.haskell.syntax.Alternative): hydra.ast.Expr =
   hydra.serialization.structuralSpaceSep(Seq(hydra.ext.haskell.serde.patternToExpr(alt.pattern), hydra.serialization.cst("->"),
      hydra.ext.haskell.serde.caseRhsToExpr(alt.rhs)))

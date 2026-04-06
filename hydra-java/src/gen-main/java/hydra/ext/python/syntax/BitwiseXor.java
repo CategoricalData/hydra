@@ -42,11 +42,15 @@ public class BitwiseXor implements Serializable, Comparable<BitwiseXor> {
   @SuppressWarnings("unchecked")
   public int compareTo(BitwiseXor other) {
     int cmp = 0;
-    cmp = ((Comparable) lhs).compareTo(other.lhs);
+    cmp = hydra.util.Comparing.compare(
+      lhs,
+      other.lhs);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) rhs).compareTo(other.rhs);
+    return hydra.util.Comparing.compare(
+      rhs,
+      other.rhs);
   }
 
   public BitwiseXor withLhs(hydra.util.Maybe<hydra.ext.python.syntax.BitwiseXor> lhs) {

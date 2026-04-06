@@ -20,9 +20,9 @@ public class ObjectExactCardinality implements Serializable, Comparable<ObjectEx
 
   public final hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property;
 
-  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> class_;
+  public final java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> class_;
 
-  public ObjectExactCardinality (java.math.BigInteger bound, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> class_) {
+  public ObjectExactCardinality (java.math.BigInteger bound, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property, java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> class_) {
     this.bound = bound;
     this.property = property;
     this.class_ = class_;
@@ -50,15 +50,21 @@ public class ObjectExactCardinality implements Serializable, Comparable<ObjectEx
   @SuppressWarnings("unchecked")
   public int compareTo(ObjectExactCardinality other) {
     int cmp = 0;
-    cmp = ((Comparable) bound).compareTo(other.bound);
+    cmp = hydra.util.Comparing.compare(
+      bound,
+      other.bound);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) property).compareTo(other.property);
+    cmp = hydra.util.Comparing.compare(
+      property,
+      other.property);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) class_).compareTo(other.class_);
+    return hydra.util.Comparing.compare(
+      class_,
+      other.class_);
   }
 
   public ObjectExactCardinality withBound(java.math.BigInteger bound) {
@@ -69,7 +75,7 @@ public class ObjectExactCardinality implements Serializable, Comparable<ObjectEx
     return new ObjectExactCardinality(bound, property, class_);
   }
 
-  public ObjectExactCardinality withClass(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> class_) {
+  public ObjectExactCardinality withClass(java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> class_) {
     return new ObjectExactCardinality(bound, property, class_);
   }
 }

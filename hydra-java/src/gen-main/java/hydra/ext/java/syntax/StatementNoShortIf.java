@@ -92,7 +92,9 @@ public abstract class StatementNoShortIf implements Serializable, Comparable<Sta
         return tagCmp;
       }
       WithoutTrailing o = (WithoutTrailing) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -132,7 +134,9 @@ public abstract class StatementNoShortIf implements Serializable, Comparable<Sta
         return tagCmp;
       }
       Labeled o = (Labeled) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -172,7 +176,9 @@ public abstract class StatementNoShortIf implements Serializable, Comparable<Sta
         return tagCmp;
       }
       IfThenElse o = (IfThenElse) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -212,7 +218,9 @@ public abstract class StatementNoShortIf implements Serializable, Comparable<Sta
         return tagCmp;
       }
       While o = (While) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -252,7 +260,9 @@ public abstract class StatementNoShortIf implements Serializable, Comparable<Sta
         return tagCmp;
       }
       For o = (For) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

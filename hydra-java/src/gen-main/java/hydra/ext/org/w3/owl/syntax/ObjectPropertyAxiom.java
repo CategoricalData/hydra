@@ -156,7 +156,9 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
         return tagCmp;
       }
       AsymmetricObjectProperty o = (AsymmetricObjectProperty) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -196,7 +198,9 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
         return tagCmp;
       }
       DisjointObjectProperties o = (DisjointObjectProperties) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -236,7 +240,9 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
         return tagCmp;
       }
       EquivalentObjectProperties o = (EquivalentObjectProperties) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -276,7 +282,9 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
         return tagCmp;
       }
       FunctionalObjectProperty o = (FunctionalObjectProperty) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -316,7 +324,9 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
         return tagCmp;
       }
       InverseFunctionalObjectProperty o = (InverseFunctionalObjectProperty) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -356,7 +366,9 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
         return tagCmp;
       }
       InverseObjectProperties o = (InverseObjectProperties) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -396,7 +408,9 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
         return tagCmp;
       }
       IrreflexiveObjectProperty o = (IrreflexiveObjectProperty) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -436,7 +450,9 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
         return tagCmp;
       }
       ObjectPropertyDomain o = (ObjectPropertyDomain) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -476,7 +492,9 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
         return tagCmp;
       }
       ObjectPropertyRange o = (ObjectPropertyRange) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -516,7 +534,9 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
         return tagCmp;
       }
       ReflexiveObjectProperty o = (ReflexiveObjectProperty) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -556,7 +576,9 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
         return tagCmp;
       }
       SubObjectPropertyOf o = (SubObjectPropertyOf) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -596,7 +618,9 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
         return tagCmp;
       }
       SymmetricObjectProperty o = (SymmetricObjectProperty) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -636,7 +660,9 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
         return tagCmp;
       }
       TransitiveObjectProperty o = (TransitiveObjectProperty) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

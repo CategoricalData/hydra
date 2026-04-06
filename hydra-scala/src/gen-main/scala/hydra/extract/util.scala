@@ -8,14 +8,6 @@ import hydra.errors.*
 
 import hydra.util.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.logic
-
-import hydra.lib.strings
-
 def comparison(cx: hydra.context.Context)(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error],
    hydra.util.Comparison] =
   hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Name, hydra.util.Comparison](hydra.extract.core.unitVariant(cx)("hydra.util.Comparison")(graph)(term))((fname: hydra.core.Name) =>

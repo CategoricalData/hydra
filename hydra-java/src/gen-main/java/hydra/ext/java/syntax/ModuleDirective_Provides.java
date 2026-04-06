@@ -16,9 +16,9 @@ public class ModuleDirective_Provides implements Serializable, Comparable<Module
   /**
    * At least one type
    */
-  public final hydra.util.ConsList<hydra.ext.java.syntax.TypeName> with;
+  public final java.util.List<hydra.ext.java.syntax.TypeName> with;
 
-  public ModuleDirective_Provides (hydra.ext.java.syntax.TypeName to, hydra.util.ConsList<hydra.ext.java.syntax.TypeName> with) {
+  public ModuleDirective_Provides (hydra.ext.java.syntax.TypeName to, java.util.List<hydra.ext.java.syntax.TypeName> with) {
     this.to = to;
     this.with = with;
   }
@@ -45,18 +45,22 @@ public class ModuleDirective_Provides implements Serializable, Comparable<Module
   @SuppressWarnings("unchecked")
   public int compareTo(ModuleDirective_Provides other) {
     int cmp = 0;
-    cmp = ((Comparable) to).compareTo(other.to);
+    cmp = hydra.util.Comparing.compare(
+      to,
+      other.to);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) with).compareTo(other.with);
+    return hydra.util.Comparing.compare(
+      with,
+      other.with);
   }
 
   public ModuleDirective_Provides withTo(hydra.ext.java.syntax.TypeName to) {
     return new ModuleDirective_Provides(to, with);
   }
 
-  public ModuleDirective_Provides withWith(hydra.util.ConsList<hydra.ext.java.syntax.TypeName> with) {
+  public ModuleDirective_Provides withWith(java.util.List<hydra.ext.java.syntax.TypeName> with) {
     return new ModuleDirective_Provides(to, with);
   }
 }

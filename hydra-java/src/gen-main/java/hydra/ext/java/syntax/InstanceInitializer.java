@@ -34,6 +34,8 @@ public class InstanceInitializer implements Serializable, Comparable<InstanceIni
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(InstanceInitializer other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

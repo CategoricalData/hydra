@@ -34,6 +34,8 @@ public class Keywords implements Serializable, Comparable<Keywords> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Keywords other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

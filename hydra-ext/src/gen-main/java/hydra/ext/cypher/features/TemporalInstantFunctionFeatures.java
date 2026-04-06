@@ -301,111 +301,165 @@ public class TemporalInstantFunctionFeatures implements Serializable, Comparable
   @SuppressWarnings("unchecked")
   public int compareTo(TemporalInstantFunctionFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) date).compareTo(other.date);
+    cmp = hydra.util.Comparing.compare(
+      date,
+      other.date);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) dateRealtime).compareTo(other.dateRealtime);
+    cmp = hydra.util.Comparing.compare(
+      dateRealtime,
+      other.dateRealtime);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) dateStatement).compareTo(other.dateStatement);
+    cmp = hydra.util.Comparing.compare(
+      dateStatement,
+      other.dateStatement);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) dateTransaction).compareTo(other.dateTransaction);
+    cmp = hydra.util.Comparing.compare(
+      dateTransaction,
+      other.dateTransaction);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) dateTruncate).compareTo(other.dateTruncate);
+    cmp = hydra.util.Comparing.compare(
+      dateTruncate,
+      other.dateTruncate);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) datetime).compareTo(other.datetime);
+    cmp = hydra.util.Comparing.compare(
+      datetime,
+      other.datetime);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) datetimeFromepoch).compareTo(other.datetimeFromepoch);
+    cmp = hydra.util.Comparing.compare(
+      datetimeFromepoch,
+      other.datetimeFromepoch);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) datetimeFromepochmillis).compareTo(other.datetimeFromepochmillis);
+    cmp = hydra.util.Comparing.compare(
+      datetimeFromepochmillis,
+      other.datetimeFromepochmillis);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) datetimeRealtime).compareTo(other.datetimeRealtime);
+    cmp = hydra.util.Comparing.compare(
+      datetimeRealtime,
+      other.datetimeRealtime);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) datetimeStatement).compareTo(other.datetimeStatement);
+    cmp = hydra.util.Comparing.compare(
+      datetimeStatement,
+      other.datetimeStatement);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) datetimeTransaction).compareTo(other.datetimeTransaction);
+    cmp = hydra.util.Comparing.compare(
+      datetimeTransaction,
+      other.datetimeTransaction);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) datetimeTruncate).compareTo(other.datetimeTruncate);
+    cmp = hydra.util.Comparing.compare(
+      datetimeTruncate,
+      other.datetimeTruncate);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) localdatetime).compareTo(other.localdatetime);
+    cmp = hydra.util.Comparing.compare(
+      localdatetime,
+      other.localdatetime);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) localdatetimeRealtime).compareTo(other.localdatetimeRealtime);
+    cmp = hydra.util.Comparing.compare(
+      localdatetimeRealtime,
+      other.localdatetimeRealtime);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) localdatetimeStatement).compareTo(other.localdatetimeStatement);
+    cmp = hydra.util.Comparing.compare(
+      localdatetimeStatement,
+      other.localdatetimeStatement);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) localdatetimeTransaction).compareTo(other.localdatetimeTransaction);
+    cmp = hydra.util.Comparing.compare(
+      localdatetimeTransaction,
+      other.localdatetimeTransaction);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) localdatetimeTruncate).compareTo(other.localdatetimeTruncate);
+    cmp = hydra.util.Comparing.compare(
+      localdatetimeTruncate,
+      other.localdatetimeTruncate);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) localtime).compareTo(other.localtime);
+    cmp = hydra.util.Comparing.compare(
+      localtime,
+      other.localtime);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) localtimeRealtime).compareTo(other.localtimeRealtime);
+    cmp = hydra.util.Comparing.compare(
+      localtimeRealtime,
+      other.localtimeRealtime);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) localtimeStatement).compareTo(other.localtimeStatement);
+    cmp = hydra.util.Comparing.compare(
+      localtimeStatement,
+      other.localtimeStatement);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) localtimeTransaction).compareTo(other.localtimeTransaction);
+    cmp = hydra.util.Comparing.compare(
+      localtimeTransaction,
+      other.localtimeTransaction);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) localtimeTruncate).compareTo(other.localtimeTruncate);
+    cmp = hydra.util.Comparing.compare(
+      localtimeTruncate,
+      other.localtimeTruncate);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) time).compareTo(other.time);
+    cmp = hydra.util.Comparing.compare(
+      time,
+      other.time);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) timeRealtime).compareTo(other.timeRealtime);
+    cmp = hydra.util.Comparing.compare(
+      timeRealtime,
+      other.timeRealtime);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) timeStatement).compareTo(other.timeStatement);
+    cmp = hydra.util.Comparing.compare(
+      timeStatement,
+      other.timeStatement);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) timeTransaction).compareTo(other.timeTransaction);
+    cmp = hydra.util.Comparing.compare(
+      timeTransaction,
+      other.timeTransaction);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) timeTruncate).compareTo(other.timeTruncate);
+    return hydra.util.Comparing.compare(
+      timeTruncate,
+      other.timeTruncate);
   }
 
   public TemporalInstantFunctionFeatures withDate(Boolean date) {

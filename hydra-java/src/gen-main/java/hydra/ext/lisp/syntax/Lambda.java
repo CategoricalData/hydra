@@ -26,7 +26,7 @@ public class Lambda implements Serializable, Comparable<Lambda> {
   /**
    * The parameter list
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol> params;
+  public final java.util.List<hydra.ext.lisp.syntax.Symbol> params;
 
   /**
    * Optional rest parameter
@@ -36,9 +36,9 @@ public class Lambda implements Serializable, Comparable<Lambda> {
   /**
    * The lambda body
    */
-  public final hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> body;
+  public final java.util.List<hydra.ext.lisp.syntax.Expression> body;
 
-  public Lambda (hydra.util.Maybe<hydra.ext.lisp.syntax.Symbol> name, hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol> params, hydra.util.Maybe<hydra.ext.lisp.syntax.Symbol> restParam, hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> body) {
+  public Lambda (hydra.util.Maybe<hydra.ext.lisp.syntax.Symbol> name, java.util.List<hydra.ext.lisp.syntax.Symbol> params, hydra.util.Maybe<hydra.ext.lisp.syntax.Symbol> restParam, java.util.List<hydra.ext.lisp.syntax.Expression> body) {
     this.name = name;
     this.params = params;
     this.restParam = restParam;
@@ -71,26 +71,34 @@ public class Lambda implements Serializable, Comparable<Lambda> {
   @SuppressWarnings("unchecked")
   public int compareTo(Lambda other) {
     int cmp = 0;
-    cmp = ((Comparable) name).compareTo(other.name);
+    cmp = hydra.util.Comparing.compare(
+      name,
+      other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) params).compareTo(other.params);
+    cmp = hydra.util.Comparing.compare(
+      params,
+      other.params);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) restParam).compareTo(other.restParam);
+    cmp = hydra.util.Comparing.compare(
+      restParam,
+      other.restParam);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) body).compareTo(other.body);
+    return hydra.util.Comparing.compare(
+      body,
+      other.body);
   }
 
   public Lambda withName(hydra.util.Maybe<hydra.ext.lisp.syntax.Symbol> name) {
     return new Lambda(name, params, restParam, body);
   }
 
-  public Lambda withParams(hydra.util.ConsList<hydra.ext.lisp.syntax.Symbol> params) {
+  public Lambda withParams(java.util.List<hydra.ext.lisp.syntax.Symbol> params) {
     return new Lambda(name, params, restParam, body);
   }
 
@@ -98,7 +106,7 @@ public class Lambda implements Serializable, Comparable<Lambda> {
     return new Lambda(name, params, restParam, body);
   }
 
-  public Lambda withBody(hydra.util.ConsList<hydra.ext.lisp.syntax.Expression> body) {
+  public Lambda withBody(java.util.List<hydra.ext.lisp.syntax.Expression> body) {
     return new Lambda(name, params, restParam, body);
   }
 }

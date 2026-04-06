@@ -76,9 +76,9 @@ public abstract class PropertyShapeConstraint implements Serializable, Comparabl
    * See https://www.w3.org/TR/shacl/#LessThanConstraintComponent
    */
   public static final class LessThan extends hydra.ext.org.w3.shacl.model.PropertyShapeConstraint implements Serializable {
-    public final hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property> value;
+    public final java.util.Set<hydra.ext.org.w3.rdf.syntax.Property> value;
 
-    public LessThan (hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property> value) {
+    public LessThan (java.util.Set<hydra.ext.org.w3.rdf.syntax.Property> value) {
       this.value = value;
     }
 
@@ -106,7 +106,9 @@ public abstract class PropertyShapeConstraint implements Serializable, Comparabl
         return tagCmp;
       }
       LessThan o = (LessThan) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -119,9 +121,9 @@ public abstract class PropertyShapeConstraint implements Serializable, Comparabl
    * See https://www.w3.org/TR/shacl/#LessThanOrEqualsConstraintComponent
    */
   public static final class LessThanOrEquals extends hydra.ext.org.w3.shacl.model.PropertyShapeConstraint implements Serializable {
-    public final hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property> value;
+    public final java.util.Set<hydra.ext.org.w3.rdf.syntax.Property> value;
 
-    public LessThanOrEquals (hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property> value) {
+    public LessThanOrEquals (java.util.Set<hydra.ext.org.w3.rdf.syntax.Property> value) {
       this.value = value;
     }
 
@@ -149,7 +151,9 @@ public abstract class PropertyShapeConstraint implements Serializable, Comparabl
         return tagCmp;
       }
       LessThanOrEquals o = (LessThanOrEquals) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -190,7 +194,9 @@ public abstract class PropertyShapeConstraint implements Serializable, Comparabl
         return tagCmp;
       }
       MaxCount o = (MaxCount) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -231,7 +237,9 @@ public abstract class PropertyShapeConstraint implements Serializable, Comparabl
         return tagCmp;
       }
       MinCount o = (MinCount) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -274,7 +282,9 @@ public abstract class PropertyShapeConstraint implements Serializable, Comparabl
         return tagCmp;
       }
       UniqueLang o = (UniqueLang) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -317,7 +327,9 @@ public abstract class PropertyShapeConstraint implements Serializable, Comparabl
         return tagCmp;
       }
       QualifiedValueShape o = (QualifiedValueShape) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

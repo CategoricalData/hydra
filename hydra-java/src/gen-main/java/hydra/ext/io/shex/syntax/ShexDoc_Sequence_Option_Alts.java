@@ -68,7 +68,9 @@ public abstract class ShexDoc_Sequence_Option_Alts implements Serializable, Comp
         return tagCmp;
       }
       NotStartAction o = (NotStartAction) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override
@@ -108,7 +110,9 @@ public abstract class ShexDoc_Sequence_Option_Alts implements Serializable, Comp
         return tagCmp;
       }
       StartActions o = (StartActions) other;
-      return ((Comparable) value).compareTo(o.value);
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
     }
 
     @Override

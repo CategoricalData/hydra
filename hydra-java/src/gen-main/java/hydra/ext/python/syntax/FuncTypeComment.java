@@ -34,6 +34,8 @@ public class FuncTypeComment implements Serializable, Comparable<FuncTypeComment
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(FuncTypeComment other) {
-    return ((Comparable) value).compareTo(other.value);
+    return hydra.util.Comparing.compare(
+      value,
+      other.value);
   }
 }

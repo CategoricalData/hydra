@@ -2,8 +2,6 @@ package hydra.strip
 
 import hydra.core.*
 
-import hydra.lib.lists
-
 def deannotateAndDetypeTerm(t: hydra.core.Term): hydra.core.Term =
   t match
   case hydra.core.Term.annotated(v_Term_annotated_at) => hydra.strip.deannotateAndDetypeTerm(v_Term_annotated_at.body)

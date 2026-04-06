@@ -7,13 +7,13 @@ package hydra.test.inference;
  */
 public interface All {
   static hydra.testing.TestGroup allTests() {
-    return new hydra.testing.TestGroup("inference", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), hydra.util.ConsList.of(
+    return new hydra.testing.TestGroup("inference", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.Arrays.asList(
       hydra.test.inference.AlgebraicTypes.allTests(),
       hydra.test.inference.AlgorithmW.allTests(),
       hydra.test.inference.Classes.allTests(),
       hydra.test.inference.Failures.allTests(),
       hydra.test.inference.Fundamentals.allTests(),
       hydra.test.inference.KernelExamples.allTests(),
-      hydra.test.inference.NominalTypes.allTests()), (hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>) (hydra.util.ConsList.<hydra.testing.TestCaseWithMetadata>empty()));
+      hydra.test.inference.NominalTypes.allTests()), (java.util.List<hydra.testing.TestCaseWithMetadata>) (java.util.Collections.<hydra.testing.TestCaseWithMetadata>emptyList()));
   }
 }

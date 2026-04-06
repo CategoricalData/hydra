@@ -13,9 +13,9 @@ public class IriRange_Sequence implements Serializable, Comparable<IriRange_Sequ
 
   public final hydra.ext.io.shex.syntax.Iri Iri;
 
-  public final hydra.util.Maybe<hydra.util.ConsList<hydra.ext.io.shex.syntax.Exclusion>> Sequence;
+  public final hydra.util.Maybe<java.util.List<hydra.ext.io.shex.syntax.Exclusion>> Sequence;
 
-  public IriRange_Sequence (hydra.ext.io.shex.syntax.Iri Iri, hydra.util.Maybe<hydra.util.ConsList<hydra.ext.io.shex.syntax.Exclusion>> Sequence) {
+  public IriRange_Sequence (hydra.ext.io.shex.syntax.Iri Iri, hydra.util.Maybe<java.util.List<hydra.ext.io.shex.syntax.Exclusion>> Sequence) {
     this.Iri = Iri;
     this.Sequence = Sequence;
   }
@@ -42,18 +42,22 @@ public class IriRange_Sequence implements Serializable, Comparable<IriRange_Sequ
   @SuppressWarnings("unchecked")
   public int compareTo(IriRange_Sequence other) {
     int cmp = 0;
-    cmp = ((Comparable) Iri).compareTo(other.Iri);
+    cmp = hydra.util.Comparing.compare(
+      Iri,
+      other.Iri);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) Sequence).compareTo(other.Sequence);
+    return hydra.util.Comparing.compare(
+      Sequence,
+      other.Sequence);
   }
 
   public IriRange_Sequence withIri(hydra.ext.io.shex.syntax.Iri Iri) {
     return new IriRange_Sequence(Iri, Sequence);
   }
 
-  public IriRange_Sequence withSequence(hydra.util.Maybe<hydra.util.ConsList<hydra.ext.io.shex.syntax.Exclusion>> Sequence) {
+  public IriRange_Sequence withSequence(hydra.util.Maybe<java.util.List<hydra.ext.io.shex.syntax.Exclusion>> Sequence) {
     return new IriRange_Sequence(Iri, Sequence);
   }
 }
