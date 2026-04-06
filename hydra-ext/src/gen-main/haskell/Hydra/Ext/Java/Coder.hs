@@ -1237,8 +1237,20 @@ encodeLiteral_encodeFloat f =
     case f of
       Core.FloatValueBigfloat v0 -> Utils.javaConstructorCall (Utils.javaConstructorName (Syntax.Identifier "java.math.BigDecimal") Nothing) [
         encodeLiteral (Core.LiteralString (Literals.showBigfloat v0))] Nothing
-      Core.FloatValueFloat32 v0 -> encodeLiteral_primCast (Syntax.PrimitiveTypeNumeric (Syntax.NumericTypeFloatingPoint Syntax.FloatingPointTypeFloat)) (encodeLiteral_litExp (Syntax.LiteralFloatingPoint (Syntax.FloatingPointLiteral (Literals.float32ToBigfloat v0))))
-      Core.FloatValueFloat64 v0 -> encodeLiteral_litExp (Syntax.LiteralFloatingPoint (Syntax.FloatingPointLiteral (Literals.float64ToBigfloat v0)))
+      Core.FloatValueFloat32 v0 -> encodeLiteral_encodeFloat32 v0
+      Core.FloatValueFloat64 v0 -> encodeLiteral_encodeFloat64 v0
+
+encodeLiteral_encodeFloat32 :: Float -> Syntax.Expression
+encodeLiteral_encodeFloat32 v =
+
+      let s = Literals.showFloat32 v
+      in (Logic.ifElse (Equality.equal s "NaN") (encodeLiteral_javaSpecialFloatExpr "Float" "NaN") (Logic.ifElse (Equality.equal s "Infinity") (encodeLiteral_javaSpecialFloatExpr "Float" "POSITIVE_INFINITY") (Logic.ifElse (Equality.equal s "-Infinity") (encodeLiteral_javaSpecialFloatExpr "Float" "NEGATIVE_INFINITY") (encodeLiteral_primCast (Syntax.PrimitiveTypeNumeric (Syntax.NumericTypeFloatingPoint Syntax.FloatingPointTypeFloat)) (encodeLiteral_litExp (Syntax.LiteralFloatingPoint (Syntax.FloatingPointLiteral (Literals.float32ToBigfloat v))))))))
+
+encodeLiteral_encodeFloat64 :: Double -> Syntax.Expression
+encodeLiteral_encodeFloat64 v =
+
+      let s = Literals.showFloat64 v
+      in (Logic.ifElse (Equality.equal s "NaN") (encodeLiteral_javaSpecialFloatExpr "Double" "NaN") (Logic.ifElse (Equality.equal s "Infinity") (encodeLiteral_javaSpecialFloatExpr "Double" "POSITIVE_INFINITY") (Logic.ifElse (Equality.equal s "-Infinity") (encodeLiteral_javaSpecialFloatExpr "Double" "NEGATIVE_INFINITY") (encodeLiteral_litExp (Syntax.LiteralFloatingPoint (Syntax.FloatingPointLiteral (Literals.float64ToBigfloat v)))))))
 
 encodeLiteral_encodeInteger :: Core.IntegerValue -> Syntax.Expression
 encodeLiteral_encodeInteger i =
@@ -1254,6 +1266,13 @@ encodeLiteral_encodeInteger i =
       Core.IntegerValueUint32 v0 -> encodeLiteral_primCast (Syntax.PrimitiveTypeNumeric (Syntax.NumericTypeIntegral Syntax.IntegralTypeLong)) (encodeLiteral_litExp (Syntax.LiteralInteger (Syntax.IntegerLiteral (Literals.uint32ToBigint v0))))
       Core.IntegerValueUint64 v0 -> Utils.javaConstructorCall (Utils.javaConstructorName (Syntax.Identifier "java.math.BigInteger") Nothing) [
         encodeLiteral (Core.LiteralString (Literals.showBigint (Literals.uint64ToBigint v0)))] Nothing
+
+encodeLiteral_javaSpecialFloatExpr :: String -> String -> Syntax.Expression
+encodeLiteral_javaSpecialFloatExpr className fieldName =
+    Utils.javaExpressionNameToJavaExpression (Syntax.ExpressionName {
+      Syntax.expressionNameQualifier = (Just (Syntax.AmbiguousName [
+        Syntax.Identifier className])),
+      Syntax.expressionNameIdentifier = (Syntax.Identifier fieldName)})
 
 encodeLiteral_litExp :: Syntax.Literal -> Syntax.Expression
 encodeLiteral_litExp l = Utils.javaLiteralToJavaExpression l

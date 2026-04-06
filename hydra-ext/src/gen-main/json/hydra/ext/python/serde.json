@@ -4378,8 +4378,11 @@
                                           "application": {
                                             "argument": {
                                               "application": {
-                                                "argument": {"variable": "f"},
-                                                "function": {"variable": "hydra.lib.literals.showBigfloat"}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "f"},
+                                                    "function": {"variable": "hydra.lib.literals.showBigfloat"}}},
+                                                "function": {"variable": "hydra.ext.python.serde.pythonFloatLiteralText"}}},
                                             "function": {"variable": "hydra.serialization.cst"}}},
                                         "domain": {"literal": {"float": {"bigfloat": {}}}},
                                         "parameter": "f"}}}},
@@ -7672,6 +7675,84 @@
                   "codomain": {"literal": {"string": {}}},
                   "domain": {"literal": {"string": {}}}}},
               "domain": {"literal": {"boolean": {}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.ext.python.serde.pythonFloatLiteralText",
+        "term": {
+          "function": {
+            "lambda": {
+              "body": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {
+                        "application": {
+                          "argument": {"variable": "s"},
+                          "function": {
+                            "application": {
+                              "argument": {"literal": {"string": "float('-inf')"}},
+                              "function": {
+                                "application": {
+                                  "argument": {
+                                    "application": {
+                                      "argument": {"literal": {"string": "-Infinity"}},
+                                      "function": {
+                                        "application": {
+                                          "argument": {"variable": "s"},
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {"variable": "hydra.lib.equality.equal"},
+                                              "type": {"literal": {"string": {}}}}}}}}},
+                                  "function": {
+                                    "typeApplication": {
+                                      "body": {"variable": "hydra.lib.logic.ifElse"},
+                                      "type": {"literal": {"string": {}}}}}}}}}}},
+                      "function": {
+                        "application": {
+                          "argument": {"literal": {"string": "float('inf')"}},
+                          "function": {
+                            "application": {
+                              "argument": {
+                                "application": {
+                                  "argument": {"literal": {"string": "Infinity"}},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "s"},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {"variable": "hydra.lib.equality.equal"},
+                                          "type": {"literal": {"string": {}}}}}}}}},
+                              "function": {
+                                "typeApplication": {
+                                  "body": {"variable": "hydra.lib.logic.ifElse"},
+                                  "type": {"literal": {"string": {}}}}}}}}}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "float('nan')"}},
+                      "function": {
+                        "application": {
+                          "argument": {
+                            "application": {
+                              "argument": {"literal": {"string": "NaN"}},
+                              "function": {
+                                "application": {
+                                  "argument": {"variable": "s"},
+                                  "function": {
+                                    "typeApplication": {
+                                      "body": {"variable": "hydra.lib.equality.equal"},
+                                      "type": {"literal": {"string": {}}}}}}}}},
+                          "function": {
+                            "typeApplication": {
+                              "body": {"variable": "hydra.lib.logic.ifElse"},
+                              "type": {"literal": {"string": {}}}}}}}}}}},
+              "domain": {"literal": {"string": {}}},
+              "parameter": "s"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"literal": {"string": {}}},
+              "domain": {"literal": {"string": {}}}}},
           "variables": []}}},
     {
       "term": {

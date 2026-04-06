@@ -312,6 +312,21 @@ def unsupported_expression(msg: str) -> hydra.ext.python.syntax.Expression:
 
     return hydra.ext.python.utils.function_call(hydra.ext.python.utils.py_expression_to_py_primary(hydra.ext.python.utils.project_from_expression(hydra.ext.python.utils.project_from_expression(hydra.ext.python.utils.project_from_expression(cast(hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.ExpressionSimple(hydra.ext.python.syntax.Disjunction((hydra.ext.python.syntax.Conjunction((cast(hydra.ext.python.syntax.Inversion, hydra.ext.python.syntax.InversionSimple(hydra.ext.python.syntax.Comparison(hydra.ext.python.syntax.BitwiseOr(Nothing(), hydra.ext.python.syntax.BitwiseXor(Nothing(), hydra.ext.python.syntax.BitwiseAnd(Nothing(), hydra.ext.python.syntax.ShiftExpression(Nothing(), hydra.ext.python.syntax.Sum(Nothing(), hydra.ext.python.syntax.Term(Nothing(), cast(hydra.ext.python.syntax.Factor, hydra.ext.python.syntax.FactorSimple(hydra.ext.python.syntax.Power(hydra.ext.python.syntax.AwaitPrimary(False, cast(hydra.ext.python.syntax.Primary, hydra.ext.python.syntax.PrimarySimple(cast(hydra.ext.python.syntax.Atom, hydra.ext.python.syntax.AtomName(hydra.ext.python.syntax.Name("hydra")))))), Nothing()))))))))), ()))),)),)))), hydra.ext.python.syntax.Name("dsl")), hydra.ext.python.syntax.Name("python")), hydra.ext.python.syntax.Name("unsupported"))), (hydra.ext.python.utils.string_to_py_expression(hydra.ext.python.syntax.QuoteStyle.DOUBLE, msg),))
 
+def encode_float_value_py_special_float(value: str) -> hydra.ext.python.syntax.Expression:
+    return hydra.ext.python.utils.function_call(hydra.ext.python.utils.py_name_to_py_primary(hydra.ext.python.syntax.Name("float")), (hydra.ext.python.utils.single_quoted_string(value),))
+
+def encode_float_value_encode_float32(v: float) -> Either[T0, hydra.ext.python.syntax.Expression]:
+    @lru_cache(1)
+    def s() -> str:
+        return hydra.lib.literals.show_float32(v)
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "NaN"), (lambda : Right(encode_float_value_py_special_float("nan"))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "Infinity"), (lambda : Right(encode_float_value_py_special_float("inf"))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "-Infinity"), (lambda : Right(encode_float_value_py_special_float("-inf"))), (lambda : Right(hydra.ext.python.utils.py_atom_to_py_expression(cast(hydra.ext.python.syntax.Atom, hydra.ext.python.syntax.AtomNumber(cast(hydra.ext.python.syntax.Number, hydra.ext.python.syntax.NumberFloat(hydra.lib.literals.float32_to_bigfloat(v)))))))))))))
+
+def encode_float_value_encode_float64(v: float) -> Either[T0, hydra.ext.python.syntax.Expression]:
+    @lru_cache(1)
+    def s() -> str:
+        return hydra.lib.literals.show_float64(v)
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "NaN"), (lambda : Right(encode_float_value_py_special_float("nan"))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "Infinity"), (lambda : Right(encode_float_value_py_special_float("inf"))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "-Infinity"), (lambda : Right(encode_float_value_py_special_float("-inf"))), (lambda : Right(hydra.ext.python.utils.py_atom_to_py_expression(cast(hydra.ext.python.syntax.Atom, hydra.ext.python.syntax.AtomNumber(cast(hydra.ext.python.syntax.Number, hydra.ext.python.syntax.NumberFloat(hydra.lib.literals.float64_to_bigfloat(v)))))))))))))
+
 def encode_float_value(fv: hydra.core.FloatValue) -> Either[T0, hydra.ext.python.syntax.Expression]:
     r"""Encode a float value to a Python expression."""
 
@@ -320,10 +335,10 @@ def encode_float_value(fv: hydra.core.FloatValue) -> Either[T0, hydra.ext.python
             return Right(hydra.ext.python.utils.function_call(hydra.ext.python.utils.py_name_to_py_primary(hydra.ext.python.syntax.Name("Decimal")), (hydra.ext.python.utils.single_quoted_string(hydra.lib.literals.show_bigfloat(f)),)))
 
         case hydra.core.FloatValueFloat32(value=f2):
-            return Right(hydra.ext.python.utils.py_atom_to_py_expression(cast(hydra.ext.python.syntax.Atom, hydra.ext.python.syntax.AtomNumber(cast(hydra.ext.python.syntax.Number, hydra.ext.python.syntax.NumberFloat(hydra.lib.literals.float32_to_bigfloat(f2)))))))
+            return encode_float_value_encode_float32(f2)
 
         case hydra.core.FloatValueFloat64(value=f3):
-            return Right(hydra.ext.python.utils.py_atom_to_py_expression(cast(hydra.ext.python.syntax.Atom, hydra.ext.python.syntax.AtomNumber(cast(hydra.ext.python.syntax.Number, hydra.ext.python.syntax.NumberFloat(hydra.lib.literals.float64_to_bigfloat(f3)))))))
+            return encode_float_value_encode_float64(f3)
 
         case _:
             raise AssertionError("Unreachable: all variants handled")

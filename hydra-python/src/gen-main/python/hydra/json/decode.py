@@ -22,16 +22,6 @@ import hydra.lib.strings
 import hydra.show.core
 import hydra.strip
 
-def expect_number(value: hydra.json.model.Value) -> Either[str, Decimal]:
-    r"""Extract a number from a JSON value."""
-
-    match value:
-        case hydra.json.model.ValueNumber(value=n):
-            return Right(n)
-
-        case _:
-            return Left("expected number")
-
 def expect_string(value: hydra.json.model.Value) -> Either[str, str]:
     r"""Extract a string from a JSON value."""
 
@@ -42,15 +32,32 @@ def expect_string(value: hydra.json.model.Value) -> Either[str, str]:
         case _:
             return Left("expected string")
 
-def decode_float(ft: hydra.core.FloatType, value: hydra.json.model.Value) -> Either[str, hydra.core.Term]:
-    r"""Decode a JSON value to a float term. Float64/Bigfloat from numbers; Float32 from string."""
+def parse_special_float(s: str) -> Maybe[float]:
+    r"""Parse a special float sentinel string to a float64. Returns Nothing for unrecognized strings."""
 
+    return hydra.lib.logic.if_else(hydra.lib.logic.or_(hydra.lib.equality.equal(s, "NaN"), hydra.lib.logic.or_(hydra.lib.equality.equal(s, "Infinity"), hydra.lib.equality.equal(s, "-Infinity"))), (lambda : hydra.lib.literals.read_float64(s)), (lambda : Nothing()))
+
+def decode_float(ft: hydra.core.FloatType, value: hydra.json.model.Value):
+    def _hoist_hydra_json_decode_decode_float_1(v1):
+        match v1:
+            case hydra.json.model.ValueNumber(value=n):
+                return Right(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueBigfloat(n)))))))
+
+            case _:
+                return Left("expected number for bigfloat")
+    def _hoist_hydra_json_decode_decode_float_2(v1):
+        match v1:
+            case hydra.json.model.ValueNumber(value=n):
+                return Right(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueFloat64(hydra.lib.literals.bigfloat_to_float64(n))))))))
+
+            case hydra.json.model.ValueString(value=s):
+                return hydra.lib.maybes.maybe((lambda : Left(hydra.lib.strings.cat(("invalid float64 sentinel: ", s)))), (lambda v: Right(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueFloat64(v)))))))), parse_special_float(s))
+
+            case _:
+                return Left("expected number or special float string for float64")
     match ft:
         case hydra.core.FloatType.BIGFLOAT:
-            @lru_cache(1)
-            def num_result() -> Either[str, Decimal]:
-                return expect_number(value)
-            return hydra.lib.eithers.map((lambda n: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueBigfloat(n))))))), num_result())
+            return _hoist_hydra_json_decode_decode_float_1(value)
 
         case hydra.core.FloatType.FLOAT32:
             @lru_cache(1)
@@ -59,13 +66,20 @@ def decode_float(ft: hydra.core.FloatType, value: hydra.json.model.Value) -> Eit
             return hydra.lib.eithers.either((lambda err: Left(err)), (lambda s: (parsed := hydra.lib.literals.read_float32(s), hydra.lib.maybes.maybe((lambda : Left(hydra.lib.strings.cat(("invalid float32: ", s)))), (lambda v: Right(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueFloat32(v)))))))), parsed))[1]), str_result())
 
         case hydra.core.FloatType.FLOAT64:
-            @lru_cache(1)
-            def num_result() -> Either[str, Decimal]:
-                return expect_number(value)
-            return hydra.lib.eithers.map((lambda n: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueFloat64(hydra.lib.literals.bigfloat_to_float64(n)))))))), num_result())
+            return _hoist_hydra_json_decode_decode_float_2(value)
 
         case _:
             raise AssertionError("Unreachable: all variants handled")
+
+def expect_number(value: hydra.json.model.Value) -> Either[str, Decimal]:
+    r"""Extract a number from a JSON value."""
+
+    match value:
+        case hydra.json.model.ValueNumber(value=n):
+            return Right(n)
+
+        case _:
+            return Left("expected number")
 
 def decode_integer(it: hydra.core.IntegerType, value: hydra.json.model.Value) -> Either[str, hydra.core.Term]:
     r"""Decode a JSON value to an integer term. Small ints from numbers; large ints from strings."""

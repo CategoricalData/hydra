@@ -17,14 +17,22 @@ def buildGraph(elements: Seq[hydra.core.Binding])(environment: Map[hydra.core.Na
   lazy val letTerms: Map[hydra.core.Name, hydra.core.Term] = hydra.lib.maps.map[Option[hydra.core.Term],
      hydra.core.Term, hydra.core.Name]((mt: Option[hydra.core.Term]) => hydra.lib.maybes.fromJust[hydra.core.Term](mt))(hydra.lib.maps.filter[Option[hydra.core.Term],
      hydra.core.Name]((mt: Option[hydra.core.Term]) => hydra.lib.maybes.isJust[hydra.core.Term](mt))(environment))
+  lazy val mergedTerms: Map[hydra.core.Name, hydra.core.Term] = hydra.lib.maps.union[hydra.core.Name, hydra.core.Term](elementTerms)(letTerms)
+  lazy val filteredTerms: Map[hydra.core.Name, hydra.core.Term] = hydra.lib.maps.filterWithKey[hydra.core.Name, hydra.core.Term]((k: hydra.core.Name) =>
+    (_v: hydra.core.Term) =>
+    hydra.lib.logic.not(hydra.lib.maps.member[hydra.core.Name, hydra.graph.Primitive](k)(primitives)))(mergedTerms)
   lazy val elementTypes: Map[hydra.core.Name, hydra.core.TypeScheme] = hydra.lib.maps.fromList[hydra.core.Name,
      hydra.core.TypeScheme](hydra.lib.maybes.cat[Tuple2[hydra.core.Name, hydra.core.TypeScheme]](hydra.lib.lists.map[hydra.core.Binding,
      Option[Tuple2[hydra.core.Name, hydra.core.TypeScheme]]]((b: hydra.core.Binding) =>
     hydra.lib.maybes.map[hydra.core.TypeScheme, Tuple2[hydra.core.Name, hydra.core.TypeScheme]]((ts: hydra.core.TypeScheme) => Tuple2(b.name,
        ts))(b.`type`))(elements)))
-  hydra.graph.Graph(hydra.lib.maps.union[hydra.core.Name, hydra.core.Term](elementTerms)(letTerms), elementTypes,
-     hydra.lib.maps.empty[hydra.core.Name, hydra.core.TypeVariableMetadata], hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.maps.keys[hydra.core.Name,
-     Option[hydra.core.Term]](hydra.lib.maps.filter[Option[hydra.core.Term], hydra.core.Name]((mt: Option[hydra.core.Term]) => hydra.lib.maybes.isNothing[hydra.core.Term](mt))(environment))),
+  lazy val filteredTypes: Map[hydra.core.Name, hydra.core.TypeScheme] = hydra.lib.maps.filterWithKey[hydra.core.Name,
+     hydra.core.TypeScheme]((k: hydra.core.Name) =>
+    (_v: hydra.core.TypeScheme) =>
+    hydra.lib.logic.not(hydra.lib.maps.member[hydra.core.Name, hydra.graph.Primitive](k)(primitives)))(elementTypes)
+  hydra.graph.Graph(filteredTerms, filteredTypes, hydra.lib.maps.empty[hydra.core.Name, hydra.core.TypeVariableMetadata],
+     hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.maps.keys[hydra.core.Name, Option[hydra.core.Term]](hydra.lib.maps.filter[Option[hydra.core.Term],
+     hydra.core.Name]((mt: Option[hydra.core.Term]) => hydra.lib.maybes.isNothing[hydra.core.Term](mt))(environment))),
      hydra.lib.maps.empty[hydra.core.Name, hydra.core.Term], primitives, hydra.lib.maps.empty[hydra.core.Name,
      hydra.core.TypeScheme], hydra.lib.sets.empty[hydra.core.Name])
 }
@@ -97,6 +105,16 @@ def graphToBindings(g: hydra.graph.Graph): Seq[hydra.core.Binding] =
     hydra.core.Binding(name, term, hydra.lib.maps.lookup[hydra.core.Name, hydra.core.TypeScheme](name)(g.boundTypes))
   }
 })(hydra.lib.maps.toList[hydra.core.Name, hydra.core.Term](g.boundTerms))
+
+def graphWithPrimitives(builtIn: Seq[hydra.graph.Primitive])(userProvided: Seq[hydra.graph.Primitive]): hydra.graph.Graph =
+  {
+  def toMap(ps: Seq[hydra.graph.Primitive]): Map[hydra.core.Name, hydra.graph.Primitive] =
+    hydra.lib.maps.fromList[hydra.core.Name, hydra.graph.Primitive](hydra.lib.lists.map[hydra.graph.Primitive,
+       Tuple2[hydra.core.Name, hydra.graph.Primitive]]((p: hydra.graph.Primitive) => Tuple2(p.name, p))(ps))
+  lazy val prims: Map[hydra.core.Name, hydra.graph.Primitive] = hydra.lib.maps.union[hydra.core.Name,
+     hydra.graph.Primitive](toMap(userProvided))(toMap(builtIn))
+  hydra.lexical.buildGraph(Seq())(hydra.lib.maps.empty[hydra.core.Name, Option[hydra.core.Term]])(prims)
+}
 
 def lookupBinding(graph: hydra.graph.Graph)(name: hydra.core.Name): Option[hydra.core.Binding] =
   hydra.lib.maybes.map[hydra.core.Term, hydra.core.Binding]((term: hydra.core.Term) =>

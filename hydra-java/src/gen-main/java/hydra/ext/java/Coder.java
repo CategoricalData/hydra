@@ -3680,16 +3680,68 @@ public interface Coder {
 
       @Override
       public hydra.ext.java.syntax.Expression visit(hydra.core.FloatValue.Float32 v) {
-        return hydra.ext.java.Coder.encodeLiteral_primCast(
-          new hydra.ext.java.syntax.PrimitiveType.Numeric(new hydra.ext.java.syntax.NumericType.FloatingPoint(new hydra.ext.java.syntax.FloatingPointType.Float_())),
-          hydra.ext.java.Coder.encodeLiteral_litExp(new hydra.ext.java.syntax.Literal.FloatingPoint(new hydra.ext.java.syntax.FloatingPointLiteral(hydra.lib.literals.Float32ToBigfloat.apply((v).value)))));
+        return hydra.ext.java.Coder.encodeLiteral_encodeFloat32((v).value);
       }
 
       @Override
       public hydra.ext.java.syntax.Expression visit(hydra.core.FloatValue.Float64 v) {
-        return hydra.ext.java.Coder.encodeLiteral_litExp(new hydra.ext.java.syntax.Literal.FloatingPoint(new hydra.ext.java.syntax.FloatingPointLiteral(hydra.lib.literals.Float64ToBigfloat.apply((v).value))));
+        return hydra.ext.java.Coder.encodeLiteral_encodeFloat64((v).value);
       }
     });
+  }
+
+  static hydra.ext.java.syntax.Expression encodeLiteral_encodeFloat32(Float v) {
+    String s = hydra.lib.literals.ShowFloat32.apply(v);
+    return hydra.lib.logic.IfElse.lazy(
+      hydra.lib.equality.Equal.apply(
+        s,
+        "NaN"),
+      () -> hydra.ext.java.Coder.encodeLiteral_javaSpecialFloatExpr(
+        "Float",
+        "NaN"),
+      () -> hydra.lib.logic.IfElse.lazy(
+        hydra.lib.equality.Equal.apply(
+          s,
+          "Infinity"),
+        () -> hydra.ext.java.Coder.encodeLiteral_javaSpecialFloatExpr(
+          "Float",
+          "POSITIVE_INFINITY"),
+        () -> hydra.lib.logic.IfElse.lazy(
+          hydra.lib.equality.Equal.apply(
+            s,
+            "-Infinity"),
+          () -> hydra.ext.java.Coder.encodeLiteral_javaSpecialFloatExpr(
+            "Float",
+            "NEGATIVE_INFINITY"),
+          () -> hydra.ext.java.Coder.encodeLiteral_primCast(
+            new hydra.ext.java.syntax.PrimitiveType.Numeric(new hydra.ext.java.syntax.NumericType.FloatingPoint(new hydra.ext.java.syntax.FloatingPointType.Float_())),
+            hydra.ext.java.Coder.encodeLiteral_litExp(new hydra.ext.java.syntax.Literal.FloatingPoint(new hydra.ext.java.syntax.FloatingPointLiteral(hydra.lib.literals.Float32ToBigfloat.apply(v))))))));
+  }
+
+  static hydra.ext.java.syntax.Expression encodeLiteral_encodeFloat64(Double v) {
+    String s = hydra.lib.literals.ShowFloat64.apply(v);
+    return hydra.lib.logic.IfElse.lazy(
+      hydra.lib.equality.Equal.apply(
+        s,
+        "NaN"),
+      () -> hydra.ext.java.Coder.encodeLiteral_javaSpecialFloatExpr(
+        "Double",
+        "NaN"),
+      () -> hydra.lib.logic.IfElse.lazy(
+        hydra.lib.equality.Equal.apply(
+          s,
+          "Infinity"),
+        () -> hydra.ext.java.Coder.encodeLiteral_javaSpecialFloatExpr(
+          "Double",
+          "POSITIVE_INFINITY"),
+        () -> hydra.lib.logic.IfElse.lazy(
+          hydra.lib.equality.Equal.apply(
+            s,
+            "-Infinity"),
+          () -> hydra.ext.java.Coder.encodeLiteral_javaSpecialFloatExpr(
+            "Double",
+            "NEGATIVE_INFINITY"),
+          () -> hydra.ext.java.Coder.encodeLiteral_litExp(new hydra.ext.java.syntax.Literal.FloatingPoint(new hydra.ext.java.syntax.FloatingPointLiteral(hydra.lib.literals.Float64ToBigfloat.apply(v)))))));
   }
 
   static hydra.ext.java.syntax.Expression encodeLiteral_encodeInteger(hydra.core.IntegerValue i) {
@@ -3759,6 +3811,10 @@ public interface Coder {
           (hydra.util.Maybe<hydra.ext.java.syntax.ClassBody>) (hydra.util.Maybe.<hydra.ext.java.syntax.ClassBody>nothing()));
       }
     });
+  }
+
+  static hydra.ext.java.syntax.Expression encodeLiteral_javaSpecialFloatExpr(String className, String fieldName) {
+    return hydra.ext.java.Utils.javaExpressionNameToJavaExpression(new hydra.ext.java.syntax.ExpressionName(hydra.util.Maybe.just(new hydra.ext.java.syntax.AmbiguousName(java.util.Arrays.asList(new hydra.ext.java.syntax.Identifier(className)))), new hydra.ext.java.syntax.Identifier(fieldName)));
   }
 
   static hydra.ext.java.syntax.Expression encodeLiteral_litExp(hydra.ext.java.syntax.Literal l) {

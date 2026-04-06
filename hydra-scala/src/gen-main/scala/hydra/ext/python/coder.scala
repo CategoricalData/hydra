@@ -729,8 +729,27 @@ def encodeFieldType(cx: hydra.context.Context)(env: hydra.ext.python.environment
 def encodeFloatValue[T0](fv: hydra.core.FloatValue): Either[T0, hydra.ext.python.syntax.Expression] =
   fv match
   case hydra.core.FloatValue.bigfloat(v_FloatValue_bigfloat_f) => Right(hydra.ext.python.utils.functionCall(hydra.ext.python.utils.pyNameToPyPrimary("Decimal"))(Seq(hydra.ext.python.utils.singleQuotedString(hydra.lib.literals.showBigfloat(v_FloatValue_bigfloat_f)))))
-  case hydra.core.FloatValue.float32(v_FloatValue_float32_f) => Right(hydra.ext.python.utils.pyAtomToPyExpression(hydra.ext.python.syntax.Atom.number(hydra.ext.python.syntax.Number.float(hydra.lib.literals.float32ToBigfloat(v_FloatValue_float32_f)))))
-  case hydra.core.FloatValue.float64(v_FloatValue_float64_f) => Right(hydra.ext.python.utils.pyAtomToPyExpression(hydra.ext.python.syntax.Atom.number(hydra.ext.python.syntax.Number.float(hydra.lib.literals.float64ToBigfloat(v_FloatValue_float64_f)))))
+  case hydra.core.FloatValue.float32(v_FloatValue_float32_f) => hydra.ext.python.coder.encodeFloatValue_encodeFloat32(v_FloatValue_float32_f)
+  case hydra.core.FloatValue.float64(v_FloatValue_float64_f) => hydra.ext.python.coder.encodeFloatValue_encodeFloat64(v_FloatValue_float64_f)
+
+def encodeFloatValue_encodeFloat32[T0](v: Float): Either[T0, hydra.ext.python.syntax.Expression] =
+  {
+  lazy val s: scala.Predef.String = hydra.lib.literals.showFloat32(v)
+  hydra.lib.logic.ifElse[Either[T0, hydra.ext.python.syntax.Expression]](hydra.lib.equality.equal[scala.Predef.String](s)("NaN"))(Right(hydra.ext.python.coder.encodeFloatValue_pySpecialFloat("nan")))(hydra.lib.logic.ifElse[Either[T0,
+     hydra.ext.python.syntax.Expression]](hydra.lib.equality.equal[scala.Predef.String](s)("Infinity"))(Right(hydra.ext.python.coder.encodeFloatValue_pySpecialFloat("inf")))(hydra.lib.logic.ifElse[Either[T0,
+     hydra.ext.python.syntax.Expression]](hydra.lib.equality.equal[scala.Predef.String](s)("-Infinity"))(Right(hydra.ext.python.coder.encodeFloatValue_pySpecialFloat("-inf")))(Right(hydra.ext.python.utils.pyAtomToPyExpression(hydra.ext.python.syntax.Atom.number(hydra.ext.python.syntax.Number.float(hydra.lib.literals.float32ToBigfloat(v))))))))
+}
+
+def encodeFloatValue_encodeFloat64[T0](v: Double): Either[T0, hydra.ext.python.syntax.Expression] =
+  {
+  lazy val s: scala.Predef.String = hydra.lib.literals.showFloat64(v)
+  hydra.lib.logic.ifElse[Either[T0, hydra.ext.python.syntax.Expression]](hydra.lib.equality.equal[scala.Predef.String](s)("NaN"))(Right(hydra.ext.python.coder.encodeFloatValue_pySpecialFloat("nan")))(hydra.lib.logic.ifElse[Either[T0,
+     hydra.ext.python.syntax.Expression]](hydra.lib.equality.equal[scala.Predef.String](s)("Infinity"))(Right(hydra.ext.python.coder.encodeFloatValue_pySpecialFloat("inf")))(hydra.lib.logic.ifElse[Either[T0,
+     hydra.ext.python.syntax.Expression]](hydra.lib.equality.equal[scala.Predef.String](s)("-Infinity"))(Right(hydra.ext.python.coder.encodeFloatValue_pySpecialFloat("-inf")))(Right(hydra.ext.python.utils.pyAtomToPyExpression(hydra.ext.python.syntax.Atom.number(hydra.ext.python.syntax.Number.float(hydra.lib.literals.float64ToBigfloat(v))))))))
+}
+
+def encodeFloatValue_pySpecialFloat(value: scala.Predef.String): hydra.ext.python.syntax.Expression =
+  hydra.ext.python.utils.functionCall(hydra.ext.python.utils.pyNameToPyPrimary("float"))(Seq(hydra.ext.python.utils.singleQuotedString(value)))
 
 def encodeForallType[T0](env: hydra.ext.python.environment.PythonEnvironment)(lt: hydra.core.ForallType): Either[T0, hydra.ext.python.syntax.Expression] =
   {

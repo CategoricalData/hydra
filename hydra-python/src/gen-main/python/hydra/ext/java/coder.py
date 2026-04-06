@@ -1204,11 +1204,26 @@ def wrap_in_supplier_lambda(expr: hydra.ext.java.syntax.Expression) -> hydra.ext
 def wrap_lazy_arguments(name: hydra.core.Name, args: frozenlist[hydra.ext.java.syntax.Expression]) -> tuple[frozenlist[hydra.ext.java.syntax.Expression], Maybe[str]]:
     return hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.equality.equal(name, hydra.core.Name("hydra.lib.logic.ifElse")), hydra.lib.equality.equal(hydra.lib.lists.length(args), 3)), (lambda : ((hydra.lib.lists.at(0, args), wrap_in_supplier_lambda(hydra.lib.lists.at(1, args)), wrap_in_supplier_lambda(hydra.lib.lists.at(2, args))), Just("lazy"))), (lambda : hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.equality.equal(name, hydra.core.Name("hydra.lib.maybes.maybe")), hydra.lib.equality.equal(hydra.lib.lists.length(args), 3)), (lambda : ((wrap_in_supplier_lambda(hydra.lib.lists.at(0, args)), hydra.lib.lists.at(1, args), hydra.lib.lists.at(2, args)), Just("applyLazy"))), (lambda : hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.equality.equal(name, hydra.core.Name("hydra.lib.maybes.cases")), hydra.lib.equality.equal(hydra.lib.lists.length(args), 3)), (lambda : ((hydra.lib.lists.at(0, args), wrap_in_supplier_lambda(hydra.lib.lists.at(1, args)), hydra.lib.lists.at(2, args)), Just("applyLazy"))), (lambda : hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.equality.equal(name, hydra.core.Name("hydra.lib.maps.findWithDefault")), hydra.lib.equality.equal(hydra.lib.lists.length(args), 3)), (lambda : ((wrap_in_supplier_lambda(hydra.lib.lists.at(0, args)), hydra.lib.lists.at(1, args), hydra.lib.lists.at(2, args)), Just("applyLazy"))), (lambda : hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.logic.or_(hydra.lib.equality.equal(name, hydra.core.Name("hydra.lib.maybes.fromMaybe")), hydra.lib.logic.or_(hydra.lib.equality.equal(name, hydra.core.Name("hydra.lib.eithers.fromLeft")), hydra.lib.equality.equal(name, hydra.core.Name("hydra.lib.eithers.fromRight")))), hydra.lib.equality.equal(hydra.lib.lists.length(args), 2)), (lambda : ((wrap_in_supplier_lambda(hydra.lib.lists.at(0, args)), hydra.lib.lists.at(1, args)), Just("applyLazy"))), (lambda : (args, Nothing())))))))))))
 
+def encode_literal_java_special_float_expr(class_name: str, field_name: str) -> hydra.ext.java.syntax.Expression:
+    return hydra.ext.java.utils.java_expression_name_to_java_expression(hydra.ext.java.syntax.ExpressionName(Just(hydra.ext.java.syntax.AmbiguousName((hydra.ext.java.syntax.Identifier(class_name),))), hydra.ext.java.syntax.Identifier(field_name)))
+
 def encode_literal_lit_exp(l: hydra.ext.java.syntax.Literal) -> hydra.ext.java.syntax.Expression:
     return hydra.ext.java.utils.java_literal_to_java_expression(l)
 
 def encode_literal_prim_cast(pt: hydra.ext.java.syntax.PrimitiveType, expr: hydra.ext.java.syntax.Expression) -> hydra.ext.java.syntax.Expression:
     return hydra.ext.java.utils.java_cast_expression_to_java_expression(hydra.ext.java.utils.java_cast_primitive(pt, hydra.ext.java.utils.java_expression_to_java_unary_expression(expr)))
+
+def encode_literal_encode_float32(v: float) -> hydra.ext.java.syntax.Expression:
+    @lru_cache(1)
+    def s() -> str:
+        return hydra.lib.literals.show_float32(v)
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "NaN"), (lambda : encode_literal_java_special_float_expr("Float", "NaN")), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "Infinity"), (lambda : encode_literal_java_special_float_expr("Float", "POSITIVE_INFINITY")), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "-Infinity"), (lambda : encode_literal_java_special_float_expr("Float", "NEGATIVE_INFINITY")), (lambda : encode_literal_prim_cast(cast(hydra.ext.java.syntax.PrimitiveType, hydra.ext.java.syntax.PrimitiveTypeNumeric(cast(hydra.ext.java.syntax.NumericType, hydra.ext.java.syntax.NumericTypeFloatingPoint(hydra.ext.java.syntax.FloatingPointType.FLOAT)))), encode_literal_lit_exp(cast(hydra.ext.java.syntax.Literal, hydra.ext.java.syntax.LiteralFloatingPoint(hydra.ext.java.syntax.FloatingPointLiteral(hydra.lib.literals.float32_to_bigfloat(v))))))))))))
+
+def encode_literal_encode_float64(v: float) -> hydra.ext.java.syntax.Expression:
+    @lru_cache(1)
+    def s() -> str:
+        return hydra.lib.literals.show_float64(v)
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "NaN"), (lambda : encode_literal_java_special_float_expr("Double", "NaN")), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "Infinity"), (lambda : encode_literal_java_special_float_expr("Double", "POSITIVE_INFINITY")), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "-Infinity"), (lambda : encode_literal_java_special_float_expr("Double", "NEGATIVE_INFINITY")), (lambda : encode_literal_lit_exp(cast(hydra.ext.java.syntax.Literal, hydra.ext.java.syntax.LiteralFloatingPoint(hydra.ext.java.syntax.FloatingPointLiteral(hydra.lib.literals.float64_to_bigfloat(v)))))))))))
 
 def encode_literal(lit: hydra.core.Literal) -> hydra.ext.java.syntax.Expression:
     match lit:
@@ -1239,10 +1254,10 @@ def encode_literal_encode_float(f: hydra.core.FloatValue) -> hydra.ext.java.synt
             return hydra.ext.java.utils.java_constructor_call(hydra.ext.java.utils.java_constructor_name(hydra.ext.java.syntax.Identifier("java.math.BigDecimal"), Nothing()), (encode_literal(cast(hydra.core.Literal, hydra.core.LiteralString(hydra.lib.literals.show_bigfloat(v)))),), Nothing())
 
         case hydra.core.FloatValueFloat32(value=v2):
-            return encode_literal_prim_cast(cast(hydra.ext.java.syntax.PrimitiveType, hydra.ext.java.syntax.PrimitiveTypeNumeric(cast(hydra.ext.java.syntax.NumericType, hydra.ext.java.syntax.NumericTypeFloatingPoint(hydra.ext.java.syntax.FloatingPointType.FLOAT)))), encode_literal_lit_exp(cast(hydra.ext.java.syntax.Literal, hydra.ext.java.syntax.LiteralFloatingPoint(hydra.ext.java.syntax.FloatingPointLiteral(hydra.lib.literals.float32_to_bigfloat(v2))))))
+            return encode_literal_encode_float32(v2)
 
         case hydra.core.FloatValueFloat64(value=v3):
-            return encode_literal_lit_exp(cast(hydra.ext.java.syntax.Literal, hydra.ext.java.syntax.LiteralFloatingPoint(hydra.ext.java.syntax.FloatingPointLiteral(hydra.lib.literals.float64_to_bigfloat(v3)))))
+            return encode_literal_encode_float64(v3)
 
         case _:
             raise AssertionError("Unreachable: all variants handled")

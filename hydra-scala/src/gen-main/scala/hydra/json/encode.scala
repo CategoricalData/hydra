@@ -6,9 +6,15 @@ import hydra.json.model.*
 
 def encodeFloat[T0](fv: hydra.core.FloatValue): Either[T0, hydra.json.model.Value] =
   fv match
-  case hydra.core.FloatValue.bigfloat(v_FloatValue_bigfloat_bf) => Right(hydra.json.model.Value.number(v_FloatValue_bigfloat_bf))
+  case hydra.core.FloatValue.bigfloat(v_FloatValue_bigfloat_bf) => {
+    lazy val s: scala.Predef.String = hydra.lib.literals.showBigfloat(v_FloatValue_bigfloat_bf)
+    hydra.lib.logic.ifElse[Either[T0, hydra.json.model.Value]](hydra.json.encode.isSpecialFloatString(s))(Right(hydra.json.model.Value.string(s)))(Right(hydra.json.model.Value.number(v_FloatValue_bigfloat_bf)))
+  }
   case hydra.core.FloatValue.float32(v_FloatValue_float32_f) => Right(hydra.json.model.Value.string(hydra.lib.literals.showFloat32(v_FloatValue_float32_f)))
-  case hydra.core.FloatValue.float64(v_FloatValue_float64_f) => Right(hydra.json.model.Value.number(hydra.lib.literals.float64ToBigfloat(v_FloatValue_float64_f)))
+  case hydra.core.FloatValue.float64(v_FloatValue_float64_f) => {
+    lazy val s: scala.Predef.String = hydra.lib.literals.showFloat64(v_FloatValue_float64_f)
+    hydra.lib.logic.ifElse[Either[T0, hydra.json.model.Value]](hydra.json.encode.isSpecialFloatString(s))(Right(hydra.json.model.Value.string(s)))(Right(hydra.json.model.Value.number(hydra.lib.literals.float64ToBigfloat(v_FloatValue_float64_f))))
+  }
 
 def encodeInteger[T0](iv: hydra.core.IntegerValue): Either[T0, hydra.json.model.Value] =
   iv match
@@ -29,6 +35,9 @@ def encodeLiteral[T0](lit: hydra.core.Literal): Either[T0, hydra.json.model.Valu
   case hydra.core.Literal.float(v_Literal_float_f) => hydra.json.encode.encodeFloat(v_Literal_float_f)
   case hydra.core.Literal.integer(v_Literal_integer_i) => hydra.json.encode.encodeInteger(v_Literal_integer_i)
   case hydra.core.Literal.string(v_Literal_string_s) => Right(hydra.json.model.Value.string(v_Literal_string_s))
+
+def isSpecialFloatString(s: scala.Predef.String): Boolean =
+  hydra.lib.logic.or(hydra.lib.equality.equal[scala.Predef.String](s)("NaN"))(hydra.lib.logic.or(hydra.lib.equality.equal[scala.Predef.String](s)("Infinity"))(hydra.lib.equality.equal[scala.Predef.String](s)("-Infinity")))
 
 def toJson(types: Map[hydra.core.Name, hydra.core.Type])(tname: hydra.core.Name)(typ: hydra.core.Type)(term: hydra.core.Term): Either[scala.Predef.String,
    hydra.json.model.Value] =

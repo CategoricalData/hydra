@@ -1231,14 +1231,60 @@ public interface Coder {
 
       @Override
       public hydra.util.Either<T0, hydra.ext.python.syntax.Expression> visit(hydra.core.FloatValue.Float32 f) {
-        return hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.Number_(new hydra.ext.python.syntax.Number_.Float_(hydra.lib.literals.Float32ToBigfloat.apply((f).value)))));
+        return hydra.ext.python.Coder.<T0>encodeFloatValue_encodeFloat32((f).value);
       }
 
       @Override
       public hydra.util.Either<T0, hydra.ext.python.syntax.Expression> visit(hydra.core.FloatValue.Float64 f) {
-        return hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.Number_(new hydra.ext.python.syntax.Number_.Float_(hydra.lib.literals.Float64ToBigfloat.apply((f).value)))));
+        return hydra.ext.python.Coder.<T0>encodeFloatValue_encodeFloat64((f).value);
       }
     });
+  }
+
+  static <T0> hydra.util.Either<T0, hydra.ext.python.syntax.Expression> encodeFloatValue_encodeFloat32(Float v) {
+    String s = hydra.lib.literals.ShowFloat32.apply(v);
+    return hydra.lib.logic.IfElse.lazy(
+      hydra.lib.equality.Equal.apply(
+        s,
+        "NaN"),
+      () -> hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Coder.encodeFloatValue_pySpecialFloat("nan")),
+      () -> hydra.lib.logic.IfElse.lazy(
+        hydra.lib.equality.Equal.apply(
+          s,
+          "Infinity"),
+        () -> hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Coder.encodeFloatValue_pySpecialFloat("inf")),
+        () -> hydra.lib.logic.IfElse.lazy(
+          hydra.lib.equality.Equal.apply(
+            s,
+            "-Infinity"),
+          () -> hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Coder.encodeFloatValue_pySpecialFloat("-inf")),
+          () -> hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.Number_(new hydra.ext.python.syntax.Number_.Float_(hydra.lib.literals.Float32ToBigfloat.apply(v))))))));
+  }
+
+  static <T0> hydra.util.Either<T0, hydra.ext.python.syntax.Expression> encodeFloatValue_encodeFloat64(Double v) {
+    String s = hydra.lib.literals.ShowFloat64.apply(v);
+    return hydra.lib.logic.IfElse.lazy(
+      hydra.lib.equality.Equal.apply(
+        s,
+        "NaN"),
+      () -> hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Coder.encodeFloatValue_pySpecialFloat("nan")),
+      () -> hydra.lib.logic.IfElse.lazy(
+        hydra.lib.equality.Equal.apply(
+          s,
+          "Infinity"),
+        () -> hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Coder.encodeFloatValue_pySpecialFloat("inf")),
+        () -> hydra.lib.logic.IfElse.lazy(
+          hydra.lib.equality.Equal.apply(
+            s,
+            "-Infinity"),
+          () -> hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Coder.encodeFloatValue_pySpecialFloat("-inf")),
+          () -> hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.Number_(new hydra.ext.python.syntax.Number_.Float_(hydra.lib.literals.Float64ToBigfloat.apply(v))))))));
+  }
+
+  static hydra.ext.python.syntax.Expression encodeFloatValue_pySpecialFloat(String value) {
+    return hydra.ext.python.Utils.functionCall(
+      hydra.ext.python.Utils.pyNameToPyPrimary(new hydra.ext.python.syntax.Name("float")),
+      java.util.Arrays.asList(hydra.ext.python.Utils.singleQuotedString(value)));
   }
 
   static <T0> hydra.util.Either<T0, hydra.ext.python.syntax.Expression> encodeForallType(hydra.ext.python.environment.PythonEnvironment env, hydra.core.ForallType lt) {
