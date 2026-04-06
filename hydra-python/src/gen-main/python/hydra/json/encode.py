@@ -25,18 +25,29 @@ import hydra.strip
 
 T0 = TypeVar("T0")
 
+def is_special_float_string(s: str) -> bool:
+    r"""Check whether a string is one of the special float sentinels: NaN, Infinity, -Infinity."""
+
+    return hydra.lib.logic.or_(hydra.lib.equality.equal(s, "NaN"), hydra.lib.logic.or_(hydra.lib.equality.equal(s, "Infinity"), hydra.lib.equality.equal(s, "-Infinity")))
+
 def encode_float(fv: hydra.core.FloatValue) -> Either[T0, hydra.json.model.Value]:
-    r"""Encode a float value to JSON. Float64/Bigfloat use native numbers; Float32 uses string."""
+    r"""Encode a float value to JSON. Float64/Bigfloat use native numbers; Float32 uses string. NaN/Inf always encoded as strings."""
 
     match fv:
         case hydra.core.FloatValueBigfloat(value=bf):
-            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(bf)))
+            @lru_cache(1)
+            def s() -> str:
+                return hydra.lib.literals.show_bigfloat(bf)
+            return hydra.lib.logic.if_else(is_special_float_string(s()), (lambda : Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(s())))), (lambda : Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(bf)))))
 
         case hydra.core.FloatValueFloat32(value=f):
             return Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(hydra.lib.literals.show_float32(f))))
 
         case hydra.core.FloatValueFloat64(value=f2):
-            return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.float64_to_bigfloat(f2))))
+            @lru_cache(1)
+            def s() -> str:
+                return hydra.lib.literals.show_float64(f2)
+            return hydra.lib.logic.if_else(is_special_float_string(s()), (lambda : Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(s())))), (lambda : Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.float64_to_bigfloat(f2))))))
 
         case _:
             raise AssertionError("Unreachable: all variants handled")

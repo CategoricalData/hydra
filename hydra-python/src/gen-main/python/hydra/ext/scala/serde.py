@@ -3,6 +3,7 @@
 r"""Serialization functions for converting Scala AST to abstract expressions."""
 
 from __future__ import annotations
+from collections.abc import Callable
 from functools import lru_cache
 from hydra.dsl.python import Nothing, frozenlist
 from typing import cast
@@ -30,6 +31,9 @@ def function_arrow_op() -> hydra.ast.Op:
 
 # The match operator.
 match_op = hydra.ast.Op(hydra.ast.Symbol("match"), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsSpace()), cast(hydra.ast.Ws, hydra.ast.WsBreakAndIndent("  "))), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE)
+
+def scala_float_literal_text(prefix: str, suffix: str, s: str) -> str:
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(s, "NaN"), (lambda : hydra.lib.strings.cat2(prefix, ".NaN")), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s, "Infinity"), (lambda : hydra.lib.strings.cat2(prefix, ".PositiveInfinity")), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s, "-Infinity"), (lambda : hydra.lib.strings.cat2(prefix, ".NegativeInfinity")), (lambda : hydra.lib.strings.cat2(s, suffix)))))))
 
 def write_data_name(dn: hydra.ext.scala.syntax.Data_Name) -> hydra.ast.Expr:
     r"""Convert a data name to an expression."""
@@ -125,10 +129,10 @@ def write_lit(lit: hydra.ext.scala.syntax.Lit) -> hydra.ast.Expr:
             return hydra.serialization.cst(hydra.lib.strings.cat2(hydra.lib.literals.show_int64(i4), "L"))
 
         case hydra.ext.scala.syntax.LitFloat(value=f):
-            return hydra.serialization.cst(hydra.lib.strings.cat2(hydra.lib.literals.show_float32(f), "f"))
+            return hydra.serialization.cst(scala_float_literal_text("Float", "f", hydra.lib.literals.show_float32(f)))
 
         case hydra.ext.scala.syntax.LitDouble(value=f2):
-            return hydra.serialization.cst(hydra.lib.literals.show_float64(f2))
+            return hydra.serialization.cst(scala_float_literal_text("Double", "", hydra.lib.literals.show_float64(f2)))
 
         case hydra.ext.scala.syntax.LitUnit():
             return hydra.serialization.cst("()")

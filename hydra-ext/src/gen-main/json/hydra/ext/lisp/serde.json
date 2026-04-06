@@ -2721,6 +2721,222 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.ext.lisp.serde.formatLispFloat",
+        "term": {
+          "function": {
+            "lambda": {
+              "body": {
+                "function": {
+                  "lambda": {
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "s",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "v"},
+                                "function": {"variable": "hydra.lib.literals.showBigfloat"}}},
+                            "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                        "body": {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "s"},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "d"},
+                                            "function": {
+                                              "function": {
+                                                "elimination": {
+                                                  "union": {
+                                                    "cases": [
+                                                      {
+                                                        "name": "clojure",
+                                                        "term": {
+                                                          "function": {
+                                                            "lambda": {
+                                                              "body": {"literal": {"string": "Double/NEGATIVE_INFINITY"}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}}},
+                                                      {
+                                                        "name": "scheme",
+                                                        "term": {
+                                                          "function": {
+                                                            "lambda": {
+                                                              "body": {"literal": {"string": "-inf.0"}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}}},
+                                                      {
+                                                        "name": "commonLisp",
+                                                        "term": {
+                                                          "function": {
+                                                            "lambda": {
+                                                              "body": {"literal": {"string": "+hydra-neg-inf+"}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}}},
+                                                      {
+                                                        "name": "emacsLisp",
+                                                        "term": {
+                                                          "function": {
+                                                            "lambda": {
+                                                              "body": {"literal": {"string": "-1.0e+INF"}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}}}],
+                                                    "typeName": "hydra.ext.lisp.syntax.Dialect"}}}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"literal": {"string": "-Infinity"}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "s"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.equality.equal"},
+                                                        "type": {"literal": {"string": {}}}}}}}}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                "type": {"literal": {"string": {}}}}}}}}}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "d"},
+                                        "function": {
+                                          "function": {
+                                            "elimination": {
+                                              "union": {
+                                                "cases": [
+                                                  {
+                                                    "name": "clojure",
+                                                    "term": {
+                                                      "function": {
+                                                        "lambda": {
+                                                          "body": {"literal": {"string": "Double/POSITIVE_INFINITY"}},
+                                                          "domain": {"unit": {}},
+                                                          "parameter": "_"}}}},
+                                                  {
+                                                    "name": "scheme",
+                                                    "term": {
+                                                      "function": {
+                                                        "lambda": {
+                                                          "body": {"literal": {"string": "+inf.0"}},
+                                                          "domain": {"unit": {}},
+                                                          "parameter": "_"}}}},
+                                                  {
+                                                    "name": "commonLisp",
+                                                    "term": {
+                                                      "function": {
+                                                        "lambda": {
+                                                          "body": {"literal": {"string": "+hydra-pos-inf+"}},
+                                                          "domain": {"unit": {}},
+                                                          "parameter": "_"}}}},
+                                                  {
+                                                    "name": "emacsLisp",
+                                                    "term": {
+                                                      "function": {
+                                                        "lambda": {
+                                                          "body": {"literal": {"string": "1.0e+INF"}},
+                                                          "domain": {"unit": {}},
+                                                          "parameter": "_"}}}}],
+                                                "typeName": "hydra.ext.lisp.syntax.Dialect"}}}}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"literal": {"string": "Infinity"}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "s"},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.equality.equal"},
+                                                    "type": {"literal": {"string": {}}}}}}}}},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"variable": "hydra.lib.logic.ifElse"},
+                                            "type": {"literal": {"string": {}}}}}}}}}}},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "d"},
+                                    "function": {
+                                      "function": {
+                                        "elimination": {
+                                          "union": {
+                                            "cases": [
+                                              {
+                                                "name": "clojure",
+                                                "term": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {"literal": {"string": "Double/NaN"}},
+                                                      "domain": {"unit": {}},
+                                                      "parameter": "_"}}}},
+                                              {
+                                                "name": "scheme",
+                                                "term": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {"literal": {"string": "+nan.0"}},
+                                                      "domain": {"unit": {}},
+                                                      "parameter": "_"}}}},
+                                              {
+                                                "name": "commonLisp",
+                                                "term": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {"literal": {"string": "+hydra-nan+"}},
+                                                      "domain": {"unit": {}},
+                                                      "parameter": "_"}}}},
+                                              {
+                                                "name": "emacsLisp",
+                                                "term": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {"literal": {"string": "0.0e+NaN"}},
+                                                      "domain": {"unit": {}},
+                                                      "parameter": "_"}}}}],
+                                            "typeName": "hydra.ext.lisp.syntax.Dialect"}}}}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"literal": {"string": "NaN"}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"variable": "s"},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.lib.equality.equal"},
+                                                "type": {"literal": {"string": {}}}}}}}}},
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"variable": "hydra.lib.logic.ifElse"},
+                                        "type": {"literal": {"string": {}}}}}}}}}}}}},
+                    "domain": {"literal": {"float": {"bigfloat": {}}}},
+                    "parameter": "v"}}},
+              "domain": {"variable": "hydra.ext.lisp.syntax.Dialect"},
+              "parameter": "d"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"literal": {"string": {}}},
+                  "domain": {"literal": {"float": {"bigfloat": {}}}}}},
+              "domain": {"variable": "hydra.ext.lisp.syntax.Dialect"}}},
+          "variables": []}}},
+    {
+      "term": {
         "name": "hydra.ext.lisp.serde.functionDefinitionToExpr",
         "term": {
           "function": {
@@ -4853,7 +5069,10 @@
                                                         "function": {
                                                           "elimination": {
                                                             "record": {"field": "value", "typeName": "hydra.ext.lisp.syntax.FloatLiteral"}}}}}},
-                                                  "function": {"variable": "hydra.lib.literals.showBigfloat"}}},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"variable": "d"},
+                                                      "function": {"variable": "hydra.ext.lisp.serde.formatLispFloat"}}}}},
                                               "function": {"variable": "hydra.serialization.cst"}}},
                                           "domain": {"variable": "hydra.ext.lisp.syntax.FloatLiteral"},
                                           "parameter": "f"}}}},

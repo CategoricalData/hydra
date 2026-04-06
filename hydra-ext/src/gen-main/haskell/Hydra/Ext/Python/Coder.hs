@@ -653,8 +653,25 @@ encodeFloatValue fv =
     case fv of
       Core.FloatValueBigfloat v0 -> Right (Utils.functionCall (Utils.pyNameToPyPrimary (Syntax.Name "Decimal")) [
         Utils.singleQuotedString (Literals.showBigfloat v0)])
-      Core.FloatValueFloat32 v0 -> Right (Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberFloat (Literals.float32ToBigfloat v0))))
-      Core.FloatValueFloat64 v0 -> Right (Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberFloat (Literals.float64ToBigfloat v0))))
+      Core.FloatValueFloat32 v0 -> encodeFloatValue_encodeFloat32 v0
+      Core.FloatValueFloat64 v0 -> encodeFloatValue_encodeFloat64 v0
+
+encodeFloatValue_encodeFloat32 :: Float -> Either t0 Syntax.Expression
+encodeFloatValue_encodeFloat32 v =
+
+      let s = Literals.showFloat32 v
+      in (Logic.ifElse (Equality.equal s "NaN") (Right (encodeFloatValue_pySpecialFloat "nan")) (Logic.ifElse (Equality.equal s "Infinity") (Right (encodeFloatValue_pySpecialFloat "inf")) (Logic.ifElse (Equality.equal s "-Infinity") (Right (encodeFloatValue_pySpecialFloat "-inf")) (Right (Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberFloat (Literals.float32ToBigfloat v))))))))
+
+encodeFloatValue_encodeFloat64 :: Double -> Either t0 Syntax.Expression
+encodeFloatValue_encodeFloat64 v =
+
+      let s = Literals.showFloat64 v
+      in (Logic.ifElse (Equality.equal s "NaN") (Right (encodeFloatValue_pySpecialFloat "nan")) (Logic.ifElse (Equality.equal s "Infinity") (Right (encodeFloatValue_pySpecialFloat "inf")) (Logic.ifElse (Equality.equal s "-Infinity") (Right (encodeFloatValue_pySpecialFloat "-inf")) (Right (Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberFloat (Literals.float64ToBigfloat v))))))))
+
+encodeFloatValue_pySpecialFloat :: String -> Syntax.Expression
+encodeFloatValue_pySpecialFloat value =
+    Utils.functionCall (Utils.pyNameToPyPrimary (Syntax.Name "float")) [
+      Utils.singleQuotedString value]
 
 -- | Encode a forall type to Python expression
 encodeForallType :: Environment_.PythonEnvironment -> Core.ForallType -> Either t0 Syntax.Expression

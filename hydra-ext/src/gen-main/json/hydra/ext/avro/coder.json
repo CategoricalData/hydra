@@ -291,9 +291,15 @@
                                                   "application": {
                                                     "argument": {
                                                       "application": {
-                                                        "argument": {"variable": "d"},
-                                                        "function": {"variable": "hydra.lib.literals.bigfloatToFloat64"}}},
-                                                    "function": {"variable": "hydra.lib.math.truncate"}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "d"},
+                                                                "function": {"variable": "hydra.lib.literals.bigfloatToFloat64"}}},
+                                                            "function": {"variable": "hydra.lib.math.truncate"}}},
+                                                        "function": {"variable": "hydra.lib.literals.float64ToBigfloat"}}},
+                                                    "function": {"variable": "hydra.lib.literals.bigfloatToBigint"}}},
                                                 "function": {"variable": "hydra.lib.literals.bigintToInt32"}}},
                                             "domain": {"literal": {"float": {"bigfloat": {}}}},
                                             "parameter": "d"}}},
@@ -314,9 +320,15 @@
                                                   "application": {
                                                     "argument": {
                                                       "application": {
-                                                        "argument": {"variable": "d"},
-                                                        "function": {"variable": "hydra.lib.literals.bigfloatToFloat64"}}},
-                                                    "function": {"variable": "hydra.lib.math.truncate"}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "d"},
+                                                                "function": {"variable": "hydra.lib.literals.bigfloatToFloat64"}}},
+                                                            "function": {"variable": "hydra.lib.math.truncate"}}},
+                                                        "function": {"variable": "hydra.lib.literals.float64ToBigfloat"}}},
+                                                    "function": {"variable": "hydra.lib.literals.bigfloatToBigint"}}},
                                                 "function": {"variable": "hydra.lib.literals.bigintToInt64"}}},
                                             "domain": {"literal": {"float": {"bigfloat": {}}}},
                                             "parameter": "d"}}},

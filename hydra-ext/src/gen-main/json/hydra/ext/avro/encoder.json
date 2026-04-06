@@ -6481,9 +6481,15 @@
                                                                                                                                           "application": {
                                                                                                                                             "argument": {
                                                                                                                                               "application": {
-                                                                                                                                                "argument": {"variable": "d"},
-                                                                                                                                                "function": {"variable": "hydra.lib.literals.bigfloatToFloat64"}}},
-                                                                                                                                            "function": {"variable": "hydra.lib.math.truncate"}}},
+                                                                                                                                                "argument": {
+                                                                                                                                                  "application": {
+                                                                                                                                                    "argument": {
+                                                                                                                                                      "application": {
+                                                                                                                                                        "argument": {"variable": "d"},
+                                                                                                                                                        "function": {"variable": "hydra.lib.literals.bigfloatToFloat64"}}},
+                                                                                                                                                    "function": {"variable": "hydra.lib.math.truncate"}}},
+                                                                                                                                                "function": {"variable": "hydra.lib.literals.float64ToBigfloat"}}},
+                                                                                                                                            "function": {"variable": "hydra.lib.literals.bigfloatToBigint"}}},
                                                                                                                                         "function": {"variable": "hydra.lib.literals.bigintToInt32"}}}},
                                                                                                                                   "typeName": "hydra.core.IntegerValue"}}},
                                                                                                                             "typeName": "hydra.core.Literal"}}},
@@ -6704,9 +6710,15 @@
                                                                                                                                           "application": {
                                                                                                                                             "argument": {
                                                                                                                                               "application": {
-                                                                                                                                                "argument": {"variable": "d"},
-                                                                                                                                                "function": {"variable": "hydra.lib.literals.bigfloatToFloat64"}}},
-                                                                                                                                            "function": {"variable": "hydra.lib.math.truncate"}}},
+                                                                                                                                                "argument": {
+                                                                                                                                                  "application": {
+                                                                                                                                                    "argument": {
+                                                                                                                                                      "application": {
+                                                                                                                                                        "argument": {"variable": "d"},
+                                                                                                                                                        "function": {"variable": "hydra.lib.literals.bigfloatToFloat64"}}},
+                                                                                                                                                    "function": {"variable": "hydra.lib.math.truncate"}}},
+                                                                                                                                                "function": {"variable": "hydra.lib.literals.float64ToBigfloat"}}},
+                                                                                                                                            "function": {"variable": "hydra.lib.literals.bigfloatToBigint"}}},
                                                                                                                                         "function": {"variable": "hydra.lib.literals.bigintToInt64"}}}},
                                                                                                                                   "typeName": "hydra.core.IntegerValue"}}},
                                                                                                                             "typeName": "hydra.core.Literal"}}},
@@ -6922,9 +6934,15 @@
                                                                                                                                 "application": {
                                                                                                                                   "argument": {
                                                                                                                                     "application": {
-                                                                                                                                      "argument": {"variable": "d"},
-                                                                                                                                      "function": {"variable": "hydra.lib.literals.bigfloatToFloat64"}}},
-                                                                                                                                  "function": {"variable": "hydra.lib.math.truncate"}}},
+                                                                                                                                      "argument": {
+                                                                                                                                        "application": {
+                                                                                                                                          "argument": {
+                                                                                                                                            "application": {
+                                                                                                                                              "argument": {"variable": "d"},
+                                                                                                                                              "function": {"variable": "hydra.lib.literals.bigfloatToFloat64"}}},
+                                                                                                                                          "function": {"variable": "hydra.lib.math.truncate"}}},
+                                                                                                                                      "function": {"variable": "hydra.lib.literals.float64ToBigfloat"}}},
+                                                                                                                                  "function": {"variable": "hydra.lib.literals.bigfloatToBigint"}}},
                                                                                                                               "function": {"variable": "hydra.lib.literals.bigintToInt64"}}}},
                                                                                                                         "typeName": "hydra.core.IntegerValue"}}},
                                                                                                                   "typeName": "hydra.core.Literal"}}},

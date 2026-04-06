@@ -9011,30 +9011,12 @@
                                         "function": {
                                           "lambda": {
                                             "body": {
-                                              "typeApplication": {
-                                                "body": {
+                                              "application": {
+                                                "argument": {"variable": "f"},
+                                                "function": {
                                                   "typeApplication": {
-                                                    "body": {
-                                                      "either": {
-                                                        "@right": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "union": {
-                                                                "field": {
-                                                                  "name": "number",
-                                                                  "term": {
-                                                                    "union": {
-                                                                      "field": {
-                                                                        "name": "float",
-                                                                        "term": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "f"},
-                                                                            "function": {"variable": "hydra.lib.literals.float32ToBigfloat"}}}},
-                                                                      "typeName": "hydra.ext.python.syntax.Number"}}},
-                                                                "typeName": "hydra.ext.python.syntax.Atom"}},
-                                                            "function": {"variable": "hydra.ext.python.utils.pyAtomToPyExpression"}}}}},
-                                                    "type": {"variable": "t0"}}},
-                                                "type": {"variable": "hydra.ext.python.syntax.Expression"}}},
+                                                    "body": {"variable": "hydra.ext.python.coder.encodeFloatValue_encodeFloat32"},
+                                                    "type": {"variable": "t0"}}}}},
                                             "domain": {"literal": {"float": {"float32": {}}}},
                                             "parameter": "f"}}}},
                                     {
@@ -9043,30 +9025,12 @@
                                         "function": {
                                           "lambda": {
                                             "body": {
-                                              "typeApplication": {
-                                                "body": {
+                                              "application": {
+                                                "argument": {"variable": "f"},
+                                                "function": {
                                                   "typeApplication": {
-                                                    "body": {
-                                                      "either": {
-                                                        "@right": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "union": {
-                                                                "field": {
-                                                                  "name": "number",
-                                                                  "term": {
-                                                                    "union": {
-                                                                      "field": {
-                                                                        "name": "float",
-                                                                        "term": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "f"},
-                                                                            "function": {"variable": "hydra.lib.literals.float64ToBigfloat"}}}},
-                                                                      "typeName": "hydra.ext.python.syntax.Number"}}},
-                                                                "typeName": "hydra.ext.python.syntax.Atom"}},
-                                                            "function": {"variable": "hydra.ext.python.utils.pyAtomToPyExpression"}}}}},
-                                                    "type": {"variable": "t0"}}},
-                                                "type": {"variable": "hydra.ext.python.syntax.Expression"}}},
+                                                    "body": {"variable": "hydra.ext.python.coder.encodeFloatValue_encodeFloat64"},
+                                                    "type": {"variable": "t0"}}}}},
                                             "domain": {"literal": {"float": {"float64": {}}}},
                                             "parameter": "f"}}}}],
                                   "typeName": "hydra.core.FloatValue"}}}}}},
@@ -9082,6 +9046,358 @@
                   "right": {"variable": "hydra.ext.python.syntax.Expression"}}},
               "domain": {"variable": "hydra.core.FloatValue"}}},
           "variables": ["t0"]}}},
+    {
+      "term": {
+        "name": "hydra.ext.python.coder.encodeFloatValue_encodeFloat32",
+        "term": {
+          "typeLambda": {
+            "body": {
+              "function": {
+                "lambda": {
+                  "body": {
+                    "let": {
+                      "bindings": [
+                        {
+                          "name": "s",
+                          "term": {
+                            "application": {
+                              "argument": {"variable": "v"},
+                              "function": {"variable": "hydra.lib.literals.showFloat32"}}},
+                          "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                      "body": {
+                        "application": {
+                          "argument": {
+                            "application": {
+                              "argument": {
+                                "application": {
+                                  "argument": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "either": {
+                                              "@right": {
+                                                "application": {
+                                                  "argument": {
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "number",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "float",
+                                                              "term": {
+                                                                "application": {
+                                                                  "argument": {"variable": "v"},
+                                                                  "function": {"variable": "hydra.lib.literals.float32ToBigfloat"}}}},
+                                                            "typeName": "hydra.ext.python.syntax.Number"}}},
+                                                      "typeName": "hydra.ext.python.syntax.Atom"}},
+                                                  "function": {"variable": "hydra.ext.python.utils.pyAtomToPyExpression"}}}}},
+                                          "type": {"variable": "t0"}}},
+                                      "type": {"variable": "hydra.ext.python.syntax.Expression"}}},
+                                  "function": {
+                                    "application": {
+                                      "argument": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "either": {
+                                                  "@right": {
+                                                    "application": {
+                                                      "argument": {"literal": {"string": "-inf"}},
+                                                      "function": {"variable": "hydra.ext.python.coder.encodeFloatValue_pySpecialFloat"}}}}},
+                                              "type": {"variable": "t0"}}},
+                                          "type": {"variable": "hydra.ext.python.syntax.Expression"}}},
+                                      "function": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"literal": {"string": "-Infinity"}},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {"variable": "s"},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {"variable": "hydra.lib.equality.equal"},
+                                                      "type": {"literal": {"string": {}}}}}}}}},
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {"variable": "hydra.lib.logic.ifElse"},
+                                              "type": {
+                                                "either": {
+                                                  "left": {"variable": "t0"},
+                                                  "right": {"variable": "hydra.ext.python.syntax.Expression"}}}}}}}}}}},
+                              "function": {
+                                "application": {
+                                  "argument": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "either": {
+                                              "@right": {
+                                                "application": {
+                                                  "argument": {"literal": {"string": "inf"}},
+                                                  "function": {"variable": "hydra.ext.python.coder.encodeFloatValue_pySpecialFloat"}}}}},
+                                          "type": {"variable": "t0"}}},
+                                      "type": {"variable": "hydra.ext.python.syntax.Expression"}}},
+                                  "function": {
+                                    "application": {
+                                      "argument": {
+                                        "application": {
+                                          "argument": {"literal": {"string": "Infinity"}},
+                                          "function": {
+                                            "application": {
+                                              "argument": {"variable": "s"},
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {"variable": "hydra.lib.equality.equal"},
+                                                  "type": {"literal": {"string": {}}}}}}}}},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {"variable": "hydra.lib.logic.ifElse"},
+                                          "type": {
+                                            "either": {
+                                              "left": {"variable": "t0"},
+                                              "right": {"variable": "hydra.ext.python.syntax.Expression"}}}}}}}}}}},
+                          "function": {
+                            "application": {
+                              "argument": {
+                                "typeApplication": {
+                                  "body": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "either": {
+                                          "@right": {
+                                            "application": {
+                                              "argument": {"literal": {"string": "nan"}},
+                                              "function": {"variable": "hydra.ext.python.coder.encodeFloatValue_pySpecialFloat"}}}}},
+                                      "type": {"variable": "t0"}}},
+                                  "type": {"variable": "hydra.ext.python.syntax.Expression"}}},
+                              "function": {
+                                "application": {
+                                  "argument": {
+                                    "application": {
+                                      "argument": {"literal": {"string": "NaN"}},
+                                      "function": {
+                                        "application": {
+                                          "argument": {"variable": "s"},
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {"variable": "hydra.lib.equality.equal"},
+                                              "type": {"literal": {"string": {}}}}}}}}},
+                                  "function": {
+                                    "typeApplication": {
+                                      "body": {"variable": "hydra.lib.logic.ifElse"},
+                                      "type": {
+                                        "either": {
+                                          "left": {"variable": "t0"},
+                                          "right": {"variable": "hydra.ext.python.syntax.Expression"}}}}}}}}}}}}},
+                  "domain": {"literal": {"float": {"float32": {}}}},
+                  "parameter": "v"}}},
+            "parameter": "t0"}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "either": {
+                  "left": {"variable": "t0"},
+                  "right": {"variable": "hydra.ext.python.syntax.Expression"}}},
+              "domain": {"literal": {"float": {"float32": {}}}}}},
+          "variables": ["t0"]}}},
+    {
+      "term": {
+        "name": "hydra.ext.python.coder.encodeFloatValue_encodeFloat64",
+        "term": {
+          "typeLambda": {
+            "body": {
+              "function": {
+                "lambda": {
+                  "body": {
+                    "let": {
+                      "bindings": [
+                        {
+                          "name": "s",
+                          "term": {
+                            "application": {
+                              "argument": {"variable": "v"},
+                              "function": {"variable": "hydra.lib.literals.showFloat64"}}},
+                          "type": {"type": {"literal": {"string": {}}}, "variables": []}}],
+                      "body": {
+                        "application": {
+                          "argument": {
+                            "application": {
+                              "argument": {
+                                "application": {
+                                  "argument": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "either": {
+                                              "@right": {
+                                                "application": {
+                                                  "argument": {
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "number",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "float",
+                                                              "term": {
+                                                                "application": {
+                                                                  "argument": {"variable": "v"},
+                                                                  "function": {"variable": "hydra.lib.literals.float64ToBigfloat"}}}},
+                                                            "typeName": "hydra.ext.python.syntax.Number"}}},
+                                                      "typeName": "hydra.ext.python.syntax.Atom"}},
+                                                  "function": {"variable": "hydra.ext.python.utils.pyAtomToPyExpression"}}}}},
+                                          "type": {"variable": "t0"}}},
+                                      "type": {"variable": "hydra.ext.python.syntax.Expression"}}},
+                                  "function": {
+                                    "application": {
+                                      "argument": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "either": {
+                                                  "@right": {
+                                                    "application": {
+                                                      "argument": {"literal": {"string": "-inf"}},
+                                                      "function": {"variable": "hydra.ext.python.coder.encodeFloatValue_pySpecialFloat"}}}}},
+                                              "type": {"variable": "t0"}}},
+                                          "type": {"variable": "hydra.ext.python.syntax.Expression"}}},
+                                      "function": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"literal": {"string": "-Infinity"}},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {"variable": "s"},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {"variable": "hydra.lib.equality.equal"},
+                                                      "type": {"literal": {"string": {}}}}}}}}},
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {"variable": "hydra.lib.logic.ifElse"},
+                                              "type": {
+                                                "either": {
+                                                  "left": {"variable": "t0"},
+                                                  "right": {"variable": "hydra.ext.python.syntax.Expression"}}}}}}}}}}},
+                              "function": {
+                                "application": {
+                                  "argument": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "either": {
+                                              "@right": {
+                                                "application": {
+                                                  "argument": {"literal": {"string": "inf"}},
+                                                  "function": {"variable": "hydra.ext.python.coder.encodeFloatValue_pySpecialFloat"}}}}},
+                                          "type": {"variable": "t0"}}},
+                                      "type": {"variable": "hydra.ext.python.syntax.Expression"}}},
+                                  "function": {
+                                    "application": {
+                                      "argument": {
+                                        "application": {
+                                          "argument": {"literal": {"string": "Infinity"}},
+                                          "function": {
+                                            "application": {
+                                              "argument": {"variable": "s"},
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {"variable": "hydra.lib.equality.equal"},
+                                                  "type": {"literal": {"string": {}}}}}}}}},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {"variable": "hydra.lib.logic.ifElse"},
+                                          "type": {
+                                            "either": {
+                                              "left": {"variable": "t0"},
+                                              "right": {"variable": "hydra.ext.python.syntax.Expression"}}}}}}}}}}},
+                          "function": {
+                            "application": {
+                              "argument": {
+                                "typeApplication": {
+                                  "body": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "either": {
+                                          "@right": {
+                                            "application": {
+                                              "argument": {"literal": {"string": "nan"}},
+                                              "function": {"variable": "hydra.ext.python.coder.encodeFloatValue_pySpecialFloat"}}}}},
+                                      "type": {"variable": "t0"}}},
+                                  "type": {"variable": "hydra.ext.python.syntax.Expression"}}},
+                              "function": {
+                                "application": {
+                                  "argument": {
+                                    "application": {
+                                      "argument": {"literal": {"string": "NaN"}},
+                                      "function": {
+                                        "application": {
+                                          "argument": {"variable": "s"},
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {"variable": "hydra.lib.equality.equal"},
+                                              "type": {"literal": {"string": {}}}}}}}}},
+                                  "function": {
+                                    "typeApplication": {
+                                      "body": {"variable": "hydra.lib.logic.ifElse"},
+                                      "type": {
+                                        "either": {
+                                          "left": {"variable": "t0"},
+                                          "right": {"variable": "hydra.ext.python.syntax.Expression"}}}}}}}}}}}}},
+                  "domain": {"literal": {"float": {"float64": {}}}},
+                  "parameter": "v"}}},
+            "parameter": "t0"}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {
+                "either": {
+                  "left": {"variable": "t0"},
+                  "right": {"variable": "hydra.ext.python.syntax.Expression"}}},
+              "domain": {"literal": {"float": {"float64": {}}}}}},
+          "variables": ["t0"]}}},
+    {
+      "term": {
+        "name": "hydra.ext.python.coder.encodeFloatValue_pySpecialFloat",
+        "term": {
+          "function": {
+            "lambda": {
+              "body": {
+                "application": {
+                  "argument": {
+                    "list": [
+                      {
+                        "application": {
+                          "argument": {"variable": "value"},
+                          "function": {"variable": "hydra.ext.python.utils.singleQuotedString"}}}]},
+                  "function": {
+                    "application": {
+                      "argument": {
+                        "application": {
+                          "argument": {
+                            "wrap": {
+                              "body": {"literal": {"string": "float"}},
+                              "typeName": "hydra.ext.python.syntax.Name"}},
+                          "function": {"variable": "hydra.ext.python.utils.pyNameToPyPrimary"}}},
+                      "function": {"variable": "hydra.ext.python.utils.functionCall"}}}}},
+              "domain": {"literal": {"string": {}}},
+              "parameter": "value"}}},
+        "type": {
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ext.python.syntax.Expression"},
+              "domain": {"literal": {"string": {}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.ext.python.coder.encodeForallType",
