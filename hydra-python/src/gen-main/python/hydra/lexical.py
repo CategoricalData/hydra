@@ -40,9 +40,18 @@ def build_graph(elements: frozenlist[hydra.core.Binding], environment: FrozenDic
     def let_terms() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
         return hydra.lib.maps.map((lambda mt: hydra.lib.maybes.from_just(mt)), hydra.lib.maps.filter((lambda mt: hydra.lib.maybes.is_just(mt)), environment))
     @lru_cache(1)
+    def merged_terms() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
+        return hydra.lib.maps.union(element_terms(), let_terms())
+    @lru_cache(1)
+    def filtered_terms() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
+        return hydra.lib.maps.filter_with_key((lambda k, _v: hydra.lib.logic.not_(hydra.lib.maps.member(k, primitives))), merged_terms())
+    @lru_cache(1)
     def element_types() -> FrozenDict[hydra.core.Name, hydra.core.TypeScheme]:
         return hydra.lib.maps.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda b: hydra.lib.maybes.map((lambda ts: (b.name, ts)), b.type)), elements)))
-    return hydra.graph.Graph(hydra.lib.maps.union(element_terms(), let_terms()), element_types(), hydra.lib.maps.empty(), hydra.lib.sets.from_list(hydra.lib.maps.keys(hydra.lib.maps.filter((lambda mt: hydra.lib.maybes.is_nothing(mt)), environment))), hydra.lib.maps.empty(), primitives, hydra.lib.maps.empty(), hydra.lib.sets.empty())
+    @lru_cache(1)
+    def filtered_types() -> FrozenDict[hydra.core.Name, hydra.core.TypeScheme]:
+        return hydra.lib.maps.filter_with_key((lambda k, _v: hydra.lib.logic.not_(hydra.lib.maps.member(k, primitives))), element_types())
+    return hydra.graph.Graph(filtered_terms(), filtered_types(), hydra.lib.maps.empty(), hydra.lib.sets.from_list(hydra.lib.maps.keys(hydra.lib.maps.filter((lambda mt: hydra.lib.maybes.is_nothing(mt)), environment))), hydra.lib.maps.empty(), primitives, hydra.lib.maps.empty(), hydra.lib.sets.empty())
 
 def choose_unique_name(reserved: frozenset[hydra.core.Name], name: hydra.core.Name) -> hydra.core.Name:
     def try_name(index: int) -> hydra.core.Name:
@@ -129,6 +138,16 @@ def graph_to_bindings(g: hydra.graph.Graph) -> frozenlist[hydra.core.Binding]:
     r"""Reconstruct a list of Bindings from a Graph's boundTerms and boundTypes."""
 
     return hydra.lib.lists.map((lambda p: (name := hydra.lib.pairs.first(p), term := hydra.lib.pairs.second(p), hydra.core.Binding(name, term, hydra.lib.maps.lookup(name, g.bound_types)))[2]), hydra.lib.maps.to_list(g.bound_terms))
+
+def graph_with_primitives(built_in: frozenlist[hydra.graph.Primitive], user_provided: frozenlist[hydra.graph.Primitive]) -> hydra.graph.Graph:
+    r"""Build a graph with primitives assembled from built-in and user-provided lists. User-provided primitives shadow built-in ones."""
+
+    def to_map(ps: frozenlist[hydra.graph.Primitive]) -> FrozenDict[hydra.core.Name, hydra.graph.Primitive]:
+        return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda p: (p.name, p)), ps))
+    @lru_cache(1)
+    def prims() -> FrozenDict[hydra.core.Name, hydra.graph.Primitive]:
+        return hydra.lib.maps.union(to_map(user_provided), to_map(built_in))
+    return build_graph((), hydra.lib.maps.empty(), prims())
 
 def lookup_primitive(graph: hydra.graph.Graph, name: hydra.core.Name) -> Maybe[hydra.graph.Primitive]:
     r"""Look up a primitive function in a graph by name."""
