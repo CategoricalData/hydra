@@ -56,6 +56,11 @@ public class Float64ToBigfloat extends PrimitiveFunction {
      * @return the BigDecimal representation of the value
      */
     public static BigDecimal apply(Double value) {
+        // BigDecimal cannot represent NaN or Infinity; use sentinel zero.
+        // Callers (coders) should check for NaN/Inf before reaching here.
+        if (Double.isNaN(value) || Double.isInfinite(value)) {
+            return BigDecimal.ZERO;
+        }
         return BigDecimal.valueOf(value);
     }
 }

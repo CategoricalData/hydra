@@ -165,7 +165,10 @@ module_ = Module ns definitions
       toDefinition encodeNullaryPrimitiveByName,
       toDefinition encodeLiteral,
       toDefinition encodeLiteral_encodeFloat,
+      toDefinition encodeLiteral_encodeFloat32,
+      toDefinition encodeLiteral_encodeFloat64,
       toDefinition encodeLiteral_encodeInteger,
+      toDefinition encodeLiteral_javaSpecialFloatExpr,
       toDefinition encodeLiteral_litExp,
       toDefinition encodeLiteral_primCast,
       toDefinition encodeLiteralType,
@@ -2264,15 +2267,50 @@ encodeLiteral_encodeFloat = def "encodeLiteral_encodeFloat" $
           list [encodeLiteral @@ inject _Literal _Literal_string (Literals.showBigfloat $ var "v")] @@
           nothing,
       _FloatValue_float32>>: "v" ~>
-        encodeLiteral_primCast @@
-          (JavaDsl.primitiveTypeNumeric $ JavaDsl.numericTypeFloatingPoint JavaDsl.floatingPointTypeFloat) @@
-          (encodeLiteral_litExp @@
-            (JavaDsl.literalFloatingPoint $ JavaDsl.floatingPointLiteral $
-              Literals.float32ToBigfloat (var "v"))),
+        encodeLiteral_encodeFloat32 @@ var "v",
       _FloatValue_float64>>: "v" ~>
-        encodeLiteral_litExp @@
-          (JavaDsl.literalFloatingPoint $ JavaDsl.floatingPointLiteral $
-            Literals.float64ToBigfloat (var "v"))]
+        encodeLiteral_encodeFloat64 @@ var "v"]
+
+-- | Encode a float32 value, handling NaN and Infinity specially since BigDecimal cannot represent them.
+encodeLiteral_encodeFloat32 :: TTermDefinition (Float -> Java.Expression)
+encodeLiteral_encodeFloat32 = def "encodeLiteral_encodeFloat32" $
+  lambda "v" $ lets [
+    "s">: Literals.showFloat32 (var "v")] $
+    Logic.ifElse (Equality.equal (var "s") (string "NaN"))
+      (encodeLiteral_javaSpecialFloatExpr @@ string "Float" @@ string "NaN") $
+    Logic.ifElse (Equality.equal (var "s") (string "Infinity"))
+      (encodeLiteral_javaSpecialFloatExpr @@ string "Float" @@ string "POSITIVE_INFINITY") $
+    Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
+      (encodeLiteral_javaSpecialFloatExpr @@ string "Float" @@ string "NEGATIVE_INFINITY") $
+    encodeLiteral_primCast @@
+      (JavaDsl.primitiveTypeNumeric $ JavaDsl.numericTypeFloatingPoint JavaDsl.floatingPointTypeFloat) @@
+      (encodeLiteral_litExp @@
+        (JavaDsl.literalFloatingPoint $ JavaDsl.floatingPointLiteral $
+          Literals.float32ToBigfloat (var "v")))
+
+-- | Encode a float64 value, handling NaN and Infinity specially since BigDecimal cannot represent them.
+encodeLiteral_encodeFloat64 :: TTermDefinition (Double -> Java.Expression)
+encodeLiteral_encodeFloat64 = def "encodeLiteral_encodeFloat64" $
+  lambda "v" $ lets [
+    "s">: Literals.showFloat64 (var "v")] $
+    Logic.ifElse (Equality.equal (var "s") (string "NaN"))
+      (encodeLiteral_javaSpecialFloatExpr @@ string "Double" @@ string "NaN") $
+    Logic.ifElse (Equality.equal (var "s") (string "Infinity"))
+      (encodeLiteral_javaSpecialFloatExpr @@ string "Double" @@ string "POSITIVE_INFINITY") $
+    Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
+      (encodeLiteral_javaSpecialFloatExpr @@ string "Double" @@ string "NEGATIVE_INFINITY") $
+    encodeLiteral_litExp @@
+      (JavaDsl.literalFloatingPoint $ JavaDsl.floatingPointLiteral $
+        Literals.float64ToBigfloat (var "v"))
+
+-- | Emit a Java field access expression like Float.NaN or Double.POSITIVE_INFINITY.
+encodeLiteral_javaSpecialFloatExpr :: TTermDefinition (String -> String -> Java.Expression)
+encodeLiteral_javaSpecialFloatExpr = def "encodeLiteral_javaSpecialFloatExpr" $
+  lambda "className" $ lambda "fieldName" $
+    JavaUtilsSource.javaExpressionNameToJavaExpression @@
+      (JavaDsl.expressionName
+        (just (JavaDsl.ambiguousName (list [JavaDsl.identifier $ var "className"])))
+        (JavaDsl.identifier $ var "fieldName"))
 
 -- | Encode an integer value to a Java expression
 encodeLiteral_encodeInteger :: TTermDefinition (IntegerValue -> Java.Expression)

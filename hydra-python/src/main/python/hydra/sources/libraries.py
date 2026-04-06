@@ -660,7 +660,7 @@ def register_math_primitives() -> dict[Name, Primitive]:
         qname(namespace, "atanh"), math.atanh, [], prims.float64(), prims.float64()
     )
     primitives[qname(namespace, "ceiling")] = prims.prim1(
-        qname(namespace, "ceiling"), math.ceiling, [], prims.float64(), prims.bigint()
+        qname(namespace, "ceiling"), math.ceiling, [], prims.float64(), prims.float64()
     )
     primitives[qname(namespace, "cos")] = prims.prim1(
         qname(namespace, "cos"), math.cos, [], prims.float64(), prims.float64()
@@ -675,7 +675,7 @@ def register_math_primitives() -> dict[Name, Primitive]:
         qname(namespace, "exp"), math.exp, [], prims.float64(), prims.float64()
     )
     primitives[qname(namespace, "floor")] = prims.prim1(
-        qname(namespace, "floor"), math.floor, [], prims.float64(), prims.bigint()
+        qname(namespace, "floor"), math.floor, [], prims.float64(), prims.float64()
     )
     primitives[qname(namespace, "log")] = prims.prim1(
         qname(namespace, "log"), math.log, [], prims.float64(), prims.float64()
@@ -690,7 +690,7 @@ def register_math_primitives() -> dict[Name, Primitive]:
         qname(namespace, "pow"), math.pow_, [], prims.float64(), prims.float64(), prims.float64()
     )
     primitives[qname(namespace, "round")] = prims.prim1(
-        qname(namespace, "round"), math.round_, [], prims.float64(), prims.bigint()
+        qname(namespace, "round"), math.round_, [], prims.float64(), prims.float64()
     )
     primitives[qname(namespace, "roundBigfloat")] = prims.prim2(
         qname(namespace, "roundBigfloat"), math.round_bigfloat, [], prims.int32(), prims.bigfloat(), prims.bigfloat()
@@ -717,7 +717,7 @@ def register_math_primitives() -> dict[Name, Primitive]:
         qname(namespace, "tanh"), math.tanh, [], prims.float64(), prims.float64()
     )
     primitives[qname(namespace, "truncate")] = prims.prim1(
-        qname(namespace, "truncate"), math.truncate, [], prims.float64(), prims.bigint()
+        qname(namespace, "truncate"), math.truncate, [], prims.float64(), prims.float64()
     )
 
     return primitives

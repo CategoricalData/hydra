@@ -141,6 +141,9 @@ module_ = Module ns definitions
       toDefinition encodeField,
       toDefinition encodeFieldType,
       toDefinition encodeFloatValue,
+      toDefinition encodeFloatValue_encodeFloat32,
+      toDefinition encodeFloatValue_encodeFloat64,
+      toDefinition encodeFloatValue_pySpecialFloat,
       toDefinition encodeForallType,
       toDefinition encodeFunction,
       toDefinition encodeFunctionDefinition,
@@ -1050,11 +1053,45 @@ encodeFloatValue = def "encodeFloatValue" $
           (PyUtils.pyNameToPyPrimary @@ (PyDsl.name $ string "Decimal")) @@
           list [PyUtils.singleQuotedString @@ (Literals.showBigfloat $ var "f")],
       _FloatValue_float32>>: "f" ~>
-        right $ PyUtils.pyAtomToPyExpression @@
-          (PyDsl.atomNumber $ PyDsl.numberFloat $ Literals.float32ToBigfloat $ var "f"),
+        encodeFloatValue_encodeFloat32 @@ var "f",
       _FloatValue_float64>>: "f" ~>
-        right $ PyUtils.pyAtomToPyExpression @@
-          (PyDsl.atomNumber $ PyDsl.numberFloat $ Literals.float64ToBigfloat $ var "f")]
+        encodeFloatValue_encodeFloat64 @@ var "f"]
+
+-- | Encode a float32 value, handling NaN and Infinity specially since BigDecimal cannot represent them.
+encodeFloatValue_encodeFloat32 :: TTermDefinition (Float -> Either (InContext Error) Py.Expression)
+encodeFloatValue_encodeFloat32 = def "encodeFloatValue_encodeFloat32" $
+  lambda "v" $ lets [
+    "s">: Literals.showFloat32 (var "v")] $
+    Logic.ifElse (Equality.equal (var "s") (string "NaN"))
+      (right $ encodeFloatValue_pySpecialFloat @@ string "nan") $
+    Logic.ifElse (Equality.equal (var "s") (string "Infinity"))
+      (right $ encodeFloatValue_pySpecialFloat @@ string "inf") $
+    Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
+      (right $ encodeFloatValue_pySpecialFloat @@ string "-inf") $
+    right $ PyUtils.pyAtomToPyExpression @@
+      (PyDsl.atomNumber $ PyDsl.numberFloat $ Literals.float32ToBigfloat $ var "v")
+
+-- | Encode a float64 value, handling NaN and Infinity specially since BigDecimal cannot represent them.
+encodeFloatValue_encodeFloat64 :: TTermDefinition (Double -> Either (InContext Error) Py.Expression)
+encodeFloatValue_encodeFloat64 = def "encodeFloatValue_encodeFloat64" $
+  lambda "v" $ lets [
+    "s">: Literals.showFloat64 (var "v")] $
+    Logic.ifElse (Equality.equal (var "s") (string "NaN"))
+      (right $ encodeFloatValue_pySpecialFloat @@ string "nan") $
+    Logic.ifElse (Equality.equal (var "s") (string "Infinity"))
+      (right $ encodeFloatValue_pySpecialFloat @@ string "inf") $
+    Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
+      (right $ encodeFloatValue_pySpecialFloat @@ string "-inf") $
+    right $ PyUtils.pyAtomToPyExpression @@
+      (PyDsl.atomNumber $ PyDsl.numberFloat $ Literals.float64ToBigfloat $ var "v")
+
+-- | Emit a Python float('nan'), float('inf'), or float('-inf') expression.
+encodeFloatValue_pySpecialFloat :: TTermDefinition (String -> Py.Expression)
+encodeFloatValue_pySpecialFloat = def "encodeFloatValue_pySpecialFloat" $
+  lambda "value" $
+    PyUtils.functionCall @@
+      (PyUtils.pyNameToPyPrimary @@ (PyDsl.name $ string "float")) @@
+      list [PyUtils.singleQuotedString @@ var "value"]
 
 -- | Encode a forall type to Python expression.
 --   Gathers all type parameters and encodes the body with parameters.
