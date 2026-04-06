@@ -152,7 +152,7 @@ SCMEOF
          (schema-types (hydra_lib_maps_from_list (append kernel-schemas test-schemas)))
          (test-terms (map (lambda (entry) (list (car entry) (cdr entry))) (hydra_lib_maps_to_list hydra_test_test_graph_test_terms)))
          (bound-terms (append
-           (map (lambda (pair) (list (car pair) (list (quote function) (list (quote primitive) (car pair))))) all-prims)
+           ;; Primitives are resolved via graphPrimitives, not boundTerms.
            (annotation-bindings)
            (list (list "hydra.monads.emptyContext" (list (quote unit) (list)))
                  (list "hydra.lexical.emptyGraph" (list (quote unit) (list))))
@@ -190,7 +190,7 @@ if [ -f "$CLJ_TESTGRAPH" ]; then
         test-schemas (into {} (map (fn [[k v]] [k (type-to-ts v)]) test-types-list))
         schema-types (merge kernel-schemas test-schemas)
         bound-terms (merge
-          (into {} (map (fn [[k _]] [k (list :function (list :primitive k))]) std-prims))
+          ;; Primitives are resolved via graphPrimitives, not boundTerms.
           (into {} (annotation-bindings))
           (into {} (seq hydra_test_test_graph_test_terms)))]
     {:bound_terms bound-terms
@@ -222,7 +222,7 @@ if [ -f "$CL_TESTGRAPH" ]; then
             (test-schemas (cl:mapcar (cl:lambda (entry) (cl:list (cl:car entry) (cl:funcall type-to-ts (cl:cadr entry)))) (hydra_lib_maps_to_list hydra_test_test_graph_test_types)))
             (schema-types (hydra_lib_maps_from_list (cl:append kernel-schemas test-schemas)))
             (prim-map (hydra_lib_maps_from_list (cl:mapcar (cl:lambda (p) (cl:list (cl:car p) (cl:cdr p))) std-prims)))
-            (bound-terms (hydra_lib_maps_from_list (cl:append (cl:mapcar (cl:lambda (p) (cl:list (cl:car p) (cl:list :function (cl:list :primitive (cl:car p))))) std-prims) (annotation-bindings) (hydra_lib_maps_to_list hydra_test_test_graph_test_terms)))))
+            (bound-terms (hydra_lib_maps_from_list (cl:append (annotation-bindings) (hydra_lib_maps_to_list hydra_test_test_graph_test_terms)))))
     (cl:list (cl:cons :bound_terms bound-terms) (cl:cons :bound_types cl:nil) (cl:cons :class_constraints cl:nil) (cl:cons :lambda_variables cl:nil) (cl:cons :metadata cl:nil) (cl:cons :primitives prim-map) (cl:cons :schema_types schema-types) (cl:cons :type_variables cl:nil))))
 CLEOF
 fi
@@ -245,7 +245,7 @@ if [ -f "$EL_TESTGRAPH" ]; then
          (test-schemas (mapcar (lambda (entry) (list (car entry) (funcall type-to-ts (cadr entry)))) (hydra_lib_maps_to_list hydra_test_test_graph_test_types)))
          (schema-types (hydra_lib_maps_from_list (append kernel-schemas test-schemas)))
          (prim-map (hydra_lib_maps_from_list (mapcar (lambda (p) (list (car p) (cdr p))) std-prims)))
-         (bound-terms (hydra_lib_maps_from_list (append (mapcar (lambda (p) (list (car p) (list :function (list :primitive (car p))))) std-prims) (hydra-annotation-bindings) (hydra_lib_maps_to_list hydra_test_test_graph_test_terms)))))
+         (bound-terms (hydra_lib_maps_from_list (append (hydra-annotation-bindings) (hydra_lib_maps_to_list hydra_test_test_graph_test_terms)))))
     (list (cons :bound_terms bound-terms) (cons :bound_types nil) (cons :class_constraints nil) (cons :lambda_variables nil) (cons :metadata nil) (cons :primitives prim-map) (cons :schema_types schema-types) (cons :type_variables nil))))
 ELEOF
 fi

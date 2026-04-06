@@ -23,7 +23,6 @@ functionVariant :: FunctionVariant -> TTerm FunctionVariant
 functionVariant v = injectUnit _FunctionVariant $ case v of
   FunctionVariantElimination -> _FunctionVariant_elimination
   FunctionVariantLambda -> _FunctionVariant_lambda
-  FunctionVariantPrimitive -> _FunctionVariant_primitive
 
 -- | Convert a Haskell LiteralVariant to a TTerm
 literalVariant :: LiteralVariant -> TTerm LiteralVariant

@@ -198,10 +198,7 @@ etaExpandTerm = define "etaExpandTerm" $
         Math.sub (var "termArityWithContext" @@ var "tx" @@ Core.applicationFunction (var "app")) (int32 1),
       _Term_function>>: "f" ~> cases _Function (var "f") Nothing [
         _Function_elimination>>: constant $ int32 1,
-        _Function_lambda>>: constant $ int32 0,
-        _Function_primitive>>: "name" ~>
-          optCases (Maps.lookup (var "name") (var "primTypes"))
-            (int32 0) Arity.typeSchemeArity],
+        _Function_lambda>>: constant $ int32 0],
       _Term_let>>: "l" ~>
         var "termArityWithContext"
           @@ (Scoping.extendGraphForLet @@ constant (constant nothing) @@ var "tx" @@ var "l")
@@ -321,10 +318,7 @@ etaExpandTerm = define "etaExpandTerm" $
         (Just nothing) [
         _Term_annotated>>: "at2" ~>
           var "termHeadType" @@ var "tx2" @@ Core.annotatedTermBody (var "at2"),
-        _Term_function>>: "f2" ~> cases _Function (var "f2") (Just nothing) [
-          _Function_primitive>>: "pn2" ~>
-            Maybes.map Scoping.typeSchemeToFType
-              (Maps.lookup (var "pn2") (var "primTypes"))],
+        _Term_function>>: constant nothing,
         _Term_let>>: "l2" ~>
           var "termHeadType"
             @@ (Scoping.extendGraphForLet @@ constant (constant nothing) @@ var "tx2" @@ var "l2")
@@ -420,13 +414,7 @@ etaExpandTerm = define "etaExpandTerm" $
             Core.lambda (Core.lambdaParameter $ var "lm") (Core.lambdaDomain $ var "lm") (var "body")) $
           "arty" <~ var "termArityWithContext" @@ var "tx" @@ var "result" $
           -- Lambda type is not in the context; pass Nothing (lambdas have arity 0 so expand is a no-op anyway)
-          var "expand" @@ false @@ var "args" @@ var "arty" @@ nothing @@ var "result",
-        _Function_primitive>>: "pn" ~>
-          -- Don't expand if bare; look up primitive type for lambda domain annotations
-          "arty" <~ var "termArityWithContext" @@ var "tx" @@ var "term" $
-          "primType" <~ Maybes.map ("ts" ~> Core.typeSchemeType $ var "ts")
-            (Maps.lookup (var "pn") (var "primTypes")) $
-          var "expand" @@ false @@ var "args" @@ var "arty" @@ var "primType" @@ var "term"],
+          var "expand" @@ false @@ var "args" @@ var "arty" @@ nothing @@ var "result"],
 
       -- Let: extend context for bindings and body
       _Term_let>>: "lt" ~>
@@ -520,9 +508,7 @@ etaExpansionArity = define "etaExpansionArity" $
     _Term_function>>: "f" ~> cases _Function (var "f")
       Nothing [
       _Function_elimination>>: constant $ int32 1,
-      _Function_lambda>>: constant $ int32 0,
-      _Function_primitive>>: "name" ~> Arity.primitiveArity
-        @@ (Maybes.fromJust (Lexical.lookupPrimitive @@ var "graph" @@ var "name"))],
+      _Function_lambda>>: constant $ int32 0],
     _Term_typeLambda>>: "ta" ~> etaExpansionArity @@ var "graph" @@ Core.typeLambdaBody (var "ta"),
     _Term_typeApplication>>: "tt" ~> etaExpansionArity @@ var "graph" @@ Core.typeApplicationTermBody (var "tt"),
     _Term_variable>>: "name" ~>
@@ -573,11 +559,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
         _Function_elimination>>: constant $ right $ int32 1,
         _Function_lambda>>: "l" ~>
           "txl" <~ Scoping.extendGraphForLambda @@ var "tx" @@ var "l" $
-          var "arityOf" @@ var "txl" @@ Core.lambdaBody (var "l"),
-        _Function_primitive>>: "name" ~>
-          Eithers.map
-          ("_ts" ~> Arity.typeSchemeArity @@ var "_ts")
-          (Lexical.requirePrimitiveType @@ var "cx" @@ var "tx" @@ var "name")]) $
+          var "arityOf" @@ var "txl" @@ Core.lambdaBody (var "l")]) $
       cases _Term (var "term")
         (Just $ var "dflt") [
         _Term_annotated>>: "at" ~> var "arityOf" @@ var "tx" @@ Core.annotatedTermBody (var "at"),
@@ -820,13 +802,7 @@ reduceTerm = define "reduceTerm" $
           _Function_lambda>>: "l" ~>
             Logic.ifElse (Lists.null $ var "args")
               (right $ var "original")
-              (var "forLambda" @@ var "l" @@ var "args"),
-          _Function_primitive>>: "name" ~>
-            "prim" <<~ Lexical.requirePrimitive @@ var "cx" @@ var "graph" @@ var "name" $
-            "arity" <~ Arity.primitiveArity @@ var "prim" $
-            Logic.ifElse (Equality.gt (var "arity") (Lists.length $ var "args"))
-              (right $ var "applyToArguments" @@ var "original" @@ var "args")
-              (var "forPrimitive" @@ var "prim" @@ var "arity" @@ var "args")],
+              (var "forLambda" @@ var "l" @@ var "args")],
       _Term_variable>>: "v" ~>
         -- Look up the variable in the graph; if found, reduce its definition
         "mBinding" <~ Lexical.lookupBinding @@ var "graph" @@ var "v" $
@@ -904,8 +880,7 @@ termIsValue = define "termIsValue" $
         _Elimination_union>>: "cs" ~>
           Logic.and (var "checkFields" @@ Core.caseStatementCases (var "cs"))
             (Maybes.maybe true termIsValue (Core.caseStatementDefault $ var "cs"))],
-    _Function_lambda>>: "l" ~> termIsValue @@ Core.lambdaBody (var "l"),
-    _Function_primitive>>: constant true]) $
+    _Function_lambda>>: "l" ~> termIsValue @@ Core.lambdaBody (var "l")]) $
   cases _Term (Strip.deannotateTerm @@ var "term")
     (Just false) [
     _Term_application>>: constant false,

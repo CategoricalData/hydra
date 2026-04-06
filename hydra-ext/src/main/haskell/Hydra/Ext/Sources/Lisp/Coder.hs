@@ -302,8 +302,6 @@ encodeFunction = def "encodeFunction" $
         "param" <~ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (Core.lambdaParameter (var "lam")))) $
         "body" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.lambdaBody (var "lam")) $
           right (lispLambdaExpr @@ list [var "param"] @@ var "body"),
-      _Function_primitive>>: lambda "name" $
-        right (lispVar @@ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (var "name")))),
       _Function_elimination>>: lambda "elim" $
         encodeElimination @@ var "dialect" @@ var "cx" @@ var "g" @@ var "elim" @@ nothing]
 
@@ -855,10 +853,6 @@ isPrimitiveRef :: TTermDefinition (String -> Term -> Bool)
 isPrimitiveRef = def "isPrimitiveRef" $
   lambda "primName" $ lambda "term" $
     cases _Term (var "term") (Just $ boolean False) [
-      _Term_function>>: lambda "f" $
-        cases _Function (var "f") (Just $ boolean False) [
-          _Function_primitive>>: lambda "name" $
-            Equality.equal (Core.unName (var "name")) (var "primName")],
       _Term_variable>>: lambda "name" $
         Equality.equal (Core.unName (var "name")) (var "primName"),
       _Term_annotated>>: lambda "at" $

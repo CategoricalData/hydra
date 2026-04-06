@@ -323,7 +323,6 @@ encodeFunction = def "encodeFunction" $
                 (var "mdom"))
               ("sdom" ~>
                 right (ScalaUtilsSource.slambda @@ var "v" @@ var "sbody" @@ var "sdom")))),
-      _Function_primitive>>: ("name" ~> right (ScalaUtilsSource.sprim @@ var "name")),
       _Function_elimination>>: ("e" ~>
         cases _Elimination (var "e") (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "unsupported elimination")) (var "cx"))) [
           _Elimination_wrap>>: ("name" ~>
@@ -586,31 +585,6 @@ encodeTerm = def "encodeTerm" $
           (Just $ asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody")
           [_Term_function>>: ("f" ~> cases _Function (var "f")
             (Just $ asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody") [
-            -- For primitives and lambdas: encode with type parameters
-            _Function_primitive>>: ("pname" ~>
-              Eithers.bind
-                (Eithers.mapList ("targ" ~> asTerm encodeType @@ var "cx" @@ var "g" @@ var "targ") (var "typeArgs"))
-                ("stypeArgs" ~> lets [
-                    -- Build set of capitalized type variable names that are in scope.
-                    -- graphTypeVariables has Hydra Names like "t0"; capitalize to match Scala "T0".
-                    "inScopeTypeVarNames">: Sets.fromList (Lists.map
-                      ("n" ~> Formatting.capitalize @@ (Core.unName (var "n")))
-                      (Sets.toList (Graph.graphTypeVariables $ var "g"))),
-                    -- Check if any type arg has an unqualified type variable NOT in scope.
-                    -- These are forall-residual vars that weren't resolved by the type adapter.
-                    "hasForallResidual">: Logic.not (Lists.null (Lists.filter ("st" ~>
-                      cases Scala._Type (var "st") (Just false) [
-                        Scala._Type_var>>: ("tv" ~> lets [
-                          "tvName">: project Scala._Type_Name Scala._Type_Name_value @@ (project Scala._Type_Var Scala._Type_Var_name @@ var "tv")] $
-                          Logic.and
-                            (Logic.not (Lists.elem (int32 46) (Strings.toList (var "tvName"))))
-                            (Logic.not (Sets.member (var "tvName") (var "inScopeTypeVarNames"))))])
-                      (var "stypeArgs")))] $
-                    Logic.ifElse (var "hasForallResidual")
-                      -- Has forall residuals: omit type args and let Scala infer
-                      (right (ScalaUtilsSource.sprim @@ var "pname"))
-                      -- All type args are valid: use explicit type params
-                      (right (ScalaUtilsSource.sapplyTypes @@ (ScalaUtilsSource.sprim @@ var "pname") @@ var "stypeArgs")))),
             _Function_elimination>>: (constant $
               -- For eliminations (record/union projections): encode the substituted body
               asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody")]),

@@ -688,8 +688,7 @@ inferTypeOfFunction = define "inferTypeOfFunction" $
   "fcx" ~> "cx" ~> "f" ~>
   cases _Function (var "f") Nothing [
     _Function_elimination>>: "elm" ~> inferTypeOfElimination @@ var "fcx" @@ var "cx" @@ var "elm",
-    _Function_lambda>>: "l" ~> inferTypeOfLambda @@ var "fcx" @@ var "cx" @@ var "l",
-    _Function_primitive>>: "name" ~> inferTypeOfPrimitive @@ var "fcx" @@ var "cx" @@ var "name"]
+    _Function_lambda>>: "l" ~> inferTypeOfLambda @@ var "fcx" @@ var "cx" @@ var "l"]
 
 inferTypeOfInjection :: TTermDefinition (Context -> Graph -> Injection -> Prelude.Either (InContext Error) InferenceResult)
 inferTypeOfInjection = define "inferTypeOfInjection" $
@@ -869,7 +868,7 @@ inferTypeOfPrimitive = define "inferTypeOfPrimitive" $
         @@ var "fcx2"
         @@ (buildTypeApplicationTerm
           @@ Core.typeSchemeVariables (var "ts")
-          @@ (Core.termFunction $ Core.functionPrimitive $ var "name"))
+          @@ Core.termVariable (var "name"))
         @@ Core.typeSchemeType (var "ts")
         @@ Substitution.idTypeSubst
         @@ var "constraints"))

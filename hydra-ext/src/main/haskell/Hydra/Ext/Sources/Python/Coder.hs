@@ -605,11 +605,6 @@ encodeApplicationInner = def "encodeApplicationInner" $
                   (right $ pair (var "valueExpr") (list ([] :: [TTerm Py.Expression])))
                   (right $ pair (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "valueExpr") @@ var "allArgs")
                                   (list ([] :: [TTerm Py.Expression])))],
-          -- Primitive: encode variable with args (wrap lazy arguments for primitives like ifElse)
-          _Function_primitive>>: "name" ~>
-            "wrappedArgs" <~ (wrapLazyArguments @@ var "name" @@ var "hargs") $
-            "expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "wrappedArgs") $
-            right $ pair (var "expr") (var "rargs"),
           -- Other functions: encode and apply
           _Function_lambda>>: constant $
             "pfun" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "fun") $
@@ -1139,9 +1134,6 @@ encodeFunction = def "encodeFunction" $
             "indexValue" <~ (PyUtils.pyAtomToPyExpression @@ (PyDsl.atomNumber $ PyDsl.numberInteger $ Literals.int32ToBigint (Lists.length (var "bindings")))) $
             "indexedExpr" <~ (PyUtils.primaryWithExpressionSlices @@ (PyUtils.pyExpressionToPyPrimary @@ var "tupleExpr") @@ list [var "indexValue"]) $
             right $ makeUncurriedLambda @@ var "pparams" @@ (PyUtils.pyPrimaryToPyExpression @@ var "indexedExpr")),
-      -- Primitives: encode as variable reference
-      _Function_primitive>>: "name" ~>
-        encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ (Phantoms.list ([] :: [TTerm Py.Expression])),
       -- Eliminations
       _Function_elimination>>: "e" ~>
         cases _Elimination (var "e") Nothing [
@@ -2440,11 +2432,7 @@ functionArityWithPrimitives = def "functionArityWithPrimitives" $
     cases _Function (var "f") (Just (Phantoms.int 0)) [
       _Function_elimination>>: constant (Phantoms.int 1),
       _Function_lambda>>: "lam" ~>
-        Math.add (Phantoms.int 1) (termArityWithPrimitives @@ var "graph" @@ (Core.lambdaBody $ var "lam")),
-      _Function_primitive>>: "name" ~>
-        optCases (Maps.lookup (var "name") (Graph.graphPrimitives $ var "graph"))
-          (Phantoms.int 0)
-          ("prim" ~> Arity.primitiveArity @@ var "prim")]
+        Math.add (Phantoms.int 1) (termArityWithPrimitives @@ var "graph" @@ (Core.lambdaBody $ var "lam"))]
 
 -- | Extract lambdas and their bodies from a term.
 --   Returns the list of lambda parameters (in order from outermost to innermost) and the innermost body.
