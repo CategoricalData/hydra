@@ -78,12 +78,12 @@ ns :: Namespace
 ns = Namespace "hydra.extract.core"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Lexical.ns, Strip.ns, ShowCore.ns, ShowError.ns]
     kernelTypesNamespaces $
     Just ("Extraction and validation for hydra.core types")
   where
-   elements = [
+   definitions = [
      toDefinition bigfloat,
      toDefinition bigfloatValue,
      toDefinition bigint,

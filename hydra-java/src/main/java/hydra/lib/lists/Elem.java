@@ -8,8 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.ConsList;
-
 import java.util.List;
 import java.util.function.Function;
 
@@ -39,7 +37,7 @@ public class Elem extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<ConsList<Term>, Term>) lst -> Terms.boolean_(lst.contains(args.get(0))), hydra.extract.Core.list(cx, graph, args.get(1)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<List<Term>, Term>) lst -> Terms.boolean_(lst.contains(args.get(0))), hydra.extract.Core.list(cx, graph, args.get(1)));
     }
 
     /**
@@ -48,7 +46,7 @@ public class Elem extends PrimitiveFunction {
      * @param elem the element to search for
      * @return a function that checks if the element is present in a list
      */
-    public static <X> Function<ConsList<X>, Boolean> apply(X elem) {
+    public static <X> Function<List<X>, Boolean> apply(X elem) {
         return lst -> apply(elem, lst);
     }
 
@@ -59,7 +57,7 @@ public class Elem extends PrimitiveFunction {
      * @param lst the list to search in
      * @return true if present, false otherwise
      */
-    public static <X> Boolean apply(X elem, ConsList<X> lst) {
+    public static <X> Boolean apply(X elem, List<X> lst) {
         return lst.contains(elem);
     }
 }

@@ -89,12 +89,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.haskell.operators"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Serialization.ns]
     KernelTypes.kernelTypesNamespaces $
     Just "AST operators for Haskell"
   where
-    elements = [
+    definitions = [
       toDefinition andOp,
       toDefinition apOp,
       toDefinition appOp,

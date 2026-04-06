@@ -8,9 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.ConsList;
-import hydra.util.PersistentMap;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -56,8 +53,8 @@ public class Keys extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> {
-            Either<InContext<Error_>, PersistentMap<Term, Term>> r = hydra.extract.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(0));
-            return hydra.lib.eithers.Map.apply(map -> Terms.list(map.keys()), r);
+            Either<InContext<Error_>, Map<Term, Term>> r = hydra.extract.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(0));
+            return hydra.lib.eithers.Map.apply(map -> Terms.list(new ArrayList<>(map.keySet())), r);
         };
     }
 
@@ -68,7 +65,7 @@ public class Keys extends PrimitiveFunction {
      * @param map the map
      * @return the keys
      */
-    public static <K, V> ConsList<K> apply(PersistentMap<K, V> map) {
-        return ConsList.fromList(map.keys());
+    public static <K, V> List<K> apply(Map<K, V> map) {
+        return new ArrayList<>(map.keySet());
     }
 }

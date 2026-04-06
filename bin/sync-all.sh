@@ -224,6 +224,9 @@ if $TARGET_HYDRA; then
     stack build hydra:exe:update-haskell-kernel
     stack exec update-haskell-kernel -- $RTS_FLAGS
     echo ""
+    echo "Applying Haskell serde bootstrap patch (NaN/Inf)..."
+    bash "$HYDRA_HASKELL_DIR/bin/patch-haskell-serde.sh"
+    echo ""
     echo "Rebuilding..."
     stack build
 
@@ -266,6 +269,9 @@ if $TARGET_HYDRA; then
     echo "Step 1e: Regenerating kernel modules (post encoder/decoder)..."
     echo ""
     stack exec update-haskell-kernel -- $RTS_FLAGS
+    echo ""
+    echo "Reapplying Haskell serde bootstrap patch (NaN/Inf)..."
+    bash "$HYDRA_HASKELL_DIR/bin/patch-haskell-serde.sh"
     echo ""
     echo "Rebuilding..."
     stack build

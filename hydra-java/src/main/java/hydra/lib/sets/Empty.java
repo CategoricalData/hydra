@@ -8,10 +8,10 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import java.util.TreeSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
-
-import hydra.util.PersistentSet;
 
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.schemeOrd;
@@ -57,7 +57,7 @@ public class Empty extends PrimitiveFunction {
      * @param <X> the type of elements in the set
      * @return an empty set
      */
-    public static <X> PersistentSet<X> apply() {
-        return PersistentSet.empty();
+    public static <X> Set<X> apply() {
+        return new TreeSet<>();
     }
 }

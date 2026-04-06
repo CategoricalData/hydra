@@ -96,12 +96,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.haskell.utils"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Analysis.ns, Formatting.ns, HaskellLanguage.ns, Names.ns]
     (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Utilities for working with Haskell syntax trees"
   where
-    elements = [
+    definitions = [
       toDefinition applicationPattern,
       toDefinition elementReference,
       toDefinition hsapp,

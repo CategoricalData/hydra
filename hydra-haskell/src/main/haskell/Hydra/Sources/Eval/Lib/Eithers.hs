@@ -61,12 +61,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [ExtractCore.ns, ShowCore.ns]
     kernelTypesNamespaces $
     Just ("Evaluation-level implementations of Either functions for the Hydra interpreter.")
   where
-    elements = [
+    definitions = [
       toDefinition bind_,
       toDefinition bimap_,
       toDefinition either_,
@@ -149,7 +149,7 @@ foldl_ = define "foldl" $
       Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
           (Core.termApplication $ Core.application
-            (Core.termFunction $ Core.functionPrimitive $ encodedName _eithers_either)
+            (Core.termVariable $ encodedName _eithers_either)
             -- If acc is Left: short-circuit
             (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "err") nothing $
               Core.termEither $ left $ Core.termVariable $ wrap _Name $ string "err"))
@@ -273,7 +273,7 @@ mapList_ = define "mapList" $
       Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
           (Core.termApplication $ Core.application
-            (Core.termFunction $ Core.functionPrimitive $ encodedName _eithers_either)
+            (Core.termVariable $ encodedName _eithers_either)
             -- If Left: return the Left unchanged (short-circuit)
             (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "err") nothing $
               Core.termEither $ left $ Core.termVariable $ wrap _Name $ string "err"))
@@ -282,7 +282,7 @@ mapList_ = define "mapList" $
             Core.termApplication $ Core.application
               (Core.termApplication $ Core.application
                 (Core.termApplication $ Core.application
-                  (Core.termFunction $ Core.functionPrimitive $ encodedName _eithers_either)
+                  (Core.termVariable $ encodedName _eithers_either)
                   -- If acc is Left: return it
                   (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "accErr") nothing $
                     Core.termEither $ left $ Core.termVariable $ wrap _Name $ string "accErr"))
@@ -291,7 +291,7 @@ mapList_ = define "mapList" $
                   Core.termEither $ right $
                     Core.termApplication $ Core.application
                       (Core.termApplication $ Core.application
-                        (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_cons)
+                        (Core.termVariable $ encodedName _lists_cons)
                         (Core.termVariable $ wrap _Name $ string "y"))
                       (Core.termVariable $ wrap _Name $ string "ys")))
               (var "acc")))
@@ -318,7 +318,7 @@ mapSet_ = define "mapSet" $
       Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
           (Core.termApplication $ Core.application
-            (Core.termFunction $ Core.functionPrimitive $ encodedName _eithers_either)
+            (Core.termVariable $ encodedName _eithers_either)
             -- If Left: return the Left unchanged (short-circuit)
             (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "err") nothing $
               Core.termEither $ left $ Core.termVariable $ wrap _Name $ string "err"))
@@ -327,7 +327,7 @@ mapSet_ = define "mapSet" $
             Core.termApplication $ Core.application
               (Core.termApplication $ Core.application
                 (Core.termApplication $ Core.application
-                  (Core.termFunction $ Core.functionPrimitive $ encodedName _eithers_either)
+                  (Core.termVariable $ encodedName _eithers_either)
                   -- If acc is Left: return it
                   (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "accErr") nothing $
                     Core.termEither $ left $ Core.termVariable $ wrap _Name $ string "accErr"))
@@ -336,7 +336,7 @@ mapSet_ = define "mapSet" $
                   Core.termEither $ right $
                     Core.termApplication $ Core.application
                       (Core.termApplication $ Core.application
-                        (Core.termFunction $ Core.functionPrimitive $ encodedName _sets_insert)
+                        (Core.termVariable $ encodedName _sets_insert)
                         (Core.termVariable $ wrap _Name $ string "y"))
                       (Core.termVariable $ wrap _Name $ string "ys")))
               (var "acc")))
@@ -364,7 +364,7 @@ mapMaybe_ = define "mapMaybe" $
           Core.termApplication $ Core.application
             (Core.termApplication $ Core.application
               (Core.termApplication $ Core.application
-                (Core.termFunction $ Core.functionPrimitive $ encodedName _eithers_either)
+                (Core.termVariable $ encodedName _eithers_either)
                 (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "err") nothing $
                   Core.termEither $ left $ Core.termVariable $ wrap _Name $ string "err"))
               (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "y") nothing $

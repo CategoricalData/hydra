@@ -61,12 +61,12 @@ ns :: Namespace
 ns = Namespace "hydra.templates"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Constants.ns, moduleNamespace DecodeCore.module_, ShowCore.ns]
     kernelTypesNamespaces $
     Just "A utility which instantiates a nonrecursive type with default values"
   where
-   elements = [
+   definitions = [
      toDefinition graphToSchema,
      toDefinition instantiateTemplate]
 

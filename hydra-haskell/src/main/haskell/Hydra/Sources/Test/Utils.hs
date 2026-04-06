@@ -95,12 +95,12 @@ ns = Namespace "hydra.test.utils"
 
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Inference.ns, ShowError.ns, Lexical.ns]
     KernelTypes.kernelTypesNamespaces $
     Just "Shared utility functions for test code generation codecs"
   where
-    elements = [
+    definitions = [
       toDefinition inferTestGroupTerms,
       toDefinition inferTestCase,
       toDefinition inferTerm]

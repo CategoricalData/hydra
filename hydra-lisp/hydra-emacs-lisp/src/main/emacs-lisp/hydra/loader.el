@@ -415,7 +415,7 @@ If PRE-TRANSFORMED is non-nil, skip the Lisp-1→Lisp-2 transformation
     "json/encode.el" "json/decode.el" "json/bootstrap.el"
     ;; Ext modules: load utils/syntax/language/serde before coders
     "ext/haskell/syntax.el" "ext/haskell/language.el"
-    "ext/haskell/operators.el" "ext/haskell/utils.el"
+    "ext/haskell/operators.el" "ext/haskell/environment.el" "ext/haskell/utils.el"
     "ext/haskell/serde.el" "ext/haskell/coder.el"
     "ext/java/syntax.el" "ext/java/language.el" "ext/java/names.el"
     "ext/java/environment.el" "ext/java/utils.el"
@@ -472,6 +472,7 @@ If PRE-TRANSFORMED is non-nil, skip the Lisp-1→Lisp-2 transformation
                   "test/checking/fundamentals.el"
                   "test/checking/nominal_types.el"
                   "test/checking/all.el"
+                  "test/dependencies.el"
                   "test/eta_expansion.el"
                   "test/formatting.el"
                   "test/hoisting/cases.el"
@@ -485,18 +486,18 @@ If PRE-TRANSFORMED is non-nil, skip the Lisp-1→Lisp-2 transformation
                   "test/inference/kernel_examples.el"
                   "test/inference/nominal_types.el"
                   "test/inference/all.el"
-                  "test/json/coder.el"
-                  "test/json/parser.el"
                   "test/json/roundtrip.el"
                   "test/json/writer.el"
                   "test/reduction.el"
                   "test/rewriting.el"
                   "test/serialization.el"
                   "test/sorting.el"
+                  "test/strip.el"
                   "test/substitution.el"
                   "test/unification.el"
                   "test/validate/core.el"
                   "test/validate/all.el"
+                  "test/variables.el"
                   "test/test_suite.el")))
     (dolist (f files)
       (let ((path (expand-file-name f base)))

@@ -24,12 +24,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.checking.fundamentals"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [TestGraph.ns, Namespace "hydra.rewriting"]
     kernelTypesNamespaces
     (Just "Fundamental type checking test cases: literals, variables, lambdas, applications, let terms, and primitives")
   where
-    elements = [
+    definitions = [
       Phantoms.toDefinition allTests,
       Phantoms.toDefinition applicationsTests,
       Phantoms.toDefinition simpleFunctionApplicationsTests,

@@ -8,8 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.ConsList;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -64,7 +62,7 @@ public class DropWhile extends PrimitiveFunction {
      * @param pred the predicate to test elements
      * @return a function that drops elements while the predicate holds
      */
-    public static <X> Function<ConsList<X>, ConsList<X>> apply(Predicate<X> pred) {
+    public static <X> Function<List<X>, List<X>> apply(Predicate<X> pred) {
         return lst -> apply((Function<X, Boolean>) x -> pred.test(x), lst);
     }
 
@@ -74,7 +72,7 @@ public class DropWhile extends PrimitiveFunction {
      * @param pred the predicate as a Function (used by generated code)
      * @return a function that drops elements while the predicate holds
      */
-    public static <X> Function<ConsList<X>, ConsList<X>> apply(Function<X, Boolean> pred) {
+    public static <X> Function<List<X>, List<X>> apply(Function<X, Boolean> pred) {
         return lst -> apply(pred, lst);
     }
 
@@ -85,7 +83,7 @@ public class DropWhile extends PrimitiveFunction {
      * @param lst the list to drop from
      * @return the remaining list after dropping
      */
-    public static <X> ConsList<X> apply(Predicate<X> pred, ConsList<X> lst) {
+    public static <X> List<X> apply(Predicate<X> pred, List<X> lst) {
         return apply((Function<X, Boolean>) x -> pred.test(x), lst);
     }
 
@@ -96,12 +94,11 @@ public class DropWhile extends PrimitiveFunction {
      * @param lst the list to drop from
      * @return the remaining list after dropping
      */
-    public static <X> ConsList<X> apply(Function<X, Boolean> pred, ConsList<X> lst) {
-        ArrayList<X> indexed = new ArrayList<>(lst);
+    public static <X> List<X> apply(Function<X, Boolean> pred, List<X> lst) {
         int i = 0;
-        while (i < indexed.size() && pred.apply(indexed.get(i))) {
+        while (i < lst.size() && pred.apply(lst.get(i))) {
             i++;
         }
-        return ConsList.fromList(indexed.subList(i, indexed.size()));
+        return new ArrayList<>(lst.subList(i, lst.size()));
     }
 }

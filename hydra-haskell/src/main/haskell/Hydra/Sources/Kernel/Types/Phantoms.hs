@@ -16,10 +16,10 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [Core.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
     Just "Phantom types for use with Hydra DSLs"
   where
-    elements = [
+    definitions = [
       tBinding,
       tTerm,
       tTermDefinition]

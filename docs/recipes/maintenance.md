@@ -223,7 +223,7 @@ Of these, definition ordering is the most prone to drift and the easiest to chec
 
 The style guide's
 [definition ordering](https://github.com/CategoricalData/hydra/wiki/Coding-style#definition-ordering)
-section requires that both the `elements` list and the corresponding
+section requires that both the `definitions` list and the corresponding
 definition bodies appear in **alphabetical order** within each module.
 
 This applies to:
@@ -260,7 +260,7 @@ done
 
 Modules with no output are correctly ordered.
 
-**Fixing violations:** reorder both the `elements` list entry *and* the corresponding
+**Fixing violations:** reorder both the `definitions` list entry *and* the corresponding
 definition body together — they must stay in sync.
 
 ### Other style checks
@@ -461,6 +461,71 @@ A mismatch typically manifests as `ImportError` at test time.
 
 ---
 
+## Reviewing user documentation
+
+User documentation drifts from the code over time as features are added, renamed, or removed,
+and as project structure evolves.
+This review catches stale material, broken links, and opportunities for small improvements.
+
+### Scope
+
+"User documentation" includes (see [CLAUDE.md](../../CLAUDE.md) for the full definition):
+- Top-level `README.md` and per-implementation / per-package READMEs
+- Everything checked into `docs/` (ignore unstaged/temporary files)
+- Everything in the `wiki/` checkout (separate Git repo)
+- `CHANGELOG.md`
+- `CLAUDE.md` itself — the task routing table, document index, and critical pitfalls
+  drift as docs and workflows change
+
+Code comments are not in scope for this review — they are maintained alongside code changes.
+
+### Procedure
+
+For each document, perform three passes:
+
+1. **Factual accuracy.** Read the document end-to-end and cross-check claims against
+   the current code, recipes, and project structure.
+   Flag:
+   - Command examples that no longer work (changed flags, renamed scripts, moved files)
+   - References to modules, types, functions, or files that have been renamed or deleted
+   - Counts and version numbers that have drifted (test counts, module counts, implementation counts)
+   - Feature descriptions that no longer match behavior
+   - Statements about "current status" that are stale (e.g., "X is in progress" after X shipped)
+
+2. **Link integrity.** Check every link:
+   - Relative links to other docs, recipes, and source files resolve to existing paths
+   - Absolute links to wiki pages point to existing pages
+   - External URLs are still reachable (lightweight check; deep-link rot is acceptable)
+
+3. **Readability and complementarity.** Consider whether the document:
+   - Still serves its stated purpose, or has grown beyond it
+   - Duplicates content that belongs in another document (consolidate or link)
+   - Has gaps that a reader would hit (missing context, unexplained terms)
+   - Could be shortened without losing value
+   - Has a clear entry point and logical flow
+
+   Make small, targeted improvements — not wholesale rewrites.
+   Structural rework of a document is out of scope for this maintenance pass.
+
+### Approach
+
+- Start with the document index in [CLAUDE.md](../../CLAUDE.md) — any doc linked there
+  is high-traffic and should be reviewed first.
+- Then walk `docs/`, `wiki/`, and top-level READMEs.
+- Track findings per document and fix them as you go, not in a separate pass.
+- Write to the [style guide](../documentation-style-guide.md):
+  line length under 120 characters, sentence-case headings, relative links for internal docs,
+  active voice, second person for recipes and tutorials.
+
+### What to avoid
+
+- Don't rewrite documents to match your preferred style.
+- Don't add content that belongs in code comments, commit messages, or changelogs.
+- Don't expand CLAUDE.md — keep the document index flat (see "Maintaining this file" in CLAUDE.md).
+- Don't touch unstaged or temporary files in `docs/work/`.
+
+---
+
 ## Full maintenance pass
 
 To run all checks in sequence (invoked via `/maintenance()` in CLAUDE.md):
@@ -472,6 +537,7 @@ To run all checks in sequence (invoked via `/maintenance()` in CLAUDE.md):
 5. Check `.cabal`/`package.yaml` exposed-modules for stale entries.
 6. Verify JSON kernel freshness via `hydra-haskell/bin/verify-json-kernel.sh`.
 7. Check Python `__init__.py` freshness.
+8. Review user documentation for accuracy, broken links, and small improvements.
 
 After all checks, present a summary of findings and changes to the user.
 If any changes affect Source modules (e.g., definition reordering),
@@ -494,3 +560,4 @@ If no changes affect generated files or tests, skip the sync.
 | `.cabal` exposed-modules | After deleting generated Haskell modules |
 | JSON kernel freshness | After kernel changes |
 | Python `__init__.py` | After sync-python |
+| User documentation review | Periodically, before releases, after major refactoring |

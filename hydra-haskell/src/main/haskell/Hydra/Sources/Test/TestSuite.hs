@@ -71,11 +71,11 @@ ns :: Namespace
 ns = Namespace "hydra.test.testSuite"
 
 module_ :: Module
-module_ = Module ns elements namespaces kernelTypesNamespaces $
+module_ = Module ns definitions namespaces kernelTypesNamespaces $
     Just ("Hydra's common test suite, which is designed to run identically in each Hydra implementation;"
       <> " the criterion for a true Hydra implementation is that all test cases pass.")
   where
-    elements = [Phantoms.toDefinition allTests]
+    definitions = [Phantoms.toDefinition allTests]
     namespaces = fst <$> testPairs
 
 allTests :: TTermDefinition TestGroup

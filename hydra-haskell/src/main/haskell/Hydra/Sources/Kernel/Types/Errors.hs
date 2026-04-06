@@ -20,12 +20,12 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements)
+module_ = Module ns (map toTypeDef definitions)
     [Context.ns, Core.ns, ErrorsChecking.ns, ErrorsCore.ns, Typing.ns, Variants.ns]
     [Context.ns, Core.ns, ErrorsChecking.ns, ErrorsCore.ns, Typing.ns, Variants.ns] $
     Just "Top-level error types for the Hydra kernel"
   where
-    elements = [
+    definitions = [
       decodingError,
       error_,
       otherError,

@@ -85,12 +85,12 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInNamespace ns
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Arity.ns, Dependencies.ns, moduleNamespace DecodeCore.module_, Lexical.ns, Reflect.ns, Rewriting.ns, Strip.ns]
     kernelTypesNamespaces $
     Just ("Type and term classification predicates")
   where
-    elements = [
+    definitions = [
       toDefinition isComplexBinding,
       toDefinition isComplexTerm,
       toDefinition isComplexVariable,
@@ -158,8 +158,14 @@ isComplexVariable = define "isComplexVariable" $
       -- Check if the variable is in the graph's bound types
       ("typeLookup" <~ Maps.lookup (var "name") (Graph.graphBoundTypes $ var "tc") $
        Maybes.maybe
-         -- If not in graph at all, assume mutual recursion (complex)
-         (boolean True)
+         -- Not in graphBoundTypes: fall through to graphPrimitives
+         ("primLookup" <~ Maps.lookup (var "name") (Graph.graphPrimitives $ var "tc") $
+          Maybes.maybe
+            -- If not in graph at all, assume mutual recursion (complex)
+            (boolean True)
+            -- If a primitive, non-nullary iff type arity > 0
+            ("prim" ~> Equality.gt (Arity.typeSchemeArity @@ Graph.primitiveType (var "prim")) (int32 0))
+            (var "primLookup"))
          -- If in graph, check if the binding itself is non-nullary (a function).
          -- Non-nullary bindings are always complex (they take parameters).
          -- Nullary bindings are assumed non-complex from this check;
@@ -268,8 +274,10 @@ isTrivialTerm = define "isTrivialTerm" $
     (Just $ boolean False) [
     -- Literals are always trivial
     _Term_literal>>: constant (boolean True),
-    -- Plain variables are trivial (the variable itself is cheap to reference)
-    _Term_variable>>: constant (boolean True),
+    -- Plain lambda-bound variables are trivial, but qualified names (element/primitive references
+    -- like "hydra.lib.maps.empty") are calls, not just references, and are not trivial.
+    _Term_variable>>: "nm" ~>
+      Equality.equal (Lists.length (Strings.splitOn (string ".") (Core.unName (var "nm")))) (int32 1),
     -- Unit is trivial
     _Term_unit>>: constant (boolean True),
     -- Field projection on a trivial subterm is trivial (e.g. app.function)

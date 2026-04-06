@@ -8,8 +8,6 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Maybe;
 
-import hydra.util.ConsList;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -78,7 +76,7 @@ public class MapMaybe extends PrimitiveFunction {
      * @param f the optional-returning function to map
      * @return a function that takes a list and returns a list of present values
      */
-    public static <X, Y> Function<ConsList<X>, ConsList<Y>> apply(Function<X, Maybe<Y>> f) {
+    public static <X, Y> Function<List<X>, List<Y>> apply(Function<X, Maybe<Y>> f) {
         return (list) -> apply(f, list);
     }
 
@@ -90,7 +88,7 @@ public class MapMaybe extends PrimitiveFunction {
      * @param list the list to map over
      * @return a list containing only the present values from applying the function
      */
-    public static <X, Y> ConsList<Y> apply(Function<X, Maybe<Y>> f, ConsList<X> list) {
+    public static <X, Y> List<Y> apply(Function<X, Maybe<Y>> f, List<X> list) {
         ArrayList<Y> result = new ArrayList<>();
         for (X item : list) {
             Maybe<Y> maybe = f.apply(item);
@@ -98,6 +96,6 @@ public class MapMaybe extends PrimitiveFunction {
                 result.add(maybe.fromJust());
             }
         }
-        return ConsList.fromList(result);
+        return result;
     }
 }

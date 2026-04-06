@@ -23,11 +23,11 @@ cypher :: String -> Type
 cypher = typeref ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [Core.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef definitions) [Core.ns] [Core.ns] $
     Just ("A Cypher model based on the OpenCypher specification (version 23), copyright Neo Technology, available at:\n" ++
       "  https://opencypher.org/resources/")
   where
-    elements = [
+    definitions = [
       query,
       regularQuery,
       union_,

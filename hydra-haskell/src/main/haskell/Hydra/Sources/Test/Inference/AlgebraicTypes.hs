@@ -19,12 +19,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.inference.algebraicTypes"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [TestGraph.ns]
     kernelTypesNamespaces
     (Just "Inference tests for algebraic data types")
   where
-    elements = [
+    definitions = [
       Phantoms.toDefinition allTests,
       Phantoms.toDefinition testGroupForCollectionPrimitives,
       Phantoms.toDefinition testGroupForEithers,

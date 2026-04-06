@@ -63,7 +63,7 @@ ns :: Namespace
 ns = Namespace "hydra.sorting"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Constants.ns]
     kernelTypesNamespaces $
     Just ("Utilities for sorting."
@@ -71,7 +71,7 @@ module_ = Module ns elements
       <> " originally based on GraphSCC by Iavor S. Diatchki:"
       <> " https://hackage.haskell.org/package/GraphSCC.")
   where
-   elements = [
+   definitions = [
      toDefinition adjacencyListToMap,
      toDefinition adjacencyListsToGraph,
      toDefinition createOrderingIsomorphism,

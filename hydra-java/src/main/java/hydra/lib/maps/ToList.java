@@ -9,9 +9,7 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Pair;
 
-import hydra.util.ConsList;
-import hydra.util.PersistentMap;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -59,11 +57,11 @@ public class ToList extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> {
-            Either<InContext<Error_>, PersistentMap<Term, Term>> r = hydra.extract.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(0));
+            Either<InContext<Error_>, Map<Term, Term>> r = hydra.extract.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(0));
             return hydra.lib.eithers.Map.apply(map -> {
-                List<Pair<Term, Term>> pairs = map.toList();
-                return Terms.list(pairs.stream().map(
-                    p -> Terms.pair(p.first, p.second)).collect(Collectors.toList()));
+                List<Term> pairTerms = map.entrySet().stream().map(
+                    e -> Terms.pair(e.getKey(), e.getValue())).collect(Collectors.toList());
+                return Terms.list(pairTerms);
             }, r);
         };
     }
@@ -75,7 +73,11 @@ public class ToList extends PrimitiveFunction {
      * @param map the map to convert
      * @return a list of key-value pairs
      */
-    public static <K, V> ConsList<Pair<K, V>> apply(PersistentMap<K, V> map) {
-        return ConsList.fromList(map.toList());
+    public static <K, V> List<Pair<K, V>> apply(Map<K, V> map) {
+        List<Pair<K, V>> result = new ArrayList<>();
+        for (Map.Entry<K, V> e : map.entrySet()) {
+            result.add(new Pair<>(e.getKey(), e.getValue()));
+        }
+        return result;
     }
 }

@@ -101,12 +101,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.json.schema.coder"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Formatting.ns, Names.ns, Strip.ns, Annotations.ns, Constants.ns, Reflect.ns, JsonSchemaSerde.ns]
     (moduleNamespace JsonSchema.module_:jsonModelNs:KernelTypes.kernelTypesNamespaces) $
     Just "JSON Schema code generator: converts Hydra modules to JSON Schema documents"
   where
-    elements = [
+    definitions = [
       toDefinition moduleToJsonSchema,
       toDefinition constructModule,
       toDefinition encodeField,

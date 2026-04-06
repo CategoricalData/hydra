@@ -1356,11 +1356,11 @@ Lists.concat (list [var "xs", var "ys"])
 
 ### Element definitions (apply with `@@`)
 
-`TBinding`s created with `define` are applied using the `@@` operator:
+`TTermDefinition`s created with `define` are applied using the `@@` operator:
 
 ```haskell
 myAddDef @@ int32 1 @@ int32 2
-Serialization.cst @@ string "hello"   -- Serialization helpers are TBindings
+Serialization.cst @@ string "hello"   -- Serialization helpers are TTermDefinitions
 ```
 
 ### Passing primitives as arguments

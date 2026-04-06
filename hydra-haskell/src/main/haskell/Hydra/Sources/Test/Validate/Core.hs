@@ -24,12 +24,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.validate.core"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Namespace "hydra.validate.core", Namespace "hydra.show.error.core"]
     kernelTypesNamespaces
     (Just "Test cases for core term and type validation")
   where
-    elements = [
+    definitions = [
       Phantoms.toDefinition allTests,
       Phantoms.toDefinition duplicateBindingsTests,
       Phantoms.toDefinition duplicateFieldsTests,

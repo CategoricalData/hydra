@@ -92,12 +92,12 @@ ns :: Namespace
 ns = Namespace "hydra.ext.rust.operators"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Serialization.ns]
     KernelTypes.kernelTypesNamespaces $
     Just "AST operators for Rust serialization"
   where
-    elements = [
+    definitions = [
       -- Assignment operators (lowest precedence)
       toDefinition assignOp,
       toDefinition addAssignOp,

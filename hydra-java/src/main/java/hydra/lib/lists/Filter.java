@@ -8,8 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.ConsList;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -64,7 +62,7 @@ public class Filter extends PrimitiveFunction {
      * @param pred the predicate to test elements
      * @return a function that filters a list by the predicate
      */
-    public static <X> Function<ConsList<X>, ConsList<X>> apply(Predicate<X> pred) {
+    public static <X> Function<List<X>, List<X>> apply(Predicate<X> pred) {
         return lst -> apply((Function<X, Boolean>) x -> pred.test(x), lst);
     }
 
@@ -75,7 +73,13 @@ public class Filter extends PrimitiveFunction {
      * @param lst the list to filter
      * @return a new list containing only elements for which the predicate returns true
      */
-    public static <X> ConsList<X> apply(Function<X, Boolean> pred, ConsList<X> lst) {
-        return lst.filter(x -> pred.apply(x));
+    public static <X> List<X> apply(Function<X, Boolean> pred, List<X> lst) {
+        ArrayList<X> result = new ArrayList<>();
+        for (X x : lst) {
+            if (pred.apply(x)) {
+                result.add(x);
+            }
+        }
+        return result;
     }
 }

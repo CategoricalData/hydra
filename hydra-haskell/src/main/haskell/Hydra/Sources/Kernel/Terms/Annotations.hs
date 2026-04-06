@@ -78,13 +78,13 @@ ns :: Namespace
 ns = Namespace "hydra.annotations"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Constants.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, ExtractCore.ns, Lexical.ns,
       Strip.ns, ShowCore.ns, ShowError.ns]
     kernelTypesNamespaces $
     Just "Utilities for reading and writing type and term annotations"
   where
-   elements = [
+   definitions = [
      toDefinition aggregateAnnotations,
      toDefinition commentsFromBinding,
      toDefinition commentsFromFieldType,

@@ -19,12 +19,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.inference.classes"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [TestGraph.ns]
     kernelTypesNamespaces
     (Just "Inference tests for type class constraints (ordering and equality)")
   where
-    elements = [
+    definitions = [
       Phantoms.toDefinition allTests,
       Phantoms.toDefinition testGroupForMonomorphicConstraints,
       Phantoms.toDefinition testGroupForPrimitiveReferences,

@@ -20,10 +20,10 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [Context.ns, Error.ns, Graph.ns, Variants.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef definitions) [Context.ns, Error.ns, Graph.ns, Variants.ns] [Core.ns] $
     Just "Abstractions for paired transformations between languages"
   where
-    elements = [
+    definitions = [
       adapter,
       adapterContext,
       bicoder,

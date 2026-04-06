@@ -28,12 +28,12 @@ ns :: Namespace
 ns = Namespace "hydra.test.etaExpansion"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [TestGraph.ns]
     kernelTypesNamespaces
     (Just "Test cases for eta expansion of terms")
   where
-    elements = [
+    definitions = [
       Phantoms.toDefinition allTests]
 
 define :: String -> TTerm a -> TTermDefinition a

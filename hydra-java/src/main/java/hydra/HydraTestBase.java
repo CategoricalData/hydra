@@ -12,7 +12,9 @@ import hydra.util.Either;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import static hydra.Coders.roundTrip;
@@ -95,19 +97,19 @@ public class HydraTestBase {
      * @return an empty graph
      */
     protected static Graph emptyGraph() {
-        hydra.util.PersistentMap<Name, Term> boundTerms = hydra.util.PersistentMap.empty();
-        hydra.util.PersistentMap<Name, TypeScheme> boundTypes = hydra.util.PersistentMap.empty();
-        hydra.util.PersistentMap<Name, hydra.core.TypeVariableMetadata> classConstraints = hydra.util.PersistentMap.empty();
-        hydra.util.PersistentSet<Name> lambdaVariables = hydra.util.PersistentSet.empty();
-        hydra.util.PersistentMap<Name, Term> metadata = hydra.util.PersistentMap.empty();
+        Map<Name, Term> boundTerms = new HashMap<>();
+        Map<Name, TypeScheme> boundTypes = new HashMap<>();
+        Map<Name, hydra.core.TypeVariableMetadata> classConstraints = new HashMap<>();
+        Set<Name> lambdaVariables = new HashSet<>();
+        Map<Name, Term> metadata = new HashMap<>();
 
-        hydra.util.PersistentMap<Name, Primitive> primitives = hydra.util.PersistentMap.empty();
+        Map<Name, Primitive> primitives = new HashMap<>();
         for (PrimitiveFunction prim : Libraries.standardPrimitives()) {
-            primitives = primitives.insert(prim.name(), prim.toNative());
+            primitives.put(prim.name(), prim.toNative());
         }
 
-        hydra.util.PersistentMap<Name, TypeScheme> schemaTypes = hydra.util.PersistentMap.empty();
-        hydra.util.PersistentSet<Name> typeVariables = hydra.util.PersistentSet.empty();
+        Map<Name, TypeScheme> schemaTypes = new HashMap<>();
+        Set<Name> typeVariables = new HashSet<>();
 
         return new Graph(boundTerms, boundTypes, classConstraints, lambdaVariables, metadata, primitives, schemaTypes, typeVariables);
     }

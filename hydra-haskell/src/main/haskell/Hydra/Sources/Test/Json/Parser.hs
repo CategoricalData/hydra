@@ -31,13 +31,13 @@ ns :: Namespace
 ns = Namespace "hydra.test.json.parser"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [Namespace "hydra.parsers", Namespace "hydra.json.parser", Namespace "hydra.json.writer",
      Namespace "hydra.lib.strings", Namespace "hydra.parsing"]
     kernelTypesNamespaces
     (Just "Test cases for JSON parsing")
   where
-    elements = [
+    definitions = [
         Phantoms.toDefinition allTests]
 
 define :: String -> TTerm a -> TTermDefinition a

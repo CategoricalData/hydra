@@ -68,12 +68,12 @@ ns :: Namespace
 ns = Namespace "hydra.serialization"
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     []
     kernelTypesNamespaces $
     Just ("Utilities for constructing generic program code ASTs, used for the serialization phase of source code generation.")
   where
-   elements = [
+   definitions = [
      toDefinition angleBraces,
      toDefinition angleBracesList,
      toDefinition bracesListAdaptive,

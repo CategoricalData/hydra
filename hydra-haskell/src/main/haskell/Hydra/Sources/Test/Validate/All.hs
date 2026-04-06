@@ -20,10 +20,10 @@ ns :: Namespace
 ns = Namespace "hydra.test.validate.all"
 
 module_ :: Module
-module_ = Module ns elements namespaces kernelTypesNamespaces $
+module_ = Module ns definitions namespaces kernelTypesNamespaces $
     Just "Hydra's validation test suite"
   where
-    elements = [Phantoms.toDefinition allTests]
+    definitions = [Phantoms.toDefinition allTests]
     namespaces = [ValidateCore.ns]
 
 allTests :: TTermDefinition TestGroup

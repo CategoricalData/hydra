@@ -8,8 +8,7 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import hydra.util.ConsList;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -37,7 +36,7 @@ public class Init extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<ConsList<Term>, Term>) lst -> Terms.list(apply(lst)), hydra.extract.Core.list(cx, graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<List<Term>, Term>) lst -> Terms.list(apply(lst)), hydra.extract.Core.list(cx, graph, args.get(0)));
     }
 
     /**
@@ -46,10 +45,10 @@ public class Init extends PrimitiveFunction {
      * @param lst the list to get the initial elements from
      * @return the initial elements (all except the last)
      */
-    public static <X> ConsList<X> apply(ConsList<X> lst) {
+    public static <X> List<X> apply(List<X> lst) {
         if (lst.isEmpty()) {
             throw new IllegalArgumentException("init: empty list");
         }
-        return lst.init();
+        return new ArrayList<>(lst.subList(0, lst.size() - 1));
     }
 }
