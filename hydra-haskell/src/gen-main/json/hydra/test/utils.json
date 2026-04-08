@@ -102,7 +102,7 @@
                                                                 "typeApplication": {
                                                                   "body": {
                                                                     "typeApplication": {
-                                                                      "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
+                                                                      "body": {"variable": "hydra.lib.eithers.mapList"},
                                                                       "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
                                                                   "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
                                                               "type": {"variable": "t1"}}}}}}},
@@ -127,7 +127,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
+                                                                  "body": {"variable": "hydra.lib.eithers.map"},
                                                                   "type": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}}},
                                                               "type": {"variable": "hydra.testing.TestGroup"}}},
                                                           "type": {"variable": "t1"}}}}}}},
@@ -164,7 +164,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "typeApplication": {
-                                                                "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
+                                                                "body": {"variable": "hydra.lib.eithers.mapList"},
                                                                 "type": {"variable": "hydra.testing.TestGroup"}}},
                                                             "type": {"variable": "hydra.testing.TestGroup"}}},
                                                         "type": {"variable": "t1"}}}}}}},
@@ -174,7 +174,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                        "body": {"variable": "hydra.lib.eithers.bind"},
                                                         "type": {"variable": "t1"}}},
                                                     "type": {"list": {"variable": "hydra.testing.TestGroup"}}}},
                                                 "type": {"variable": "hydra.testing.TestGroup"}}}}}}}}},
@@ -291,7 +291,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
+                                                        "body": {"variable": "hydra.lib.eithers.map"},
                                                         "type": {"variable": "hydra.testing.TestCase"}}},
                                                     "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
                                                 "type": {"variable": "t1"}}}}}}}}},
@@ -361,21 +361,10 @@
                                         "lambda": {
                                           "body": {
                                             "application": {
-                                              "argument": {
-                                                "application": {
-                                                  "argument": {"variable": "ic"},
-                                                  "function": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "object", "typeName": "hydra.context.InContext"}}}},
-                                                      "type": {"variable": "hydra.errors.Error"}}}}},
+                                              "argument": {"variable": "e"},
                                               "function": {"variable": "hydra.show.errors.error"}}},
-                                          "domain": {
-                                            "application": {
-                                              "argument": {"variable": "hydra.errors.Error"},
-                                              "function": {"variable": "hydra.context.InContext"}}},
-                                          "parameter": "ic"}}},
+                                          "domain": {"variable": "hydra.errors.Error"},
+                                          "parameter": "e"}}},
                                     "function": {
                                       "typeApplication": {
                                         "body": {
@@ -384,11 +373,8 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {"function": {"primitive": "hydra.lib.eithers.bimap"}},
-                                                    "type": {
-                                                      "application": {
-                                                        "argument": {"variable": "hydra.errors.Error"},
-                                                        "function": {"variable": "hydra.context.InContext"}}}}},
+                                                    "body": {"variable": "hydra.lib.eithers.bimap"},
+                                                    "type": {"variable": "hydra.errors.Error"}}},
                                                 "type": {"variable": "hydra.typing.InferenceResult"}}},
                                             "type": {"literal": {"string": {}}}}},
                                         "type": {"variable": "hydra.core.Term"}}}}}}}}},

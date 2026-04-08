@@ -113,7 +113,7 @@ module_ = Module ns definitions
       toDefinition resolveType,
       toDefinition typeToTypeScheme]
 
-dereferenceType :: TTermDefinition (Context -> Graph -> Name -> Either (InContext Error) (Maybe Type))
+dereferenceType :: TTermDefinition (Context -> Graph -> Name -> Either Error (Maybe Type))
 dereferenceType = define "dereferenceType" $
   doc "Dereference a type name to get the actual type (Either version)" $
   "cx" ~> "graph" ~> "name" ~>
@@ -121,9 +121,8 @@ dereferenceType = define "dereferenceType" $
   optCases (var "mel")
     (right nothing)
     ("el" ~> Eithers.map (unaryFunction just)
-      (Ctx.withContext (var "cx")
-        (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
-          (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el")))))
+      (Eithers.bimap ("_e" ~> Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (string "type") (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
+          (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el"))))
 
 fieldMap :: TTermDefinition ([Field] -> M.Map Name Term)
 fieldMap = define "fieldMap" $
@@ -137,32 +136,31 @@ fieldTypeMap = define "fieldTypeMap" $
   "toPair" <~ ("f" ~> pair (Core.fieldTypeName $ var "f") (Core.fieldTypeType $ var "f")) $
   Maps.fromList $ Lists.map (var "toPair") (var "fields")
 
-fieldTypes :: TTermDefinition (Context -> Graph -> Type -> Either (InContext Error) (M.Map Name Type))
+fieldTypes :: TTermDefinition (Context -> Graph -> Type -> Either Error (M.Map Name Type))
 fieldTypes = define "fieldTypes" $
   doc "Get field types from a record or union type (Either version)" $
   "cx" ~> "graph" ~> "t" ~>
   "toMap" <~ ("fields" ~> Maps.fromList (Lists.map
     ("ft" ~> pair (Core.fieldTypeName (var "ft")) (Core.fieldTypeType (var "ft")))
     (var "fields"))) $
-  match _Type (Just (Ctx.failInContext (Error.errorOther $ Error.otherError (
-    Strings.cat (list [string "expected record or union type but found ", ShowCore.type_ @@ var "t"]))) (var "cx"))) [
+  match _Type (Just (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $
+    Error.unexpectedShapeError (string "record or union type") (ShowCore.type_ @@ var "t")) (var "cx"))) [
     _Type_forall>>: "ft" ~> fieldTypes @@ var "cx" @@ var "graph" @@ Core.forallTypeBody (var "ft"),
     _Type_record>>: "rt" ~> right (var "toMap" @@ var "rt"),
     _Type_union>>: "rt" ~> right (var "toMap" @@ var "rt"),
     _Type_variable>>: "name" ~>
       -- Try graphSchemaTypes first (type definitions), then fall back to graphBoundTerms (legacy)
       Maybes.maybe
-        (Eithers.bind (Lexical.requireBinding @@ var "cx" @@ var "graph" @@ var "name") (
+        (Eithers.bind (Lexical.requireBinding @@ var "graph" @@ var "name") (
           "el" ~>
-          Eithers.bind (Ctx.withContext (var "cx")
-            (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
-              (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el")))) (
+          Eithers.bind (Eithers.bimap ("_e" ~> Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (string "type") (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
+              (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el"))) (
             "decodedType" ~> fieldTypes @@ var "cx" @@ var "graph" @@ var "decodedType")))
         ("ts" ~> fieldTypes @@ var "cx" @@ var "graph" @@ Core.typeSchemeType (var "ts"))
         (Maps.lookup (var "name") (Graph.graphSchemaTypes $ var "graph"))]
   @@ (Strip.deannotateType @@ var "t")
 
-findFieldType :: TTermDefinition (Context -> Name -> [FieldType] -> Either (InContext Error) Type)
+findFieldType :: TTermDefinition (Context -> Name -> [FieldType] -> Either Error Type)
 findFieldType = define "findFieldType" $
   doc "Find a field type by name in a list of field types" $
   "cx" ~> "fname" ~> "fields" ~>
@@ -170,10 +168,10 @@ findFieldType = define "findFieldType" $
     ("ft" ~> Equality.equal (Core.unName (Core.fieldTypeName (var "ft"))) (Core.unName (var "fname")))
     (var "fields") $
   Logic.ifElse (Lists.null (var "matchingFields"))
-    (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat2 (string "No such field: ") (Core.unName (var "fname")))) (var "cx"))
+    (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname")) (var "cx"))
     (Logic.ifElse (Equality.equal (Lists.length (var "matchingFields")) (int32 1))
       (right (Core.fieldTypeType (Lists.head (var "matchingFields"))))
-      (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat2 (string "Multiple fields named ") (Core.unName (var "fname")))) (var "cx")))
+      (Ctx.failInContext (Error.errorExtraction $ Error.extractionErrorMultipleFields $ Error.multipleFieldsError (var "fname")) (var "cx")))
 
 fTypeIsPolymorphic :: TTermDefinition (Type -> Bool)
 fTypeIsPolymorphic = define "fTypeIsPolymorphic" $
@@ -252,7 +250,7 @@ nominalApplication = define "nominalApplication" $
     (Core.typeVariable $ var "tname")
     (var "args")
 
-requireRecordType :: TTermDefinition (Context -> Graph -> Name -> Either (InContext Error) [FieldType])
+requireRecordType :: TTermDefinition (Context -> Graph -> Name -> Either Error [FieldType])
 requireRecordType = define "requireRecordType" $
   doc "Require a name to resolve to a record type" $
   "cx" ~> "graph" ~> "name" ~>
@@ -260,7 +258,7 @@ requireRecordType = define "requireRecordType" $
     _Type_record>>: "rt" ~> just (var "rt")]) $
   requireRowType @@ var "cx" @@ string "record type" @@ var "toRecord" @@ var "graph" @@ var "name"
 
-requireRowType :: TTermDefinition (Context -> String -> (Type -> Maybe [FieldType]) -> Graph -> Name -> Either (InContext Error) [FieldType])
+requireRowType :: TTermDefinition (Context -> String -> (Type -> Maybe [FieldType]) -> Graph -> Name -> Either Error [FieldType])
 requireRowType = define "requireRowType" $
   doc "Require a name to resolve to a row type" $
   "cx" ~> "label" ~> "getter" ~> "graph" ~> "name" ~>
@@ -270,44 +268,36 @@ requireRowType = define "requireRowType" $
   Eithers.bind (requireType @@ var "cx" @@ var "graph" @@ var "name") (
     "t" ~>
     Maybes.maybe
-      (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat (list [
-        Core.unName (var "name"),
-        (string " does not resolve to a "),
-        var "label",
-        (string " type: "),
-        ShowCore.type_ @@ var "t"]))) (var "cx"))
+      (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError
+        (Strings.cat2 (var "label") (string " type"))
+        (Strings.cat2 (Core.unName (var "name")) (Strings.cat2 (string ": ") (ShowCore.type_ @@ var "t")))) (var "cx"))
       (unaryFunction right)
       (var "getter" @@ (var "rawType" @@ var "t")))
 
-requireSchemaType :: TTermDefinition (Context -> M.Map Name TypeScheme -> Name -> Either (InContext Error) (TypeScheme, Context))
+requireSchemaType :: TTermDefinition (Context -> M.Map Name TypeScheme -> Name -> Either Error (TypeScheme, Context))
 requireSchemaType = define "requireSchemaType" $
   doc "Look up a schema type and instantiate it, threading Context" $
   "cx" ~> "types" ~> "tname" ~>
   Maybes.maybe
-    (left $ Ctx.inContext
-      (Error.errorOther $ Error.otherError $ Strings.cat $ list [
-        (string "No such schema type: "),
-        Core.unName $ var "tname",
-        (string ". Available types are: "),
-        Strings.intercalate (string ", ") (Lists.map (unaryFunction Core.unName) $ Maps.keys $ var "types")])
-      (var "cx"))
+    (left $
+      Error.errorResolution $ Error.resolutionErrorNoSuchBinding $ Error.noSuchBindingError (var "tname"))
     ("ts" ~> right $ instantiateTypeScheme @@ var "cx" @@ (Strip.deannotateTypeSchemeRecursive @@ var "ts"))
     (Maps.lookup (var "tname") (var "types"))
 
-requireType :: TTermDefinition (Context -> Graph -> Name -> Either (InContext Error) Type)
+requireType :: TTermDefinition (Context -> Graph -> Name -> Either Error Type)
 requireType = define "requireType" $
   doc "Require a type by name" $
   "cx" ~> "graph" ~> "name" ~>
   -- Look up in schema types first, then fall back to bound types
   Maybes.maybe
     (Maybes.maybe
-      (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat2 (string "no such type: ") (Core.unName (var "name")))) (var "cx"))
+      (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoSuchBinding $ Error.noSuchBindingError (var "name")) (var "cx"))
       ("ts" ~> right (Scoping.typeSchemeToFType @@ var "ts"))
       (Maps.lookup (var "name") (Graph.graphBoundTypes (var "graph"))))
     ("ts" ~> right (Scoping.typeSchemeToFType @@ var "ts"))
     (Maps.lookup (var "name") (Graph.graphSchemaTypes (var "graph")))
 
-requireUnionField_ :: TTermDefinition (Context -> Graph -> Name -> Name -> Either (InContext Error) Type)
+requireUnionField_ :: TTermDefinition (Context -> Graph -> Name -> Name -> Either Error Type)
 requireUnionField_ = define "requireUnionField" $
   doc "Require a field type from a union type" $
   "cx" ~> "graph" ~> "tname" ~> "fname" ~>
@@ -316,15 +306,11 @@ requireUnionField_ = define "requireUnionField" $
       ("ft" ~> Equality.equal (Core.fieldTypeName $ var "ft") (var "fname"))
       (var "rt")) $
     Logic.ifElse (Lists.null $ var "matches")
-      (Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat $ list [
-        string "no field \"",
-        Core.unName (var "fname"),
-        string "\" in union type \"",
-        Core.unName (var "tname")]) (var "cx"))
+      (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname")) (var "cx"))
       (right $ Core.fieldTypeType $ Lists.head $ var "matches")) $
   Eithers.bind (requireUnionType @@ var "cx" @@ var "graph" @@ var "tname") (var "withRowType")
 
-requireUnionType :: TTermDefinition (Context -> Graph -> Name -> Either (InContext Error) [FieldType])
+requireUnionType :: TTermDefinition (Context -> Graph -> Name -> Either Error [FieldType])
 requireUnionType = define "requireUnionType" $
   doc "Require a name to resolve to a union type" $
   "cx" ~> "graph" ~> "name" ~>

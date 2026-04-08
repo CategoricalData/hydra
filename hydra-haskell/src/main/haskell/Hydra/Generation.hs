@@ -72,7 +72,7 @@ showError = ShowError.error
 -- | Generate source files and write them to disk.
 -- This is a thin I/O wrapper around 'generateSourceFiles'.
 generateSources
-  :: (Module -> [Definition] -> Context.Context -> Graph -> Either (Context.InContext Error.Error) (M.Map FilePath String))
+  :: (Module -> [Definition] -> Context.Context -> Graph -> Either Error.Error (M.Map FilePath String))
   -> Language
   -> Bool  -- ^ doInfer
   -> Bool  -- ^ doExpand
@@ -85,7 +85,7 @@ generateSources
 generateSources printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings basePath universeModules modulesToGenerate = do
     let cx = Context.Context [] [] M.empty
     case CodeGeneration.generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bootstrapGraph universeModules modulesToGenerate cx of
-      Left ic -> fail $ "Failed to generate source files: " ++ formatError ic
+      Left err -> fail $ "Failed to generate source files: " ++ showError err
       Right files -> do
         mapM_ writePair files
         return $ length files
@@ -119,7 +119,7 @@ writeHaskell = generateSources moduleToHaskell haskellLanguage True False False 
 writeLexicon :: FilePath -> IO ()
 writeLexicon path = do
   case CodeGeneration.inferAndGenerateLexicon (Context [] [] M.empty) bootstrapGraph Sources.kernelModules of
-    Left err -> fail $ "Lexicon generation failed: " ++ err
+    Left err -> fail $ "Lexicon generation failed: " ++ showError err
     Right content -> do
       writeFile path content
       putStrLn $ "Lexicon written to " ++ path
@@ -131,11 +131,11 @@ writeLexiconToStandardPath = writeLexicon "../docs/hydra-lexicon.txt"
 ----------------------------------------
 
 -- | IO wrapper for generateCoderModules. Evaluates the Either and handles errors.
-generateCoderModulesIO :: (Context.Context -> Graph -> Module -> Either (Context.InContext Error.Error) (Maybe Module)) -> String -> [Module] -> [Module] -> IO [Module]
+generateCoderModulesIO :: (Context.Context -> Graph -> Module -> Either Error.Error (Maybe Module)) -> String -> [Module] -> [Module] -> IO [Module]
 generateCoderModulesIO codec label universeModules typeModules = do
     let cx = Context.Context [] [] M.empty
     case CodeGeneration.generateCoderModules codec bootstrapGraph universeModules typeModules cx of
-      Left ic -> fail $ "Failed to generate " ++ label ++ " modules: " ++ formatError ic
+      Left err -> fail $ "Failed to generate " ++ label ++ " modules: " ++ showError err
       Right results -> return results
 
 generateDecoderModules :: [Module] -> [Module] -> IO [Module]
@@ -237,7 +237,7 @@ writeDslHaskell basePath universeModules typeModules = do
 inferModulesIO :: [Module] -> [Module] -> IO [Module]
 inferModulesIO universeMods targetMods = do
   case CodeGeneration.inferModules (Context [] [] M.empty) bootstrapGraph universeMods targetMods of
-    Left ic -> fail $ "Type inference failed: " ++ formatError ic
+    Left err -> fail $ "Type inference failed: " ++ showError err
     Right mods -> return mods
 
 ----------------------------------------
@@ -258,7 +258,7 @@ buildSchemaMap g = M.map extractType (graphSchemaTypes g)
 writeModuleJson :: M.Map Name Type -> FilePath -> Module -> IO ()
 writeModuleJson schemaMap basePath mod = do
     case CodeGeneration.moduleToJson schemaMap mod of
-      Left err -> fail $ "Failed to convert module to JSON: " ++ unNamespace (moduleNamespace mod) ++ ": " ++ err
+      Left err -> fail $ "Failed to convert module to JSON: " ++ unNamespace (moduleNamespace mod) ++ ": " ++ showError err
       Right jsonStr -> do
         let filePath = basePath FP.</> CodeGeneration.namespaceToPath (moduleNamespace mod) ++ ".json"
         SD.createDirectoryIfMissing True $ FP.takeDirectory filePath
@@ -380,7 +380,7 @@ loadModulesFromJson basePath universeModules namespaces = do
       case parseResult of
         Left err -> fail $ "JSON parse error for " ++ unNamespace ns ++ ": " ++ err
         Right jsonVal -> case CodeGeneration.decodeModuleFromJson bootstrapGraph universeModules jsonVal of
-          Left err -> fail $ "Module decode error for " ++ unNamespace ns ++ ": " ++ err
+          Left err -> fail $ "Module decode error for " ++ unNamespace ns ++ ": " ++ showError err
           Right mod -> do
             putStrLn $ "  Loaded: " ++ unNamespace ns
             return mod
@@ -461,8 +461,8 @@ generateGenerationTestSuite testGen outDir modules lookupTestGroup = do
       putStrLn "Starting type inference..."
       let cx0 = Context [] [] M.empty
       case Inference.inferGraphTypes cx0 (graphToBindings graph) graph of
-        Left ic -> do
-          putStrLn $ "✗ Type inference failed: " ++ showError (inContextObject ic)
+        Left err -> do
+          putStrLn $ "✗ Type inference failed: " ++ showError err
           return False
         Right ((g, _inferredBindings), _cx') -> do
           putStrLn $ "Type inference complete. Generating " ++ show (length moduleTestPairs) ++ " module(s)..."

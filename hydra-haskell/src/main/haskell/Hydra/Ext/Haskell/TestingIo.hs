@@ -26,7 +26,7 @@ haskellTestGenerator :: TestGenerator H.ModuleName
 haskellTestGenerator = TestGenerator {
   testGeneratorNamespacesForModule = \m g -> do
     case namespacesForModule m emptyContext g of
-      Left ic -> Left (showError (inContextObject ic))
+      Left err -> Left (showError err)
       Right ns -> Right ns,
   testGeneratorGenerateTestFile = Generated.generateHaskellTestFile,
   testGeneratorAggregatorFile = Just generateHaskellAggregatorSpec

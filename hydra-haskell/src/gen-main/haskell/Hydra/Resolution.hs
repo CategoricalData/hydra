@@ -31,13 +31,13 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Map as M
 
 -- | Dereference a type name to get the actual type (Either version)
-dereferenceType :: Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Errors.Error) (Maybe Core.Type)
+dereferenceType :: t0 -> Graph.Graph -> Core.Name -> Either Errors.Error (Maybe Core.Type)
 dereferenceType cx graph name =
 
       let mel = Lexical.lookupBinding graph name
-      in (Maybes.maybe (Right Nothing) (\el -> Eithers.map Maybes.pure (Eithers.bimap (\_wc_e -> Context.InContext {
-        Context.inContextObject = _wc_e,
-        Context.inContextContext = cx}) (\_wc_a -> _wc_a) (Eithers.bimap (\_e -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _e))) (\_a -> _a) (Core_.type_ graph (Core.bindingTerm el))))) mel)
+      in (Maybes.maybe (Right Nothing) (\el -> Eithers.map Maybes.pure (Eithers.bimap (\_e -> Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+        Errors.unexpectedShapeErrorExpected = "type",
+        Errors.unexpectedShapeErrorActual = (Errors.unDecodingError _e)}))) (\_a -> _a) (Core_.type_ graph (Core.bindingTerm el)))) mel)
 
 -- | Test whether a given System F type is polymorphic (i.e., a forall type)
 fTypeIsPolymorphic :: Core.Type -> Bool
@@ -60,7 +60,7 @@ fieldTypeMap fields =
       in (Maps.fromList (Lists.map toPair fields))
 
 -- | Get field types from a record or union type (Either version)
-fieldTypes :: Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Errors.Error) (M.Map Core.Name Core.Type)
+fieldTypes :: t0 -> Graph.Graph -> Core.Type -> Either Errors.Error (M.Map Core.Name Core.Type)
 fieldTypes cx graph t =
 
       let toMap = \fields -> Maps.fromList (Lists.map (\ft -> (Core.fieldTypeName ft, (Core.fieldTypeType ft))) fields)
@@ -68,25 +68,21 @@ fieldTypes cx graph t =
         Core.TypeForall v0 -> fieldTypes cx graph (Core.forallTypeBody v0)
         Core.TypeRecord v0 -> Right (toMap v0)
         Core.TypeUnion v0 -> Right (toMap v0)
-        Core.TypeVariable v0 -> Maybes.maybe (Eithers.bind (Lexical.requireBinding cx graph v0) (\el -> Eithers.bind (Eithers.bimap (\_wc_e -> Context.InContext {
-          Context.inContextObject = _wc_e,
-          Context.inContextContext = cx}) (\_wc_a -> _wc_a) (Eithers.bimap (\_e -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _e))) (\_a -> _a) (Core_.type_ graph (Core.bindingTerm el)))) (\decodedType -> fieldTypes cx graph decodedType))) (\ts -> fieldTypes cx graph (Core.typeSchemeType ts)) (Maps.lookup v0 (Graph.graphSchemaTypes graph))
-        _ -> Left (Context.InContext {
-          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat [
-            "expected record or union type but found ",
-            (Core__.type_ t)]))),
-          Context.inContextContext = cx})
+        Core.TypeVariable v0 -> Maybes.maybe (Eithers.bind (Lexical.requireBinding graph v0) (\el -> Eithers.bind (Eithers.bimap (\_e -> Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+          Errors.unexpectedShapeErrorExpected = "type",
+          Errors.unexpectedShapeErrorActual = (Errors.unDecodingError _e)}))) (\_a -> _a) (Core_.type_ graph (Core.bindingTerm el))) (\decodedType -> fieldTypes cx graph decodedType))) (\ts -> fieldTypes cx graph (Core.typeSchemeType ts)) (Maps.lookup v0 (Graph.graphSchemaTypes graph))
+        _ -> Left (Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+          Errors.unexpectedShapeErrorExpected = "record or union type",
+          Errors.unexpectedShapeErrorActual = (Core__.type_ t)})))
 
 -- | Find a field type by name in a list of field types
-findFieldType :: Context.Context -> Core.Name -> [Core.FieldType] -> Either (Context.InContext Errors.Error) Core.Type
+findFieldType :: t0 -> Core.Name -> [Core.FieldType] -> Either Errors.Error Core.Type
 findFieldType cx fname fields =
 
       let matchingFields = Lists.filter (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) (Core.unName fname)) fields
-      in (Logic.ifElse (Lists.null matchingFields) (Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "No such field: " (Core.unName fname)))),
-        Context.inContextContext = cx})) (Logic.ifElse (Equality.equal (Lists.length matchingFields) 1) (Right (Core.fieldTypeType (Lists.head matchingFields))) (Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Multiple fields named " (Core.unName fname)))),
-        Context.inContextContext = cx}))))
+      in (Logic.ifElse (Lists.null matchingFields) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
+        Errors.noMatchingFieldErrorFieldName = fname})))) (Logic.ifElse (Equality.equal (Lists.length matchingFields) 1) (Right (Core.fieldTypeType (Lists.head matchingFields))) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorMultipleFields (Errors.MultipleFieldsError {
+        Errors.multipleFieldsErrorFieldName = fname}))))))
 
 -- | Fully strip a type of forall quantifiers, normalizing bound variable names for alpha-equivalence comparison
 fullyStripAndNormalizeType :: Core.Type -> Core.Type
@@ -143,7 +139,7 @@ nominalApplication tname args =
       Core.applicationTypeArgument = a})) (Core.TypeVariable tname) args
 
 -- | Require a name to resolve to a record type
-requireRecordType :: Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Errors.Error) [Core.FieldType]
+requireRecordType :: t0 -> Graph.Graph -> Core.Name -> Either Errors.Error [Core.FieldType]
 requireRecordType cx graph name =
 
       let toRecord =
@@ -153,7 +149,7 @@ requireRecordType cx graph name =
       in (requireRowType cx "record type" toRecord graph name)
 
 -- | Require a name to resolve to a row type
-requireRowType :: Context.Context -> String -> (Core.Type -> Maybe t0) -> Graph.Graph -> Core.Name -> Either (Context.InContext Errors.Error) t0
+requireRowType :: t0 -> String -> (Core.Type -> Maybe t1) -> Graph.Graph -> Core.Name -> Either Errors.Error t1
 requireRowType cx label getter graph name =
 
       let rawType =
@@ -161,51 +157,35 @@ requireRowType cx label getter graph name =
                 Core.TypeAnnotated v0 -> rawType (Core.annotatedTypeBody v0)
                 Core.TypeForall v0 -> rawType (Core.forallTypeBody v0)
                 _ -> t
-      in (Eithers.bind (requireType cx graph name) (\t -> Maybes.maybe (Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat [
-          Core.unName name,
-          " does not resolve to a ",
-          label,
-          " type: ",
-          (Core__.type_ t)]))),
-        Context.inContextContext = cx})) (\x -> Right x) (getter (rawType t))))
+      in (Eithers.bind (requireType cx graph name) (\t -> Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+        Errors.unexpectedShapeErrorExpected = (Strings.cat2 label " type"),
+        Errors.unexpectedShapeErrorActual = (Strings.cat2 (Core.unName name) (Strings.cat2 ": " (Core__.type_ t)))})))) (\x -> Right x) (getter (rawType t))))
 
 -- | Look up a schema type and instantiate it, threading Context
-requireSchemaType :: Context.Context -> M.Map Core.Name Core.TypeScheme -> Core.Name -> Either (Context.InContext Errors.Error) (Core.TypeScheme, Context.Context)
+requireSchemaType :: Context.Context -> M.Map Core.Name Core.TypeScheme -> Core.Name -> Either Errors.Error (Core.TypeScheme, Context.Context)
 requireSchemaType cx types tname =
-    Maybes.maybe (Left (Context.InContext {
-      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat [
-        "No such schema type: ",
-        (Core.unName tname),
-        ". Available types are: ",
-        (Strings.intercalate ", " (Lists.map Core.unName (Maps.keys types)))]))),
-      Context.inContextContext = cx})) (\ts -> Right (instantiateTypeScheme cx (Strip.deannotateTypeSchemeRecursive ts))) (Maps.lookup tname types)
+    Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchBinding (Errors.NoSuchBindingError {
+      Errors.noSuchBindingErrorName = tname})))) (\ts -> Right (instantiateTypeScheme cx (Strip.deannotateTypeSchemeRecursive ts))) (Maps.lookup tname types)
 
 -- | Require a type by name
-requireType :: Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Errors.Error) Core.Type
+requireType :: t0 -> Graph.Graph -> Core.Name -> Either Errors.Error Core.Type
 requireType cx graph name =
-    Maybes.maybe (Maybes.maybe (Left (Context.InContext {
-      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "no such type: " (Core.unName name)))),
-      Context.inContextContext = cx})) (\ts -> Right (Scoping.typeSchemeToFType ts)) (Maps.lookup name (Graph.graphBoundTypes graph))) (\ts -> Right (Scoping.typeSchemeToFType ts)) (Maps.lookup name (Graph.graphSchemaTypes graph))
+    Maybes.maybe (Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchBinding (Errors.NoSuchBindingError {
+      Errors.noSuchBindingErrorName = name})))) (\ts -> Right (Scoping.typeSchemeToFType ts)) (Maps.lookup name (Graph.graphBoundTypes graph))) (\ts -> Right (Scoping.typeSchemeToFType ts)) (Maps.lookup name (Graph.graphSchemaTypes graph))
 
 -- | Require a field type from a union type
-requireUnionField :: Context.Context -> Graph.Graph -> Core.Name -> Core.Name -> Either (Context.InContext Errors.Error) Core.Type
+requireUnionField :: t0 -> Graph.Graph -> Core.Name -> Core.Name -> Either Errors.Error Core.Type
 requireUnionField cx graph tname fname =
 
       let withRowType =
               \rt ->
                 let matches = Lists.filter (\ft -> Equality.equal (Core.fieldTypeName ft) fname) rt
-                in (Logic.ifElse (Lists.null matches) (Left (Context.InContext {
-                  Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat [
-                    "no field \"",
-                    (Core.unName fname),
-                    "\" in union type \"",
-                    (Core.unName tname)]))),
-                  Context.inContextContext = cx})) (Right (Core.fieldTypeType (Lists.head matches))))
+                in (Logic.ifElse (Lists.null matches) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
+                  Errors.noMatchingFieldErrorFieldName = fname})))) (Right (Core.fieldTypeType (Lists.head matches))))
       in (Eithers.bind (requireUnionType cx graph tname) withRowType)
 
 -- | Require a name to resolve to a union type
-requireUnionType :: Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Errors.Error) [Core.FieldType]
+requireUnionType :: t0 -> Graph.Graph -> Core.Name -> Either Errors.Error [Core.FieldType]
 requireUnionType cx graph name =
 
       let toUnion =

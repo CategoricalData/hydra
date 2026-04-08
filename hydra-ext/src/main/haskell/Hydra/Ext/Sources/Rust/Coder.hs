@@ -356,7 +356,7 @@ encodeLiteral = def "encodeLiteral" $
 -- =============================================================================
 
 -- | Encode a Hydra type as a Rust syntax type
-encodeType :: TTermDefinition (Context -> Graph -> Type -> Either (InContext Error) R.Type)
+encodeType :: TTermDefinition (Context -> Graph -> Type -> Either Error R.Type)
 encodeType = def "encodeType" $
   "cx" ~> "g" ~> lambda "t" $
     "typ" <~ (Strip.deannotateType @@ var "t") $
@@ -424,7 +424,7 @@ encodeType = def "encodeType" $
 -- =============================================================================
 
 -- | Encode a Hydra term as a Rust expression
-encodeTerm :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) R.Expression)
+encodeTerm :: TTermDefinition (Context -> Graph -> Term -> Either Error R.Expression)
 encodeTerm = def "encodeTerm" $
   "cx" ~> "g" ~> lambda "term" $
     cases _Term (var "term") (Just $
@@ -538,7 +538,7 @@ encodeTerm = def "encodeTerm" $
 -- =============================================================================
 
 -- | Encode a Hydra function as a Rust expression
-encodeFunction :: TTermDefinition (Context -> Graph -> Function -> Either (InContext Error) R.Expression)
+encodeFunction :: TTermDefinition (Context -> Graph -> Function -> Either Error R.Expression)
 encodeFunction = def "encodeFunction" $
   "cx" ~> "g" ~> lambda "fun" $
     cases _Function (var "fun") Nothing [
@@ -546,8 +546,6 @@ encodeFunction = def "encodeFunction" $
         "param" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.lambdaParameter (var "lam"))) $
         "body" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ Core.lambdaBody (var "lam")) $
           right (rustClosure @@ list [var "param"] @@ var "body"),
-      _Function_primitive>>: lambda "name" $
-        right (rustExprPath @@ Core.unName (var "name")),
       _Function_elimination>>: lambda "elim" $
         encodeElimination @@ var "cx" @@ var "g" @@ var "elim" @@ nothing]
 
@@ -557,7 +555,7 @@ encodeFunction = def "encodeFunction" $
 
 -- | Encode a Hydra elimination as a Rust expression.
 -- Takes an optional argument for applied eliminations.
-encodeElimination :: TTermDefinition (Context -> Graph -> Elimination -> Maybe Term -> Either (InContext Error) R.Expression)
+encodeElimination :: TTermDefinition (Context -> Graph -> Elimination -> Maybe Term -> Either Error R.Expression)
 encodeElimination = def "encodeElimination" $
   "cx" ~> "g" ~> lambda "elim" $ lambda "marg" $
     cases _Elimination (var "elim") Nothing [
@@ -648,7 +646,7 @@ encodeElimination = def "encodeElimination" $
 -- =============================================================================
 
 -- | Encode a Hydra record field as a Rust struct field
-encodeStructField :: TTermDefinition (Context -> Graph -> FieldType -> Either (InContext Error) R.StructField)
+encodeStructField :: TTermDefinition (Context -> Graph -> FieldType -> Either Error R.StructField)
 encodeStructField = def "encodeStructField" $
   "cx" ~> "g" ~> lambda "ft" $
     "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
@@ -665,7 +663,7 @@ encodeStructField = def "encodeStructField" $
 -- =============================================================================
 
 -- | Encode a Hydra union field as a Rust enum variant
-encodeEnumVariant :: TTermDefinition (Context -> Graph -> FieldType -> Either (InContext Error) R.EnumVariant)
+encodeEnumVariant :: TTermDefinition (Context -> Graph -> FieldType -> Either Error R.EnumVariant)
 encodeEnumVariant = def "encodeEnumVariant" $
   "cx" ~> "g" ~> lambda "ft" $
     "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
@@ -701,7 +699,7 @@ encodeEnumVariant = def "encodeEnumVariant" $
 -- =============================================================================
 
 -- | Encode a Hydra type definition as a Rust item
-encodeTypeDefinition :: TTermDefinition (Context -> Graph -> TypeDefinition -> Either (InContext Error) R.ItemWithComments)
+encodeTypeDefinition :: TTermDefinition (Context -> Graph -> TypeDefinition -> Either Error R.ItemWithComments)
 encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.typeDefinitionName (var "tdef") $
@@ -773,7 +771,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
 -- =============================================================================
 
 -- | Encode a Hydra term definition as a Rust function item
-encodeTermDefinition :: TTermDefinition (Context -> Graph -> TermDefinition -> Either (InContext Error) R.ItemWithComments)
+encodeTermDefinition :: TTermDefinition (Context -> Graph -> TermDefinition -> Either Error R.ItemWithComments)
 encodeTermDefinition = def "encodeTermDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.termDefinitionName (var "tdef") $
@@ -809,7 +807,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
 -- =============================================================================
 
 -- | Convert a Hydra module to a map of file paths to Rust source code strings.
-moduleToRust :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either (InContext Error) (M.Map FilePath String))
+moduleToRust :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String))
 moduleToRust = def "moduleToRust" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
     "partitioned" <~ (Environment.partitionDefinitions @@ var "defs") $

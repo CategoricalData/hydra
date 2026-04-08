@@ -6,7 +6,6 @@ module Hydra.Ext.Haskell.Testing where
 
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
 import qualified Hydra.Dependencies as Dependencies
@@ -70,7 +69,7 @@ buildNamespacesForTestGroup mod tgroup graph_ =
                     Packaging.moduleTermDependencies = (Packaging.moduleTermDependencies mod),
                     Packaging.moduleTypeDependencies = (Packaging.moduleTypeDependencies mod),
                     Packaging.moduleDescription = (Packaging.moduleDescription mod)}
-      in (Eithers.bind (Eithers.bimap (\ic -> Errors.error (Context.inContextObject ic)) (\a -> a) (Utils.namespacesForModule tempModule Lexical.emptyContext graph_)) (\baseNamespaces ->
+      in (Eithers.bind (Eithers.bimap (\e -> Errors.error e) (\a -> a) (Utils.namespacesForModule tempModule Lexical.emptyContext graph_)) (\baseNamespaces ->
         let encodedNames = Sets.unions (Lists.map (\t -> extractEncodedTermVariableNames graph_ t) testTerms)
         in (Right (addNamespacesToNamespaces baseNamespaces encodedNames))))
 

@@ -142,7 +142,7 @@ runReverseDemo = do
   let typeMap = M.fromList [(addressName, addressType), (personName, personType)]
 
   case Encoder.encodeType cx typeMap personName of
-    Left err -> putStrLn $ "  ERROR: " ++ ShowError.error (inContextObject err)
+    Left err -> putStrLn $ "  ERROR: " ++ ShowError.error err
     Right adapter -> do
       let avroSchema = Coders.adapterTarget adapter
       let json = SchemaJson.encodeSchema avroSchema
@@ -169,7 +169,7 @@ runReverseDemo = do
               Core.TermLiteral (Core.LiteralString "engineer"),
               Core.TermLiteral (Core.LiteralString "haskell")])]
       case Coders.coderEncode (Coders.adapterCoder adapter) cx personTerm of
-        Left err -> putStrLn $ "  Term encode ERROR: " ++ ShowError.error (inContextObject err)
+        Left err -> putStrLn $ "  Term encode ERROR: " ++ ShowError.error err
         Right jsonVal -> do
           let termJsonStr = JsonWriter.printJson jsonVal
           putStrLn $ "  Term encoded as JSON: " ++ termJsonStr

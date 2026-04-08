@@ -110,8 +110,7 @@ haskellLanguage = haskellLanguageDefinition "haskellLanguage" $
     Core.floatTypeFloat64], -- Double
   "functionVariants">: Sets.fromList $ list [
     Variants.functionVariantElimination,
-    Variants.functionVariantLambda,
-    Variants.functionVariantPrimitive],
+    Variants.functionVariantLambda],
   "integerTypes">: Sets.fromList $ list [
     Core.integerTypeBigint, -- Integer
     Core.integerTypeInt8, -- Int8

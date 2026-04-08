@@ -113,8 +113,7 @@ javaLanguage = define "javaLanguage" $
     Core.floatTypeFloat64], -- double
   "functionVariants">: Sets.fromList $ list [
     Variants.functionVariantElimination,
-    Variants.functionVariantLambda,
-    Variants.functionVariantPrimitive],
+    Variants.functionVariantLambda],
   "integerTypes">: Sets.fromList $ list [
     Core.integerTypeBigint, -- java.math.BigInteger
     Core.integerTypeInt8, -- byte (signed, 8-bit)

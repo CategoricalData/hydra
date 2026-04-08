@@ -145,6 +145,6 @@ inferTerm = define "inferTerm" $
   doc "Run type inference on a single term" $
   lambda "g" $ lambda "term" $
     Eithers.bimap
-      ("ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic"))
+      ("e" ~> ShowError.error_ @@ var "e")
       ("x" ~> Typing.inferenceResultTerm (var "x"))
       (Inference.inferInGraphContext @@ asTerm Lexical.emptyContext @@ var "g" @@ var "term")

@@ -72,18 +72,18 @@ module_ = Module ns definitions
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-formatError :: TTerm (InContext Error -> String)
-formatError = "ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic")
+formatError :: TTerm (Error -> String)
+formatError = "e" ~> ShowError.error_ @@ var "e"
 
-comparison :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either (InContext Error) Comparison)
+comparison :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either Error Comparison)
 comparison = define "comparison" $
   doc "Extract a comparison from a term" $
   "cx" ~> "graph" ~> "term" ~>
-    "fname" <<~ ExtractCore.unitVariant @@ var "cx" @@ Core.nameLift _Comparison @@ var "graph" @@ var "term" $
+    "fname" <<~ ExtractCore.unitVariant @@ Core.nameLift _Comparison @@ var "graph" @@ var "term" $
         Logic.ifElse (Equality.equal (Core.unName $ var "fname") (string $ unName _Comparison_equalTo))
           (right Graph.comparisonEqualTo)
           (Logic.ifElse (Equality.equal (Core.unName $ var "fname") (string $ unName _Comparison_lessThan))
             (right Graph.comparisonLessThan)
             (Logic.ifElse (Equality.equal (Core.unName $ var "fname") (string $ unName _Comparison_greaterThan))
               (right Graph.comparisonGreaterThan)
-              (Ctx.failInContext (Error.errorOther $ Error.otherError (string "expected comparison but found " ++ Core.unName (var "fname"))) (var "cx"))))
+              (Ctx.failInContext (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "comparison") (Core.unName (var "fname"))) (var "cx"))))

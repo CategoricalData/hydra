@@ -4,7 +4,6 @@
 
 module Hydra.Templates where
 
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
 import qualified Hydra.Errors as Errors
@@ -15,31 +14,28 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Show.Core as Core__
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Map as M
 
 -- | Decode a list of type-encoding bindings into a map of named types
-graphToSchema :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Errors.DecodingError) (M.Map Core.Name Core.Type)
+graphToSchema :: t0 -> Graph.Graph -> [Core.Binding] -> Either Errors.DecodingError (M.Map Core.Name Core.Type)
 graphToSchema cx graph els =
 
       let toPair =
               \el ->
                 let name = Core.bindingName el
-                in (Eithers.bind (Eithers.bimap (\_wc_e -> Context.InContext {
-                  Context.inContextObject = _wc_e,
-                  Context.inContextContext = cx}) (\_wc_a -> _wc_a) (Core_.type_ graph (Core.bindingTerm el))) (\t -> Right (name, t)))
+                in (Eithers.bind (Core_.type_ graph (Core.bindingTerm el)) (\t -> Right (name, t)))
       in (Eithers.bind (Eithers.mapList toPair els) (\pairs -> Right (Maps.fromList pairs)))
 
 -- | Given a graph schema and a nonrecursive type, instantiate it with default values. If the minimal flag is set, the smallest possible term is produced; otherwise, exactly one subterm is produced for constructors which do not otherwise require one, e.g. in lists and optionals. The name parameter provides the element name for nominal type construction.
-instantiateTemplate :: Context.Context -> Bool -> M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> Either (Context.InContext Errors.Error) Core.Term
+instantiateTemplate :: t0 -> Bool -> M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> Either Errors.Error Core.Term
 instantiateTemplate cx minimal schema tname t =
 
       let inst = \tn -> instantiateTemplate cx minimal schema tn
           noPoly =
-                  Left (Context.InContext {
-                    Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "Polymorphic and function types are not currently supported")),
-                    Context.inContextContext = cx})
+                  Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+                    Errors.unexpectedShapeErrorExpected = "non-polymorphic type",
+                    Errors.unexpectedShapeErrorActual = "polymorphic or function type"})))
           forFloat =
                   \ft -> case ft of
                     Core.FloatTypeBigfloat -> Core.FloatValueBigfloat 0.0
@@ -86,9 +82,9 @@ instantiateTemplate cx minimal schema tname t =
             Core.recordFields = dfields}))))
         Core.TypeSet v0 -> Logic.ifElse minimal (Right (Core.TermSet Sets.empty)) (Eithers.bind (inst tname v0) (\e -> Right (Core.TermSet (Sets.fromList [
           e]))))
-        Core.TypeVariable v0 -> Maybes.maybe (Left (Context.InContext {
-          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Type variable " (Strings.cat2 (Core__.term (Core.TermVariable v0)) " not found in schema")))),
-          Context.inContextContext = cx})) (inst v0) (Maps.lookup v0 schema)
+        Core.TypeVariable v0 -> Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+          Errors.unexpectedShapeErrorExpected = "bound type variable",
+          Errors.unexpectedShapeErrorActual = (Strings.cat2 "unbound variable " (Core.unName v0))})))) (inst v0) (Maps.lookup v0 schema)
         Core.TypeWrap v0 -> Eithers.bind (inst tname v0) (\e -> Right (Core.TermWrap (Core.WrappedTerm {
           Core.wrappedTermTypeName = tname,
           Core.wrappedTermBody = e})))

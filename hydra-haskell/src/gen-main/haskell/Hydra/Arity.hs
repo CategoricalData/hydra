@@ -16,7 +16,6 @@ functionArity x =
     case x of
       Core.FunctionElimination _ -> 1
       Core.FunctionLambda v0 -> (\i -> Math.add 1 i) (termArity (Core.lambdaBody v0))
-      Core.FunctionPrimitive _ -> 42
 
 -- | Find the arity (expected number of arguments) of a primitive constant or function
 primitiveArity :: Graph.Primitive -> Int

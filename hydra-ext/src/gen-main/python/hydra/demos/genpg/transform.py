@@ -214,7 +214,7 @@ def element_specs_by_table(graph: hydra.pg.model.LazyGraph[hydra.core.Term]) -> 
         return graph.edges
     return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v: hydra.lib.eithers.map((lambda t: (t, v)), table_for_vertex(v))), vertices()), (lambda vertex_pairs: hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda e: hydra.lib.eithers.map((lambda t: (t, e)), table_for_edge(e))), edges()), (lambda edge_pairs: (add_vertex := (lambda m, p: (table := hydra.lib.pairs.first(p), v := hydra.lib.pairs.second(p), existing := hydra.lib.maps.lookup(table, m), current := hydra.lib.maybes.from_maybe((lambda : ((), ())), existing), hydra.lib.maps.insert(table, (hydra.lib.lists.cons(v, hydra.lib.pairs.first(current)), hydra.lib.pairs.second(current)), m))[4]), add_edge := (lambda m, p: (table := hydra.lib.pairs.first(p), e := hydra.lib.pairs.second(p), existing := hydra.lib.maps.lookup(table, m), current := hydra.lib.maybes.from_maybe((lambda : ((), ())), existing), hydra.lib.maps.insert(table, (hydra.lib.pairs.first(current), hydra.lib.lists.cons(e, hydra.lib.pairs.second(current))), m))[4]), vertex_map := hydra.lib.lists.foldl((lambda x1, x2: add_vertex(x1, x2)), hydra.lib.maps.empty(), vertex_pairs), Right(hydra.lib.lists.foldl((lambda x1, x2: add_edge(x1, x2)), vertex_map, edge_pairs)))[3]))))
 
-def evaluate_properties(cx: hydra.context.Context, g: hydra.graph.Graph, specs: FrozenDict[T0, hydra.core.Term], record: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], FrozenDict[T0, hydra.core.Term]]:
+def evaluate_properties(cx: hydra.context.Context, g: hydra.graph.Graph, specs: FrozenDict[T0, hydra.core.Term], record: hydra.core.Term) -> Either[hydra.errors.Error, FrozenDict[T0, hydra.core.Term]]:
     r"""Evaluate property specifications against a record term."""
 
     def extract_maybe(k: T1, term: hydra.core.Term) -> Either[T2, Maybe[tuple[T1, hydra.core.Term]]]:
@@ -226,7 +226,7 @@ def evaluate_properties(cx: hydra.context.Context, g: hydra.graph.Graph, specs: 
                 raise TypeError("Unsupported Term")
     return hydra.lib.eithers.map((lambda pairs: hydra.lib.maps.from_list(hydra.lib.maybes.cat(pairs))), hydra.lib.eithers.map_list((lambda pair: (k := hydra.lib.pairs.first(pair), spec := hydra.lib.pairs.second(pair), hydra.lib.eithers.bind(hydra.reduction.reduce_term(cx, g, True, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(spec, record)))), (lambda value: extract_maybe(k, hydra.strip.deannotate_term(value)))))[2]), hydra.lib.maps.to_list(specs)))
 
-def evaluate_edge(cx: hydra.context.Context, g: hydra.graph.Graph, edge_spec: hydra.pg.model.Edge[hydra.core.Term], record: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], Maybe[hydra.pg.model.Edge[hydra.core.Term]]]:
+def evaluate_edge(cx: hydra.context.Context, g: hydra.graph.Graph, edge_spec: hydra.pg.model.Edge[hydra.core.Term], record: hydra.core.Term) -> Either[hydra.errors.Error, Maybe[hydra.pg.model.Edge[hydra.core.Term]]]:
     r"""Evaluate an edge specification against a record term to produce an optional edge."""
 
     @lru_cache(1)
@@ -244,9 +244,9 @@ def evaluate_edge(cx: hydra.context.Context, g: hydra.graph.Graph, edge_spec: hy
     @lru_cache(1)
     def prop_specs() -> FrozenDict[hydra.pg.model.PropertyKey, hydra.core.Term]:
         return edge_spec.properties
-    return hydra.lib.eithers.bind(hydra.reduction.reduce_term(cx, g, True, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(id_spec(), record)))), (lambda id: hydra.lib.eithers.bind(hydra.lib.eithers.bind(hydra.reduction.reduce_term(cx, g, True, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(out_spec(), record)))), (lambda _term: hydra.extract.core.maybe_term(cx, (lambda t: Right(t)), g, _term))), (lambda m_out_id: hydra.lib.eithers.bind(hydra.lib.eithers.bind(hydra.reduction.reduce_term(cx, g, True, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(in_spec(), record)))), (lambda _term: hydra.extract.core.maybe_term(cx, (lambda t: Right(t)), g, _term))), (lambda m_in_id: hydra.lib.eithers.bind(evaluate_properties(cx, g, prop_specs(), record), (lambda props: Right(hydra.lib.maybes.bind(m_out_id, (lambda out_id: hydra.lib.maybes.map((lambda in_id: hydra.pg.model.Edge(label(), id, out_id, in_id, props)), m_in_id))))))))))))
+    return hydra.lib.eithers.bind(hydra.reduction.reduce_term(cx, g, True, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(id_spec(), record)))), (lambda id: hydra.lib.eithers.bind(hydra.lib.eithers.bind(hydra.reduction.reduce_term(cx, g, True, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(out_spec(), record)))), (lambda _term: hydra.extract.core.maybe_term((lambda t: Right(t)), g, _term))), (lambda m_out_id: hydra.lib.eithers.bind(hydra.lib.eithers.bind(hydra.reduction.reduce_term(cx, g, True, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(in_spec(), record)))), (lambda _term: hydra.extract.core.maybe_term((lambda t: Right(t)), g, _term))), (lambda m_in_id: hydra.lib.eithers.bind(evaluate_properties(cx, g, prop_specs(), record), (lambda props: Right(hydra.lib.maybes.bind(m_out_id, (lambda out_id: hydra.lib.maybes.map((lambda in_id: hydra.pg.model.Edge(label(), id, out_id, in_id, props)), m_in_id))))))))))))
 
-def evaluate_vertex(cx: hydra.context.Context, g: hydra.graph.Graph, vertex_spec: hydra.pg.model.Vertex[hydra.core.Term], record: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], Maybe[hydra.pg.model.Vertex[hydra.core.Term]]]:
+def evaluate_vertex(cx: hydra.context.Context, g: hydra.graph.Graph, vertex_spec: hydra.pg.model.Vertex[hydra.core.Term], record: hydra.core.Term) -> Either[hydra.errors.Error, Maybe[hydra.pg.model.Vertex[hydra.core.Term]]]:
     r"""Evaluate a vertex specification against a record term to produce an optional vertex."""
 
     @lru_cache(1)
@@ -258,7 +258,7 @@ def evaluate_vertex(cx: hydra.context.Context, g: hydra.graph.Graph, vertex_spec
     @lru_cache(1)
     def prop_specs() -> FrozenDict[hydra.pg.model.PropertyKey, hydra.core.Term]:
         return vertex_spec.properties
-    return hydra.lib.eithers.bind(hydra.lib.eithers.bind(hydra.reduction.reduce_term(cx, g, True, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(id_spec(), record)))), (lambda _term: hydra.extract.core.maybe_term(cx, (lambda t: Right(t)), g, _term))), (lambda m_id: hydra.lib.eithers.bind(evaluate_properties(cx, g, prop_specs(), record), (lambda props: Right(hydra.lib.maybes.map((lambda id: hydra.pg.model.Vertex(label(), id, props)), m_id))))))
+    return hydra.lib.eithers.bind(hydra.lib.eithers.bind(hydra.reduction.reduce_term(cx, g, True, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(id_spec(), record)))), (lambda _term: hydra.extract.core.maybe_term((lambda t: Right(t)), g, _term))), (lambda m_id: hydra.lib.eithers.bind(evaluate_properties(cx, g, prop_specs(), record), (lambda props: Right(hydra.lib.maybes.map((lambda id: hydra.pg.model.Vertex(label(), id, props)), m_id))))))
 
 def list_any(pred: Callable[[T0], bool], xs: frozenlist[T0]) -> bool:
     r"""Check if any element in a list satisfies a predicate."""
@@ -356,12 +356,12 @@ def term_row_to_record(table_type: hydra.tabular.TableType, row: hydra.tabular.D
         return row.value
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name(tname), hydra.lib.lists.zip_with((lambda col_type, mvalue: (cname := col_type.name.value, hydra.core.Field(hydra.core.Name(cname), cast(hydra.core.Term, hydra.core.TermMaybe(mvalue))))[1]), col_types, cells()))))
 
-def transform_record(cx: hydra.context.Context, g: hydra.graph.Graph, vspecs: frozenlist[hydra.pg.model.Vertex[hydra.core.Term]], especs: frozenlist[hydra.pg.model.Edge[hydra.core.Term]], record: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], tuple[frozenlist[hydra.pg.model.Vertex[hydra.core.Term]], frozenlist[hydra.pg.model.Edge[hydra.core.Term]]]]:
+def transform_record(cx: hydra.context.Context, g: hydra.graph.Graph, vspecs: frozenlist[hydra.pg.model.Vertex[hydra.core.Term]], especs: frozenlist[hydra.pg.model.Edge[hydra.core.Term]], record: hydra.core.Term) -> Either[hydra.errors.Error, tuple[frozenlist[hydra.pg.model.Vertex[hydra.core.Term]], frozenlist[hydra.pg.model.Edge[hydra.core.Term]]]]:
     r"""Transform a record through vertex and edge specifications to produce vertices and edges."""
 
     return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda spec: evaluate_vertex(cx, g, spec, record)), vspecs), (lambda m_vertices: hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda spec: evaluate_edge(cx, g, spec, record)), especs), (lambda m_edges: Right((hydra.lib.maybes.cat(m_vertices), hydra.lib.maybes.cat(m_edges)))))))
 
-def transform_table_rows(cx: hydra.context.Context, g: hydra.graph.Graph, vspecs: frozenlist[hydra.pg.model.Vertex[hydra.core.Term]], especs: frozenlist[hydra.pg.model.Edge[hydra.core.Term]], table_type: hydra.tabular.TableType, rows: frozenlist[hydra.tabular.DataRow[hydra.core.Term]]) -> Either[hydra.context.InContext[hydra.errors.Error], tuple[frozenlist[hydra.pg.model.Vertex[hydra.core.Term]], frozenlist[hydra.pg.model.Edge[hydra.core.Term]]]]:
+def transform_table_rows(cx: hydra.context.Context, g: hydra.graph.Graph, vspecs: frozenlist[hydra.pg.model.Vertex[hydra.core.Term]], especs: frozenlist[hydra.pg.model.Edge[hydra.core.Term]], table_type: hydra.tabular.TableType, rows: frozenlist[hydra.tabular.DataRow[hydra.core.Term]]) -> Either[hydra.errors.Error, tuple[frozenlist[hydra.pg.model.Vertex[hydra.core.Term]], frozenlist[hydra.pg.model.Edge[hydra.core.Term]]]]:
     r"""Transform all rows from a table through vertex/edge specifications."""
 
     return hydra.lib.eithers.map((lambda pairs: hydra.lib.lists.foldl((lambda x1, x2: concat_pairs(x1, x2)), ((), ()), pairs)), hydra.lib.eithers.map_list((lambda row: transform_record(cx, g, vspecs, especs, term_row_to_record(table_type, row))), rows))

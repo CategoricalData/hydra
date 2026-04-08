@@ -87,7 +87,7 @@ import qualified Hydra.Ext.Sources.Avro.Schema as AvroSchema
 import qualified Hydra.Ext.Avro.Environment as AvroEnv
 
 -- Local type aliases
-type Result a = Either (InContext Error) a
+type Result a = Either Error a
 type HydraAvroAdapter = Adapter Type Avro.Schema Term JM.Value
 
 
@@ -232,7 +232,7 @@ encodeTypeInner = define "encodeTypeInner" $
                               "encodeEntry">: lambda "entry" $ lets [
                                 "k">: Pairs.first (var "entry"),
                                 "v">: Pairs.second (var "entry")] $
-                                Eithers.bind (ExtractCore.string @@ var "cx" @@ Graph.emptyGraph @@ var "k") (lambda "kStr" $
+                                Eithers.bind (ExtractCore.string @@ Graph.emptyGraph @@ var "k") (lambda "kStr" $
                                 Eithers.map (lambda "vJson" $ pair (var "kStr") (var "vJson"))
                                   (Coders.coderEncode (Coders.adapterCoder (var "valAd")) @@ var "cx1" @@ var "v"))] $
                               Eithers.map (lambda "pairs" $ inject JM._Value JM._Value_object (Maps.fromList (var "pairs")))
@@ -385,7 +385,7 @@ floatAdapter = define "floatAdapter" $
         @@ boolean False
         @@ (lambda "_cx" $ lambda "t" $
           Eithers.map (lambda "f" $ inject JM._Value JM._Value_number (Literals.float32ToBigfloat (var "f")))
-            (ExtractCore.float32 @@ var "cx" @@ Graph.emptyGraph @@ var "t"))
+            (ExtractCore.float32 @@ Graph.emptyGraph @@ var "t"))
         @@ (lambda "_cx" $ lambda "j" $
           cases JM._Value (var "j") Nothing [
             JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalFloat (Core.floatValueFloat32 (Literals.bigfloatToFloat32 (var "d")))))]),
@@ -395,7 +395,7 @@ floatAdapter = define "floatAdapter" $
         @@ boolean False
         @@ (lambda "_cx" $ lambda "t" $
           Eithers.map (lambda "d" $ inject JM._Value JM._Value_number (Literals.float64ToBigfloat (var "d")))
-            (ExtractCore.float64 @@ var "cx" @@ Graph.emptyGraph @@ var "t"))
+            (ExtractCore.float64 @@ Graph.emptyGraph @@ var "t"))
         @@ (lambda "_cx" $ lambda "j" $
           cases JM._Value (var "j") Nothing [
             JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalFloat (Core.floatValueFloat64 (Literals.bigfloatToFloat64 (var "d")))))])]
@@ -471,27 +471,27 @@ integerAdapter = define "integerAdapter" $
                 _Literal_integer>>: lambda "iv" $ right (inject JM._Value JM._Value_number (integerValueToDouble @@ var "iv"))]])
         @@ (lambda "_cx" $ lambda "j" $
           cases JM._Value (var "j") Nothing [
-            JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt64 (Literals.bigintToInt64 (Math.truncate (Literals.bigfloatToFloat64 (var "d")))))))])) [
+            JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt64 (Literals.bigintToInt64 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 (var "d")))))))))])) [
     _IntegerType_int32>>: constant $
       var "simple"
         @@ inject Avro._Schema Avro._Schema_primitive (injectUnit Avro._Primitive Avro._Primitive_int)
         @@ boolean False
         @@ (lambda "_cx" $ lambda "t" $
           Eithers.map (lambda "i" $ inject JM._Value JM._Value_number (Literals.bigintToBigfloat (Literals.int32ToBigint (var "i"))))
-            (ExtractCore.int32 @@ var "cx" @@ Graph.emptyGraph @@ var "t"))
+            (ExtractCore.int32 @@ Graph.emptyGraph @@ var "t"))
         @@ (lambda "_cx" $ lambda "j" $
           cases JM._Value (var "j") Nothing [
-            JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt32 (Literals.bigintToInt32 (Math.truncate (Literals.bigfloatToFloat64 (var "d")))))))]),
+            JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt32 (Literals.bigintToInt32 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 (var "d")))))))))]),
     _IntegerType_int64>>: constant $
       var "simple"
         @@ inject Avro._Schema Avro._Schema_primitive (injectUnit Avro._Primitive Avro._Primitive_long)
         @@ boolean False
         @@ (lambda "_cx" $ lambda "t" $
           Eithers.map (lambda "i" $ inject JM._Value JM._Value_number (Literals.bigintToBigfloat (Literals.int64ToBigint (var "i"))))
-            (ExtractCore.int64 @@ var "cx" @@ Graph.emptyGraph @@ var "t"))
+            (ExtractCore.int64 @@ Graph.emptyGraph @@ var "t"))
         @@ (lambda "_cx" $ lambda "j" $
           cases JM._Value (var "j") Nothing [
-            JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt64 (Literals.bigintToInt64 (Math.truncate (Literals.bigfloatToFloat64 (var "d")))))))])]
+            JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt64 (Literals.bigintToInt64 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 (var "d")))))))))])]
 
 integerValueToDouble :: TTermDefinition (IntegerValue -> Double)
 integerValueToDouble = define "integerValueToDouble" $

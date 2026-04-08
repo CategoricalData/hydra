@@ -6,7 +6,6 @@ module Hydra.Dsls where
 
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Constants as Constants
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
 import qualified Hydra.Encode.Core as Core__
@@ -76,7 +75,7 @@ dslDefinitionName typeName localName =
         localName])))
 
 -- | Transform a type module into a DSL module
-dslModule :: Context.Context -> Graph.Graph -> Packaging.Module -> Either (Context.InContext Errors.Error) (Maybe Packaging.Module)
+dslModule :: t0 -> Graph.Graph -> Packaging.Module -> Either Errors.Error (Maybe Packaging.Module)
 dslModule cx graph mod =
     Eithers.bind (filterTypeBindings cx graph (Maybes.cat (Lists.map (\d -> case d of
       Packaging.DefinitionType v0 -> Just ((\name -> \typ ->
@@ -93,9 +92,7 @@ dslModule cx graph mod =
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
             Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeType (Packaging.typeDefinitionType v0)))
-      _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\ic -> Context.InContext {
-      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError (Context.inContextObject ic)))),
-      Context.inContextContext = (Context.inContextContext ic)}) (\x -> x) (generateBindingsForType cx graph b)) typeBindings) (\dslBindings -> Right (Just (Packaging.Module {
+      _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (generateBindingsForType cx graph b)) typeBindings) (\dslBindings -> Right (Just (Packaging.Module {
       Packaging.moduleNamespace = (dslNamespace (Packaging.moduleNamespace mod)),
       Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
         Packaging.termDefinitionName = (Core.bindingName b),
@@ -153,13 +150,11 @@ findUniqueName candidate usedNames =
       "_"]) usedNames)
 
 -- | Generate all DSL bindings for a type binding
-generateBindingsForType :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Errors.DecodingError) [Core.Binding]
+generateBindingsForType :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.DecodingError [Core.Binding]
 generateBindingsForType cx graph b =
 
       let typeName = Core.bindingName b
-      in (Eithers.bind (Eithers.bimap (\_wc_e -> Context.InContext {
-        Context.inContextObject = _wc_e,
-        Context.inContextContext = cx}) (\_wc_a -> _wc_a) (Core_.type_ graph (Core.bindingTerm b))) (\rawType ->
+      in (Eithers.bind (Core_.type_ graph (Core.bindingTerm b)) (\rawType ->
         let typ = Strip.deannotateTypeParameters (Strip.deannotateType rawType)
         in (Right (case typ of
           Core.TypeRecord v0 -> Lists.concat [

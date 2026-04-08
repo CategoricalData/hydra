@@ -125,7 +125,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                            "body": {"variable": "hydra.lib.pairs.first"},
                                                                             "type": {
                                                                               "pair": {
                                                                                 "first": {"variable": "hydra.core.Term"},
@@ -135,7 +135,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                        "body": {"variable": "hydra.lib.pairs.second"},
                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                     "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                             "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -158,11 +158,8 @@
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"literal": {"string": "INFERENCE ERROR: "}},
-                                                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                            "domain": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                            "domain": {"variable": "hydra.errors.Error"},
                                                             "parameter": "e"}}},
                                                       "function": {
                                                         "typeApplication": {
@@ -170,11 +167,8 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.either"}},
-                                                                  "type": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                  "body": {"variable": "hydra.lib.eithers.either"},
+                                                                  "type": {"variable": "hydra.errors.Error"}}},
                                                               "type": {
                                                                 "pair": {
                                                                   "first": {
@@ -367,7 +361,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                            "body": {"variable": "hydra.lib.pairs.first"},
                                                                             "type": {
                                                                               "pair": {
                                                                                 "first": {"variable": "hydra.core.Term"},
@@ -377,7 +371,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                        "body": {"variable": "hydra.lib.pairs.second"},
                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                     "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                             "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -400,11 +394,8 @@
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"literal": {"string": "INFERENCE ERROR: "}},
-                                                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                            "domain": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                            "domain": {"variable": "hydra.errors.Error"},
                                                             "parameter": "e"}}},
                                                       "function": {
                                                         "typeApplication": {
@@ -412,11 +403,8 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.either"}},
-                                                                  "type": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                  "body": {"variable": "hydra.lib.eithers.either"},
+                                                                  "type": {"variable": "hydra.errors.Error"}}},
                                                               "type": {
                                                                 "pair": {
                                                                   "first": {
@@ -612,7 +600,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                            "body": {"variable": "hydra.lib.pairs.first"},
                                                                             "type": {
                                                                               "pair": {
                                                                                 "first": {"variable": "hydra.core.Term"},
@@ -622,7 +610,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                        "body": {"variable": "hydra.lib.pairs.second"},
                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                     "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                             "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -645,11 +633,8 @@
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"literal": {"string": "INFERENCE ERROR: "}},
-                                                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                            "domain": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                            "domain": {"variable": "hydra.errors.Error"},
                                                             "parameter": "e"}}},
                                                       "function": {
                                                         "typeApplication": {
@@ -657,11 +642,8 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.either"}},
-                                                                  "type": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                  "body": {"variable": "hydra.lib.eithers.either"},
+                                                                  "type": {"variable": "hydra.errors.Error"}}},
                                                               "type": {
                                                                 "pair": {
                                                                   "first": {
@@ -857,7 +839,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                            "body": {"variable": "hydra.lib.pairs.first"},
                                                                             "type": {
                                                                               "pair": {
                                                                                 "first": {"variable": "hydra.core.Term"},
@@ -867,7 +849,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                        "body": {"variable": "hydra.lib.pairs.second"},
                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                     "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                             "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -890,11 +872,8 @@
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"literal": {"string": "INFERENCE ERROR: "}},
-                                                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                            "domain": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                            "domain": {"variable": "hydra.errors.Error"},
                                                             "parameter": "e"}}},
                                                       "function": {
                                                         "typeApplication": {
@@ -902,11 +881,8 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.either"}},
-                                                                  "type": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                  "body": {"variable": "hydra.lib.eithers.either"},
+                                                                  "type": {"variable": "hydra.errors.Error"}}},
                                                               "type": {
                                                                 "pair": {
                                                                   "first": {
@@ -1086,7 +1062,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                            "body": {"variable": "hydra.lib.pairs.first"},
                                                                             "type": {
                                                                               "pair": {
                                                                                 "first": {"variable": "hydra.core.Term"},
@@ -1096,7 +1072,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                        "body": {"variable": "hydra.lib.pairs.second"},
                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                     "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                             "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -1119,11 +1095,8 @@
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"literal": {"string": "INFERENCE ERROR: "}},
-                                                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                            "domain": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                            "domain": {"variable": "hydra.errors.Error"},
                                                             "parameter": "e"}}},
                                                       "function": {
                                                         "typeApplication": {
@@ -1131,11 +1104,8 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.either"}},
-                                                                  "type": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                  "body": {"variable": "hydra.lib.eithers.either"},
+                                                                  "type": {"variable": "hydra.errors.Error"}}},
                                                               "type": {
                                                                 "pair": {
                                                                   "first": {
@@ -1406,7 +1376,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                            "body": {"variable": "hydra.lib.pairs.first"},
                                                                             "type": {
                                                                               "pair": {
                                                                                 "first": {"variable": "hydra.core.Term"},
@@ -1416,7 +1386,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                        "body": {"variable": "hydra.lib.pairs.second"},
                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                     "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                             "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -1439,11 +1409,8 @@
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"literal": {"string": "INFERENCE ERROR: "}},
-                                                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                            "domain": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                            "domain": {"variable": "hydra.errors.Error"},
                                                             "parameter": "e"}}},
                                                       "function": {
                                                         "typeApplication": {
@@ -1451,11 +1418,8 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.either"}},
-                                                                  "type": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                  "body": {"variable": "hydra.lib.eithers.either"},
+                                                                  "type": {"variable": "hydra.errors.Error"}}},
                                                               "type": {
                                                                 "pair": {
                                                                   "first": {
@@ -1638,16 +1602,11 @@
                                                                                                                                   "term": {
                                                                                                                                     "union": {
                                                                                                                                       "field": {
-                                                                                                                                        "name": "function",
+                                                                                                                                        "name": "variable",
                                                                                                                                         "term": {
-                                                                                                                                          "union": {
-                                                                                                                                            "field": {
-                                                                                                                                              "name": "primitive",
-                                                                                                                                              "term": {
-                                                                                                                                                "wrap": {
-                                                                                                                                                  "body": {"literal": {"string": "hydra.lib.math.negate"}},
-                                                                                                                                                  "typeName": "hydra.core.Name"}}},
-                                                                                                                                            "typeName": "hydra.core.Function"}}},
+                                                                                                                                          "wrap": {
+                                                                                                                                            "body": {"literal": {"string": "hydra.lib.math.negate"}},
+                                                                                                                                            "typeName": "hydra.core.Name"}}},
                                                                                                                                       "typeName": "hydra.core.Term"}}},
                                                                                                                                 {
                                                                                                                                   "name": "argument",
@@ -1690,16 +1649,11 @@
                                                                                                                                                                             "term": {
                                                                                                                                                                               "union": {
                                                                                                                                                                                 "field": {
-                                                                                                                                                                                  "name": "function",
+                                                                                                                                                                                  "name": "variable",
                                                                                                                                                                                   "term": {
-                                                                                                                                                                                    "union": {
-                                                                                                                                                                                      "field": {
-                                                                                                                                                                                        "name": "primitive",
-                                                                                                                                                                                        "term": {
-                                                                                                                                                                                          "wrap": {
-                                                                                                                                                                                            "body": {"literal": {"string": "hydra.lib.math.negate"}},
-                                                                                                                                                                                            "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                                      "typeName": "hydra.core.Function"}}},
+                                                                                                                                                                                    "wrap": {
+                                                                                                                                                                                      "body": {"literal": {"string": "hydra.lib.math.negate"}},
+                                                                                                                                                                                      "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                                                                                                           {
                                                                                                                                                                             "name": "argument",
@@ -1781,16 +1735,11 @@
                                                                                                           "term": {
                                                                                                             "union": {
                                                                                                               "field": {
-                                                                                                                "name": "function",
+                                                                                                                "name": "variable",
                                                                                                                 "term": {
-                                                                                                                  "union": {
-                                                                                                                    "field": {
-                                                                                                                      "name": "primitive",
-                                                                                                                      "term": {
-                                                                                                                        "wrap": {
-                                                                                                                          "body": {"literal": {"string": "hydra.lib.math.negate"}},
-                                                                                                                          "typeName": "hydra.core.Name"}}},
-                                                                                                                    "typeName": "hydra.core.Function"}}},
+                                                                                                                  "wrap": {
+                                                                                                                    "body": {"literal": {"string": "hydra.lib.math.negate"}},
+                                                                                                                    "typeName": "hydra.core.Name"}}},
                                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                                         {
                                                                                                           "name": "argument",
@@ -1806,16 +1755,11 @@
                                                                                                                         "term": {
                                                                                                                           "union": {
                                                                                                                             "field": {
-                                                                                                                              "name": "function",
+                                                                                                                              "name": "variable",
                                                                                                                               "term": {
-                                                                                                                                "union": {
-                                                                                                                                  "field": {
-                                                                                                                                    "name": "primitive",
-                                                                                                                                    "term": {
-                                                                                                                                      "wrap": {
-                                                                                                                                        "body": {"literal": {"string": "hydra.lib.math.negate"}},
-                                                                                                                                        "typeName": "hydra.core.Name"}}},
-                                                                                                                                  "typeName": "hydra.core.Function"}}},
+                                                                                                                                "wrap": {
+                                                                                                                                  "body": {"literal": {"string": "hydra.lib.math.negate"}},
+                                                                                                                                  "typeName": "hydra.core.Name"}}},
                                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                                       {
                                                                                                                         "name": "argument",
@@ -1853,16 +1797,11 @@
                                                                                             "term": {
                                                                                               "union": {
                                                                                                 "field": {
-                                                                                                  "name": "function",
+                                                                                                  "name": "variable",
                                                                                                   "term": {
-                                                                                                    "union": {
-                                                                                                      "field": {
-                                                                                                        "name": "primitive",
-                                                                                                        "term": {
-                                                                                                          "wrap": {
-                                                                                                            "body": {"literal": {"string": "hydra.lib.math.negate"}},
-                                                                                                            "typeName": "hydra.core.Name"}}},
-                                                                                                      "typeName": "hydra.core.Function"}}},
+                                                                                                    "wrap": {
+                                                                                                      "body": {"literal": {"string": "hydra.lib.math.negate"}},
+                                                                                                      "typeName": "hydra.core.Name"}}},
                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                           {
                                                                                             "name": "argument",
@@ -1909,7 +1848,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                            "body": {"variable": "hydra.lib.pairs.first"},
                                                                             "type": {
                                                                               "pair": {
                                                                                 "first": {"variable": "hydra.core.Term"},
@@ -1919,7 +1858,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                        "body": {"variable": "hydra.lib.pairs.second"},
                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                     "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                             "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -1942,11 +1881,8 @@
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"literal": {"string": "INFERENCE ERROR: "}},
-                                                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                            "domain": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                            "domain": {"variable": "hydra.errors.Error"},
                                                             "parameter": "e"}}},
                                                       "function": {
                                                         "typeApplication": {
@@ -1954,11 +1890,8 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.either"}},
-                                                                  "type": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                  "body": {"variable": "hydra.lib.eithers.either"},
+                                                                  "type": {"variable": "hydra.errors.Error"}}},
                                                               "type": {
                                                                 "pair": {
                                                                   "first": {
@@ -2198,7 +2131,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                            "body": {"variable": "hydra.lib.pairs.first"},
                                                                             "type": {
                                                                               "pair": {
                                                                                 "first": {"variable": "hydra.core.Term"},
@@ -2208,7 +2141,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                        "body": {"variable": "hydra.lib.pairs.second"},
                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                     "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                             "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -2231,11 +2164,8 @@
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"literal": {"string": "INFERENCE ERROR: "}},
-                                                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                            "domain": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                            "domain": {"variable": "hydra.errors.Error"},
                                                             "parameter": "e"}}},
                                                       "function": {
                                                         "typeApplication": {
@@ -2243,11 +2173,8 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.either"}},
-                                                                  "type": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                  "body": {"variable": "hydra.lib.eithers.either"},
+                                                                  "type": {"variable": "hydra.errors.Error"}}},
                                                               "type": {
                                                                 "pair": {
                                                                   "first": {
@@ -2674,7 +2601,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                            "body": {"variable": "hydra.lib.pairs.first"},
                                                                             "type": {
                                                                               "pair": {
                                                                                 "first": {"variable": "hydra.core.Term"},
@@ -2684,7 +2611,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                        "body": {"variable": "hydra.lib.pairs.second"},
                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                     "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                             "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -2707,11 +2634,8 @@
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"literal": {"string": "INFERENCE ERROR: "}},
-                                                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                            "domain": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                            "domain": {"variable": "hydra.errors.Error"},
                                                             "parameter": "e"}}},
                                                       "function": {
                                                         "typeApplication": {
@@ -2719,11 +2643,8 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.either"}},
-                                                                  "type": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                  "body": {"variable": "hydra.lib.eithers.either"},
+                                                                  "type": {"variable": "hydra.errors.Error"}}},
                                                               "type": {
                                                                 "pair": {
                                                                   "first": {
@@ -3226,7 +3147,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                            "body": {"variable": "hydra.lib.pairs.first"},
                                                                             "type": {
                                                                               "pair": {
                                                                                 "first": {"variable": "hydra.core.Term"},
@@ -3236,7 +3157,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                        "body": {"variable": "hydra.lib.pairs.second"},
                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                     "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                             "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -3259,11 +3180,8 @@
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"literal": {"string": "INFERENCE ERROR: "}},
-                                                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                            "domain": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                            "domain": {"variable": "hydra.errors.Error"},
                                                             "parameter": "e"}}},
                                                       "function": {
                                                         "typeApplication": {
@@ -3271,11 +3189,8 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.either"}},
-                                                                  "type": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                  "body": {"variable": "hydra.lib.eithers.either"},
+                                                                  "type": {"variable": "hydra.errors.Error"}}},
                                                               "type": {
                                                                 "pair": {
                                                                   "first": {
@@ -3775,7 +3690,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                            "body": {"variable": "hydra.lib.pairs.first"},
                                                                             "type": {
                                                                               "pair": {
                                                                                 "first": {"variable": "hydra.core.Term"},
@@ -3785,7 +3700,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                        "body": {"variable": "hydra.lib.pairs.second"},
                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                     "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                             "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -3808,11 +3723,8 @@
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"literal": {"string": "INFERENCE ERROR: "}},
-                                                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                            "domain": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                            "domain": {"variable": "hydra.errors.Error"},
                                                             "parameter": "e"}}},
                                                       "function": {
                                                         "typeApplication": {
@@ -3820,11 +3732,8 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.either"}},
-                                                                  "type": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                  "body": {"variable": "hydra.lib.eithers.either"},
+                                                                  "type": {"variable": "hydra.errors.Error"}}},
                                                               "type": {
                                                                 "pair": {
                                                                   "first": {
@@ -4334,7 +4243,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                            "body": {"variable": "hydra.lib.pairs.first"},
                                                                             "type": {
                                                                               "pair": {
                                                                                 "first": {"variable": "hydra.core.Term"},
@@ -4344,7 +4253,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                        "body": {"variable": "hydra.lib.pairs.second"},
                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                     "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                                             "function": {"variable": "hydra.show.core.typeScheme"}}},
@@ -4367,11 +4276,8 @@
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"literal": {"string": "INFERENCE ERROR: "}},
-                                                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                            "domain": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                                    "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                            "domain": {"variable": "hydra.errors.Error"},
                                                             "parameter": "e"}}},
                                                       "function": {
                                                         "typeApplication": {
@@ -4379,11 +4285,8 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.either"}},
-                                                                  "type": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                  "body": {"variable": "hydra.lib.eithers.either"},
+                                                                  "type": {"variable": "hydra.errors.Error"}}},
                                                               "type": {
                                                                 "pair": {
                                                                   "first": {

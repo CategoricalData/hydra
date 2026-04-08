@@ -43,6 +43,10 @@ matchOp =
       Ast.opPrecedence = (Ast.Precedence 0),
       Ast.opAssociativity = Ast.AssociativityNone}
 
+scalaFloatLiteralText :: String -> String -> String -> String
+scalaFloatLiteralText prefix suffix s =
+    Logic.ifElse (Equality.equal s "NaN") (Strings.cat2 prefix ".NaN") (Logic.ifElse (Equality.equal s "Infinity") (Strings.cat2 prefix ".PositiveInfinity") (Logic.ifElse (Equality.equal s "-Infinity") (Strings.cat2 prefix ".NegativeInfinity") (Strings.cat2 s suffix)))
+
 -- | Convert a case clause to an expression
 writeCase :: Syntax.Case -> Ast.Expr
 writeCase c =
@@ -279,8 +283,8 @@ writeLit lit =
       Syntax.LitShort v0 -> Serialization.cst (Strings.cat2 (Literals.showInt16 v0) ".toShort")
       Syntax.LitInt v0 -> Serialization.cst (Literals.showInt32 v0)
       Syntax.LitLong v0 -> Serialization.cst (Strings.cat2 (Literals.showInt64 v0) "L")
-      Syntax.LitFloat v0 -> Serialization.cst (Strings.cat2 (Literals.showFloat32 v0) "f")
-      Syntax.LitDouble v0 -> Serialization.cst (Literals.showFloat64 v0)
+      Syntax.LitFloat v0 -> Serialization.cst (scalaFloatLiteralText "Float" "f" (Literals.showFloat32 v0))
+      Syntax.LitDouble v0 -> Serialization.cst (scalaFloatLiteralText "Double" "" (Literals.showFloat64 v0))
       Syntax.LitUnit -> Serialization.cst "()"
       Syntax.LitString v0 -> Serialization.cst (Strings.cat2 "\"" (Strings.cat2 (Serde.escapeJavaString v0) "\""))
       Syntax.LitBytes v0 -> Serialization.cst (Strings.cat2 "Array[Byte](" (Strings.cat2 (Strings.intercalate ", " (Lists.map (\b -> Strings.cat2 (Literals.showInt32 b) ".toByte") v0)) ")"))

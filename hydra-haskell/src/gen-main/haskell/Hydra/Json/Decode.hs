@@ -20,13 +20,13 @@ import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Map as M
 
--- | Decode a JSON value to a float term. Float64/Bigfloat from numbers; Float32 from string.
+-- | Decode a JSON value to a float term. Numbers for Bigfloat/Float64; strings for Float32 and NaN/Inf sentinels.
 decodeFloat :: Core.FloatType -> Model.Value -> Either String Core.Term
 decodeFloat ft value =
     case ft of
-      Core.FloatTypeBigfloat ->
-        let numResult = expectNumber value
-        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat n))) numResult)
+      Core.FloatTypeBigfloat -> case value of
+        Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat v1)))
+        _ -> Left "expected number for bigfloat"
       Core.FloatTypeFloat32 ->
         let strResult = expectString value
         in (Eithers.either (\err -> Left err) (\s ->
@@ -34,9 +34,12 @@ decodeFloat ft value =
           in (Maybes.maybe (Left (Strings.cat [
             "invalid float32: ",
             s])) (\v -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 v)))) parsed)) strResult)
-      Core.FloatTypeFloat64 ->
-        let numResult = expectNumber value
-        in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.bigfloatToFloat64 n)))) numResult)
+      Core.FloatTypeFloat64 -> case value of
+        Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.bigfloatToFloat64 v1))))
+        Model.ValueString v1 -> Maybes.maybe (Left (Strings.cat [
+          "invalid float64 sentinel: ",
+          v1])) (\v -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 v)))) (parseSpecialFloat v1)
+        _ -> Left "expected number or special float string for float64"
 
 -- | Decode a JSON value to an integer term. Small ints from numbers; large ints from strings.
 decodeInteger :: Core.IntegerType -> Model.Value -> Either String Core.Term
@@ -262,3 +265,8 @@ fromJson types tname typ value =
         _ -> Left (Strings.cat [
           "unsupported type for JSON decoding: ",
           (Core_.type_ typ)])
+
+-- | Parse a special float sentinel string to a float64. Returns Nothing for unrecognized strings.
+parseSpecialFloat :: String -> Maybe Double
+parseSpecialFloat s =
+    Logic.ifElse (Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Equality.equal s "-Infinity"))) (Literals.readFloat64 s) Nothing

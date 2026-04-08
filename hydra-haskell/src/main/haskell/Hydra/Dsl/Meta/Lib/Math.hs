@@ -44,8 +44,10 @@ atan2 = primitive2 _math_atan2
 atanh :: TTerm Double -> TTerm Double
 atanh = primitive1 _math_atanh
 
--- | Return the ceiling of x as an integer.
-ceiling :: TTerm Double -> TTerm Integer
+-- | Return the ceiling of x as a float64.
+-- DIVERGENCE FROM HASKELL: returns Double rather than Integer so that NaN and
+-- ±Inf inputs propagate per IEEE 754.
+ceiling :: TTerm Double -> TTerm Double
 ceiling = primitive1 _math_ceiling
 
 -- | Return the cosine of x radians.
@@ -72,8 +74,10 @@ even = primitive1 _math_even
 exp :: TTerm Double -> TTerm Double
 exp = primitive1 _math_exp
 
--- | Return the floor of x as an integer.
-floor :: TTerm Double -> TTerm Integer
+-- | Return the floor of x as a float64.
+-- DIVERGENCE FROM HASKELL: returns Double rather than Integer so that NaN and
+-- ±Inf inputs propagate per IEEE 754.
+floor :: TTerm Double -> TTerm Double
 floor = primitive1 _math_floor
 
 -- | Return the natural logarithm of x.
@@ -144,8 +148,10 @@ maybeRem = primitive2 _math_maybeRem
 rem :: Integral a => TTerm a -> TTerm a -> TTerm a
 rem = primitive2 _math_rem
 
--- | Return x rounded to the nearest integer.
-round :: TTerm Double -> TTerm Integer
+-- | Return x rounded to the nearest integer, as a float64.
+-- DIVERGENCE FROM HASKELL: returns Double rather than Integer so that NaN and
+-- ±Inf inputs propagate per IEEE 754.
+round :: TTerm Double -> TTerm Double
 round = primitive1 _math_round
 
 -- | Round a bigfloat to n significant digits.
@@ -196,6 +202,8 @@ tan = primitive1 _math_tan
 tanh :: TTerm Double -> TTerm Double
 tanh = primitive1 _math_tanh
 
--- | Return x truncated to an integer (towards zero).
-truncate :: TTerm Double -> TTerm Integer
+-- | Return x truncated (towards zero), as a float64.
+-- DIVERGENCE FROM HASKELL: returns Double rather than Integer so that NaN and
+-- ±Inf inputs propagate per IEEE 754.
+truncate :: TTerm Double -> TTerm Double
 truncate = primitive1 _math_truncate

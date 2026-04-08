@@ -575,7 +575,7 @@ encodeNamedExpression ne =
 encodeNumber :: Syntax.Number -> Ast.Expr
 encodeNumber num =
     case num of
-      Syntax.NumberFloat v0 -> Serialization.cst (Literals.showBigfloat v0)
+      Syntax.NumberFloat v0 -> Serialization.cst (pythonFloatLiteralText (Literals.showBigfloat v0))
       Syntax.NumberInteger v0 -> Serialization.cst (Literals.showBigint v0)
 
 -- | Serialize an or pattern
@@ -986,6 +986,10 @@ escapePythonString doubleQuoted s =
           escaped = Logic.ifElse doubleQuoted (replace "\"" "\\\"" s5) (replace "'" "\\'" s5)
           quote = Logic.ifElse doubleQuoted "\"" "'"
       in (Strings.cat2 quote (Strings.cat2 escaped quote))
+
+pythonFloatLiteralText :: String -> String
+pythonFloatLiteralText s =
+    Logic.ifElse (Equality.equal s "NaN") "float('nan')" (Logic.ifElse (Equality.equal s "Infinity") "float('inf')" (Logic.ifElse (Equality.equal s "-Infinity") "float('-inf')" s))
 
 -- | Convert a doc string to Python comment format
 toPythonComments :: String -> String

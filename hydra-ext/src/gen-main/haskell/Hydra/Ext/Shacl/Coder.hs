@@ -52,7 +52,7 @@ elementIri :: Core.Binding -> Syntax.Iri
 elementIri el = Utils.nameToIri (Core.bindingName el)
 
 -- | Encode a record field as RDF triples with a given subject
-encodeField :: Core.Name -> Syntax.Resource -> Core.Field -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) ([Syntax.Triple], Context.Context)
+encodeField :: Core.Name -> Syntax.Resource -> Core.Field -> Context.Context -> Graph.Graph -> Either Errors.Error ([Syntax.Triple], Context.Context)
 encodeField rname subject field cx g =
 
       let pair1 = Utils.nextBlankNode cx
@@ -64,7 +64,7 @@ encodeField rname subject field cx g =
         in (Right (Lists.concat2 (Utils.triplesOf descs) (Utils.forObjects subject (Utils.propertyIri rname (Core.fieldName field)) (Utils.subjectsOf descs)), cx2))))
 
 -- | Encode a FieldType as a SHACL property shape Definition
-encodeFieldType :: Core.Name -> Maybe Integer -> Core.FieldType -> Context.Context -> Either (Context.InContext Errors.Error) (Model.Definition Model.PropertyShape)
+encodeFieldType :: Core.Name -> Maybe Integer -> Core.FieldType -> t0 -> Either Errors.Error (Model.Definition Model.PropertyShape)
 encodeFieldType rname order ft cx =
 
       let fname = Core.fieldTypeName ft
@@ -95,7 +95,7 @@ encodeFieldType rname order ft cx =
       in (forType (Just 1) (Just 1) ftype)
 
 -- | Encode a list of terms as RDF list structure
-encodeList :: Syntax.Resource -> [Core.Term] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) ([Syntax.Description], Context.Context)
+encodeList :: Syntax.Resource -> [Core.Term] -> Context.Context -> Graph.Graph -> Either Errors.Error ([Syntax.Description], Context.Context)
 encodeList subj terms cx0 g =
     Logic.ifElse (Lists.null terms) (Right ([
       Syntax.Description {
@@ -146,7 +146,7 @@ encodeLiteralType lt =
         Core.LiteralTypeString -> xsd "string"
 
 -- | Encode a Hydra term as a list of RDF Descriptions
-encodeTerm :: Syntax.Resource -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) ([Syntax.Description], Context.Context)
+encodeTerm :: Syntax.Resource -> Core.Term -> Context.Context -> Graph.Graph -> Either Errors.Error ([Syntax.Description], Context.Context)
 encodeTerm subject term cx g =
     case term of
       Core.TermAnnotated v0 -> encodeTerm subject (Core.annotatedTermBody v0) cx g
@@ -158,7 +158,7 @@ encodeTerm subject term cx g =
       Core.TermMap v0 -> Eithers.map (\_r -> ([
         Syntax.Description {
           Syntax.descriptionSubject = (Utils.resourceToNode subject),
-          Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Lists.concat (Pairs.first _r))))}], (Pairs.second _r))) (foldAccumResult (\_cx0 -> \kv -> Eithers.bind (Core___.string _cx0 g (Strip.deannotateTerm (Pairs.first kv))) (\_ks ->
+          Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Lists.concat (Pairs.first _r))))}], (Pairs.second _r))) (foldAccumResult (\_cx0 -> \kv -> Eithers.bind (Core___.string g (Strip.deannotateTerm (Pairs.first kv))) (\_ks ->
         let pair2 = Utils.nextBlankNode _cx0
             node2 = Pairs.first pair2
             cx2 = Pairs.second pair2
@@ -190,7 +190,7 @@ encodeTerm subject term cx g =
       _ -> unexpectedE cx "RDF-compatible term" "unsupported term variant"
 
 -- | Encode a Hydra type as SHACL CommonProperties
-encodeType :: Core.Name -> Core.Type -> Context.Context -> Either (Context.InContext Errors.Error) Model.CommonProperties
+encodeType :: Core.Name -> Core.Type -> t0 -> Either Errors.Error Model.CommonProperties
 encodeType tname typ cx =
 
       let any = Right (common [])
@@ -215,11 +215,8 @@ encodeType tname typ cx =
         _ -> unexpectedE cx "type" "unsupported type variant"
 
 -- | Construct an error result with a context and message
-err :: Context.Context -> String -> Either (Context.InContext Errors.Error) t0
-err cx msg =
-    Left (Context.InContext {
-      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError msg)),
-      Context.inContextContext = cx})
+err :: t0 -> String -> Either Errors.Error t1
+err cx msg = Left (Errors.ErrorOther (Errors.OtherError msg))
 
 -- | Fold over a list, accumulating results and threading context through each step
 foldAccumResult :: (t0 -> t1 -> Either t2 (t3, t0)) -> t0 -> [t1] -> Either t2 ([t3], t0)
@@ -244,7 +241,7 @@ property iri =
       Model.propertyShapePath = iri}
 
 -- | Encode a module's type elements as a SHACL ShapesGraph
-shaclCoder :: Packaging.Module -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Model.ShapesGraph, Context.Context)
+shaclCoder :: Packaging.Module -> t0 -> Graph.Graph -> Either Errors.Error (Model.ShapesGraph, t0)
 shaclCoder mod cx g =
 
       let typeEls =
@@ -265,16 +262,14 @@ shaclCoder mod cx g =
                       Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeType (Packaging.typeDefinitionType v0)))
                 _ -> Nothing) (Packaging.moduleDefinitions mod))
           toShape =
-                  \el -> Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
-                    Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
-                    Context.inContextContext = cx}) (\_t -> _t) (Core_.type_ g (Core.bindingTerm el))) (\_typ -> Eithers.map (\_cp -> Model.Definition {
+                  \el -> Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_t -> _t) (Core_.type_ g (Core.bindingTerm el))) (\_typ -> Eithers.map (\_cp -> Model.Definition {
                     Model.definitionIri = (elementIri el),
                     Model.definitionTarget = (Model.ShapeNode (Model.NodeShape {
                       Model.nodeShapeCommon = _cp}))}) (encodeType (Core.bindingName el) _typ cx))
       in (Eithers.map (\_shapes -> (Model.ShapesGraph (Sets.fromList _shapes), cx)) (Eithers.mapList toShape typeEls))
 
 -- | Construct an error for unexpected input, given expected and found descriptions
-unexpectedE :: Context.Context -> String -> String -> Either (Context.InContext Errors.Error) t0
+unexpectedE :: t0 -> String -> String -> Either Errors.Error t1
 unexpectedE cx expected found =
     err cx (Strings.cat [
       "Expected ",

@@ -108,8 +108,7 @@ csharpLanguage = define "csharpLanguage" $
     Core.floatTypeFloat64],
   "functionVariants">: Sets.fromList $ list [
     Variants.functionVariantElimination,
-    Variants.functionVariantLambda,
-    Variants.functionVariantPrimitive],
+    Variants.functionVariantLambda],
   "integerTypes">: Sets.fromList $ list [
     -- See https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/integral-numeric-types
     -- Note: the other two C# integral types, nint and nuint, have no equivalents in Hydra

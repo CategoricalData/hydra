@@ -4,16 +4,14 @@
 
 module Hydra.Eval.Lib.Pairs where
 
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Show.Core as Core_
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 
 -- | Interpreter-friendly bimap for Pair terms.
-bimap :: Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
+bimap :: t0 -> t1 -> Core.Term -> Core.Term -> Core.Term -> Either Errors.Error Core.Term
 bimap cx g firstFun secondFun pairTerm =
     case pairTerm of
       Core.TermPair v0 ->
@@ -24,24 +22,24 @@ bimap cx g firstFun secondFun pairTerm =
           Core.applicationArgument = fst}), (Core.TermApplication (Core.Application {
           Core.applicationFunction = secondFun,
           Core.applicationArgument = snd})))))
-      _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "pair value") " but found ") (Core_.term pairTerm)))),
-        Context.inContextContext = cx})
+      _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+        Errors.unexpectedShapeErrorExpected = "pair value",
+        Errors.unexpectedShapeErrorActual = (Core_.term pairTerm)})))
 
 -- | Interpreter-friendly first for Pair terms.
-first :: Context.Context -> t0 -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
+first :: t0 -> t1 -> Core.Term -> Either Errors.Error Core.Term
 first cx g pairTerm =
     case pairTerm of
       Core.TermPair v0 -> Right (Pairs.first v0)
-      _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "pair value") " but found ") (Core_.term pairTerm)))),
-        Context.inContextContext = cx})
+      _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+        Errors.unexpectedShapeErrorExpected = "pair value",
+        Errors.unexpectedShapeErrorActual = (Core_.term pairTerm)})))
 
 -- | Interpreter-friendly second for Pair terms.
-second :: Context.Context -> t0 -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
+second :: t0 -> t1 -> Core.Term -> Either Errors.Error Core.Term
 second cx g pairTerm =
     case pairTerm of
       Core.TermPair v0 -> Right (Pairs.second v0)
-      _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "pair value") " but found ") (Core_.term pairTerm)))),
-        Context.inContextContext = cx})
+      _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+        Errors.unexpectedShapeErrorExpected = "pair value",
+        Errors.unexpectedShapeErrorActual = (Core_.term pairTerm)})))

@@ -37,7 +37,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
+                                                            "body": {"variable": "hydra.lib.eithers.mapList"},
                                                             "type": {"variable": "hydra.json.model.Value"}}},
                                                         "type": {"variable": "t0"}}},
                                                     "type": {"literal": {"string": {}}}}}}}}},
@@ -171,14 +171,14 @@
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {"literal": {"string": "missing field: "}},
-                                                                      "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}}}},
+                                                                      "function": {"variable": "hydra.lib.strings.cat2"}}}}}}},
                                                           "type": {"literal": {"string": {}}}}},
                                                       "type": {"variable": "t1"}}},
                                                   "function": {
                                                     "typeApplication": {
                                                       "body": {
                                                         "typeApplication": {
-                                                          "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                          "body": {"variable": "hydra.lib.maybes.maybe"},
                                                           "type": {
                                                             "either": {"left": {"literal": {"string": {}}}, "right": {"variable": "t1"}}}}},
                                                       "type": {"variable": "t1"}}}}}}},
@@ -212,7 +212,7 @@
                                                     "typeApplication": {
                                                       "body": {
                                                         "typeApplication": {
-                                                          "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                          "body": {"variable": "hydra.lib.eithers.bind"},
                                                           "type": {"literal": {"string": {}}}}},
                                                       "type": {"maybe": {"variable": "t1"}}}},
                                                   "type": {"variable": "t1"}}}}}}},
@@ -342,7 +342,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                  "body": {"variable": "hydra.lib.maps.lookup"},
                                                                   "type": {"variable": "t3"}}},
                                                               "type": {"variable": "t0"}}}}}}},
                                                   "function": {
@@ -370,7 +370,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
+                                                                                "body": {"variable": "hydra.lib.eithers.map"},
                                                                                 "type": {"variable": "t2"}}},
                                                                             "type": {"maybe": {"variable": "t2"}}}},
                                                                         "type": {"variable": "t1"}}}}}}},
@@ -392,7 +392,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                  "body": {"variable": "hydra.lib.maybes.maybe"},
                                                                   "type": {
                                                                     "either": {"left": {"variable": "t1"}, "right": {"maybe": {"variable": "t2"}}}}}},
                                                               "type": {"variable": "t0"}}}}}}}}},

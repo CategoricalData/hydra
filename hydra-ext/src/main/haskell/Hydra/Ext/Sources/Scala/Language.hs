@@ -106,8 +106,7 @@ scalaLanguage = define "scalaLanguage" $
     Core.floatTypeFloat64],
   "functionVariants">: Sets.fromList $ list [
     Variants.functionVariantElimination,
-    Variants.functionVariantLambda,
-    Variants.functionVariantPrimitive],
+    Variants.functionVariantLambda],
   "integerTypes">: Sets.fromList $ list [
     Core.integerTypeBigint,
     Core.integerTypeInt8,

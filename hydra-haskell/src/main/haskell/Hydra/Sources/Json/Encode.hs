@@ -100,7 +100,8 @@ module_ = Module ns definitions
       toDefinition toJsonUntyped,
       toDefinition encodeLiteral,
       toDefinition encodeFloat,
-      toDefinition encodeInteger]
+      toDefinition encodeInteger,
+      toDefinition isSpecialFloatString]
 
 -- | Encode a Term to a JSON Value, given a type and type lookup table.
 -- Returns Left with an error message for unsupported term constructs.
@@ -430,13 +431,30 @@ encodeLiteral = define "encodeLiteral" $
 
 -- | Encode a float value to JSON
 -- Float64 and Bigfloat use native JSON numbers; Float32 uses string to preserve exact precision
+-- Special values (NaN, Infinity, -Infinity) are encoded as JSON strings for all float types
 encodeFloat :: TTermDefinition (FloatValue -> Either String Value)
 encodeFloat = define "encodeFloat" $
-  doc "Encode a float value to JSON. Float64/Bigfloat use native numbers; Float32 uses string." $
+  doc "Encode a float value to JSON. Float64/Bigfloat use native numbers; Float32 uses string. NaN/Inf always encoded as strings." $
   "fv" ~> cases _FloatValue (var "fv") Nothing [
-    _FloatValue_bigfloat>>: "bf" ~> right $ Json.valueNumber $ var "bf",
+    _FloatValue_bigfloat>>: "bf" ~>
+      "s" <~ (Literals.showBigfloat $ var "bf") $
+      Logic.ifElse (isSpecialFloatString @@ var "s")
+        (right $ Json.valueString $ var "s")
+        (right $ Json.valueNumber $ var "bf"),
     _FloatValue_float32>>: "f" ~> right $ Json.valueString $ Literals.showFloat32 $ var "f",
-    _FloatValue_float64>>: "f" ~> right $ Json.valueNumber $ Literals.float64ToBigfloat $ var "f"]
+    _FloatValue_float64>>: "f" ~>
+      "s" <~ (Literals.showFloat64 $ var "f") $
+      Logic.ifElse (isSpecialFloatString @@ var "s")
+        (right $ Json.valueString $ var "s")
+        (right $ Json.valueNumber $ Literals.float64ToBigfloat $ var "f")]
+
+-- | Check whether a string is one of the special float sentinels: "NaN", "Infinity", "-Infinity"
+isSpecialFloatString :: TTermDefinition (String -> Bool)
+isSpecialFloatString = define "isSpecialFloatString" $
+  doc "Check whether a string is one of the special float sentinels: NaN, Infinity, -Infinity." $
+  "s" ~> Logic.or (Equality.equal (var "s") (string "NaN")) $
+         Logic.or (Equality.equal (var "s") (string "Infinity"))
+                  (Equality.equal (var "s") (string "-Infinity"))
 
 -- | Encode an integer value to JSON
 -- Small integers (int8, int16, int32, uint8, uint16) use native JSON numbers

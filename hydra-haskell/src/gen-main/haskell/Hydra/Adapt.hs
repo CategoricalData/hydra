@@ -33,7 +33,6 @@ import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Show.Core as Core_
-import qualified Hydra.Show.Errors as Errors_
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -41,7 +40,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Adapt a graph and its schema to the given language constraints. The doExpand flag controls eta expansion of partial applications. Adaptation is type-preserving: binding-level TypeSchemes are adapted (not stripped). Note: case statement hoisting is done separately, prior to adaptation. The els0 parameter provides the original ordered bindings. Returns both the adapted graph and the ordered adapted bindings.
-adaptDataGraph :: Coders.LanguageConstraints -> Bool -> [Core.Binding] -> Context.Context -> Graph.Graph -> Either String (Graph.Graph, [Core.Binding])
+adaptDataGraph :: Coders.LanguageConstraints -> Bool -> [Core.Binding] -> t0 -> Graph.Graph -> Either Errors.Error (Graph.Graph, [Core.Binding])
 adaptDataGraph constraints doExpand els0 cx graph0 =
 
       let transformTerm =
@@ -59,7 +58,7 @@ adaptDataGraph constraints doExpand els0 cx graph0 =
           prims0 = Graph.graphPrimitives graph0
           schemaTypes0 = Graph.graphSchemaTypes graph0
           schemaBindings = Environment.typesToDefinitions (Maps.map (\ts -> Scoping.typeSchemeToFType ts) schemaTypes0)
-      in (Eithers.bind (Logic.ifElse (Maps.null schemaTypes0) (Right Maps.empty) (Eithers.bind (Eithers.bimap (\ic -> Errors.unDecodingError (Context.inContextObject ic)) (\x -> x) (Environment.graphAsTypes cx graph0 schemaBindings)) (\tmap0 -> Eithers.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 -> Right (Maps.map (\t -> Resolution.typeToTypeScheme t) tmap1))))) (\schemaResult ->
+      in (Eithers.bind (Logic.ifElse (Maps.null schemaTypes0) (Right Maps.empty) (Eithers.bind (Eithers.bimap (\e -> Errors.ErrorDecoding e) (\x -> x) (Environment.graphAsTypes graph0 schemaBindings)) (\tmap0 -> Eithers.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 -> Right (Maps.map (\t -> Resolution.typeToTypeScheme t) tmap1))))) (\schemaResult ->
         let adaptedSchemaTypes = schemaResult
             adaptBinding =
                     \el ->
@@ -105,7 +104,7 @@ adaptFloatType constraints ft =
       in (Logic.ifElse supported (Just ft) (forUnsupported ft))
 
 -- | Adapt a schema graph to the given language constraints
-adaptGraphSchema :: Ord t0 => (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> M.Map t0 Core.Type -> Either String (M.Map t0 Core.Type))
+adaptGraphSchema :: Ord t0 => (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> M.Map t0 Core.Type -> Either Errors.Error (M.Map t0 Core.Type))
 adaptGraphSchema constraints litmap types0 =
 
       let mapPair =
@@ -135,7 +134,7 @@ adaptIntegerType constraints it =
       in (Logic.ifElse supported (Just it) (forUnsupported it))
 
 -- | Rewrite callback for adapting lambda domain types in a term
-adaptLambdaDomains :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> (t0 -> Either String Core.Term) -> t0 -> Either String Core.Term
+adaptLambdaDomains :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> (t0 -> Either Errors.Error Core.Term) -> t0 -> Either Errors.Error Core.Term
 adaptLambdaDomains constraints litmap recurse term =
     Eithers.bind (recurse term) (\rewritten -> case rewritten of
       Core.TermFunction v0 -> case v0 of
@@ -185,7 +184,7 @@ adaptLiteralValue litmap lt l =
     Maybes.maybe (Core.LiteralString (Core_.literal l)) (\lt2 -> adaptLiteral lt2 l) (Maps.lookup lt litmap)
 
 -- | Rewrite callback for adapting nested let binding TypeSchemes in a term
-adaptNestedTypes :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> (t0 -> Either String Core.Term) -> t0 -> Either String Core.Term
+adaptNestedTypes :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> (t0 -> Either Errors.Error Core.Term) -> t0 -> Either Errors.Error Core.Term
 adaptNestedTypes constraints litmap recurse term =
     Eithers.bind (recurse term) (\rewritten -> case rewritten of
       Core.TermLet v0 ->
@@ -200,7 +199,7 @@ adaptNestedTypes constraints litmap recurse term =
       _ -> Right rewritten)
 
 -- | Adapt a primitive to the given language constraints, prior to inference
-adaptPrimitive :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Graph.Primitive -> Either String Graph.Primitive
+adaptPrimitive :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Graph.Primitive -> Either Errors.Error Graph.Primitive
 adaptPrimitive constraints litmap prim0 =
 
       let ts0 = Graph.primitiveType prim0
@@ -210,7 +209,7 @@ adaptPrimitive constraints litmap prim0 =
         Graph.primitiveImplementation = (Graph.primitiveImplementation prim0)})))
 
 -- | Adapt a term using the given language constraints
-adaptTerm :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Context.Context -> Graph.Graph -> Core.Term -> Either String Core.Term
+adaptTerm :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 adaptTerm constraints litmap cx graph term0 =
 
       let rewrite =
@@ -236,11 +235,11 @@ adaptTerm constraints litmap cx graph term0 =
                     Core.typeApplicationTermBody = (Core.typeApplicationTermBody v0),
                     Core.typeApplicationTermType = atyp})))
                   Core.TermTypeLambda _ -> Right term1
-                  _ -> Eithers.bind (tryTerm term1) (\mterm -> Maybes.maybe (Left (Strings.cat2 "no alternatives for term: " (Core_.term term1))) (\term2 -> Right term2) mterm)))
+                  _ -> Eithers.bind (tryTerm term1) (\mterm -> Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "no alternatives for term: " (Core_.term term1))))) (\term2 -> Right term2) mterm)))
       in (Rewriting.rewriteTermM rewrite term0)
 
 -- | Adapt a term using the constraints of a given language
-adaptTermForLanguage :: Coders.Language -> Context.Context -> Graph.Graph -> Core.Term -> Either String Core.Term
+adaptTermForLanguage :: Coders.Language -> t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 adaptTermForLanguage lang cx g term =
 
       let constraints = Coders.languageConstraints lang
@@ -248,7 +247,7 @@ adaptTermForLanguage lang cx g term =
       in (adaptTerm constraints litmap cx g term)
 
 -- | Adapt a type using the given language constraints
-adaptType :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Core.Type -> Either String Core.Type
+adaptType :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Core.Type -> Either Errors.Error Core.Type
 adaptType constraints litmap type0 =
 
       let forSupported =
@@ -266,11 +265,11 @@ adaptType constraints litmap type0 =
                     let supportedVariant = Sets.member (Reflect.typeVariant typ) (Coders.languageConstraintsTypeVariants constraints)
                     in (Logic.ifElse supportedVariant (forSupported typ) (forUnsupported typ))
           rewrite =
-                  \recurse -> \typ -> Eithers.bind (recurse typ) (\type1 -> Maybes.maybe (Left (Strings.cat2 "no alternatives for type: " (Core_.type_ typ))) (\type2 -> Right type2) (tryType type1))
+                  \recurse -> \typ -> Eithers.bind (recurse typ) (\type1 -> Maybes.maybe (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "no alternatives for type: " (Core_.type_ typ))))) (\type2 -> Right type2) (tryType type1))
       in (Rewriting.rewriteTypeM rewrite type0)
 
 -- | Adapt a type using the constraints of a given language
-adaptTypeForLanguage :: Coders.Language -> Core.Type -> Either String Core.Type
+adaptTypeForLanguage :: Coders.Language -> Core.Type -> Either Errors.Error Core.Type
 adaptTypeForLanguage lang typ =
 
       let constraints = Coders.languageConstraints lang
@@ -278,7 +277,7 @@ adaptTypeForLanguage lang typ =
       in (adaptType constraints litmap typ)
 
 -- | Adapt a type scheme to the given language constraints, prior to inference
-adaptTypeScheme :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Core.TypeScheme -> Either String Core.TypeScheme
+adaptTypeScheme :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Core.TypeScheme -> Either Errors.Error Core.TypeScheme
 adaptTypeScheme constraints litmap ts0 =
 
       let vars0 = Core.typeSchemeVariables ts0
@@ -296,7 +295,7 @@ composeCoders c1 c2 =
       Coders.coderDecode = (\cx -> \c -> Eithers.bind (Coders.coderDecode c2 cx c) (\b2 -> Coders.coderDecode c1 cx b2))}
 
 -- | Given a data graph along with language constraints, original ordered bindings, and a designated list of namespaces, adapt the graph to the language constraints, then return the processed graph along with term definitions grouped by namespace (in the order of the input namespaces). Inference is performed before adaptation if bindings lack type annotations. Hoisting must preserve type schemes; if any binding loses its type scheme after hoisting, the pipeline fails. Adaptation preserves type application/lambda wrappers and adapts embedded types. Post-adaptation inference is performed to ensure binding TypeSchemes are fully consistent. The doExpand flag controls eta expansion. The doHoistCaseStatements flag controls case statement hoisting (needed for Python). The doHoistPolymorphicLetBindings flag controls polymorphic let binding hoisting (needed for Java). The originalBindings parameter provides the original ordered bindings (from module elements).
-dataGraphToDefinitions :: Coders.LanguageConstraints -> Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Graph.Graph -> [Packaging.Namespace] -> Context.Context -> Either String (Graph.Graph, [[Packaging.TermDefinition]])
+dataGraphToDefinitions :: Coders.LanguageConstraints -> Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Graph.Graph -> [Packaging.Namespace] -> Context.Context -> Either Errors.Error (Graph.Graph, [[Packaging.TermDefinition]])
 dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings originalBindings graph0 namespaces cx =
 
       let namespacesSet = Sets.fromList namespaces
@@ -332,11 +331,11 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
                   \debugLabel -> \bindings ->
                     let untypedBindings =
                             Lists.map (\b -> Core.unName (Core.bindingName b)) (Lists.filter (\b -> Logic.not (Maybes.isJust (Core.bindingType b))) bindings)
-                    in (Logic.ifElse (Lists.null untypedBindings) (Right bindings) (Left (Strings.cat [
+                    in (Logic.ifElse (Lists.null untypedBindings) (Right bindings) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                       "Found untyped bindings (",
                       debugLabel,
                       "): ",
-                      (Strings.intercalate ", " untypedBindings)])))
+                      (Strings.intercalate ", " untypedBindings)])))))
           normalizeBindings =
                   \bindings -> Lists.map (\b -> Core.Binding {
                     Core.bindingName = (Core.bindingName b),
@@ -356,7 +355,7 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
                       Graph.graphTypeVariables = (Graph.graphTypeVariables g)}
           bins0 = originalBindings
           bins1 = Logic.ifElse doHoistCaseStatements (hoistCases bins0) bins0
-      in (Eithers.bind (Logic.ifElse doInfer (Eithers.map (\result -> Pairs.second (Pairs.first result)) (Eithers.bimap (\ic -> Errors_.error (Context.inContextObject ic)) (\x -> x) (Inference.inferGraphTypes cx bins1 (rebuildGraph bins1)))) (checkBindingsTyped "after case hoisting" bins1)) (\bins2 -> Eithers.bind (Logic.ifElse doHoistPolymorphicLetBindings (checkBindingsTyped "after let hoisting" (hoistPoly bins2)) (Right bins2)) (\bins3 -> Eithers.bind (adaptDataGraph constraints doExpand bins3 cx (rebuildGraph bins3)) (\adaptResult ->
+      in (Eithers.bind (Logic.ifElse doInfer (Eithers.map (\result -> Pairs.second (Pairs.first result)) (Inference.inferGraphTypes cx bins1 (rebuildGraph bins1))) (checkBindingsTyped "after case hoisting" bins1)) (\bins2 -> Eithers.bind (Logic.ifElse doHoistPolymorphicLetBindings (checkBindingsTyped "after let hoisting" (hoistPoly bins2)) (Right bins2)) (\bins3 -> Eithers.bind (adaptDataGraph constraints doExpand bins3 cx (rebuildGraph bins3)) (\adaptResult ->
         let adapted = Pairs.first adaptResult
             adaptedBindings = Pairs.second adaptResult
         in (Eithers.bind (checkBindingsTyped "after adaptation" adaptedBindings) (\bins4 ->
@@ -525,7 +524,6 @@ pushTypeAppsInward term =
                                     Core.lambdaParameter = (Core.lambdaParameter v0),
                                     Core.lambdaDomain = (Core.lambdaDomain v0),
                                     Core.lambdaBody = (go (Core.lambdaBody v0))})
-                                  Core.FunctionPrimitive v0 -> Core.FunctionPrimitive v0
                         forLet =
                                 \lt ->
                                   let mapBinding =
@@ -576,11 +574,11 @@ pushTypeAppsInward term =
       in (go term)
 
 -- | Given a schema graph along with language constraints and a designated list of element names, adapt the graph to the language constraints, then return a corresponding type definition for each element name.
-schemaGraphToDefinitions :: Coders.LanguageConstraints -> Graph.Graph -> [[Core.Name]] -> Context.Context -> Either String (M.Map Core.Name Core.Type, [[Packaging.TypeDefinition]])
+schemaGraphToDefinitions :: Coders.LanguageConstraints -> Graph.Graph -> [[Core.Name]] -> t0 -> Either Errors.Error (M.Map Core.Name Core.Type, [[Packaging.TypeDefinition]])
 schemaGraphToDefinitions constraints graph nameLists cx =
 
       let litmap = adaptLiteralTypesMap constraints
-      in (Eithers.bind (Eithers.bimap (\ic -> Errors.unDecodingError (Context.inContextObject ic)) (\x -> x) (Environment.graphAsTypes cx graph (Lexical.graphToBindings graph))) (\tmap0 -> Eithers.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 ->
+      in (Eithers.bind (Eithers.bimap (\e -> Errors.ErrorDecoding e) (\x -> x) (Environment.graphAsTypes graph (Lexical.graphToBindings graph))) (\tmap0 -> Eithers.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 ->
         let toDef =
                 \pair -> Packaging.TypeDefinition {
                   Packaging.typeDefinitionName = (Pairs.first pair),
@@ -591,7 +589,7 @@ schemaGraphToDefinitions constraints graph nameLists cx =
         in (Right (tmap1, (Lists.map (\names -> Lists.map toDef (Lists.map (\n -> (n, (Maybes.fromJust (Maps.lookup n tmap1)))) names)) nameLists))))))
 
 -- | Given a target language and a source type, produce an adapter which rewrites the type and its terms according to the language's constraints. The encode direction adapts terms; the decode direction is identity.
-simpleLanguageAdapter :: Coders.Language -> t0 -> Graph.Graph -> Core.Type -> Either String (Coders.Adapter Core.Type Core.Type Core.Term Core.Term)
+simpleLanguageAdapter :: Coders.Language -> t0 -> Graph.Graph -> Core.Type -> Either Errors.Error (Coders.Adapter Core.Type Core.Type Core.Term Core.Term)
 simpleLanguageAdapter lang cx g typ =
 
       let constraints = Coders.languageConstraints lang
@@ -601,13 +599,11 @@ simpleLanguageAdapter lang cx g typ =
         Coders.adapterSource = typ,
         Coders.adapterTarget = adaptedType,
         Coders.adapterCoder = Coders.Coder {
-          Coders.coderEncode = (\cx2 -> \term -> Eithers.bimap (\_s -> Context.InContext {
-            Context.inContextObject = (Errors.ErrorOther (Errors.OtherError _s)),
-            Context.inContextContext = cx2}) (\_x -> _x) (adaptTerm constraints litmap cx2 g term)),
+          Coders.coderEncode = (\cx2 -> \term -> adaptTerm constraints litmap cx2 g term),
           Coders.coderDecode = (\cx2 -> \term -> Right term)}})))
 
 -- | Find a list of alternatives for a given term, if any
-termAlternatives :: Context.Context -> Graph.Graph -> Core.Term -> Either String [Core.Term]
+termAlternatives :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error [Core.Term]
 termAlternatives cx graph term =
     case term of
       Core.TermAnnotated v0 ->
@@ -636,7 +632,7 @@ termAlternatives cx graph term =
                       in Core.Field {
                         Core.fieldName = fname,
                         Core.fieldTerm = (Core.TermMaybe (Logic.ifElse (Equality.equal ftname fname) (Just fterm) Nothing))}
-        in (Eithers.bind (Eithers.bimap (\ic -> Errors_.error (Context.inContextObject ic)) (\x -> x) (Resolution.requireUnionType cx graph tname)) (\rt -> Right [
+        in (Eithers.bind (Resolution.requireUnionType cx graph tname) (\rt -> Right [
           Core.TermRecord (Core.Record {
             Core.recordTypeName = tname,
             Core.recordFields = (Lists.map forFieldType rt)})]))

@@ -100,6 +100,7 @@ module_ = Module ns definitions
       toDefinition decodeLiteral,
       toDefinition decodeFloat,
       toDefinition decodeInteger,
+      toDefinition parseSpecialFloat,
       toDefinition expectString,
       toDefinition expectArray,
       toDefinition expectObject,
@@ -362,19 +363,21 @@ decodeLiteral = define "decodeLiteral" $
       Eithers.map ("s" ~> Core.termLiteral $ Core.literalString $ var "s") (var "strResult")]
 
 -- | Decode a JSON value to a float term
--- Float64 and Bigfloat are decoded from JSON numbers; Float32 from string
+-- Float64 and Bigfloat are decoded from JSON numbers or special sentinel strings; Float32 from string
+-- Special values (NaN, Infinity, -Infinity) are accepted as JSON strings for all float types
 decodeFloat :: TTermDefinition (FloatType -> Value -> Either String Term)
 decodeFloat = define "decodeFloat" $
-  doc "Decode a JSON value to a float term. Float64/Bigfloat from numbers; Float32 from string." $
+  doc "Decode a JSON value to a float term. Numbers for Bigfloat/Float64; strings for Float32 and NaN/Inf sentinels." $
   "ft" ~> "value" ~>
   cases _FloatType (var "ft") Nothing [
-    -- Bigfloat: JSON number (Double) -> bigfloat
+    -- Bigfloat: JSON number (Double) -> bigfloat. NaN/Inf sentinels not supported since
+    -- some host languages (Java BigDecimal, Python Decimal) cannot represent them.
     _FloatType_bigfloat>>: constant $
-      "numResult" <~ (expectNumber @@ var "value") $
-      Eithers.map
-        ("n" ~> Core.termLiteral $ Core.literalFloat $ Core.floatValueBigfloat $ var "n")
-        (var "numResult"),
-    -- Float32: JSON string -> parse as float32 (preserves exact precision)
+      cases _Value (var "value")
+        (Just $ left $ string "expected number for bigfloat") [
+        _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueBigfloat $ var "n"],
+    -- Float32: JSON string -> parse as float32 (preserves exact precision; readFloat32
+    -- also handles NaN/Infinity/-Infinity sentinels natively).
     _FloatType_float32>>: constant $
       "strResult" <~ (expectString @@ var "value") $
       Eithers.either_
@@ -386,12 +389,29 @@ decodeFloat = define "decodeFloat" $
             ("v" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ var "v")
             (var "parsed"))
         (var "strResult"),
-    -- Float64: JSON number (Double) -> float64
+    -- Float64: JSON number (Double) -> float64, or special sentinel string
     _FloatType_float64>>: constant $
-      "numResult" <~ (expectNumber @@ var "value") $
-      Eithers.map
-        ("n" ~> Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ Literals.bigfloatToFloat64 $ var "n")
-        (var "numResult")]
+      cases _Value (var "value")
+        (Just $ left $ string "expected number or special float string for float64") [
+        _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ Literals.bigfloatToFloat64 $ var "n",
+        _Value_string>>: "s" ~>
+          Maybes.maybe
+            (left $ Strings.cat $ list [string "invalid float64 sentinel: ", var "s"])
+            ("v" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ var "v")
+            (parseSpecialFloat @@ var "s")]]
+
+-- | Parse a string as a special float sentinel ("NaN", "Infinity", "-Infinity") to a float64.
+-- Returns Nothing if the string is not a recognized sentinel.
+parseSpecialFloat :: TTermDefinition (String -> Maybe Double)
+parseSpecialFloat = define "parseSpecialFloat" $
+  doc "Parse a special float sentinel string to a float64. Returns Nothing for unrecognized strings." $
+  "s" ~>
+    Logic.ifElse
+      (Logic.or (Equality.equal (var "s") (string "NaN")) $
+       Logic.or (Equality.equal (var "s") (string "Infinity"))
+                (Equality.equal (var "s") (string "-Infinity")))
+      (Literals.readFloat64 $ var "s")
+      Phantoms.nothing
 
 -- | Decode a JSON value to an integer term
 -- Small integers (int8, int16, int32, uint8, uint16) are decoded from JSON numbers

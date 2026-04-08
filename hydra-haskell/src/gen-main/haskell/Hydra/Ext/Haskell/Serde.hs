@@ -297,10 +297,21 @@ literalToExpr lit =
                 "(",
                 e,
                 ")"]) e
+          -- BOOTSTRAP PATCH: render NaN/Inf as valid Haskell expressions.
+          showDoubleForHaskell :: Double -> String
+          showDoubleForHaskell v
+            | Prelude.isNaN v = "(0/0)"
+            | Prelude.isInfinite v = if v Prelude.> 0 then "(1/0)" else "(-1/0)"
+            | otherwise = parensIfNeg (v Prelude.< 0) (Literals.showFloat64 v)
+          showFloatForHaskell :: Float -> String
+          showFloatForHaskell v
+            | Prelude.isNaN v = "(0/0)"
+            | Prelude.isInfinite v = if v Prelude.> 0 then "(1/0)" else "(-1/0)"
+            | otherwise = parensIfNeg (v Prelude.< 0) (Literals.showFloat32 v)
       in (Serialization.cst (case lit of
         Syntax.LiteralChar v0 -> Literals.showString (Literals.showUint16 v0)
-        Syntax.LiteralDouble v0 -> parensIfNeg (Equality.lt v0 0.0) (Literals.showFloat64 v0)
-        Syntax.LiteralFloat v0 -> parensIfNeg (Equality.lt v0 0.0) (Literals.showFloat32 v0)
+        Syntax.LiteralDouble v0 -> showDoubleForHaskell v0
+        Syntax.LiteralFloat v0 -> showFloatForHaskell v0
         Syntax.LiteralInt v0 -> parensIfNeg (Equality.lt v0 0) (Literals.showInt32 v0)
         Syntax.LiteralInteger v0 -> parensIfNeg (Equality.lt v0 0) (Literals.showBigint v0)
         Syntax.LiteralString v0 -> Literals.showString v0))

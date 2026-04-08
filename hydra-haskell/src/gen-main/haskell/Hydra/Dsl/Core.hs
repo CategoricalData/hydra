@@ -796,14 +796,6 @@ functionLambda x =
         Core.fieldName = (Core.Name "lambda"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-functionPrimitive :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.Function
-functionPrimitive x =
-    Phantoms.TTerm (Core.TermUnion (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.core.Function"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "primitive"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
 functionType :: Phantoms.TTerm Core.Type -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Core.FunctionType
 functionType domain codomain =
     Phantoms.TTerm (Core.TermRecord (Core.Record {

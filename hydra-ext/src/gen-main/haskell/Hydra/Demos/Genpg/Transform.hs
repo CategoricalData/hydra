@@ -134,7 +134,7 @@ elementSpecsByTable graph =
         in (Right (Lists.foldl addEdge vertexMap edgePairs)))))
 
 -- | Evaluate an edge specification against a record term to produce an optional edge
-evaluateEdge :: Context.Context -> Graph.Graph -> Model.Edge Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) (Maybe (Model.Edge Core.Term))
+evaluateEdge :: Context.Context -> Graph.Graph -> Model.Edge Core.Term -> Core.Term -> Either Errors.Error (Maybe (Model.Edge Core.Term))
 evaluateEdge cx g edgeSpec record =
 
       let label = Model.edgeLabel edgeSpec
@@ -146,9 +146,9 @@ evaluateEdge cx g edgeSpec record =
         Core.applicationFunction = idSpec,
         Core.applicationArgument = record}))) (\id -> Eithers.bind (Eithers.bind (Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
         Core.applicationFunction = outSpec,
-        Core.applicationArgument = record}))) (\_term -> Core_.maybeTerm cx (\t -> Right t) g _term)) (\mOutId -> Eithers.bind (Eithers.bind (Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
+        Core.applicationArgument = record}))) (\_term -> Core_.maybeTerm (\t -> Right t) g _term)) (\mOutId -> Eithers.bind (Eithers.bind (Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
         Core.applicationFunction = inSpec,
-        Core.applicationArgument = record}))) (\_term -> Core_.maybeTerm cx (\t -> Right t) g _term)) (\mInId -> Eithers.bind (evaluateProperties cx g propSpecs record) (\props -> Right (Maybes.bind mOutId (\outId -> Maybes.map (\inId -> Model.Edge {
+        Core.applicationArgument = record}))) (\_term -> Core_.maybeTerm (\t -> Right t) g _term)) (\mInId -> Eithers.bind (evaluateProperties cx g propSpecs record) (\props -> Right (Maybes.bind mOutId (\outId -> Maybes.map (\inId -> Model.Edge {
         Model.edgeLabel = label,
         Model.edgeId = id,
         Model.edgeOut = outId,
@@ -156,7 +156,7 @@ evaluateEdge cx g edgeSpec record =
         Model.edgeProperties = props}) mInId)))))))
 
 -- | Evaluate property specifications against a record term
-evaluateProperties :: Ord t0 => (Context.Context -> Graph.Graph -> M.Map t0 Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) (M.Map t0 Core.Term))
+evaluateProperties :: Ord t0 => (Context.Context -> Graph.Graph -> M.Map t0 Core.Term -> Core.Term -> Either Errors.Error (M.Map t0 Core.Term))
 evaluateProperties cx g specs record =
 
       let extractMaybe =
@@ -170,7 +170,7 @@ evaluateProperties cx g specs record =
           Core.applicationArgument = record}))) (\value -> extractMaybe k (Strip.deannotateTerm value)))) (Maps.toList specs)))
 
 -- | Evaluate a vertex specification against a record term to produce an optional vertex
-evaluateVertex :: Context.Context -> Graph.Graph -> Model.Vertex Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) (Maybe (Model.Vertex Core.Term))
+evaluateVertex :: Context.Context -> Graph.Graph -> Model.Vertex Core.Term -> Core.Term -> Either Errors.Error (Maybe (Model.Vertex Core.Term))
 evaluateVertex cx g vertexSpec record =
 
       let label = Model.vertexLabel vertexSpec
@@ -178,7 +178,7 @@ evaluateVertex cx g vertexSpec record =
           propSpecs = Model.vertexProperties vertexSpec
       in (Eithers.bind (Eithers.bind (Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
         Core.applicationFunction = idSpec,
-        Core.applicationArgument = record}))) (\_term -> Core_.maybeTerm cx (\t -> Right t) g _term)) (\mId -> Eithers.bind (evaluateProperties cx g propSpecs record) (\props -> Right (Maybes.map (\id -> Model.Vertex {
+        Core.applicationArgument = record}))) (\_term -> Core_.maybeTerm (\t -> Right t) g _term)) (\mId -> Eithers.bind (evaluateProperties cx g propSpecs record) (\props -> Right (Maybes.map (\id -> Model.Vertex {
         Model.vertexLabel = label,
         Model.vertexId = id,
         Model.vertexProperties = props}) mId))))
@@ -318,11 +318,11 @@ termRowToRecord tableType row =
             Core.fieldTerm = (Core.TermMaybe mvalue)}) colTypes cells)}))
 
 -- | Transform a record through vertex and edge specifications to produce vertices and edges
-transformRecord :: Context.Context -> Graph.Graph -> [Model.Vertex Core.Term] -> [Model.Edge Core.Term] -> Core.Term -> Either (Context.InContext Errors.Error) ([Model.Vertex Core.Term], [Model.Edge Core.Term])
+transformRecord :: Context.Context -> Graph.Graph -> [Model.Vertex Core.Term] -> [Model.Edge Core.Term] -> Core.Term -> Either Errors.Error ([Model.Vertex Core.Term], [Model.Edge Core.Term])
 transformRecord cx g vspecs especs record =
     Eithers.bind (Eithers.mapList (\spec -> evaluateVertex cx g spec record) vspecs) (\mVertices -> Eithers.bind (Eithers.mapList (\spec -> evaluateEdge cx g spec record) especs) (\mEdges -> Right (Maybes.cat mVertices, (Maybes.cat mEdges))))
 
 -- | Transform all rows from a table through vertex/edge specifications
-transformTableRows :: Context.Context -> Graph.Graph -> [Model.Vertex Core.Term] -> [Model.Edge Core.Term] -> Tabular.TableType -> [Tabular.DataRow Core.Term] -> Either (Context.InContext Errors.Error) ([Model.Vertex Core.Term], [Model.Edge Core.Term])
+transformTableRows :: Context.Context -> Graph.Graph -> [Model.Vertex Core.Term] -> [Model.Edge Core.Term] -> Tabular.TableType -> [Tabular.DataRow Core.Term] -> Either Errors.Error ([Model.Vertex Core.Term], [Model.Edge Core.Term])
 transformTableRows cx g vspecs especs tableType rows =
     Eithers.map (\pairs -> Lists.foldl concatPairs ([], []) pairs) (Eithers.mapList (\row -> transformRecord cx g vspecs especs (termRowToRecord tableType row)) rows)

@@ -4,7 +4,6 @@
 
 module Hydra.Environment where
 
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
 import qualified Hydra.Encode.Core as Core__
@@ -28,11 +27,11 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Map as M
 
 -- | Convert a definition to a typed term
-definitionAsTypeApplicationTerm :: Context.Context -> Core.Binding -> Either (Context.InContext Errors.Error) Core.TypeApplicationTerm
-definitionAsTypeApplicationTerm cx el =
-    Maybes.maybe (Left (Context.InContext {
-      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "missing element type")),
-      Context.inContextContext = cx})) (\ts -> Right (Core.TypeApplicationTerm {
+definitionAsTypeApplicationTerm :: Core.Binding -> Either Errors.Error Core.TypeApplicationTerm
+definitionAsTypeApplicationTerm el =
+    Maybes.maybe (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+      Errors.unexpectedShapeErrorExpected = "typed binding",
+      Errors.unexpectedShapeErrorActual = "untyped binding"})))) (\ts -> Right (Core.TypeApplicationTerm {
       Core.typeApplicationTermBody = (Core.bindingTerm el),
       Core.typeApplicationTermType = (Core.typeSchemeType ts)})) (Core.bindingType el)
 
@@ -48,13 +47,10 @@ graphAsTerm :: [Core.Binding] -> Core.Term -> Core.Term
 graphAsTerm bindings body = Core.TermLet (graphAsLet bindings body)
 
 -- | Decode a list of type-encoding bindings into a map of named types
-graphAsTypes :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Errors.DecodingError) (M.Map Core.Name Core.Type)
-graphAsTypes cx graph els =
+graphAsTypes :: Graph.Graph -> [Core.Binding] -> Either Errors.DecodingError (M.Map Core.Name Core.Type)
+graphAsTypes graph els =
 
-      let toPair =
-              \el -> Eithers.map (\typ -> (Core.bindingName el, typ)) (Eithers.bimap (\_wc_e -> Context.InContext {
-                Context.inContextObject = _wc_e,
-                Context.inContextContext = cx}) (\_wc_a -> _wc_a) (Core_.type_ graph (Core.bindingTerm el)))
+      let toPair = \el -> Eithers.map (\typ -> (Core.bindingName el, typ)) (Core_.type_ graph (Core.bindingTerm el))
       in (Eithers.map Maps.fromList (Eithers.mapList toPair els))
 
 -- | Partition a list of definitions into type definitions and term definitions
@@ -96,8 +92,8 @@ reorderDefs defs =
         sortedTermDefs])
 
 -- | Convert a schema graph to a typing environment (Either version)
-schemaGraphToTypingEnvironment :: Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (M.Map Core.Name Core.TypeScheme)
-schemaGraphToTypingEnvironment cx g =
+schemaGraphToTypingEnvironment :: Graph.Graph -> Either Errors.Error (M.Map Core.Name Core.TypeScheme)
+schemaGraphToTypingEnvironment g =
 
       let toTypeScheme =
               \vars -> \typ -> case (Strip.deannotateType typ) of
@@ -106,14 +102,8 @@ schemaGraphToTypingEnvironment cx g =
                   Core.typeSchemeVariables = (Lists.reverse vars),
                   Core.typeSchemeType = typ,
                   Core.typeSchemeConstraints = Nothing}
-          decodeType =
-                  \term -> Eithers.bimap (\_wc_e -> Context.InContext {
-                    Context.inContextObject = _wc_e,
-                    Context.inContextContext = cx}) (\_wc_a -> _wc_a) (Eithers.bimap (\_e -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _e))) (\_a -> _a) (Core_.type_ g term))
-          decodeTypeScheme =
-                  \term -> Eithers.bimap (\_wc_e -> Context.InContext {
-                    Context.inContextObject = _wc_e,
-                    Context.inContextContext = cx}) (\_wc_a -> _wc_a) (Eithers.bimap (\_e -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _e))) (\_a -> _a) (Core_.typeScheme g term))
+          decodeType = \term -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (Core_.type_ g term)
+          decodeTypeScheme = \term -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (Core_.typeScheme g term)
           toPair =
                   \el ->
                     let forTerm =

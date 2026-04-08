@@ -1,0 +1,39 @@
+{
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.test.testEnv.testGraph",
+        "term": {"variable": "hydra.lexical.emptyGraph"},
+        "type": {"type": {"variable": "hydra.graph.Graph"}, "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.test.testEnv.testContext",
+        "term": {"variable": "hydra.lexical.emptyContext"},
+        "type": {"type": {"variable": "hydra.context.Context"}, "variables": []}}}],
+  "description": "Type-level declarations for the hand-written Hydra.Test.TestEnv module.",
+  "namespace": "hydra.test.testEnv",
+  "termDependencies": ["hydra.lexical"],
+  "typeDependencies": [
+    "hydra.paths",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.context",
+    "hydra.core",
+    "hydra.error.checking",
+    "hydra.error.core",
+    "hydra.error.packaging",
+    "hydra.errors",
+    "hydra.graph",
+    "hydra.json.model",
+    "hydra.packaging",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants"]}
