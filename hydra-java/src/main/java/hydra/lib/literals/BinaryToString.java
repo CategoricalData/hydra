@@ -15,7 +15,6 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.errors.OtherError;
 import hydra.util.Either;
@@ -48,7 +47,7 @@ public class BinaryToString extends PrimitiveFunction {
      * @return a function that converts binary terms to string terms
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> {
             Term term = args.get(0);
             if (term instanceof Term.Literal) {
@@ -58,7 +57,7 @@ public class BinaryToString extends PrimitiveFunction {
                     return Either.right(Terms.string(apply(bytes)));
                 }
             }
-            return Either.left(new InContext<>(new Error_.Other(new OtherError("expected binary literal")), cx));
+            return Either.left(new Error_.Other(new OtherError("expected binary literal")));
         };
     }
 

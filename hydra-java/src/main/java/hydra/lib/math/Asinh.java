@@ -14,7 +14,6 @@ import static hydra.dsl.Types.float64;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -45,8 +44,8 @@ public class Asinh extends PrimitiveFunction {
      * @return a function that maps terms to a flow of terms
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((arg0) -> Terms.float64(apply(arg0)), hydra.extract.Core.float64(cx, graph, args.get(0)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((arg0) -> Terms.float64(apply(arg0)), hydra.extract.Core.float64(graph, args.get(0)));
     }
 
     /**
@@ -55,6 +54,11 @@ public class Asinh extends PrimitiveFunction {
      * @return the inverse hyperbolic sine
      */
     public static Double apply(Double x) {
+        // Special-case infinities to match Haskell: asinh(±Inf) = ±Inf.
+        // The naive formula gives log(-Inf + Inf) = NaN for -Inf input.
+        if (Double.isInfinite(x)) {
+            return x;
+        }
         return Math.log(x + Math.sqrt(x * x + 1.0));
     }
 }

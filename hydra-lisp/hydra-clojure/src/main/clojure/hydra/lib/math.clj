@@ -28,7 +28,11 @@
 ;; asinh :: Double -> Double
 (def hydra_lib_math_asinh
   "Return the inverse hyperbolic sine of x."
-  (fn [x] (Math/log (+ x (Math/sqrt (+ (* x x) 1.0))))))
+  ;; Special-case infinities: asinh(±Inf) = ±Inf (naive formula gives NaN for -Inf).
+  (fn [x]
+    (if (Double/isInfinite x)
+      x
+      (Math/log (+ x (Math/sqrt (+ (* x x) 1.0)))))))
 
 ;; atan :: Double -> Double
 (def hydra_lib_math_atan
@@ -38,17 +42,27 @@
 ;; atan2 :: Double -> Double -> Double
 (def hydra_lib_math_atan2
   "Return the arc tangent of y/x in radians, using signs to determine quadrant."
-  (fn [y] (fn [x] (Math/atan2 y x))))
+  ;; Match Haskell: atan2 returns NaN when both arguments are infinite
+  ;; (Java's Math.atan2 returns ±pi/4 or ±3pi/4 in these cases).
+  (fn [y] (fn [x]
+    (if (and (Double/isInfinite y) (Double/isInfinite x))
+      Double/NaN
+      (Math/atan2 y x)))))
 
 ;; atanh :: Double -> Double
 (def hydra_lib_math_atanh
   "Return the inverse hyperbolic tangent of x."
   (fn [x] (* 0.5 (Math/log (/ (+ 1.0 x) (- 1.0 x))))))
 
-;; ceiling :: Double -> BigInt
+;; ceiling :: Double -> Double
+;; DIVERGENCE FROM HASKELL: Hydra returns a float, not an integer, so that
+;; NaN/Inf propagate naturally per IEEE 754.
 (def hydra_lib_math_ceiling
-  "Return the ceiling of x as an integer."
-  (fn [x] (long (Math/ceil x))))
+  "Return the ceiling of x as a float."
+  (fn [x]
+    (if (or (Double/isNaN x) (Double/isInfinite x))
+      x
+      (Math/ceil x))))
 
 ;; cos :: Double -> Double
 (def hydra_lib_math_cos
@@ -80,10 +94,14 @@
   "Return e raised to the power x."
   (fn [x] (Math/exp x)))
 
-;; floor :: Double -> BigInt
+;; floor :: Double -> Double
+;; DIVERGENCE FROM HASKELL: returns a float, not an integer (see ceiling).
 (def hydra_lib_math_floor
-  "Return the floor of x as an integer."
-  (fn [x] (long (Math/floor x))))
+  "Return the floor of x as a float."
+  (fn [x]
+    (if (or (Double/isNaN x) (Double/isInfinite x))
+      x
+      (Math/floor x))))
 
 ;; log :: Double -> Double
 (def hydra_lib_math_log
@@ -194,27 +212,41 @@
   "Integer remainder."
   (fn [a] (fn [b] (rem a b))))
 
-;; round :: Double -> BigInt (Haskell-style round half to even)
+;; round :: Double -> Double (Haskell-style round half to even)
+;; DIVERGENCE FROM HASKELL: returns a float, not an integer (see ceiling).
 (def hydra_lib_math_round
-  "Return x rounded to the nearest integer."
+  "Return x rounded to the nearest integer, as a float."
   (fn [x]
-    (long (.setScale (BigDecimal/valueOf (double x)) 0 java.math.RoundingMode/HALF_EVEN))))
+    (if (or (Double/isNaN x) (Double/isInfinite x))
+      x
+      (double (.setScale (BigDecimal/valueOf (double x)) 0 java.math.RoundingMode/HALF_EVEN)))))
 
 ;; roundFloat32 :: Int -> Float -> Float
+;; Returns NaN/Inf inputs unchanged (no rounding is possible).
 (def hydra_lib_math_round_float32
   "Round a float32 to n significant digits."
   (fn [n] (fn [x]
-    (if (== x 0.0) (float 0.0)
-      (let [factor (Math/pow 10.0 (- n 1 (Math/floor (Math/log10 (Math/abs (double x))))))]
-        (float (/ (Math/round (* (double x) factor)) factor)))))))
+    (let [dx (double x)]
+      (cond
+        (Double/isNaN dx) x
+        (Double/isInfinite dx) x
+        (== dx 0.0) (float 0.0)
+        :else
+          (let [factor (Math/pow 10.0 (- n 1 (Math/floor (Math/log10 (Math/abs dx)))))]
+            (float (/ (Math/round (* dx factor)) factor))))))))
 
 ;; roundFloat64 :: Int -> Double -> Double
+;; Returns NaN/Inf inputs unchanged (no rounding is possible).
 (def hydra_lib_math_round_float64
   "Round a float64 to n significant digits."
   (fn [n] (fn [x]
-    (if (== x 0.0) 0.0
-      (let [factor (Math/pow 10.0 (- n 1 (Math/floor (Math/log10 (Math/abs x)))))]
-        (/ (Math/round (* x factor)) factor))))))
+    (cond
+      (Double/isNaN x) x
+      (Double/isInfinite x) x
+      (== x 0.0) 0.0
+      :else
+        (let [factor (Math/pow 10.0 (- n 1 (Math/floor (Math/log10 (Math/abs x)))))]
+          (/ (Math/round (* x factor)) factor))))))
 
 ;; roundBigfloat :: Int -> Double -> Double  (alias for roundFloat64)
 (def hydra_lib_math_round_bigfloat
@@ -261,7 +293,11 @@
   "Return the hyperbolic tangent of x."
   (fn [x] (Math/tanh x)))
 
-;; truncate :: Double -> BigInt
+;; truncate :: Double -> Double
+;; DIVERGENCE FROM HASKELL: returns a float, not an integer (see ceiling).
 (def hydra_lib_math_truncate
-  "Return x truncated to an integer (towards zero)."
-  (fn [x] (long x)))
+  "Return x truncated (towards zero), as a float."
+  (fn [x]
+    (if (or (Double/isNaN x) (Double/isInfinite x))
+      x
+      (double (long x)))))

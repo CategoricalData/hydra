@@ -9,6 +9,17 @@ from hydra.dsl.python import frozenlist, Maybe, Just, Nothing
 
 import builtins as _builtins
 
+def _safe(f, x):
+    """Wrap a math function to return NaN/Inf on domain/range errors (matching Haskell/Java IEEE 754 behavior).
+    Python's math module raises ValueError for e.g. sin(inf), cos(inf), log(-1),
+    and OverflowError for e.g. exp(1e308), whereas Haskell and Java return NaN or Inf per IEEE 754."""
+    try:
+        return f(x)
+    except ValueError:
+        return float('nan')
+    except OverflowError:
+        return float('inf')
+
 def abs_(x: int) -> int:
     """Return the absolute value."""
     return _builtins.abs(x)
@@ -19,12 +30,12 @@ abs = abs_
 
 def acos(x: float) -> float:
     """Return the arc cosine of x in radians."""
-    return math.acos(x)
+    return _safe(math.acos, x)
 
 
 def acosh(x: float) -> float:
     """Return the inverse hyperbolic cosine of x."""
-    return math.acosh(x)
+    return _safe(math.acosh, x)
 
 
 def add(x: int, y: int) -> int:
@@ -34,7 +45,7 @@ def add(x: int, y: int) -> int:
 
 def asin(x: float) -> float:
     """Return the arc sine of x in radians."""
-    return math.asin(x)
+    return _safe(math.asin, x)
 
 
 def asinh(x: float) -> float:
@@ -48,23 +59,33 @@ def atan(x: float) -> float:
 
 
 def atan2(y: float, x: float) -> float:
-    """Return the arc tangent of y/x in radians, using signs to determine quadrant."""
+    """Return the arc tangent of y/x in radians, using signs to determine quadrant.
+    Matches Haskell behavior: returns NaN when both arguments are infinite."""
+    if math.isinf(y) and math.isinf(x):
+        return float('nan')
     return math.atan2(y, x)
 
 
 def atanh(x: float) -> float:
     """Return the inverse hyperbolic tangent of x."""
-    return math.atanh(x)
+    if x == 1.0:
+        return float('inf')
+    if x == -1.0:
+        return float('-inf')
+    return _safe(math.atanh, x)
 
 
-def ceiling(x: float) -> int:
-    """Return the ceiling of x as an integer."""
-    return math.ceil(x)
+def ceiling(x: float) -> float:
+    """Return the ceiling of x as a float.
+    Returns NaN/Inf for NaN/Inf inputs, matching Haskell/Java IEEE 754 behavior."""
+    if math.isnan(x) or math.isinf(x):
+        return x
+    return float(math.ceil(x))
 
 
 def cos(x: float) -> float:
     """Return the cosine of x radians."""
-    return math.cos(x)
+    return _safe(math.cos, x)
 
 
 def cosh(x: float) -> float:
@@ -89,22 +110,32 @@ def even(x: int) -> bool:
 
 def exp(x: float) -> float:
     """Return e raised to the power x."""
-    return math.exp(x)
+    return _safe(math.exp, x)
 
 
-def floor(x: float) -> int:
-    """Return the floor of x as an integer."""
-    return math.floor(x)
+def floor(x: float) -> float:
+    """Return the floor of x as a float.
+    Returns NaN/Inf for NaN/Inf inputs, matching Haskell/Java IEEE 754 behavior."""
+    if math.isnan(x) or math.isinf(x):
+        return x
+    return float(math.floor(x))
 
 
 def log(x: float) -> float:
     """Return the natural logarithm of x."""
-    return math.log(x)
+    if x == 0.0:
+        return float('-inf')
+    return _safe(math.log, x)
 
 
 def log_base(base: float, x: float) -> float:
     """Return the logarithm of x to the given base."""
-    return math.log(x, base)
+    if x == 0.0:
+        return float('-inf')
+    try:
+        return math.log(x, base)
+    except (ValueError, ZeroDivisionError):
+        return float('nan')
 
 
 def maybe_div(x: int, y: int) -> Maybe[int]:
@@ -177,8 +208,17 @@ def pi() -> float:
 
 
 def pow_(x: float, y: float) -> float:
-    """Return x raised to the power y."""
-    return math.pow(x, y)
+    """Return x raised to the power y.
+    Matches Java Math.pow / Haskell (**) IEEE 754 behavior."""
+    try:
+        return math.pow(x, y)
+    except OverflowError:
+        return float('-inf') if x < 0 and y % 2 == 1 else float('inf')
+    except ValueError:
+        # pow(0, negative) = Infinity; pow(negative, non-integer) = NaN
+        if x == 0.0 and y < 0:
+            return float('inf')
+        return float('nan')
 
 # Alias for Hydra compatibility (pow is a Python builtin)
 pow = pow_
@@ -202,9 +242,12 @@ def rem(a: int, b: int) -> int:
     return a - q * b
 
 
-def round_(x: float) -> int:
-    """Return x rounded to the nearest integer."""
-    return _builtins.round(x)
+def round_(x: float) -> float:
+    """Return x rounded to the nearest integer as a float.
+    Returns NaN/Inf for NaN/Inf inputs, matching Haskell/Java IEEE 754 behavior."""
+    if math.isnan(x) or math.isinf(x):
+        return x
+    return float(_builtins.round(x))
 
 # Alias for Hydra compatibility (round is a Python builtin)
 round = round_
@@ -220,6 +263,8 @@ def round_float32(n: int, x: float) -> float:
     import struct
     if x == 0:
         return 0.0
+    if math.isnan(x) or math.isinf(x):
+        return x
     # Round-trip through float32 to ensure input is in float32 precision
     x32 = struct.unpack('f', struct.pack('f', x))[0]
     factor = 10 ** (n - 1 - math.floor(math.log10(_builtins.abs(x32))))
@@ -230,6 +275,8 @@ def round_float32(n: int, x: float) -> float:
 
 def round_float64(n: int, x: float) -> float:
     """Round a float64 to n significant digits."""
+    if math.isnan(x) or math.isinf(x):
+        return x
     if x == 0:
         return 0.0
     factor = 10 ** (n - 1 - math.floor(math.log10(_builtins.abs(x))))
@@ -248,7 +295,7 @@ def signum(x: int) -> int:
 
 def sin(x: float) -> float:
     """Return the sine of x radians."""
-    return math.sin(x)
+    return _safe(math.sin, x)
 
 
 def sinh(x: float) -> float:
@@ -258,7 +305,7 @@ def sinh(x: float) -> float:
 
 def sqrt(x: float) -> float:
     """Return the square root of x."""
-    return math.sqrt(x)
+    return _safe(math.sqrt, x)
 
 
 def sub(x: int, y: int) -> int:
@@ -273,7 +320,7 @@ def succ(x: int) -> int:
 
 def tan(x: float) -> float:
     """Return the tangent of x radians."""
-    return math.tan(x)
+    return _safe(math.tan, x)
 
 
 def tanh(x: float) -> float:
@@ -281,6 +328,9 @@ def tanh(x: float) -> float:
     return math.tanh(x)
 
 
-def truncate(x: float) -> int:
-    """Return x truncated to an integer (towards zero)."""
-    return math.trunc(x)
+def truncate(x: float) -> float:
+    """Return x truncated to an integer as a float (towards zero).
+    Returns NaN/Inf for NaN/Inf inputs, matching Haskell/Java IEEE 754 behavior."""
+    if math.isnan(x) or math.isinf(x):
+        return x
+    return float(math.trunc(x))

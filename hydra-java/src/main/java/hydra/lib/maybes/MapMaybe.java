@@ -18,7 +18,6 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -49,18 +48,18 @@ public class MapMaybe extends PrimitiveFunction {
      * @return a function that maps an optional-returning function over a list
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(cx, graph, args.get(1)), inputList -> {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(graph, args.get(1)), inputList -> {
                 Term f = args.get(0);
                 List<Term> results = new ArrayList<>();
                 for (Term item : inputList) {
-                    Either<InContext<Error_>, Term> r = hydra.Reduction.reduceTerm(
+                    Either<Error_, Term> r = hydra.Reduction.reduceTerm(
                         hydra.Lexical.emptyContext(), graph, true, Terms.apply(f, item));
                     if (r.isLeft()) return (Either) r;
-                    Either<InContext<Error_>, Maybe<Term>> maybeResult = hydra.extract.Core.maybeTerm(cx,
-                        t -> Either.right(t), graph, ((Either.Right<InContext<Error_>, Term>) r).value);
+                    Either<Error_, Maybe<Term>> maybeResult = hydra.extract.Core.maybeTerm(
+                        t -> Either.right(t), graph, ((Either.Right<Error_, Term>) r).value);
                     if (maybeResult.isLeft()) return (Either) maybeResult;
-                    Maybe<Term> maybe = ((Either.Right<InContext<Error_>, Maybe<Term>>) maybeResult).value;
+                    Maybe<Term> maybe = ((Either.Right<Error_, Maybe<Term>>) maybeResult).value;
                     if (maybe.isJust()) {
                         results.add(maybe.fromJust());
                     }

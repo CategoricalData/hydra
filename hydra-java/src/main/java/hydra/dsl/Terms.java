@@ -503,7 +503,7 @@ public interface Terms {
      * @return the primitive function term
      */
     static Term primitive(Name primName) {
-        return function(new Function.Primitive(primName));
+        return new Term.Variable(primName);
     }
 
     /**

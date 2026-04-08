@@ -18,7 +18,6 @@ import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -49,10 +48,10 @@ public class Range extends PrimitiveFunction {
      * @return a function that maps terms to a flow of terms
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.int32(cx, graph, args.get(0)), arg0 -> hydra.lib.eithers.Map.apply(arg1 -> Terms.list(apply(arg0, arg1).stream()
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.int32(graph, args.get(0)), arg0 -> hydra.lib.eithers.Map.apply(arg1 -> Terms.list(apply(arg0, arg1).stream()
                 .map(Terms::int32)
-                .collect(Collectors.toList())), hydra.extract.Core.int32(cx, graph, args.get(1))));
+                .collect(Collectors.toList())), hydra.extract.Core.int32(graph, args.get(1))));
     }
 
     /**

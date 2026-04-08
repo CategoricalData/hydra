@@ -180,7 +180,7 @@ writeJava "../hydra-java/src/gen-test/java" allModules baseTestModules
 ### Algebraic Data Types
 
 The Hydra coder which generates everything in `src/gen-main` and `src/gen-test` can be found
-[here](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/src/main/haskell/Hydra/Ext/Staging/Java).
+[here](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/src/main/haskell/Hydra/Ext/Java).
 A variety of techniques are used in order to materialize Hydra's core language in Java,
 including a [pattern](https://garciat.com/posts/java-adt) for representing algebraic data types
 which was originally proposed by Gabriel Garcia,
