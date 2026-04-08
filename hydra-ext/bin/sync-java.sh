@@ -86,8 +86,8 @@ stack exec bootstrap-from-json -- --target java --include-coders --include-dsls 
 TESTGRAPH="../hydra-java/src/gen-test/java/hydra/test/TestGraph.java"
 if [ -f "$TESTGRAPH" ]; then
     echo "  Post-processing: patching TestGraph.java..."
-    sed_inplace 's/return hydra.Lexical.emptyGraph();/return hydra.test.TestEnv.testGraph;/' "$TESTGRAPH"
-    sed_inplace 's/return hydra.Lexical.emptyContext();/return hydra.test.TestEnv.testContext;/' "$TESTGRAPH"
+    sed_inplace 's/return hydra.Lexical.emptyGraph();/return hydra.test.TestEnv.testGraph();/' "$TESTGRAPH"
+    sed_inplace 's/return hydra.Lexical.emptyContext();/return hydra.test.TestEnv.testContext();/' "$TESTGRAPH"
 fi
 
 step 3 $TOTAL_STEPS "Generating ext Java modules into hydra-ext from JSON"
