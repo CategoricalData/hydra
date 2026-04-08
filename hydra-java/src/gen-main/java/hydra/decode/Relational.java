@@ -8,7 +8,7 @@ package hydra.decode;
 public interface Relational {
   static hydra.util.Either<hydra.errors.DecodingError, hydra.relational.ColumnName> columnName(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.ColumnName>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.relational.ColumnName>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.ColumnName>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.relational.ColumnName>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.ColumnName>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.relational.ColumnName> otherwise(hydra.core.Term instance) {
@@ -20,7 +20,7 @@ public interface Relational {
           return hydra.lib.eithers.Map.apply(
             (java.util.function.Function<String, hydra.relational.ColumnName>) (b -> new hydra.relational.ColumnName(b)),
             hydra.lib.eithers.Either.apply(
-              (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, String>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, String>left(new hydra.errors.DecodingError(err))),
+              (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, String>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, String>left(err)),
               (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
                 @Override
                 public hydra.util.Either<hydra.errors.DecodingError, String> otherwise(hydra.core.Term instance) {
@@ -42,19 +42,19 @@ public interface Relational {
                   });
                 }
               })),
-              hydra.Lexical.stripAndDereferenceTermEither(
+              hydra.extract.Core.stripWithDecodingError(
                 cx,
                 (wrappedTerm).value.body)));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }
 
   static <T0> hydra.util.Either<hydra.errors.DecodingError, hydra.relational.ColumnSchema<T0>> columnSchema(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, T0>>> t, hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.ColumnSchema<T0>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.relational.ColumnSchema<T0>>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.ColumnSchema<T0>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.relational.ColumnSchema<T0>>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.ColumnSchema<T0>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.relational.ColumnSchema<T0>> otherwise(hydra.core.Term instance) {
@@ -81,14 +81,14 @@ public interface Relational {
               (java.util.function.Function<T0, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.ColumnSchema<T0>>>) (field_domain -> hydra.util.Either.<hydra.errors.DecodingError, hydra.relational.ColumnSchema<T0>>right((hydra.relational.ColumnSchema<T0>) (new hydra.relational.ColumnSchema<T0>(field_name, field_domain)))))));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }
 
   static hydra.util.Either<hydra.errors.DecodingError, hydra.relational.ForeignKey> foreignKey(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.ForeignKey>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.relational.ForeignKey>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.ForeignKey>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.relational.ForeignKey>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.ForeignKey>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.relational.ForeignKey> otherwise(hydra.core.Term instance) {
@@ -123,14 +123,14 @@ public interface Relational {
               (java.util.function.Function<java.util.Map<hydra.relational.ColumnName, hydra.relational.ColumnName>, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.ForeignKey>>) (field_keys -> hydra.util.Either.<hydra.errors.DecodingError, hydra.relational.ForeignKey>right(new hydra.relational.ForeignKey(field_foreignRelation, field_keys))))));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }
 
   static hydra.util.Either<hydra.errors.DecodingError, hydra.relational.PrimaryKey> primaryKey(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.PrimaryKey>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.relational.PrimaryKey>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.PrimaryKey>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.relational.PrimaryKey>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.PrimaryKey>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.relational.PrimaryKey> otherwise(hydra.core.Term instance) {
@@ -149,14 +149,14 @@ public interface Relational {
               (wrappedTerm).value.body));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }
 
   static <T0> hydra.util.Either<hydra.errors.DecodingError, hydra.relational.Relation<T0>> relation(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, T0>>> v, hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.Relation<T0>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.relational.Relation<T0>>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.Relation<T0>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.relational.Relation<T0>>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.Relation<T0>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.relational.Relation<T0>> otherwise(hydra.core.Term instance) {
@@ -176,14 +176,14 @@ public interface Relational {
               (wrappedTerm).value.body));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }
 
   static hydra.util.Either<hydra.errors.DecodingError, hydra.relational.RelationName> relationName(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.RelationName>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.relational.RelationName>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.RelationName>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.relational.RelationName>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.RelationName>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.relational.RelationName> otherwise(hydra.core.Term instance) {
@@ -195,7 +195,7 @@ public interface Relational {
           return hydra.lib.eithers.Map.apply(
             (java.util.function.Function<String, hydra.relational.RelationName>) (b -> new hydra.relational.RelationName(b)),
             hydra.lib.eithers.Either.apply(
-              (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, String>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, String>left(new hydra.errors.DecodingError(err))),
+              (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, String>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, String>left(err)),
               (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
                 @Override
                 public hydra.util.Either<hydra.errors.DecodingError, String> otherwise(hydra.core.Term instance) {
@@ -217,19 +217,19 @@ public interface Relational {
                   });
                 }
               })),
-              hydra.Lexical.stripAndDereferenceTermEither(
+              hydra.extract.Core.stripWithDecodingError(
                 cx,
                 (wrappedTerm).value.body)));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }
 
   static <T0> hydra.util.Either<hydra.errors.DecodingError, hydra.relational.RelationSchema<T0>> relationSchema(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, T0>>> t, hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.RelationSchema<T0>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.relational.RelationSchema<T0>>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.RelationSchema<T0>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.relational.RelationSchema<T0>>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.RelationSchema<T0>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.relational.RelationSchema<T0>> otherwise(hydra.core.Term instance) {
@@ -284,14 +284,14 @@ public interface Relational {
                   (java.util.function.Function<java.util.List<hydra.relational.ForeignKey>, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.RelationSchema<T0>>>) (field_foreignKeys -> hydra.util.Either.<hydra.errors.DecodingError, hydra.relational.RelationSchema<T0>>right((hydra.relational.RelationSchema<T0>) (new hydra.relational.RelationSchema<T0>(field_name, field_columns, field_primaryKeys, field_foreignKeys)))))))))));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }
 
   static <T0> hydra.util.Either<hydra.errors.DecodingError, hydra.relational.Relationship<T0>> relationship(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, T0>>> v, hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.Relationship<T0>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.relational.Relationship<T0>>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.Relationship<T0>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.relational.Relationship<T0>>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.Relationship<T0>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.relational.Relationship<T0>> otherwise(hydra.core.Term instance) {
@@ -314,14 +314,14 @@ public interface Relational {
               (wrappedTerm).value.body));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }
 
   static <T0> hydra.util.Either<hydra.errors.DecodingError, hydra.relational.Row<T0>> row(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, T0>>> v, hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.Row<T0>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.relational.Row<T0>>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.Row<T0>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.relational.Row<T0>>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.relational.Row<T0>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.relational.Row<T0>> otherwise(hydra.core.Term instance) {
@@ -338,7 +338,7 @@ public interface Relational {
               (wrappedTerm).value.body));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }

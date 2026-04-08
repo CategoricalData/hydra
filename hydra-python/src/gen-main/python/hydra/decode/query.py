@@ -11,7 +11,6 @@ import hydra.core
 import hydra.decode.core
 import hydra.errors
 import hydra.extract.core
-import hydra.lexical
 import hydra.lib.eithers
 import hydra.lib.maps
 import hydra.lib.maybes
@@ -32,7 +31,7 @@ def comparison_constraint(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected union"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_query_comparison_constraint_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_query_comparison_constraint_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def edge(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_query_edge_1(cx, v1):
@@ -45,7 +44,7 @@ def edge(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_query_edge_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_query_edge_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def variable(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_query_variable_1(v1):
@@ -65,11 +64,11 @@ def variable(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_query_variable_3(cx, v1):
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
-                return hydra.lib.eithers.map((lambda b: hydra.query.Variable(b)), hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_hydra_decode_query_variable_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, wrapped_term.body)))
+                return hydra.lib.eithers.map((lambda b: hydra.query.Variable(b)), hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_hydra_decode_query_variable_2(stripped2)), hydra.extract.core.strip_with_decoding_error(cx, wrapped_term.body)))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected wrapped type"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_query_variable_3(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_query_variable_3(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def node(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_query_node_1(cx, v1):
@@ -85,7 +84,7 @@ def node(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected union"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_query_node_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_query_node_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def range_(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_query_range_1(cx, v1):
@@ -136,11 +135,11 @@ def range_(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
                         case _:
                             return Left(hydra.errors.DecodingError("expected literal"))
-                return hydra.lib.eithers.bind(hydra.extract.core.require_field("min", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_3(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_min: hydra.lib.eithers.bind(hydra.extract.core.require_field("max", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_6(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_max: Right(hydra.query.Range(field_min, field_max))))))
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("min", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_field_map_body_3(stripped2)), hydra.extract.core.strip_with_decoding_error(cx2, raw2))), field_map(), cx), (lambda field_min: hydra.lib.eithers.bind(hydra.extract.core.require_field("max", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_field_map_body_6(stripped2)), hydra.extract.core.strip_with_decoding_error(cx2, raw2))), field_map(), cx), (lambda field_max: Right(hydra.query.Range(field_min, field_max))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_query_range_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_query_range_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def regex_quantifier(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_query_regex_quantifier_1(cx, v1):
@@ -193,12 +192,12 @@ def regex_quantifier(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
                             case _:
                                 return Left(hydra.errors.DecodingError("expected literal"))
-                    return hydra.lib.maps.from_list(((hydra.core.Name("one"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierOne())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("zeroOrOne"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierZeroOrOne())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("zeroOrMore"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierZeroOrMore())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("oneOrMore"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierOneOrMore())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("exactly"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierExactly(t))), hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_variant_map_3(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, input))))), (hydra.core.Name("atLeast"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierAtLeast(t))), hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_variant_map_6(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, input))))), (hydra.core.Name("range"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierRange(t))), range_(cx, input))))))
+                    return hydra.lib.maps.from_list(((hydra.core.Name("one"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierOne())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("zeroOrOne"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierZeroOrOne())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("zeroOrMore"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierZeroOrMore())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("oneOrMore"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierOneOrMore())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("exactly"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierExactly(t))), hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_variant_map_3(stripped2)), hydra.extract.core.strip_with_decoding_error(cx, input))))), (hydra.core.Name("atLeast"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierAtLeast(t))), hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_variant_map_6(stripped2)), hydra.extract.core.strip_with_decoding_error(cx, input))))), (hydra.core.Name("range"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.query.RegexQuantifier, hydra.query.RegexQuantifierRange(t))), range_(cx, input))))))
                 return hydra.lib.maybes.maybe((lambda : Left(hydra.errors.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union"))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected union"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_query_regex_quantifier_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_query_regex_quantifier_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def step(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_query_step_1(cx, v1):
@@ -214,7 +213,7 @@ def step(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected union"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_query_step_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_query_step_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def path(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_query_path_1(cx, v1):
@@ -230,7 +229,7 @@ def path(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected union"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_query_path_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_query_path_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def regex_sequence(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_query_regex_sequence_1(cx, v1):
@@ -243,7 +242,7 @@ def regex_sequence(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_query_regex_sequence_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_query_regex_sequence_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def triple_pattern(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_query_triple_pattern_1(cx, v1):
@@ -256,7 +255,7 @@ def triple_pattern(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_query_triple_pattern_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_query_triple_pattern_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def graph_pattern(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_query_graph_pattern_1(cx, v1):
@@ -269,7 +268,7 @@ def graph_pattern(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_query_graph_pattern_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_query_graph_pattern_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def pattern(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_query_pattern_1(cx, v1):
@@ -285,7 +284,7 @@ def pattern(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected union"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_query_pattern_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_query_pattern_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def path_equation(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_query_path_equation_1(cx, v1):
@@ -298,7 +297,7 @@ def path_equation(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_query_path_equation_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_query_path_equation_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def pattern_implication(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_query_pattern_implication_1(cx, v1):
@@ -311,7 +310,7 @@ def pattern_implication(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_query_pattern_implication_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_query_pattern_implication_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def query(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_query_query_1(cx, v1):
@@ -324,4 +323,4 @@ def query(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_query_query_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_query_query_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))

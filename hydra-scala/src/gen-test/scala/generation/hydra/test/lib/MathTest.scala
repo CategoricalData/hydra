@@ -1025,6 +1025,36 @@ class MathTest extends AnyFunSuite {
 
   }
 
+  test("sin - sin NaN") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("sin - sin +Inf") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("sin - sin -Inf") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
   // cos
 
   test("cos - cos 0") {
@@ -1077,6 +1107,36 @@ class MathTest extends AnyFunSuite {
 
   }
 
+  test("cos - cos NaN") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("cos - cos +Inf") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("cos - cos -Inf") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
   // tan
 
   test("tan - tan 0") {
@@ -1116,6 +1176,36 @@ class MathTest extends AnyFunSuite {
       0.546302489844:float64) == (
 
       0.546302489844:float64))
+
+  }
+
+  test("tan - tan NaN") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("tan - tan +Inf") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("tan - tan -Inf") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
 
   }
 
@@ -1161,6 +1251,56 @@ class MathTest extends AnyFunSuite {
 
   }
 
+  test("asin - asin below domain") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("asin - asin above domain") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("asin - asin NaN") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("asin - asin +Inf") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("asin - asin -Inf") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
   // acos
 
   test("acos - acos 1") {
@@ -1203,6 +1343,56 @@ class MathTest extends AnyFunSuite {
 
   }
 
+  test("acos - acos below domain") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("acos - acos above domain") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("acos - acos NaN") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("acos - acos +Inf") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("acos - acos -Inf") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
   // atan
 
   test("atan - atan 0") {
@@ -1232,6 +1422,36 @@ class MathTest extends AnyFunSuite {
       0.463647609001:float64) == (
 
       0.463647609001:float64))
+
+  }
+
+  test("atan - atan NaN") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("atan - atan +Inf") {
+
+    assert((
+
+      1.57079632679:float64) == (
+
+      1.57079632679:float64))
+
+  }
+
+  test("atan - atan -Inf") {
+
+    assert((
+
+      -1.57079632679:float64) == (
+
+      -1.57079632679:float64))
 
   }
 
@@ -1277,6 +1497,106 @@ class MathTest extends AnyFunSuite {
 
   }
 
+  test("atan2 - atan2 NaN 1") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("atan2 - atan2 +Inf 1") {
+
+    assert((
+
+      1.57079632679:float64) == (
+
+      1.57079632679:float64))
+
+  }
+
+  test("atan2 - atan2 -Inf 1") {
+
+    assert((
+
+      -1.57079632679:float64) == (
+
+      -1.57079632679:float64))
+
+  }
+
+  test("atan2 - atan2 1 NaN") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("atan2 - atan2 1 +Inf") {
+
+    assert((
+
+      0.0:float64) == (
+
+      0.0:float64))
+
+  }
+
+  test("atan2 - atan2 1 -Inf") {
+
+    assert((
+
+      3.14159265359:float64) == (
+
+      3.14159265359:float64))
+
+  }
+
+  test("atan2 - atan2 +Inf +Inf") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("atan2 - atan2 +Inf -Inf") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("atan2 - atan2 -Inf +Inf") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("atan2 - atan2 -Inf -Inf") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
   // sinh
 
   test("sinh - sinh 0") {
@@ -1306,6 +1626,36 @@ class MathTest extends AnyFunSuite {
       3.62686040785:float64) == (
 
       3.62686040785:float64))
+
+  }
+
+  test("sinh - sinh NaN") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("sinh - sinh +Inf") {
+
+    assert((
+
+      Infinity:float64) == (
+
+      Infinity:float64))
+
+  }
+
+  test("sinh - sinh -Inf") {
+
+    assert((
+
+      -Infinity:float64) == (
+
+      -Infinity:float64))
 
   }
 
@@ -1341,6 +1691,36 @@ class MathTest extends AnyFunSuite {
 
   }
 
+  test("cosh - cosh NaN") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("cosh - cosh +Inf") {
+
+    assert((
+
+      Infinity:float64) == (
+
+      Infinity:float64))
+
+  }
+
+  test("cosh - cosh -Inf") {
+
+    assert((
+
+      Infinity:float64) == (
+
+      Infinity:float64))
+
+  }
+
   // tanh
 
   test("tanh - tanh 0") {
@@ -1370,6 +1750,36 @@ class MathTest extends AnyFunSuite {
       0.46211715726:float64) == (
 
       0.46211715726:float64))
+
+  }
+
+  test("tanh - tanh NaN") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("tanh - tanh +Inf") {
+
+    assert((
+
+      1.0:float64) == (
+
+      1.0:float64))
+
+  }
+
+  test("tanh - tanh -Inf") {
+
+    assert((
+
+      -1.0:float64) == (
+
+      -1.0:float64))
 
   }
 
@@ -1405,6 +1815,36 @@ class MathTest extends AnyFunSuite {
 
   }
 
+  test("asinh - asinh NaN") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("asinh - asinh +Inf") {
+
+    assert((
+
+      Infinity:float64) == (
+
+      Infinity:float64))
+
+  }
+
+  test("asinh - asinh -Inf") {
+
+    assert((
+
+      -Infinity:float64) == (
+
+      -Infinity:float64))
+
+  }
+
   // acosh
 
   test("acosh - acosh 1") {
@@ -1437,6 +1877,56 @@ class MathTest extends AnyFunSuite {
 
   }
 
+  test("acosh - acosh below domain") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("acosh - acosh negative") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("acosh - acosh NaN") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("acosh - acosh +Inf") {
+
+    assert((
+
+      Infinity:float64) == (
+
+      Infinity:float64))
+
+  }
+
+  test("acosh - acosh -Inf") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
   // atanh
 
   test("atanh - atanh 0") {
@@ -1466,6 +1956,76 @@ class MathTest extends AnyFunSuite {
       0.100335347731:float64) == (
 
       0.100335347731:float64))
+
+  }
+
+  test("atanh - atanh upper boundary") {
+
+    assert((
+
+      Infinity:float64) == (
+
+      Infinity:float64))
+
+  }
+
+  test("atanh - atanh lower boundary") {
+
+    assert((
+
+      -Infinity:float64) == (
+
+      -Infinity:float64))
+
+  }
+
+  test("atanh - atanh above domain") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("atanh - atanh below domain") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("atanh - atanh NaN") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("atanh - atanh +Inf") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("atanh - atanh -Inf") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
 
   }
 
@@ -1521,6 +2081,36 @@ class MathTest extends AnyFunSuite {
 
   }
 
+  test("exp - exp NaN") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("exp - exp +Inf") {
+
+    assert((
+
+      Infinity:float64) == (
+
+      Infinity:float64))
+
+  }
+
+  test("exp - exp -Inf") {
+
+    assert((
+
+      0.0:float64) == (
+
+      0.0:float64))
+
+  }
+
   // log
 
   test("log - log 1") {
@@ -1560,6 +2150,56 @@ class MathTest extends AnyFunSuite {
       2.30258509299:float64) == (
 
       2.30258509299:float64))
+
+  }
+
+  test("log - log 0") {
+
+    assert((
+
+      -Infinity:float64) == (
+
+      -Infinity:float64))
+
+  }
+
+  test("log - log negative") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("log - log NaN") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("log - log +Inf") {
+
+    assert((
+
+      Infinity:float64) == (
+
+      Infinity:float64))
+
+  }
+
+  test("log - log -Inf") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
 
   }
 
@@ -1615,6 +2255,96 @@ class MathTest extends AnyFunSuite {
 
   }
 
+  test("logBase - logBase 10 0") {
+
+    assert((
+
+      -Infinity:float64) == (
+
+      -Infinity:float64))
+
+  }
+
+  test("logBase - logBase 10 negative") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("logBase - logBase negative 10") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("logBase - logBase 10 NaN") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("logBase - logBase 10 +Inf") {
+
+    assert((
+
+      Infinity:float64) == (
+
+      Infinity:float64))
+
+  }
+
+  test("logBase - logBase 10 -Inf") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("logBase - logBase NaN 10") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("logBase - logBase +Inf 10") {
+
+    assert((
+
+      0.0:float64) == (
+
+      0.0:float64))
+
+  }
+
+  test("logBase - logBase -Inf 10") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
   // pow
 
   test("pow - 2^3") {
@@ -1654,6 +2384,106 @@ class MathTest extends AnyFunSuite {
       1.41421356237:float64) == (
 
       1.41421356237:float64))
+
+  }
+
+  test("pow - 0^0") {
+
+    assert((
+
+      1.0:float64) == (
+
+      1.0:float64))
+
+  }
+
+  test("pow - 0^-1") {
+
+    assert((
+
+      Infinity:float64) == (
+
+      Infinity:float64))
+
+  }
+
+  test("pow - (-1)^0.5") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("pow - NaN^2") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("pow - +Inf^2") {
+
+    assert((
+
+      Infinity:float64) == (
+
+      Infinity:float64))
+
+  }
+
+  test("pow - -Inf^2") {
+
+    assert((
+
+      Infinity:float64) == (
+
+      Infinity:float64))
+
+  }
+
+  test("pow - +Inf^-1") {
+
+    assert((
+
+      0.0:float64) == (
+
+      0.0:float64))
+
+  }
+
+  test("pow - 2^NaN") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("pow - 2^+Inf") {
+
+    assert((
+
+      Infinity:float64) == (
+
+      Infinity:float64))
+
+  }
+
+  test("pow - 2^-Inf") {
+
+    assert((
+
+      0.0:float64) == (
+
+      0.0:float64))
 
   }
 
@@ -1709,15 +2539,55 @@ class MathTest extends AnyFunSuite {
 
   }
 
+  test("sqrt - sqrt negative") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("sqrt - sqrt NaN") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("sqrt - sqrt +Inf") {
+
+    assert((
+
+      Infinity:float64) == (
+
+      Infinity:float64))
+
+  }
+
+  test("sqrt - sqrt -Inf") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
   // ceiling
 
   test("ceiling - ceiling 3.2") {
 
     assert((
 
-      4:bigint) == (
+      4.0:float64) == (
 
-      4:bigint))
+      4.0:float64))
 
   }
 
@@ -1725,9 +2595,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      3:bigint) == (
+      3.0:float64) == (
 
-      3:bigint))
+      3.0:float64))
 
   }
 
@@ -1735,9 +2605,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      -3:bigint) == (
+      -3.0:float64) == (
 
-      -3:bigint))
+      -3.0:float64))
 
   }
 
@@ -1745,9 +2615,39 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      -3:bigint) == (
+      -3.0:float64) == (
 
-      -3:bigint))
+      -3.0:float64))
+
+  }
+
+  test("ceiling - ceiling NaN") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("ceiling - ceiling +Inf") {
+
+    assert((
+
+      Infinity:float64) == (
+
+      Infinity:float64))
+
+  }
+
+  test("ceiling - ceiling -Inf") {
+
+    assert((
+
+      -Infinity:float64) == (
+
+      -Infinity:float64))
 
   }
 
@@ -1757,9 +2657,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      3:bigint) == (
+      3.0:float64) == (
 
-      3:bigint))
+      3.0:float64))
 
   }
 
@@ -1767,9 +2667,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      3:bigint) == (
+      3.0:float64) == (
 
-      3:bigint))
+      3.0:float64))
 
   }
 
@@ -1777,9 +2677,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      -4:bigint) == (
+      -4.0:float64) == (
 
-      -4:bigint))
+      -4.0:float64))
 
   }
 
@@ -1787,9 +2687,39 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      -3:bigint) == (
+      -3.0:float64) == (
 
-      -3:bigint))
+      -3.0:float64))
+
+  }
+
+  test("floor - floor NaN") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("floor - floor +Inf") {
+
+    assert((
+
+      Infinity:float64) == (
+
+      Infinity:float64))
+
+  }
+
+  test("floor - floor -Inf") {
+
+    assert((
+
+      -Infinity:float64) == (
+
+      -Infinity:float64))
 
   }
 
@@ -1799,9 +2729,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      3:bigint) == (
+      3.0:float64) == (
 
-      3:bigint))
+      3.0:float64))
 
   }
 
@@ -1809,9 +2739,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      4:bigint) == (
+      4.0:float64) == (
 
-      4:bigint))
+      4.0:float64))
 
   }
 
@@ -1819,9 +2749,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      4:bigint) == (
+      4.0:float64) == (
 
-      4:bigint))
+      4.0:float64))
 
   }
 
@@ -1829,9 +2759,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      -3:bigint) == (
+      -3.0:float64) == (
 
-      -3:bigint))
+      -3.0:float64))
 
   }
 
@@ -1839,9 +2769,39 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      -4:bigint) == (
+      -4.0:float64) == (
 
-      -4:bigint))
+      -4.0:float64))
+
+  }
+
+  test("round - round NaN") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("round - round +Inf") {
+
+    assert((
+
+      Infinity:float64) == (
+
+      Infinity:float64))
+
+  }
+
+  test("round - round -Inf") {
+
+    assert((
+
+      -Infinity:float64) == (
+
+      -Infinity:float64))
 
   }
 
@@ -1939,6 +2899,36 @@ class MathTest extends AnyFunSuite {
 
   }
 
+  test("roundFloat32 - NaN") {
+
+    assert((
+
+      NaN:float32) == (
+
+      NaN:float32))
+
+  }
+
+  test("roundFloat32 - +Inf") {
+
+    assert((
+
+      Infinity:float32) == (
+
+      Infinity:float32))
+
+  }
+
+  test("roundFloat32 - -Inf") {
+
+    assert((
+
+      -Infinity:float32) == (
+
+      -Infinity:float32))
+
+  }
+
   // roundFloat64
 
   test("roundFloat64 - zero") {
@@ -2011,15 +3001,45 @@ class MathTest extends AnyFunSuite {
 
   }
 
+  test("roundFloat64 - NaN") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("roundFloat64 - +Inf") {
+
+    assert((
+
+      Infinity:float64) == (
+
+      Infinity:float64))
+
+  }
+
+  test("roundFloat64 - -Inf") {
+
+    assert((
+
+      -Infinity:float64) == (
+
+      -Infinity:float64))
+
+  }
+
   // truncate
 
   test("truncate - truncate 3.8") {
 
     assert((
 
-      3:bigint) == (
+      3.0:float64) == (
 
-      3:bigint))
+      3.0:float64))
 
   }
 
@@ -2027,9 +3047,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      3:bigint) == (
+      3.0:float64) == (
 
-      3:bigint))
+      3.0:float64))
 
   }
 
@@ -2037,9 +3057,9 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      -3:bigint) == (
+      -3.0:float64) == (
 
-      -3:bigint))
+      -3.0:float64))
 
   }
 
@@ -2047,9 +3067,39 @@ class MathTest extends AnyFunSuite {
 
     assert((
 
-      -3:bigint) == (
+      -3.0:float64) == (
 
-      -3:bigint))
+      -3.0:float64))
+
+  }
+
+  test("truncate - truncate NaN") {
+
+    assert((
+
+      NaN:float64) == (
+
+      NaN:float64))
+
+  }
+
+  test("truncate - truncate +Inf") {
+
+    assert((
+
+      Infinity:float64) == (
+
+      Infinity:float64))
+
+  }
+
+  test("truncate - truncate -Inf") {
+
+    assert((
+
+      -Infinity:float64) == (
+
+      -Infinity:float64))
 
   }
 }

@@ -12,7 +12,6 @@ import hydra.core
 import hydra.decode.core
 import hydra.errors
 import hydra.extract.core
-import hydra.lexical
 import hydra.lib.eithers
 
 T0 = TypeVar("T0")
@@ -52,11 +51,11 @@ def context(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
                         case _:
                             return Left(hydra.errors.DecodingError("expected literal"))
-                return hydra.lib.eithers.bind(hydra.extract.core.require_field("trace", (lambda v12, v2: hydra.extract.core.decode_list((lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), v12, v2)), field_map(), cx), (lambda field_trace: hydra.lib.eithers.bind(hydra.extract.core.require_field("messages", (lambda v12, v2: hydra.extract.core.decode_list((lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_4(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), v12, v2)), field_map(), cx), (lambda field_messages: hydra.lib.eithers.bind(hydra.extract.core.require_field("other", (lambda v12, v2: hydra.extract.core.decode_map((lambda x1, x2: hydra.decode.core.name(x1, x2)), (lambda x1, x2: hydra.decode.core.term(x1, x2)), v12, v2)), field_map(), cx), (lambda field_other: Right(hydra.context.Context(field_trace, field_messages, field_other))))))))
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("trace", (lambda v12, v2: hydra.extract.core.decode_list((lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_field_map_body_2(stripped2)), hydra.extract.core.strip_with_decoding_error(cx2, raw2))), v12, v2)), field_map(), cx), (lambda field_trace: hydra.lib.eithers.bind(hydra.extract.core.require_field("messages", (lambda v12, v2: hydra.extract.core.decode_list((lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_field_map_body_4(stripped2)), hydra.extract.core.strip_with_decoding_error(cx2, raw2))), v12, v2)), field_map(), cx), (lambda field_messages: hydra.lib.eithers.bind(hydra.extract.core.require_field("other", (lambda v12, v2: hydra.extract.core.decode_map((lambda x1, x2: hydra.decode.core.name(x1, x2)), (lambda x1, x2: hydra.decode.core.term(x1, x2)), v12, v2)), field_map(), cx), (lambda field_other: Right(hydra.context.Context(field_trace, field_messages, field_other))))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_context_context_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_context_context_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def in_context(e: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_context_in_context_1(cx, e, v1):
@@ -69,4 +68,4 @@ def in_context(e: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.er
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_context_in_context_1(cx, e, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_context_in_context_1(cx, e, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))

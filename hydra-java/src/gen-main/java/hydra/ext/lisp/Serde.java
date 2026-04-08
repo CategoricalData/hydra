@@ -733,6 +733,86 @@ public interface Serde {
     });
   }
 
+  static String formatLispFloat(hydra.ext.lisp.syntax.Dialect d, java.math.BigDecimal v) {
+    String s = hydra.lib.literals.ShowBigfloat.apply(v);
+    return hydra.lib.logic.IfElse.lazy(
+      hydra.lib.equality.Equal.apply(
+        s,
+        "NaN"),
+      () -> (d).accept(new hydra.ext.lisp.syntax.Dialect.PartialVisitor<>() {
+        @Override
+        public String visit(hydra.ext.lisp.syntax.Dialect.Clojure ignored) {
+          return "Double/NaN";
+        }
+
+        @Override
+        public String visit(hydra.ext.lisp.syntax.Dialect.Scheme ignored) {
+          return "+nan.0";
+        }
+
+        @Override
+        public String visit(hydra.ext.lisp.syntax.Dialect.CommonLisp ignored) {
+          return "+hydra-nan+";
+        }
+
+        @Override
+        public String visit(hydra.ext.lisp.syntax.Dialect.EmacsLisp ignored) {
+          return "0.0e+NaN";
+        }
+      }),
+      () -> hydra.lib.logic.IfElse.lazy(
+        hydra.lib.equality.Equal.apply(
+          s,
+          "Infinity"),
+        () -> (d).accept(new hydra.ext.lisp.syntax.Dialect.PartialVisitor<>() {
+          @Override
+          public String visit(hydra.ext.lisp.syntax.Dialect.Clojure ignored) {
+            return "Double/POSITIVE_INFINITY";
+          }
+
+          @Override
+          public String visit(hydra.ext.lisp.syntax.Dialect.Scheme ignored) {
+            return "+inf.0";
+          }
+
+          @Override
+          public String visit(hydra.ext.lisp.syntax.Dialect.CommonLisp ignored) {
+            return "+hydra-pos-inf+";
+          }
+
+          @Override
+          public String visit(hydra.ext.lisp.syntax.Dialect.EmacsLisp ignored) {
+            return "1.0e+INF";
+          }
+        }),
+        () -> hydra.lib.logic.IfElse.lazy(
+          hydra.lib.equality.Equal.apply(
+            s,
+            "-Infinity"),
+          () -> (d).accept(new hydra.ext.lisp.syntax.Dialect.PartialVisitor<>() {
+            @Override
+            public String visit(hydra.ext.lisp.syntax.Dialect.Clojure ignored) {
+              return "Double/NEGATIVE_INFINITY";
+            }
+
+            @Override
+            public String visit(hydra.ext.lisp.syntax.Dialect.Scheme ignored) {
+              return "-inf.0";
+            }
+
+            @Override
+            public String visit(hydra.ext.lisp.syntax.Dialect.CommonLisp ignored) {
+              return "+hydra-neg-inf+";
+            }
+
+            @Override
+            public String visit(hydra.ext.lisp.syntax.Dialect.EmacsLisp ignored) {
+              return "-1.0e+INF";
+            }
+          }),
+          () -> s)));
+  }
+
   static hydra.ast.Expr functionDefinitionToExpr(hydra.ext.lisp.syntax.Dialect d, hydra.ext.lisp.syntax.FunctionDefinition fdef) {
     hydra.util.Lazy<java.util.List<hydra.ast.Expr>> body = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.ext.lisp.syntax.Expression, hydra.ast.Expr>) (v1 -> hydra.ext.lisp.Serde.expressionToExpr(
@@ -1174,7 +1254,9 @@ public interface Serde {
 
       @Override
       public hydra.ast.Expr visit(hydra.ext.lisp.syntax.Literal.Float_ f) {
-        return hydra.Serialization.cst(hydra.lib.literals.ShowBigfloat.apply((f).value.value));
+        return hydra.Serialization.cst(hydra.ext.lisp.Serde.formatLispFloat(
+          d,
+          (f).value.value));
       }
 
       @Override

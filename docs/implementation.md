@@ -26,21 +26,22 @@ organization rather than abstract foundations.
 2. [Type modules](#type-modules)
 3. [DSL system](#dsl-system)
 4. [Primitive functions](#primitive-functions)
-5. [Cross-language compilation (coders)](#cross-language-compilation-coders)
-6. [The bootstrap process](#the-bootstrap-process)
-7. [Extending Hydra](#extending-hydra)
-8. [Appendix: Build scripts and executables](#appendix-build-scripts-and-executables)
+5. [Variable resolution and graphs](#variable-resolution-and-graphs)
+6. [Cross-language compilation (coders)](#cross-language-compilation-coders)
+7. [The bootstrap process](#the-bootstrap-process)
+8. [Extending Hydra](#extending-hydra)
+9. [Appendix: Build scripts and executables](#appendix-build-scripts-and-executables)
 
 ---
 
 ## Architecture overview
 
 Hydra is a **strongly-typed functional programming language that executes in multiple language environments**.
-By design, developers can write Hydra source code in any of the supported host languages (Java, Python, Haskell)
-and cross-compile it to any other supported language.
+By design, developers can write Hydra source code in any of the supported host languages
+(Haskell, Java, Python, Scala, Lisp) and cross-compile it to any other supported language.
 [Hydra-Haskell](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell) serves as the source of truth
 for the **Hydra kernel** (the core type system and transformation infrastructure), but Hydra programs themselves
-can be written and executed in Java, Python, or any other supported implementation.
+can be written and executed in Java, Python, Scala, Lisp, or any other supported implementation.
 
 The implementation follows a layered architecture:
 
@@ -72,7 +73,7 @@ The implementation follows a layered architecture:
 ┌──────────────────────────────────────────────────────────────┐
 │         Coders (Cross-Language Transformations)              │
 │  Transform Hydra modules between language implementations    │
-│  Location: hydra-ext/src/main/haskell/Hydra/Ext/Staging/     │
+│  Location: hydra-ext/src/main/haskell/Hydra/Ext/     │
 │  Enable: Write in Java, compile to Python (or vice versa)    │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -175,13 +176,13 @@ import Hydra.Dsl.Types as Types
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 module_ :: Module
-module_ = Module ns elements termDeps typeDeps (Just description)
+module_ = Module ns (map toTypeDef definitions) termDeps typeDeps (Just description)
   where
     ns = Namespace "hydra.namespace"
     core = typeref $ moduleNamespace Core.module_
     def = datatype ns
 
-    elements = [
+    definitions = [
       def "TypeName1" $ doc "Description" $ definition1,
       def "TypeName2" $ doc "Description" $ definition2,
       -- ...
@@ -456,7 +457,7 @@ Here's a complete example showing DSL usage in type inference:
 
 ```haskell
 -- From Hydra.Sources.Kernel.Terms.Inference
-inferTypeOfEitherDef :: TBinding (InferenceContext -> Either Term Term -> Flow s InferenceResult)
+inferTypeOfEither :: TTermDefinition (Context -> Graph -> Either Term Term -> Either (InContext Error) InferenceResult)
 inferTypeOfEitherDef = define "inferTypeOfEither" $
   doc "Infer the type of an Either term" $
   "cx" ~> "e" ~>
@@ -745,6 +746,84 @@ This provides:
 
 ---
 
+## Variable resolution and graphs
+
+All named references in Hydra use `TermVariable`.
+At runtime, the reduction engine resolves each variable name through the `Graph`,
+which holds three separate namespaces.
+
+### The Graph structure
+
+A `Graph` contains (among other fields):
+
+| Field | Type | Contents |
+|-------|------|----------|
+| `graphBoundTerms` | `Map Name Term` | Module-level definitions (element bindings, let-bound variables) |
+| `graphPrimitives` | `Map Name Primitive` | Built-in primitive functions and constants |
+| `graphBoundTypes` | `Map Name TypeScheme` | Type schemes for bound terms |
+
+Lambda-bound variables are not stored in the graph; they are resolved structurally
+during beta-reduction.
+
+### Resolution order
+
+When `reduceTerm` encounters a `TermVariable`, it resolves the name in this order:
+
+1. **`graphBoundTerms`** — module definitions, let-bound variables.
+   If found, the binding's term is recursively reduced.
+2. **`graphPrimitives`** — built-in functions and constants.
+   If found, the primitive is applied with arity-based argument collection.
+3. **Lambda-bound** — the variable was introduced by a lambda parameter.
+   It remains as-is (a free variable in the current scope).
+
+This means module bindings shadow primitives, and primitives shadow lambda-bound variables.
+In practice, names don't collide: module definitions use qualified names like `hydra.core.Term`,
+while primitives use the `hydra.lib.*` namespace.
+
+### Construction-time shadowing
+
+As a safety mechanism, `buildGraph` filters `graphBoundTerms` and `graphBoundTypes`
+against `graphPrimitives` at construction time.
+Any binding whose name matches a primitive is removed from the graph.
+This ensures primitives always take priority by construction,
+not just by resolution order.
+
+### Assembling primitives: `graphWithPrimitives`
+
+The `hydra.lexical.graphWithPrimitives` function creates a graph
+with primitives assembled from two lists:
+
+```
+graphWithPrimitives :: [Primitive] -> [Primitive] -> Graph
+graphWithPrimitives builtIn userProvided = ...
+```
+
+User-provided primitives shadow built-in ones (left-biased map union).
+This enables:
+- **Language implementers** to override kernel primitives with optimized host-language versions.
+- **Users** to provide domain-specific primitive functions alongside the standard library.
+
+The bootstrap graph (`Hydra.Dsl.Bootstrap.bootstrapGraph` in Haskell) uses the standard
+libraries directly.
+Test runners and custom applications can use `graphWithPrimitives` to inject additional primitives.
+
+### Built-in primitives vs. user-defined functions
+
+**Built-in primitives** (`graphPrimitives`) are implemented natively in the host language.
+Each `Primitive` carries a name, a type scheme, and an `implementation` function that maps
+a list of `Term` arguments to a result `Term`.
+See [Primitive functions](#primitive-functions) above.
+
+**User-defined functions** (`graphBoundTerms`) are Hydra terms — typically lambdas or
+compositions of other terms.
+They are defined in modules and resolved by name just like primitives,
+but they are reduced by the Hydra reduction engine rather than calling native code.
+
+Both are referenced the same way in Hydra source code: as `TermVariable` with a qualified name.
+The distinction is invisible to Hydra programs.
+
+---
+
 ## Cross-language compilation (coders)
 
 Coders enable cross-compilation of Hydra programs between different language implementations.
@@ -759,7 +838,7 @@ to write Hydra code in their preferred language and compile it to any other supp
 ### Coder locations
 
 ```
-hydra-ext/src/main/haskell/Hydra/Ext/Staging/
+hydra-ext/src/main/haskell/Hydra/Ext/
 ├── Java/           # Full OOP with generics
 ├── Python/         # Dynamic with dataclasses
 ├── Cpp/            # Systems language with templates
@@ -1225,7 +1304,7 @@ See the
 [Extending Hydra Core recipe](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/extending-hydra-core.md).
 
 **Target languages**: Add support for new programming languages by implementing a coder (term/type encoding),
-serializer (AST to text), and language constraint definitions in `hydra-ext/src/main/haskell/Hydra/Ext/Staging/`.
+serializer (AST to text), and language constraint definitions in `hydra-ext/src/main/haskell/Hydra/Ext/`.
 
 **Standard libraries**: Create new library modules by defining types in `Sources/Kernel/Types/`,
 implementing native functions in `Lib/`, registering primitives, and creating DSL wrappers.
@@ -1274,7 +1353,7 @@ implementing native functions in `Lib/`, registering primitives, and creating DS
 
 ### Code generators
 
-[`hydra-ext/src/main/haskell/Hydra/Ext/Staging/`](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/src/main/haskell/Hydra/Ext/Staging)
+[`hydra-ext/src/main/haskell/Hydra/Ext/`](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/src/main/haskell/Hydra/Ext)
 ```
 ├── Java/               # Java coder
 ├── Python/             # Python coder

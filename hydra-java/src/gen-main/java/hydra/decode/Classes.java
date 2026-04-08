@@ -8,7 +8,7 @@ package hydra.decode;
 public interface Classes {
   static hydra.util.Either<hydra.errors.DecodingError, hydra.classes.TypeClass> typeClass(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.classes.TypeClass>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.classes.TypeClass>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.classes.TypeClass>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.classes.TypeClass>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.classes.TypeClass>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.classes.TypeClass> otherwise(hydra.core.Term instance) {
@@ -42,7 +42,7 @@ public interface Classes {
               variantMap.get()));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }

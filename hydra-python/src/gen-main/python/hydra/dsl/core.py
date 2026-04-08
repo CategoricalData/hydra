@@ -203,9 +203,6 @@ def function_elimination(x: hydra.phantoms.TTerm[hydra.core.Elimination]) -> hyd
 def function_lambda(x: hydra.phantoms.TTerm[hydra.core.Lambda]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Function"), hydra.core.Field(hydra.core.Name("lambda"), x.value)))))
 
-def function_primitive(x: hydra.phantoms.TTerm[hydra.core.Name]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Function"), hydra.core.Field(hydra.core.Name("primitive"), x.value)))))
-
 def function_type(domain: hydra.phantoms.TTerm[hydra.core.Type], codomain: hydra.phantoms.TTerm[hydra.core.Type]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.FunctionType"), (hydra.core.Field(hydra.core.Name("domain"), domain.value), hydra.core.Field(hydra.core.Name("codomain"), codomain.value))))))
 

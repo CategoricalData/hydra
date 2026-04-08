@@ -16,11 +16,15 @@ public abstract class CheckingError implements Serializable, Comparable<Checking
 
   public static final hydra.core.Name NOT_A_FUNCTION_TYPE = new hydra.core.Name("notAFunctionType");
 
+  public static final hydra.core.Name OTHER = new hydra.core.Name("other");
+
   public static final hydra.core.Name TYPE_ARITY_MISMATCH = new hydra.core.Name("typeArityMismatch");
 
   public static final hydra.core.Name TYPE_MISMATCH = new hydra.core.Name("typeMismatch");
 
   public static final hydra.core.Name UNBOUND_TYPE_VARIABLES = new hydra.core.Name("unboundTypeVariables");
+
+  public static final hydra.core.Name UNDEFINED_TERM_VARIABLE = new hydra.core.Name("undefinedTermVariable");
 
   public static final hydra.core.Name UNEQUAL_TYPES = new hydra.core.Name("unequalTypes");
 
@@ -29,6 +33,8 @@ public abstract class CheckingError implements Serializable, Comparable<Checking
   public static final hydra.core.Name UNTYPED_LAMBDA = new hydra.core.Name("untypedLambda");
 
   public static final hydra.core.Name UNTYPED_LET_BINDING = new hydra.core.Name("untypedLetBinding");
+
+  public static final hydra.core.Name UNTYPED_TERM_VARIABLE = new hydra.core.Name("untypedTermVariable");
 
   private CheckingError () {
 
@@ -43,11 +49,15 @@ public abstract class CheckingError implements Serializable, Comparable<Checking
 
     R visit(NotAFunctionType instance) ;
 
+    R visit(Other instance) ;
+
     R visit(TypeArityMismatch instance) ;
 
     R visit(TypeMismatch instance) ;
 
     R visit(UnboundTypeVariables instance) ;
+
+    R visit(UndefinedTermVariable instance) ;
 
     R visit(UnequalTypes instance) ;
 
@@ -56,6 +66,8 @@ public abstract class CheckingError implements Serializable, Comparable<Checking
     R visit(UntypedLambda instance) ;
 
     R visit(UntypedLetBinding instance) ;
+
+    R visit(UntypedTermVariable instance) ;
   }
 
   public interface PartialVisitor<R> extends Visitor<R> {
@@ -75,6 +87,10 @@ public abstract class CheckingError implements Serializable, Comparable<Checking
       return otherwise(instance);
     }
 
+    default R visit(Other instance) {
+      return otherwise(instance);
+    }
+
     default R visit(TypeArityMismatch instance) {
       return otherwise(instance);
     }
@@ -84,6 +100,10 @@ public abstract class CheckingError implements Serializable, Comparable<Checking
     }
 
     default R visit(UnboundTypeVariables instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(UndefinedTermVariable instance) {
       return otherwise(instance);
     }
 
@@ -100,6 +120,10 @@ public abstract class CheckingError implements Serializable, Comparable<Checking
     }
 
     default R visit(UntypedLetBinding instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(UntypedTermVariable instance) {
       return otherwise(instance);
     }
   }
@@ -240,6 +264,51 @@ public abstract class CheckingError implements Serializable, Comparable<Checking
   }
 
   /**
+   * A generic checking error
+   */
+  public static final class Other extends hydra.error.checking.CheckingError implements Serializable {
+    public final hydra.error.checking.OtherCheckingError value;
+
+    public Other (hydra.error.checking.OtherCheckingError value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Other)) {
+        return false;
+      }
+      Other o = (Other) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(CheckingError other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Other o = (Other) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  /**
    * A type constructor applied to the wrong number of arguments
    */
   public static final class TypeArityMismatch extends hydra.error.checking.CheckingError implements Serializable {
@@ -363,6 +432,51 @@ public abstract class CheckingError implements Serializable, Comparable<Checking
         return tagCmp;
       }
       UnboundTypeVariables o = (UnboundTypeVariables) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  /**
+   * A reference to a term variable that is not bound in scope, encountered during checking
+   */
+  public static final class UndefinedTermVariable extends hydra.error.checking.CheckingError implements Serializable {
+    public final hydra.error.checking.UndefinedTermVariableCheckingError value;
+
+    public UndefinedTermVariable (hydra.error.checking.UndefinedTermVariableCheckingError value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof UndefinedTermVariable)) {
+        return false;
+      }
+      UndefinedTermVariable o = (UndefinedTermVariable) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(CheckingError other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      UndefinedTermVariable o = (UndefinedTermVariable) other;
       return hydra.util.Comparing.compare(
         value,
         o.value);
@@ -543,6 +657,51 @@ public abstract class CheckingError implements Serializable, Comparable<Checking
         return tagCmp;
       }
       UntypedLetBinding o = (UntypedLetBinding) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  /**
+   * A reference to a term variable whose type is not known, encountered during checking
+   */
+  public static final class UntypedTermVariable extends hydra.error.checking.CheckingError implements Serializable {
+    public final hydra.error.checking.UntypedTermVariableCheckingError value;
+
+    public UntypedTermVariable (hydra.error.checking.UntypedTermVariableCheckingError value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof UntypedTermVariable)) {
+        return false;
+      }
+      UntypedTermVariable o = (UntypedTermVariable) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(CheckingError other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      UntypedTermVariable o = (UntypedTermVariable) other;
       return hydra.util.Comparing.compare(
         value,
         o.value);

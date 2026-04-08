@@ -10,7 +10,6 @@ from typing import cast
 import hydra.core
 import hydra.errors
 import hydra.extract.core
-import hydra.lexical
 import hydra.lib.eithers
 import hydra.lib.maps
 import hydra.lib.maybes
@@ -31,7 +30,7 @@ def elimination_variant(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected union"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_variants_elimination_variant_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_variants_elimination_variant_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def function_variant(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_variants_function_variant_1(cx, v1):
@@ -42,12 +41,12 @@ def function_variant(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 fterm = field.term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.errors.DecodingError, hydra.variants.FunctionVariant]]]:
-                    return hydra.lib.maps.from_list(((hydra.core.Name("elimination"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.FunctionVariant.ELIMINATION), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("lambda"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.FunctionVariant.LAMBDA), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("primitive"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.FunctionVariant.PRIMITIVE), hydra.extract.core.decode_unit(cx, input))))))
+                    return hydra.lib.maps.from_list(((hydra.core.Name("elimination"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.FunctionVariant.ELIMINATION), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("lambda"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.variants.FunctionVariant.LAMBDA), hydra.extract.core.decode_unit(cx, input))))))
                 return hydra.lib.maybes.maybe((lambda : Left(hydra.errors.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union"))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected union"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_variants_function_variant_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_variants_function_variant_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def literal_variant(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_variants_literal_variant_1(cx, v1):
@@ -63,7 +62,7 @@ def literal_variant(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected union"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_variants_literal_variant_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_variants_literal_variant_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def term_variant(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_variants_term_variant_1(cx, v1):
@@ -79,7 +78,7 @@ def term_variant(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected union"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_variants_term_variant_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_variants_term_variant_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def type_variant(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_variants_type_variant_1(cx, v1):
@@ -95,4 +94,4 @@ def type_variant(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected union"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_variants_type_variant_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_variants_type_variant_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))

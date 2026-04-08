@@ -10,7 +10,7 @@ A guide to generating source code in target languages from Hydra module definiti
 
 ## Overview
 
-Hydra modules can be defined in any host language's DSL (Haskell, Java, Python, Scala) and generated into
+Hydra modules can be defined in any host language's DSL (Haskell, Java, Python, Scala, Lisp) and generated into
 any target language. There are two source representations for modules:
 
 - **DSL modules** are human-authored source code, designed for readability and maintainability.

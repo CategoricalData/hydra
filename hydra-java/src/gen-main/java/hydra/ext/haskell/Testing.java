@@ -31,7 +31,7 @@ public interface Testing {
       testBindings.get()), (mod).termDependencies, (mod).typeDependencies, (mod).description));
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.Bimap.apply(
-        (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ic -> hydra.show.Errors.error(((java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, hydra.errors.Error_>) (projected -> projected.object)).apply(ic))),
+        (java.util.function.Function<hydra.errors.Error_, String>) (e -> hydra.show.Errors.error(e)),
         (java.util.function.Function<hydra.packaging.Namespaces<hydra.ext.haskell.syntax.ModuleName>, hydra.packaging.Namespaces<hydra.ext.haskell.syntax.ModuleName>>) (a -> a),
         hydra.ext.haskell.Utils.namespacesForModule(
           tempModule.get(),

@@ -338,10 +338,6 @@ public interface Core {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Function"), new hydra.core.Field(new hydra.core.Name("lambda"), (x).value))));
   }
 
-  static hydra.phantoms.TTerm<hydra.core.Function> functionPrimitive(hydra.phantoms.TTerm<hydra.core.Name> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Function"), new hydra.core.Field(new hydra.core.Name("primitive"), (x).value))));
-  }
-
   static hydra.phantoms.TTerm<hydra.core.FunctionType> functionType(hydra.phantoms.TTerm<hydra.core.Type> domain, hydra.phantoms.TTerm<hydra.core.Type> codomain) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.FunctionType"), java.util.Arrays.asList(
       new hydra.core.Field(new hydra.core.Name("domain"), (domain).value),

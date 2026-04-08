@@ -1,16 +1,11 @@
 package hydra.test.utils
 
-import hydra.context.*
-
 import hydra.testing.*
 
 import hydra.typing.*
 
-import hydra.lib.eithers
-
 def inferTerm(g: hydra.graph.Graph)(term: hydra.core.Term): Either[scala.Predef.String, hydra.core.Term] =
-  hydra.lib.eithers.bimap[hydra.context.InContext[hydra.errors.Error], hydra.typing.InferenceResult, scala.Predef.String,
-     hydra.core.Term]((ic: hydra.context.InContext[hydra.errors.Error]) => hydra.show.errors.error(ic.`object`))((x: hydra.typing.InferenceResult) => (x.term))(hydra.inference.inferInGraphContext(hydra.lexical.emptyContext)(g)(term))
+  hydra.lib.eithers.bimap[hydra.errors.Error, hydra.typing.InferenceResult, scala.Predef.String, hydra.core.Term]((e: hydra.errors.Error) => hydra.show.errors.error(e))((x: hydra.typing.InferenceResult) => (x.term))(hydra.inference.inferInGraphContext(hydra.lexical.emptyContext)(g)(term))
 
 def inferTestCase[T0, T1](g: T0)(tcm: hydra.testing.TestCaseWithMetadata): Either[T1, hydra.testing.TestCaseWithMetadata] =
   {

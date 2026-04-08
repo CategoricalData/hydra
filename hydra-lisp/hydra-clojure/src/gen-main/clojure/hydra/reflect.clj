@@ -14,9 +14,9 @@
 
 (def hydra_reflect_float_value_type (fn [match_target] ((fn [match_value] (cond (= (first match_target) :bigfloat) ((fn [_] (list :bigfloat nil)) match_value) (= (first match_target) :float32) ((fn [_] (list :float32 nil)) match_value) (= (first match_target) :float64) ((fn [_] (list :float64 nil)) match_value))) (second match_target))))
 
-(def hydra_reflect_function_variant (fn [match_target] ((fn [match_value] (cond (= (first match_target) :elimination) ((fn [_] (list :elimination nil)) match_value) (= (first match_target) :lambda) ((fn [_] (list :lambda nil)) match_value) (= (first match_target) :primitive) ((fn [_] (list :primitive nil)) match_value))) (second match_target))))
+(def hydra_reflect_function_variant (fn [match_target] ((fn [match_value] (cond (= (first match_target) :elimination) ((fn [_] (list :elimination nil)) match_value) (= (first match_target) :lambda) ((fn [_] (list :lambda nil)) match_value))) (second match_target))))
 
-(def hydra_reflect_function_variants (list (list :elimination nil) (list :lambda nil) (list :primitive nil)))
+(def hydra_reflect_function_variants (list (list :elimination nil) (list :lambda nil)))
 
 (def hydra_reflect_integer_type_is_signed (fn [match_target] ((fn [match_value] (cond (= (first match_target) :bigint) ((fn [_] true) match_value) (= (first match_target) :int8) ((fn [_] true) match_value) (= (first match_target) :int16) ((fn [_] true) match_value) (= (first match_target) :int32) ((fn [_] true) match_value) (= (first match_target) :int64) ((fn [_] true) match_value) (= (first match_target) :uint8) ((fn [_] false) match_value) (= (first match_target) :uint16) ((fn [_] false) match_value) (= (first match_target) :uint32) ((fn [_] false) match_value) (= (first match_target) :uint64) ((fn [_] false) match_value))) (second match_target))))
 

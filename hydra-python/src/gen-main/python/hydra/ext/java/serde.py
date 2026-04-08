@@ -54,6 +54,9 @@ def escape_java_char(c: int) -> str:
 def escape_java_string(s: str) -> str:
     return hydra.lib.strings.cat(hydra.lib.lists.map((lambda c: escape_java_char(c)), hydra.lib.strings.to_list(s)))
 
+def java_float_literal_text(s: str) -> str:
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(s, "NaN"), (lambda : "Double.NaN"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s, "Infinity"), (lambda : "Double.POSITIVE_INFINITY"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s, "-Infinity"), (lambda : "Double.NEGATIVE_INFINITY"), (lambda : s))))))
+
 def sanitize_java_comment(s: str) -> str:
     r"""Sanitize a string for use in a Java comment."""
 
@@ -259,7 +262,7 @@ def write_class_literal(_: T0) -> hydra.ast.Expr:
     return hydra.serialization.cst("STUB:ClassLiteral")
 
 def write_floating_point_literal(fl: hydra.ext.java.syntax.FloatingPointLiteral) -> hydra.ast.Expr:
-    return hydra.serialization.cst(hydra.lib.literals.show_bigfloat(fl.value))
+    return hydra.serialization.cst(java_float_literal_text(hydra.lib.literals.show_bigfloat(fl.value)))
 
 def write_integer_literal(il: hydra.ext.java.syntax.IntegerLiteral) -> hydra.ast.Expr:
     i = il.value

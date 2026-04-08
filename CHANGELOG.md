@@ -14,6 +14,18 @@ The format is inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0
 
 ### Changed
 
+- **Unified variable resolution: removed `FunctionPrimitive`** (#251).
+  The `primitive` variant has been removed from the `Function` union type.
+  All named references (module definitions, primitives, constants) now use `TermVariable`.
+  At runtime, variables resolve through `graphBoundTerms`, then `graphPrimitives`,
+  then lambda-bound scope.
+  A new `graphWithPrimitives` API in `hydra.lexical` assembles primitives from
+  built-in and user-provided lists, with user-provided primitives shadowing built-in ones.
+  Construction-time shadowing in `buildGraph` ensures primitives always take priority.
+  **Breaking**: code that pattern-matches on `Function.Primitive` (Java), `FunctionPrimitive`
+  (Python/Haskell), or `Function.primitive` (Scala) must be updated.
+  Use `TermVariable` instead.
+
 - **Java: standard collection interfaces in generated code** (#313).
   Generated Java classes now use `java.util.List`, `java.util.Map`, and `java.util.Set`
   in field types and constructor parameters, instead of the internal `ConsList`,

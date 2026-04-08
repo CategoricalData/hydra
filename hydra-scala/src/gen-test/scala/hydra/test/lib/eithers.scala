@@ -2,18 +2,6 @@ package hydra.test.lib.eithers
 
 import hydra.testing.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.math
-
-import hydra.lib.strings
-
 lazy val allTests: hydra.testing.TestGroup = hydra.testing.TestGroup("hydra.lib.eithers primitives", None, Seq(hydra.testing.TestGroup("bind", None, Seq(), Seq(hydra.testing.TestCaseWithMetadata("bind Right with success", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.show.core.either((n: Int) => hydra.lib.literals.showInt32(n))((n: Int) => hydra.lib.literals.showInt32(n))(hydra.lib.eithers.bind[Int, scala.Predef.String, Int](Right("ab"))((s: scala.Predef.String) =>
   hydra.lib.logic.ifElse[Either[Int, Int]](hydra.lib.strings.`null`(s))(Left(0))(Right(hydra.lib.strings.length(s))))), hydra.show.core.either((n: Int) => hydra.lib.literals.showInt32(n))((n: Int) => hydra.lib.literals.showInt32(n))(Right(2)))), None, Seq()), hydra.testing.TestCaseWithMetadata("bind Right with failure", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.show.core.either((n: Int) => hydra.lib.literals.showInt32(n))((n: Int) => hydra.lib.literals.showInt32(n))(hydra.lib.eithers.bind[Int, scala.Predef.String, Int](Right(""))((s: scala.Predef.String) =>
   hydra.lib.logic.ifElse[Either[Int, Int]](hydra.lib.strings.`null`(s))(Left(0))(Right(hydra.lib.strings.length(s))))), hydra.show.core.either((n: Int) => hydra.lib.literals.showInt32(n))((n: Int) => hydra.lib.literals.showInt32(n))(Left(0)))), None, Seq()), hydra.testing.TestCaseWithMetadata("bind Left returns Left unchanged", hydra.testing.TestCase.universal(hydra.testing.UniversalTestCase(hydra.show.core.either((n: Int) => hydra.lib.literals.showInt32(n))((n: Int) => hydra.lib.literals.showInt32(n))(hydra.lib.eithers.bind[Int, scala.Predef.String, Int](Left(42))((s: scala.Predef.String) =>

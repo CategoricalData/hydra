@@ -26,10 +26,6 @@ public interface Variants {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.FunctionVariant"), new hydra.core.Field(new hydra.core.Name("lambda"), new hydra.core.Term.Unit()))));
   }
 
-  static hydra.phantoms.TTerm<hydra.variants.FunctionVariant> functionVariantPrimitive() {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.FunctionVariant"), new hydra.core.Field(new hydra.core.Name("primitive"), new hydra.core.Term.Unit()))));
-  }
-
   static hydra.phantoms.TTerm<hydra.variants.LiteralVariant> literalVariantBinary() {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.LiteralVariant"), new hydra.core.Field(new hydra.core.Name("binary"), new hydra.core.Term.Unit()))));
   }

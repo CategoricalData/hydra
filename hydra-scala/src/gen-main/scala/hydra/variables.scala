@@ -4,26 +4,6 @@ import hydra.coders.*
 
 import hydra.core.*
 
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.math
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def freeTypeVariablesInTerm(term0: hydra.core.Term): scala.collection.immutable.Set[hydra.core.Name] =
   {
   def allOf[T0](sets: Seq[scala.collection.immutable.Set[T0]]): scala.collection.immutable.Set[T0] =

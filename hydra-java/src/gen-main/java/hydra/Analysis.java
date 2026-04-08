@@ -60,7 +60,7 @@ public interface Analysis {
       body,
       tapps));
     hydra.util.Lazy<hydra.util.Maybe<hydra.core.Type>> mcod = new hydra.util.Lazy<>(() -> hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.core.Type>>) (ignored -> (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing())),
+      (java.util.function.Function<hydra.errors.Error_, hydra.util.Maybe<hydra.core.Type>>) (ignored -> (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing())),
       (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>>) (c -> hydra.util.Maybe.just(c)),
       hydra.Checking.typeOfTerm(
         cx,
@@ -275,8 +275,8 @@ public interface Analysis {
       hydra.lib.sets.ToList.apply(allNames.get()))));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.Set<hydra.packaging.Namespace>> dependencyNamespaces(hydra.context.Context cx, hydra.graph.Graph graph, Boolean binds, Boolean withPrims, Boolean withNoms, Boolean withSchema, java.util.List<hydra.core.Binding> els) {
-    java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.Set<hydra.core.Name>>> depNames = (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.Set<hydra.core.Name>>>) (el -> {
+  static <T0> hydra.util.Either<hydra.errors.Error_, java.util.Set<hydra.packaging.Namespace>> dependencyNamespaces(T0 cx, hydra.graph.Graph graph, Boolean binds, Boolean withPrims, Boolean withNoms, Boolean withSchema, java.util.List<hydra.core.Binding> els) {
+    java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.errors.Error_, java.util.Set<hydra.core.Name>>> depNames = (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.errors.Error_, java.util.Set<hydra.core.Name>>>) (el -> {
       hydra.core.Term term = (el).term;
       java.util.Set<hydra.core.Name> dataNames = hydra.Dependencies.termDependencyNames(
         binds,
@@ -303,16 +303,11 @@ public interface Analysis {
               true,
               typ)))),
           hydra.lib.eithers.Bimap.apply(
-            (java.util.function.Function<hydra.errors.Error_, hydra.context.InContext<hydra.errors.Error_>>) (_wc_e -> (hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(_wc_e, new hydra.context.Context(hydra.lib.lists.Cons.apply(
-              "dependency namespace (type)",
-              (cx).trace), (cx).messages, (cx).other)))),
-            (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (_wc_a -> _wc_a),
-            hydra.lib.eithers.Bimap.apply(
-              (java.util.function.Function<hydra.errors.DecodingError, hydra.errors.Error_>) (_e -> new hydra.errors.Error_.Other(new hydra.errors.OtherError((_e).value))),
-              (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (_a -> _a),
-              hydra.decode.Core.type(
-                graph,
-                term)))),
+            (java.util.function.Function<hydra.errors.DecodingError, hydra.errors.Error_>) (_e -> new hydra.errors.Error_.Decoding(_e)),
+            (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (_a -> _a),
+            hydra.decode.Core.type(
+              graph,
+              term))),
         () -> hydra.lib.logic.IfElse.lazy(
           hydra.Predicates.isEncodedTerm(deannotatedTerm),
           () -> hydra.lib.eithers.Map.apply(
@@ -325,17 +320,12 @@ public interface Analysis {
                 withNoms,
                 decodedTerm)))),
             hydra.lib.eithers.Bimap.apply(
-              (java.util.function.Function<hydra.errors.Error_, hydra.context.InContext<hydra.errors.Error_>>) (_wc_e -> (hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(_wc_e, new hydra.context.Context(hydra.lib.lists.Cons.apply(
-                "dependency namespace (term)",
-                (cx).trace), (cx).messages, (cx).other)))),
-              (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (_wc_a -> _wc_a),
-              hydra.lib.eithers.Bimap.apply(
-                (java.util.function.Function<hydra.errors.DecodingError, hydra.errors.Error_>) (_e -> new hydra.errors.Error_.Other(new hydra.errors.OtherError((_e).value))),
-                (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (_a -> _a),
-                hydra.decode.Core.term(
-                  graph,
-                  term)))),
-          () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, java.util.Set<hydra.core.Name>>right(hydra.lib.sets.Unions.apply(java.util.Arrays.asList(
+              (java.util.function.Function<hydra.errors.DecodingError, hydra.errors.Error_>) (_e -> new hydra.errors.Error_.Decoding(_e)),
+              (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (_a -> _a),
+              hydra.decode.Core.term(
+                graph,
+                term))),
+          () -> hydra.util.Either.<hydra.errors.Error_, java.util.Set<hydra.core.Name>>right(hydra.lib.sets.Unions.apply(java.util.Arrays.asList(
             dataNames,
             schemaNames.get())))));
     });
@@ -765,7 +755,7 @@ public interface Analysis {
       defTerms.get());
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.Set<hydra.packaging.Namespace>> moduleDependencyNamespaces(hydra.context.Context cx, hydra.graph.Graph graph, Boolean binds, Boolean withPrims, Boolean withNoms, Boolean withSchema, hydra.packaging.Module mod) {
+  static <T0> hydra.util.Either<hydra.errors.Error_, java.util.Set<hydra.packaging.Namespace>> moduleDependencyNamespaces(T0 cx, hydra.graph.Graph graph, Boolean binds, Boolean withPrims, Boolean withNoms, Boolean withSchema, hydra.packaging.Module mod) {
     hydra.util.Lazy<java.util.List<hydra.core.Binding>> allBindings = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.packaging.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.packaging.Definition.PartialVisitor<>() {
         @Override
@@ -794,7 +784,7 @@ public interface Analysis {
       (java.util.function.Function<java.util.Set<hydra.packaging.Namespace>, java.util.Set<hydra.packaging.Namespace>>) (deps -> hydra.lib.sets.Delete.apply(
         (mod).namespace,
         deps)),
-      hydra.Analysis.dependencyNamespaces(
+      hydra.Analysis.<T0>dependencyNamespaces(
         cx,
         graph,
         binds,

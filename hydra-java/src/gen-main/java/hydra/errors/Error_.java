@@ -18,7 +18,13 @@ public abstract class Error_ implements Serializable, Comparable<Error_> {
 
   public static final hydra.core.Name DUPLICATE_FIELD = new hydra.core.Name("duplicateField");
 
+  public static final hydra.core.Name EXTRACTION = new hydra.core.Name("extraction");
+
+  public static final hydra.core.Name INFERENCE = new hydra.core.Name("inference");
+
   public static final hydra.core.Name OTHER = new hydra.core.Name("other");
+
+  public static final hydra.core.Name RESOLUTION = new hydra.core.Name("resolution");
 
   public static final hydra.core.Name UNDEFINED_FIELD = new hydra.core.Name("undefinedField");
 
@@ -47,7 +53,13 @@ public abstract class Error_ implements Serializable, Comparable<Error_> {
 
     R visit(DuplicateField instance) ;
 
+    R visit(Extraction instance) ;
+
+    R visit(Inference instance) ;
+
     R visit(Other instance) ;
+
+    R visit(Resolution instance) ;
 
     R visit(UndefinedField instance) ;
 
@@ -83,7 +95,19 @@ public abstract class Error_ implements Serializable, Comparable<Error_> {
       return otherwise(instance);
     }
 
+    default R visit(Extraction instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Inference instance) {
+      return otherwise(instance);
+    }
+
     default R visit(Other instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Resolution instance) {
       return otherwise(instance);
     }
 
@@ -293,6 +317,96 @@ public abstract class Error_ implements Serializable, Comparable<Error_> {
   }
 
   /**
+   * An error that occurred while extracting a value from a term
+   */
+  public static final class Extraction extends hydra.errors.Error_ implements Serializable {
+    public final hydra.errors.ExtractionError value;
+
+    public Extraction (hydra.errors.ExtractionError value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Extraction)) {
+        return false;
+      }
+      Extraction o = (Extraction) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Error_ other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Extraction o = (Extraction) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  /**
+   * A type inference error
+   */
+  public static final class Inference extends hydra.errors.Error_ implements Serializable {
+    public final hydra.errors.InferenceError value;
+
+    public Inference (hydra.errors.InferenceError value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Inference)) {
+        return false;
+      }
+      Inference o = (Inference) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Error_ other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Inference o = (Inference) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  /**
    * Any other error
    */
   public static final class Other extends hydra.errors.Error_ implements Serializable {
@@ -326,6 +440,51 @@ public abstract class Error_ implements Serializable, Comparable<Error_> {
         return tagCmp;
       }
       Other o = (Other) other;
+      return hydra.util.Comparing.compare(
+        value,
+        o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  /**
+   * A name-resolution error
+   */
+  public static final class Resolution extends hydra.errors.Error_ implements Serializable {
+    public final hydra.errors.ResolutionError value;
+
+    public Resolution (hydra.errors.ResolutionError value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Resolution)) {
+        return false;
+      }
+      Resolution o = (Resolution) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Error_ other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Resolution o = (Resolution) other;
       return hydra.util.Comparing.compare(
         value,
         o.value);

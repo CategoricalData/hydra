@@ -11,7 +11,6 @@ import hydra.annotations
 import hydra.checking
 import hydra.coders
 import hydra.constants
-import hydra.context
 import hydra.core
 import hydra.decode.core
 import hydra.dependencies
@@ -109,10 +108,10 @@ def definition_dependency_namespaces(defs: frozenlist[hydra.packaging.Definition
         return hydra.lib.sets.unions(hydra.lib.lists.map((lambda x1: def_names(x1)), defs))
     return hydra.lib.sets.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda x1: hydra.names.namespace_of(x1)), hydra.lib.sets.to_list(all_names()))))
 
-def dependency_namespaces(cx: hydra.context.Context, graph: hydra.graph.Graph, binds: bool, with_prims: bool, with_noms: bool, with_schema: bool, els: frozenlist[hydra.core.Binding]) -> Either[hydra.context.InContext[hydra.errors.Error], frozenset[hydra.packaging.Namespace]]:
+def dependency_namespaces(cx: T0, graph: hydra.graph.Graph, binds: bool, with_prims: bool, with_noms: bool, with_schema: bool, els: frozenlist[hydra.core.Binding]) -> Either[hydra.errors.Error, frozenset[hydra.packaging.Namespace]]:
     r"""Find dependency namespaces in all of a set of terms (Either version)."""
 
-    def dep_names(el: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.errors.Error], frozenset[hydra.core.Name]]:
+    def dep_names(el: hydra.core.Binding) -> Either[hydra.errors.Error, frozenset[hydra.core.Name]]:
         term = el.term
         @lru_cache(1)
         def deannotated_term() -> hydra.core.Term:
@@ -123,7 +122,7 @@ def dependency_namespaces(cx: hydra.context.Context, graph: hydra.graph.Graph, b
         @lru_cache(1)
         def schema_names() -> frozenset[hydra.core.Name]:
             return hydra.lib.logic.if_else(with_schema, (lambda : hydra.lib.maybes.maybe((lambda : hydra.lib.sets.empty()), (lambda ts: hydra.dependencies.type_dependency_names(True, ts.type)), el.type)), (lambda : hydra.lib.sets.empty()))
-        return hydra.lib.logic.if_else(hydra.predicates.is_encoded_type(deannotated_term()), (lambda : hydra.lib.eithers.map((lambda typ: hydra.lib.sets.unions((data_names(), schema_names(), hydra.dependencies.type_dependency_names(True, typ)))), hydra.lib.eithers.bimap((lambda _wc_e: hydra.context.InContext(_wc_e, hydra.context.Context(hydra.lib.lists.cons("dependency namespace (type)", cx.trace), cx.messages, cx.other))), (lambda _wc_a: _wc_a), hydra.lib.eithers.bimap((lambda _e: cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(_e.value)))), (lambda _a: _a), hydra.decode.core.type(graph, term))))), (lambda : hydra.lib.logic.if_else(hydra.predicates.is_encoded_term(deannotated_term()), (lambda : hydra.lib.eithers.map((lambda decoded_term: hydra.lib.sets.unions((data_names(), schema_names(), hydra.dependencies.term_dependency_names(binds, with_prims, with_noms, decoded_term)))), hydra.lib.eithers.bimap((lambda _wc_e: hydra.context.InContext(_wc_e, hydra.context.Context(hydra.lib.lists.cons("dependency namespace (term)", cx.trace), cx.messages, cx.other))), (lambda _wc_a: _wc_a), hydra.lib.eithers.bimap((lambda _e: cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(_e.value)))), (lambda _a: _a), hydra.decode.core.term(graph, term))))), (lambda : Right(hydra.lib.sets.unions((data_names(), schema_names())))))))
+        return hydra.lib.logic.if_else(hydra.predicates.is_encoded_type(deannotated_term()), (lambda : hydra.lib.eithers.map((lambda typ: hydra.lib.sets.unions((data_names(), schema_names(), hydra.dependencies.type_dependency_names(True, typ)))), hydra.lib.eithers.bimap((lambda _e: cast(hydra.errors.Error, hydra.errors.ErrorDecoding(_e))), (lambda _a: _a), hydra.decode.core.type(graph, term)))), (lambda : hydra.lib.logic.if_else(hydra.predicates.is_encoded_term(deannotated_term()), (lambda : hydra.lib.eithers.map((lambda decoded_term: hydra.lib.sets.unions((data_names(), schema_names(), hydra.dependencies.term_dependency_names(binds, with_prims, with_noms, decoded_term)))), hydra.lib.eithers.bimap((lambda _e: cast(hydra.errors.Error, hydra.errors.ErrorDecoding(_e))), (lambda _a: _a), hydra.decode.core.term(graph, term)))), (lambda : Right(hydra.lib.sets.unions((data_names(), schema_names())))))))
     return hydra.lib.eithers.map((lambda names_list: hydra.lib.sets.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda x1: hydra.names.namespace_of(x1)), hydra.lib.sets.to_list(hydra.lib.sets.unions(names_list)))))), hydra.lib.eithers.map_list((lambda x1: dep_names(x1)), els))
 
 def gather_applications(term: hydra.core.Term) -> tuple[frozenlist[hydra.core.Term], hydra.core.Term]:
@@ -320,7 +319,7 @@ def module_contains_binary_literals(mod: hydra.packaging.Module) -> bool:
         return hydra.lib.maybes.cat(hydra.lib.lists.map((lambda d: _hoist_def_terms_1(d)), mod.definitions))
     return hydra.lib.lists.foldl((lambda acc, t: hydra.lib.logic.or_(acc, term_contains_binary(t))), False, def_terms())
 
-def module_dependency_namespaces(cx: hydra.context.Context, graph: hydra.graph.Graph, binds: bool, with_prims: bool, with_noms: bool, with_schema: bool, mod: hydra.packaging.Module) -> Either[hydra.context.InContext[hydra.errors.Error], frozenset[hydra.packaging.Namespace]]:
+def module_dependency_namespaces(cx: T0, graph: hydra.graph.Graph, binds: bool, with_prims: bool, with_noms: bool, with_schema: bool, mod: hydra.packaging.Module) -> Either[hydra.errors.Error, frozenset[hydra.packaging.Namespace]]:
     r"""Find dependency namespaces in all elements of a module, excluding the module's own namespace (Either version)."""
 
     @lru_cache(1)

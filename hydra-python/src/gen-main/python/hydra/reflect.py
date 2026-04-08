@@ -76,14 +76,11 @@ def function_variant(v1: hydra.core.Function) -> hydra.variants.FunctionVariant:
         case hydra.core.FunctionLambda():
             return hydra.variants.FunctionVariant.LAMBDA
 
-        case hydra.core.FunctionPrimitive():
-            return hydra.variants.FunctionVariant.PRIMITIVE
-
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
 # All function variants (constructors), in a canonical order.
-function_variants = (hydra.variants.FunctionVariant.ELIMINATION, hydra.variants.FunctionVariant.LAMBDA, hydra.variants.FunctionVariant.PRIMITIVE)
+function_variants = (hydra.variants.FunctionVariant.ELIMINATION, hydra.variants.FunctionVariant.LAMBDA)
 
 def integer_type_is_signed(v1: hydra.core.IntegerType) -> bool:
     r"""Find whether a given integer type is signed (true) or unsigned (false)."""

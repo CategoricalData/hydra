@@ -279,10 +279,7 @@
 
         bound-terms
         (merge
-          ;; Bridge all standard primitives as term bindings
-          (into {} (map (fn [[k _]] [k (list :function (list :primitive k))]) std-prims))
-          ;; Bridge annotation primitives as term bindings
-          (into {} (map (fn [[k _]] [k (list :function (list :primitive k))]) ann-prims))
+          ;; Primitives are resolved via graphPrimitives, not boundTerms.
           ;; Constants and monads
           {"hydra.monads.emptyContext" (list :unit)
            "hydra.lexical.emptyGraph"  (list :unit)}

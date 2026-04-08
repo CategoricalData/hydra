@@ -204,21 +204,17 @@ class FunctionElimination(Node["Elimination"]):
 class FunctionLambda(Node["Lambda"]):
     r"""A function abstraction (lambda)"""
 
-class FunctionPrimitive(Node["Name"]):
-    r"""A reference to a built-in (primitive) function"""
-
 class _FunctionMeta(type):
     def __getitem__(cls, item):
         return object
 
 # A function.
 class Function(metaclass=_FunctionMeta):
-    r"""FunctionElimination | FunctionLambda | FunctionPrimitive"""
+    r"""FunctionElimination | FunctionLambda"""
 
     TYPE_ = Name("hydra.core.Function")
     ELIMINATION = Name("elimination")
     LAMBDA = Name("lambda")
-    PRIMITIVE = Name("primitive")
 
 @dataclass(frozen=True)
 class FunctionType:

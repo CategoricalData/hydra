@@ -7,16 +7,15 @@ from collections.abc import Callable
 from functools import lru_cache
 from hydra.dsl.python import Either, Left, Right
 from typing import TypeVar, cast
-import hydra.context
 import hydra.core
 import hydra.errors
 import hydra.lib.pairs
-import hydra.lib.strings
 import hydra.show.core
 
 T0 = TypeVar("T0")
+T1 = TypeVar("T1")
 
-def bimap(cx: hydra.context.Context, g: T0, first_fun: hydra.core.Term, second_fun: hydra.core.Term, pair_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
+def bimap(cx: T0, g: T1, first_fun: hydra.core.Term, second_fun: hydra.core.Term, pair_term: hydra.core.Term) -> Either[hydra.errors.Error, hydra.core.Term]:
     r"""Interpreter-friendly bimap for Pair terms."""
 
     match pair_term:
@@ -30,9 +29,9 @@ def bimap(cx: hydra.context.Context, g: T0, first_fun: hydra.core.Term, second_f
             return Right(cast(hydra.core.Term, hydra.core.TermPair((cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(first_fun, fst()))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(second_fun, snd())))))))
 
         case _:
-            return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "pair value"), " but found "), hydra.show.core.term(pair_term))))), cx))
+            return Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorUnexpectedShape(hydra.errors.UnexpectedShapeError("pair value", hydra.show.core.term(pair_term)))))))
 
-def first(cx: hydra.context.Context, g: T0, pair_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
+def first(cx: T0, g: T1, pair_term: hydra.core.Term) -> Either[hydra.errors.Error, hydra.core.Term]:
     r"""Interpreter-friendly first for Pair terms."""
 
     match pair_term:
@@ -40,9 +39,9 @@ def first(cx: hydra.context.Context, g: T0, pair_term: hydra.core.Term) -> Eithe
             return Right(hydra.lib.pairs.first(p))
 
         case _:
-            return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "pair value"), " but found "), hydra.show.core.term(pair_term))))), cx))
+            return Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorUnexpectedShape(hydra.errors.UnexpectedShapeError("pair value", hydra.show.core.term(pair_term)))))))
 
-def second(cx: hydra.context.Context, g: T0, pair_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
+def second(cx: T0, g: T1, pair_term: hydra.core.Term) -> Either[hydra.errors.Error, hydra.core.Term]:
     r"""Interpreter-friendly second for Pair terms."""
 
     match pair_term:
@@ -50,4 +49,4 @@ def second(cx: hydra.context.Context, g: T0, pair_term: hydra.core.Term) -> Eith
             return Right(hydra.lib.pairs.second(p))
 
         case _:
-            return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "pair value"), " but found "), hydra.show.core.term(pair_term))))), cx))
+            return Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorUnexpectedShape(hydra.errors.UnexpectedShapeError("pair value", hydra.show.core.term(pair_term)))))))

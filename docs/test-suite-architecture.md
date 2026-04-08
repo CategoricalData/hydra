@@ -27,18 +27,18 @@ using `ref`. This ensures consistency and eliminates duplication across test cas
 **Example from TestGraph.hs:**
 ```haskell
 module_ :: Module
-module_ = Module (Namespace "hydra.test.testGraph") elements
+module_ = Module (Namespace "hydra.test.testGraph") definitions
     [TestTerms.module_, TestTypes.module_]
     kernelTypesModules $
     Just "A module defining the graph used in the test suite."
   where
-   elements = [
-     el testTermsDef,
-     el testTypesDef,
-     el testNamespaceDef,
-     el testSchemaNamespaceDef]
+   definitions = [
+     toDefinition testTermsDef,
+     toDefinition testTypesDef,
+     toDefinition testNamespaceDef,
+     toDefinition testSchemaNamespaceDef]
 
-testTypesDef :: TBinding (M.Map Name Type)
+testTypesDef :: TTermDefinition (M.Map Name Type)
 testTypesDef = define "testTypes" $
   Maps.fromList $ Phantoms.list [
     Phantoms.tuple2 (ref TestTypes.testTypePersonNameDef) (ref TestTypes.testTypePersonDef),
@@ -84,13 +84,13 @@ module_ = Module (Namespace "hydra.test.myTest") elements
     kernelTypesModules           -- Schema dependencies
     (Just "Description of this test module")
   where
-    elements = [
-      Phantoms.el allTestsDef]
+    definitions = [
+      Phantoms.toDefinition allTestsDef]
 
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = Phantoms.definitionInModule module_
 
-allTestsDef :: TBinding TestGroup
+allTestsDef :: TTermDefinition TestGroup
 allTestsDef = define "allTests" $
   Phantoms.doc "Description of test group" $
   Testing.testGroup (Phantoms.string "myTest")
@@ -253,7 +253,7 @@ module_ :: Module
 module_ = Module (Namespace "hydra.test.checking.all") elements modules kernelTypesModules $
     Just "All type checking tests"
   where
-    elements = [Phantoms.el allTestsDef]
+    definitions = [Phantoms.toDefinition allTestsDef]
     modules = [
       Fundamentals.module_,
       AlgebraicTypes.module_,
@@ -262,7 +262,7 @@ module_ = Module (Namespace "hydra.test.checking.all") elements modules kernelTy
       Advanced.module_,
       Failures.module_]
 
-allTestsDef :: TBinding TestGroup
+allTestsDef :: TTermDefinition TestGroup
 allTestsDef = definitionInModule module_ "allTests" $
     Phantoms.doc "The group of all checking tests" $
     Testing.testGroup (Phantoms.string "checking") Phantoms.nothing (Phantoms.list subgroups) (Phantoms.list [])
@@ -283,13 +283,13 @@ The top-level `TestSuite` module aggregates all test categories:
 ```haskell
 -- Hydra/Sources/Test/TestSuite.hs (simplified)
 module_ :: Module
-module_ = Module ns elements namespaces kernelTypesNamespaces $
+module_ = Module ns definitions namespaces kernelTypesNamespaces $
     Just "Hydra's common test suite..."
   where
-    elements = [Phantoms.toBinding allTests]
+    definitions = [Phantoms.toDefinition allTests]
     namespaces = fst <$> testPairs
 
-allTests :: TBinding TestGroup
+allTests :: TTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     doc "The group of all common tests" $
     Testing.testGroup (string "common") nothing (list subgroups) (list [])
@@ -297,7 +297,7 @@ allTests = definitionInModule module_ "allTests" $
     subgroups = snd <$> testPairs
 
 -- Test pairs organized into library and other categories
-libPairs :: [(Namespace, TBinding TestGroup)]
+libPairs :: [(Namespace, TTermDefinition TestGroup)]
 libPairs = [
   (Chars.ns, Chars.allTests),
   (Eithers.ns, Eithers.allTests),
@@ -306,7 +306,7 @@ libPairs = [
   -- ... plus Equality, Flows, Literals, Logic, Maps, Math, Maybes, Pairs, Sets
   ]
 
-otherPairs :: [(Namespace, TBinding TestGroup)]
+otherPairs :: [(Namespace, TTermDefinition TestGroup)]
 otherPairs = [
   (CheckingAll.ns, CheckingAll.allTests),
   (InferenceAll.ns, InferenceAll.allTests),
@@ -442,7 +442,7 @@ Testing.testGroup "name" nothing (list subgroups) (list [])  -- Wrong DSL level
 Add documentation to test groups:
 
 ```haskell
-allTestsDef :: TBinding TestGroup
+allTestsDef :: TTermDefinition TestGroup
 allTestsDef = define "allTests" $
   Phantoms.doc "Clear description of what this test group validates" $
   Testing.testGroup (Phantoms.string "name") ...
@@ -468,7 +468,7 @@ To add a new test module:
        kernelTypesModules
        (Just "Description")
      where
-       elements = [Phantoms.el allTestsDef]
+       definitions = [Phantoms.toDefinition allTestsDef]
    ```
 
 3. **Create test cases** using appropriate helper functions

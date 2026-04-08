@@ -424,7 +424,7 @@ def hoist_subterms(should_hoist: Callable[[tuple[frozenlist[hydra.paths.SubtermS
                 def recursed() -> tuple[T1, hydra.core.Term]:
                     return recurse(counter, term)
                 @lru_cache(1)
-                def new_counter() -> hydra.core.Term:
+                def new_counter() -> T1:
                     return hydra.lib.pairs.first(recursed())
                 @lru_cache(1)
                 def recursed_term() -> hydra.core.Term:

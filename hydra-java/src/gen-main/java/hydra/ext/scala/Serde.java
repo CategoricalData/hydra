@@ -21,6 +21,33 @@ public interface Serde {
     return new hydra.ast.Op(new hydra.ast.Symbol("match"), new hydra.ast.Padding(new hydra.ast.Ws.Space(), new hydra.ast.Ws.BreakAndIndent("  ")), new hydra.ast.Precedence(0), new hydra.ast.Associativity.None());
   }
 
+  static String scalaFloatLiteralText(String prefix, String suffix, String s) {
+    return hydra.lib.logic.IfElse.lazy(
+      hydra.lib.equality.Equal.apply(
+        s,
+        "NaN"),
+      () -> hydra.lib.strings.Cat2.apply(
+        prefix,
+        ".NaN"),
+      () -> hydra.lib.logic.IfElse.lazy(
+        hydra.lib.equality.Equal.apply(
+          s,
+          "Infinity"),
+        () -> hydra.lib.strings.Cat2.apply(
+          prefix,
+          ".PositiveInfinity"),
+        () -> hydra.lib.logic.IfElse.lazy(
+          hydra.lib.equality.Equal.apply(
+            s,
+            "-Infinity"),
+          () -> hydra.lib.strings.Cat2.apply(
+            prefix,
+            ".NegativeInfinity"),
+          () -> hydra.lib.strings.Cat2.apply(
+            s,
+            suffix))));
+  }
+
   static hydra.ast.Expr writeCase(hydra.ext.scala.syntax.Case c) {
     hydra.ext.scala.syntax.Pat pat = (c).pat;
     hydra.ext.scala.syntax.Data term = (c).body;
@@ -433,14 +460,18 @@ public interface Serde {
 
       @Override
       public hydra.ast.Expr visit(hydra.ext.scala.syntax.Lit.Float_ f) {
-        return hydra.Serialization.cst(hydra.lib.strings.Cat2.apply(
-          hydra.lib.literals.ShowFloat32.apply((f).value),
-          "f"));
+        return hydra.Serialization.cst(hydra.ext.scala.Serde.scalaFloatLiteralText(
+          "Float",
+          "f",
+          hydra.lib.literals.ShowFloat32.apply((f).value)));
       }
 
       @Override
       public hydra.ast.Expr visit(hydra.ext.scala.syntax.Lit.Double_ f) {
-        return hydra.Serialization.cst(hydra.lib.literals.ShowFloat64.apply((f).value));
+        return hydra.Serialization.cst(hydra.ext.scala.Serde.scalaFloatLiteralText(
+          "Double",
+          "",
+          hydra.lib.literals.ShowFloat64.apply((f).value)));
       }
 
       @Override

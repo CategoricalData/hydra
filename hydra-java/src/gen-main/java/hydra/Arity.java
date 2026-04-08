@@ -19,11 +19,6 @@ public interface Arity {
           1,
           hydra.Arity.termArity((arg_).value.body));
       }
-
-      @Override
-      public Integer visit(hydra.core.Function.Primitive ignored) {
-        return 42;
-      }
     });
   }
 

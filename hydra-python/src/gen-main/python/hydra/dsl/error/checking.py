@@ -19,6 +19,9 @@ def checking_error_not_a_forall_type(x: hydra.phantoms.TTerm[hydra.error.checkin
 def checking_error_not_a_function_type(x: hydra.phantoms.TTerm[hydra.error.checking.NotAFunctionTypeError]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("notAFunctionType"), x.value)))))
 
+def checking_error_other(x: hydra.phantoms.TTerm[hydra.error.checking.OtherCheckingError]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("other"), x.value)))))
+
 def checking_error_type_arity_mismatch(x: hydra.phantoms.TTerm[hydra.error.checking.TypeArityMismatchError]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("typeArityMismatch"), x.value)))))
 
@@ -27,6 +30,9 @@ def checking_error_type_mismatch(x: hydra.phantoms.TTerm[hydra.error.checking.Ty
 
 def checking_error_unbound_type_variables(x: hydra.phantoms.TTerm[hydra.error.checking.UnboundTypeVariablesError]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("unboundTypeVariables"), x.value)))))
+
+def checking_error_undefined_term_variable(x: hydra.phantoms.TTerm[hydra.error.checking.UndefinedTermVariableCheckingError]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("undefinedTermVariable"), x.value)))))
 
 def checking_error_unequal_types(x: hydra.phantoms.TTerm[hydra.error.checking.UnequalTypesError]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("unequalTypes"), x.value)))))
@@ -39,6 +45,9 @@ def checking_error_untyped_lambda(x: hydra.phantoms.TTerm[hydra.error.checking.U
 
 def checking_error_untyped_let_binding(x: hydra.phantoms.TTerm[hydra.error.checking.UntypedLetBindingError]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("untypedLetBinding"), x.value)))))
+
+def checking_error_untyped_term_variable(x: hydra.phantoms.TTerm[hydra.error.checking.UntypedTermVariableCheckingError]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.error.checking.CheckingError"), hydra.core.Field(hydra.core.Name("untypedTermVariable"), x.value)))))
 
 def incorrect_unification_error(substitution: hydra.phantoms.TTerm[hydra.typing.TypeSubst]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.checking.IncorrectUnificationError"), (hydra.core.Field(hydra.core.Name("substitution"), substitution.value),)))))
@@ -72,6 +81,21 @@ def not_a_function_type_error_type(x: hydra.phantoms.TTerm[hydra.error.checking.
 
 def not_a_function_type_error_with_type(original: hydra.phantoms.TTerm[hydra.error.checking.NotAFunctionTypeError], new_val: hydra.phantoms.TTerm[hydra.core.Type]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.checking.NotAFunctionTypeError"), (hydra.core.Field(hydra.core.Name("type"), new_val.value),)))))
+
+def other_checking_error(path: hydra.phantoms.TTerm[hydra.paths.SubtermPath], message: hydra.phantoms.TTerm[str]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.checking.OtherCheckingError"), (hydra.core.Field(hydra.core.Name("path"), path.value), hydra.core.Field(hydra.core.Name("message"), message.value))))))
+
+def other_checking_error_message(x: hydra.phantoms.TTerm[hydra.error.checking.OtherCheckingError]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.error.checking.OtherCheckingError"), hydra.core.Name("message")))))))), x.value))))
+
+def other_checking_error_path(x: hydra.phantoms.TTerm[hydra.error.checking.OtherCheckingError]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.error.checking.OtherCheckingError"), hydra.core.Name("path")))))))), x.value))))
+
+def other_checking_error_with_message(original: hydra.phantoms.TTerm[hydra.error.checking.OtherCheckingError], new_val: hydra.phantoms.TTerm[str]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.checking.OtherCheckingError"), (hydra.core.Field(hydra.core.Name("path"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.error.checking.OtherCheckingError"), hydra.core.Name("path")))))))), original.value)))), hydra.core.Field(hydra.core.Name("message"), new_val.value))))))
+
+def other_checking_error_with_path(original: hydra.phantoms.TTerm[hydra.error.checking.OtherCheckingError], new_val: hydra.phantoms.TTerm[hydra.paths.SubtermPath]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.checking.OtherCheckingError"), (hydra.core.Field(hydra.core.Name("path"), new_val.value), hydra.core.Field(hydra.core.Name("message"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.error.checking.OtherCheckingError"), hydra.core.Name("message")))))))), original.value)))))))))
 
 def type_arity_mismatch_error(type: hydra.phantoms.TTerm[hydra.core.Type], expected_arity: hydra.phantoms.TTerm[int], actual_arity: hydra.phantoms.TTerm[int], type_arguments: hydra.phantoms.TTerm[frozenlist[hydra.core.Type]]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.checking.TypeArityMismatchError"), (hydra.core.Field(hydra.core.Name("type"), type.value), hydra.core.Field(hydra.core.Name("expectedArity"), expected_arity.value), hydra.core.Field(hydra.core.Name("actualArity"), actual_arity.value), hydra.core.Field(hydra.core.Name("typeArguments"), type_arguments.value))))))
@@ -130,6 +154,21 @@ def unbound_type_variables_error_with_type(original: hydra.phantoms.TTerm[hydra.
 def unbound_type_variables_error_with_variables(original: hydra.phantoms.TTerm[hydra.error.checking.UnboundTypeVariablesError], new_val: hydra.phantoms.TTerm[frozenset[hydra.core.Name]]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.checking.UnboundTypeVariablesError"), (hydra.core.Field(hydra.core.Name("variables"), new_val.value), hydra.core.Field(hydra.core.Name("type"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.error.checking.UnboundTypeVariablesError"), hydra.core.Name("type")))))))), original.value)))))))))
 
+def undefined_term_variable_checking_error(path: hydra.phantoms.TTerm[hydra.paths.SubtermPath], name: hydra.phantoms.TTerm[hydra.core.Name]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.checking.UndefinedTermVariableCheckingError"), (hydra.core.Field(hydra.core.Name("path"), path.value), hydra.core.Field(hydra.core.Name("name"), name.value))))))
+
+def undefined_term_variable_checking_error_name(x: hydra.phantoms.TTerm[hydra.error.checking.UndefinedTermVariableCheckingError]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.error.checking.UndefinedTermVariableCheckingError"), hydra.core.Name("name")))))))), x.value))))
+
+def undefined_term_variable_checking_error_path(x: hydra.phantoms.TTerm[hydra.error.checking.UndefinedTermVariableCheckingError]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.error.checking.UndefinedTermVariableCheckingError"), hydra.core.Name("path")))))))), x.value))))
+
+def undefined_term_variable_checking_error_with_name(original: hydra.phantoms.TTerm[hydra.error.checking.UndefinedTermVariableCheckingError], new_val: hydra.phantoms.TTerm[hydra.core.Name]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.checking.UndefinedTermVariableCheckingError"), (hydra.core.Field(hydra.core.Name("path"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.error.checking.UndefinedTermVariableCheckingError"), hydra.core.Name("path")))))))), original.value)))), hydra.core.Field(hydra.core.Name("name"), new_val.value))))))
+
+def undefined_term_variable_checking_error_with_path(original: hydra.phantoms.TTerm[hydra.error.checking.UndefinedTermVariableCheckingError], new_val: hydra.phantoms.TTerm[hydra.paths.SubtermPath]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.checking.UndefinedTermVariableCheckingError"), (hydra.core.Field(hydra.core.Name("path"), new_val.value), hydra.core.Field(hydra.core.Name("name"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.error.checking.UndefinedTermVariableCheckingError"), hydra.core.Name("name")))))))), original.value)))))))))
+
 def unequal_types_error(types: hydra.phantoms.TTerm[frozenlist[hydra.core.Type]], description: hydra.phantoms.TTerm[str]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.checking.UnequalTypesError"), (hydra.core.Field(hydra.core.Name("types"), types.value), hydra.core.Field(hydra.core.Name("description"), description.value))))))
 
@@ -164,3 +203,18 @@ def untyped_let_binding_error_binding(x: hydra.phantoms.TTerm[hydra.error.checki
 
 def untyped_let_binding_error_with_binding(original: hydra.phantoms.TTerm[hydra.error.checking.UntypedLetBindingError], new_val: hydra.phantoms.TTerm[hydra.core.Binding]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.checking.UntypedLetBindingError"), (hydra.core.Field(hydra.core.Name("binding"), new_val.value),)))))
+
+def untyped_term_variable_checking_error(path: hydra.phantoms.TTerm[hydra.paths.SubtermPath], name: hydra.phantoms.TTerm[hydra.core.Name]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.checking.UntypedTermVariableCheckingError"), (hydra.core.Field(hydra.core.Name("path"), path.value), hydra.core.Field(hydra.core.Name("name"), name.value))))))
+
+def untyped_term_variable_checking_error_name(x: hydra.phantoms.TTerm[hydra.error.checking.UntypedTermVariableCheckingError]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.error.checking.UntypedTermVariableCheckingError"), hydra.core.Name("name")))))))), x.value))))
+
+def untyped_term_variable_checking_error_path(x: hydra.phantoms.TTerm[hydra.error.checking.UntypedTermVariableCheckingError]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.error.checking.UntypedTermVariableCheckingError"), hydra.core.Name("path")))))))), x.value))))
+
+def untyped_term_variable_checking_error_with_name(original: hydra.phantoms.TTerm[hydra.error.checking.UntypedTermVariableCheckingError], new_val: hydra.phantoms.TTerm[hydra.core.Name]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.checking.UntypedTermVariableCheckingError"), (hydra.core.Field(hydra.core.Name("path"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.error.checking.UntypedTermVariableCheckingError"), hydra.core.Name("path")))))))), original.value)))), hydra.core.Field(hydra.core.Name("name"), new_val.value))))))
+
+def untyped_term_variable_checking_error_with_path(original: hydra.phantoms.TTerm[hydra.error.checking.UntypedTermVariableCheckingError], new_val: hydra.phantoms.TTerm[hydra.paths.SubtermPath]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.error.checking.UntypedTermVariableCheckingError"), (hydra.core.Field(hydra.core.Name("path"), new_val.value), hydra.core.Field(hydra.core.Name("name"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.error.checking.UntypedTermVariableCheckingError"), hydra.core.Name("name")))))))), original.value)))))))))

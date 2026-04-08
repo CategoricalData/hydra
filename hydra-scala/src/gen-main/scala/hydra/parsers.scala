@@ -2,16 +2,6 @@ package hydra.parsers
 
 import hydra.parsing.*
 
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.logic
-
-import hydra.lib.maybes
-
-import hydra.lib.strings
-
 def alt[T0](p1: hydra.parsing.Parser[T0])(p2: hydra.parsing.Parser[T0]): hydra.parsing.Parser[T0] =
   {
   def parse(input: scala.Predef.String): hydra.parsing.ParseResult[T0] =

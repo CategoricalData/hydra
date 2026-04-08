@@ -2,20 +2,6 @@ package hydra.ext.java.serde
 
 import hydra.ext.java.syntax.*
 
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.math
-
-import hydra.lib.maybes
-
-import hydra.lib.strings
-
 def escapeJavaChar(c: Int): scala.Predef.String =
   hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(34))("\\\"")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(92))("\\\\")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(10))("\\n")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(13))("\\r")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(9))("\\t")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(8))("\\b")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(12))("\\f")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.logic.and(hydra.lib.equality.gte[Int](c)(32))(hydra.lib.equality.lt[Int](c)(127)))(hydra.lib.strings.fromList(Seq(c)))(hydra.ext.java.serde.javaUnicodeEscape(c)))))))))
 
@@ -24,6 +10,9 @@ def escapeJavaString(s: scala.Predef.String): scala.Predef.String =
 
 def hexDigit(n: Int): Int =
   hydra.lib.logic.ifElse[Int](hydra.lib.equality.lt[Int](n)(10))(hydra.lib.math.add(n)(48))(hydra.lib.math.add(hydra.lib.math.sub(n)(10))(65))
+
+def javaFloatLiteralText(s: scala.Predef.String): scala.Predef.String =
+  hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](s)("NaN"))("Double.NaN")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](s)("Infinity"))("Double.POSITIVE_INFINITY")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](s)("-Infinity"))("Double.NEGATIVE_INFINITY")(s)))
 
 def javaUnicodeEscape(n: Int): scala.Predef.String =
   hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.gt[Int](n)(65535))({
@@ -461,7 +450,8 @@ def writeFieldModifier(m: hydra.ext.java.syntax.FieldModifier): hydra.ast.Expr =
   case hydra.ext.java.syntax.FieldModifier.transient => hydra.serialization.cst("transient")
   case hydra.ext.java.syntax.FieldModifier.volatile => hydra.serialization.cst("volatile")
 
-def writeFloatingPointLiteral(fl: hydra.ext.java.syntax.FloatingPointLiteral): hydra.ast.Expr = hydra.serialization.cst(hydra.lib.literals.showBigfloat(fl))
+def writeFloatingPointLiteral(fl: hydra.ext.java.syntax.FloatingPointLiteral): hydra.ast.Expr =
+  hydra.serialization.cst(hydra.ext.java.serde.javaFloatLiteralText(hydra.lib.literals.showBigfloat(fl)))
 
 def writeFloatingPointType(ft: hydra.ext.java.syntax.FloatingPointType): hydra.ast.Expr =
   ft match

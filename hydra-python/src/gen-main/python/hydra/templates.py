@@ -8,7 +8,6 @@ from decimal import Decimal
 from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Just, Left, Nothing, Right, frozenlist
 from typing import TypeVar, cast
-import hydra.context
 import hydra.core
 import hydra.decode.core
 import hydra.errors
@@ -18,26 +17,26 @@ import hydra.lib.maps
 import hydra.lib.maybes
 import hydra.lib.sets
 import hydra.lib.strings
-import hydra.show.core
 
 T0 = TypeVar("T0")
+T1 = TypeVar("T1")
 
-def graph_to_schema(cx: hydra.context.Context, graph: hydra.graph.Graph, els: frozenlist[hydra.core.Binding]) -> Either[hydra.context.InContext[hydra.errors.DecodingError], FrozenDict[hydra.core.Name, hydra.core.Type]]:
+def graph_to_schema(cx: T0, graph: hydra.graph.Graph, els: frozenlist[hydra.core.Binding]) -> Either[hydra.errors.DecodingError, FrozenDict[hydra.core.Name, hydra.core.Type]]:
     r"""Decode a list of type-encoding bindings into a map of named types."""
 
-    def to_pair(el: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.errors.DecodingError], tuple[hydra.core.Name, hydra.core.Type]]:
+    def to_pair(el: hydra.core.Binding) -> Either[hydra.errors.DecodingError, tuple[hydra.core.Name, hydra.core.Type]]:
         name = el.name
-        return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda _wc_e: hydra.context.InContext(_wc_e, cx)), (lambda _wc_a: _wc_a), hydra.decode.core.type(graph, el.term)), (lambda t: Right((name, t))))
+        return hydra.lib.eithers.bind(hydra.decode.core.type(graph, el.term), (lambda t: Right((name, t))))
     return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda x1: to_pair(x1)), els), (lambda pairs: Right(hydra.lib.maps.from_list(pairs))))
 
-def instantiate_template(cx: hydra.context.Context, minimal: bool, schema: FrozenDict[hydra.core.Name, hydra.core.Type], tname: hydra.core.Name, t: hydra.core.Type) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
+def instantiate_template(cx: T0, minimal: bool, schema: FrozenDict[hydra.core.Name, hydra.core.Type], tname: hydra.core.Name, t: hydra.core.Type) -> Either[hydra.errors.Error, hydra.core.Term]:
     r"""Given a graph schema and a nonrecursive type, instantiate it with default values. If the minimal flag is set, the smallest possible term is produced; otherwise, exactly one subterm is produced for constructors which do not otherwise require one, e.g. in lists and optionals. The name parameter provides the element name for nominal type construction."""
 
-    def inst(tn: hydra.core.Name, v1: hydra.core.Type) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
+    def inst(tn: hydra.core.Name, v1: hydra.core.Type) -> Either[hydra.errors.Error, hydra.core.Term]:
         return instantiate_template(cx, minimal, schema, tn, v1)
     @lru_cache(1)
-    def no_poly() -> Either[hydra.context.InContext[hydra.errors.Error], T0]:
-        return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("Polymorphic and function types are not currently supported"))), cx))
+    def no_poly() -> Either[hydra.errors.Error, T1]:
+        return Left(cast(hydra.errors.Error, hydra.errors.ErrorExtraction(cast(hydra.errors.ExtractionError, hydra.errors.ExtractionErrorUnexpectedShape(hydra.errors.UnexpectedShapeError("non-polymorphic type", "polymorphic or function type"))))))
     def for_float(ft: hydra.core.FloatType) -> hydra.core.FloatValue:
         match ft:
             case hydra.core.FloatType.BIGFLOAT:
@@ -129,7 +128,7 @@ def instantiate_template(cx: hydra.context.Context, minimal: bool, schema: Froze
             return hydra.lib.logic.if_else(minimal, (lambda : Right(cast(hydra.core.Term, hydra.core.TermMaybe(Nothing())))), (lambda : hydra.lib.eithers.bind(inst(tname, ot), (lambda e: Right(cast(hydra.core.Term, hydra.core.TermMaybe(Just(e))))))))
 
         case hydra.core.TypeRecord(value=rt):
-            def to_field(ft: hydra.core.FieldType) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Field]:
+            def to_field(ft: hydra.core.FieldType) -> Either[hydra.errors.Error, hydra.core.Field]:
                 return hydra.lib.eithers.bind(inst(tname, ft.type), (lambda e: Right(hydra.core.Field(ft.name, e))))
             return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda x1: to_field(x1)), rt), (lambda dfields: Right(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(tname, dfields))))))
 
@@ -137,7 +136,7 @@ def instantiate_template(cx: hydra.context.Context, minimal: bool, schema: Froze
             return hydra.lib.logic.if_else(minimal, (lambda : Right(cast(hydra.core.Term, hydra.core.TermSet(hydra.lib.sets.empty())))), (lambda : hydra.lib.eithers.bind(inst(tname, et2), (lambda e: Right(cast(hydra.core.Term, hydra.core.TermSet(hydra.lib.sets.from_list((e,)))))))))
 
         case hydra.core.TypeVariable(value=vname):
-            return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2("Type variable ", hydra.lib.strings.cat2(hydra.show.core.term(cast(hydra.core.Term, hydra.core.TermVariable(vname))), " not found in schema"))))), cx))), (lambda v1: inst(vname, v1)), hydra.lib.maps.lookup(vname, schema))
+            return hydra.lib.maybes.maybe((lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorResolution(cast(hydra.errors.ResolutionError, hydra.errors.ResolutionErrorUnexpectedShape(hydra.errors.UnexpectedShapeError("bound type variable", hydra.lib.strings.cat2("unbound variable ", vname.value)))))))), (lambda v1: inst(vname, v1)), hydra.lib.maps.lookup(vname, schema))
 
         case hydra.core.TypeWrap(value=wt):
             return hydra.lib.eithers.bind(inst(tname, wt), (lambda e: Right(cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(tname, e))))))

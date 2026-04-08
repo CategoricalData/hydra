@@ -11,7 +11,6 @@ import hydra.core
 import hydra.decode.core
 import hydra.errors
 import hydra.extract.core
-import hydra.lexical
 import hydra.lib.eithers
 import hydra.lib.maps
 import hydra.lib.maybes
@@ -53,11 +52,11 @@ def subterm_node(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
                         case _:
                             return Left(hydra.errors.DecodingError("expected literal"))
-                return hydra.lib.eithers.bind(hydra.extract.core.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.core.require_field("label", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_label: hydra.lib.eithers.bind(hydra.extract.core.require_field("id", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_4(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_id: Right(hydra.paths.SubtermNode(field_name, field_label, field_id))))))))
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.core.require_field("label", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_field_map_body_2(stripped2)), hydra.extract.core.strip_with_decoding_error(cx2, raw2))), field_map(), cx), (lambda field_label: hydra.lib.eithers.bind(hydra.extract.core.require_field("id", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_field_map_body_4(stripped2)), hydra.extract.core.strip_with_decoding_error(cx2, raw2))), field_map(), cx), (lambda field_id: Right(hydra.paths.SubtermNode(field_name, field_label, field_id))))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_paths_subterm_node_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_paths_subterm_node_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def subterm_step(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_paths_subterm_step_1(cx, v1):
@@ -173,12 +172,12 @@ def subterm_step(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
                             case _:
                                 return Left(hydra.errors.DecodingError("expected literal"))
-                    return hydra.lib.maps.from_list(((hydra.core.Name("annotatedBody"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepAnnotatedBody())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("applicationFunction"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepApplicationFunction())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("applicationArgument"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepApplicationArgument())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("lambdaBody"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepLambdaBody())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("unionCasesDefault"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepUnionCasesDefault())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("unionCasesBranch"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepUnionCasesBranch(t))), hydra.decode.core.name(cx, input)))), (hydra.core.Name("letBody"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepLetBody())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("letBinding"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepLetBinding(t))), hydra.decode.core.name(cx, input)))), (hydra.core.Name("listElement"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepListElement(t))), hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_variant_map_3(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, input))))), (hydra.core.Name("mapKey"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepMapKey(t))), hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_variant_map_6(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, input))))), (hydra.core.Name("mapValue"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepMapValue(t))), hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_variant_map_9(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, input))))), (hydra.core.Name("maybeTerm"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepMaybeTerm())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("productTerm"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepProductTerm(t))), hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_variant_map_12(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, input))))), (hydra.core.Name("recordField"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepRecordField(t))), hydra.decode.core.name(cx, input)))), (hydra.core.Name("setElement"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepSetElement(t))), hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_variant_map_15(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, input))))), (hydra.core.Name("sumTerm"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepSumTerm())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("typeLambdaBody"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepTypeLambdaBody())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("typeApplicationTerm"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepTypeApplicationTerm())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("injectionTerm"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepInjectionTerm())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("wrappedTerm"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepWrappedTerm())), hydra.extract.core.decode_unit(cx, input))))))
+                    return hydra.lib.maps.from_list(((hydra.core.Name("annotatedBody"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepAnnotatedBody())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("applicationFunction"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepApplicationFunction())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("applicationArgument"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepApplicationArgument())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("lambdaBody"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepLambdaBody())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("unionCasesDefault"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepUnionCasesDefault())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("unionCasesBranch"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepUnionCasesBranch(t))), hydra.decode.core.name(cx, input)))), (hydra.core.Name("letBody"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepLetBody())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("letBinding"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepLetBinding(t))), hydra.decode.core.name(cx, input)))), (hydra.core.Name("listElement"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepListElement(t))), hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_variant_map_3(stripped2)), hydra.extract.core.strip_with_decoding_error(cx, input))))), (hydra.core.Name("mapKey"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepMapKey(t))), hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_variant_map_6(stripped2)), hydra.extract.core.strip_with_decoding_error(cx, input))))), (hydra.core.Name("mapValue"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepMapValue(t))), hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_variant_map_9(stripped2)), hydra.extract.core.strip_with_decoding_error(cx, input))))), (hydra.core.Name("maybeTerm"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepMaybeTerm())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("productTerm"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepProductTerm(t))), hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_variant_map_12(stripped2)), hydra.extract.core.strip_with_decoding_error(cx, input))))), (hydra.core.Name("recordField"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepRecordField(t))), hydra.decode.core.name(cx, input)))), (hydra.core.Name("setElement"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepSetElement(t))), hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_variant_map_15(stripped2)), hydra.extract.core.strip_with_decoding_error(cx, input))))), (hydra.core.Name("sumTerm"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepSumTerm())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("typeLambdaBody"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepTypeLambdaBody())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("typeApplicationTerm"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepTypeApplicationTerm())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("injectionTerm"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepInjectionTerm())), hydra.extract.core.decode_unit(cx, input)))), (hydra.core.Name("wrappedTerm"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.paths.SubtermStep, hydra.paths.SubtermStepWrappedTerm())), hydra.extract.core.decode_unit(cx, input))))))
                 return hydra.lib.maybes.maybe((lambda : Left(hydra.errors.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union"))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected union"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_paths_subterm_step_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_paths_subterm_step_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def subterm_path(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_paths_subterm_path_1(cx, v1):
@@ -188,7 +187,7 @@ def subterm_path(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected wrapped type"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_paths_subterm_path_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_paths_subterm_path_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def subterm_edge(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_paths_subterm_edge_1(cx, v1):
@@ -201,7 +200,7 @@ def subterm_edge(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_paths_subterm_edge_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_paths_subterm_edge_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def subterm_graph(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_paths_subterm_graph_1(cx, v1):
@@ -214,7 +213,7 @@ def subterm_graph(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_paths_subterm_graph_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_paths_subterm_graph_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def subtype_node(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_paths_subtype_node_1(cx, v1):
@@ -251,11 +250,11 @@ def subtype_node(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
                         case _:
                             return Left(hydra.errors.DecodingError("expected literal"))
-                return hydra.lib.eithers.bind(hydra.extract.core.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.core.require_field("label", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_label: hydra.lib.eithers.bind(hydra.extract.core.require_field("id", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_4(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_id: Right(hydra.paths.SubtypeNode(field_name, field_label, field_id))))))))
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.core.require_field("label", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_field_map_body_2(stripped2)), hydra.extract.core.strip_with_decoding_error(cx2, raw2))), field_map(), cx), (lambda field_label: hydra.lib.eithers.bind(hydra.extract.core.require_field("id", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_field_map_body_4(stripped2)), hydra.extract.core.strip_with_decoding_error(cx2, raw2))), field_map(), cx), (lambda field_id: Right(hydra.paths.SubtypeNode(field_name, field_label, field_id))))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_paths_subtype_node_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_paths_subtype_node_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def subtype_step(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_paths_subtype_step_1(cx, v1):
@@ -271,7 +270,7 @@ def subtype_step(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected union"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_paths_subtype_step_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_paths_subtype_step_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def subtype_path(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_paths_subtype_path_1(cx, v1):
@@ -281,7 +280,7 @@ def subtype_path(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected wrapped type"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_paths_subtype_path_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_paths_subtype_path_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def subtype_edge(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_paths_subtype_edge_1(cx, v1):
@@ -294,7 +293,7 @@ def subtype_edge(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_paths_subtype_edge_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_paths_subtype_edge_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def subtype_graph(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_paths_subtype_graph_1(cx, v1):
@@ -307,4 +306,4 @@ def subtype_graph(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_paths_subtype_graph_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_paths_subtype_graph_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))

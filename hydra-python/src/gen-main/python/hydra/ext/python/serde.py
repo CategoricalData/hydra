@@ -35,12 +35,15 @@ def encode_lambda_parameters(lp: hydra.ext.python.syntax.LambdaParameters) -> hy
     nodef = lp.param_no_default
     return hydra.serialization.comma_sep(hydra.serialization.inline_style, hydra.lib.lists.map((lambda x1: encode_lambda_param_no_default(x1)), nodef))
 
+def python_float_literal_text(s: str) -> str:
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(s, "NaN"), (lambda : "float('nan')"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s, "Infinity"), (lambda : "float('inf')"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s, "-Infinity"), (lambda : "float('-inf')"), (lambda : s))))))
+
 def encode_number(num: hydra.ext.python.syntax.Number) -> hydra.ast.Expr:
     r"""Serialize a Python number literal."""
 
     match num:
         case hydra.ext.python.syntax.NumberFloat(value=f):
-            return hydra.serialization.cst(hydra.lib.literals.show_bigfloat(f))
+            return hydra.serialization.cst(python_float_literal_text(hydra.lib.literals.show_bigfloat(f)))
 
         case hydra.ext.python.syntax.NumberInteger(value=i):
             return hydra.serialization.cst(hydra.lib.literals.show_bigint(i))

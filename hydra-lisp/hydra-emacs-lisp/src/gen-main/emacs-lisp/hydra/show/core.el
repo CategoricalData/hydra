@@ -46,7 +46,7 @@
 
 (defvar hydra_show_core_fields (lambda (flds) (let ((field_strs (funcall (hydra_lib_lists_map hydra_show_core_field) flds))) (hydra_lib_strings_cat (list "{" (funcall (hydra_lib_strings_intercalate ", ") field_strs) "}")))))
 
-(defvar hydra_show_core_function (lambda (f) (funcall (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :elimination) (hydra_show_core_elimination match_value)) ((equal (car match_target) :lambda) (hydra_show_core_lambda match_value)) ((equal (car match_target) :primitive) (funcall (lambda (name) (funcall (hydra_lib_strings_cat2 (funcall (lambda (v) v) name)) "!")) match_value)))) (cadr match_target))) f)))
+(defvar hydra_show_core_function (lambda (f) (funcall (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :elimination) (hydra_show_core_elimination match_value)) ((equal (car match_target) :lambda) (hydra_show_core_lambda match_value)))) (cadr match_target))) f)))
 
 (defvar hydra_show_core_injection (lambda (inj) (let ((tname (funcall (lambda (v) (hydra_core_injection-type_name v)) inj))) (let ((f (funcall (lambda (v) (hydra_core_injection-field v)) inj))) (hydra_lib_strings_cat (list "inject(" (funcall (lambda (v) v) tname) ")" (hydra_show_core_fields (list f))))))))
 
