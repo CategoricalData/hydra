@@ -6,7 +6,7 @@ package hydra;
  * Dependency extraction, binding sort, and let normalization
  */
 public interface Dependencies {
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, java.util.List<hydra.core.Binding>> definitionsWithDependencies(hydra.context.Context cx, hydra.graph.Graph graph, java.util.List<hydra.core.Binding> original) {
+  static <T0> hydra.util.Either<hydra.errors.Error_, java.util.List<hydra.core.Binding>> definitionsWithDependencies(T0 cx, hydra.graph.Graph graph, java.util.List<hydra.core.Binding> original) {
     java.util.function.Function<hydra.core.Binding, java.util.List<hydra.core.Name>> depNames = (java.util.function.Function<hydra.core.Binding, java.util.List<hydra.core.Name>>) (el -> hydra.lib.sets.ToList.apply(hydra.Dependencies.termDependencyNames(
       true,
       false,
@@ -20,8 +20,7 @@ public interface Dependencies {
         depNames,
         original)))));
     return hydra.lib.eithers.MapList.apply(
-      (java.util.function.Function<hydra.core.Name, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.core.Binding>>) (name -> hydra.Lexical.requireBinding(
-        cx,
+      (java.util.function.Function<hydra.core.Name, hydra.util.Either<hydra.errors.Error_, hydra.core.Binding>>) (name -> hydra.Lexical.requireBinding(
         graph,
         name)),
       allDepNames.get());
@@ -131,10 +130,10 @@ public interface Dependencies {
       hydra.lib.lists.Pure.apply(hydra.lib.pairs.First.apply(hr)));
   }
 
-  static hydra.util.Either<String, hydra.core.Type> inlineType(java.util.Map<hydra.core.Name, hydra.core.Type> schema, hydra.core.Type typ) {
+  static hydra.util.Either<hydra.errors.Error_, hydra.core.Type> inlineType(java.util.Map<hydra.core.Name, hydra.core.Type> schema, hydra.core.Type typ) {
     return hydra.Rewriting.rewriteTypeM(
-      (java.util.function.Function<java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>, java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>>) (v1 -> (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>) (v2 -> hydra.Dependencies.inlineType_f(
-        (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Type>, java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>>) (p0 -> p1 -> hydra.Dependencies.inlineType(
+      (java.util.function.Function<java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.errors.Error_, hydra.core.Type>>, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.errors.Error_, hydra.core.Type>>>) (v1 -> (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.errors.Error_, hydra.core.Type>>) (v2 -> hydra.Dependencies.inlineType_f(
+        (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Type>, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.errors.Error_, hydra.core.Type>>>) (p0 -> p1 -> hydra.Dependencies.inlineType(
           p0,
           p1)),
         schema,
@@ -143,20 +142,20 @@ public interface Dependencies {
       typ);
   }
 
-  static <T0> hydra.util.Either<String, hydra.core.Type> inlineType_f(java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Type>, java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>> hydra_dependencies_inlineType, java.util.Map<hydra.core.Name, hydra.core.Type> schema, java.util.function.Function<T0, hydra.util.Either<String, hydra.core.Type>> recurse, T0 typ) {
-    java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>> afterRecurse = (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>) (tr -> (tr).accept(new hydra.core.Type.PartialVisitor<>() {
+  static <T0> hydra.util.Either<hydra.errors.Error_, hydra.core.Type> inlineType_f(java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Type>, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.errors.Error_, hydra.core.Type>>> hydra_dependencies_inlineType, java.util.Map<hydra.core.Name, hydra.core.Type> schema, java.util.function.Function<T0, hydra.util.Either<hydra.errors.Error_, hydra.core.Type>> recurse, T0 typ) {
+    java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.errors.Error_, hydra.core.Type>> afterRecurse = (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.errors.Error_, hydra.core.Type>>) (tr -> (tr).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
-      public hydra.util.Either<String, hydra.core.Type> otherwise(hydra.core.Type instance) {
-        return hydra.util.Either.<String, hydra.core.Type>right(tr);
+      public hydra.util.Either<hydra.errors.Error_, hydra.core.Type> otherwise(hydra.core.Type instance) {
+        return hydra.util.Either.<hydra.errors.Error_, hydra.core.Type>right(tr);
       }
 
       @Override
-      public hydra.util.Either<String, hydra.core.Type> visit(hydra.core.Type.Variable v) {
+      public hydra.util.Either<hydra.errors.Error_, hydra.core.Type> visit(hydra.core.Type.Variable v) {
         return hydra.lib.maybes.Maybe.applyLazy(
-          () -> hydra.util.Either.<String, hydra.core.Type>left(hydra.lib.strings.Cat2.apply(
+          () -> hydra.util.Either.<hydra.errors.Error_, hydra.core.Type>left(new hydra.errors.Error_.Other(new hydra.errors.OtherError(hydra.lib.strings.Cat2.apply(
             "No such type in schema: ",
-            (v).value.value)),
-          (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>) (v1 -> (hydra_dependencies_inlineType).apply(schema).apply(v1)),
+            (v).value.value)))),
+          (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.errors.Error_, hydra.core.Type>>) (v1 -> (hydra_dependencies_inlineType).apply(schema).apply(v1)),
           hydra.lib.maps.Lookup.apply(
             (v).value,
             schema));
@@ -164,7 +163,7 @@ public interface Dependencies {
     }));
     return hydra.lib.eithers.Bind.apply(
       (recurse).apply(typ),
-      (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>) (tr -> (afterRecurse).apply(tr)));
+      (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.errors.Error_, hydra.core.Type>>) (tr -> (afterRecurse).apply(tr)));
   }
 
   static Boolean isLambda(hydra.core.Term term) {
@@ -456,11 +455,6 @@ public interface Dependencies {
             @Override
             public java.util.Set<hydra.core.Name> otherwise(hydra.core.Function instance) {
               return names;
-            }
-
-            @Override
-            public java.util.Set<hydra.core.Name> visit(hydra.core.Function.Primitive name) {
-              return (prim).apply((name).value);
             }
 
             @Override

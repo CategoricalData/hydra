@@ -226,7 +226,7 @@ Before writing any Hydra code, read the
 [Coding style](https://github.com/CategoricalData/hydra/wiki/Coding-style) wiki page.
 Key rules:
 
-- **Alphabetical ordering**: All definitions in the `elements` list and their
+- **Alphabetical ordering**: All definitions in the `definitions` list and their
   corresponding function implementations must be in alphabetical order. No exceptions.
 - **Fail immediately on errors**: Never silently return defaults or swallow failures.
 - **Consistent imports**: Copy the import block from an existing module of the same kind.
@@ -251,7 +251,7 @@ These are hard-won lessons. Read the linked docs for full context.
 
 4. **Reason by analogy**: Hydra is characterized by a core set of problems which are
    solved in different ways depending on the host or target language. Very often, the best
-   way to approach a problem is to examine how it has already been solved in other conexts.
+   way to approach a problem is to examine how it has already been solved in other contexts.
 
 5. **Three DSL levels**: Term-level, meta-level (phantom-typed), and generated DSL.
    Mixing levels is a common source of errors. See [docs/dsl-guide.md](docs/dsl-guide.md).

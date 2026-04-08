@@ -68,26 +68,26 @@ ns = Namespace "hydra.mymodule"
 
 -- Define the module
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns definitions
     [DependencyModule1.ns, DependencyModule2.ns]  -- dependencies
     kernelTypesNamespaces $
     Just "Description of this module"
   where
-    elements = [
-      toBinding myFunction1,
-      toBinding myFunction2]
+    definitions = [
+      toDefinition myFunction1,
+      toDefinition myFunction2]
 
 -- Helper for defining elements
-define :: String -> TTerm a -> TBinding a
+define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 -- Define elements
-myFunction1 :: TBinding (Int -> Int)
+myFunction1 :: TTermDefinition (Int -> Int)
 myFunction1 = define "myFunction1" $
   doc "Description of myFunction1" $
   "x" ~> var "x"
 
-myFunction2 :: TBinding (String -> String)
+myFunction2 :: TTermDefinition (String -> String)
 myFunction2 = define "myFunction2" $
   doc "Description of myFunction2" $
   "s" ~> var "s"
@@ -159,7 +159,7 @@ cd ../hydra-ext
 In the source module, add the new definition:
 
 ```haskell
-myNewFunction :: TBinding (A -> B)
+myNewFunction :: TTermDefinition (A -> B)
 myNewFunction = define "myNewFunction" $
   doc "Description" $
   "x" ~> someExpression (var "x")
@@ -168,9 +168,9 @@ myNewFunction = define "myNewFunction" $
 ### Step 2: Register in the Module's Element List
 
 ```haskell
-elements = [
+definitions = [
   -- ... existing elements ...
-  toBinding myNewFunction]
+  toDefinition myNewFunction]
 ```
 
 ### Step 3: Build and Regenerate
@@ -183,7 +183,7 @@ Same as for creating a module - build, regenerate Haskell, rebuild, regenerate o
 
 ### Step 1: Remove from Element List
 
-In the source module, remove the element from the `elements` list.
+In the source module, remove the element from the `definitions` list.
 
 ### Step 2: Update All References
 
@@ -282,11 +282,11 @@ Also update the Haskell binding name if desired.
 ### Step 2: Update the Element Registration
 
 ```haskell
-elements = [
+definitions = [
   -- Change:
-  toBinding myOldName
+  toDefinition myOldName
   -- To:
-  toBinding myNewName]
+  toDefinition myNewName]
 ```
 
 ### Step 3: Update All References
@@ -740,7 +740,7 @@ Adding a primitive requires updates to **six files**:
 
 4. **`Hydra.Sources.Eval.Lib.Lists`** - The interpreter-friendly definition:
    ```haskell
-   find_ :: TBinding (Term -> Term -> Flow s Term)
+   find_ :: TTermDefinition (Term -> Term -> Flow s Term)
    find_ = define "find" $ ...
    ```
 
@@ -839,8 +839,8 @@ Lists.find ("b" ~> (Core.bindingName (var "b")) `eq` (var "name")) elements
 - `Hydra/Sources/Kernel/Terms/Haskell/Coder.hs` + `Hydra/Haskell/Coder.hs`
 
 **hydra-ext:**
-- `Hydra/Ext/Staging/Python/Coder.hs`
-- `Hydra/Ext/Staging/Python/TestCodec.hs`
+- `Hydra/Ext/Python/Coder.hs`
+- `Hydra/Ext/Python/TestCodec.hs`
 - `Hydra/Ext/Tools/Analysis/Dependencies.hs`
 - `Hydra/Ext/Tools/Analysis/Summaries.hs`
 - `Hydra/Ext/Tools/AvroWorkflows.hs`

@@ -40,7 +40,6 @@ case class ForallType(parameter: hydra.core.Name, body: hydra.core.Type)
 enum Function :
    case elimination(value: hydra.core.Elimination) extends Function
    case lambda(value: hydra.core.Lambda) extends Function
-   case primitive(value: hydra.core.Name) extends Function
 
 case class FunctionType(domain: hydra.core.Type, codomain: hydra.core.Type)
 

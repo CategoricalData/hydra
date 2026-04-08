@@ -6,8 +6,6 @@ import hydra.util.*
 
 import hydra.variants.*
 
-import hydra.lib.lists
-
 def eliminationVariant(v1: hydra.core.Elimination): hydra.variants.EliminationVariant =
   v1 match
   case hydra.core.Elimination.record(v_Elimination_record__) => hydra.variants.EliminationVariant.record
@@ -35,10 +33,8 @@ def functionVariant(v1: hydra.core.Function): hydra.variants.FunctionVariant =
   v1 match
   case hydra.core.Function.elimination(v_Function_elimination__) => hydra.variants.FunctionVariant.elimination
   case hydra.core.Function.lambda(v_Function_lambda__) => hydra.variants.FunctionVariant.lambda
-  case hydra.core.Function.primitive(v_Function_primitive__) => hydra.variants.FunctionVariant.primitive
 
-lazy val functionVariants: Seq[hydra.variants.FunctionVariant] = Seq(hydra.variants.FunctionVariant.elimination,
-   hydra.variants.FunctionVariant.lambda, hydra.variants.FunctionVariant.primitive)
+lazy val functionVariants: Seq[hydra.variants.FunctionVariant] = Seq(hydra.variants.FunctionVariant.elimination, hydra.variants.FunctionVariant.lambda)
 
 def integerTypeIsSigned(v1: hydra.core.IntegerType): Boolean =
   v1 match

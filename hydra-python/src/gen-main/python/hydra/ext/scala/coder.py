@@ -10,7 +10,6 @@ from hydra.dsl.python import Either, FrozenDict, Just, Left, Maybe, Nothing, Rig
 from typing import TypeVar, cast
 import hydra.analysis
 import hydra.annotations
-import hydra.context
 import hydra.core
 import hydra.environment
 import hydra.errors
@@ -44,6 +43,7 @@ import hydra.variables
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
+T2 = TypeVar("T2")
 
 def apply_var(fterm: hydra.core.Term, avar: hydra.core.Name):
     r"""Apply a variable to a term, performing substitution for lambdas."""
@@ -78,8 +78,8 @@ def drop_domains(n: int, t: hydra.core.Type):
                 return t
     return hydra.lib.logic.if_else(hydra.lib.equality.lte(n, 0), (lambda : t), (lambda : _hoist_hydra_ext_scala_coder_drop_domains_1(n, t, hydra.strip.deannotate_type(t))))
 
-def encode_type(cx: hydra.context.Context, g: T0, t: hydra.core.Type):
-    def _hoist_hydra_ext_scala_coder_encode_type_1(cx, v1):
+def encode_type(cx: T0, g: T1, t: hydra.core.Type):
+    def _hoist_hydra_ext_scala_coder_encode_type_1(v1):
         match v1:
             case hydra.core.FloatType.BIGFLOAT:
                 return Right(cast(hydra.ext.scala.syntax.Type, hydra.ext.scala.syntax.TypeRef(cast(hydra.ext.scala.syntax.Type_Ref, hydra.ext.scala.syntax.Type_RefName(hydra.ext.scala.syntax.Type_Name("BigDecimal"))))))
@@ -91,8 +91,8 @@ def encode_type(cx: hydra.context.Context, g: T0, t: hydra.core.Type):
                 return Right(cast(hydra.ext.scala.syntax.Type, hydra.ext.scala.syntax.TypeRef(cast(hydra.ext.scala.syntax.Type_Ref, hydra.ext.scala.syntax.Type_RefName(hydra.ext.scala.syntax.Type_Name("Double"))))))
 
             case _:
-                return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unsupported float type"))), cx))
-    def _hoist_hydra_ext_scala_coder_encode_type_2(cx, v1):
+                return Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unsupported float type"))))
+    def _hoist_hydra_ext_scala_coder_encode_type_2(v1):
         match v1:
             case hydra.core.IntegerType.BIGINT:
                 return Right(cast(hydra.ext.scala.syntax.Type, hydra.ext.scala.syntax.TypeRef(cast(hydra.ext.scala.syntax.Type_Ref, hydra.ext.scala.syntax.Type_RefName(hydra.ext.scala.syntax.Type_Name("BigInt"))))))
@@ -122,8 +122,8 @@ def encode_type(cx: hydra.context.Context, g: T0, t: hydra.core.Type):
                 return Right(cast(hydra.ext.scala.syntax.Type, hydra.ext.scala.syntax.TypeRef(cast(hydra.ext.scala.syntax.Type_Ref, hydra.ext.scala.syntax.Type_RefName(hydra.ext.scala.syntax.Type_Name("BigInt"))))))
 
             case _:
-                return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unsupported integer type"))), cx))
-    def _hoist_hydra_ext_scala_coder_encode_type_3(cx, v1):
+                return Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unsupported integer type"))))
+    def _hoist_hydra_ext_scala_coder_encode_type_3(v1):
         match v1:
             case hydra.core.LiteralTypeBinary():
                 return Right(hydra.ext.scala.utils.stapply(cast(hydra.ext.scala.syntax.Type, hydra.ext.scala.syntax.TypeRef(cast(hydra.ext.scala.syntax.Type_Ref, hydra.ext.scala.syntax.Type_RefName(hydra.ext.scala.syntax.Type_Name("Array"))))), (cast(hydra.ext.scala.syntax.Type, hydra.ext.scala.syntax.TypeRef(cast(hydra.ext.scala.syntax.Type_Ref, hydra.ext.scala.syntax.Type_RefName(hydra.ext.scala.syntax.Type_Name("Byte"))))),)))
@@ -132,16 +132,16 @@ def encode_type(cx: hydra.context.Context, g: T0, t: hydra.core.Type):
                 return Right(cast(hydra.ext.scala.syntax.Type, hydra.ext.scala.syntax.TypeRef(cast(hydra.ext.scala.syntax.Type_Ref, hydra.ext.scala.syntax.Type_RefName(hydra.ext.scala.syntax.Type_Name("Boolean"))))))
 
             case hydra.core.LiteralTypeFloat(value=ft):
-                return _hoist_hydra_ext_scala_coder_encode_type_1(cx, ft)
+                return _hoist_hydra_ext_scala_coder_encode_type_1(ft)
 
             case hydra.core.LiteralTypeInteger(value=it):
-                return _hoist_hydra_ext_scala_coder_encode_type_2(cx, it)
+                return _hoist_hydra_ext_scala_coder_encode_type_2(it)
 
             case hydra.core.LiteralTypeString():
                 return Right(cast(hydra.ext.scala.syntax.Type, hydra.ext.scala.syntax.TypeRef(cast(hydra.ext.scala.syntax.Type_Ref, hydra.ext.scala.syntax.Type_RefName(hydra.ext.scala.syntax.Type_Name("scala.Predef.String"))))))
 
             case _:
-                return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unsupported literal type"))), cx))
+                return Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unsupported literal type"))))
     match hydra.strip.deannotate_type(t):
         case hydra.core.TypeApplication(value=at):
             def collect_type_args(t2: hydra.core.Type, acc: frozenlist[hydra.core.Type]):
@@ -183,7 +183,7 @@ def encode_type(cx: hydra.context.Context, g: T0, t: hydra.core.Type):
             return hydra.lib.eithers.bind(encode_type(cx, g, lt), (lambda slt: Right(hydra.ext.scala.utils.stapply1(cast(hydra.ext.scala.syntax.Type, hydra.ext.scala.syntax.TypeRef(cast(hydra.ext.scala.syntax.Type_Ref, hydra.ext.scala.syntax.Type_RefName(hydra.ext.scala.syntax.Type_Name("Seq"))))), slt))))
 
         case hydra.core.TypeLiteral(value=lt2):
-            return _hoist_hydra_ext_scala_coder_encode_type_3(cx, lt2)
+            return _hoist_hydra_ext_scala_coder_encode_type_3(lt2)
 
         case hydra.core.TypeMap(value=mt):
             kt = mt.keys
@@ -199,16 +199,16 @@ def encode_type(cx: hydra.context.Context, g: T0, t: hydra.core.Type):
             return hydra.lib.eithers.bind(encode_type(cx, g, ft), (lambda sft: hydra.lib.eithers.bind(encode_type(cx, g, st), (lambda sst: Right(hydra.ext.scala.utils.stapply2(cast(hydra.ext.scala.syntax.Type, hydra.ext.scala.syntax.TypeRef(cast(hydra.ext.scala.syntax.Type_Ref, hydra.ext.scala.syntax.Type_RefName(hydra.ext.scala.syntax.Type_Name("Tuple2"))))), sft, sst))))))
 
         case hydra.core.TypeRecord():
-            return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unexpected anonymous record type"))), cx))
+            return Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unexpected anonymous record type"))))
 
         case hydra.core.TypeSet(value=st):
             return hydra.lib.eithers.bind(encode_type(cx, g, st), (lambda sst: Right(hydra.ext.scala.utils.stapply1(cast(hydra.ext.scala.syntax.Type, hydra.ext.scala.syntax.TypeRef(cast(hydra.ext.scala.syntax.Type_Ref, hydra.ext.scala.syntax.Type_RefName(hydra.ext.scala.syntax.Type_Name("scala.collection.immutable.Set"))))), sst))))
 
         case hydra.core.TypeUnion():
-            return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unexpected anonymous union type"))), cx))
+            return Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unexpected anonymous union type"))))
 
         case hydra.core.TypeWrap():
-            return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unexpected anonymous wrap type"))), cx))
+            return Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unexpected anonymous wrap type"))))
 
         case hydra.core.TypeForall(value=ft2):
             v = ft2.parameter
@@ -223,9 +223,9 @@ def encode_type(cx: hydra.context.Context, g: T0, t: hydra.core.Type):
             return Right(cast(hydra.ext.scala.syntax.Type, hydra.ext.scala.syntax.TypeVar(hydra.ext.scala.syntax.Type_Var(hydra.ext.scala.syntax.Type_Name(type_name())))))
 
         case _:
-            return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unsupported type"))), cx))
+            return Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unsupported type"))))
 
-def find_sdom(cx: hydra.context.Context, g: hydra.graph.Graph, meta: FrozenDict[hydra.core.Name, hydra.core.Term]):
+def find_sdom(cx: T0, g: hydra.graph.Graph, meta: FrozenDict[hydra.core.Name, hydra.core.Term]):
     def _hoist_hydra_ext_scala_coder_find_sdom_1(cx, g, v1):
         match v1:
             case hydra.core.TypeFunction(value=ft2):
@@ -245,10 +245,10 @@ def find_sdom(cx: hydra.context.Context, g: hydra.graph.Graph, meta: FrozenDict[
 
             case _:
                 return hydra.lib.eithers.bind(encode_type(cx, g, t), (lambda st: Right(Just(st))))
-    return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda _de: hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(_de.value))), cx)), (lambda _a: _a), hydra.annotations.get_type(g, meta)), (lambda mtyp: hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda t: _hoist_hydra_ext_scala_coder_find_sdom_2(cx, g, t, hydra.strip.deannotate_type(t))), mtyp)))
+    return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda _de: cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(_de.value)))), (lambda _a: _a), hydra.annotations.get_type(g, meta)), (lambda mtyp: hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda t: _hoist_hydra_ext_scala_coder_find_sdom_2(cx, g, t, hydra.strip.deannotate_type(t))), mtyp)))
 
-def encode_literal(cx: hydra.context.Context, g: T0, av: hydra.core.Literal):
-    def _hoist_hydra_ext_scala_coder_encode_literal_1(cx, v1):
+def encode_literal(cx: T0, g: T1, av: hydra.core.Literal):
+    def _hoist_hydra_ext_scala_coder_encode_literal_1(v1):
         match v1:
             case hydra.core.FloatValueBigfloat(value=bf):
                 return Right(cast(hydra.ext.scala.syntax.Lit, hydra.ext.scala.syntax.LitDouble(hydra.lib.literals.bigfloat_to_float64(bf))))
@@ -260,8 +260,8 @@ def encode_literal(cx: hydra.context.Context, g: T0, av: hydra.core.Literal):
                 return Right(cast(hydra.ext.scala.syntax.Lit, hydra.ext.scala.syntax.LitDouble(f)))
 
             case _:
-                return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unexpected float value"))), cx))
-    def _hoist_hydra_ext_scala_coder_encode_literal_2(cx, v1):
+                return Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unexpected float value"))))
+    def _hoist_hydra_ext_scala_coder_encode_literal_2(v1):
         match v1:
             case hydra.core.IntegerValueBigint(value=i):
                 return Right(cast(hydra.ext.scala.syntax.Lit, hydra.ext.scala.syntax.LitLong(hydra.lib.literals.bigint_to_int64(i))))
@@ -291,7 +291,7 @@ def encode_literal(cx: hydra.context.Context, g: T0, av: hydra.core.Literal):
                 return Right(cast(hydra.ext.scala.syntax.Lit, hydra.ext.scala.syntax.LitLong(hydra.lib.literals.bigint_to_int64(hydra.lib.literals.uint64_to_bigint(i)))))
 
             case _:
-                return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unexpected integer value"))), cx))
+                return Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unexpected integer value"))))
     match av:
         case hydra.core.LiteralBinary(value=b):
             return Right(cast(hydra.ext.scala.syntax.Lit, hydra.ext.scala.syntax.LitBytes(hydra.lib.literals.binary_to_bytes(b))))
@@ -300,16 +300,16 @@ def encode_literal(cx: hydra.context.Context, g: T0, av: hydra.core.Literal):
             return Right(cast(hydra.ext.scala.syntax.Lit, hydra.ext.scala.syntax.LitBoolean(b2)))
 
         case hydra.core.LiteralFloat(value=fv):
-            return _hoist_hydra_ext_scala_coder_encode_literal_1(cx, fv)
+            return _hoist_hydra_ext_scala_coder_encode_literal_1(fv)
 
         case hydra.core.LiteralInteger(value=iv):
-            return _hoist_hydra_ext_scala_coder_encode_literal_2(cx, iv)
+            return _hoist_hydra_ext_scala_coder_encode_literal_2(iv)
 
         case hydra.core.LiteralString(value=s):
             return Right(cast(hydra.ext.scala.syntax.Lit, hydra.ext.scala.syntax.LitString(s)))
 
         case _:
-            return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unexpected literal"))), cx))
+            return Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unexpected literal"))))
 
 def strip_wrap_eliminations(t: hydra.core.Term):
     r"""Strip wrap eliminations from terms (newtypes are erased in Scala)."""
@@ -370,7 +370,7 @@ def strip_wrap_eliminations(t: hydra.core.Term):
         case _:
             return t
 
-def encode_typed_param(cx: hydra.context.Context, g: T0, pair: tuple[hydra.core.Name, hydra.core.Type]) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.scala.syntax.Data_Param]:
+def encode_typed_param(cx: T0, g: T1, pair: tuple[hydra.core.Name, hydra.core.Type]) -> Either[hydra.errors.Error, hydra.ext.scala.syntax.Data_Param]:
     r"""Encode a parameter with its type annotation."""
 
     @lru_cache(1)
@@ -474,7 +474,7 @@ def extract_params(t: hydra.core.Term):
             case _:
                 return ()
 
-def encode_case(cx: hydra.context.Context, g: hydra.graph.Graph, ftypes: FrozenDict[hydra.core.Name, hydra.core.Type], sn: Maybe[hydra.core.Name], f: hydra.core.Field) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.scala.syntax.Case]:
+def encode_case(cx: T0, g: hydra.graph.Graph, ftypes: FrozenDict[hydra.core.Name, hydra.core.Type], sn: Maybe[hydra.core.Name], f: hydra.core.Field) -> Either[hydra.errors.Error, hydra.ext.scala.syntax.Case]:
     r"""Encode a case branch."""
 
     fname = f.name
@@ -571,7 +571,7 @@ def encode_case(cx: hydra.context.Context, g: hydra.graph.Graph, ftypes: FrozenD
         return apply_var(fterm, v())
     return hydra.lib.eithers.bind(encode_term(cx, g, applied()), (lambda body: Right(hydra.ext.scala.syntax.Case(pat(), Nothing(), body))))
 
-def encode_function(cx: hydra.context.Context, g: hydra.graph.Graph, meta: FrozenDict[hydra.core.Name, hydra.core.Term], fun: hydra.core.Function, arg: Maybe[hydra.core.Term]):
+def encode_function(cx: T0, g: hydra.graph.Graph, meta: FrozenDict[hydra.core.Name, hydra.core.Term], fun: hydra.core.Function, arg: Maybe[hydra.core.Term]):
     def _hoist_hydra_ext_scala_coder_encode_function_1(arg, cx, g, meta, v1):
         match v1:
             case hydra.core.EliminationWrap():
@@ -600,7 +600,7 @@ def encode_function(cx: hydra.context.Context, g: hydra.graph.Graph, meta: Froze
                 return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda f: encode_case(cx, g, ftypes(), sn(), f)), cases), (lambda field_cases: hydra.lib.eithers.bind(hydra.lib.maybes.maybe((lambda : Right(field_cases)), (lambda dflt_term: hydra.lib.eithers.bind(encode_term(cx, g, dflt_term), (lambda sdflt: Right(hydra.lib.lists.concat2(field_cases, (hydra.ext.scala.syntax.Case(cast(hydra.ext.scala.syntax.Pat, hydra.ext.scala.syntax.PatWildcard()), Nothing(), sdflt),)))))), dflt), (lambda scases: hydra.lib.maybes.maybe((lambda : hydra.lib.eithers.bind(find_sdom(cx, g, meta), (lambda sdom: Right(hydra.ext.scala.utils.slambda(v, cast(hydra.ext.scala.syntax.Data, hydra.ext.scala.syntax.DataMatch(hydra.ext.scala.syntax.Data_Match(hydra.ext.scala.utils.sname(v), scases))), sdom))))), (lambda a: hydra.lib.eithers.bind(encode_term(cx, g, a), (lambda sa: Right(cast(hydra.ext.scala.syntax.Data, hydra.ext.scala.syntax.DataMatch(hydra.ext.scala.syntax.Data_Match(sa, scases))))))), arg)))))
 
             case _:
-                return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unsupported elimination"))), cx))
+                return Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unsupported elimination"))))
     match fun:
         case hydra.core.FunctionLambda(value=lam):
             param = lam.parameter
@@ -614,16 +614,13 @@ def encode_function(cx: hydra.context.Context, g: hydra.graph.Graph, meta: Froze
                 return hydra.lib.maybes.bind(raw_mdom, (lambda dom: (free_vars := hydra.variables.free_variables_in_type(dom), unqualified_free_vars := hydra.lib.sets.from_list(hydra.lib.lists.filter((lambda n: hydra.lib.logic.not_(hydra.lib.lists.elem(46, hydra.lib.strings.to_list(n.value)))), hydra.lib.sets.to_list(free_vars))), unresolved_vars := hydra.lib.sets.difference(unqualified_free_vars, g.type_variables), hydra.lib.logic.if_else(hydra.lib.sets.null(unresolved_vars), (lambda : Just(dom)), (lambda : Nothing())))[3]))
             return hydra.lib.eithers.bind(encode_term(cx, g, body), (lambda sbody: hydra.lib.eithers.bind(hydra.lib.maybes.maybe((lambda : find_sdom(cx, g, meta)), (lambda dom: hydra.lib.eithers.bind(encode_type(cx, g, dom), (lambda sdom: Right(Just(sdom))))), mdom()), (lambda sdom: Right(hydra.ext.scala.utils.slambda(v(), sbody, sdom))))))
 
-        case hydra.core.FunctionPrimitive(value=name):
-            return Right(hydra.ext.scala.utils.sprim(name))
-
         case hydra.core.FunctionElimination(value=e):
             return _hoist_hydra_ext_scala_coder_encode_function_1(arg, cx, g, meta, e)
 
         case _:
-            return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unsupported function"))), cx))
+            return Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unsupported function"))))
 
-def encode_let_binding(cx: hydra.context.Context, g: hydra.graph.Graph, outer_type_vars: frozenset[hydra.core.Name], b: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.scala.syntax.Stat]:
+def encode_let_binding(cx: T0, g: hydra.graph.Graph, outer_type_vars: frozenset[hydra.core.Name], b: hydra.core.Binding) -> Either[hydra.errors.Error, hydra.ext.scala.syntax.Stat]:
     r"""Encode a let binding as a val or def declaration. outerTypeVars are type params from the enclosing scope."""
 
     @lru_cache(1)
@@ -655,7 +652,7 @@ def encode_let_binding(cx: hydra.context.Context, g: hydra.graph.Graph, outer_ty
         return hydra.lib.maybes.maybe((lambda : False), (lambda ts: _hoist_is_fn_2(hydra.strip.deannotate_type(ts.type))), mts())
     return hydra.lib.maybes.maybe((lambda : hydra.lib.eithers.bind(encode_term(cx, g, bterm), (lambda srhs: Right(cast(hydra.ext.scala.syntax.Stat, hydra.ext.scala.syntax.StatDefn(cast(hydra.ext.scala.syntax.Defn, hydra.ext.scala.syntax.DefnVal(hydra.ext.scala.syntax.Defn_Val((cast(hydra.ext.scala.syntax.Mod, hydra.ext.scala.syntax.ModLazy()),), (cast(hydra.ext.scala.syntax.Pat, hydra.ext.scala.syntax.PatVar(hydra.ext.scala.syntax.Pat_Var(hydra.ext.scala.syntax.Data_Name(hydra.ext.scala.syntax.PredefString(bname()))))),), Nothing(), srhs))))))))), (lambda ts: (new_vars := hydra.lib.lists.filter((lambda v: hydra.lib.logic.not_(hydra.lib.sets.member(v, outer_type_vars))), ts.variables), use_def := hydra.lib.logic.or_(is_fn(), hydra.lib.logic.not_(hydra.lib.lists.null(new_vars))), hydra.lib.logic.if_else(use_def, (lambda : encode_local_def(cx, g, outer_type_vars, bname(), bterm, ts.type)), (lambda : hydra.lib.eithers.bind(encode_term(cx, g, bterm), (lambda srhs: hydra.lib.eithers.bind(encode_type(cx, g, ts.type), (lambda styp: Right(cast(hydra.ext.scala.syntax.Stat, hydra.ext.scala.syntax.StatDefn(cast(hydra.ext.scala.syntax.Defn, hydra.ext.scala.syntax.DefnVal(hydra.ext.scala.syntax.Defn_Val((cast(hydra.ext.scala.syntax.Mod, hydra.ext.scala.syntax.ModLazy()),), (cast(hydra.ext.scala.syntax.Pat, hydra.ext.scala.syntax.PatVar(hydra.ext.scala.syntax.Pat_Var(hydra.ext.scala.syntax.Data_Name(hydra.ext.scala.syntax.PredefString(bname()))))),), Just(styp), srhs)))))))))))))[2]), mts())
 
-def encode_local_def(cx: hydra.context.Context, g: hydra.graph.Graph, outer_type_vars: frozenset[hydra.core.Name], lname: str, term: hydra.core.Term, typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.scala.syntax.Stat]:
+def encode_local_def(cx: T0, g: hydra.graph.Graph, outer_type_vars: frozenset[hydra.core.Name], lname: str, term: hydra.core.Term, typ: hydra.core.Type) -> Either[hydra.errors.Error, hydra.ext.scala.syntax.Stat]:
     r"""Encode a local def. outerTypeVars are type params already in scope (don't redeclare them)."""
 
     @lru_cache(1)
@@ -690,7 +687,7 @@ def encode_local_def(cx: hydra.context.Context, g: hydra.graph.Graph, outer_type
         return hydra.graph.Graph(g.bound_terms, g.bound_types, g.class_constraints, g.lambda_variables, g.metadata, g.primitives, g.schema_types, hydra.lib.sets.union(all_type_vars(), g.type_variables))
     return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v1: encode_typed_param(cx, g_with_type_vars(), v1)), zipped_params()), (lambda sparams: hydra.lib.eithers.bind(encode_term(cx, g_with_type_vars(), extract_body(term)), (lambda sbody: hydra.lib.eithers.bind(encode_type(cx, g_with_type_vars(), cod()), (lambda scod: (g_for_lets := hydra.lib.logic.if_else(hydra.lib.lists.null(let_bindings()), (lambda : g_with_type_vars()), (lambda : hydra.scoping.extend_graph_for_let((lambda g2, b: hydra.lib.logic.if_else(hydra.predicates.is_complex_binding(g2, b), (lambda : Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(True)))))), (lambda : Nothing()))), g_with_type_vars(), hydra.core.Let(let_bindings(), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("dummy"))))))), hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v1: encode_let_binding(cx, g_for_lets, all_type_vars(), v1)), let_bindings()), (lambda sbindings: (def_body := hydra.lib.logic.if_else(hydra.lib.lists.null(sbindings), (lambda : sbody), (lambda : cast(hydra.ext.scala.syntax.Data, hydra.ext.scala.syntax.DataBlock(hydra.ext.scala.syntax.Data_Block(hydra.lib.lists.concat2(sbindings, (cast(hydra.ext.scala.syntax.Stat, hydra.ext.scala.syntax.StatTerm(sbody)),))))))), Right(cast(hydra.ext.scala.syntax.Stat, hydra.ext.scala.syntax.StatDefn(cast(hydra.ext.scala.syntax.Defn, hydra.ext.scala.syntax.DefnDef(hydra.ext.scala.syntax.Defn_Def((), hydra.ext.scala.syntax.Data_Name(hydra.ext.scala.syntax.PredefString(lname)), tparams(), hydra.lib.lists.map((lambda p: (p,)), sparams), Just(scod), def_body)))))))[1])))[1]))))))
 
-def encode_term(cx: hydra.context.Context, g: hydra.graph.Graph, term0: hydra.core.Term):
+def encode_term(cx: T0, g: hydra.graph.Graph, term0: hydra.core.Term):
     r"""Encode a Hydra term as a Scala expression."""
 
     @lru_cache(1)
@@ -737,9 +734,6 @@ def encode_term(cx: hydra.context.Context, g: hydra.graph.Graph, term0: hydra.co
             substituted_body = body_after_type_lambdas()
             def _hoist_collect_type_args_body_1(v1):
                 match v1:
-                    case hydra.core.FunctionPrimitive(value=pname):
-                        return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda targ: encode_type(cx, g, targ)), type_args()), (lambda stype_args: (in_scope_type_var_names := hydra.lib.sets.from_list(hydra.lib.lists.map((lambda n: hydra.formatting.capitalize(n.value)), hydra.lib.sets.to_list(g.type_variables))), has_forall_residual := (_hoist_has_forall_residual_1 := (lambda v12: (lambda tv: (tv_name := tv.name.value, hydra.lib.logic.and_(hydra.lib.logic.not_(hydra.lib.lists.elem(46, hydra.lib.strings.to_list(tv_name))), hydra.lib.logic.not_(hydra.lib.sets.member(tv_name, in_scope_type_var_names))))[1])(v12.value) if isinstance(v12, hydra.ext.scala.syntax.TypeVar) else False), hydra.lib.logic.not_(hydra.lib.lists.null(hydra.lib.lists.filter((lambda st: _hoist_has_forall_residual_1(st)), stype_args))))[1], hydra.lib.logic.if_else(has_forall_residual, (lambda : Right(hydra.ext.scala.utils.sprim(pname))), (lambda : Right(hydra.ext.scala.utils.sapply_types(hydra.ext.scala.utils.sprim(pname), stype_args)))))[2]))
-
                     case hydra.core.FunctionElimination():
                         return encode_term(cx, g, substituted_body)
 
@@ -749,6 +743,9 @@ def encode_term(cx: hydra.context.Context, g: hydra.graph.Graph, term0: hydra.co
                 match v1:
                     case hydra.core.TermFunction(value=f):
                         return _hoist_collect_type_args_body_1(f)
+
+                    case hydra.core.TermVariable(value=pname):
+                        return hydra.lib.maybes.cases(hydra.lib.maps.lookup(pname, g.primitives), (lambda : encode_term(cx, g, substituted_body)), (lambda _prim: hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda targ: encode_type(cx, g, targ)), type_args()), (lambda stype_args: (in_scope_type_var_names := hydra.lib.sets.from_list(hydra.lib.lists.map((lambda n: hydra.formatting.capitalize(n.value)), hydra.lib.sets.to_list(g.type_variables))), has_forall_residual := (_hoist_has_forall_residual_1 := (lambda v12: (lambda tv: (tv_name := tv.name.value, hydra.lib.logic.and_(hydra.lib.logic.not_(hydra.lib.lists.elem(46, hydra.lib.strings.to_list(tv_name))), hydra.lib.logic.not_(hydra.lib.sets.member(tv_name, in_scope_type_var_names))))[1])(v12.value) if isinstance(v12, hydra.ext.scala.syntax.TypeVar) else False), hydra.lib.logic.not_(hydra.lib.lists.null(hydra.lib.lists.filter((lambda st: _hoist_has_forall_residual_1(st)), stype_args))))[1], hydra.lib.logic.if_else(has_forall_residual, (lambda : Right(hydra.ext.scala.utils.sprim(pname))), (lambda : Right(hydra.ext.scala.utils.sapply_types(hydra.ext.scala.utils.sprim(pname), stype_args)))))[2]))))
 
                     case _:
                         return encode_term(cx, g, substituted_body)
@@ -888,13 +885,15 @@ def encode_term(cx: hydra.context.Context, g: hydra.graph.Graph, term0: hydra.co
             @lru_cache(1)
             def local_name() -> str:
                 return hydra.names.local_name_of(v2)
-            parts = hydra.lib.strings.split_on(".", full_name)
+            @lru_cache(1)
+            def parts() -> frozenlist[str]:
+                return hydra.lib.strings.split_on(".", full_name)
             @lru_cache(1)
             def num_parts() -> int:
-                return hydra.lib.lists.length(parts)
+                return hydra.lib.lists.length(parts())
             @lru_cache(1)
             def escaped() -> str:
-                return hydra.lib.logic.if_else(hydra.lib.equality.lte(num_parts(), 1), (lambda : hydra.ext.scala.utils.scala_escape_name(full_name)), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(num_parts(), 2), (lambda : hydra.lib.strings.cat2(hydra.lib.lists.head(parts), hydra.lib.strings.cat2(".", hydra.ext.scala.utils.scala_escape_name(local_name())))), (lambda : hydra.lib.strings.intercalate(".", hydra.lib.lists.concat2(hydra.lib.lists.take(hydra.lib.math.sub(num_parts(), 1), parts), (hydra.ext.scala.utils.scala_escape_name(local_name()),)))))))
+                return hydra.lib.logic.if_else(hydra.lib.equality.lte(num_parts(), 1), (lambda : hydra.ext.scala.utils.scala_escape_name(full_name)), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(num_parts(), 2), (lambda : hydra.lib.strings.cat2(hydra.lib.lists.head(parts()), hydra.lib.strings.cat2(".", hydra.ext.scala.utils.scala_escape_name(local_name())))), (lambda : hydra.lib.strings.intercalate(".", hydra.lib.lists.concat2(hydra.lib.lists.take(hydra.lib.math.sub(num_parts(), 1), parts()), (hydra.ext.scala.utils.scala_escape_name(local_name()),)))))))
             return Right(hydra.ext.scala.utils.sname(escaped()))
 
         case hydra.core.TermAnnotated(value=at):
@@ -918,9 +917,9 @@ def encode_term(cx: hydra.context.Context, g: hydra.graph.Graph, term0: hydra.co
             return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v1: encode_let_binding(cx, g_let(), g_let().type_variables, v1)), bindings), (lambda sbindings: hydra.lib.eithers.bind(encode_term(cx, g_let(), body), (lambda sbody: Right(cast(hydra.ext.scala.syntax.Data, hydra.ext.scala.syntax.DataBlock(hydra.ext.scala.syntax.Data_Block(hydra.lib.lists.concat2(sbindings, (cast(hydra.ext.scala.syntax.Stat, hydra.ext.scala.syntax.StatTerm(sbody)),))))))))))
 
         case _:
-            return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unexpected term"))), cx))
+            return Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unexpected term"))))
 
-def encode_complex_term_def(cx: hydra.context.Context, g: hydra.graph.Graph, lname: str, term: hydra.core.Term, typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.scala.syntax.Stat]:
+def encode_complex_term_def(cx: T0, g: hydra.graph.Graph, lname: str, term: hydra.core.Term, typ: hydra.core.Type) -> Either[hydra.errors.Error, hydra.ext.scala.syntax.Stat]:
     r"""Encode a complex term definition with proper parameter types from the type signature."""
 
     @lru_cache(1)
@@ -952,7 +951,7 @@ def encode_complex_term_def(cx: hydra.context.Context, g: hydra.graph.Graph, lna
         return hydra.graph.Graph(g.bound_terms, g.bound_types, g.class_constraints, g.lambda_variables, g.metadata, g.primitives, g.schema_types, hydra.lib.sets.union(hydra.lib.sets.from_list(free_type_vars()), g.type_variables))
     return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v1: encode_typed_param(cx, g_with_type_vars(), v1)), zipped_params()), (lambda sparams: hydra.lib.eithers.bind(encode_term(cx, g_with_type_vars(), extract_body(term)), (lambda sbody: hydra.lib.eithers.bind(encode_type(cx, g, cod()), (lambda scod: (g_for_lets := hydra.lib.logic.if_else(hydra.lib.lists.null(let_bindings()), (lambda : g_with_type_vars()), (lambda : hydra.scoping.extend_graph_for_let((lambda g2, b: hydra.lib.logic.if_else(hydra.predicates.is_complex_binding(g2, b), (lambda : Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(True)))))), (lambda : Nothing()))), g_with_type_vars(), hydra.core.Let(let_bindings(), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("dummy"))))))), hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v1: encode_let_binding(cx, g_for_lets, hydra.lib.sets.from_list(free_type_vars()), v1)), let_bindings()), (lambda sbindings: (def_body := hydra.lib.logic.if_else(hydra.lib.lists.null(sbindings), (lambda : sbody), (lambda : cast(hydra.ext.scala.syntax.Data, hydra.ext.scala.syntax.DataBlock(hydra.ext.scala.syntax.Data_Block(hydra.lib.lists.concat2(sbindings, (cast(hydra.ext.scala.syntax.Stat, hydra.ext.scala.syntax.StatTerm(sbody)),))))))), Right(cast(hydra.ext.scala.syntax.Stat, hydra.ext.scala.syntax.StatDefn(cast(hydra.ext.scala.syntax.Defn, hydra.ext.scala.syntax.DefnDef(hydra.ext.scala.syntax.Defn_Def((), hydra.ext.scala.syntax.Data_Name(hydra.ext.scala.syntax.PredefString(lname)), tparams(), hydra.lib.lists.map((lambda p: (p,)), sparams), Just(scod), def_body)))))))[1])))[1]))))))
 
-def encode_term_definition(cx: hydra.context.Context, g: hydra.graph.Graph, td: hydra.packaging.TermDefinition) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.scala.syntax.Stat]:
+def encode_term_definition(cx: T0, g: hydra.graph.Graph, td: hydra.packaging.TermDefinition) -> Either[hydra.errors.Error, hydra.ext.scala.syntax.Stat]:
     r"""Encode a term definition as a Scala statement."""
 
     name = td.name
@@ -997,7 +996,7 @@ def type_param_to_type_var(tp: hydra.ext.scala.syntax.Type_Param) -> hydra.ext.s
                 return ""
     return cast(hydra.ext.scala.syntax.Type, hydra.ext.scala.syntax.TypeVar(hydra.ext.scala.syntax.Type_Var(hydra.ext.scala.syntax.Type_Name(s()))))
 
-def field_to_enum_case(cx: hydra.context.Context, g: T0, parent_name: str, tparams: frozenlist[hydra.ext.scala.syntax.Type_Param], ft: hydra.core.FieldType) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.scala.syntax.Stat]:
+def field_to_enum_case(cx: T0, g: T1, parent_name: str, tparams: frozenlist[hydra.ext.scala.syntax.Type_Param], ft: hydra.core.FieldType) -> Either[hydra.errors.Error, hydra.ext.scala.syntax.Stat]:
     r"""Convert a field type to a Scala enum case."""
 
     @lru_cache(1)
@@ -1021,7 +1020,7 @@ def field_to_enum_case(cx: hydra.context.Context, g: T0, parent_name: str, tpara
         return hydra.lib.logic.if_else(hydra.lib.lists.null(tparams), (lambda : cast(hydra.ext.scala.syntax.Type, hydra.ext.scala.syntax.TypeRef(cast(hydra.ext.scala.syntax.Type_Ref, hydra.ext.scala.syntax.Type_RefName(hydra.ext.scala.syntax.Type_Name(parent_name)))))), (lambda : cast(hydra.ext.scala.syntax.Type, hydra.ext.scala.syntax.TypeApply(hydra.ext.scala.syntax.Type_Apply(cast(hydra.ext.scala.syntax.Type, hydra.ext.scala.syntax.TypeRef(cast(hydra.ext.scala.syntax.Type_Ref, hydra.ext.scala.syntax.Type_RefName(hydra.ext.scala.syntax.Type_Name(parent_name))))), hydra.lib.lists.map((lambda x1: type_param_to_type_var(x1)), tparams))))))
     return hydra.lib.eithers.bind(encode_type(cx, g, ftyp), (lambda sftyp: Right(cast(hydra.ext.scala.syntax.Stat, hydra.ext.scala.syntax.StatDefn(cast(hydra.ext.scala.syntax.Defn, hydra.ext.scala.syntax.DefnEnumCase(hydra.ext.scala.syntax.Defn_EnumCase((), case_name, (), hydra.ext.scala.syntax.Ctor_Primary((), cast(hydra.ext.scala.syntax.Name, hydra.ext.scala.syntax.NameValue("")), (hydra.lib.logic.if_else(is_unit(), (lambda : ()), (lambda : (hydra.ext.scala.syntax.Data_Param((), cast(hydra.ext.scala.syntax.Name, hydra.ext.scala.syntax.NameValue("value")), Just(sftyp), Nothing()),))),)), (hydra.ext.scala.syntax.Init(parent_type(), cast(hydra.ext.scala.syntax.Name, hydra.ext.scala.syntax.NameValue("")), ()),)))))))))
 
-def field_to_param(cx: hydra.context.Context, g: T0, ft: hydra.core.FieldType) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.scala.syntax.Data_Param]:
+def field_to_param(cx: T0, g: T1, ft: hydra.core.FieldType) -> Either[hydra.errors.Error, hydra.ext.scala.syntax.Data_Param]:
     r"""Convert a field type to a Scala parameter."""
 
     @lru_cache(1)
@@ -1030,7 +1029,7 @@ def field_to_param(cx: hydra.context.Context, g: T0, ft: hydra.core.FieldType) -
     ftyp = ft.type
     return hydra.lib.eithers.bind(encode_type(cx, g, ftyp), (lambda sftyp: Right(hydra.ext.scala.syntax.Data_Param((), cast(hydra.ext.scala.syntax.Name, hydra.ext.scala.syntax.NameValue(fname())), Just(sftyp), Nothing()))))
 
-def encode_type_definition(cx: hydra.context.Context, g: T0, td: hydra.packaging.TypeDefinition):
+def encode_type_definition(cx: T0, g: T1, td: hydra.packaging.TypeDefinition):
     r"""Encode a type definition as a Scala statement."""
 
     name = td.name
@@ -1108,12 +1107,12 @@ def to_prim_import(ns: hydra.packaging.Namespace) -> hydra.ext.scala.syntax.Stat
 
     return cast(hydra.ext.scala.syntax.Stat, hydra.ext.scala.syntax.StatImportExport(cast(hydra.ext.scala.syntax.ImportExportStat, hydra.ext.scala.syntax.ImportExportStatImport(hydra.ext.scala.syntax.Import((hydra.ext.scala.syntax.Importer(cast(hydra.ext.scala.syntax.Data_Ref, hydra.ext.scala.syntax.Data_RefName(hydra.ext.scala.syntax.Data_Name(hydra.ext.scala.syntax.PredefString(hydra.lib.strings.intercalate(".", hydra.lib.strings.split_on(".", ns.value)))))), ()),))))))
 
-def find_imports(cx: hydra.context.Context, g: hydra.graph.Graph, mod: hydra.packaging.Module) -> Either[hydra.context.InContext[hydra.errors.Error], frozenlist[hydra.ext.scala.syntax.Stat]]:
+def find_imports(cx: T0, g: hydra.graph.Graph, mod: hydra.packaging.Module) -> Either[hydra.errors.Error, frozenlist[hydra.ext.scala.syntax.Stat]]:
     r"""Find import statements for the module."""
 
     return hydra.lib.eithers.bind(hydra.analysis.module_dependency_namespaces(cx, g, False, False, True, False, mod), (lambda el_imps: hydra.lib.eithers.bind(hydra.analysis.module_dependency_namespaces(cx, g, False, True, False, False, mod), (lambda prim_imps: Right(hydra.lib.lists.concat((hydra.lib.lists.map((lambda x1: to_el_import(x1)), hydra.lib.sets.to_list(el_imps)), hydra.lib.lists.map((lambda x1: to_prim_import(x1)), hydra.lib.sets.to_list(prim_imps)))))))))
 
-def construct_module(cx: hydra.context.Context, g: hydra.graph.Graph, mod: hydra.packaging.Module, defs: frozenlist[hydra.packaging.Definition]) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.scala.syntax.Pkg]:
+def construct_module(cx: T0, g: hydra.graph.Graph, mod: hydra.packaging.Module, defs: frozenlist[hydra.packaging.Definition]) -> Either[hydra.errors.Error, hydra.ext.scala.syntax.Pkg]:
     r"""Construct a Scala package from a Hydra module and its definitions."""
 
     @lru_cache(1)
@@ -1126,11 +1125,15 @@ def construct_module(cx: hydra.context.Context, g: hydra.graph.Graph, mod: hydra
     def term_defs() -> frozenlist[hydra.packaging.TermDefinition]:
         return hydra.lib.pairs.second(partitioned())
     ns_name = mod.namespace.value
-    pname = hydra.ext.scala.syntax.Data_Name(hydra.ext.scala.syntax.PredefString(hydra.lib.strings.intercalate(".", hydra.lib.strings.split_on(".", ns_name))))
-    pref = cast(hydra.ext.scala.syntax.Data_Ref, hydra.ext.scala.syntax.Data_RefName(pname))
-    return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda td: encode_type_definition(cx, g, td)), type_defs()), (lambda type_decl_stats: hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda td: encode_term_definition(cx, g, td)), term_defs()), (lambda term_decl_stats: hydra.lib.eithers.bind(find_imports(cx, g, mod), (lambda imports: Right(hydra.ext.scala.syntax.Pkg(pname, pref, hydra.lib.lists.concat((imports, type_decl_stats, term_decl_stats))))))))))
+    @lru_cache(1)
+    def pname() -> hydra.ext.scala.syntax.Data_Name:
+        return hydra.ext.scala.syntax.Data_Name(hydra.ext.scala.syntax.PredefString(hydra.lib.strings.intercalate(".", hydra.lib.strings.split_on(".", ns_name))))
+    @lru_cache(1)
+    def pref() -> hydra.ext.scala.syntax.Data_Ref:
+        return cast(hydra.ext.scala.syntax.Data_Ref, hydra.ext.scala.syntax.Data_RefName(pname()))
+    return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda td: encode_type_definition(cx, g, td)), type_defs()), (lambda type_decl_stats: hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda td: encode_term_definition(cx, g, td)), term_defs()), (lambda term_decl_stats: hydra.lib.eithers.bind(find_imports(cx, g, mod), (lambda imports: Right(hydra.ext.scala.syntax.Pkg(pname(), pref(), hydra.lib.lists.concat((imports, type_decl_stats, term_decl_stats))))))))))
 
-def encode_untype_application_term(cx: hydra.context.Context, g: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.scala.syntax.Data]:
+def encode_untype_application_term(cx: hydra.context.Context, g: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.errors.Error, hydra.ext.scala.syntax.Data]:
     r"""Encode an untyped application term by first inferring types."""
 
     return hydra.lib.eithers.bind(hydra.inference.infer_in_graph_context(cx, g, term), (lambda result: encode_term(cx, g, result.term)))
@@ -1151,17 +1154,17 @@ def extract_codomain(t: hydra.core.Type) -> hydra.core.Type:
             case _:
                 return t
 
-def find_domain(cx: hydra.context.Context, g: hydra.graph.Graph, meta: FrozenDict[hydra.core.Name, hydra.core.Term]):
-    def _hoist_hydra_ext_scala_coder_find_domain_1(cx, v1):
+def find_domain(cx: T0, g: hydra.graph.Graph, meta: FrozenDict[hydra.core.Name, hydra.core.Term]):
+    def _hoist_hydra_ext_scala_coder_find_domain_1(v1):
         match v1:
             case hydra.core.TypeFunction(value=ft):
                 return Right(ft.domain)
 
             case _:
-                return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("expected a function type"))), cx))
-    return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda _de: hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(_de.value))), cx)), (lambda _a: _a), hydra.annotations.get_type(g, meta)), (lambda r: hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("expected a typed term"))), cx))), (lambda t: _hoist_hydra_ext_scala_coder_find_domain_1(cx, hydra.strip.deannotate_type(t))), r)))
+                return Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("expected a function type"))))
+    return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda _de: cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(_de.value)))), (lambda _a: _a), hydra.annotations.get_type(g, meta)), (lambda r: hydra.lib.maybes.maybe((lambda : Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("expected a typed term"))))), (lambda t: _hoist_hydra_ext_scala_coder_find_domain_1(hydra.strip.deannotate_type(t))), r)))
 
-def module_to_scala(mod: hydra.packaging.Module, defs: frozenlist[hydra.packaging.Definition], cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.errors.Error], FrozenDict[str, str]]:
+def module_to_scala(mod: hydra.packaging.Module, defs: frozenlist[hydra.packaging.Definition], cx: T0, g: hydra.graph.Graph) -> Either[hydra.errors.Error, FrozenDict[str, str]]:
     r"""Convert a Hydra module to Scala source code."""
 
     return hydra.lib.eithers.bind(construct_module(cx, g, mod, defs), (lambda pkg: (s := hydra.serialization.print_expr(hydra.serialization.parenthesize(hydra.ext.scala.serde.write_pkg(pkg))), Right(hydra.lib.maps.singleton(hydra.names.namespace_to_file_path(hydra.util.CaseConvention.CAMEL, hydra.packaging.FileExtension("scala"), mod.namespace), s)))[1]))

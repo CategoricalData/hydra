@@ -439,6 +439,18 @@
 
   (should (equal 0.479425538604:float64 0.479425538604:float64)))
 
+(ert-deftest test-math-negsin-negsin-nan ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negsin-negsin--plusinf ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negsin-negsin--neginf ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
 ;; cos
 
 (ert-deftest test-math-negcos-negcos-0 ()
@@ -461,6 +473,18 @@
 
   (should (equal 0.87758256189:float64 0.87758256189:float64)))
 
+(ert-deftest test-math-negcos-negcos-nan ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negcos-negcos--plusinf ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negcos-negcos--neginf ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
 ;; tan
 
 (ert-deftest test-math-negtan-negtan-0 ()
@@ -478,6 +502,18 @@
 (ert-deftest test-math-negtan-negtan-0-dot5 ()
 
   (should (equal 0.546302489844:float64 0.546302489844:float64)))
+
+(ert-deftest test-math-negtan-negtan-nan ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negtan-negtan--plusinf ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negtan-negtan--neginf ()
+
+  (should (equal NaN:float64 NaN:float64)))
 
 ;; asin
 
@@ -497,6 +533,26 @@
 
   (should (equal 0.523598775598:float64 0.523598775598:float64)))
 
+(ert-deftest test-math-negasin-negasin-below-domain ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negasin-negasin-above-domain ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negasin-negasin-nan ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negasin-negasin--plusinf ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negasin-negasin--neginf ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
 ;; acos
 
 (ert-deftest test-math-negacos-negacos-1 ()
@@ -515,6 +571,26 @@
 
   (should (equal 1.0471975512:float64 1.0471975512:float64)))
 
+(ert-deftest test-math-negacos-negacos-below-domain ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negacos-negacos-above-domain ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negacos-negacos-nan ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negacos-negacos--plusinf ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negacos-negacos--neginf ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
 ;; atan
 
 (ert-deftest test-math-negatan-negatan-0 ()
@@ -528,6 +604,18 @@
 (ert-deftest test-math-negatan-negatan-0-dot5 ()
 
   (should (equal 0.463647609001:float64 0.463647609001:float64)))
+
+(ert-deftest test-math-negatan-negatan-nan ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negatan-negatan--plusinf ()
+
+  (should (equal 1.57079632679:float64 1.57079632679:float64)))
+
+(ert-deftest test-math-negatan-negatan--neginf ()
+
+  (should (equal -1.57079632679:float64 -1.57079632679:float64)))
 
 ;; atan2
 
@@ -547,6 +635,46 @@
 
   (should (equal 0.643501108793:float64 0.643501108793:float64)))
 
+(ert-deftest test-math-negatan2-negatan2-nan-1 ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negatan2-negatan2--plusinf-1 ()
+
+  (should (equal 1.57079632679:float64 1.57079632679:float64)))
+
+(ert-deftest test-math-negatan2-negatan2--neginf-1 ()
+
+  (should (equal -1.57079632679:float64 -1.57079632679:float64)))
+
+(ert-deftest test-math-negatan2-negatan2-1-nan ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negatan2-negatan2-1--plusinf ()
+
+  (should (equal 0.0:float64 0.0:float64)))
+
+(ert-deftest test-math-negatan2-negatan2-1--neginf ()
+
+  (should (equal 3.14159265359:float64 3.14159265359:float64)))
+
+(ert-deftest test-math-negatan2-negatan2--plusinf--plusinf ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negatan2-negatan2--plusinf--neginf ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negatan2-negatan2--neginf--plusinf ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negatan2-negatan2--neginf--neginf ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
 ;; sinh
 
 (ert-deftest test-math-negsinh-negsinh-0 ()
@@ -560,6 +688,18 @@
 (ert-deftest test-math-negsinh-negsinh-2 ()
 
   (should (equal 3.62686040785:float64 3.62686040785:float64)))
+
+(ert-deftest test-math-negsinh-negsinh-nan ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negsinh-negsinh--plusinf ()
+
+  (should (equal Infinity:float64 Infinity:float64)))
+
+(ert-deftest test-math-negsinh-negsinh--neginf ()
+
+  (should (equal -Infinity:float64 -Infinity:float64)))
 
 ;; cosh
 
@@ -575,6 +715,18 @@
 
   (should (equal 3.76219569108:float64 3.76219569108:float64)))
 
+(ert-deftest test-math-negcosh-negcosh-nan ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negcosh-negcosh--plusinf ()
+
+  (should (equal Infinity:float64 Infinity:float64)))
+
+(ert-deftest test-math-negcosh-negcosh--neginf ()
+
+  (should (equal Infinity:float64 Infinity:float64)))
+
 ;; tanh
 
 (ert-deftest test-math-negtanh-negtanh-0 ()
@@ -588,6 +740,18 @@
 (ert-deftest test-math-negtanh-negtanh-0-dot5 ()
 
   (should (equal 0.46211715726:float64 0.46211715726:float64)))
+
+(ert-deftest test-math-negtanh-negtanh-nan ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negtanh-negtanh--plusinf ()
+
+  (should (equal 1.0:float64 1.0:float64)))
+
+(ert-deftest test-math-negtanh-negtanh--neginf ()
+
+  (should (equal -1.0:float64 -1.0:float64)))
 
 ;; asinh
 
@@ -603,6 +767,18 @@
 
   (should (equal 0.48121182506:float64 0.48121182506:float64)))
 
+(ert-deftest test-math-negasinh-negasinh-nan ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negasinh-negasinh--plusinf ()
+
+  (should (equal Infinity:float64 Infinity:float64)))
+
+(ert-deftest test-math-negasinh-negasinh--neginf ()
+
+  (should (equal -Infinity:float64 -Infinity:float64)))
+
 ;; acosh
 
 (ert-deftest test-math-negacosh-negacosh-1 ()
@@ -617,6 +793,26 @@
 
   (should (equal 1.76274717404:float64 1.76274717404:float64)))
 
+(ert-deftest test-math-negacosh-negacosh-below-domain ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negacosh-negacosh-negative ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negacosh-negacosh-nan ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negacosh-negacosh--plusinf ()
+
+  (should (equal Infinity:float64 Infinity:float64)))
+
+(ert-deftest test-math-negacosh-negacosh--neginf ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
 ;; atanh
 
 (ert-deftest test-math-negatanh-negatanh-0 ()
@@ -630,6 +826,34 @@
 (ert-deftest test-math-negatanh-negatanh-0-dot1 ()
 
   (should (equal 0.100335347731:float64 0.100335347731:float64)))
+
+(ert-deftest test-math-negatanh-negatanh-upper-boundary ()
+
+  (should (equal Infinity:float64 Infinity:float64)))
+
+(ert-deftest test-math-negatanh-negatanh-lower-boundary ()
+
+  (should (equal -Infinity:float64 -Infinity:float64)))
+
+(ert-deftest test-math-negatanh-negatanh-above-domain ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negatanh-negatanh-below-domain ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negatanh-negatanh-nan ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negatanh-negatanh--plusinf ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negatanh-negatanh--neginf ()
+
+  (should (equal NaN:float64 NaN:float64)))
 
 ;; exp
 
@@ -653,6 +877,18 @@
 
   (should (equal 1.6487212707:float64 1.6487212707:float64)))
 
+(ert-deftest test-math-negexp-negexp-nan ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negexp-negexp--plusinf ()
+
+  (should (equal Infinity:float64 Infinity:float64)))
+
+(ert-deftest test-math-negexp-negexp--neginf ()
+
+  (should (equal 0.0:float64 0.0:float64)))
+
 ;; log
 
 (ert-deftest test-math-neglog-neglog-1 ()
@@ -670,6 +906,26 @@
 (ert-deftest test-math-neglog-neglog-10 ()
 
   (should (equal 2.30258509299:float64 2.30258509299:float64)))
+
+(ert-deftest test-math-neglog-neglog-0 ()
+
+  (should (equal -Infinity:float64 -Infinity:float64)))
+
+(ert-deftest test-math-neglog-neglog-negative ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-neglog-neglog-nan ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-neglog-neglog--plusinf ()
+
+  (should (equal Infinity:float64 Infinity:float64)))
+
+(ert-deftest test-math-neglog-neglog--neginf ()
+
+  (should (equal NaN:float64 NaN:float64)))
 
 ;; logBase
 
@@ -693,6 +949,42 @@
 
   (should (equal 3.32192809489:float64 3.32192809489:float64)))
 
+(ert-deftest test-math-neglogbase-neglogbase-10-0 ()
+
+  (should (equal -Infinity:float64 -Infinity:float64)))
+
+(ert-deftest test-math-neglogbase-neglogbase-10-negative ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-neglogbase-neglogbase-negative-10 ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-neglogbase-neglogbase-10-nan ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-neglogbase-neglogbase-10--plusinf ()
+
+  (should (equal Infinity:float64 Infinity:float64)))
+
+(ert-deftest test-math-neglogbase-neglogbase-10--neginf ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-neglogbase-neglogbase-nan-10 ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-neglogbase-neglogbase--plusinf-10 ()
+
+  (should (equal 0.0:float64 0.0:float64)))
+
+(ert-deftest test-math-neglogbase-neglogbase--neginf-10 ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
 ;; pow
 
 (ert-deftest test-math-negpow-neg2-3 ()
@@ -710,6 +1002,46 @@
 (ert-deftest test-math-negpow-neg2-0-dot5 ()
 
   (should (equal 1.41421356237:float64 1.41421356237:float64)))
+
+(ert-deftest test-math-negpow-neg0-0 ()
+
+  (should (equal 1.0:float64 1.0:float64)))
+
+(ert-deftest test-math-negpow-neg0--neg1 ()
+
+  (should (equal Infinity:float64 Infinity:float64)))
+
+(ert-deftest test-math-negpow-neg--neg1-0-dot5 ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negpow-negnan-2 ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negpow-neg-plusinf-2 ()
+
+  (should (equal Infinity:float64 Infinity:float64)))
+
+(ert-deftest test-math-negpow-neg-neginf-2 ()
+
+  (should (equal Infinity:float64 Infinity:float64)))
+
+(ert-deftest test-math-negpow-neg-plusinf--neg1 ()
+
+  (should (equal 0.0:float64 0.0:float64)))
+
+(ert-deftest test-math-negpow-neg2-nan ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negpow-neg2--plusinf ()
+
+  (should (equal Infinity:float64 Infinity:float64)))
+
+(ert-deftest test-math-negpow-neg2--neginf ()
+
+  (should (equal 0.0:float64 0.0:float64)))
 
 ;; sqrt
 
@@ -733,63 +1065,115 @@
 
   (should (equal 1.73205080757:float64 1.73205080757:float64)))
 
+(ert-deftest test-math-negsqrt-negsqrt-negative ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negsqrt-negsqrt-nan ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negsqrt-negsqrt--plusinf ()
+
+  (should (equal Infinity:float64 Infinity:float64)))
+
+(ert-deftest test-math-negsqrt-negsqrt--neginf ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
 ;; ceiling
 
 (ert-deftest test-math-negceiling-negceiling-3-dot2 ()
 
-  (should (equal 4:bigint 4:bigint)))
+  (should (equal 4.0:float64 4.0:float64)))
 
 (ert-deftest test-math-negceiling-negceiling-3-dot0 ()
 
-  (should (equal 3:bigint 3:bigint)))
+  (should (equal 3.0:float64 3.0:float64)))
 
 (ert-deftest test-math-negceiling-negceiling--neg3-dot2 ()
 
-  (should (equal -3:bigint -3:bigint)))
+  (should (equal -3.0:float64 -3.0:float64)))
 
 (ert-deftest test-math-negceiling-negceiling--neg3-dot0 ()
 
-  (should (equal -3:bigint -3:bigint)))
+  (should (equal -3.0:float64 -3.0:float64)))
+
+(ert-deftest test-math-negceiling-negceiling-nan ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negceiling-negceiling--plusinf ()
+
+  (should (equal Infinity:float64 Infinity:float64)))
+
+(ert-deftest test-math-negceiling-negceiling--neginf ()
+
+  (should (equal -Infinity:float64 -Infinity:float64)))
 
 ;; floor
 
 (ert-deftest test-math-negfloor-negfloor-3-dot8 ()
 
-  (should (equal 3:bigint 3:bigint)))
+  (should (equal 3.0:float64 3.0:float64)))
 
 (ert-deftest test-math-negfloor-negfloor-3-dot0 ()
 
-  (should (equal 3:bigint 3:bigint)))
+  (should (equal 3.0:float64 3.0:float64)))
 
 (ert-deftest test-math-negfloor-negfloor--neg3-dot2 ()
 
-  (should (equal -4:bigint -4:bigint)))
+  (should (equal -4.0:float64 -4.0:float64)))
 
 (ert-deftest test-math-negfloor-negfloor--neg3-dot0 ()
 
-  (should (equal -3:bigint -3:bigint)))
+  (should (equal -3.0:float64 -3.0:float64)))
+
+(ert-deftest test-math-negfloor-negfloor-nan ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negfloor-negfloor--plusinf ()
+
+  (should (equal Infinity:float64 Infinity:float64)))
+
+(ert-deftest test-math-negfloor-negfloor--neginf ()
+
+  (should (equal -Infinity:float64 -Infinity:float64)))
 
 ;; round
 
 (ert-deftest test-math-neground-neground-3-dot4 ()
 
-  (should (equal 3:bigint 3:bigint)))
+  (should (equal 3.0:float64 3.0:float64)))
 
 (ert-deftest test-math-neground-neground-3-dot5 ()
 
-  (should (equal 4:bigint 4:bigint)))
+  (should (equal 4.0:float64 4.0:float64)))
 
 (ert-deftest test-math-neground-neground-3-dot6 ()
 
-  (should (equal 4:bigint 4:bigint)))
+  (should (equal 4.0:float64 4.0:float64)))
 
 (ert-deftest test-math-neground-neground--neg3-dot4 ()
 
-  (should (equal -3:bigint -3:bigint)))
+  (should (equal -3.0:float64 -3.0:float64)))
 
 (ert-deftest test-math-neground-neground--neg3-dot5 ()
 
-  (should (equal -4:bigint -4:bigint)))
+  (should (equal -4.0:float64 -4.0:float64)))
+
+(ert-deftest test-math-neground-neground-nan ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-neground-neground--plusinf ()
+
+  (should (equal Infinity:float64 Infinity:float64)))
+
+(ert-deftest test-math-neground-neground--neginf ()
+
+  (should (equal -Infinity:float64 -Infinity:float64)))
 
 ;; roundBigfloat
 
@@ -831,6 +1215,18 @@
 
   (should (equal -1230.0:float32 -1230.0:float32)))
 
+(ert-deftest test-math-negroundfloat32-negnan ()
+
+  (should (equal NaN:float32 NaN:float32)))
+
+(ert-deftest test-math-negroundfloat32-neg-plusinf ()
+
+  (should (equal Infinity:float32 Infinity:float32)))
+
+(ert-deftest test-math-negroundfloat32-neg-neginf ()
+
+  (should (equal -Infinity:float32 -Infinity:float32)))
+
 ;; roundFloat64
 
 (ert-deftest test-math-negroundfloat64-negzero ()
@@ -861,20 +1257,44 @@
 
   (should (equal 10.0:float64 10.0:float64)))
 
+(ert-deftest test-math-negroundfloat64-negnan ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negroundfloat64-neg-plusinf ()
+
+  (should (equal Infinity:float64 Infinity:float64)))
+
+(ert-deftest test-math-negroundfloat64-neg-neginf ()
+
+  (should (equal -Infinity:float64 -Infinity:float64)))
+
 ;; truncate
 
 (ert-deftest test-math-negtruncate-negtruncate-3-dot8 ()
 
-  (should (equal 3:bigint 3:bigint)))
+  (should (equal 3.0:float64 3.0:float64)))
 
 (ert-deftest test-math-negtruncate-negtruncate-3-dot2 ()
 
-  (should (equal 3:bigint 3:bigint)))
+  (should (equal 3.0:float64 3.0:float64)))
 
 (ert-deftest test-math-negtruncate-negtruncate--neg3-dot8 ()
 
-  (should (equal -3:bigint -3:bigint)))
+  (should (equal -3.0:float64 -3.0:float64)))
 
 (ert-deftest test-math-negtruncate-negtruncate--neg3-dot2 ()
 
-  (should (equal -3:bigint -3:bigint)))
+  (should (equal -3.0:float64 -3.0:float64)))
+
+(ert-deftest test-math-negtruncate-negtruncate-nan ()
+
+  (should (equal NaN:float64 NaN:float64)))
+
+(ert-deftest test-math-negtruncate-negtruncate--plusinf ()
+
+  (should (equal Infinity:float64 Infinity:float64)))
+
+(ert-deftest test-math-negtruncate-negtruncate--neginf ()
+
+  (should (equal -Infinity:float64 -Infinity:float64)))

@@ -12,7 +12,6 @@ import hydra.decode.context
 import hydra.decode.core
 import hydra.errors
 import hydra.extract.core
-import hydra.lexical
 import hydra.lib.eithers
 import hydra.typing
 
@@ -29,7 +28,7 @@ def function_structure(env: Callable[[hydra.graph.Graph, hydra.core.Term], Eithe
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_typing_function_structure_1(cx, env, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_typing_function_structure_1(cx, env, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def type_subst(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_typing_type_subst_1(cx, v1):
@@ -39,7 +38,7 @@ def type_subst(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected wrapped type"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_typing_type_subst_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_typing_type_subst_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def inference_result(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_typing_inference_result_1(cx, v1):
@@ -52,7 +51,7 @@ def inference_result(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_typing_inference_result_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_typing_inference_result_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def term_subst(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_typing_term_subst_1(cx, v1):
@@ -62,7 +61,7 @@ def term_subst(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected wrapped type"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_typing_term_subst_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_typing_term_subst_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def type_constraint(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_typing_type_constraint_1(cx, v1):
@@ -85,8 +84,8 @@ def type_constraint(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
                         case _:
                             return Left(hydra.errors.DecodingError("expected literal"))
-                return hydra.lib.eithers.bind(hydra.extract.core.require_field("left", (lambda x1, x2: hydra.decode.core.type(x1, x2)), field_map(), cx), (lambda field_left: hydra.lib.eithers.bind(hydra.extract.core.require_field("right", (lambda x1, x2: hydra.decode.core.type(x1, x2)), field_map(), cx), (lambda field_right: hydra.lib.eithers.bind(hydra.extract.core.require_field("comment", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_comment: Right(hydra.typing.TypeConstraint(field_left, field_right, field_comment))))))))
+                return hydra.lib.eithers.bind(hydra.extract.core.require_field("left", (lambda x1, x2: hydra.decode.core.type(x1, x2)), field_map(), cx), (lambda field_left: hydra.lib.eithers.bind(hydra.extract.core.require_field("right", (lambda x1, x2: hydra.decode.core.type(x1, x2)), field_map(), cx), (lambda field_right: hydra.lib.eithers.bind(hydra.extract.core.require_field("comment", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped2: _hoist_field_map_body_2(stripped2)), hydra.extract.core.strip_with_decoding_error(cx2, raw2))), field_map(), cx), (lambda field_comment: Right(hydra.typing.TypeConstraint(field_left, field_right, field_comment))))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_typing_type_constraint_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_typing_type_constraint_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))

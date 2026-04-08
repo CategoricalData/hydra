@@ -88,10 +88,12 @@ def lisp_var(name: str) -> hydra.ext.lisp.syntax.Expression:
 
 def qualified_snake_name(name: hydra.core.Name) -> str:
     raw = name.value
-    parts = hydra.lib.strings.split_on(".", raw)
+    @lru_cache(1)
+    def parts() -> frozenlist[str]:
+        return hydra.lib.strings.split_on(".", raw)
     @lru_cache(1)
     def snake_parts() -> frozenlist[str]:
-        return hydra.lib.lists.map((lambda p: hydra.formatting.convert_case_camel_or_underscore_to_lower_snake(p)), parts)
+        return hydra.lib.lists.map((lambda p: hydra.formatting.convert_case_camel_or_underscore_to_lower_snake(p)), parts())
     @lru_cache(1)
     def joined() -> str:
         return hydra.lib.strings.intercalate("_", snake_parts())
@@ -172,19 +174,9 @@ def lisp_list_expr(elements: frozenlist[hydra.ext.lisp.syntax.Expression]) -> hy
 
 lisp_nil_expr = cast(hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.ExpressionLiteral(cast(hydra.ext.lisp.syntax.Literal, hydra.ext.lisp.syntax.LiteralNil())))
 
-def is_primitive_ref(prim_name: str, term: hydra.core.Term):
+def is_primitive_ref(prim_name: str, term: hydra.core.Term) -> bool:
     while True:
-        def _hoist_hydra_ext_lisp_coder_is_primitive_ref_1(prim_name, v1):
-            match v1:
-                case hydra.core.FunctionPrimitive(value=name):
-                    return hydra.lib.equality.equal(name.value, prim_name)
-
-                case _:
-                    return False
         match term:
-            case hydra.core.TermFunction(value=f):
-                return _hoist_hydra_ext_lisp_coder_is_primitive_ref_1(prim_name, f)
-
             case hydra.core.TermVariable(value=name):
                 return hydra.lib.equality.equal(name.value, prim_name)
 
@@ -214,7 +206,7 @@ def encode_application(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, ra
     def d_fun() -> hydra.core.Term:
         return hydra.strip.deannotate_term(raw_fun)
     @lru_cache(1)
-    def normal() -> Either[hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression]:
+    def normal() -> Either[T2, hydra.ext.lisp.syntax.Expression]:
         return hydra.lib.eithers.bind(encode_term(dialect, cx, g, raw_fun), (lambda fun: hydra.lib.eithers.bind(encode_term(dialect, cx, g, raw_arg), (lambda arg: Right(lisp_app(fun, (arg,)))))))
     def enc(t: hydra.core.Term) -> Either[T2, hydra.ext.lisp.syntax.Expression]:
         return encode_term(dialect, cx, g, t)
@@ -270,7 +262,7 @@ def encode_elimination(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, el
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def encode_function(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, fun: hydra.core.Function) -> Either[hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression]:
+def encode_function(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, fun: hydra.core.Function) -> Either[T2, hydra.ext.lisp.syntax.Expression]:
     match fun:
         case hydra.core.FunctionLambda(value=lam):
             @lru_cache(1)
@@ -278,16 +270,13 @@ def encode_function(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, fun: 
                 return hydra.formatting.convert_case_camel_or_underscore_to_lower_snake(hydra.formatting.sanitize_with_underscores(hydra.ext.lisp.language.lisp_reserved_words(), lam.parameter.value))
             return hydra.lib.eithers.bind(encode_term(dialect, cx, g, lam.body), (lambda body: Right(lisp_lambda_expr((param(),), body))))
 
-        case hydra.core.FunctionPrimitive(value=name):
-            return Right(lisp_var(hydra.formatting.convert_case_camel_or_underscore_to_lower_snake(hydra.formatting.sanitize_with_underscores(hydra.ext.lisp.language.lisp_reserved_words(), name.value))))
-
         case hydra.core.FunctionElimination(value=elim):
             return encode_elimination(dialect, cx, g, elim, Nothing())
 
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def encode_let_as_native(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, bindings: frozenlist[hydra.core.Binding], body: hydra.core.Term) -> Either[hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression]:
+def encode_let_as_native(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, bindings: frozenlist[hydra.core.Binding], body: hydra.core.Term) -> Either[T2, hydra.ext.lisp.syntax.Expression]:
     @lru_cache(1)
     def is_clojure_top() -> bool:
         match dialect:
@@ -389,7 +378,7 @@ def encode_field_def(ft: hydra.core.FieldType) -> hydra.ext.lisp.syntax.FieldDef
     fname = ft.name.value
     return hydra.ext.lisp.syntax.FieldDefinition(hydra.ext.lisp.syntax.Symbol(hydra.formatting.convert_case_camel_to_lower_snake(fname)), Nothing())
 
-def encode_let_as_lambda_app(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, bindings: frozenlist[hydra.core.Binding], body: hydra.core.Term) -> Either[hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression]:
+def encode_let_as_lambda_app(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, bindings: frozenlist[hydra.core.Binding], body: hydra.core.Term) -> Either[T2, hydra.ext.lisp.syntax.Expression]:
     return hydra.lib.eithers.bind(encode_term(dialect, cx, g, body), (lambda body_expr: hydra.lib.eithers.foldl((lambda acc, b: (bname := hydra.formatting.convert_case_camel_or_underscore_to_lower_snake(hydra.formatting.sanitize_with_underscores(hydra.ext.lisp.language.lisp_reserved_words(), b.name.value)), hydra.lib.eithers.bind(encode_term(dialect, cx, g, b.term), (lambda bval: Right(lisp_app(lisp_lambda_expr((bname,), acc), (bval,))))))[1]), body_expr, hydra.lib.lists.reverse(bindings))))
 
 def lisp_top_form(form: hydra.ext.lisp.syntax.TopLevelForm) -> hydra.ext.lisp.syntax.TopLevelFormWithComments:
@@ -555,7 +544,7 @@ def module_imports(focus_ns: hydra.packaging.Namespace, defs: frozenlist[hydra.p
         return hydra.lib.sets.to_list(hydra.lib.sets.delete(focus_ns, hydra.analysis.definition_dependency_namespaces(defs)))
     return hydra.lib.lists.map((lambda ns: hydra.ext.lisp.syntax.ImportDeclaration(hydra.ext.lisp.syntax.NamespaceName(ns.value), cast(hydra.ext.lisp.syntax.ImportSpec, hydra.ext.lisp.syntax.ImportSpecAll()))), dep_nss())
 
-def module_to_lisp(dialect: hydra.ext.lisp.syntax.Dialect, mod: hydra.packaging.Module, defs0: frozenlist[hydra.packaging.Definition], cx: T0, g: T1) -> Either[hydra.ext.lisp.syntax.Program, hydra.ext.lisp.syntax.Program]:
+def module_to_lisp(dialect: hydra.ext.lisp.syntax.Dialect, mod: hydra.packaging.Module, defs0: frozenlist[hydra.packaging.Definition], cx: T0, g: T1) -> Either[T2, hydra.ext.lisp.syntax.Program]:
     @lru_cache(1)
     def defs() -> frozenlist[hydra.packaging.Definition]:
         return hydra.environment.reorder_defs(defs0)

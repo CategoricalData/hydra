@@ -2,7 +2,7 @@
 
 Hydra-Scala is a complete Scala 3 implementation of the [Hydra](https://github.com/CategoricalData/hydra)
 kernel. It supports the full code generation pipeline and passes the bootstrapping test suite,
-producing output identical to the Haskell, Java, and Python hosts for all target languages.
+producing output identical to the Haskell, Java, Python, and Lisp hosts for all target languages.
 
 ## Features
 
@@ -41,7 +41,7 @@ Or include Scala in the full sync:
 
 ```bash
 # From the repo root
-./bin/sync-all.sh --targets hydra,java,python,scala
+./bin/sync-all.sh --targets all
 ```
 
 ## Project structure

@@ -8,7 +8,7 @@ package hydra.decode;
 public interface Tabular {
   static hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.ColumnType> columnType(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.ColumnType>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.tabular.ColumnType>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.ColumnType>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.tabular.ColumnType>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.ColumnType>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.ColumnType> otherwise(hydra.core.Term instance) {
@@ -37,14 +37,14 @@ public interface Tabular {
               (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.ColumnType>>) (field_type -> hydra.util.Either.<hydra.errors.DecodingError, hydra.tabular.ColumnType>right(new hydra.tabular.ColumnType(field_name, field_type))))));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }
 
   static <T0> hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.DataRow<T0>> dataRow(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, T0>>> v, hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.DataRow<T0>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.tabular.DataRow<T0>>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.DataRow<T0>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.tabular.DataRow<T0>>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.DataRow<T0>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.DataRow<T0>> otherwise(hydra.core.Term instance) {
@@ -64,14 +64,14 @@ public interface Tabular {
               (wrappedTerm).value.body));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }
 
   static hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.HeaderRow> headerRow(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.HeaderRow>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.tabular.HeaderRow>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.HeaderRow>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.tabular.HeaderRow>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.HeaderRow>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.HeaderRow> otherwise(hydra.core.Term instance) {
@@ -84,7 +84,7 @@ public interface Tabular {
             (java.util.function.Function<java.util.List<String>, hydra.tabular.HeaderRow>) (b -> new hydra.tabular.HeaderRow(b)),
             hydra.extract.Core.decodeList(
               (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>) (raw2 -> hydra.lib.eithers.Either.apply(
-                (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, String>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, String>left(new hydra.errors.DecodingError(err))),
+                (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, String>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, String>left(err)),
                 (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, String>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
                   @Override
                   public hydra.util.Either<hydra.errors.DecodingError, String> otherwise(hydra.core.Term instance) {
@@ -106,21 +106,21 @@ public interface Tabular {
                     });
                   }
                 })),
-                hydra.Lexical.stripAndDereferenceTermEither(
+                hydra.extract.Core.stripWithDecodingError(
                   cx2,
                   raw2)))),
               cx,
               (wrappedTerm).value.body));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }
 
   static <T0> hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.Table<T0>> table(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, T0>>> v, hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.Table<T0>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.tabular.Table<T0>>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.Table<T0>>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.tabular.Table<T0>>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.Table<T0>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.Table<T0>> otherwise(hydra.core.Term instance) {
@@ -156,14 +156,14 @@ public interface Tabular {
               (java.util.function.Function<java.util.List<hydra.tabular.DataRow<T0>>, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.Table<T0>>>) (field_data -> hydra.util.Either.<hydra.errors.DecodingError, hydra.tabular.Table<T0>>right((hydra.tabular.Table<T0>) (new hydra.tabular.Table<T0>(field_header, field_data)))))));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }
 
   static hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.TableType> tableType(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.TableType>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.tabular.TableType>left(new hydra.errors.DecodingError(err))),
+      (java.util.function.Function<hydra.errors.DecodingError, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.TableType>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, hydra.tabular.TableType>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.TableType>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.TableType> otherwise(hydra.core.Term instance) {
@@ -195,7 +195,7 @@ public interface Tabular {
               (java.util.function.Function<java.util.List<hydra.tabular.ColumnType>, hydra.util.Either<hydra.errors.DecodingError, hydra.tabular.TableType>>) (field_columns -> hydra.util.Either.<hydra.errors.DecodingError, hydra.tabular.TableType>right(new hydra.tabular.TableType(field_name, field_columns))))));
         }
       })),
-      hydra.Lexical.stripAndDereferenceTermEither(
+      hydra.extract.Core.stripWithDecodingError(
         cx,
         raw));
   }

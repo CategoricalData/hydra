@@ -354,9 +354,6 @@ def function(f: hydra.core.Function) -> str:
         case hydra.core.FunctionLambda(value=v12):
             return lambda_(v12)
 
-        case hydra.core.FunctionPrimitive(value=name):
-            return hydra.lib.strings.cat2(name.value, "!")
-
         case _:
             raise AssertionError("Unreachable: all variants handled")
 

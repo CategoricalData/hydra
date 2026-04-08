@@ -1,7 +1,5 @@
 package hydra.resolution
 
-import hydra.context.*
-
 import hydra.core.*
 
 import hydra.errors.*
@@ -10,36 +8,14 @@ import hydra.graph.*
 
 import hydra.typing.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.math
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.strings
-
-def dereferenceType(cx: hydra.context.Context)(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.context.InContext[hydra.errors.Error],
-   Option[hydra.core.Type]] =
+def dereferenceType[T0](cx: T0)(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.errors.Error, Option[hydra.core.Type]] =
   {
   lazy val mel: Option[hydra.core.Binding] = hydra.lexical.lookupBinding(graph)(name)
-  hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error], Option[hydra.core.Type]],
-     hydra.core.Binding](Right(None))((el: hydra.core.Binding) =>
-    hydra.lib.eithers.map[hydra.core.Type, Option[hydra.core.Type], hydra.context.InContext[hydra.errors.Error]](hydra.lib.maybes.pure[hydra.core.Type])(hydra.lib.eithers.bimap[hydra.errors.Error,
-       hydra.core.Type, hydra.context.InContext[hydra.errors.Error], hydra.core.Type]((_wc_e: hydra.errors.Error) => hydra.context.InContext(_wc_e,
-       cx))((_wc_a: hydra.core.Type) => _wc_a)(hydra.lib.eithers.bimap[hydra.errors.DecodingError, hydra.core.Type,
-       hydra.errors.Error, hydra.core.Type]((_e: hydra.errors.DecodingError) => hydra.errors.Error.other(_e))((_a: hydra.core.Type) => _a)(hydra.decode.core.`type`(graph)(el.term)))))(mel)
+  hydra.lib.maybes.maybe[Either[hydra.errors.Error, Option[hydra.core.Type]], hydra.core.Binding](Right(None))((el: hydra.core.Binding) =>
+    hydra.lib.eithers.map[hydra.core.Type, Option[hydra.core.Type], hydra.errors.Error](hydra.lib.maybes.pure[hydra.core.Type])(hydra.lib.eithers.bimap[hydra.errors.DecodingError,
+       hydra.core.Type, hydra.errors.Error, hydra.core.Type]((_e: hydra.errors.DecodingError) =>
+    hydra.errors.Error.resolution(hydra.errors.ResolutionError.unexpectedShape(hydra.errors.UnexpectedShapeError("type",
+       _e))))((_a: hydra.core.Type) => _a)(hydra.decode.core.`type`(graph)(el.term))))(mel)
 }
 
 def fTypeIsPolymorphic(typ: hydra.core.Type): Boolean =
@@ -60,8 +36,7 @@ def fieldTypeMap(fields: Seq[hydra.core.FieldType]): Map[hydra.core.Name, hydra.
   hydra.lib.maps.fromList[hydra.core.Name, hydra.core.Type](hydra.lib.lists.map[hydra.core.FieldType, Tuple2[hydra.core.Name, hydra.core.Type]](toPair)(fields))
 }
 
-def fieldTypes(cx: hydra.context.Context)(graph: hydra.graph.Graph)(t: hydra.core.Type): Either[hydra.context.InContext[hydra.errors.Error],
-   Map[hydra.core.Name, hydra.core.Type]] =
+def fieldTypes[T0](cx: T0)(graph: hydra.graph.Graph)(t: hydra.core.Type): Either[hydra.errors.Error, Map[hydra.core.Name, hydra.core.Type]] =
   {
   def toMap(fields: Seq[hydra.core.FieldType]): Map[hydra.core.Name, hydra.core.Type] =
     hydra.lib.maps.fromList[hydra.core.Name, hydra.core.Type](hydra.lib.lists.map[hydra.core.FieldType,
@@ -70,26 +45,24 @@ def fieldTypes(cx: hydra.context.Context)(graph: hydra.graph.Graph)(t: hydra.cor
     case hydra.core.Type.forall(v_Type_forall_ft) => hydra.resolution.fieldTypes(cx)(graph)(v_Type_forall_ft.body)
     case hydra.core.Type.record(v_Type_record_rt) => Right(toMap(v_Type_record_rt))
     case hydra.core.Type.union(v_Type_union_rt) => Right(toMap(v_Type_union_rt))
-    case hydra.core.Type.variable(v_Type_variable_name) => hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error],
-       Map[hydra.core.Name, hydra.core.Type]], hydra.core.TypeScheme](hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error],
-       hydra.core.Binding, Map[hydra.core.Name, hydra.core.Type]](hydra.lexical.requireBinding(cx)(graph)(v_Type_variable_name))((el: hydra.core.Binding) =>
-      hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Type, Map[hydra.core.Name,
-         hydra.core.Type]](hydra.lib.eithers.bimap[hydra.errors.Error, hydra.core.Type, hydra.context.InContext[hydra.errors.Error],
-         hydra.core.Type]((_wc_e: hydra.errors.Error) => hydra.context.InContext(_wc_e, cx))((_wc_a: hydra.core.Type) => _wc_a)(hydra.lib.eithers.bimap[hydra.errors.DecodingError,
-         hydra.core.Type, hydra.errors.Error, hydra.core.Type]((_e: hydra.errors.DecodingError) => hydra.errors.Error.other(_e))((_a: hydra.core.Type) => _a)(hydra.decode.core.`type`(graph)(el.term))))((decodedType: hydra.core.Type) => hydra.resolution.fieldTypes(cx)(graph)(decodedType))))((ts: hydra.core.TypeScheme) => hydra.resolution.fieldTypes(cx)(graph)(ts.`type`))(hydra.lib.maps.lookup[hydra.core.Name,
+    case hydra.core.Type.variable(v_Type_variable_name) => hydra.lib.maybes.maybe[Either[hydra.errors.Error,
+       Map[hydra.core.Name, hydra.core.Type]], hydra.core.TypeScheme](hydra.lib.eithers.bind[hydra.errors.Error,
+       hydra.core.Binding, Map[hydra.core.Name, hydra.core.Type]](hydra.lexical.requireBinding(graph)(v_Type_variable_name))((el: hydra.core.Binding) =>
+      hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, Map[hydra.core.Name, hydra.core.Type]](hydra.lib.eithers.bimap[hydra.errors.DecodingError,
+         hydra.core.Type, hydra.errors.Error, hydra.core.Type]((_e: hydra.errors.DecodingError) =>
+      hydra.errors.Error.resolution(hydra.errors.ResolutionError.unexpectedShape(hydra.errors.UnexpectedShapeError("type",
+         _e))))((_a: hydra.core.Type) => _a)(hydra.decode.core.`type`(graph)(el.term)))((decodedType: hydra.core.Type) => hydra.resolution.fieldTypes(cx)(graph)(decodedType))))((ts: hydra.core.TypeScheme) => hydra.resolution.fieldTypes(cx)(graph)(ts.`type`))(hydra.lib.maps.lookup[hydra.core.Name,
          hydra.core.TypeScheme](v_Type_variable_name)(graph.schemaTypes))
-    case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat(Seq("expected record or union type but found ",
-       hydra.show.core.`type`(t)))), cx))
+    case _ => Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.unexpectedShape(hydra.errors.UnexpectedShapeError("record or union type",
+       hydra.show.core.`type`(t)))))
 }
 
-def findFieldType(cx: hydra.context.Context)(fname: hydra.core.Name)(fields: Seq[hydra.core.FieldType]): Either[hydra.context.InContext[hydra.errors.Error],
-   hydra.core.Type] =
+def findFieldType[T0](cx: T0)(fname: hydra.core.Name)(fields: Seq[hydra.core.FieldType]): Either[hydra.errors.Error, hydra.core.Type] =
   {
   lazy val matchingFields: Seq[hydra.core.FieldType] = hydra.lib.lists.filter[hydra.core.FieldType]((ft: hydra.core.FieldType) =>
     hydra.lib.equality.equal[scala.Predef.String](ft.name)(fname))(fields)
-  hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Type]](hydra.lib.lists.`null`[hydra.core.FieldType](matchingFields))(Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2("No such field: ")(fname)),
-     cx)))(hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Type]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.FieldType](matchingFields))(1))(Right(hydra.lib.lists.head[hydra.core.FieldType](matchingFields).`type`))(Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2("Multiple fields named ")(fname)),
-     cx))))
+  hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.core.Type]](hydra.lib.lists.`null`[hydra.core.FieldType](matchingFields))(Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.noMatchingField(hydra.errors.NoMatchingFieldError(fname)))))(hydra.lib.logic.ifElse[Either[hydra.errors.Error,
+     hydra.core.Type]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.FieldType](matchingFields))(1))(Right(hydra.lib.lists.head[hydra.core.FieldType](matchingFields).`type`))(Left(hydra.errors.Error.extraction(hydra.errors.ExtractionError.multipleFields(hydra.errors.MultipleFieldsError(fname))))))
 }
 
 def fullyStripAndNormalizeType(typ: hydra.core.Type): hydra.core.Type =
@@ -150,8 +123,7 @@ def nominalApplication(tname: hydra.core.Name)(args: Seq[hydra.core.Type]): hydr
   (a: hydra.core.Type) =>
   hydra.core.Type.application(hydra.core.ApplicationType(t, a)))(hydra.core.Type.variable(tname))(args)
 
-def requireRecordType(cx: hydra.context.Context)(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.context.InContext[hydra.errors.Error],
-   Seq[hydra.core.FieldType]] =
+def requireRecordType[T0](cx: T0)(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.errors.Error, Seq[hydra.core.FieldType]] =
   {
   def toRecord(t: hydra.core.Type): Option[Seq[hydra.core.FieldType]] =
     t match
@@ -160,51 +132,43 @@ def requireRecordType(cx: hydra.context.Context)(graph: hydra.graph.Graph)(name:
   hydra.resolution.requireRowType(cx)("record type")(toRecord)(graph)(name)
 }
 
-def requireRowType[T0](cx: hydra.context.Context)(label: scala.Predef.String)(getter: (hydra.core.Type => Option[T0]))(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.context.InContext[hydra.errors.Error],
-   T0] =
+def requireRowType[T0, T1](cx: T0)(label: scala.Predef.String)(getter: (hydra.core.Type => Option[T1]))(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.errors.Error,
+   T1] =
   {
   def rawType(t: hydra.core.Type): hydra.core.Type =
     t match
     case hydra.core.Type.annotated(v_Type_annotated_at) => rawType(v_Type_annotated_at.body)
     case hydra.core.Type.forall(v_Type_forall_ft) => rawType(v_Type_forall_ft.body)
     case _ => t
-  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Type, T0](hydra.resolution.requireType(cx)(graph)(name))((t: hydra.core.Type) =>
-    hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error], T0], T0](Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat(Seq(name,
-       " does not resolve to a ", label, " type: ", hydra.show.core.`type`(t)))), cx)))((x: T0) => Right(x))(getter(rawType(t))))
+  hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, T1](hydra.resolution.requireType(cx)(graph)(name))((t: hydra.core.Type) =>
+    hydra.lib.maybes.maybe[Either[hydra.errors.Error, T1], T1](Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.unexpectedShape(hydra.errors.UnexpectedShapeError(hydra.lib.strings.cat2(label)(" type"),
+       hydra.lib.strings.cat2(name)(hydra.lib.strings.cat2(": ")(hydra.show.core.`type`(t))))))))((x: T1) => Right(x))(getter(rawType(t))))
 }
 
-def requireSchemaType(cx: hydra.context.Context)(types: Map[hydra.core.Name, hydra.core.TypeScheme])(tname: hydra.core.Name): Either[hydra.context.InContext[hydra.errors.Error],
+def requireSchemaType(cx: hydra.context.Context)(types: Map[hydra.core.Name, hydra.core.TypeScheme])(tname: hydra.core.Name): Either[hydra.errors.Error,
    Tuple2[hydra.core.TypeScheme, hydra.context.Context]] =
-  hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error], Tuple2[hydra.core.TypeScheme,
-     hydra.context.Context]], hydra.core.TypeScheme](Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat(Seq("No such schema type: ",
-     tname, ". Available types are: ", hydra.lib.strings.intercalate(", ")(hydra.lib.lists.map[hydra.core.Name,
-     scala.Predef.String]((x) => x)(hydra.lib.maps.keys[hydra.core.Name, hydra.core.TypeScheme](types)))))),
-     cx)))((ts: hydra.core.TypeScheme) =>
+  hydra.lib.maybes.maybe[Either[hydra.errors.Error, Tuple2[hydra.core.TypeScheme, hydra.context.Context]],
+     hydra.core.TypeScheme](Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.noSuchBinding(hydra.errors.NoSuchBindingError(tname)))))((ts: hydra.core.TypeScheme) =>
   Right(hydra.resolution.instantiateTypeScheme(cx)(hydra.strip.deannotateTypeSchemeRecursive(ts))))(hydra.lib.maps.lookup[hydra.core.Name,
      hydra.core.TypeScheme](tname)(types))
 
-def requireType(cx: hydra.context.Context)(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.context.InContext[hydra.errors.Error],
-   hydra.core.Type] =
-  hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Type], hydra.core.TypeScheme](hydra.lib.maybes.maybe[Either[hydra.context.InContext[hydra.errors.Error],
-     hydra.core.Type], hydra.core.TypeScheme](Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2("no such type: ")(name)),
-     cx)))((ts: hydra.core.TypeScheme) => Right(hydra.scoping.typeSchemeToFType(ts)))(hydra.lib.maps.lookup[hydra.core.Name,
+def requireType[T0](cx: T0)(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.errors.Error, hydra.core.Type] =
+  hydra.lib.maybes.maybe[Either[hydra.errors.Error, hydra.core.Type], hydra.core.TypeScheme](hydra.lib.maybes.maybe[Either[hydra.errors.Error,
+     hydra.core.Type], hydra.core.TypeScheme](Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.noSuchBinding(hydra.errors.NoSuchBindingError(name)))))((ts: hydra.core.TypeScheme) => Right(hydra.scoping.typeSchemeToFType(ts)))(hydra.lib.maps.lookup[hydra.core.Name,
      hydra.core.TypeScheme](name)(graph.boundTypes)))((ts: hydra.core.TypeScheme) => Right(hydra.scoping.typeSchemeToFType(ts)))(hydra.lib.maps.lookup[hydra.core.Name,
      hydra.core.TypeScheme](name)(graph.schemaTypes))
 
-def requireUnionField(cx: hydra.context.Context)(graph: hydra.graph.Graph)(tname: hydra.core.Name)(fname: hydra.core.Name): Either[hydra.context.InContext[hydra.errors.Error],
-   hydra.core.Type] =
+def requireUnionField[T0](cx: T0)(graph: hydra.graph.Graph)(tname: hydra.core.Name)(fname: hydra.core.Name): Either[hydra.errors.Error, hydra.core.Type] =
   {
-  def withRowType(rt: Seq[hydra.core.FieldType]): Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Type] =
+  def withRowType(rt: Seq[hydra.core.FieldType]): Either[hydra.errors.Error, hydra.core.Type] =
     {
     lazy val matches: Seq[hydra.core.FieldType] = hydra.lib.lists.filter[hydra.core.FieldType]((ft: hydra.core.FieldType) => hydra.lib.equality.equal[hydra.core.Name](ft.name)(fname))(rt)
-    hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Type]](hydra.lib.lists.`null`[hydra.core.FieldType](matches))(Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat(Seq("no field \"",
-       fname, "\" in union type \"", tname))), cx)))(Right(hydra.lib.lists.head[hydra.core.FieldType](matches).`type`))
+    hydra.lib.logic.ifElse[Either[hydra.errors.Error, hydra.core.Type]](hydra.lib.lists.`null`[hydra.core.FieldType](matches))(Left(hydra.errors.Error.resolution(hydra.errors.ResolutionError.noMatchingField(hydra.errors.NoMatchingFieldError(fname)))))(Right(hydra.lib.lists.head[hydra.core.FieldType](matches).`type`))
   }
-  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Seq[hydra.core.FieldType], hydra.core.Type](hydra.resolution.requireUnionType(cx)(graph)(tname))(withRowType)
+  hydra.lib.eithers.bind[hydra.errors.Error, Seq[hydra.core.FieldType], hydra.core.Type](hydra.resolution.requireUnionType(cx)(graph)(tname))(withRowType)
 }
 
-def requireUnionType(cx: hydra.context.Context)(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.context.InContext[hydra.errors.Error],
-   Seq[hydra.core.FieldType]] =
+def requireUnionType[T0](cx: T0)(graph: hydra.graph.Graph)(name: hydra.core.Name): Either[hydra.errors.Error, Seq[hydra.core.FieldType]] =
   {
   def toUnion(t: hydra.core.Type): Option[Seq[hydra.core.FieldType]] =
     t match

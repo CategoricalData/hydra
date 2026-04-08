@@ -4,39 +4,18 @@ import hydra.coders.*
 
 import hydra.core.*
 
+import hydra.errors.*
+
 import hydra.packaging.*
 
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.math
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
-def definitionsWithDependencies(cx: hydra.context.Context)(graph: hydra.graph.Graph)(original: Seq[hydra.core.Binding]): Either[hydra.context.InContext[hydra.errors.Error],
-   Seq[hydra.core.Binding]] =
+def definitionsWithDependencies[T0](cx: T0)(graph: hydra.graph.Graph)(original: Seq[hydra.core.Binding]): Either[hydra.errors.Error, Seq[hydra.core.Binding]] =
   {
   def depNames(el: hydra.core.Binding): Seq[hydra.core.Name] =
     hydra.lib.sets.toList[hydra.core.Name](hydra.dependencies.termDependencyNames(true)(false)(false)(el.term))
   lazy val allDepNames: Seq[hydra.core.Name] = hydra.lib.lists.nub[hydra.core.Name](hydra.lib.lists.concat2[hydra.core.Name](hydra.lib.lists.map[hydra.core.Binding,
      hydra.core.Name]((x: hydra.core.Binding) => (x.name))(original))(hydra.lib.lists.concat[hydra.core.Name](hydra.lib.lists.map[hydra.core.Binding,
      Seq[hydra.core.Name]](depNames)(original))))
-  hydra.lib.eithers.mapList[hydra.core.Name, hydra.core.Binding, hydra.context.InContext[hydra.errors.Error]]((name: hydra.core.Name) => hydra.lexical.requireBinding(cx)(graph)(name))(allDepNames)
+  hydra.lib.eithers.mapList[hydra.core.Name, hydra.core.Binding, hydra.errors.Error]((name: hydra.core.Name) => hydra.lexical.requireBinding(graph)(name))(allDepNames)
 }
 
 def flattenLetTerms(term: hydra.core.Term): hydra.core.Term =
@@ -141,17 +120,17 @@ def flattenLetTerms(term: hydra.core.Term): hydra.core.Term =
   hydra.rewriting.rewriteTerm(flatten)(term)
 }
 
-def inlineType(schema: Map[hydra.core.Name, hydra.core.Type])(typ: hydra.core.Type): Either[scala.Predef.String, hydra.core.Type] =
+def inlineType(schema: Map[hydra.core.Name, hydra.core.Type])(typ: hydra.core.Type): Either[hydra.errors.Error, hydra.core.Type] =
   {
-  def f[T0](recurse: (T0 => Either[scala.Predef.String, hydra.core.Type]))(typ2: T0): Either[scala.Predef.String, hydra.core.Type] =
+  def f[T0](recurse: (T0 => Either[hydra.errors.Error, hydra.core.Type]))(typ2: T0): Either[hydra.errors.Error, hydra.core.Type] =
     {
-    def afterRecurse(tr: hydra.core.Type): Either[scala.Predef.String, hydra.core.Type] =
+    def afterRecurse(tr: hydra.core.Type): Either[hydra.errors.Error, hydra.core.Type] =
       tr match
-      case hydra.core.Type.variable(v_Type_variable_v) => hydra.lib.maybes.maybe[Either[scala.Predef.String,
-         hydra.core.Type], hydra.core.Type](Left(hydra.lib.strings.cat2("No such type in schema: ")(v_Type_variable_v)))((v1: hydra.core.Type) => hydra.dependencies.inlineType(schema)(v1))(hydra.lib.maps.lookup[hydra.core.Name,
+      case hydra.core.Type.variable(v_Type_variable_v) => hydra.lib.maybes.maybe[Either[hydra.errors.Error,
+         hydra.core.Type], hydra.core.Type](Left(hydra.errors.Error.other(hydra.lib.strings.cat2("No such type in schema: ")(v_Type_variable_v))))((v1: hydra.core.Type) => hydra.dependencies.inlineType(schema)(v1))(hydra.lib.maps.lookup[hydra.core.Name,
          hydra.core.Type](v_Type_variable_v)(schema))
       case _ => Right(tr)
-    hydra.lib.eithers.bind[scala.Predef.String, hydra.core.Type, hydra.core.Type](recurse(typ2))((tr: hydra.core.Type) => afterRecurse(tr))
+    hydra.lib.eithers.bind[hydra.errors.Error, hydra.core.Type, hydra.core.Type](recurse(typ2))((tr: hydra.core.Type) => afterRecurse(tr))
   }
   hydra.rewriting.rewriteTypeM(f)(typ)
 }
@@ -286,7 +265,6 @@ def termDependencyNames(binds: Boolean)(withPrims: Boolean)(withNoms: Boolean)(t
       hydra.lib.logic.ifElse[scala.collection.immutable.Set[hydra.core.Name]](binds)(hydra.lib.sets.insert[hydra.core.Name](name)(names))(names)
     term match
       case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-        case hydra.core.Function.primitive(v_Function_primitive_name) => prim(v_Function_primitive_name)
         case hydra.core.Function.elimination(v_Function_elimination_e) => v_Function_elimination_e match
           case hydra.core.Elimination.record(v_Elimination_record_proj) => nominal(v_Elimination_record_proj.typeName)
           case hydra.core.Elimination.union(v_Elimination_union_caseStmt) => nominal(v_Elimination_union_caseStmt.typeName)
@@ -348,7 +326,7 @@ def topologicalSortBindingMap(bindingMap: Map[hydra.core.Name, hydra.core.Term])
   def toPair(name: hydra.core.Name): Tuple2[hydra.core.Name, hydra.core.Term] =
     Tuple2(name, hydra.lib.maybes.fromMaybe[hydra.core.Term](hydra.core.Term.literal(hydra.core.Literal.string("Impossible!")))(hydra.lib.maps.lookup[hydra.core.Name,
        hydra.core.Term](name)(bindingMap)))
-  hydra.lib.lists.map[Seq[hydra.core.Name], Seq[Tuple2[hydra.core.Name, hydra.core.Term]]]((v1: Seq[hydra.core.Name]) =>
+  hydra.lib.lists.map[Seq[hydra.core.Name], Seq[Tuple2[hydra.core.Name, hydra.core.Term]]]((v1) =>
     hydra.lib.lists.map[hydra.core.Name, Tuple2[hydra.core.Name, hydra.core.Term]](toPair)(v1))(hydra.sorting.topologicalSortComponents(hydra.lib.lists.map[Tuple2[hydra.core.Name,
        hydra.core.Term], Tuple2[hydra.core.Name, Seq[hydra.core.Name]]](depsOf)(bindings)))
 }

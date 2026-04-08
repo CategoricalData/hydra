@@ -1426,11 +1426,6 @@ public interface Rewriting {
         public hydra.core.Function visit(hydra.core.Function.Lambda l) {
           return new hydra.core.Function.Lambda(new hydra.core.Lambda((l).value.parameter, (l).value.domain, (recurse).apply((l).value.body)));
         }
-
-        @Override
-        public hydra.core.Function visit(hydra.core.Function.Primitive name) {
-          return new hydra.core.Function.Primitive((name).value);
-        }
       }));
       java.util.function.Function<hydra.core.Let, hydra.core.Let> forLet = (java.util.function.Function<hydra.core.Let, hydra.core.Let>) (lt -> {
         java.util.function.Function<hydra.core.Binding, hydra.core.Binding> mapBinding = (java.util.function.Function<hydra.core.Binding, hydra.core.Binding>) (b -> new hydra.core.Binding((b).name, (recurse).apply((b).term), (b).type));
@@ -1612,11 +1607,6 @@ public interface Rewriting {
         return hydra.lib.eithers.Bind.apply(
           (recurse).apply(body),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Function>>) (rbody -> hydra.util.Either.<T1, hydra.core.Function>right(new hydra.core.Function.Lambda(new hydra.core.Lambda(v, d, rbody)))));
-      }
-
-      @Override
-      public hydra.util.Either<T1, hydra.core.Function> visit(hydra.core.Function.Primitive name) {
-        return hydra.util.Either.<T1, hydra.core.Function>right(new hydra.core.Function.Primitive((name).value));
       }
     });
   }
@@ -1884,11 +1874,6 @@ public interface Rewriting {
           (recurse).apply(body),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Function>>) (rbody -> hydra.util.Either.<T3, hydra.core.Function>right(new hydra.core.Function.Lambda(new hydra.core.Lambda(v, d, rbody)))));
       }
-
-      @Override
-      public hydra.util.Either<T3, hydra.core.Function> visit(hydra.core.Function.Primitive name) {
-        return hydra.util.Either.<T3, hydra.core.Function>right(new hydra.core.Function.Primitive((name).value));
-      }
     });
   }
 
@@ -2128,11 +2113,6 @@ public interface Rewriting {
       @Override
       public hydra.core.Function visit(hydra.core.Function.Lambda l) {
         return new hydra.core.Function.Lambda(new hydra.core.Lambda((l).value.parameter, (l).value.domain, (recurse).apply((l).value.body)));
-      }
-
-      @Override
-      public hydra.core.Function visit(hydra.core.Function.Primitive name) {
-        return new hydra.core.Function.Primitive((name).value);
       }
     }));
     java.util.function.Function<hydra.core.Let, hydra.core.Let> forLet = (java.util.function.Function<hydra.core.Let, hydra.core.Let>) (lt -> {

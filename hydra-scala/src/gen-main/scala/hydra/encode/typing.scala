@@ -4,12 +4,6 @@ import hydra.core.*
 
 import hydra.typing.*
 
-import hydra.lib.lists
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
 def functionStructure[T0](env: (T0 => hydra.core.Term))(x: hydra.typing.FunctionStructure[T0]): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.typing.FunctionStructure", Seq(hydra.core.Field("typeParams",
      hydra.core.Term.list(hydra.lib.lists.map[hydra.core.Name, hydra.core.Term](hydra.encode.core.name)(x.typeParams))),

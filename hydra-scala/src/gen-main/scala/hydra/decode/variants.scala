@@ -6,16 +6,9 @@ import hydra.errors.*
 
 import hydra.variants.*
 
-import hydra.lib.eithers
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.strings
-
 def eliminationVariant(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.variants.EliminationVariant] =
-  hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.variants.EliminationVariant]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
+  hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
+     hydra.variants.EliminationVariant]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.union(v_Term_union_inj) => {
     lazy val field: hydra.core.Field = (v_Term_union_inj.field)
@@ -34,10 +27,11 @@ def eliminationVariant(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydr
        hydra.variants.EliminationVariant])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
        hydra.variants.EliminationVariant]](fname)(variantMap))
   }
-  case _ => Left("expected union"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
+  case _ => Left("expected union"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
 def functionVariant(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.variants.FunctionVariant] =
-  hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.variants.FunctionVariant]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
+  hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
+     hydra.variants.FunctionVariant]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.union(v_Term_union_inj) => {
     lazy val field: hydra.core.Field = (v_Term_union_inj.field)
@@ -48,18 +42,17 @@ def functionVariant(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.e
        (input: hydra.core.Term) =>
       hydra.lib.eithers.map[Unit, hydra.variants.FunctionVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.FunctionVariant.elimination)(hydra.extract.core.decodeUnit(cx)(input))),
          Tuple2("lambda", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.variants.FunctionVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.FunctionVariant.lambda)(hydra.extract.core.decodeUnit(cx)(input))),
-         Tuple2("primitive", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.variants.FunctionVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.FunctionVariant.primitive)(hydra.extract.core.decodeUnit(cx)(input)))))
+      hydra.lib.eithers.map[Unit, hydra.variants.FunctionVariant, hydra.errors.DecodingError]((t: Unit) => hydra.variants.FunctionVariant.lambda)(hydra.extract.core.decodeUnit(cx)(input)))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.variants.FunctionVariant], (hydra.core.Term) => Either[hydra.errors.DecodingError,
        hydra.variants.FunctionVariant]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError,
        hydra.variants.FunctionVariant])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
        hydra.variants.FunctionVariant]](fname)(variantMap))
   }
-  case _ => Left("expected union"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
+  case _ => Left("expected union"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
 def literalVariant(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.variants.LiteralVariant] =
-  hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.variants.LiteralVariant]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
+  hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
+     hydra.variants.LiteralVariant]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.union(v_Term_union_inj) => {
     lazy val field: hydra.core.Field = (v_Term_union_inj.field)
@@ -82,10 +75,11 @@ def literalVariant(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.er
        hydra.variants.LiteralVariant])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
        hydra.variants.LiteralVariant]](fname)(variantMap))
   }
-  case _ => Left("expected union"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
+  case _ => Left("expected union"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
 def termVariant(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.variants.TermVariant] =
-  hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.variants.TermVariant]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
+  hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
+     hydra.variants.TermVariant]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.union(v_Term_union_inj) => {
     lazy val field: hydra.core.Field = (v_Term_union_inj.field)
@@ -134,10 +128,11 @@ def termVariant(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
        hydra.variants.TermVariant])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
        hydra.variants.TermVariant]](fname)(variantMap))
   }
-  case _ => Left("expected union"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
+  case _ => Left("expected union"))(hydra.extract.core.stripWithDecodingError(cx)(raw))
 
 def typeVariant(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.DecodingError, hydra.variants.TypeVariant] =
-  hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, hydra.variants.TypeVariant]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
+  hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.core.Term, Either[hydra.errors.DecodingError,
+     hydra.variants.TypeVariant]]((err: hydra.errors.DecodingError) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.union(v_Term_union_inj) => {
     lazy val field: hydra.core.Field = (v_Term_union_inj.field)
@@ -184,4 +179,4 @@ def typeVariant(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error
        hydra.variants.TypeVariant])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError,
        hydra.variants.TypeVariant]](fname)(variantMap))
   }
-  case _ => Left("expected union"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
+  case _ => Left("expected union"))(hydra.extract.core.stripWithDecodingError(cx)(raw))

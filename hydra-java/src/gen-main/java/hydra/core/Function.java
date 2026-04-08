@@ -14,8 +14,6 @@ public abstract class Function implements Serializable, Comparable<Function> {
 
   public static final hydra.core.Name LAMBDA = new hydra.core.Name("lambda");
 
-  public static final hydra.core.Name PRIMITIVE = new hydra.core.Name("primitive");
-
   private Function () {
 
   }
@@ -26,8 +24,6 @@ public abstract class Function implements Serializable, Comparable<Function> {
     R visit(Elimination instance) ;
 
     R visit(Lambda instance) ;
-
-    R visit(Primitive instance) ;
   }
 
   public interface PartialVisitor<R> extends Visitor<R> {
@@ -40,10 +36,6 @@ public abstract class Function implements Serializable, Comparable<Function> {
     }
 
     default R visit(Lambda instance) {
-      return otherwise(instance);
-    }
-
-    default R visit(Primitive instance) {
       return otherwise(instance);
     }
   }
@@ -127,51 +119,6 @@ public abstract class Function implements Serializable, Comparable<Function> {
         return tagCmp;
       }
       Lambda o = (Lambda) other;
-      return hydra.util.Comparing.compare(
-        value,
-        o.value);
-    }
-
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-
-  /**
-   * A reference to a built-in (primitive) function
-   */
-  public static final class Primitive extends hydra.core.Function implements Serializable {
-    public final hydra.core.Name value;
-
-    public Primitive (hydra.core.Name value) {
-      this.value = value;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Primitive)) {
-        return false;
-      }
-      Primitive o = (Primitive) other;
-      return java.util.Objects.equals(
-        this.value,
-        o.value);
-    }
-
-    @Override
-    public int hashCode() {
-      return 2 * java.util.Objects.hashCode(value);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public int compareTo(Function other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
-      if (tagCmp != 0) {
-        return tagCmp;
-      }
-      Primitive o = (Primitive) other;
       return hydra.util.Comparing.compare(
         value,
         o.value);

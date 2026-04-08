@@ -2,18 +2,6 @@ package hydra.encode.core
 
 import hydra.core.*
 
-import hydra.lib.eithers
-
-import hydra.lib.lists
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
 def annotatedTerm(x: hydra.core.AnnotatedTerm): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.core.AnnotatedTerm", Seq(hydra.core.Field("body", hydra.encode.core.term(x.body)),
      hydra.core.Field("annotation", hydra.core.Term.map(hydra.lib.maps.bimap[hydra.core.Name, hydra.core.Term,
@@ -89,8 +77,6 @@ def function(v1: hydra.core.Function): hydra.core.Term =
      hydra.core.Field("elimination", hydra.encode.core.elimination(v_Function_elimination_y))))
   case hydra.core.Function.lambda(v_Function_lambda_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Function",
      hydra.core.Field("lambda", hydra.encode.core.lambda(v_Function_lambda_y))))
-  case hydra.core.Function.primitive(v_Function_primitive_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Function",
-     hydra.core.Field("primitive", hydra.encode.core.name(v_Function_primitive_y))))
 
 def functionType(x: hydra.core.FunctionType): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.core.FunctionType", Seq(hydra.core.Field("domain", hydra.encode.core.`type`(x.domain)),

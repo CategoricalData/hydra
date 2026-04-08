@@ -10,7 +10,11 @@ public interface Encode {
     return (fv).accept(new hydra.core.FloatValue.PartialVisitor<>() {
       @Override
       public hydra.util.Either<T0, hydra.json.model.Value> visit(hydra.core.FloatValue.Bigfloat bf) {
-        return hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.Number_((bf).value));
+        String s = hydra.lib.literals.ShowBigfloat.apply((bf).value);
+        return hydra.lib.logic.IfElse.lazy(
+          hydra.json.Encode.isSpecialFloatString(s),
+          () -> hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.String_(s)),
+          () -> hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.Number_((bf).value)));
       }
 
       @Override
@@ -20,7 +24,11 @@ public interface Encode {
 
       @Override
       public hydra.util.Either<T0, hydra.json.model.Value> visit(hydra.core.FloatValue.Float64 f) {
-        return hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.Number_(hydra.lib.literals.Float64ToBigfloat.apply((f).value)));
+        String s = hydra.lib.literals.ShowFloat64.apply((f).value);
+        return hydra.lib.logic.IfElse.lazy(
+          hydra.json.Encode.isSpecialFloatString(s),
+          () -> hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.String_(s)),
+          () -> hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.Number_(hydra.lib.literals.Float64ToBigfloat.apply((f).value))));
       }
     });
   }
@@ -101,6 +109,20 @@ public interface Encode {
         return hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.String_((s).value));
       }
     });
+  }
+
+  static Boolean isSpecialFloatString(String s) {
+    return hydra.lib.logic.Or.apply(
+      hydra.lib.equality.Equal.apply(
+        s,
+        "NaN"),
+      hydra.lib.logic.Or.apply(
+        hydra.lib.equality.Equal.apply(
+          s,
+          "Infinity"),
+        hydra.lib.equality.Equal.apply(
+          s,
+          "-Infinity")));
   }
 
   static hydra.util.Either<String, hydra.json.model.Value> toJson(java.util.Map<hydra.core.Name, hydra.core.Type> types, hydra.core.Name tname, hydra.core.Type typ, hydra.core.Term term) {

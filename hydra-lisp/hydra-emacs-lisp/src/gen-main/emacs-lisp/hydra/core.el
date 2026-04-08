@@ -30,7 +30,7 @@
 
 (cl-defstruct hydra_core_forall_type parameter body)
 
-(defvar hydra_core_function-variants (list :elimination :lambda :primitive))
+(defvar hydra_core_function-variants (list :elimination :lambda))
 
 (cl-defstruct hydra_core_function_type domain codomain)
 

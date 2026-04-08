@@ -2,24 +2,6 @@ package hydra.show.core
 
 import hydra.core.*
 
-import hydra.lib.eithers
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
-
 def binding(el: hydra.core.Binding): scala.Predef.String =
   {
   lazy val name: scala.Predef.String = (el.name)
@@ -98,7 +80,6 @@ def function(f: hydra.core.Function): scala.Predef.String =
   f match
   case hydra.core.Function.elimination(v_Function_elimination_v1) => hydra.show.core.elimination(v_Function_elimination_v1)
   case hydra.core.Function.lambda(v_Function_lambda_v1) => hydra.show.core.lambda(v_Function_lambda_v1)
-  case hydra.core.Function.primitive(v_Function_primitive_name) => hydra.lib.strings.cat2(v_Function_primitive_name)("!")
 
 def injection(inj: hydra.core.Injection): scala.Predef.String =
   {

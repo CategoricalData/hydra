@@ -11,7 +11,6 @@ import hydra.core
 import hydra.decode.core
 import hydra.errors
 import hydra.extract.core
-import hydra.lexical
 import hydra.lib.eithers
 import hydra.phantoms
 
@@ -26,7 +25,7 @@ def t_term(a: T0, cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected wrapped type"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_phantoms_t_term_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_phantoms_t_term_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def t_binding(a: T0, cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_phantoms_t_binding_1(a, cx, v1):
@@ -39,7 +38,7 @@ def t_binding(a: T0, cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_phantoms_t_binding_1(a, cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_phantoms_t_binding_1(a, cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))
 
 def t_term_definition(a: T0, cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_phantoms_t_term_definition_1(a, cx, v1):
@@ -52,4 +51,4 @@ def t_term_definition(a: T0, cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_phantoms_t_term_definition_1(a, cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_phantoms_t_term_definition_1(a, cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))

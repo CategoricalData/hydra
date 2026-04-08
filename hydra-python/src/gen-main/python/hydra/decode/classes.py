@@ -11,7 +11,6 @@ import hydra.classes
 import hydra.core
 import hydra.errors
 import hydra.extract.core
-import hydra.lexical
 import hydra.lib.eithers
 import hydra.lib.maps
 import hydra.lib.maybes
@@ -31,4 +30,4 @@ def type_class(cx: hydra.graph.Graph, raw: hydra.core.Term):
 
             case _:
                 return Left(hydra.errors.DecodingError("expected union"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_classes_type_class_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda stripped: _hoist_hydra_decode_classes_type_class_1(cx, stripped)), hydra.extract.core.strip_with_decoding_error(cx, raw))

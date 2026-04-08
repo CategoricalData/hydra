@@ -4,10 +4,6 @@ import hydra.core.*
 
 import hydra.error.core.*
 
-import hydra.lib.literals
-
-import hydra.lib.strings
-
 def constantConditionError(e: hydra.error.core.ConstantConditionError): scala.Predef.String =
   hydra.lib.strings.cat(Seq("constant condition: ifElse with literal ", hydra.lib.literals.showBoolean(e.value)))
 

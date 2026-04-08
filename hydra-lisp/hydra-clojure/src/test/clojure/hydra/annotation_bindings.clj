@@ -11,7 +11,7 @@
 (defn- t-app [fun arg]
   (list :application (->hydra_core_application fun arg)))
 (defn- t-prim [name]
-  (list :function (list :primitive name)))
+  (list :variable name))
 (defn- t-let [name val body]
   (list :let (->hydra_core_let
                (list (->hydra_core_binding name val nil))

@@ -2,8 +2,6 @@ package hydra.ext.haskell.operators
 
 import hydra.ast.*
 
-import hydra.lib.math
-
 lazy val andOp: hydra.ast.Op = hydra.serialization.op("&&")(3)(hydra.ast.Associativity.right)
 
 lazy val apOp: hydra.ast.Op = hydra.serialization.op("<*>")(4)(hydra.ast.Associativity.left)

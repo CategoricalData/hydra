@@ -4,10 +4,6 @@ import hydra.core.*
 
 import hydra.testing.*
 
-import hydra.lib.lists
-
-import hydra.lib.maybes
-
 def tag(x: hydra.testing.Tag): hydra.core.Term =
   hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.testing.Tag", hydra.core.Term.literal(hydra.core.Literal.string(x))))
 

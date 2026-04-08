@@ -2,18 +2,6 @@ package hydra.ext.python.serde
 
 import hydra.ext.python.syntax.*
 
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maybes
-
-import hydra.lib.strings
-
 def encodeAnnotatedRhs(arhs: hydra.ext.python.syntax.AnnotatedRhs): hydra.ast.Expr =
   hydra.serialization.spaceSep(Seq(hydra.serialization.cst("="), arhs match
   case hydra.ext.python.syntax.AnnotatedRhs.star(v_AnnotatedRhs_star_ses) => hydra.serialization.commaSep(hydra.serialization.inlineStyle)(hydra.lib.lists.map[hydra.ext.python.syntax.StarExpression,
@@ -418,7 +406,7 @@ def encodeNamedExpression(ne: hydra.ext.python.syntax.NamedExpression): hydra.as
 
 def encodeNumber(num: hydra.ext.python.syntax.Number): hydra.ast.Expr =
   num match
-  case hydra.ext.python.syntax.Number.float(v_Number_float_f) => hydra.serialization.cst(hydra.lib.literals.showBigfloat(v_Number_float_f))
+  case hydra.ext.python.syntax.Number.float(v_Number_float_f) => hydra.serialization.cst(hydra.ext.python.serde.pythonFloatLiteralText(hydra.lib.literals.showBigfloat(v_Number_float_f)))
   case hydra.ext.python.syntax.Number.integer(v_Number_integer_i) => hydra.serialization.cst(hydra.lib.literals.showBigint(v_Number_integer_i))
 
 def encodeOrPattern(op: hydra.ext.python.syntax.OrPattern): hydra.ast.Expr =
@@ -717,6 +705,9 @@ def escapePythonString(doubleQuoted: Boolean)(s: scala.Predef.String): scala.Pre
   lazy val quote: scala.Predef.String = hydra.lib.logic.ifElse[scala.Predef.String](doubleQuoted)("\"")("'")
   hydra.lib.strings.cat2(quote)(hydra.lib.strings.cat2(escaped)(quote))
 }
+
+def pythonFloatLiteralText(s: scala.Predef.String): scala.Predef.String =
+  hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](s)("NaN"))("float('nan')")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](s)("Infinity"))("float('inf')")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](s)("-Infinity"))("float('-inf')")(s)))
 
 def toPythonComments(`doc_`: scala.Predef.String): scala.Predef.String =
   hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[scala.Predef.String](`doc_`)(""))("")(hydra.lib.strings.intercalate("\n")(hydra.lib.lists.map[scala.Predef.String,

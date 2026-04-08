@@ -293,11 +293,11 @@
 
 (ert-deftest test-reduction-negetaexpandterm-negfully-applied-binary-function-unchanged ()
 
-  (should (equal (hydra.lib.strings.splitOn! @ "foo" @ "bar") (hydra.lib.strings.splitOn! @ "foo" @ "bar"))))
+  (should (equal (hydra.lib.strings.splitOn @ "foo" @ "bar") (hydra.lib.strings.splitOn @ "foo" @ "bar"))))
 
 (ert-deftest test-reduction-negetaexpandterm-neglambda-with-fully-applied-primitive-unchanged ()
 
-  (should (equal λx.(hydra.lib.strings.splitOn! @ "," @ x) λx.(hydra.lib.strings.splitOn! @ "," @ x))))
+  (should (equal λx.(hydra.lib.strings.splitOn @ "," @ x) λx.(hydra.lib.strings.splitOn @ "," @ x))))
 
 (ert-deftest test-reduction-negetaexpandterm-neglambda-returning-constant-unchanged ()
 
@@ -305,15 +305,15 @@
 
 (ert-deftest test-reduction-negetaexpandterm-negbare-unary-primitive-unchanged ()
 
-  (should (equal hydra.lib.strings.toLower! hydra.lib.strings.toLower!)))
+  (should (equal hydra.lib.strings.toLower hydra.lib.strings.toLower)))
 
 (ert-deftest test-reduction-negetaexpandterm-negbare-binary-primitive-unchanged ()
 
-  (should (equal hydra.lib.strings.splitOn! hydra.lib.strings.splitOn!)))
+  (should (equal hydra.lib.strings.splitOn hydra.lib.strings.splitOn)))
 
 (ert-deftest test-reduction-negetaexpandterm-negpartially-applied-binary-primitive-expands-to-one-lambda ()
 
-  (should (equal λv1.(hydra.lib.strings.splitOn! @ foo @ v1) λv1.(hydra.lib.strings.splitOn! @ foo @ v1))))
+  (should (equal λv1.(hydra.lib.strings.splitOn @ foo @ v1) λv1.(hydra.lib.strings.splitOn @ foo @ v1))))
 
 (ert-deftest test-reduction-negetaexpandterm-negprojection-expands-to-lambda ()
 
@@ -321,7 +321,7 @@
 
 (ert-deftest test-reduction-negetaexpandterm-negpartial-application-inside-lambda-expands ()
 
-  (should (equal λx.λv1.(hydra.lib.strings.splitOn! @ x @ v1) λx.λv1.(hydra.lib.strings.splitOn! @ x @ v1))))
+  (should (equal λx.λv1.(hydra.lib.strings.splitOn @ x @ v1) λx.λv1.(hydra.lib.strings.splitOn @ x @ v1))))
 
 (ert-deftest test-reduction-negetaexpandterm-neglet-with-constant-body-unchanged ()
 
@@ -329,12 +329,12 @@
 
 (ert-deftest test-reduction-negetaexpandterm-neglet-with-bare-primitive-value-unchanged ()
 
-  (should (equal let foo = hydra.lib.strings.splitOn! in foo let foo = hydra.lib.strings.splitOn! in foo)))
+  (should (equal let foo = hydra.lib.strings.splitOn in foo let foo = hydra.lib.strings.splitOn in foo)))
 
 (ert-deftest test-reduction-negetaexpandterm-negfully-applied-unary-unchanged ()
 
-  (should (equal (hydra.lib.strings.toLower! @ "FOO") (hydra.lib.strings.toLower! @ "FOO"))))
+  (should (equal (hydra.lib.strings.toLower @ "FOO") (hydra.lib.strings.toLower @ "FOO"))))
 
 (ert-deftest test-reduction-negetaexpandterm-negpartial-application-in-list-expands ()
 
-  (should (equal [λx.["foo"], λv1.(hydra.lib.strings.splitOn! @ "bar" @ v1)] [λx.["foo"], λv1.(hydra.lib.strings.splitOn! @ "bar" @ v1)])))
+  (should (equal [λx.["foo"], λv1.(hydra.lib.strings.splitOn @ "bar" @ v1)] [λx.["foo"], λv1.(hydra.lib.strings.splitOn @ "bar" @ v1)])))

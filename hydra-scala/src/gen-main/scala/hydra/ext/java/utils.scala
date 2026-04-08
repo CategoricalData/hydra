@@ -1,7 +1,5 @@
 package hydra.ext.java.utils
 
-import hydra.context.*
-
 import hydra.core.*
 
 import hydra.errors.*
@@ -11,28 +9,6 @@ import hydra.ext.java.environment.*
 import hydra.ext.java.syntax.*
 
 import hydra.packaging.*
-
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.math
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
 
 def addExpressions(exprs: Seq[hydra.ext.java.syntax.MultiplicativeExpression]): hydra.ext.java.syntax.AdditiveExpression =
   {
@@ -53,7 +29,7 @@ def addInScopeVars(names: Seq[hydra.core.Name])(aliases: hydra.ext.java.environm
   hydra.lib.lists.foldl[hydra.ext.java.environment.Aliases, hydra.core.Name]((a: hydra.ext.java.environment.Aliases) =>
   (n: hydra.core.Name) => hydra.ext.java.utils.addInScopeVar(n)(a))(aliases)(names)
 
-def addJavaTypeParameter(rt: hydra.ext.java.syntax.ReferenceType)(t: hydra.ext.java.syntax.Type)(cx: hydra.context.Context): Either[hydra.context.InContext[hydra.errors.Error],
+def addJavaTypeParameter[T0](rt: hydra.ext.java.syntax.ReferenceType)(t: hydra.ext.java.syntax.Type)(cx: T0): Either[hydra.errors.Error,
    hydra.ext.java.syntax.Type] =
   t match
   case hydra.ext.java.syntax.Type.reference(v_Type_reference_rt1) => v_Type_reference_rt1 match
@@ -66,12 +42,10 @@ def addJavaTypeParameter(rt: hydra.ext.java.syntax.ReferenceType)(t: hydra.ext.j
         Right(hydra.ext.java.syntax.Type.reference(hydra.ext.java.syntax.ReferenceType.classOrInterface(hydra.ext.java.syntax.ClassOrInterfaceType.`class`(hydra.ext.java.syntax.ClassType(anns,
            qual, id, hydra.lib.lists.concat2[hydra.ext.java.syntax.TypeArgument](args)(Seq(hydra.ext.java.syntax.TypeArgument.reference(rt))))))))
       }
-      case hydra.ext.java.syntax.ClassOrInterfaceType.interface(v_ClassOrInterfaceType_interface__) => Left(hydra.context.InContext(hydra.errors.Error.other("expected a Java class type"),
-         cx))
+      case hydra.ext.java.syntax.ClassOrInterfaceType.interface(v_ClassOrInterfaceType_interface__) => Left(hydra.errors.Error.other("expected a Java class type"))
     case hydra.ext.java.syntax.ReferenceType.variable(v_ReferenceType_variable_tv) => Right(hydra.ext.java.utils.javaTypeVariableToType(v_ReferenceType_variable_tv))
-    case hydra.ext.java.syntax.ReferenceType.array(v_ReferenceType_array__) => Left(hydra.context.InContext(hydra.errors.Error.other("expected a Java class or interface type, or a variable"),
-       cx))
-  case hydra.ext.java.syntax.Type.primitive(v_Type_primitive__) => Left(hydra.context.InContext(hydra.errors.Error.other("expected a reference type"), cx))
+    case hydra.ext.java.syntax.ReferenceType.array(v_ReferenceType_array__) => Left(hydra.errors.Error.other("expected a Java class or interface type, or a variable"))
+  case hydra.ext.java.syntax.Type.primitive(v_Type_primitive__) => Left(hydra.errors.Error.other("expected a reference type"))
 
 def addVarRename(original: hydra.core.Name)(renamed: hydra.core.Name)(aliases: hydra.ext.java.environment.Aliases): hydra.ext.java.environment.Aliases =
   hydra.ext.java.environment.Aliases(aliases.currentNamespace, (aliases.packages), (aliases.branchVars),
@@ -430,11 +404,10 @@ def javaTypeToJavaFormalParameter(jt: hydra.ext.java.syntax.Type)(fname: hydra.c
   hydra.ext.java.syntax.FormalParameter.simple(hydra.ext.java.syntax.FormalParameter_Simple(Seq(), jt,
      hydra.ext.java.utils.fieldNameToJavaVariableDeclaratorId(fname)))
 
-def javaTypeToJavaReferenceType(t: hydra.ext.java.syntax.Type)(cx: hydra.context.Context): Either[hydra.context.InContext[hydra.errors.Error],
-   hydra.ext.java.syntax.ReferenceType] =
+def javaTypeToJavaReferenceType[T0](t: hydra.ext.java.syntax.Type)(cx: T0): Either[hydra.errors.Error, hydra.ext.java.syntax.ReferenceType] =
   t match
   case hydra.ext.java.syntax.Type.reference(v_Type_reference_rt) => Right(v_Type_reference_rt)
-  case hydra.ext.java.syntax.Type.primitive(v_Type_primitive__) => Left(hydra.context.InContext(hydra.errors.Error.other("expected a Java reference type"), cx))
+  case hydra.ext.java.syntax.Type.primitive(v_Type_primitive__) => Left(hydra.errors.Error.other("expected a Java reference type"))
 
 def javaTypeToJavaResult(jt: hydra.ext.java.syntax.Type): hydra.ext.java.syntax.Result = hydra.ext.java.syntax.Result.`type`(jt)
 
@@ -590,7 +563,7 @@ def toAssignStmt(fname: hydra.core.Name): hydra.ext.java.syntax.Statement =
   hydra.ext.java.utils.javaAssignmentStatement(lhs)(rhs)
 }
 
-def toJavaArrayType(t: hydra.ext.java.syntax.Type)(cx: hydra.context.Context): Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.java.syntax.Type] =
+def toJavaArrayType[T0](t: hydra.ext.java.syntax.Type)(cx: T0): Either[hydra.errors.Error, hydra.ext.java.syntax.Type] =
   t match
   case hydra.ext.java.syntax.Type.reference(v_Type_reference_rt) => v_Type_reference_rt match
     case hydra.ext.java.syntax.ReferenceType.classOrInterface(v_ReferenceType_classOrInterface_cit) => Right(hydra.ext.java.syntax.Type.reference(hydra.ext.java.syntax.ReferenceType.array(hydra.ext.java.syntax.ArrayType(Seq(Seq()),
@@ -601,10 +574,8 @@ def toJavaArrayType(t: hydra.ext.java.syntax.Type)(cx: hydra.context.Context): E
       lazy val variant: hydra.ext.java.syntax.ArrayType_Variant = (v_ReferenceType_array_at.variant)
       Right(hydra.ext.java.syntax.Type.reference(hydra.ext.java.syntax.ReferenceType.array(hydra.ext.java.syntax.ArrayType(newDims, variant))))
     }
-    case hydra.ext.java.syntax.ReferenceType.variable(v_ReferenceType_variable__) => Left(hydra.context.InContext(hydra.errors.Error.other("don't know how to make Java reference type into array type"),
-       cx))
-  case hydra.ext.java.syntax.Type.primitive(v_Type_primitive__) => Left(hydra.context.InContext(hydra.errors.Error.other("don't know how to make Java type into array type"),
-     cx))
+    case hydra.ext.java.syntax.ReferenceType.variable(v_ReferenceType_variable__) => Left(hydra.errors.Error.other("don't know how to make Java reference type into array type"))
+  case hydra.ext.java.syntax.Type.primitive(v_Type_primitive__) => Left(hydra.errors.Error.other("don't know how to make Java type into array type"))
 
 def typeParameterToReferenceType(tp: hydra.ext.java.syntax.TypeParameter): hydra.ext.java.syntax.ReferenceType = hydra.ext.java.utils.javaTypeVariable(tp.identifier)
 

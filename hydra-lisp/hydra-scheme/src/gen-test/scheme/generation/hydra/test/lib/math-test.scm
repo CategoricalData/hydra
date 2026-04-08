@@ -439,6 +439,18 @@
 
   (assert (equal? 0.479425538604:float64 0.479425538604:float64)))
 
+(define (test-math-negsin-negsin-nan)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negsin-negsin--plusinf)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negsin-negsin--neginf)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
 ;; cos
 
 (define (test-math-negcos-negcos-0)
@@ -461,6 +473,18 @@
 
   (assert (equal? 0.87758256189:float64 0.87758256189:float64)))
 
+(define (test-math-negcos-negcos-nan)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negcos-negcos--plusinf)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negcos-negcos--neginf)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
 ;; tan
 
 (define (test-math-negtan-negtan-0)
@@ -478,6 +502,18 @@
 (define (test-math-negtan-negtan-0-dot5)
 
   (assert (equal? 0.546302489844:float64 0.546302489844:float64)))
+
+(define (test-math-negtan-negtan-nan)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negtan-negtan--plusinf)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negtan-negtan--neginf)
+
+  (assert (equal? NaN:float64 NaN:float64)))
 
 ;; asin
 
@@ -497,6 +533,26 @@
 
   (assert (equal? 0.523598775598:float64 0.523598775598:float64)))
 
+(define (test-math-negasin-negasin-below-domain)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negasin-negasin-above-domain)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negasin-negasin-nan)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negasin-negasin--plusinf)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negasin-negasin--neginf)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
 ;; acos
 
 (define (test-math-negacos-negacos-1)
@@ -515,6 +571,26 @@
 
   (assert (equal? 1.0471975512:float64 1.0471975512:float64)))
 
+(define (test-math-negacos-negacos-below-domain)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negacos-negacos-above-domain)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negacos-negacos-nan)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negacos-negacos--plusinf)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negacos-negacos--neginf)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
 ;; atan
 
 (define (test-math-negatan-negatan-0)
@@ -528,6 +604,18 @@
 (define (test-math-negatan-negatan-0-dot5)
 
   (assert (equal? 0.463647609001:float64 0.463647609001:float64)))
+
+(define (test-math-negatan-negatan-nan)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negatan-negatan--plusinf)
+
+  (assert (equal? 1.57079632679:float64 1.57079632679:float64)))
+
+(define (test-math-negatan-negatan--neginf)
+
+  (assert (equal? -1.57079632679:float64 -1.57079632679:float64)))
 
 ;; atan2
 
@@ -547,6 +635,46 @@
 
   (assert (equal? 0.643501108793:float64 0.643501108793:float64)))
 
+(define (test-math-negatan2-negatan2-nan-1)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negatan2-negatan2--plusinf-1)
+
+  (assert (equal? 1.57079632679:float64 1.57079632679:float64)))
+
+(define (test-math-negatan2-negatan2--neginf-1)
+
+  (assert (equal? -1.57079632679:float64 -1.57079632679:float64)))
+
+(define (test-math-negatan2-negatan2-1-nan)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negatan2-negatan2-1--plusinf)
+
+  (assert (equal? 0.0:float64 0.0:float64)))
+
+(define (test-math-negatan2-negatan2-1--neginf)
+
+  (assert (equal? 3.14159265359:float64 3.14159265359:float64)))
+
+(define (test-math-negatan2-negatan2--plusinf--plusinf)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negatan2-negatan2--plusinf--neginf)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negatan2-negatan2--neginf--plusinf)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negatan2-negatan2--neginf--neginf)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
 ;; sinh
 
 (define (test-math-negsinh-negsinh-0)
@@ -560,6 +688,18 @@
 (define (test-math-negsinh-negsinh-2)
 
   (assert (equal? 3.62686040785:float64 3.62686040785:float64)))
+
+(define (test-math-negsinh-negsinh-nan)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negsinh-negsinh--plusinf)
+
+  (assert (equal? Infinity:float64 Infinity:float64)))
+
+(define (test-math-negsinh-negsinh--neginf)
+
+  (assert (equal? -Infinity:float64 -Infinity:float64)))
 
 ;; cosh
 
@@ -575,6 +715,18 @@
 
   (assert (equal? 3.76219569108:float64 3.76219569108:float64)))
 
+(define (test-math-negcosh-negcosh-nan)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negcosh-negcosh--plusinf)
+
+  (assert (equal? Infinity:float64 Infinity:float64)))
+
+(define (test-math-negcosh-negcosh--neginf)
+
+  (assert (equal? Infinity:float64 Infinity:float64)))
+
 ;; tanh
 
 (define (test-math-negtanh-negtanh-0)
@@ -588,6 +740,18 @@
 (define (test-math-negtanh-negtanh-0-dot5)
 
   (assert (equal? 0.46211715726:float64 0.46211715726:float64)))
+
+(define (test-math-negtanh-negtanh-nan)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negtanh-negtanh--plusinf)
+
+  (assert (equal? 1.0:float64 1.0:float64)))
+
+(define (test-math-negtanh-negtanh--neginf)
+
+  (assert (equal? -1.0:float64 -1.0:float64)))
 
 ;; asinh
 
@@ -603,6 +767,18 @@
 
   (assert (equal? 0.48121182506:float64 0.48121182506:float64)))
 
+(define (test-math-negasinh-negasinh-nan)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negasinh-negasinh--plusinf)
+
+  (assert (equal? Infinity:float64 Infinity:float64)))
+
+(define (test-math-negasinh-negasinh--neginf)
+
+  (assert (equal? -Infinity:float64 -Infinity:float64)))
+
 ;; acosh
 
 (define (test-math-negacosh-negacosh-1)
@@ -617,6 +793,26 @@
 
   (assert (equal? 1.76274717404:float64 1.76274717404:float64)))
 
+(define (test-math-negacosh-negacosh-below-domain)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negacosh-negacosh-negative)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negacosh-negacosh-nan)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negacosh-negacosh--plusinf)
+
+  (assert (equal? Infinity:float64 Infinity:float64)))
+
+(define (test-math-negacosh-negacosh--neginf)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
 ;; atanh
 
 (define (test-math-negatanh-negatanh-0)
@@ -630,6 +826,34 @@
 (define (test-math-negatanh-negatanh-0-dot1)
 
   (assert (equal? 0.100335347731:float64 0.100335347731:float64)))
+
+(define (test-math-negatanh-negatanh-upper-boundary)
+
+  (assert (equal? Infinity:float64 Infinity:float64)))
+
+(define (test-math-negatanh-negatanh-lower-boundary)
+
+  (assert (equal? -Infinity:float64 -Infinity:float64)))
+
+(define (test-math-negatanh-negatanh-above-domain)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negatanh-negatanh-below-domain)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negatanh-negatanh-nan)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negatanh-negatanh--plusinf)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negatanh-negatanh--neginf)
+
+  (assert (equal? NaN:float64 NaN:float64)))
 
 ;; exp
 
@@ -653,6 +877,18 @@
 
   (assert (equal? 1.6487212707:float64 1.6487212707:float64)))
 
+(define (test-math-negexp-negexp-nan)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negexp-negexp--plusinf)
+
+  (assert (equal? Infinity:float64 Infinity:float64)))
+
+(define (test-math-negexp-negexp--neginf)
+
+  (assert (equal? 0.0:float64 0.0:float64)))
+
 ;; log
 
 (define (test-math-neglog-neglog-1)
@@ -670,6 +906,26 @@
 (define (test-math-neglog-neglog-10)
 
   (assert (equal? 2.30258509299:float64 2.30258509299:float64)))
+
+(define (test-math-neglog-neglog-0)
+
+  (assert (equal? -Infinity:float64 -Infinity:float64)))
+
+(define (test-math-neglog-neglog-negative)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-neglog-neglog-nan)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-neglog-neglog--plusinf)
+
+  (assert (equal? Infinity:float64 Infinity:float64)))
+
+(define (test-math-neglog-neglog--neginf)
+
+  (assert (equal? NaN:float64 NaN:float64)))
 
 ;; logBase
 
@@ -693,6 +949,42 @@
 
   (assert (equal? 3.32192809489:float64 3.32192809489:float64)))
 
+(define (test-math-neglogbase-neglogbase-10-0)
+
+  (assert (equal? -Infinity:float64 -Infinity:float64)))
+
+(define (test-math-neglogbase-neglogbase-10-negative)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-neglogbase-neglogbase-negative-10)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-neglogbase-neglogbase-10-nan)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-neglogbase-neglogbase-10--plusinf)
+
+  (assert (equal? Infinity:float64 Infinity:float64)))
+
+(define (test-math-neglogbase-neglogbase-10--neginf)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-neglogbase-neglogbase-nan-10)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-neglogbase-neglogbase--plusinf-10)
+
+  (assert (equal? 0.0:float64 0.0:float64)))
+
+(define (test-math-neglogbase-neglogbase--neginf-10)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
 ;; pow
 
 (define (test-math-negpow-neg2-3)
@@ -710,6 +1002,46 @@
 (define (test-math-negpow-neg2-0-dot5)
 
   (assert (equal? 1.41421356237:float64 1.41421356237:float64)))
+
+(define (test-math-negpow-neg0-0)
+
+  (assert (equal? 1.0:float64 1.0:float64)))
+
+(define (test-math-negpow-neg0--neg1)
+
+  (assert (equal? Infinity:float64 Infinity:float64)))
+
+(define (test-math-negpow-neg--neg1-0-dot5)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negpow-negnan-2)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negpow-neg-plusinf-2)
+
+  (assert (equal? Infinity:float64 Infinity:float64)))
+
+(define (test-math-negpow-neg-neginf-2)
+
+  (assert (equal? Infinity:float64 Infinity:float64)))
+
+(define (test-math-negpow-neg-plusinf--neg1)
+
+  (assert (equal? 0.0:float64 0.0:float64)))
+
+(define (test-math-negpow-neg2-nan)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negpow-neg2--plusinf)
+
+  (assert (equal? Infinity:float64 Infinity:float64)))
+
+(define (test-math-negpow-neg2--neginf)
+
+  (assert (equal? 0.0:float64 0.0:float64)))
 
 ;; sqrt
 
@@ -733,63 +1065,115 @@
 
   (assert (equal? 1.73205080757:float64 1.73205080757:float64)))
 
+(define (test-math-negsqrt-negsqrt-negative)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negsqrt-negsqrt-nan)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negsqrt-negsqrt--plusinf)
+
+  (assert (equal? Infinity:float64 Infinity:float64)))
+
+(define (test-math-negsqrt-negsqrt--neginf)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
 ;; ceiling
 
 (define (test-math-negceiling-negceiling-3-dot2)
 
-  (assert (equal? 4:bigint 4:bigint)))
+  (assert (equal? 4.0:float64 4.0:float64)))
 
 (define (test-math-negceiling-negceiling-3-dot0)
 
-  (assert (equal? 3:bigint 3:bigint)))
+  (assert (equal? 3.0:float64 3.0:float64)))
 
 (define (test-math-negceiling-negceiling--neg3-dot2)
 
-  (assert (equal? -3:bigint -3:bigint)))
+  (assert (equal? -3.0:float64 -3.0:float64)))
 
 (define (test-math-negceiling-negceiling--neg3-dot0)
 
-  (assert (equal? -3:bigint -3:bigint)))
+  (assert (equal? -3.0:float64 -3.0:float64)))
+
+(define (test-math-negceiling-negceiling-nan)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negceiling-negceiling--plusinf)
+
+  (assert (equal? Infinity:float64 Infinity:float64)))
+
+(define (test-math-negceiling-negceiling--neginf)
+
+  (assert (equal? -Infinity:float64 -Infinity:float64)))
 
 ;; floor
 
 (define (test-math-negfloor-negfloor-3-dot8)
 
-  (assert (equal? 3:bigint 3:bigint)))
+  (assert (equal? 3.0:float64 3.0:float64)))
 
 (define (test-math-negfloor-negfloor-3-dot0)
 
-  (assert (equal? 3:bigint 3:bigint)))
+  (assert (equal? 3.0:float64 3.0:float64)))
 
 (define (test-math-negfloor-negfloor--neg3-dot2)
 
-  (assert (equal? -4:bigint -4:bigint)))
+  (assert (equal? -4.0:float64 -4.0:float64)))
 
 (define (test-math-negfloor-negfloor--neg3-dot0)
 
-  (assert (equal? -3:bigint -3:bigint)))
+  (assert (equal? -3.0:float64 -3.0:float64)))
+
+(define (test-math-negfloor-negfloor-nan)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negfloor-negfloor--plusinf)
+
+  (assert (equal? Infinity:float64 Infinity:float64)))
+
+(define (test-math-negfloor-negfloor--neginf)
+
+  (assert (equal? -Infinity:float64 -Infinity:float64)))
 
 ;; round
 
 (define (test-math-neground-neground-3-dot4)
 
-  (assert (equal? 3:bigint 3:bigint)))
+  (assert (equal? 3.0:float64 3.0:float64)))
 
 (define (test-math-neground-neground-3-dot5)
 
-  (assert (equal? 4:bigint 4:bigint)))
+  (assert (equal? 4.0:float64 4.0:float64)))
 
 (define (test-math-neground-neground-3-dot6)
 
-  (assert (equal? 4:bigint 4:bigint)))
+  (assert (equal? 4.0:float64 4.0:float64)))
 
 (define (test-math-neground-neground--neg3-dot4)
 
-  (assert (equal? -3:bigint -3:bigint)))
+  (assert (equal? -3.0:float64 -3.0:float64)))
 
 (define (test-math-neground-neground--neg3-dot5)
 
-  (assert (equal? -4:bigint -4:bigint)))
+  (assert (equal? -4.0:float64 -4.0:float64)))
+
+(define (test-math-neground-neground-nan)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-neground-neground--plusinf)
+
+  (assert (equal? Infinity:float64 Infinity:float64)))
+
+(define (test-math-neground-neground--neginf)
+
+  (assert (equal? -Infinity:float64 -Infinity:float64)))
 
 ;; roundBigfloat
 
@@ -831,6 +1215,18 @@
 
   (assert (equal? -1230.0:float32 -1230.0:float32)))
 
+(define (test-math-negroundfloat32-negnan)
+
+  (assert (equal? NaN:float32 NaN:float32)))
+
+(define (test-math-negroundfloat32-neg-plusinf)
+
+  (assert (equal? Infinity:float32 Infinity:float32)))
+
+(define (test-math-negroundfloat32-neg-neginf)
+
+  (assert (equal? -Infinity:float32 -Infinity:float32)))
+
 ;; roundFloat64
 
 (define (test-math-negroundfloat64-negzero)
@@ -861,20 +1257,44 @@
 
   (assert (equal? 10.0:float64 10.0:float64)))
 
+(define (test-math-negroundfloat64-negnan)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negroundfloat64-neg-plusinf)
+
+  (assert (equal? Infinity:float64 Infinity:float64)))
+
+(define (test-math-negroundfloat64-neg-neginf)
+
+  (assert (equal? -Infinity:float64 -Infinity:float64)))
+
 ;; truncate
 
 (define (test-math-negtruncate-negtruncate-3-dot8)
 
-  (assert (equal? 3:bigint 3:bigint)))
+  (assert (equal? 3.0:float64 3.0:float64)))
 
 (define (test-math-negtruncate-negtruncate-3-dot2)
 
-  (assert (equal? 3:bigint 3:bigint)))
+  (assert (equal? 3.0:float64 3.0:float64)))
 
 (define (test-math-negtruncate-negtruncate--neg3-dot8)
 
-  (assert (equal? -3:bigint -3:bigint)))
+  (assert (equal? -3.0:float64 -3.0:float64)))
 
 (define (test-math-negtruncate-negtruncate--neg3-dot2)
 
-  (assert (equal? -3:bigint -3:bigint)))
+  (assert (equal? -3.0:float64 -3.0:float64)))
+
+(define (test-math-negtruncate-negtruncate-nan)
+
+  (assert (equal? NaN:float64 NaN:float64)))
+
+(define (test-math-negtruncate-negtruncate--plusinf)
+
+  (assert (equal? Infinity:float64 Infinity:float64)))
+
+(define (test-math-negtruncate-negtruncate--neginf)
+
+  (assert (equal? -Infinity:float64 -Infinity:float64)))

@@ -4,12 +4,14 @@ r"""Lisp serializer: converts Lisp AST to concrete syntax for Clojure, Emacs Lis
 
 from __future__ import annotations
 from collections.abc import Callable
+from decimal import Decimal
 from functools import lru_cache
 from hydra.dsl.python import frozenlist
 from typing import cast
 import hydra.core
 import hydra.ext.lisp.syntax
 import hydra.formatting
+import hydra.lib.equality
 import hydra.lib.lists
 import hydra.lib.literals
 import hydra.lib.logic
@@ -72,6 +74,60 @@ def false_expr(d: hydra.ext.lisp.syntax.Dialect) -> hydra.ast.Expr:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
+def format_lisp_float(d: hydra.ext.lisp.syntax.Dialect, v: Decimal):
+    @lru_cache(1)
+    def s() -> str:
+        return hydra.lib.literals.show_bigfloat(v)
+    def _hoist_s_body_1(v1):
+        match v1:
+            case hydra.ext.lisp.syntax.Dialect.CLOJURE:
+                return "Double/NaN"
+
+            case hydra.ext.lisp.syntax.Dialect.SCHEME:
+                return "+nan.0"
+
+            case hydra.ext.lisp.syntax.Dialect.COMMON_LISP:
+                return "+hydra-nan+"
+
+            case hydra.ext.lisp.syntax.Dialect.EMACS_LISP:
+                return "0.0e+NaN"
+
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
+    def _hoist_s_body_2(v1):
+        match v1:
+            case hydra.ext.lisp.syntax.Dialect.CLOJURE:
+                return "Double/POSITIVE_INFINITY"
+
+            case hydra.ext.lisp.syntax.Dialect.SCHEME:
+                return "+inf.0"
+
+            case hydra.ext.lisp.syntax.Dialect.COMMON_LISP:
+                return "+hydra-pos-inf+"
+
+            case hydra.ext.lisp.syntax.Dialect.EMACS_LISP:
+                return "1.0e+INF"
+
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
+    def _hoist_s_body_3(v1):
+        match v1:
+            case hydra.ext.lisp.syntax.Dialect.CLOJURE:
+                return "Double/NEGATIVE_INFINITY"
+
+            case hydra.ext.lisp.syntax.Dialect.SCHEME:
+                return "-inf.0"
+
+            case hydra.ext.lisp.syntax.Dialect.COMMON_LISP:
+                return "+hydra-neg-inf+"
+
+            case hydra.ext.lisp.syntax.Dialect.EMACS_LISP:
+                return "-1.0e+INF"
+
+            case _:
+                raise AssertionError("Unreachable: all variants handled")
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "NaN"), (lambda : _hoist_s_body_1(d)), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "Infinity"), (lambda : _hoist_s_body_2(d)), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s(), "-Infinity"), (lambda : _hoist_s_body_3(d)), (lambda : s()))))))
+
 def keyword_to_expr(d: hydra.ext.lisp.syntax.Dialect, k: hydra.ext.lisp.syntax.Keyword) -> hydra.ast.Expr:
     name = k.name
     ns = k.namespace
@@ -122,7 +178,7 @@ def literal_to_expr(d: hydra.ext.lisp.syntax.Dialect, lit: hydra.ext.lisp.syntax
             return hydra.serialization.cst(hydra.lib.literals.show_bigint(i.value))
 
         case hydra.ext.lisp.syntax.LiteralFloat(value=f):
-            return hydra.serialization.cst(hydra.lib.literals.show_bigfloat(f.value))
+            return hydra.serialization.cst(format_lisp_float(d, f.value))
 
         case hydra.ext.lisp.syntax.LiteralString(value=s):
             @lru_cache(1)

@@ -125,7 +125,7 @@ Hydra-Python uses the **src/main vs src/gen-main** separation pattern
   - Generated from Haskell DSL sources using the Python coder in hydra-ext
 
 - **`src/gen-test/python/`** - Generated test suite
-  - `hydra/test/` - Common tests ensuring parity with Haskell and Java
+  - `hydra/test/` - Common tests ensuring parity with Haskell, Java, Scala, and Lisp
   - `generation/` - Generation tests (terms generated to Python and executed)
 
 ## Generate Python code

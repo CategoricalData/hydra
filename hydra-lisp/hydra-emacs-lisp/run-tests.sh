@@ -1,34 +1,3 @@
-#!/bin/bash
-set -eo pipefail
-
-# Run Hydra Emacs Lisp test suite.
-#
-# Prerequisites:
-#   - Emacs 28+ must be installed
-#   - Run from the hydra-emacs-lisp directory
-#
-# Environment:
-#   HYDRA_BENCHMARK_OUTPUT  If set, writes benchmark JSON to this path
-
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$SCRIPT_DIR"
-
-START_SEC=$(python3 -c 'import time; print(time.monotonic())')
-
-# Run tests, capturing output while filtering byte-compiler warnings
-EXIT_CODE=0
-OUTPUT=$(emacs --batch --load run-tests.el 2>&1 | grep -v "^run-tests.el: Warning:" | tee /dev/stderr) || EXIT_CODE=$?
-
-END_SEC=$(python3 -c 'import time; print(time.monotonic())')
-
-# Parse results from output (format: "Results: N passed, N failed, N skipped")
-PASSED=$(echo "$OUTPUT" | sed -n 's/.*Results: *\([0-9]*\) passed.*/\1/p' | tail -1)
-FAILED=$(echo "$OUTPUT" | sed -n 's/.*Results:.*passed, *\([0-9]*\) failed.*/\1/p' | tail -1)
-SKIPPED=$(echo "$OUTPUT" | sed -n 's/.*Results:.*failed, *\([0-9]*\) skipped.*/\1/p' | tail -1)
-PASSED=${PASSED:-0}
-FAILED=${FAILED:-0}
-SKIPPED=${SKIPPED:-0}
-
-# Benchmark JSON is written by the Emacs Lisp test runner when HYDRA_BENCHMARK_OUTPUT is set
-
-exit $EXIT_CODE
+#!/usr/bin/env bash
+# Shim: delegate to the shared Lisp test runner.
+exec "$(dirname "$0")/../bin/run-tests.sh" emacs-lisp "$@"

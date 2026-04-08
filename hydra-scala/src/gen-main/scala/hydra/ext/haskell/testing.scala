@@ -2,8 +2,6 @@ package hydra.ext.haskell.testing
 
 import hydra.coders.*
 
-import hydra.context.*
-
 import hydra.core.*
 
 import hydra.ext.haskell.syntax.*
@@ -13,28 +11,6 @@ import hydra.packaging.*
 import hydra.testing.*
 
 import hydra.util.*
-
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.literals
-
-import hydra.lib.logic
-
-import hydra.lib.maps
-
-import hydra.lib.math
-
-import hydra.lib.maybes
-
-import hydra.lib.pairs
-
-import hydra.lib.sets
-
-import hydra.lib.strings
 
 def addNamespacesToNamespaces(ns0: hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName])(names: scala.collection.immutable.Set[hydra.core.Name]): hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName] =
   {
@@ -61,8 +37,8 @@ def buildNamespacesForTestGroup(mod: hydra.packaging.Module)(tgroup: hydra.testi
     hydra.packaging.Definition.term(hydra.packaging.TermDefinition(b.name, (b.term), (b.`type`))))(testBindings),
        (mod.termDependencies), (mod.typeDependencies), (mod.description))
   hydra.lib.eithers.bind[scala.Predef.String, hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName],
-     hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName]](hydra.lib.eithers.bimap[hydra.context.InContext[hydra.errors.Error],
-     hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName], scala.Predef.String, hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName]]((ic: hydra.context.InContext[hydra.errors.Error]) => hydra.show.errors.error(ic.`object`))((a: hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName]) => a)(hydra.ext.haskell.utils.namespacesForModule(tempModule)(hydra.lexical.emptyContext)(`graph_`)))((baseNamespaces: hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName]) =>
+     hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName]](hydra.lib.eithers.bimap[hydra.errors.Error,
+     hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName], scala.Predef.String, hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName]]((e: hydra.errors.Error) => hydra.show.errors.error(e))((a: hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName]) => a)(hydra.ext.haskell.utils.namespacesForModule(tempModule)(hydra.lexical.emptyContext)(`graph_`)))((baseNamespaces: hydra.packaging.Namespaces[hydra.ext.haskell.syntax.ModuleName]) =>
     {
     lazy val encodedNames: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.unions[hydra.core.Name](hydra.lib.lists.map[hydra.core.Term,
        scala.collection.immutable.Set[hydra.core.Name]]((t: hydra.core.Term) =>

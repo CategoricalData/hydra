@@ -4,18 +4,6 @@ import hydra.packaging.*
 
 import hydra.testing.*
 
-import hydra.lib.chars
-
-import hydra.lib.eithers
-
-import hydra.lib.equality
-
-import hydra.lib.lists
-
-import hydra.lib.logic
-
-import hydra.lib.strings
-
 def buildPythonTestModule[T0](testModule: T0)(testGroup: hydra.testing.TestGroup)(testBody: scala.Predef.String): scala.Predef.String =
   {
   lazy val `groupName_`: scala.Predef.String = (testGroup.name)

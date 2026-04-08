@@ -11,7 +11,6 @@ import hydra.adapt
 import hydra.annotations
 import hydra.coders
 import hydra.constants
-import hydra.context
 import hydra.core
 import hydra.decode.core
 import hydra.decode.packaging
@@ -37,7 +36,6 @@ import hydra.lib.sets
 import hydra.lib.strings
 import hydra.packaging
 import hydra.show.core
-import hydra.show.errors
 import hydra.strip
 
 T0 = TypeVar("T0")
@@ -116,10 +114,10 @@ def modules_to_graph(bs_graph: hydra.graph.Graph, universe_modules: frozenlist[h
         return hydra.lexical.elements_to_graph(bs_graph, hydra.lib.maps.empty(), schema_elements())
     @lru_cache(1)
     def schema_types() -> FrozenDict[hydra.core.Name, hydra.core.TypeScheme]:
-        return hydra.lib.eithers.either((lambda _: hydra.lib.maps.empty()), (lambda _r: _r), hydra.environment.schema_graph_to_typing_environment(hydra.lexical.empty_context(), schema_graph()))
+        return hydra.lib.eithers.either((lambda _: hydra.lib.maps.empty()), (lambda _r: _r), hydra.environment.schema_graph_to_typing_environment(schema_graph()))
     return hydra.lexical.elements_to_graph(bs_graph, schema_types(), data_elements())
 
-def decode_module_from_json(bs_graph: hydra.graph.Graph, universe_modules: frozenlist[hydra.packaging.Module], json_val: hydra.json.model.Value) -> Either[str, hydra.packaging.Module]:
+def decode_module_from_json(bs_graph: hydra.graph.Graph, universe_modules: frozenlist[hydra.packaging.Module], json_val: hydra.json.model.Value) -> Either[hydra.errors.Error, hydra.packaging.Module]:
     r"""Decode a single module from a JSON value."""
 
     @lru_cache(1)
@@ -129,7 +127,7 @@ def decode_module_from_json(bs_graph: hydra.graph.Graph, universe_modules: froze
     def schema_map() -> FrozenDict[hydra.core.Name, hydra.core.Type]:
         return build_schema_map(graph())
     mod_type = cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.packaging.Module")))
-    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda term: hydra.lib.eithers.either((lambda dec_err: Left(dec_err.value)), (lambda mod: Right(mod)), hydra.decode.packaging.module(graph(), term))), hydra.json.decode.from_json(schema_map(), hydra.core.Name("hydra.packaging.Module"), mod_type, json_val))
+    return hydra.lib.eithers.either((lambda err: Left(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(err))))), (lambda term: hydra.lib.eithers.either((lambda dec_err: Left(cast(hydra.errors.Error, hydra.errors.ErrorDecoding(dec_err)))), (lambda mod: Right(mod)), hydra.decode.packaging.module(graph(), term))), hydra.json.decode.from_json(schema_map(), hydra.core.Name("hydra.packaging.Module"), mod_type, json_val))
 
 def escape_control_chars_in_json(input: frozenlist[int]) -> frozenlist[int]:
     r"""Escape unescaped control characters inside JSON string literals."""
@@ -160,10 +158,10 @@ def format_term_binding(binding: hydra.core.Binding) -> str:
         return hydra.lib.maybes.maybe((lambda : "?"), (lambda scheme: hydra.show.core.type_scheme(scheme)), binding.type)
     return hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("  ", name), " : "), type_str())
 
-def format_type_binding(graph: hydra.graph.Graph, binding: hydra.core.Binding) -> Either[hydra.errors.DecodingError, str]:
+def format_type_binding(graph: hydra.graph.Graph, binding: hydra.core.Binding) -> Either[hydra.errors.Error, str]:
     r"""Format a type binding for the lexicon."""
 
-    return hydra.lib.eithers.bind(hydra.decode.core.type(graph, binding.term), (lambda typ: Right(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("  ", binding.name.value), " = "), hydra.show.core.type(typ)))))
+    return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda _e: cast(hydra.errors.Error, hydra.errors.ErrorDecoding(_e))), (lambda _a: _a), hydra.decode.core.type(graph, binding.term)), (lambda typ: Right(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("  ", binding.name.value), " = "), hydra.show.core.type(typ)))))
 
 def generate_coder_modules(codec: Callable[[T0, hydra.graph.Graph, T1], Either[T2, Maybe[T3]]], bs_graph: hydra.graph.Graph, universe_modules: frozenlist[hydra.packaging.Module], type_modules: frozenlist[T1], cx: T0) -> Either[T2, frozenlist[T3]]:
     r"""Generate encoder or decoder modules for a list of type modules."""
@@ -202,7 +200,7 @@ def generate_coder_modules(codec: Callable[[T0, hydra.graph.Graph, T1], Either[T
         return hydra.lexical.elements_to_graph(bs_graph, hydra.lib.maps.empty(), schema_elements())
     @lru_cache(1)
     def schema_types() -> FrozenDict[hydra.core.Name, hydra.core.TypeScheme]:
-        return hydra.lib.eithers.either((lambda _: hydra.lib.maps.empty()), (lambda _r: _r), hydra.environment.schema_graph_to_typing_environment(hydra.lexical.empty_context(), schema_graph()))
+        return hydra.lib.eithers.either((lambda _: hydra.lib.maps.empty()), (lambda _r: _r), hydra.environment.schema_graph_to_typing_environment(schema_graph()))
     @lru_cache(1)
     def all_elements() -> frozenlist[hydra.core.Binding]:
         return hydra.lib.lists.concat2(schema_elements(), data_elements())
@@ -211,7 +209,7 @@ def generate_coder_modules(codec: Callable[[T0, hydra.graph.Graph, T1], Either[T
         return hydra.lexical.elements_to_graph(bs_graph, schema_types(), all_elements())
     return hydra.lib.eithers.map((lambda results: hydra.lib.maybes.cat(results)), hydra.lib.eithers.map_list((lambda m: codec(cx, graph(), m)), type_modules))
 
-def generate_lexicon(graph: hydra.graph.Graph) -> Either[hydra.errors.DecodingError, str]:
+def generate_lexicon(graph: hydra.graph.Graph) -> Either[hydra.errors.Error, str]:
     r"""Generate the lexicon content from a graph."""
 
     @lru_cache(1)
@@ -244,7 +242,7 @@ def generate_source_files(print_definitions: Callable[[
   hydra.packaging.Module,
   frozenlist[hydra.packaging.Definition],
   hydra.context.Context,
-  hydra.graph.Graph], Either[hydra.context.InContext[hydra.errors.Error], FrozenDict[T0, T1]]], lang: hydra.coders.Language, do_infer: bool, do_expand: bool, do_hoist_case_statements: bool, do_hoist_polymorphic_let_bindings: bool, bs_graph: hydra.graph.Graph, universe_modules: frozenlist[hydra.packaging.Module], mods_to_generate: frozenlist[hydra.packaging.Module], cx: hydra.context.Context) -> Either[hydra.context.InContext[hydra.errors.Error], frozenlist[tuple[T0, T1]]]:
+  hydra.graph.Graph], Either[hydra.errors.Error, FrozenDict[T0, T1]]], lang: hydra.coders.Language, do_infer: bool, do_expand: bool, do_hoist_case_statements: bool, do_hoist_polymorphic_let_bindings: bool, bs_graph: hydra.graph.Graph, universe_modules: frozenlist[hydra.packaging.Module], mods_to_generate: frozenlist[hydra.packaging.Module], cx: hydra.context.Context) -> Either[hydra.errors.Error, frozenlist[tuple[T0, T1]]]:
     r"""Pure core of code generation: given a coder, language, flags, bootstrap graph, universe, and modules to generate, produce a list of (filePath, content) pairs."""
 
     @lru_cache(1)
@@ -302,13 +300,13 @@ def generate_source_files(print_definitions: Callable[[
         return hydra.lexical.elements_to_graph(bs_graph, hydra.lib.maps.empty(), schema_elements())
     @lru_cache(1)
     def schema_types2() -> FrozenDict[hydra.core.Name, hydra.core.TypeScheme]:
-        return hydra.lib.eithers.either((lambda _: hydra.lib.maps.empty()), (lambda _r: _r), hydra.environment.schema_graph_to_typing_environment(hydra.lexical.empty_context(), schema_graph()))
+        return hydra.lib.eithers.either((lambda _: hydra.lib.maps.empty()), (lambda _r: _r), hydra.environment.schema_graph_to_typing_environment(schema_graph()))
     @lru_cache(1)
     def data_graph() -> hydra.graph.Graph:
         return hydra.lexical.elements_to_graph(bs_graph, schema_types2(), data_elements())
-    return hydra.lib.eithers.bind(hydra.lib.logic.if_else(hydra.lib.lists.null(type_modules_to_generate()), (lambda : Right(())), (lambda : (name_lists := (_hoist_name_lists_1 := (lambda v1: (lambda td: Just(td.name))(v1.value) if isinstance(v1, hydra.packaging.DefinitionType) else Nothing()), hydra.lib.lists.map((lambda m: hydra.lib.maybes.cat(hydra.lib.lists.map((lambda d: _hoist_name_lists_1(d)), m.definitions))), type_modules_to_generate()))[1], hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda s: hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(s))), cx)), (lambda r: r), hydra.adapt.schema_graph_to_definitions(constraints, schema_graph(), name_lists, cx)), (lambda schema_result: (def_lists := hydra.lib.pairs.second(schema_result), schema_graph_with_types := hydra.graph.Graph(schema_graph().bound_terms, schema_graph().bound_types, schema_graph().class_constraints, schema_graph().lambda_variables, schema_graph().metadata, schema_graph().primitives, schema_types2(), schema_graph().type_variables), hydra.lib.eithers.map((lambda xs: hydra.lib.lists.concat(xs)), hydra.lib.eithers.map_list((lambda p: (mod := hydra.lib.pairs.first(p), defs := hydra.lib.pairs.second(p), hydra.lib.eithers.map((lambda m: hydra.lib.maps.to_list(m)), print_definitions(mod, hydra.lib.lists.map((lambda d: cast(hydra.packaging.Definition, hydra.packaging.DefinitionType(d))), defs), cx, schema_graph_with_types)))[2]), hydra.lib.lists.zip(type_modules_to_generate(), def_lists))))[2])))[1])), (lambda schema_files: hydra.lib.eithers.bind(hydra.lib.logic.if_else(hydra.lib.lists.null(term_modules_to_generate()), (lambda : Right(())), (lambda : (namespaces := hydra.lib.lists.map((lambda m: m.namespace), term_modules_to_generate()), hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda s: hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(s))), cx)), (lambda r: r), hydra.adapt.data_graph_to_definitions(constraints, do_infer, do_expand, do_hoist_case_statements, do_hoist_polymorphic_let_bindings, data_elements(), data_graph(), namespaces, cx)), (lambda data_result: (g1 := hydra.lib.pairs.first(data_result), def_lists := hydra.lib.pairs.second(data_result), def_name := (lambda d: (_hoist_def_name_1 := (lambda v1: (lambda td: td.name)(v1.value) if isinstance(v1, hydra.packaging.DefinitionTerm) else (lambda td: td.name)(v1.value) if isinstance(v1, hydra.packaging.DefinitionType) else hydra.dsl.python.unsupported("no matching case in inline union elimination")), _hoist_def_name_1(d))[1]), refresh_module := (lambda els, m: (_hoist_refresh_module_1 := (lambda els, v1: (lambda td: Just(cast(hydra.packaging.Definition, hydra.packaging.DefinitionType(td))))(v1.value) if isinstance(v1, hydra.packaging.DefinitionType) else (lambda td: hydra.lib.maybes.map((lambda b: cast(hydra.packaging.Definition, hydra.packaging.DefinitionTerm(hydra.packaging.TermDefinition(b.name, b.term, b.type)))), hydra.lib.lists.find((lambda b: hydra.lib.equality.equal(b.name, td.name)), els)))(v1.value) if isinstance(v1, hydra.packaging.DefinitionTerm) else hydra.dsl.python.unsupported("no matching case in inline union elimination")), hydra.packaging.Module(m.namespace, hydra.lib.maybes.cat(hydra.lib.lists.map((lambda d: _hoist_refresh_module_1(els, d)), m.definitions)), m.term_dependencies, m.type_dependencies, m.description))[1]), all_bindings := hydra.lexical.graph_to_bindings(g1), refreshed_mods := hydra.lib.lists.map((lambda m: refresh_module(all_bindings, m)), term_modules_to_generate()), dedup_defs := (lambda defs: hydra.lib.maps.elems(hydra.lib.maps.from_list(hydra.lib.lists.map((lambda d: (d.name, d)), defs)))), deduped_def_lists := hydra.lib.lists.map((lambda x1: dedup_defs(x1)), def_lists), hydra.lib.eithers.map((lambda xs: hydra.lib.lists.concat(xs)), hydra.lib.eithers.map_list((lambda p: (mod := hydra.lib.pairs.first(p), defs := hydra.lib.pairs.second(p), hydra.lib.eithers.map((lambda m: hydra.lib.maps.to_list(m)), print_definitions(mod, hydra.lib.lists.map((lambda d: cast(hydra.packaging.Definition, hydra.packaging.DefinitionTerm(d))), defs), cx, g1)))[2]), hydra.lib.lists.zip(refreshed_mods, deduped_def_lists))))[8])))[1])), (lambda term_files: Right(hydra.lib.lists.concat2(schema_files, term_files))))))
+    return hydra.lib.eithers.bind(hydra.lib.logic.if_else(hydra.lib.lists.null(type_modules_to_generate()), (lambda : Right(())), (lambda : (name_lists := (_hoist_name_lists_1 := (lambda v1: (lambda td: Just(td.name))(v1.value) if isinstance(v1, hydra.packaging.DefinitionType) else Nothing()), hydra.lib.lists.map((lambda m: hydra.lib.maybes.cat(hydra.lib.lists.map((lambda d: _hoist_name_lists_1(d)), m.definitions))), type_modules_to_generate()))[1], hydra.lib.eithers.bind(hydra.adapt.schema_graph_to_definitions(constraints, schema_graph(), name_lists, cx), (lambda schema_result: (def_lists := hydra.lib.pairs.second(schema_result), schema_graph_with_types := hydra.graph.Graph(schema_graph().bound_terms, schema_graph().bound_types, schema_graph().class_constraints, schema_graph().lambda_variables, schema_graph().metadata, schema_graph().primitives, schema_types2(), schema_graph().type_variables), hydra.lib.eithers.map((lambda xs: hydra.lib.lists.concat(xs)), hydra.lib.eithers.map_list((lambda p: (mod := hydra.lib.pairs.first(p), defs := hydra.lib.pairs.second(p), hydra.lib.eithers.map((lambda m: hydra.lib.maps.to_list(m)), print_definitions(mod, hydra.lib.lists.map((lambda d: cast(hydra.packaging.Definition, hydra.packaging.DefinitionType(d))), defs), cx, schema_graph_with_types)))[2]), hydra.lib.lists.zip(type_modules_to_generate(), def_lists))))[2])))[1])), (lambda schema_files: hydra.lib.eithers.bind(hydra.lib.logic.if_else(hydra.lib.lists.null(term_modules_to_generate()), (lambda : Right(())), (lambda : (namespaces := hydra.lib.lists.map((lambda m: m.namespace), term_modules_to_generate()), hydra.lib.eithers.bind(hydra.adapt.data_graph_to_definitions(constraints, do_infer, do_expand, do_hoist_case_statements, do_hoist_polymorphic_let_bindings, data_elements(), data_graph(), namespaces, cx), (lambda data_result: (g1 := hydra.lib.pairs.first(data_result), def_lists := hydra.lib.pairs.second(data_result), def_name := (lambda d: (_hoist_def_name_1 := (lambda v1: (lambda td: td.name)(v1.value) if isinstance(v1, hydra.packaging.DefinitionTerm) else (lambda td: td.name)(v1.value) if isinstance(v1, hydra.packaging.DefinitionType) else hydra.dsl.python.unsupported("no matching case in inline union elimination")), _hoist_def_name_1(d))[1]), refresh_module := (lambda els, m: (_hoist_refresh_module_1 := (lambda els, v1: (lambda td: Just(cast(hydra.packaging.Definition, hydra.packaging.DefinitionType(td))))(v1.value) if isinstance(v1, hydra.packaging.DefinitionType) else (lambda td: hydra.lib.maybes.map((lambda b: cast(hydra.packaging.Definition, hydra.packaging.DefinitionTerm(hydra.packaging.TermDefinition(b.name, b.term, b.type)))), hydra.lib.lists.find((lambda b: hydra.lib.equality.equal(b.name, td.name)), els)))(v1.value) if isinstance(v1, hydra.packaging.DefinitionTerm) else hydra.dsl.python.unsupported("no matching case in inline union elimination")), hydra.packaging.Module(m.namespace, hydra.lib.maybes.cat(hydra.lib.lists.map((lambda d: _hoist_refresh_module_1(els, d)), m.definitions)), m.term_dependencies, m.type_dependencies, m.description))[1]), all_bindings := hydra.lexical.graph_to_bindings(g1), refreshed_mods := hydra.lib.lists.map((lambda m: refresh_module(all_bindings, m)), term_modules_to_generate()), dedup_defs := (lambda defs: hydra.lib.maps.elems(hydra.lib.maps.from_list(hydra.lib.lists.map((lambda d: (d.name, d)), defs)))), deduped_def_lists := hydra.lib.lists.map((lambda x1: dedup_defs(x1)), def_lists), hydra.lib.eithers.map((lambda xs: hydra.lib.lists.concat(xs)), hydra.lib.eithers.map_list((lambda p: (mod := hydra.lib.pairs.first(p), defs := hydra.lib.pairs.second(p), hydra.lib.eithers.map((lambda m: hydra.lib.maps.to_list(m)), print_definitions(mod, hydra.lib.lists.map((lambda d: cast(hydra.packaging.Definition, hydra.packaging.DefinitionTerm(d))), defs), cx, g1)))[2]), hydra.lib.lists.zip(refreshed_mods, deduped_def_lists))))[8])))[1])), (lambda term_files: Right(hydra.lib.lists.concat2(schema_files, term_files))))))
 
-def infer_and_generate_lexicon(cx: hydra.context.Context, bs_graph: hydra.graph.Graph, kernel_modules: frozenlist[hydra.packaging.Module]) -> Either[str, str]:
+def infer_and_generate_lexicon(cx: hydra.context.Context, bs_graph: hydra.graph.Graph, kernel_modules: frozenlist[hydra.packaging.Module]) -> Either[hydra.errors.Error, str]:
     r"""Perform type inference and generate the lexicon for a set of modules."""
 
     @lru_cache(1)
@@ -324,9 +322,9 @@ def infer_and_generate_lexicon(cx: hydra.context.Context, bs_graph: hydra.graph.
                 case _:
                     return Nothing()
         return hydra.lib.lists.concat(hydra.lib.lists.map((lambda m: hydra.lib.maybes.cat(hydra.lib.lists.map((lambda d: _hoist_data_elements_1(d)), m.definitions))), kernel_modules))
-    return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda ic: hydra.show.errors.error(ic.object)), (lambda x: x), hydra.inference.infer_graph_types(cx, data_elements(), g0())), (lambda infer_result_with_cx: (g1 := hydra.lib.pairs.first(hydra.lib.pairs.first(infer_result_with_cx)), hydra.lib.eithers.bimap((lambda v1: v1.value), (lambda x: x), generate_lexicon(g1)))[1]))
+    return hydra.lib.eithers.bind(hydra.inference.infer_graph_types(cx, data_elements(), g0()), (lambda infer_result_with_cx: (g1 := hydra.lib.pairs.first(hydra.lib.pairs.first(infer_result_with_cx)), generate_lexicon(g1))[1]))
 
-def infer_modules(cx: hydra.context.Context, bs_graph: hydra.graph.Graph, universe_mods: frozenlist[hydra.packaging.Module], target_mods: frozenlist[hydra.packaging.Module]) -> Either[hydra.context.InContext[hydra.errors.Error], frozenlist[hydra.packaging.Module]]:
+def infer_modules(cx: hydra.context.Context, bs_graph: hydra.graph.Graph, universe_mods: frozenlist[hydra.packaging.Module], target_mods: frozenlist[hydra.packaging.Module]) -> Either[hydra.errors.Error, frozenlist[hydra.packaging.Module]]:
     r"""Perform type inference on modules and reconstruct with inferred types."""
 
     @lru_cache(1)
@@ -344,14 +342,14 @@ def infer_modules(cx: hydra.context.Context, bs_graph: hydra.graph.Graph, univer
         return hydra.lib.lists.concat(hydra.lib.lists.map((lambda m: hydra.lib.maybes.cat(hydra.lib.lists.map((lambda d: _hoist_data_elements_1(d)), m.definitions))), universe_mods))
     return hydra.lib.eithers.bind(hydra.inference.infer_graph_types(cx, data_elements(), g0()), (lambda infer_result_with_cx: (infer_result := hydra.lib.pairs.first(infer_result_with_cx), g1 := hydra.lib.pairs.first(infer_result), inferred_elements := hydra.lib.pairs.second(infer_result), is_type_only_module := (lambda mod: (_hoist_is_type_only_module_1 := (lambda v1: (lambda td: Just(hydra.core.Binding(td.name, td.term, td.type)))(v1.value) if isinstance(v1, hydra.packaging.DefinitionTerm) else Nothing()), hydra.lib.logic.not_(hydra.lib.logic.not_(hydra.lib.lists.null(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda d: _hoist_is_type_only_module_1(d)), mod.definitions))))))[1]), def_name := (lambda d: (_hoist_def_name_1 := (lambda v1: (lambda td: td.name)(v1.value) if isinstance(v1, hydra.packaging.DefinitionTerm) else (lambda td: td.name)(v1.value) if isinstance(v1, hydra.packaging.DefinitionType) else hydra.dsl.python.unsupported("no matching case in inline union elimination")), _hoist_def_name_1(d))[1]), refresh_module := (lambda m: (_hoist_refresh_module_1 := (lambda v1: (lambda td: Just(cast(hydra.packaging.Definition, hydra.packaging.DefinitionType(td))))(v1.value) if isinstance(v1, hydra.packaging.DefinitionType) else (lambda td: hydra.lib.maybes.map((lambda b: cast(hydra.packaging.Definition, hydra.packaging.DefinitionTerm(hydra.packaging.TermDefinition(b.name, b.term, b.type)))), hydra.lib.lists.find((lambda b: hydra.lib.equality.equal(b.name, td.name)), inferred_elements)))(v1.value) if isinstance(v1, hydra.packaging.DefinitionTerm) else hydra.dsl.python.unsupported("no matching case in inline union elimination")), hydra.lib.logic.if_else(is_type_only_module(m), (lambda : m), (lambda : hydra.packaging.Module(m.namespace, hydra.lib.maybes.cat(hydra.lib.lists.map((lambda d: _hoist_refresh_module_1(d)), m.definitions)), m.term_dependencies, m.type_dependencies, m.description))))[1]), Right(hydra.lib.lists.map((lambda x1: refresh_module(x1)), target_mods)))[6]))
 
-def module_to_json(schema_map: FrozenDict[hydra.core.Name, hydra.core.Type], m: hydra.packaging.Module) -> Either[str, str]:
+def module_to_json(schema_map: FrozenDict[hydra.core.Name, hydra.core.Type], m: hydra.packaging.Module) -> Either[hydra.errors.Error, str]:
     r"""Convert a Module to a JSON string."""
 
     @lru_cache(1)
     def term() -> hydra.core.Term:
         return hydra.encode.packaging.module(m)
     mod_type = cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.packaging.Module")))
-    return hydra.lib.eithers.map((lambda json: hydra.json.writer.print_json(json)), hydra.json.encode.to_json(schema_map, hydra.core.Name("hydra.packaging.Module"), mod_type, term()))
+    return hydra.lib.eithers.map((lambda json: hydra.json.writer.print_json(json)), hydra.lib.eithers.bimap((lambda _e: cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(_e)))), (lambda _a: _a), hydra.json.encode.to_json(schema_map, hydra.core.Name("hydra.packaging.Module"), mod_type, term())))
 
 def module_to_source_module(m: hydra.packaging.Module) -> hydra.packaging.Module:
     r"""Convert a generated Module into a Source module."""

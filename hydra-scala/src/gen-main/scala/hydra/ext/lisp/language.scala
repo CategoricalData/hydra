@@ -6,10 +6,6 @@ import hydra.core.*
 
 import hydra.variants.*
 
-import hydra.lib.lists
-
-import hydra.lib.sets
-
 lazy val lispLanguage: hydra.coders.Language = {
   lazy val eliminationVariants: scala.collection.immutable.Set[hydra.variants.EliminationVariant] = hydra.lib.sets.fromList[hydra.variants.EliminationVariant](Seq(hydra.variants.EliminationVariant.record,
      hydra.variants.EliminationVariant.union, hydra.variants.EliminationVariant.wrap))
@@ -19,7 +15,7 @@ lazy val lispLanguage: hydra.coders.Language = {
   lazy val floatTypes: scala.collection.immutable.Set[hydra.core.FloatType] = hydra.lib.sets.fromList[hydra.core.FloatType](Seq(hydra.core.FloatType.bigfloat,
      hydra.core.FloatType.float64))
   lazy val functionVariants: scala.collection.immutable.Set[hydra.variants.FunctionVariant] = hydra.lib.sets.fromList[hydra.variants.FunctionVariant](Seq(hydra.variants.FunctionVariant.elimination,
-     hydra.variants.FunctionVariant.lambda, hydra.variants.FunctionVariant.primitive))
+     hydra.variants.FunctionVariant.lambda))
   lazy val integerTypes: scala.collection.immutable.Set[hydra.core.IntegerType] = hydra.lib.sets.fromList[hydra.core.IntegerType](Seq(hydra.core.IntegerType.bigint))
   lazy val termVariants: scala.collection.immutable.Set[hydra.variants.TermVariant] = hydra.lib.sets.fromList[hydra.variants.TermVariant](Seq(hydra.variants.TermVariant.annotated,
      hydra.variants.TermVariant.application, hydra.variants.TermVariant.either, hydra.variants.TermVariant.function,

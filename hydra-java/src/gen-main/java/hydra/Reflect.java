@@ -88,19 +88,13 @@ public interface Reflect {
       public hydra.variants.FunctionVariant visit(hydra.core.Function.Lambda ignored) {
         return new hydra.variants.FunctionVariant.Lambda();
       }
-
-      @Override
-      public hydra.variants.FunctionVariant visit(hydra.core.Function.Primitive ignored) {
-        return new hydra.variants.FunctionVariant.Primitive();
-      }
     });
   }
 
   static java.util.List<hydra.variants.FunctionVariant> functionVariants() {
     return java.util.Arrays.asList(
       new hydra.variants.FunctionVariant.Elimination(),
-      new hydra.variants.FunctionVariant.Lambda(),
-      new hydra.variants.FunctionVariant.Primitive());
+      new hydra.variants.FunctionVariant.Lambda());
   }
 
   static Boolean integerTypeIsSigned(hydra.core.IntegerType v1) {
