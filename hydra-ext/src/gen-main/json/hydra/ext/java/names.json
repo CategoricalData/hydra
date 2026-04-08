@@ -123,7 +123,7 @@
                                 "typeApplication": {
                                   "body": {
                                     "typeApplication": {
-                                      "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                      "body": {"variable": "hydra.lib.lists.map"},
                                       "type": {"literal": {"string": {}}}}},
                                   "type": {"variable": "hydra.ext.java.syntax.Identifier"}}}}}}},
                       "typeName": "hydra.ext.java.syntax.PackageName"}},

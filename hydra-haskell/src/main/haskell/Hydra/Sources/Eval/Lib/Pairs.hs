@@ -73,13 +73,13 @@ module_ = Module ns definitions
 
 -- | Interpreter-friendly bimap for Pair terms.
 -- Applies firstFun to the first element and secondFun to the second element.
-bimap_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
+bimap_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Term -> Either Error Term)
 bimap_ = define "bimap" $
   doc "Interpreter-friendly bimap for Pair terms." $
   "cx" ~> "g" ~>
   "firstFun" ~> "secondFun" ~> "pairTerm" ~>
   cases _Term (var "pairTerm")
-    (Just (ExtractCore.unexpected (var "cx") (string "pair value") (ShowCore.term @@ var "pairTerm"))) [
+    (Just (ExtractCore.unexpected (string "pair value") (ShowCore.term @@ var "pairTerm"))) [
     _Term_pair>>: "p" ~>
       "fst" <~ Pairs.first (var "p") $
       "snd" <~ Pairs.second (var "p") $
@@ -89,24 +89,24 @@ bimap_ = define "bimap" $
 
 -- | Interpreter-friendly first for Pair terms.
 -- Extracts the first element of a pair.
-first_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
+first_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
 first_ = define "first" $
   doc "Interpreter-friendly first for Pair terms." $
   "cx" ~> "g" ~>
   "pairTerm" ~>
   cases _Term (var "pairTerm")
-    (Just (ExtractCore.unexpected (var "cx") (string "pair value") (ShowCore.term @@ var "pairTerm"))) [
+    (Just (ExtractCore.unexpected (string "pair value") (ShowCore.term @@ var "pairTerm"))) [
     _Term_pair>>: "p" ~>
       right $ Pairs.first (var "p")]
 
 -- | Interpreter-friendly second for Pair terms.
 -- Extracts the second element of a pair.
-second_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
+second_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
 second_ = define "second" $
   doc "Interpreter-friendly second for Pair terms." $
   "cx" ~> "g" ~>
   "pairTerm" ~>
   cases _Term (var "pairTerm")
-    (Just (ExtractCore.unexpected (var "cx") (string "pair value") (ShowCore.term @@ var "pairTerm"))) [
+    (Just (ExtractCore.unexpected (string "pair value") (ShowCore.term @@ var "pairTerm"))) [
     _Term_pair>>: "p" ~>
       right $ Pairs.second (var "p")]

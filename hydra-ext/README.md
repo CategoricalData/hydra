@@ -3,7 +3,7 @@
 This subproject contains domain-specific extensions to Hydra, currently
 including the coders and models listed below.
 There are also a number of demos and tools also written in Haskell, as well as
-a few artifacts in Java and Python.
+a few artifacts in Java, Python, Scala, and Lisp.
 
 JavaDocs for Hydra-Ext can be found [here](https://categoricaldata.github.io/hydra/hydra-ext/javadoc),
 and releases can be found on Maven Central [here](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-ext).
@@ -16,7 +16,7 @@ Hydra-Ext uses the **src/main vs src/gen-main** separation pattern
 - **`src/main/haskell/`** - Hand-written source code
   - `Hydra/Ext/Demos/` - Demo applications
   - `Hydra/Ext/Sources/` - Domain models, language syntax definitions, and native Hydra code
-  - `Hydra/Ext/Staging/` - Language coders (Java, Python, C++, Scala, etc.)
+  - `Hydra/Ext/` - Language coders (Java, Python, Scala, Lisp, C++, etc.)
     and other code which is written in "raw" Haskell rather than the Hydra DSL
   - `Hydra/Ext/Tools/` - Analysis and transformation utilities
 
@@ -28,7 +28,7 @@ Hydra-Ext uses the **src/main vs src/gen-main** separation pattern
   - Can be generated using `writeJava "src/gen-main/java" hydraKernelModules hydraExtModules`
 
 Note: Only generated Haskell is checked into version control for space reasons.
-Java and Python can be generated on demand.
+Java, Python, Scala, and Lisp can be generated on demand.
 
 ## Coders
 

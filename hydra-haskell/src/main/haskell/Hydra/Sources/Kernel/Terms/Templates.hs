@@ -73,18 +73,18 @@ module_ = Module ns definitions
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-graphToSchema :: TTermDefinition (Context -> Graph -> [Binding] -> Either (InContext DecodingError) (M.Map Name Type))
+graphToSchema :: TTermDefinition (Context -> Graph -> [Binding] -> Either DecodingError (M.Map Name Type))
 graphToSchema = define "graphToSchema" $
   doc "Decode a list of type-encoding bindings into a map of named types" $
   "cx" ~> "graph" ~> "els" ~>
   "toPair" <~ ("el" ~>
     "name" <~ Core.bindingName (var "el") $
-    Eithers.bind (Ctx.withContext (var "cx") (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "el")))) (
+    Eithers.bind (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "el"))) (
       "t" ~> right (pair (var "name") (var "t")))) $
   Eithers.bind (Eithers.mapList (var "toPair") (var "els")) (
     "pairs" ~> right (Maps.fromList (var "pairs")))
 
-instantiateTemplate :: TTermDefinition (Context -> Bool -> M.Map Name Type -> Name -> Type -> Either (InContext Error) Term)
+instantiateTemplate :: TTermDefinition (Context -> Bool -> M.Map Name Type -> Name -> Type -> Either Error Term)
 instantiateTemplate = define "instantiateTemplate" $
   doc ("Given a graph schema and a nonrecursive type, instantiate it with default values."
     <> " If the minimal flag is set, the smallest possible term is produced; otherwise, exactly one subterm"
@@ -92,7 +92,7 @@ instantiateTemplate = define "instantiateTemplate" $
     <> " The name parameter provides the element name for nominal type construction.") $
   "cx" ~> "minimal" ~> "schema" ~> "tname" ~> "t" ~>
   "inst" <~ ("tn" ~> instantiateTemplate @@ var "cx" @@ var "minimal" @@ var "schema" @@ var "tn") $
-  "noPoly" <~ Ctx.failInContext (Error.errorOther $ Error.otherError (string "Polymorphic and function types are not currently supported")) (var "cx") $
+  "noPoly" <~ Ctx.failInContext (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "non-polymorphic type") (string "polymorphic or function type")) (var "cx") $
   "forFloat" <~ ("ft" ~> cases _FloatType (var "ft")
     Nothing [
     _FloatType_bigfloat>>: constant (Core.floatValueBigfloat (bigfloat 0.0)),
@@ -152,7 +152,7 @@ instantiateTemplate = define "instantiateTemplate" $
         "e" ~> right (Core.termSet (Sets.fromList (list [var "e"]))))),
     _Type_variable>>: "vname" ~>
       Maybes.maybe
-        (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat2 (string "Type variable ") (Strings.cat2 (ShowCore.term @@ (Core.termVariable (var "vname"))) (string " not found in schema")))) (var "cx"))
+        (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (string "bound type variable") (Strings.cat2 (string "unbound variable ") (Core.unName (var "vname")))) (var "cx"))
         (var "inst" @@ var "vname")
         (Maps.lookup (var "vname") (var "schema")),
     _Type_wrap>>: "wt" ~>

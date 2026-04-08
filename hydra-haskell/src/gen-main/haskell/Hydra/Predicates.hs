@@ -58,7 +58,9 @@ isComplexVariable tc name =
       let metaLookup = Maps.lookup name (Graph.graphMetadata tc)
       in (Logic.ifElse (Maybes.isJust metaLookup) True (Logic.ifElse (Sets.member name (Graph.graphLambdaVariables tc)) True (
         let typeLookup = Maps.lookup name (Graph.graphBoundTypes tc)
-        in (Maybes.maybe True (\ts -> Equality.gt (Arity.typeSchemeArity ts) 0) typeLookup))))
+        in (Maybes.maybe (
+          let primLookup = Maps.lookup name (Graph.graphPrimitives tc)
+          in (Maybes.maybe True (\prim -> Equality.gt (Arity.typeSchemeArity (Graph.primitiveType prim)) 0) primLookup)) (\ts -> Equality.gt (Arity.typeSchemeArity ts) 0) typeLookup))))
 
 -- | Determines whether a given term is an encoded term (meta-level term)
 isEncodedTerm :: Core.Term -> Bool
@@ -98,7 +100,7 @@ isNominalType typ =
       _ -> False
 
 -- | Check if an element is serializable (no function types in dependencies) (Either version)
-isSerializable :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Errors.Error) Bool
+isSerializable :: Context.Context -> Graph.Graph -> Core.Binding -> Either Errors.Error Bool
 isSerializable cx graph el =
 
       let variants =
@@ -108,7 +110,7 @@ isSerializable cx graph el =
         in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))) (typeDependencies cx graph False Equality.identity (Core.bindingName el)))
 
 -- | Check if a type (by name) is serializable, resolving all type dependencies (Either version)
-isSerializableByName :: Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Errors.Error) Bool
+isSerializableByName :: Context.Context -> Graph.Graph -> Core.Name -> Either Errors.Error Bool
 isSerializableByName cx graph name =
 
       let variants =
@@ -130,7 +132,7 @@ isTrivialTerm :: Core.Term -> Bool
 isTrivialTerm t =
     case (Strip.deannotateTerm t) of
       Core.TermLiteral _ -> True
-      Core.TermVariable _ -> True
+      Core.TermVariable v0 -> Equality.equal (Lists.length (Strings.splitOn "." (Core.unName v0))) 1
       Core.TermUnit -> True
       Core.TermApplication v0 ->
         let fun = Core.applicationFunction v0
@@ -175,7 +177,7 @@ isUnitType x =
       _ -> False
 
 -- | Get all type dependencies for a given type name (Either version)
-typeDependencies :: Context.Context -> Graph.Graph -> Bool -> (Core.Type -> Core.Type) -> Core.Name -> Either (Context.InContext Errors.Error) (M.Map Core.Name Core.Type)
+typeDependencies :: Context.Context -> Graph.Graph -> Bool -> (Core.Type -> Core.Type) -> Core.Name -> Either Errors.Error (M.Map Core.Name Core.Type)
 typeDependencies cx graph withSchema transform name =
 
       let requireType =
@@ -185,9 +187,7 @@ typeDependencies cx graph withSchema transform name =
                           Context.contextTrace = (Lists.cons (Strings.cat2 "type dependencies of " (Core.unName name2)) (Context.contextTrace cx)),
                           Context.contextMessages = (Context.contextMessages cx),
                           Context.contextOther = (Context.contextOther cx)}
-                in (Eithers.bind (Lexical.requireBinding cx1 graph name2) (\el -> Eithers.bimap (\_wc_e -> Context.InContext {
-                  Context.inContextObject = _wc_e,
-                  Context.inContextContext = cx1}) (\_wc_a -> _wc_a) (Eithers.bimap (\_e -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _e))) (\_a -> _a) (Core_.type_ graph (Core.bindingTerm el)))))
+                in (Eithers.bind (Lexical.requireBinding graph name2) (\el -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (Core_.type_ graph (Core.bindingTerm el))))
           toPair = \name2 -> Eithers.map (\typ -> (name2, (transform typ))) (requireType name2)
           deps =
                   \seeds -> \names -> Logic.ifElse (Sets.null seeds) (Right names) (Eithers.bind (Eithers.mapList toPair (Sets.toList seeds)) (\pairs ->

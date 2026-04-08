@@ -4,11 +4,9 @@
 
 module Hydra.Pg.Graphson.Utils where
 
-import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Json.Model as Model
-import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
@@ -71,7 +69,7 @@ encodeStringValue :: String -> Either t0 Syntax.Value
 encodeStringValue s = Right (Syntax.ValueString s)
 
 -- | Encode a Hydra Term as a GraphSON Value. Supports literals and unit values.
-encodeTermValue :: Core.Term -> Either (Context.InContext Errors.Error) Syntax.Value
+encodeTermValue :: Core.Term -> Either Errors.Error Syntax.Value
 encodeTermValue term =
     case (Strip.deannotateTerm term) of
       Core.TermLiteral v0 -> case v0 of
@@ -81,24 +79,16 @@ encodeTermValue term =
           Core.FloatValueBigfloat v2 -> Right (Syntax.ValueBigDecimal (Syntax.BigDecimalValue (Literals.showBigfloat v2)))
           Core.FloatValueFloat32 v2 -> Right (Syntax.ValueFloat (Syntax.FloatValueFinite v2))
           Core.FloatValueFloat64 v2 -> Right (Syntax.ValueDouble (Syntax.DoubleValueFinite v2))
-          _ -> Left (Context.InContext {
-            Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unsupported float type")),
-            Context.inContextContext = Lexical.emptyContext})
+          _ -> Left (Errors.ErrorOther (Errors.OtherError "unsupported float type"))
         Core.LiteralInteger v1 -> case v1 of
           Core.IntegerValueBigint v2 -> Right (Syntax.ValueBigInteger v2)
           Core.IntegerValueInt32 v2 -> Right (Syntax.ValueInteger v2)
           Core.IntegerValueInt64 v2 -> Right (Syntax.ValueLong v2)
-          _ -> Left (Context.InContext {
-            Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unsupported integer type")),
-            Context.inContextContext = Lexical.emptyContext})
+          _ -> Left (Errors.ErrorOther (Errors.OtherError "unsupported integer type"))
         Core.LiteralString v1 -> Right (Syntax.ValueString v1)
-        _ -> Left (Context.InContext {
-          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unsupported literal type for GraphSON encoding")),
-          Context.inContextContext = Lexical.emptyContext})
+        _ -> Left (Errors.ErrorOther (Errors.OtherError "unsupported literal type for GraphSON encoding"))
       Core.TermUnit -> Right Syntax.ValueNull
-      _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unsupported term variant for GraphSON encoding")),
-        Context.inContextContext = Lexical.emptyContext})
+      _ -> Left (Errors.ErrorOther (Errors.OtherError "unsupported term variant for GraphSON encoding"))
 
 -- | Convert property graph elements to a list of GraphSON JSON values
 pgElementsToGraphson :: Ord t0 => ((t0 -> Either t1 Syntax.Value) -> [Model_.Element t0] -> Either t1 [Model.Value])

@@ -6,6 +6,7 @@ import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:))
 import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
+import qualified Hydra.Sources.Kernel.Types.Paths as Paths
 import qualified Hydra.Sources.Kernel.Types.Typing as Typing
 import qualified Hydra.Sources.Kernel.Types.Variants as Variants
 
@@ -17,7 +18,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef definitions) [Core.ns, Typing.ns, Variants.ns] [Core.ns, Typing.ns, Variants.ns] $
+module_ = Module ns (map toTypeDef definitions) [Core.ns, Paths.ns, Typing.ns, Variants.ns] [Core.ns, Paths.ns, Typing.ns, Variants.ns] $
     Just "Error types for type checking"
   where
     definitions = [
@@ -25,13 +26,16 @@ module_ = Module ns (map toTypeDef definitions) [Core.ns, Typing.ns, Variants.ns
       incorrectUnificationError,
       notAForallTypeError,
       notAFunctionTypeError,
+      otherCheckingError,
       typeArityMismatchError,
       typeMismatchError,
       unboundTypeVariablesError,
+      undefinedTermVariableCheckingError,
       unequalTypesError,
       unsupportedTermVariantError,
       untypedLambdaError,
-      untypedLetBindingError]
+      untypedLetBindingError,
+      untypedTermVariableCheckingError]
 
 checkingError :: Binding
 checkingError = define "CheckingError" $
@@ -46,6 +50,9 @@ checkingError = define "CheckingError" $
     "notAFunctionType">:
       doc "A type that is not a function type when one was expected" $
       notAFunctionTypeError,
+    "other">:
+      doc "A generic checking error" $
+      otherCheckingError,
     "typeArityMismatch">:
       doc "A type constructor applied to the wrong number of arguments" $
       typeArityMismatchError,
@@ -55,6 +62,9 @@ checkingError = define "CheckingError" $
     "unboundTypeVariables">:
       doc "Type variables that are not bound in scope" $
       unboundTypeVariablesError,
+    "undefinedTermVariable">:
+      doc "A reference to a term variable that is not bound in scope, encountered during checking" $
+      undefinedTermVariableCheckingError,
     "unequalTypes">:
       doc "Multiple types that should be equal but are not" $
       unequalTypesError,
@@ -66,7 +76,10 @@ checkingError = define "CheckingError" $
       untypedLambdaError,
     "untypedLetBinding">:
       doc "A let binding without a type annotation" $
-      untypedLetBindingError]
+      untypedLetBindingError,
+    "untypedTermVariable">:
+      doc "A reference to a term variable whose type is not known, encountered during checking" $
+      untypedTermVariableCheckingError]
 
 incorrectUnificationError :: Binding
 incorrectUnificationError = define "IncorrectUnificationError" $
@@ -165,3 +178,36 @@ untypedLetBindingError = define "UntypedLetBindingError" $
     "binding">:
       doc "The untyped binding" $
       Core.binding]
+
+otherCheckingError :: Binding
+otherCheckingError = define "OtherCheckingError" $
+  doc "A generic checking error: message + subterm path" $
+  T.record [
+    "path">:
+      doc "The subterm path at which the error was observed" $
+      Paths.subtermPath,
+    "message">:
+      doc "A human-readable error message" $
+      T.string]
+
+undefinedTermVariableCheckingError :: Binding
+undefinedTermVariableCheckingError = define "UndefinedTermVariableCheckingError" $
+  doc "A reference to a term variable that is not bound in scope, encountered during checking" $
+  T.record [
+    "path">:
+      doc "The subterm path at which the variable was referenced" $
+      Paths.subtermPath,
+    "name">:
+      doc "The name of the undefined variable" $
+      Core.name]
+
+untypedTermVariableCheckingError :: Binding
+untypedTermVariableCheckingError = define "UntypedTermVariableCheckingError" $
+  doc "A reference to a term variable whose type is not known, encountered during checking" $
+  T.record [
+    "path">:
+      doc "The subterm path at which the variable was referenced" $
+      Paths.subtermPath,
+    "name">:
+      doc "The name of the untyped variable" $
+      Core.name]

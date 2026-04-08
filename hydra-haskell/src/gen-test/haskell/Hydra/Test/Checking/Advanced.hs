@@ -101,7 +101,7 @@ annotationsInComplexContextsTests =
                 Core.Binding {
                   Core.bindingName = (Core.Name "add"),
                   Core.bindingTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
-                    Core.annotatedTermBody = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add"))),
+                    Core.annotatedTermBody = (Core.TermVariable (Core.Name "hydra.lib.math.add")),
                     Core.annotatedTermAnnotation = M.empty})),
                   Core.bindingType = Nothing}],
               Core.letBody = (Core.TermApplication (Core.Application {

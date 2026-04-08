@@ -20,7 +20,7 @@ import qualified Data.Maybe as Y
 type PgTransform = M.Map String ([Pg.Vertex Term], [Pg.Edge Term])
 
 
-type Result a = Either (InContext Error) a
+type Result a = Either Error a
 
 evaluate :: Context -> Graph -> Term -> Result Term
 evaluate cx g term = reduceTerm cx g True term
@@ -28,8 +28,8 @@ evaluate cx g term = reduceTerm cx g True term
 evaluateEdge :: Context -> Graph -> Pg.Edge Term -> Term -> Result (Maybe (Pg.Edge Term))
 evaluateEdge cx g (Pg.Edge label idSpec outSpec inSpec propSpecs) term = do
     id <- evaluate cx g $ Terms.apply idSpec term
-    mOutId <- evaluate cx g (Terms.apply outSpec term) >>= ExtractCore.maybeTerm cx Right g
-    mInId <- evaluate cx g (Terms.apply inSpec term) >>= ExtractCore.maybeTerm cx Right g
+    mOutId <- evaluate cx g (Terms.apply outSpec term) >>= ExtractCore.maybeTerm Right g
+    mInId <- evaluate cx g (Terms.apply inSpec term) >>= ExtractCore.maybeTerm Right g
     props <- evaluateProperties cx g propSpecs term
     return $ case mOutId of
       Nothing -> Nothing
@@ -46,11 +46,11 @@ evaluateProperties cx g specs record = M.fromList . Y.catMaybes <$> (CM.mapM for
         TermMaybe mv -> case mv of
           Nothing -> return Nothing
           Just v -> return $ Just (k, v)
-        _ -> Left $ InContext (ErrorOther (OtherError $ "expected an optional value for property " ++ Pg.unPropertyKey k ++ " but got " ++ ShowCore.term value)) cx
+        _ -> Left $ ErrorOther (OtherError $ "expected an optional value for property " ++ Pg.unPropertyKey k ++ " but got " ++ ShowCore.term value)
 
 evaluateVertex :: Context -> Graph -> Pg.Vertex Term -> Term -> Result (Maybe (Pg.Vertex Term))
 evaluateVertex cx g (Pg.Vertex label idSpec propSpecs) record = do
-  mId <- evaluate cx g (Terms.apply idSpec record) >>= ExtractCore.maybeTerm cx Right g
+  mId <- evaluate cx g (Terms.apply idSpec record) >>= ExtractCore.maybeTerm Right g
   props <- evaluateProperties cx g propSpecs record
   return $ case mId of
     Nothing -> Nothing
@@ -118,7 +118,7 @@ transformTable tableType@(TableType (RelationName tableName) _) path vspecs espe
     (Table _ rows) <- decodeTableIo tableType path
     let cx = emptyContext
     pairs <- case CM.mapM (transformRecord cx hydraCoreGraph vspecs especs . termRowToRecord tableType) rows of
-      Left ic -> fail $ ShowError.error (inContextObject ic)
+      Left ic -> fail $ ShowError.error ic
       Right ps -> return ps
     return $ L.foldl addRow ([], []) pairs
   where

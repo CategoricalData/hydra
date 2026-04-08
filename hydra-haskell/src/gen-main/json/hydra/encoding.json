@@ -4,52 +4,40 @@
       "term": {
         "name": "hydra.encoding.encodeBinding",
         "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "@key": "description",
-                "@value": {
-                  "literal": {"string": "Transform a type binding into an encoder binding"}}}],
+          "typeLambda": {
             "body": {
-              "function": {
-                "lambda": {
-                  "body": {
-                    "function": {
-                      "lambda": {
-                        "body": {
-                          "function": {
-                            "lambda": {
-                              "body": {
-                                "application": {
-                                  "argument": {
-                                    "function": {
-                                      "lambda": {
-                                        "body": {
-                                          "typeApplication": {
+              "annotated": {
+                "annotation": [
+                  {
+                    "@key": "description",
+                    "@value": {
+                      "literal": {"string": "Transform a type binding into an encoder binding"}}}],
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "application": {
+                                      "argument": {
+                                        "function": {
+                                          "lambda": {
                                             "body": {
                                               "typeApplication": {
                                                 "body": {
-                                                  "either": {
-                                                    "@right": {
-                                                      "record": {
-                                                        "fields": [
-                                                          {
-                                                            "name": "name",
-                                                            "term": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "b"},
-                                                                    "function": {
-                                                                      "function": {
-                                                                        "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}}}},
-                                                                "function": {"variable": "hydra.encoding.encodeBindingName"}}}},
-                                                          {
-                                                            "name": "term",
-                                                            "term": {
-                                                              "application": {
-                                                                "argument": {"variable": "typ"},
-                                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "either": {
+                                                        "@right": {
+                                                          "record": {
+                                                            "fields": [
+                                                              {
+                                                                "name": "name",
+                                                                "term": {
                                                                   "application": {
                                                                     "argument": {
                                                                       "application": {
@@ -57,33 +45,42 @@
                                                                         "function": {
                                                                           "function": {
                                                                             "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}}}},
-                                                                    "function": {"variable": "hydra.encoding.encodeTypeNamed"}}}}}},
-                                                          {
-                                                            "name": "type",
-                                                            "term": {
-                                                              "maybe": {
-                                                                "application": {
-                                                                  "argument": {"variable": "typ"},
-                                                                  "function": {
-                                                                    "application": {
-                                                                      "argument": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "b"},
-                                                                          "function": {
+                                                                    "function": {"variable": "hydra.encoding.encodeBindingName"}}}},
+                                                              {
+                                                                "name": "term",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "typ"},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "b"},
                                                                             "function": {
-                                                                              "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}}}},
-                                                                      "function": {"variable": "hydra.encoding.encoderTypeSchemeNamed"}}}}}}}],
-                                                        "typeName": "hydra.core.Binding"}}}},
-                                                "type": {
-                                                  "application": {
-                                                    "argument": {"variable": "hydra.errors.DecodingError"},
-                                                    "function": {"variable": "hydra.context.InContext"}}}}},
-                                            "type": {"variable": "hydra.core.Binding"}}},
-                                        "domain": {"variable": "hydra.core.Type"},
-                                        "parameter": "typ"}}},
-                                  "function": {
-                                    "application": {
-                                      "argument": {
+                                                                              "function": {
+                                                                                "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}}}},
+                                                                        "function": {"variable": "hydra.encoding.encodeTypeNamed"}}}}}},
+                                                              {
+                                                                "name": "type",
+                                                                "term": {
+                                                                  "maybe": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "typ"},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "b"},
+                                                                              "function": {
+                                                                                "function": {
+                                                                                  "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}}}},
+                                                                          "function": {"variable": "hydra.encoding.encoderTypeSchemeNamed"}}}}}}}],
+                                                            "typeName": "hydra.core.Binding"}}}},
+                                                    "type": {"variable": "hydra.errors.DecodingError"}}},
+                                                "type": {"variable": "hydra.core.Binding"}}},
+                                            "domain": {"variable": "hydra.core.Type"},
+                                            "parameter": "typ"}}},
+                                      "function": {
                                         "application": {
                                           "argument": {
                                             "application": {
@@ -98,64 +95,22 @@
                                                   "argument": {"variable": "graph"},
                                                   "function": {"variable": "hydra.decode.core.type"}}}}},
                                           "function": {
-                                            "application": {
-                                              "argument": {
-                                                "function": {
-                                                  "lambda": {
-                                                    "body": {"variable": "_wc_a"},
-                                                    "domain": {"variable": "hydra.core.Type"},
-                                                    "parameter": "_wc_a"}}},
-                                              "function": {
-                                                "application": {
-                                                  "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {
-                                                              "record": {
-                                                                "fields": [
-                                                                  {"name": "object", "term": {"variable": "_wc_e"}},
-                                                                  {"name": "context", "term": {"variable": "cx"}}],
-                                                                "typeName": "hydra.context.InContext"}},
-                                                            "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                        "domain": {"variable": "hydra.errors.DecodingError"},
-                                                        "parameter": "_wc_e"}}},
-                                                  "function": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "typeApplication": {
-                                                          "body": {
-                                                            "typeApplication": {
-                                                              "body": {
-                                                                "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.bimap"}},
-                                                                  "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                              "type": {"variable": "hydra.core.Type"}}},
-                                                          "type": {
-                                                            "application": {
-                                                              "argument": {"variable": "hydra.errors.DecodingError"},
-                                                              "function": {"variable": "hydra.context.InContext"}}}}},
-                                                      "type": {"variable": "hydra.core.Type"}}}}}}}}},
-                                      "function": {
-                                        "typeApplication": {
-                                          "body": {
                                             "typeApplication": {
                                               "body": {
                                                 "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
-                                                  "type": {
-                                                    "application": {
-                                                      "argument": {"variable": "hydra.errors.DecodingError"},
-                                                      "function": {"variable": "hydra.context.InContext"}}}}},
-                                              "type": {"variable": "hydra.core.Type"}}},
-                                          "type": {"variable": "hydra.core.Binding"}}}}}}},
-                              "domain": {"variable": "hydra.core.Binding"},
-                              "parameter": "b"}}},
-                        "domain": {"variable": "hydra.graph.Graph"},
-                        "parameter": "graph"}}},
-                  "domain": {"variable": "hydra.context.Context"},
-                  "parameter": "cx"}}}}},
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {"variable": "hydra.lib.eithers.bind"},
+                                                      "type": {"variable": "hydra.errors.DecodingError"}}},
+                                                  "type": {"variable": "hydra.core.Type"}}},
+                                              "type": {"variable": "hydra.core.Binding"}}}}}}},
+                                  "domain": {"variable": "hydra.core.Binding"},
+                                  "parameter": "b"}}},
+                            "domain": {"variable": "hydra.graph.Graph"},
+                            "parameter": "graph"}}},
+                      "domain": {"variable": "t0"},
+                      "parameter": "cx"}}}}},
+            "parameter": "t0"}},
         "type": {
           "type": {
             "function": {
@@ -165,15 +120,12 @@
                     "function": {
                       "codomain": {
                         "either": {
-                          "left": {
-                            "application": {
-                              "argument": {"variable": "hydra.errors.DecodingError"},
-                              "function": {"variable": "hydra.context.InContext"}}},
+                          "left": {"variable": "hydra.errors.DecodingError"},
                           "right": {"variable": "hydra.core.Binding"}}},
                       "domain": {"variable": "hydra.core.Binding"}}},
                   "domain": {"variable": "hydra.graph.Graph"}}},
-              "domain": {"variable": "hydra.context.Context"}}},
-          "variables": []}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0"]}}},
     {
       "term": {
         "name": "hydra.encoding.encodeBindingName",
@@ -234,18 +186,18 @@
                                                           "function": {
                                                             "application": {
                                                               "argument": {"literal": {"string": "."}},
-                                                              "function": {"function": {"primitive": "hydra.lib.strings.splitOn"}}}}}},
+                                                              "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
                                                       "function": {
                                                         "typeApplication": {
-                                                          "body": {"function": {"primitive": "hydra.lib.lists.init"}},
+                                                          "body": {"variable": "hydra.lib.lists.init"},
                                                           "type": {"literal": {"string": {}}}}}}},
                                                   "function": {
                                                     "typeApplication": {
-                                                      "body": {"function": {"primitive": "hydra.lib.lists.tail"}},
+                                                      "body": {"variable": "hydra.lib.lists.tail"},
                                                       "type": {"literal": {"string": {}}}}}}},
                                               "function": {
                                                 "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
+                                                  "body": {"variable": "hydra.lib.lists.concat2"},
                                                   "type": {"literal": {"string": {}}}}}}}}},
                                       "function": {
                                         "application": {
@@ -253,12 +205,12 @@
                                             "list": [{"literal": {"string": "hydra"}}, {"literal": {"string": "encode"}}]},
                                           "function": {
                                             "typeApplication": {
-                                              "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
+                                              "body": {"variable": "hydra.lib.lists.concat2"},
                                               "type": {"literal": {"string": {}}}}}}}}},
                                   "function": {
                                     "application": {
                                       "argument": {"literal": {"string": "."}},
-                                      "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}},
+                                      "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
                               "typeName": "hydra.core.Name"}},
                           "function": {
                             "application": {
@@ -277,19 +229,19 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {"literal": {"string": "."}},
-                                                  "function": {"function": {"primitive": "hydra.lib.strings.splitOn"}}}}}},
+                                                  "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
                                           "function": {
                                             "typeApplication": {
-                                              "body": {"function": {"primitive": "hydra.lib.lists.tail"}},
+                                              "body": {"variable": "hydra.lib.lists.tail"},
                                               "type": {"literal": {"string": {}}}}}}},
                                       "function": {
                                         "typeApplication": {
-                                          "body": {"function": {"primitive": "hydra.lib.lists.null"}},
+                                          "body": {"variable": "hydra.lib.lists.null"},
                                           "type": {"literal": {"string": {}}}}}}},
-                                  "function": {"function": {"primitive": "hydra.lib.logic.not"}}}},
+                                  "function": {"variable": "hydra.lib.logic.not"}}},
                               "function": {
                                 "typeApplication": {
-                                  "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                  "body": {"variable": "hydra.lib.logic.ifElse"},
                                   "type": {"variable": "hydra.core.Name"}}}}}}}}},
                   "domain": {"variable": "hydra.core.Name"},
                   "parameter": "n"}}}}},
@@ -363,7 +315,7 @@
                                                           "record": {"field": "parameter", "typeName": "hydra.core.ForallType"}}}}}},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
+                                                    "body": {"variable": "hydra.lib.lists.cons"},
                                                     "type": {"variable": "hydra.core.Name"}}}}}}},
                                         "domain": {"variable": "hydra.core.ForallType"},
                                         "parameter": "ft"}}}}],
@@ -446,7 +398,7 @@
                                                     "function": {"variable": "hydra.encoding.encoderCollectOrdVars"}}},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
+                                                    "body": {"variable": "hydra.lib.lists.concat2"},
                                                     "type": {"variable": "hydra.core.Name"}}}}}}},
                                         "domain": {"variable": "hydra.core.ApplicationType"},
                                         "parameter": "appType"}}}},
@@ -479,7 +431,7 @@
                                                     "function": {"variable": "hydra.encoding.encoderCollectOrdVars"}}},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
+                                                    "body": {"variable": "hydra.lib.lists.concat2"},
                                                     "type": {"variable": "hydra.core.Name"}}}}}}},
                                         "domain": {"variable": "hydra.core.EitherType"},
                                         "parameter": "et"}}}},
@@ -548,7 +500,7 @@
                                                     "function": {"variable": "hydra.encoding.encoderCollectOrdVars"}}}]},
                                             "function": {
                                               "typeApplication": {
-                                                "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                                "body": {"variable": "hydra.lib.lists.concat"},
                                                 "type": {"variable": "hydra.core.Name"}}}}},
                                         "domain": {"variable": "hydra.core.MapType"},
                                         "parameter": "mt"}}}},
@@ -592,7 +544,7 @@
                                                     "function": {"variable": "hydra.encoding.encoderCollectOrdVars"}}},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
+                                                    "body": {"variable": "hydra.lib.lists.concat2"},
                                                     "type": {"variable": "hydra.core.Name"}}}}}}},
                                         "domain": {"variable": "hydra.core.PairType"},
                                         "parameter": "pt"}}}},
@@ -626,12 +578,12 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                            "body": {"variable": "hydra.lib.lists.map"},
                                                             "type": {"variable": "hydra.core.FieldType"}}},
                                                         "type": {"list": {"variable": "hydra.core.Name"}}}}}}}},
                                             "function": {
                                               "typeApplication": {
-                                                "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                                "body": {"variable": "hydra.lib.lists.concat"},
                                                 "type": {"variable": "hydra.core.Name"}}}}},
                                         "domain": {"list": {"variable": "hydra.core.FieldType"}},
                                         "parameter": "rt"}}}},
@@ -654,7 +606,7 @@
                                                     "function": {"variable": "hydra.encoding.encoderCollectTypeVarsFromType"}}},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
+                                                    "body": {"variable": "hydra.lib.lists.concat2"},
                                                     "type": {"variable": "hydra.core.Name"}}}}}}},
                                         "domain": {"variable": "hydra.core.Type"},
                                         "parameter": "elemType"}}}},
@@ -688,12 +640,12 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                            "body": {"variable": "hydra.lib.lists.map"},
                                                             "type": {"variable": "hydra.core.FieldType"}}},
                                                         "type": {"list": {"variable": "hydra.core.Name"}}}}}}}},
                                             "function": {
                                               "typeApplication": {
-                                                "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                                "body": {"variable": "hydra.lib.lists.concat"},
                                                 "type": {"variable": "hydra.core.Name"}}}}},
                                         "domain": {"list": {"variable": "hydra.core.FieldType"}},
                                         "parameter": "rt"}}}},
@@ -787,7 +739,7 @@
                                                     "function": {"variable": "hydra.encoding.encoderCollectTypeVarsFromType"}}},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
+                                                    "body": {"variable": "hydra.lib.lists.concat2"},
                                                     "type": {"variable": "hydra.core.Name"}}}}}}},
                                         "domain": {"variable": "hydra.core.ApplicationType"},
                                         "parameter": "appType"}}}},
@@ -847,7 +799,7 @@
                                                     "function": {"variable": "hydra.encoding.encoderCollectTypeVarsFromType"}}},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
+                                                    "body": {"variable": "hydra.lib.lists.concat2"},
                                                     "type": {"variable": "hydra.core.Name"}}}}}}},
                                         "domain": {"variable": "hydra.core.MapType"},
                                         "parameter": "mt"}}}},
@@ -891,7 +843,7 @@
                                                     "function": {"variable": "hydra.encoding.encoderCollectTypeVarsFromType"}}},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
+                                                    "body": {"variable": "hydra.lib.lists.concat2"},
                                                     "type": {"variable": "hydra.core.Name"}}}}}}},
                                         "domain": {"variable": "hydra.core.PairType"},
                                         "parameter": "pt"}}}},
@@ -925,12 +877,12 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                            "body": {"variable": "hydra.lib.lists.map"},
                                                             "type": {"variable": "hydra.core.FieldType"}}},
                                                         "type": {"list": {"variable": "hydra.core.Name"}}}}}}}},
                                             "function": {
                                               "typeApplication": {
-                                                "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                                "body": {"variable": "hydra.lib.lists.concat"},
                                                 "type": {"variable": "hydra.core.Name"}}}}},
                                         "domain": {"list": {"variable": "hydra.core.FieldType"}},
                                         "parameter": "rt"}}}},
@@ -975,12 +927,12 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                            "body": {"variable": "hydra.lib.lists.map"},
                                                             "type": {"variable": "hydra.core.FieldType"}}},
                                                         "type": {"list": {"variable": "hydra.core.Name"}}}}}}}},
                                             "function": {
                                               "typeApplication": {
-                                                "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                                "body": {"variable": "hydra.lib.lists.concat"},
                                                 "type": {"variable": "hydra.core.Name"}}}}},
                                         "domain": {"list": {"variable": "hydra.core.FieldType"}},
                                         "parameter": "rt"}}}},
@@ -1994,13 +1946,13 @@
                                                 "argument": {"variable": "v"},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"function": {"primitive": "hydra.lib.lists.elem"}},
+                                                    "body": {"variable": "hydra.lib.lists.elem"},
                                                     "type": {"variable": "hydra.core.Name"}}}}}}},
                                         "domain": {"variable": "hydra.core.Name"},
                                         "parameter": "v"}}},
                                   "function": {
                                     "typeApplication": {
-                                      "body": {"function": {"primitive": "hydra.lib.lists.filter"}},
+                                      "body": {"variable": "hydra.lib.lists.filter"},
                                       "type": {"variable": "hydra.core.Name"}}}}}}},
                           "type": {"type": {"list": {"variable": "hydra.core.Name"}}, "variables": []}},
                         {
@@ -2038,7 +1990,7 @@
                                                                               "typeName": "hydra.core.Name"}},
                                                                           "function": {
                                                                             "typeApplication": {
-                                                                              "body": {"function": {"primitive": "hydra.lib.sets.singleton"}},
+                                                                              "body": {"variable": "hydra.lib.sets.singleton"},
                                                                               "type": {"variable": "hydra.core.Name"}}}}}}],
                                                                   "typeName": "hydra.core.TypeVariableMetadata"}}}},
                                                           "type": {"variable": "hydra.core.Name"}}},
@@ -2049,7 +2001,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                    "body": {"variable": "hydra.lib.lists.map"},
                                                     "type": {"variable": "hydra.core.Name"}}},
                                                 "type": {
                                                   "pair": {
@@ -2059,7 +2011,7 @@
                                       "typeApplication": {
                                         "body": {
                                           "typeApplication": {
-                                            "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
+                                            "body": {"variable": "hydra.lib.maps.fromList"},
                                             "type": {"variable": "hydra.core.Name"}}},
                                         "type": {"variable": "hydra.core.TypeVariableMetadata"}}}}}},
                               "function": {
@@ -2078,11 +2030,11 @@
                                           "argument": {"variable": "ordVars"},
                                           "function": {
                                             "typeApplication": {
-                                              "body": {"function": {"primitive": "hydra.lib.lists.null"}},
+                                              "body": {"variable": "hydra.lib.lists.null"},
                                               "type": {"variable": "hydra.core.Name"}}}}},
                                       "function": {
                                         "typeApplication": {
-                                          "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                          "body": {"variable": "hydra.lib.logic.ifElse"},
                                           "type": {
                                             "maybe": {
                                               "map": {
@@ -2172,13 +2124,13 @@
                                                       "argument": {"variable": "v"},
                                                       "function": {
                                                         "typeApplication": {
-                                                          "body": {"function": {"primitive": "hydra.lib.lists.elem"}},
+                                                          "body": {"variable": "hydra.lib.lists.elem"},
                                                           "type": {"variable": "hydra.core.Name"}}}}}}},
                                               "domain": {"variable": "hydra.core.Name"},
                                               "parameter": "v"}}},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"function": {"primitive": "hydra.lib.lists.filter"}},
+                                            "body": {"variable": "hydra.lib.lists.filter"},
                                             "type": {"variable": "hydra.core.Name"}}}}}}},
                                 "type": {"type": {"list": {"variable": "hydra.core.Name"}}, "variables": []}},
                               {
@@ -2216,7 +2168,7 @@
                                                                                     "typeName": "hydra.core.Name"}},
                                                                                 "function": {
                                                                                   "typeApplication": {
-                                                                                    "body": {"function": {"primitive": "hydra.lib.sets.singleton"}},
+                                                                                    "body": {"variable": "hydra.lib.sets.singleton"},
                                                                                     "type": {"variable": "hydra.core.Name"}}}}}}],
                                                                         "typeName": "hydra.core.TypeVariableMetadata"}}}},
                                                                 "type": {"variable": "hydra.core.Name"}}},
@@ -2227,7 +2179,7 @@
                                                     "typeApplication": {
                                                       "body": {
                                                         "typeApplication": {
-                                                          "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                          "body": {"variable": "hydra.lib.lists.map"},
                                                           "type": {"variable": "hydra.core.Name"}}},
                                                       "type": {
                                                         "pair": {
@@ -2237,7 +2189,7 @@
                                             "typeApplication": {
                                               "body": {
                                                 "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
+                                                  "body": {"variable": "hydra.lib.maps.fromList"},
                                                   "type": {"variable": "hydra.core.Name"}}},
                                               "type": {"variable": "hydra.core.TypeVariableMetadata"}}}}}},
                                     "function": {
@@ -2256,11 +2208,11 @@
                                                 "argument": {"variable": "ordVars"},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"function": {"primitive": "hydra.lib.lists.null"}},
+                                                    "body": {"variable": "hydra.lib.lists.null"},
                                                     "type": {"variable": "hydra.core.Name"}}}}},
                                             "function": {
                                               "typeApplication": {
-                                                "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                "body": {"variable": "hydra.lib.logic.ifElse"},
                                                 "type": {
                                                   "maybe": {
                                                     "map": {
@@ -3020,16 +2972,11 @@
                                                                                         "term": {
                                                                                           "union": {
                                                                                             "field": {
-                                                                                              "name": "function",
+                                                                                              "name": "variable",
                                                                                               "term": {
-                                                                                                "union": {
-                                                                                                  "field": {
-                                                                                                    "name": "primitive",
-                                                                                                    "term": {
-                                                                                                      "wrap": {
-                                                                                                        "body": {"literal": {"string": "hydra.lib.lists.map"}},
-                                                                                                        "typeName": "hydra.core.Name"}}},
-                                                                                                  "typeName": "hydra.core.Function"}}},
+                                                                                                "wrap": {
+                                                                                                  "body": {"literal": {"string": "hydra.lib.lists.map"}},
+                                                                                                  "typeName": "hydra.core.Name"}}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
                                                                                         "name": "argument",
@@ -3697,16 +3644,11 @@
                                                                                                       "term": {
                                                                                                         "union": {
                                                                                                           "field": {
-                                                                                                            "name": "function",
+                                                                                                            "name": "variable",
                                                                                                             "term": {
-                                                                                                              "union": {
-                                                                                                                "field": {
-                                                                                                                  "name": "primitive",
-                                                                                                                  "term": {
-                                                                                                                    "wrap": {
-                                                                                                                      "body": {"literal": {"string": "hydra.lib.eithers.bimap"}},
-                                                                                                                      "typeName": "hydra.core.Name"}}},
-                                                                                                                "typeName": "hydra.core.Function"}}},
+                                                                                                              "wrap": {
+                                                                                                                "body": {"literal": {"string": "hydra.lib.eithers.bimap"}},
+                                                                                                                "typeName": "hydra.core.Name"}}},
                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                     {
                                                                                                       "name": "argument",
@@ -3910,16 +3852,11 @@
                                                                                                       "term": {
                                                                                                         "union": {
                                                                                                           "field": {
-                                                                                                            "name": "function",
+                                                                                                            "name": "variable",
                                                                                                             "term": {
-                                                                                                              "union": {
-                                                                                                                "field": {
-                                                                                                                  "name": "primitive",
-                                                                                                                  "term": {
-                                                                                                                    "wrap": {
-                                                                                                                      "body": {"literal": {"string": "hydra.lib.maps.bimap"}},
-                                                                                                                      "typeName": "hydra.core.Name"}}},
-                                                                                                                "typeName": "hydra.core.Function"}}},
+                                                                                                              "wrap": {
+                                                                                                                "body": {"literal": {"string": "hydra.lib.maps.bimap"}},
+                                                                                                                "typeName": "hydra.core.Name"}}},
                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                     {
                                                                                                       "name": "argument",
@@ -4054,16 +3991,11 @@
                                                                                         "term": {
                                                                                           "union": {
                                                                                             "field": {
-                                                                                              "name": "function",
+                                                                                              "name": "variable",
                                                                                               "term": {
-                                                                                                "union": {
-                                                                                                  "field": {
-                                                                                                    "name": "primitive",
-                                                                                                    "term": {
-                                                                                                      "wrap": {
-                                                                                                        "body": {"literal": {"string": "hydra.lib.maybes.map"}},
-                                                                                                        "typeName": "hydra.core.Name"}}},
-                                                                                                  "typeName": "hydra.core.Function"}}},
+                                                                                                "wrap": {
+                                                                                                  "body": {"literal": {"string": "hydra.lib.maybes.map"}},
+                                                                                                  "typeName": "hydra.core.Name"}}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
                                                                                         "name": "argument",
@@ -4189,16 +4121,11 @@
                                                                                                       "term": {
                                                                                                         "union": {
                                                                                                           "field": {
-                                                                                                            "name": "function",
+                                                                                                            "name": "variable",
                                                                                                             "term": {
-                                                                                                              "union": {
-                                                                                                                "field": {
-                                                                                                                  "name": "primitive",
-                                                                                                                  "term": {
-                                                                                                                    "wrap": {
-                                                                                                                      "body": {"literal": {"string": "hydra.lib.pairs.bimap"}},
-                                                                                                                      "typeName": "hydra.core.Name"}}},
-                                                                                                                "typeName": "hydra.core.Function"}}},
+                                                                                                              "wrap": {
+                                                                                                                "body": {"literal": {"string": "hydra.lib.pairs.bimap"}},
+                                                                                                                "typeName": "hydra.core.Name"}}},
                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                     {
                                                                                                       "name": "argument",
@@ -4353,7 +4280,7 @@
                                                                                       "typeApplication": {
                                                                                         "body": {
                                                                                           "typeApplication": {
-                                                                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                            "body": {"variable": "hydra.lib.lists.map"},
                                                                                             "type": {"variable": "hydra.core.Binding"}}},
                                                                                         "type": {"variable": "hydra.packaging.Definition"}}}}}}}},
                                                                           {
@@ -4378,7 +4305,7 @@
                                                                                               "typeApplication": {
                                                                                                 "body": {
                                                                                                   "typeApplication": {
-                                                                                                    "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                                    "body": {"variable": "hydra.lib.lists.map"},
                                                                                                     "type": {"variable": "hydra.packaging.Namespace"}}},
                                                                                                 "type": {"variable": "hydra.packaging.Namespace"}}}}}}},
                                                                                     "function": {
@@ -4399,16 +4326,16 @@
                                                                                                   "typeApplication": {
                                                                                                     "body": {
                                                                                                       "typeApplication": {
-                                                                                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                                        "body": {"variable": "hydra.lib.lists.map"},
                                                                                                         "type": {"variable": "hydra.packaging.Namespace"}}},
                                                                                                     "type": {"variable": "hydra.packaging.Namespace"}}}}}}},
                                                                                         "function": {
                                                                                           "typeApplication": {
-                                                                                            "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
+                                                                                            "body": {"variable": "hydra.lib.lists.concat2"},
                                                                                             "type": {"variable": "hydra.packaging.Namespace"}}}}}}},
                                                                                 "function": {
                                                                                   "typeApplication": {
-                                                                                    "body": {"function": {"primitive": "hydra.lib.lists.nub"}},
+                                                                                    "body": {"variable": "hydra.lib.lists.nub"},
                                                                                     "type": {"variable": "hydra.packaging.Namespace"}}}}}},
                                                                           {
                                                                             "name": "typeDependencies",
@@ -4439,12 +4366,9 @@
                                                                                                   "elimination": {
                                                                                                     "record": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}}}},
                                                                                           "function": {"function": {"elimination": {"wrap": "hydra.packaging.Namespace"}}}}}]},
-                                                                                  "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}}}}],
+                                                                                  "function": {"variable": "hydra.lib.strings.cat"}}}}}],
                                                                         "typeName": "hydra.packaging.Module"}}}}},
-                                                              "type": {
-                                                                "application": {
-                                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                              "type": {"variable": "hydra.errors.Error"}}},
                                                           "type": {"maybe": {"variable": "hydra.packaging.Module"}}}},
                                                       "domain": {"list": {"variable": "hydra.core.Binding"}},
                                                       "parameter": "encodedBindings"}}},
@@ -4469,7 +4393,10 @@
                                                                               "function": {
                                                                                 "application": {
                                                                                   "argument": {"variable": "cx"},
-                                                                                  "function": {"variable": "hydra.encoding.encodeBinding"}}}}}}},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"variable": "hydra.encoding.encodeBinding"},
+                                                                                      "type": {"variable": "hydra.context.Context"}}}}}}}}},
                                                                       "function": {
                                                                         "application": {
                                                                           "argument": {
@@ -4484,51 +4411,11 @@
                                                                                 "function": {
                                                                                   "lambda": {
                                                                                     "body": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {
-                                                                                          "record": {
-                                                                                            "fields": [
-                                                                                              {
-                                                                                                "name": "object",
-                                                                                                "term": {
-                                                                                                  "union": {
-                                                                                                    "field": {
-                                                                                                      "name": "other",
-                                                                                                      "term": {
-                                                                                                        "wrap": {
-                                                                                                          "body": {
-                                                                                                            "application": {
-                                                                                                              "argument": {
-                                                                                                                "application": {
-                                                                                                                  "argument": {"variable": "ic"},
-                                                                                                                  "function": {
-                                                                                                                    "typeApplication": {
-                                                                                                                      "body": {
-                                                                                                                        "function": {
-                                                                                                                          "elimination": {"record": {"field": "object", "typeName": "hydra.context.InContext"}}}},
-                                                                                                                      "type": {"variable": "hydra.errors.DecodingError"}}}}},
-                                                                                                              "function": {"function": {"elimination": {"wrap": "hydra.errors.DecodingError"}}}}},
-                                                                                                          "typeName": "hydra.errors.OtherError"}}},
-                                                                                                    "typeName": "hydra.errors.Error"}}},
-                                                                                              {
-                                                                                                "name": "context",
-                                                                                                "term": {
-                                                                                                  "application": {
-                                                                                                    "argument": {"variable": "ic"},
-                                                                                                    "function": {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {
-                                                                                                          "function": {
-                                                                                                            "elimination": {
-                                                                                                              "record": {"field": "context", "typeName": "hydra.context.InContext"}}}},
-                                                                                                        "type": {"variable": "hydra.errors.DecodingError"}}}}}}],
-                                                                                            "typeName": "hydra.context.InContext"}},
-                                                                                        "type": {"variable": "hydra.errors.Error"}}},
-                                                                                    "domain": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "hydra.errors.DecodingError"},
-                                                                                        "function": {"variable": "hydra.context.InContext"}}},
-                                                                                    "parameter": "ic"}}},
+                                                                                      "union": {
+                                                                                        "field": {"name": "decoding", "term": {"variable": "_e"}},
+                                                                                        "typeName": "hydra.errors.Error"}},
+                                                                                    "domain": {"variable": "hydra.errors.DecodingError"},
+                                                                                    "parameter": "_e"}}},
                                                                               "function": {
                                                                                 "typeApplication": {
                                                                                   "body": {
@@ -4537,16 +4424,10 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "typeApplication": {
-                                                                                              "body": {"function": {"primitive": "hydra.lib.eithers.bimap"}},
-                                                                                              "type": {
-                                                                                                "application": {
-                                                                                                  "argument": {"variable": "hydra.errors.DecodingError"},
-                                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                              "body": {"variable": "hydra.lib.eithers.bimap"},
+                                                                                              "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                           "type": {"variable": "hydra.core.Binding"}}},
-                                                                                      "type": {
-                                                                                        "application": {
-                                                                                          "argument": {"variable": "hydra.errors.Error"},
-                                                                                          "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                      "type": {"variable": "hydra.errors.Error"}}},
                                                                                   "type": {"variable": "hydra.core.Binding"}}}}}}}}},
                                                                   "domain": {"variable": "hydra.core.Binding"},
                                                                   "parameter": "b"}}},
@@ -4556,24 +4437,18 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
+                                                                        "body": {"variable": "hydra.lib.eithers.mapList"},
                                                                         "type": {"variable": "hydra.core.Binding"}}},
                                                                     "type": {"variable": "hydra.core.Binding"}}},
-                                                                "type": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "hydra.errors.Error"},
-                                                                    "function": {"variable": "hydra.context.InContext"}}}}}}}}},
+                                                                "type": {"variable": "hydra.errors.Error"}}}}}}},
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {
                                                           "typeApplication": {
                                                             "body": {
                                                               "typeApplication": {
-                                                                "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
-                                                                "type": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "hydra.errors.Error"},
-                                                                    "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                "body": {"variable": "hydra.lib.eithers.bind"},
+                                                                "type": {"variable": "hydra.errors.Error"}}},
                                                             "type": {"list": {"variable": "hydra.core.Binding"}}}},
                                                         "type": {"maybe": {"variable": "hydra.packaging.Module"}}}}}}}},
                                             "function": {
@@ -4588,10 +4463,7 @@
                                                               "typeApplication": {
                                                                 "body": {"maybe": null},
                                                                 "type": {"variable": "hydra.packaging.Module"}}}}},
-                                                        "type": {
-                                                          "application": {
-                                                            "argument": {"variable": "hydra.errors.Error"},
-                                                            "function": {"variable": "hydra.context.InContext"}}}}},
+                                                        "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"maybe": {"variable": "hydra.packaging.Module"}}}},
                                                 "function": {
                                                   "application": {
@@ -4600,17 +4472,14 @@
                                                         "argument": {"variable": "typeBindings"},
                                                         "function": {
                                                           "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.lists.null"}},
+                                                            "body": {"variable": "hydra.lib.lists.null"},
                                                             "type": {"variable": "hydra.core.Binding"}}}}},
                                                     "function": {
                                                       "typeApplication": {
-                                                        "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                        "body": {"variable": "hydra.lib.logic.ifElse"},
                                                         "type": {
                                                           "either": {
-                                                            "left": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.errors.Error"},
-                                                                "function": {"variable": "hydra.context.InContext"}}},
+                                                            "left": {"variable": "hydra.errors.Error"},
                                                             "right": {"maybe": {"variable": "hydra.packaging.Module"}}}}}}}}}}}},
                                         "domain": {"list": {"variable": "hydra.core.Binding"}},
                                         "parameter": "typeBindings"}}},
@@ -4732,7 +4601,7 @@
                                                                                                                                             "typeApplication": {
                                                                                                                                               "body": {
                                                                                                                                                 "typeApplication": {
-                                                                                                                                                  "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
+                                                                                                                                                  "body": {"variable": "hydra.lib.maps.fromList"},
                                                                                                                                                   "type": {"variable": "hydra.core.Name"}}},
                                                                                                                                               "type": {"variable": "hydra.core.Term"}}}}}}],
                                                                                                                                   "typeName": "hydra.core.AnnotatedTerm"}}},
@@ -4791,12 +4660,12 @@
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
-                                                              "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                              "body": {"variable": "hydra.lib.lists.map"},
                                                               "type": {"variable": "hydra.packaging.Definition"}}},
                                                           "type": {"maybe": {"variable": "hydra.core.Binding"}}}}}}}},
                                               "function": {
                                                 "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.maybes.cat"}},
+                                                  "body": {"variable": "hydra.lib.maybes.cat"},
                                                   "type": {"variable": "hydra.core.Binding"}}}}},
                                           "function": {
                                             "application": {
@@ -4811,11 +4680,8 @@
                                             "typeApplication": {
                                               "body": {
                                                 "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
-                                                  "type": {
-                                                    "application": {
-                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                  "body": {"variable": "hydra.lib.eithers.bind"},
+                                                  "type": {"variable": "hydra.errors.Error"}}},
                                               "type": {"list": {"variable": "hydra.core.Binding"}}}},
                                           "type": {"maybe": {"variable": "hydra.packaging.Module"}}}}}}}},
                               "domain": {"variable": "hydra.packaging.Module"},
@@ -4833,10 +4699,7 @@
                     "function": {
                       "codomain": {
                         "either": {
-                          "left": {
-                            "application": {
-                              "argument": {"variable": "hydra.errors.Error"},
-                              "function": {"variable": "hydra.context.InContext"}}},
+                          "left": {"variable": "hydra.errors.Error"},
                           "right": {"maybe": {"variable": "hydra.packaging.Module"}}}},
                       "domain": {"variable": "hydra.packaging.Module"}}},
                   "domain": {"variable": "hydra.graph.Graph"}}},
@@ -4927,16 +4790,16 @@
                                           "function": {
                                             "application": {
                                               "argument": {"literal": {"string": "."}},
-                                              "function": {"function": {"primitive": "hydra.lib.strings.splitOn"}}}}}},
+                                              "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
                                       "function": {
                                         "typeApplication": {
-                                          "body": {"function": {"primitive": "hydra.lib.lists.tail"}},
+                                          "body": {"variable": "hydra.lib.lists.tail"},
                                           "type": {"literal": {"string": {}}}}}}},
                                   "function": {
                                     "application": {
                                       "argument": {"literal": {"string": "."}},
-                                      "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}}]},
-                          "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                                      "function": {"variable": "hydra.lib.strings.intercalate"}}}}}]},
+                          "function": {"variable": "hydra.lib.strings.cat"}}},
                       "typeName": "hydra.packaging.Namespace"}},
                   "domain": {"variable": "hydra.packaging.Namespace"},
                   "parameter": "ns"}}}}},
@@ -5242,7 +5105,7 @@
                                                                                                             "typeApplication": {
                                                                                                               "body": {
                                                                                                                 "typeApplication": {
-                                                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                                                                   "type": {"variable": "hydra.core.FieldType"}}},
                                                                                                               "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                                                                 "typeName": "hydra.core.Term"}}}],
@@ -5348,16 +5211,11 @@
                                                                                         "term": {
                                                                                           "union": {
                                                                                             "field": {
-                                                                                              "name": "function",
+                                                                                              "name": "variable",
                                                                                               "term": {
-                                                                                                "union": {
-                                                                                                  "field": {
-                                                                                                    "name": "primitive",
-                                                                                                    "term": {
-                                                                                                      "wrap": {
-                                                                                                        "body": {"literal": {"string": "hydra.lib.sets.map"}},
-                                                                                                        "typeName": "hydra.core.Name"}}},
-                                                                                                  "typeName": "hydra.core.Function"}}},
+                                                                                                "wrap": {
+                                                                                                  "body": {"literal": {"string": "hydra.lib.sets.map"}},
+                                                                                                  "typeName": "hydra.core.Name"}}},
                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                       {
                                                                                         "name": "argument",
@@ -6402,7 +6260,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                  "body": {"variable": "hydra.lib.lists.map"},
                                                                   "type": {"variable": "hydra.core.FieldType"}}},
                                                               "type": {"variable": "hydra.core.Field"}}}}}}}}],
                                               "typeName": "hydra.core.CaseStatement"}}},
@@ -6666,7 +6524,7 @@
                                               "argument": {"variable": "hydra.annotations.isNativeType"},
                                               "function": {
                                                 "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.lists.filter"}},
+                                                  "body": {"variable": "hydra.lib.lists.filter"},
                                                   "type": {"variable": "hydra.core.Binding"}}}}}}},
                                       "function": {
                                         "application": {
@@ -6683,18 +6541,15 @@
                                                 "typeApplication": {
                                                   "body": {
                                                     "typeApplication": {
-                                                      "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
+                                                      "body": {"variable": "hydra.lib.eithers.mapList"},
                                                       "type": {"variable": "hydra.core.Binding"}}},
                                                   "type": {"maybe": {"variable": "hydra.core.Binding"}}}},
-                                              "type": {
-                                                "application": {
-                                                  "argument": {"variable": "hydra.errors.Error"},
-                                                  "function": {"variable": "hydra.context.InContext"}}}}}}}}},
+                                              "type": {"variable": "hydra.errors.Error"}}}}}}},
                                   "function": {
                                     "application": {
                                       "argument": {
                                         "typeApplication": {
-                                          "body": {"function": {"primitive": "hydra.lib.maybes.cat"}},
+                                          "body": {"variable": "hydra.lib.maybes.cat"},
                                           "type": {"variable": "hydra.core.Binding"}}},
                                       "function": {
                                         "typeApplication": {
@@ -6702,13 +6557,10 @@
                                             "typeApplication": {
                                               "body": {
                                                 "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
+                                                  "body": {"variable": "hydra.lib.eithers.map"},
                                                   "type": {"list": {"maybe": {"variable": "hydra.core.Binding"}}}}},
                                               "type": {"list": {"variable": "hydra.core.Binding"}}}},
-                                          "type": {
-                                            "application": {
-                                              "argument": {"variable": "hydra.errors.Error"},
-                                              "function": {"variable": "hydra.context.InContext"}}}}}}}}},
+                                          "type": {"variable": "hydra.errors.Error"}}}}}}},
                               "domain": {"list": {"variable": "hydra.core.Binding"}},
                               "parameter": "bindings"}}},
                         "domain": {"variable": "hydra.graph.Graph"},
@@ -6724,10 +6576,7 @@
                     "function": {
                       "codomain": {
                         "either": {
-                          "left": {
-                            "application": {
-                              "argument": {"variable": "hydra.errors.Error"},
-                              "function": {"variable": "hydra.context.InContext"}}},
+                          "left": {"variable": "hydra.errors.Error"},
                           "right": {"list": {"variable": "hydra.core.Binding"}}}},
                       "domain": {"list": {"variable": "hydra.core.Binding"}}}},
                   "domain": {"variable": "hydra.graph.Graph"}}},
@@ -6775,12 +6624,9 @@
                                                                 "argument": {"variable": "serializable"},
                                                                 "function": {
                                                                   "typeApplication": {
-                                                                    "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
                                                                     "type": {"maybe": {"variable": "hydra.core.Binding"}}}}}}}}}}}},
-                                                "type": {
-                                                  "application": {
-                                                    "argument": {"variable": "hydra.errors.Error"},
-                                                    "function": {"variable": "hydra.context.InContext"}}}}},
+                                                "type": {"variable": "hydra.errors.Error"}}},
                                             "type": {"maybe": {"variable": "hydra.core.Binding"}}}},
                                         "domain": {"literal": {"boolean": {}}},
                                         "parameter": "serializable"}}},
@@ -6807,11 +6653,8 @@
                                             "typeApplication": {
                                               "body": {
                                                 "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
-                                                  "type": {
-                                                    "application": {
-                                                      "argument": {"variable": "hydra.errors.Error"},
-                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                  "body": {"variable": "hydra.lib.eithers.bind"},
+                                                  "type": {"variable": "hydra.errors.Error"}}},
                                               "type": {"literal": {"boolean": {}}}}},
                                           "type": {"maybe": {"variable": "hydra.core.Binding"}}}}}}}},
                               "domain": {"variable": "hydra.core.Binding"},
@@ -6829,10 +6672,7 @@
                     "function": {
                       "codomain": {
                         "either": {
-                          "left": {
-                            "application": {
-                              "argument": {"variable": "hydra.errors.Error"},
-                              "function": {"variable": "hydra.context.InContext"}}},
+                          "left": {"variable": "hydra.errors.Error"},
                           "right": {"maybe": {"variable": "hydra.core.Binding"}}}},
                       "domain": {"variable": "hydra.core.Binding"}}},
                   "domain": {"variable": "hydra.graph.Graph"}}},

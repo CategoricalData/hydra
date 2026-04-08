@@ -238,18 +238,18 @@ modulesToGraph = define "modulesToGraph" $
   "schemaTypes" <~ Eithers.either_
     (constant (Maps.empty :: TTerm (M.Map Name TypeScheme)))
     ("_r" ~> var "_r")
-    (Environment.schemaGraphToTypingEnvironment @@ Lexical.emptyContext @@ var "schemaGraph") $
+    (Environment.schemaGraphToTypingEnvironment @@ var "schemaGraph") $
   Lexical.elementsToGraph @@ var "bsGraph" @@ var "schemaTypes" @@ var "dataElements"
 
 -- | Pure core of code generation: given a coder, language, flags, bootstrap graph, universe,
 -- and modules to generate, produce a list of (filePath, content) pairs.
 -- This function contains no I/O and can be generated to other languages.
 generateSourceFiles
-  :: TTermDefinition ((Module -> [Definition] -> Context -> Graph -> Prelude.Either (InContext Error) (M.Map String String))
+  :: TTermDefinition ((Module -> [Definition] -> Context -> Graph -> Prelude.Either Error (M.Map String String))
     -> Language
     -> Bool -> Bool -> Bool -> Bool
     -> Graph -> [Module] -> [Module]
-    -> Context -> Prelude.Either (InContext Error) [(String, String)])
+    -> Context -> Prelude.Either Error [(String, String)])
 generateSourceFiles = define "generateSourceFiles" $
   doc ("Pure core of code generation: given a coder, language, flags, bootstrap graph, universe,"
     <> " and modules to generate, produce a list of (filePath, content) pairs.") $
@@ -277,7 +277,7 @@ generateSourceFiles = define "generateSourceFiles" $
   "schemaTypes2" <~ Eithers.either_
     (constant (Maps.empty :: TTerm (M.Map Name TypeScheme)))
     ("_r" ~> var "_r")
-    (Environment.schemaGraphToTypingEnvironment @@ Lexical.emptyContext @@ var "schemaGraph") $
+    (Environment.schemaGraphToTypingEnvironment @@ var "schemaGraph") $
   "dataGraph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ var "schemaTypes2" @@ var "dataElements" $
 
   -- Generate type modules
@@ -285,8 +285,7 @@ generateSourceFiles = define "generateSourceFiles" $
     (right (TTerm (Terms.list []) :: TTerm [(String, String)]))
     ("nameLists" <~ Lists.map ("m" ~> moduleTypeNames (var "m"))
         (var "typeModulesToGenerate") $
-      "schemaResult" <<~ Eithers.bimap ("s" ~> Ctx.inContext (Error.errorOther $ Error.otherError (var "s")) (var "cx")) ("r" ~> var "r")
-        (Adapt.schemaGraphToDefinitions @@ var "constraints" @@ var "schemaGraph" @@ var "nameLists" @@ var "cx") $
+      "schemaResult" <<~ Adapt.schemaGraphToDefinitions @@ var "constraints" @@ var "schemaGraph" @@ var "nameLists" @@ var "cx" $
       "defLists" <~ Pairs.second (var "schemaResult") $
       "schemaGraphWithTypes" <~ Graph.graphWithSchemaTypes (var "schemaGraph") (var "schemaTypes2") $
       Eithers.map ("xs" ~> Lists.concat (var "xs")) $
@@ -301,11 +300,10 @@ generateSourceFiles = define "generateSourceFiles" $
   "termFiles" <<~ Logic.ifElse (Lists.null $ var "termModulesToGenerate")
     (right (TTerm (Terms.list []) :: TTerm [(String, String)]))
     ("namespaces" <~ Lists.map ("m" ~> Packaging.moduleNamespace (var "m")) (var "termModulesToGenerate") $
-      "dataResult" <<~ Eithers.bimap ("s" ~> Ctx.inContext (Error.errorOther $ Error.otherError (var "s")) (var "cx")) ("r" ~> var "r")
-        (Adapt.dataGraphToDefinitions
+      "dataResult" <<~ Adapt.dataGraphToDefinitions
           @@ var "constraints"
           @@ var "doInfer" @@ var "doExpand" @@ var "doHoistCaseStatements" @@ var "doHoistPolymorphicLetBindings"
-          @@ var "dataElements" @@ var "dataGraph" @@ var "namespaces" @@ var "cx") $
+          @@ var "dataElements" @@ var "dataGraph" @@ var "namespaces" @@ var "cx" $
       "g1" <~ Pairs.first (var "dataResult") $
       "defLists" <~ Pairs.second (var "dataResult") $
       -- Refresh modules with elements from the inferred graph
@@ -365,11 +363,11 @@ formatPrimitive = define "formatPrimitive" $
   (string "  ") ++ var "name" ++ (string " : ") ++ var "typeStr"
 
 -- | Format a type binding for the lexicon: "  name = type"
-formatTypeBinding :: TTermDefinition (Graph -> Binding -> Prelude.Either DecodingError String)
+formatTypeBinding :: TTermDefinition (Graph -> Binding -> Prelude.Either Error String)
 formatTypeBinding = define "formatTypeBinding" $
   doc "Format a type binding for the lexicon" $
   "graph" ~> "binding" ~>
-  "typ" <<~ decoderFor _Type @@ var "graph" @@ (Core.bindingTerm $ var "binding") $
+  "typ" <<~ Eithers.bimap ("_e" ~> Error.errorDecoding $ var "_e") ("_a" ~> var "_a") (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm $ var "binding")) $
   right $
     (string "  ") ++ Core.unName (Core.bindingName $ var "binding") ++ (string " = ") ++ (ShowCore.type_ @@ var "typ")
 
@@ -409,7 +407,7 @@ moduleToSourceModule = define "moduleToSourceModule" $
 
 -- | Generate the lexicon content from a graph.
 -- Lists all primitives, types, and terms with their types.
-generateLexicon :: TTermDefinition (Graph -> Prelude.Either DecodingError String)
+generateLexicon :: TTermDefinition (Graph -> Prelude.Either Error String)
 generateLexicon = define "generateLexicon" $
   doc "Generate the lexicon content from a graph" $
   "graph" ~>
@@ -432,19 +430,20 @@ generateLexicon = define "generateLexicon" $
 -- | Convert a Module to a JSON string.
 -- Encodes the Module as a Term, converts to JSON, then serializes to a string.
 -- The schema map is used to resolve type variables during type-directed encoding.
-moduleToJson :: TTermDefinition (M.Map Name Type -> Module -> Either String String)
+moduleToJson :: TTermDefinition (M.Map Name Type -> Module -> Either Error String)
 moduleToJson = define "moduleToJson" $
   doc "Convert a Module to a JSON string" $
   "schemaMap" ~> "m" ~>
   "term" <~ encoderFor _Module @@ var "m" $
   "modType" <~ Core.typeVariable (wrap _Name (string "hydra.packaging.Module")) $
   Eithers.map ("json" ~> var "hydra.json.writer.printJson" @@ var "json")
-    (var "hydra.json.encode.toJson" @@ var "schemaMap" @@ Core.nameLift _Module @@ var "modType" @@ var "term")
+    (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError $ var "_e") ("_a" ~> var "_a")
+      (var "hydra.json.encode.toJson" @@ var "schemaMap" @@ Core.nameLift _Module @@ var "modType" @@ var "term"))
 
 -- | Perform type inference on a set of modules and reconstruct the target modules
 -- with inferred types. Type-only modules (containing only native type definitions)
 -- are passed through unchanged.
-inferModules :: TTermDefinition (Context -> Graph -> [Module] -> [Module] -> Prelude.Either (InContext Error) [Module])
+inferModules :: TTermDefinition (Context -> Graph -> [Module] -> [Module] -> Prelude.Either Error [Module])
 inferModules = define "inferModules" $
   doc "Perform type inference on modules and reconstruct with inferred types" $
   "cx" ~> "bsGraph" ~> "universeMods" ~> "targetMods" ~>
@@ -483,8 +482,8 @@ inferModules = define "inferModules" $
 -- Takes a codec function, bootstrap graph, universe modules, and type modules.
 -- Returns the generated coder modules (Nothing results are filtered out).
 generateCoderModules
-  :: TTermDefinition ((Context -> Graph -> Module -> Prelude.Either (InContext Error) (Maybe Module)) -> Graph -> [Module] -> [Module]
-    -> Context -> Prelude.Either (InContext Error) [Module])
+  :: TTermDefinition ((Context -> Graph -> Module -> Prelude.Either Error (Maybe Module)) -> Graph -> [Module] -> [Module]
+    -> Context -> Prelude.Either Error [Module])
 generateCoderModules = define "generateCoderModules" $
   doc "Generate encoder or decoder modules for a list of type modules" $
   "codec" ~> "bsGraph" ~> "universeModules" ~> "typeModules" ~> "cx" ~>
@@ -501,7 +500,7 @@ generateCoderModules = define "generateCoderModules" $
   "schemaTypes" <~ Eithers.either_
     (constant (Maps.empty :: TTerm (M.Map Name TypeScheme)))
     ("_r" ~> var "_r")
-    (Environment.schemaGraphToTypingEnvironment @@ Lexical.emptyContext @@ var "schemaGraph") $
+    (Environment.schemaGraphToTypingEnvironment @@ var "schemaGraph") $
   "allElements" <~ Lists.concat2 (var "schemaElements") (var "dataElements") $
   "graph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ var "schemaTypes" @@ var "allElements" $
   Eithers.map ("results" ~> Maybes.cat (var "results")) $
@@ -509,15 +508,15 @@ generateCoderModules = define "generateCoderModules" $
 
 -- | Perform type inference on a graph and generate its lexicon.
 -- Composes inferGraphTypes and generateLexicon into a single computation.
-inferAndGenerateLexicon :: TTermDefinition (Context -> Graph -> [Module] -> Prelude.Either String String)
+inferAndGenerateLexicon :: TTermDefinition (Context -> Graph -> [Module] -> Prelude.Either Error String)
 inferAndGenerateLexicon = define "inferAndGenerateLexicon" $
   doc "Perform type inference and generate the lexicon for a set of modules" $
   "cx" ~> "bsGraph" ~> "kernelModules" ~>
   "g0" <~ modulesToGraph @@ var "bsGraph" @@ var "kernelModules" @@ var "kernelModules" $
   "dataElements" <~ Lists.concat (Lists.map ("m" ~> moduleTermBindings (var "m")) (var "kernelModules")) $
-  "inferResultWithCx" <<~ Eithers.bimap ("ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic")) ("x" ~> var "x") (Inference.inferGraphTypes @@ var "cx" @@ var "dataElements" @@ var "g0") $
+  "inferResultWithCx" <<~ Inference.inferGraphTypes @@ var "cx" @@ var "dataElements" @@ var "g0" $
   "g1" <~ Pairs.first (Pairs.first $ var "inferResultWithCx") $
-  Eithers.bimap (unwrap _DecodingError) ("x" ~> var "x") (generateLexicon @@ var "g1")
+  generateLexicon @@ var "g1"
 
 -- | Escape unescaped control characters (< 0x20) inside JSON string literals.
 -- Operates on a list of int32 character codes (bytes).
@@ -560,7 +559,7 @@ escapeControlCharsInJson = define "escapeControlCharsInJson" $
 -- | Decode a single module from a JSON value.
 -- Given a bootstrap graph, universe modules, and a JSON value, decodes it to a Packaging.
 -- This is the pure core of the JSON module loading pipeline.
-decodeModuleFromJson :: TTermDefinition (Graph -> [Module] -> JsonModel.Value -> Either String Module)
+decodeModuleFromJson :: TTermDefinition (Graph -> [Module] -> JsonModel.Value -> Either Error Module)
 decodeModuleFromJson = define "decodeModuleFromJson" $
   doc "Decode a single module from a JSON value" $
   "bsGraph" ~> "universeModules" ~> "jsonVal" ~>
@@ -569,11 +568,11 @@ decodeModuleFromJson = define "decodeModuleFromJson" $
   "modType" <~ Core.typeVariable (Core.nameLift _Module) $
   -- Step 1: JSON -> Term
   Eithers.either_
-    ("err" ~> left (var "err"))
+    ("err" ~> left (Error.errorOther $ Error.otherError $ var "err"))
     ("term" ~>
       -- Step 2: Term -> Module (via decoderFor _Module)
       Eithers.either_
-        ("decErr" ~> left (unwrap _DecodingError @@ var "decErr"))
+        ("decErr" ~> left (Error.errorDecoding $ var "decErr"))
         ("mod" ~> right (var "mod"))
         (decoderFor _Module @@ var "graph" @@ var "term"))
     (JsonDecode.fromJson @@ var "schemaMap" @@ Core.nameLift _Module @@ var "modType" @@ var "jsonVal")

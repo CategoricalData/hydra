@@ -13,7 +13,7 @@ and cx g a b =
     Right (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
-          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
+          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
           Core.applicationArgument = a})),
         Core.applicationArgument = b})),
       Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean False))}))
@@ -24,7 +24,7 @@ not cx g a =
     Right (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
-          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
+          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
           Core.applicationArgument = a})),
         Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean False))})),
       Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))}))
@@ -35,7 +35,7 @@ or cx g a b =
     Right (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
-          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.logic.ifElse"))),
+          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
           Core.applicationArgument = a})),
         Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})),
       Core.applicationArgument = b}))

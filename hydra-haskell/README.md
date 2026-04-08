@@ -70,7 +70,7 @@ The entire Hydra kernel is written using Haskell-based domain-specific languages
   These libraries are registered in
   [Libraries.hs](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs).
 
-The DSL sources are also used to generate Java and Python implementations,
+The DSL sources are also used to generate Java, Python, Scala, and Lisp implementations,
 ensuring parity across each Hydra language variant.
 
 ### Build and REPL
@@ -180,7 +180,7 @@ Note `src/gen-test` as opposed to `src/gen-main`.
 
 ### Generate code for other languages
 
-Java and Python code generation is handled by the
+Java, Python, Scala, and Lisp code generation is handled by the
 [Hydra-Ext](https://github.com/CategoricalData/hydra/tree/main/hydra-ext) package.
 From the `hydra-ext` directory:
 

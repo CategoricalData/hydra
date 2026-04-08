@@ -1146,7 +1146,7 @@ toAcceptMethod = def "toAcceptMethod" $
 
 
 -- | Convert a Java Type to an array type
-toJavaArrayType :: TTermDefinition (Java.Type -> Context -> Either (InContext Error) Java.Type)
+toJavaArrayType :: TTermDefinition (Java.Type -> Context -> Either Error Java.Type)
 toJavaArrayType = def "toJavaArrayType" $
   lambda "t" $ "cx" ~>
   cases Java._Type (var "t") Nothing [
@@ -1170,7 +1170,7 @@ toJavaArrayType = def "toJavaArrayType" $
 
 
 -- | Extract the reference type from a Java type, failing if it's a primitive type
-javaTypeToJavaReferenceType :: TTermDefinition (Java.Type -> Context -> Either (InContext Error) Java.ReferenceType)
+javaTypeToJavaReferenceType :: TTermDefinition (Java.Type -> Context -> Either Error Java.ReferenceType)
 javaTypeToJavaReferenceType = def "javaTypeToJavaReferenceType" $
   lambda "t" $ "cx" ~>
   cases Java._Type (var "t") Nothing [
@@ -1207,7 +1207,7 @@ javaReferenceTypeToRawType = def "javaReferenceTypeToRawType" $
 
 
 -- | Add a reference type as a type argument to an existing Java type
-addJavaTypeParameter :: TTermDefinition (Java.ReferenceType -> Java.Type -> Context -> Either (InContext Error) Java.Type)
+addJavaTypeParameter :: TTermDefinition (Java.ReferenceType -> Java.Type -> Context -> Either Error Java.Type)
 addJavaTypeParameter = def "addJavaTypeParameter" $
   lambda "rt" $ lambda "t" $ "cx" ~>
   cases Java._Type (var "t") Nothing [

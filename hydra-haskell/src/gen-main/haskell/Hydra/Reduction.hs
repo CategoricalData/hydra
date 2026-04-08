@@ -37,7 +37,7 @@ alphaConvert :: Core.Name -> Core.Name -> Core.Term -> Core.Term
 alphaConvert vold vnew term = Variables.replaceFreeTermVariable vold (Core.TermVariable vnew) term
 
 -- | Eagerly beta-reduce a type by substituting type arguments into type lambdas
-betaReduceType :: Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Errors.Error) Core.Type
+betaReduceType :: t0 -> Graph.Graph -> Core.Type -> Either Errors.Error Core.Type
 betaReduceType cx graph typ =
 
       let reduceApp =
@@ -105,11 +105,10 @@ etaExpandTerm tx0 term0 =
                     Core.TermFunction v0 -> case v0 of
                       Core.FunctionElimination _ -> 1
                       Core.FunctionLambda _ -> 0
-                      Core.FunctionPrimitive v1 -> Maybes.maybe 0 Arity.typeSchemeArity (Maps.lookup v1 primTypes)
                     Core.TermLet v0 -> termArityWithContext (Scoping.extendGraphForLet (\_ -> \_2 -> Nothing) tx v0) (Core.letBody v0)
                     Core.TermTypeLambda v0 -> termArityWithContext (Scoping.extendGraphForTypeLambda tx v0) (Core.typeLambdaBody v0)
                     Core.TermTypeApplication v0 -> termArityWithContext tx (Core.typeApplicationTermBody v0)
-                    Core.TermVariable v0 -> Maybes.maybe 0 Arity.typeArity (Maybes.map Scoping.typeSchemeToFType (Maps.lookup v0 (Graph.graphBoundTypes tx)))
+                    Core.TermVariable v0 -> Maybes.maybe (Maybes.maybe 0 Arity.typeSchemeArity (Maps.lookup v0 primTypes)) Arity.typeArity (Maybes.map Scoping.typeSchemeToFType (Maps.lookup v0 (Graph.graphBoundTypes tx)))
                     _ -> 0
           domainTypes =
                   \n -> \mt -> Logic.ifElse (Equality.lte n 0) [] (Maybes.maybe (Lists.map (\_ -> Nothing) (Math.range 1 n)) (\typ -> case typ of
@@ -163,9 +162,7 @@ etaExpandTerm tx0 term0 =
                         termHeadType =
                                 \tx2 -> \trm2 -> case trm2 of
                                   Core.TermAnnotated v0 -> termHeadType tx2 (Core.annotatedTermBody v0)
-                                  Core.TermFunction v0 -> case v0 of
-                                    Core.FunctionPrimitive v1 -> Maybes.map Scoping.typeSchemeToFType (Maps.lookup v1 primTypes)
-                                    _ -> Nothing
+                                  Core.TermFunction _ -> Nothing
                                   Core.TermLet v0 -> termHeadType (Scoping.extendGraphForLet (\_ -> \_2 -> Nothing) tx2 v0) (Core.letBody v0)
                                   Core.TermTypeLambda v0 -> termHeadType (Scoping.extendGraphForTypeLambda tx2 v0) (Core.typeLambdaBody v0)
                                   Core.TermTypeApplication v0 -> Maybes.bind (termHeadType tx2 (Core.typeApplicationTermBody v0)) (\htyp2 -> case htyp2 of
@@ -235,10 +232,6 @@ etaExpandTerm tx0 term0 =
                                         Core.lambdaBody = body}))
                               arty = termArityWithContext tx result
                           in (expand False args arty Nothing result)
-                        Core.FunctionPrimitive v1 ->
-                          let arty = termArityWithContext tx term
-                              primType = Maybes.map (\ts -> Core.typeSchemeType ts) (Maps.lookup v1 primTypes)
-                          in (expand False args arty primType term)
                       Core.TermLet v0 ->
                         let tx1 = Scoping.extendGraphForLet (\_ -> \_2 -> Nothing) tx v0
                             mapBinding =
@@ -284,7 +277,7 @@ etaExpandTerm tx0 term0 =
       in (contractTerm (rewriteWithArgs [] tx0 term0))
 
 -- | Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x', eliminating partial application. Variable references are not expanded. This is useful for targets like Python with weaker support for currying than Hydra or Haskell. Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references. It also assumes that type inference has already been performed. After eta expansion, type inference needs to be performed again, as new, untyped lambdas may have been added.
-etaExpandTypedTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
+etaExpandTypedTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 etaExpandTypedTerm cx tx0 term0 =
 
       let rewrite =
@@ -317,7 +310,6 @@ etaExpandTypedTerm cx tx0 term0 =
                                             Core.FunctionLambda v0 ->
                                               let txl = Scoping.extendGraphForLambda tx3 v0
                                               in (arityOf txl (Core.lambdaBody v0))
-                                            Core.FunctionPrimitive v0 -> Eithers.map (\_ts -> Arity.typeSchemeArity _ts) (Lexical.requirePrimitiveType cx tx3 v0)
                               in case term2 of
                                 Core.TermAnnotated v0 -> arityOf tx2 (Core.annotatedTermBody v0)
                                 Core.TermFunction v0 -> forFunction tx2 v0
@@ -403,7 +395,6 @@ etaExpansionArity graph term =
       Core.TermFunction v0 -> case v0 of
         Core.FunctionElimination _ -> 1
         Core.FunctionLambda _ -> 0
-        Core.FunctionPrimitive v1 -> Arity.primitiveArity (Maybes.fromJust (Lexical.lookupPrimitive graph v1))
       Core.TermTypeLambda v0 -> etaExpansionArity graph (Core.typeLambdaBody v0)
       Core.TermTypeApplication v0 -> etaExpansionArity graph (Core.typeApplicationTermBody v0)
       Core.TermVariable v0 -> Maybes.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeType ts)) (Maybes.bind (Lexical.lookupBinding graph v0) (\b -> Core.bindingType b))
@@ -447,7 +438,7 @@ etaReduceTerm term =
         _ -> noChange
 
 -- | A term evaluation function which is alternatively lazy or eager
-reduceTerm :: Context.Context -> Graph.Graph -> Bool -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
+reduceTerm :: Context.Context -> Graph.Graph -> Bool -> Core.Term -> Either Errors.Error Core.Term
 reduceTerm cx graph eager term =
 
       let reduce = \eager2 -> reduceTerm cx graph eager2
@@ -468,35 +459,20 @@ reduceTerm cx graph eager term =
                   \fun -> \args -> Logic.ifElse (Lists.null args) fun (applyToArguments (Core.TermApplication (Core.Application {
                     Core.applicationFunction = fun,
                     Core.applicationArgument = (Lists.head args)})) (Lists.tail args))
-          mapErrorToString =
-                  \ic -> Context.InContext {
-                    Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors_.error (Context.inContextObject ic)))),
-                    Context.inContextContext = (Context.inContextContext ic)}
+          mapErrorToString = \e -> Errors.ErrorOther (Errors.OtherError (Errors_.error e))
           applyElimination =
                   \elm -> \reducedArg -> case elm of
-                    Core.EliminationRecord v0 -> Eithers.bind (Core__.record cx (Core.projectionTypeName v0) graph (Strip.deannotateTerm reducedArg)) (\fields ->
+                    Core.EliminationRecord v0 -> Eithers.bind (Core__.record (Core.projectionTypeName v0) graph (Strip.deannotateTerm reducedArg)) (\fields ->
                       let matchingFields = Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.projectionField v0)) fields
-                      in (Logic.ifElse (Lists.null matchingFields) (Left (Context.InContext {
-                        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat [
-                          "no such field: ",
-                          (Core.unName (Core.projectionField v0)),
-                          " in ",
-                          (Core.unName (Core.projectionTypeName v0)),
-                          " record"]))),
-                        Context.inContextContext = cx})) (Right (Core.fieldTerm (Lists.head matchingFields)))))
-                    Core.EliminationUnion v0 -> Eithers.bind (Core__.injection cx (Core.caseStatementTypeName v0) graph reducedArg) (\field ->
+                      in (Logic.ifElse (Lists.null matchingFields) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
+                        Errors.noMatchingFieldErrorFieldName = (Core.projectionField v0)})))) (Right (Core.fieldTerm (Lists.head matchingFields)))))
+                    Core.EliminationUnion v0 -> Eithers.bind (Core__.injection (Core.caseStatementTypeName v0) graph reducedArg) (\field ->
                       let matchingFields = Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.fieldName field)) (Core.caseStatementCases v0)
-                      in (Logic.ifElse (Lists.null matchingFields) (Maybes.maybe (Left (Context.InContext {
-                        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat [
-                          "no such field ",
-                          (Core.unName (Core.fieldName field)),
-                          " in ",
-                          (Core.unName (Core.caseStatementTypeName v0)),
-                          " case statement"]))),
-                        Context.inContextContext = cx})) (\x -> Right x) (Core.caseStatementDefault v0)) (Right (Core.TermApplication (Core.Application {
+                      in (Logic.ifElse (Lists.null matchingFields) (Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
+                        Errors.noMatchingFieldErrorFieldName = (Core.fieldName field)})))) (\x -> Right x) (Core.caseStatementDefault v0)) (Right (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.fieldTerm (Lists.head matchingFields)),
                         Core.applicationArgument = (Core.fieldTerm field)})))))
-                    Core.EliminationWrap v0 -> Core__.wrap cx v0 graph reducedArg
+                    Core.EliminationWrap v0 -> Core__.wrap v0 graph reducedArg
           applyIfNullary =
                   \eager2 -> \original -> \args ->
                     let stripped = Strip.deannotateTerm original
@@ -524,12 +500,13 @@ reduceTerm cx graph eager term =
                       Core.TermFunction v0 -> case v0 of
                         Core.FunctionElimination v1 -> Logic.ifElse (Lists.null args) (Right original) (forElimination v1 args)
                         Core.FunctionLambda v1 -> Logic.ifElse (Lists.null args) (Right original) (forLambda v1 args)
-                        Core.FunctionPrimitive v1 -> Eithers.bind (Lexical.requirePrimitive cx graph v1) (\prim ->
-                          let arity = Arity.primitiveArity prim
-                          in (Logic.ifElse (Equality.gt arity (Lists.length args)) (Right (applyToArguments original args)) (forPrimitive prim arity args)))
                       Core.TermVariable v0 ->
                         let mBinding = Lexical.lookupBinding graph v0
-                        in (Maybes.maybe (Right (applyToArguments original args)) (\binding -> applyIfNullary eager2 (Core.bindingTerm binding) args) mBinding)
+                        in (Maybes.maybe (
+                          let mPrim = Lexical.lookupPrimitive graph v0
+                          in (Maybes.maybe (Right (applyToArguments original args)) (\prim ->
+                            let arity = Arity.primitiveArity prim
+                            in (Logic.ifElse (Equality.gt arity (Lists.length args)) (Right (applyToArguments original args)) (forPrimitive prim arity args))) mPrim)) (\binding -> applyIfNullary eager2 (Core.bindingTerm binding) args) mBinding)
                       Core.TermLet v0 ->
                         let bindings = Core.letBindings v0
                             body = Core.letBody v0
@@ -571,7 +548,6 @@ termIsValue term =
                       Core.EliminationRecord _ -> True
                       Core.EliminationUnion v1 -> Logic.and (checkFields (Core.caseStatementCases v1)) (Maybes.maybe True termIsValue (Core.caseStatementDefault v1))
                     Core.FunctionLambda v0 -> termIsValue (Core.lambdaBody v0)
-                    Core.FunctionPrimitive _ -> True
       in case (Strip.deannotateTerm term) of
         Core.TermApplication _ -> False
         Core.TermEither v0 -> Eithers.either (\l -> termIsValue l) (\r -> termIsValue r) v0

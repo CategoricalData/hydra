@@ -111,7 +111,7 @@ buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
       _Module_description>>: project _Module _Module_description @@ var "mod"]] $
     Eithers.bind
       (Eithers.bimap
-        (lambda "ic" $ ShowError.error_ @@ Ctx.inContextObject (var "ic"))
+        (lambda "e" $ ShowError.error_ @@ var "e")
         (lambda "a" $ var "a")
         (HaskellUtilsSource.namespacesForModule @@ var "tempModule" @@ asTerm Lexical.emptyContext @@ var "graph_"))
       (lambda "baseNamespaces" $ lets [

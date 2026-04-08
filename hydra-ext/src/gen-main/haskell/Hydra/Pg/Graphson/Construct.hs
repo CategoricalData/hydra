@@ -5,7 +5,6 @@
 module Hydra.Pg.Graphson.Construct where
 
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Context as Context
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lib.Eithers as Eithers
@@ -51,9 +50,7 @@ graphsonVertexToJsonCoder :: Coders.Coder Syntax.Vertex Model.Value
 graphsonVertexToJsonCoder =
     Coders.Coder {
       Coders.coderEncode = (\_cx -> \v -> Right (Coder.vertexToJson v)),
-      Coders.coderDecode = (\_cx -> \_ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "decoding GraphSON JSON is currently unsupported")),
-        Context.inContextContext = _cx}))}
+      Coders.coderDecode = (\_cx -> \_ -> Left (Errors.ErrorOther (Errors.OtherError "decoding GraphSON JSON is currently unsupported")))}
 
 -- | Convert a property graph vertex with adjacent edges to a GraphSON vertex
 pgVertexWithAdjacentEdgesToGraphsonVertex :: (t0 -> Either t1 Syntax.Value) -> Model_.VertexWithAdjacentEdges t0 -> Either t1 Syntax.Vertex

@@ -472,12 +472,12 @@ generateWrappedTypeAccessors = define "generateWrappedTypeAccessors" $
 -- - Records: constructor + accessors + withXxx updaters
 -- - Unions: injection helpers
 -- - Wrapped types: wrap + unwrap
-generateBindingsForType :: TTermDefinition (Context -> Graph -> Binding -> Either (InContext DecodingError) [Binding])
+generateBindingsForType :: TTermDefinition (Context -> Graph -> Binding -> Either DecodingError [Binding])
 generateBindingsForType = define "generateBindingsForType" $
   doc "Generate all DSL bindings for a type binding" $
   "cx" ~> "graph" ~> "b" ~>
   "typeName" <~ (Core.bindingName (var "b")) $
-  Eithers.bind (Ctx.withContext (var "cx") (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "b")))) (
+  Eithers.bind (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "b"))) (
     "rawType" ~>
     "typ" <~ (Strip.deannotateTypeParameters @@ (Strip.deannotateType @@ var "rawType")) $
     right (cases _Type (var "typ") (Just $ list ([] :: [TTerm Binding])) [
@@ -522,7 +522,7 @@ findUniqueName = define "findUniqueName" $
     (findUniqueName @@ (Strings.cat $ list [var "candidate", string "_"]) @@ var "usedNames")
 
 -- | Filter bindings to only DSL-eligible type definitions
-filterTypeBindings :: TTermDefinition (Context -> Graph -> [Binding] -> Either (InContext Error) [Binding])
+filterTypeBindings :: TTermDefinition (Context -> Graph -> [Binding] -> Either Error [Binding])
 filterTypeBindings = define "filterTypeBindings" $
   doc "Filter bindings to only DSL-eligible type definitions" $
   "cx" ~> "graph" ~> "bindings" ~>
@@ -532,7 +532,7 @@ filterTypeBindings = define "filterTypeBindings" $
 
 -- | Check if a binding is eligible for DSL generation.
 -- Excludes phantom types (TTerm, TBinding) since they are meta-infrastructure.
-isDslEligibleBinding :: TTermDefinition (Context -> Graph -> Binding -> Either (InContext Error) (Maybe Binding))
+isDslEligibleBinding :: TTermDefinition (Context -> Graph -> Binding -> Either Error (Maybe Binding))
 isDslEligibleBinding = define "isDslEligibleBinding" $
   doc "Check if a binding is eligible for DSL generation" $
   "cx" ~> "graph" ~> "b" ~>
@@ -543,7 +543,7 @@ isDslEligibleBinding = define "isDslEligibleBinding" $
 
 -- | Transform a type module into a DSL module.
 -- Returns Nothing if the module has no eligible type definitions.
-dslModule :: TTermDefinition (Context -> Graph -> Module -> Either (InContext Error) (Maybe Module))
+dslModule :: TTermDefinition (Context -> Graph -> Module -> Either Error (Maybe Module))
 dslModule = define "dslModule" $
   doc "Transform a type module into a DSL module" $
   "cx" ~> "graph" ~> "mod" ~>
@@ -557,7 +557,7 @@ dslModule = define "dslModule" $
       (right nothing)
       ("dslBindings" <<~ Eithers.mapList ("b" ~>
         Eithers.bimap
-          ("ic" ~> Ctx.inContext (Error.errorOther $ Error.otherError (unwrap _DecodingError @@ Ctx.inContextObject (var "ic"))) (Ctx.inContextContext (var "ic")))
+          ("_e" ~> Error.errorDecoding $ var "_e")
           ("x" ~> var "x")
           (generateBindingsForType @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
         right (just (Packaging.module_

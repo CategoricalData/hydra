@@ -106,8 +106,7 @@ rustLanguage = define "rustLanguage" $
       Core.floatTypeFloat64], -- f64
     "functionVariants">: Sets.fromList $ list [
       Variants.functionVariantElimination,
-      Variants.functionVariantLambda,
-      Variants.functionVariantPrimitive],
+      Variants.functionVariantLambda],
     "integerTypes">: Sets.fromList $ list [
       Core.integerTypeInt8,   -- i8
       Core.integerTypeInt16,  -- i16

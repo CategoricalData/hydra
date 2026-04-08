@@ -72,44 +72,44 @@ module_ = Module ns definitions
 
 -- | Interpreter-friendly even.
 -- even x = equal (mod x 2) 0
-even_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
+even_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
 even_ = define "even" $
   doc "Interpreter-friendly even." $
   "cx" ~> "g" ~>
   "x" ~>
   right $ Core.termApplication $ Core.application
     (Core.termApplication $ Core.application
-      (Core.termFunction $ Core.functionPrimitive $ encodedName _equality_equal)
+      (Core.termVariable $ encodedName _equality_equal)
       (Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
-          (Core.termFunction $ Core.functionPrimitive $ encodedName _math_mod)
+          (Core.termVariable $ encodedName _math_mod)
           (var "x"))
         (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ MetaLiterals.int32 2)))
     (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ MetaLiterals.int32 0)
 
 -- | Interpreter-friendly odd.
 -- odd x = not (even x)
-odd_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
+odd_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
 odd_ = define "odd" $
   doc "Interpreter-friendly odd." $
   "cx" ~> "g" ~>
   "x" ~>
   right $ Core.termApplication $ Core.application
-    (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_not)
+    (Core.termVariable $ encodedName _logic_not)
     (Core.termApplication $ Core.application
-      (Core.termFunction $ Core.functionPrimitive $ encodedName _math_even)
+      (Core.termVariable $ encodedName _math_even)
       (var "x"))
 
 -- | Interpreter-friendly predecessor.
 -- pred x = sub x 1
-pred_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
+pred_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
 pred_ = define "pred" $
   doc "Interpreter-friendly predecessor." $
   "cx" ~> "g" ~>
   "x" ~>
   right $ Core.termApplication $ Core.application
     (Core.termApplication $ Core.application
-      (Core.termFunction $ Core.functionPrimitive $ encodedName _math_sub)
+      (Core.termVariable $ encodedName _math_sub)
       (var "x"))
     (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ MetaLiterals.int32 1)
 
@@ -117,17 +117,17 @@ pred_ = define "pred" $
 --   The recursive definition causes the interpreter to loop. The eval primitive returns a term
 --   containing ifElse(gt(lo,hi), [], cons(lo, range(add(lo,1), hi))), but reduction does not
 --   terminate. Needs investigation of the reducer's handling of recursive primitive references.
--- range_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+-- range_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
 
 -- | Interpreter-friendly successor.
 -- succ x = add x 1
-succ_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
+succ_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
 succ_ = define "succ" $
   doc "Interpreter-friendly successor." $
   "cx" ~> "g" ~>
   "x" ~>
   right $ Core.termApplication $ Core.application
     (Core.termApplication $ Core.application
-      (Core.termFunction $ Core.functionPrimitive $ encodedName _math_add)
+      (Core.termVariable $ encodedName _math_add)
       (var "x"))
     (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ MetaLiterals.int32 1)

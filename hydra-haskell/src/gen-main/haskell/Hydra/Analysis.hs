@@ -110,7 +110,7 @@ definitionDependencyNamespaces defs =
       in (Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList allNames))))
 
 -- | Find dependency namespaces in all of a set of terms (Either version)
-dependencyNamespaces :: Context.Context -> Graph.Graph -> Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Either (Context.InContext Errors.Error) (S.Set Packaging.Namespace)
+dependencyNamespaces :: t0 -> Graph.Graph -> Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Either Errors.Error (S.Set Packaging.Namespace)
 dependencyNamespaces cx graph binds withPrims withNoms withSchema els =
 
       let depNames =
@@ -123,20 +123,10 @@ dependencyNamespaces cx graph binds withPrims withNoms withSchema els =
                 in (Logic.ifElse (Predicates.isEncodedType deannotatedTerm) (Eithers.map (\typ -> Sets.unions [
                   dataNames,
                   schemaNames,
-                  (Dependencies.typeDependencyNames True typ)]) (Eithers.bimap (\_wc_e -> Context.InContext {
-                  Context.inContextObject = _wc_e,
-                  Context.inContextContext = Context.Context {
-                    Context.contextTrace = (Lists.cons "dependency namespace (type)" (Context.contextTrace cx)),
-                    Context.contextMessages = (Context.contextMessages cx),
-                    Context.contextOther = (Context.contextOther cx)}}) (\_wc_a -> _wc_a) (Eithers.bimap (\_e -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _e))) (\_a -> _a) (Core_.type_ graph term)))) (Logic.ifElse (Predicates.isEncodedTerm deannotatedTerm) (Eithers.map (\decodedTerm -> Sets.unions [
+                  (Dependencies.typeDependencyNames True typ)]) (Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (Core_.type_ graph term))) (Logic.ifElse (Predicates.isEncodedTerm deannotatedTerm) (Eithers.map (\decodedTerm -> Sets.unions [
                   dataNames,
                   schemaNames,
-                  (Dependencies.termDependencyNames binds withPrims withNoms decodedTerm)]) (Eithers.bimap (\_wc_e -> Context.InContext {
-                  Context.inContextObject = _wc_e,
-                  Context.inContextContext = Context.Context {
-                    Context.contextTrace = (Lists.cons "dependency namespace (term)" (Context.contextTrace cx)),
-                    Context.contextMessages = (Context.contextMessages cx),
-                    Context.contextOther = (Context.contextOther cx)}}) (\_wc_a -> _wc_a) (Eithers.bimap (\_e -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _e))) (\_a -> _a) (Core_.term graph term)))) (Right (Sets.unions [
+                  (Dependencies.termDependencyNames binds withPrims withNoms decodedTerm)]) (Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (Core_.term graph term))) (Right (Sets.unions [
                   dataNames,
                   schemaNames]))))
       in (Eithers.map (\namesList -> Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList (Sets.unions namesList))))) (Eithers.mapList depNames els))
@@ -278,7 +268,7 @@ moduleContainsBinaryLiterals mod =
       in (Lists.foldl (\acc -> \t -> Logic.or acc (termContainsBinary t)) False defTerms)
 
 -- | Find dependency namespaces in all elements of a module, excluding the module's own namespace (Either version)
-moduleDependencyNamespaces :: Context.Context -> Graph.Graph -> Bool -> Bool -> Bool -> Bool -> Packaging.Module -> Either (Context.InContext Errors.Error) (S.Set Packaging.Namespace)
+moduleDependencyNamespaces :: t0 -> Graph.Graph -> Bool -> Bool -> Bool -> Bool -> Packaging.Module -> Either Errors.Error (S.Set Packaging.Namespace)
 moduleDependencyNamespaces cx graph binds withPrims withNoms withSchema mod =
 
       let allBindings =

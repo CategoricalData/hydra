@@ -584,17 +584,17 @@ hydraLibMathFloat64 = standardLibrary _hydra_lib_math [
   prim1 _math_atan     Math.atan     [] float64 float64,
   prim2 _math_atan2    Math.atan2    [] float64 float64 float64,
   prim1 _math_atanh    Math.atanh    [] float64 float64,
-  prim1 _math_ceiling  Math.ceiling  [] float64 bigint,
+  prim1 _math_ceiling  Math.ceiling  [] float64 float64,
   prim1 _math_cos      Math.cos      [] float64 float64,
   prim1 _math_cosh     Math.cosh     [] float64 float64,
   prim0 _math_e        Math.e        [] float64,
   prim1 _math_exp      Math.exp      [] float64 float64,
-  prim1 _math_floor    Math.floor    [] float64 bigint,
+  prim1 _math_floor    Math.floor    [] float64 float64,
   prim1 _math_log      Math.log      [] float64 float64,
   prim2 _math_logBase  Math.logBase  [] float64 float64 float64,
   prim0 _math_pi       Math.pi       [] float64,
   prim2 _math_pow      Math.pow      [] float64 float64 float64,
-  prim1 _math_round         Math.round         [] float64 bigint,
+  prim1 _math_round         Math.round         [] float64 float64,
   prim2 _math_roundBigfloat Math.roundBigfloat [] int32 bigfloat bigfloat,
   prim2 _math_roundFloat32  Math.roundFloat32  [] int32 float32 float32,
   prim2 _math_roundFloat64  Math.roundFloat64  [] int32 float64 float64,
@@ -603,7 +603,7 @@ hydraLibMathFloat64 = standardLibrary _hydra_lib_math [
   prim1 _math_sqrt     Math.sqrt     [] float64 float64,
   prim1 _math_tan      Math.tan      [] float64 float64,
   prim1 _math_tanh     Math.tanh     [] float64 float64,
-  prim1 _math_truncate Math.truncate [] float64 bigint]
+  prim1 _math_truncate Math.truncate [] float64 float64]
 
 hydraLibMathInt32 :: Library
 hydraLibMathInt32 = standardLibrary _hydra_lib_math [

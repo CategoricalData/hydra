@@ -51,12 +51,12 @@ emptyEncodeEnvironment typeMap =
       Environment.encodeEnvironmentEmitted = Maps.empty}
 
 -- | Encode a Hydra type to an Avro schema adapter, given the type map and a root name
-encodeType :: Context.Context -> M.Map Core.Name Core.Type -> Core.Name -> Either (Context.InContext Errors.Error) (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value)
+encodeType :: t0 -> M.Map Core.Name Core.Type -> Core.Name -> Either Errors.Error (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value)
 encodeType cx typeMap name_ =
     Eithers.map (\adEnv -> Pairs.first adEnv) (encodeTypeWithEnv cx name_ (emptyEncodeEnvironment typeMap))
 
 -- | Core encoding logic: recursively encode a Hydra type to an Avro schema
-encodeTypeInner :: Context.Context -> Maybe Core.Name -> Core.Type -> Environment.EncodeEnvironment -> Either (Context.InContext Errors.Error) (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value, Environment.EncodeEnvironment)
+encodeTypeInner :: t0 -> Maybe Core.Name -> Core.Type -> Environment.EncodeEnvironment -> Either Errors.Error (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value, Environment.EncodeEnvironment)
 encodeTypeInner cx mName typ env =
 
       let annResult = extractAnnotations typ
@@ -106,7 +106,7 @@ encodeTypeInner cx mName typ env =
                                 \entry ->
                                   let k = Pairs.first entry
                                       v = Pairs.second entry
-                                  in (Eithers.bind (Core_.string cx (Graph.Graph {
+                                  in (Eithers.bind (Core_.string (Graph.Graph {
                                     Graph.graphBoundTerms = Maps.empty,
                                     Graph.graphBoundTypes = Maps.empty,
                                     Graph.graphClassConstraints = Maps.empty,
@@ -158,7 +158,7 @@ encodeTypeInner cx mName typ env =
         _ -> err cx "unsupported Hydra type for Avro encoding"
 
 -- | Encode with full environment threading. Returns the adapter and updated environment
-encodeTypeWithEnv :: Context.Context -> Core.Name -> Environment.EncodeEnvironment -> Either (Context.InContext Errors.Error) (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value, Environment.EncodeEnvironment)
+encodeTypeWithEnv :: t0 -> Core.Name -> Environment.EncodeEnvironment -> Either Errors.Error (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value, Environment.EncodeEnvironment)
 encodeTypeWithEnv cx name_ env =
     Maybes.maybe (err cx (Strings.cat2 "type not found in type map: " (Literals.showString (Core.unName name_)))) (\typ -> encodeTypeInner cx (Just name_) typ env) (Maps.lookup name_ (Environment.encodeEnvironmentTypeMap env))
 
@@ -203,11 +203,8 @@ enumAdapter cx typ mName annotations fieldTypes env0 =
       in (Right (adapter_, env1))
 
 -- | Construct an error result with a message in context
-err :: Context.Context -> String -> Either (Context.InContext Errors.Error) t0
-err cx msg =
-    Left (Context.InContext {
-      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError msg)),
-      Context.inContextContext = cx})
+err :: t0 -> String -> Either Errors.Error t1
+err cx msg = Left (Errors.ErrorOther (Errors.OtherError msg))
 
 -- | Extract annotations from a potentially annotated type
 extractAnnotations :: Core.Type -> (M.Map Core.Name Core.Term, Core.Type)
@@ -223,7 +220,7 @@ extractAnnotations typ =
       _ -> (Maps.empty, typ)
 
 -- | Create an adapter for float types
-floatAdapter :: Context.Context -> t0 -> Core.FloatType -> Either t1 (Coders.Adapter t0 Schema.Schema Core.Term Model.Value)
+floatAdapter :: t0 -> t1 -> Core.FloatType -> Either t2 (Coders.Adapter t1 Schema.Schema Core.Term Model.Value)
 floatAdapter cx typ ft =
 
       let simple =
@@ -235,7 +232,7 @@ floatAdapter cx typ ft =
                   Coders.coderEncode = encode,
                   Coders.coderDecode = decode}})
       in case ft of
-        Core.FloatTypeFloat32 -> simple (Schema.SchemaPrimitive Schema.PrimitiveFloat) False (\_cx -> \t -> Eithers.map (\f -> Model.ValueNumber (Literals.float32ToBigfloat f)) (Core_.float32 cx (Graph.Graph {
+        Core.FloatTypeFloat32 -> simple (Schema.SchemaPrimitive Schema.PrimitiveFloat) False (\_cx -> \t -> Eithers.map (\f -> Model.ValueNumber (Literals.float32ToBigfloat f)) (Core_.float32 (Graph.Graph {
           Graph.graphBoundTerms = Maps.empty,
           Graph.graphBoundTypes = Maps.empty,
           Graph.graphClassConstraints = Maps.empty,
@@ -245,7 +242,7 @@ floatAdapter cx typ ft =
           Graph.graphSchemaTypes = Maps.empty,
           Graph.graphTypeVariables = Sets.empty}) t)) (\_cx -> \j -> case j of
           Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (Literals.bigfloatToFloat32 v1)))))
-        Core.FloatTypeFloat64 -> simple (Schema.SchemaPrimitive Schema.PrimitiveDouble) False (\_cx -> \t -> Eithers.map (\d -> Model.ValueNumber (Literals.float64ToBigfloat d)) (Core_.float64 cx (Graph.Graph {
+        Core.FloatTypeFloat64 -> simple (Schema.SchemaPrimitive Schema.PrimitiveDouble) False (\_cx -> \t -> Eithers.map (\d -> Model.ValueNumber (Literals.float64ToBigfloat d)) (Core_.float64 (Graph.Graph {
           Graph.graphBoundTerms = Maps.empty,
           Graph.graphBoundTypes = Maps.empty,
           Graph.graphClassConstraints = Maps.empty,
@@ -269,7 +266,7 @@ floatValueToDouble fv =
       Core.FloatValueFloat64 v0 -> Literals.float64ToBigfloat v0
 
 -- | Fold over field types, building adapters and threading the environment
-foldFieldAdapters :: Context.Context -> [Core.FieldType] -> Environment.EncodeEnvironment -> Either (Context.InContext Errors.Error) ([(Core.Name, (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value))], Environment.EncodeEnvironment)
+foldFieldAdapters :: t0 -> [Core.FieldType] -> Environment.EncodeEnvironment -> Either Errors.Error ([(Core.Name, (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value))], Environment.EncodeEnvironment)
 foldFieldAdapters cx fieldTypes env0 =
     Lists.foldl (\acc -> \ft -> Eithers.bind acc (\accPair ->
       let soFar = Pairs.first accPair
@@ -291,7 +288,7 @@ hydraAnnotationsToAvro anns =
       in (Core.unName k, (termToJsonValue v))) (Maps.toList anns))
 
 -- | Encode a single type without a type map (for simple/anonymous types)
-hydraAvroAdapter :: Context.Context -> M.Map Core.Name Core.Type -> Core.Type -> Either (Context.InContext Errors.Error) (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value)
+hydraAvroAdapter :: t0 -> M.Map Core.Name Core.Type -> Core.Type -> Either Errors.Error (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value)
 hydraAvroAdapter cx typeMap typ =
     Eithers.map (\adEnv -> Pairs.first adEnv) (encodeTypeInner cx Nothing typ (emptyEncodeEnvironment typeMap))
 
@@ -300,7 +297,7 @@ hydraNameToAvroName :: Core.Name -> (String, (Maybe String))
 hydraNameToAvroName name_ = (localName name_, (nameNamespace name_))
 
 -- | Create an adapter for integer types
-integerAdapter :: Context.Context -> t0 -> Core.IntegerType -> Either t1 (Coders.Adapter t0 Schema.Schema Core.Term Model.Value)
+integerAdapter :: t0 -> t1 -> Core.IntegerType -> Either t2 (Coders.Adapter t1 Schema.Schema Core.Term Model.Value)
 integerAdapter cx typ it =
 
       let simple =
@@ -312,7 +309,7 @@ integerAdapter cx typ it =
                   Coders.coderEncode = encode,
                   Coders.coderDecode = decode}})
       in case it of
-        Core.IntegerTypeInt32 -> simple (Schema.SchemaPrimitive Schema.PrimitiveInt) False (\_cx -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint i))) (Core_.int32 cx (Graph.Graph {
+        Core.IntegerTypeInt32 -> simple (Schema.SchemaPrimitive Schema.PrimitiveInt) False (\_cx -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint i))) (Core_.int32 (Graph.Graph {
           Graph.graphBoundTerms = Maps.empty,
           Graph.graphBoundTypes = Maps.empty,
           Graph.graphClassConstraints = Maps.empty,
@@ -321,8 +318,8 @@ integerAdapter cx typ it =
           Graph.graphPrimitives = Maps.empty,
           Graph.graphSchemaTypes = Maps.empty,
           Graph.graphTypeVariables = Sets.empty}) t)) (\_cx -> \j -> case j of
-          Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Literals.bigintToInt32 (Math.truncate (Literals.bigfloatToFloat64 v1)))))))
-        Core.IntegerTypeInt64 -> simple (Schema.SchemaPrimitive Schema.PrimitiveLong) False (\_cx -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToBigfloat (Literals.int64ToBigint i))) (Core_.int64 cx (Graph.Graph {
+          Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Literals.bigintToInt32 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 v1)))))))))
+        Core.IntegerTypeInt64 -> simple (Schema.SchemaPrimitive Schema.PrimitiveLong) False (\_cx -> \t -> Eithers.map (\i -> Model.ValueNumber (Literals.bigintToBigfloat (Literals.int64ToBigint i))) (Core_.int64 (Graph.Graph {
           Graph.graphBoundTerms = Maps.empty,
           Graph.graphBoundTypes = Maps.empty,
           Graph.graphClassConstraints = Maps.empty,
@@ -331,11 +328,11 @@ integerAdapter cx typ it =
           Graph.graphPrimitives = Maps.empty,
           Graph.graphSchemaTypes = Maps.empty,
           Graph.graphTypeVariables = Sets.empty}) t)) (\_cx -> \j -> case j of
-          Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 (Literals.bigintToInt64 (Math.truncate (Literals.bigfloatToFloat64 v1)))))))
+          Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 (Literals.bigintToInt64 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 v1)))))))))
         _ -> simple (Schema.SchemaPrimitive Schema.PrimitiveLong) True (\_cx -> \t -> case t of
           Core.TermLiteral v0 -> case v0 of
             Core.LiteralInteger v1 -> Right (Model.ValueNumber (integerValueToDouble v1))) (\_cx -> \j -> case j of
-          Model.ValueNumber v0 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 (Literals.bigintToInt64 (Math.truncate (Literals.bigfloatToFloat64 v0)))))))
+          Model.ValueNumber v0 -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 (Literals.bigintToInt64 (Literals.bigfloatToBigint (Literals.float64ToBigfloat (Math.truncate (Literals.bigfloatToFloat64 v0)))))))))
 
 -- | Convert any integer value to a double (bigfloat)
 integerValueToDouble :: Core.IntegerValue -> Double
@@ -352,7 +349,7 @@ integerValueToDouble iv =
       Core.IntegerValueUint64 v0 -> Literals.bigintToBigfloat (Literals.uint64ToBigint v0)
 
 -- | Create an adapter for literal types
-literalAdapter :: Context.Context -> t0 -> Core.LiteralType -> Either t1 (Coders.Adapter t0 Schema.Schema Core.Term Model.Value)
+literalAdapter :: t0 -> t1 -> Core.LiteralType -> Either t2 (Coders.Adapter t1 Schema.Schema Core.Term Model.Value)
 literalAdapter cx typ lt =
 
       let simple =
@@ -396,7 +393,7 @@ nameNamespace name_ =
       in (Logic.ifElse (Equality.equal (Lists.length parts) 1) Nothing (Just (Strings.intercalate "." (Lists.init parts))))
 
 -- | Build a named type adapter (shared between record and union-as-record)
-namedTypeAdapter :: Context.Context -> Core.Type -> Maybe Core.Name -> M.Map Core.Name Core.Term -> [Core.FieldType] -> Environment.EncodeEnvironment -> ([Schema.Field] -> Schema.NamedType) -> (Context.Context -> Core.Name -> [(Core.Name, (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value))] -> ((Context.Context -> Core.Term -> Either (Context.InContext Errors.Error) Model.Value), (Context.Context -> Model.Value -> Either (Context.InContext Errors.Error) Core.Term))) -> Either (Context.InContext Errors.Error) (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value, Environment.EncodeEnvironment)
+namedTypeAdapter :: t0 -> Core.Type -> Maybe Core.Name -> M.Map Core.Name Core.Term -> [Core.FieldType] -> Environment.EncodeEnvironment -> ([Schema.Field] -> Schema.NamedType) -> (t0 -> Core.Name -> [(Core.Name, (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value))] -> ((Context.Context -> Core.Term -> Either Errors.Error Model.Value), (Context.Context -> Model.Value -> Either Errors.Error Core.Term))) -> Either Errors.Error (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value, Environment.EncodeEnvironment)
 namedTypeAdapter cx typ mName annotations fieldTypes env0 mkNamedType mkCoder =
 
       let typeName = Maybes.fromMaybe (typeToName typ) mName
@@ -432,7 +429,7 @@ namedTypeAdapter cx typ mName annotations fieldTypes env0 mkNamedType mkCoder =
         in (Right (adapter_, env2)))) (\existingAd -> Right (existingAd, env0)) (Maps.lookup typeName (Environment.encodeEnvironmentEmitted env0)))
 
 -- | Build a record term coder from field adapters
-recordTermCoder :: Context.Context -> Core.Name -> [(Core.Name, (Coders.Adapter t0 t1 Core.Term Model.Value))] -> ((Context.Context -> Core.Term -> Either (Context.InContext Errors.Error) Model.Value), (Context.Context -> Model.Value -> Either (Context.InContext Errors.Error) Core.Term))
+recordTermCoder :: t0 -> Core.Name -> [(Core.Name, (Coders.Adapter t1 t2 Core.Term Model.Value))] -> ((Context.Context -> Core.Term -> Either Errors.Error Model.Value), (Context.Context -> Model.Value -> Either Errors.Error Core.Term))
 recordTermCoder cx typeName fieldAdapters =
 
       let encode =
@@ -496,7 +493,7 @@ typeToName t =
       _ -> Core.Name "Unknown"
 
 -- | Adapter for general unions (encoded as records with optional fields)
-unionAsRecordAdapter :: Context.Context -> Core.Type -> Maybe Core.Name -> M.Map Core.Name Core.Term -> [Core.FieldType] -> Environment.EncodeEnvironment -> Either (Context.InContext Errors.Error) (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value, Environment.EncodeEnvironment)
+unionAsRecordAdapter :: t0 -> Core.Type -> Maybe Core.Name -> M.Map Core.Name Core.Term -> [Core.FieldType] -> Environment.EncodeEnvironment -> Either Errors.Error (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value, Environment.EncodeEnvironment)
 unionAsRecordAdapter cx typ mName annotations fieldTypes env0 =
     Eithers.bind (foldFieldAdapters cx fieldTypes env0) (\faResult ->
       let fieldAdapters = Pairs.first faResult

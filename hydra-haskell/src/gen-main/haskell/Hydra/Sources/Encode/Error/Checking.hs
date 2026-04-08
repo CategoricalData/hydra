@@ -116,6 +116,38 @@ module_ =
                                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.checking.notAFunctionTypeError")),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))},
               Core.Field {
+                Core.fieldName = (Core.Name "other"),
+                Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "y"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                    Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+                    Core.injectionField = Core.Field {
+                      Core.fieldName = (Core.Name "union"),
+                      Core.fieldTerm = (Core.TermRecord (Core.Record {
+                        Core.recordTypeName = (Core.Name "hydra.core.Injection"),
+                        Core.recordFields = [
+                          Core.Field {
+                            Core.fieldName = (Core.Name "typeName"),
+                            Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                              Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.error.checking.CheckingError"))}))},
+                          Core.Field {
+                            Core.fieldName = (Core.Name "field"),
+                            Core.fieldTerm = (Core.TermRecord (Core.Record {
+                              Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                              Core.recordFields = [
+                                Core.Field {
+                                  Core.fieldName = (Core.Name "name"),
+                                  Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                    Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "other"))}))},
+                                Core.Field {
+                                  Core.fieldName = (Core.Name "term"),
+                                  Core.fieldTerm = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.checking.otherCheckingError")),
+                                    Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))},
+              Core.Field {
                 Core.fieldName = (Core.Name "typeArityMismatch"),
                 Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "y"),
@@ -210,6 +242,38 @@ module_ =
                                   Core.fieldName = (Core.Name "term"),
                                   Core.fieldTerm = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.checking.unboundTypeVariablesError")),
+                                    Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))},
+              Core.Field {
+                Core.fieldName = (Core.Name "undefinedTermVariable"),
+                Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "y"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                    Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+                    Core.injectionField = Core.Field {
+                      Core.fieldName = (Core.Name "union"),
+                      Core.fieldTerm = (Core.TermRecord (Core.Record {
+                        Core.recordTypeName = (Core.Name "hydra.core.Injection"),
+                        Core.recordFields = [
+                          Core.Field {
+                            Core.fieldName = (Core.Name "typeName"),
+                            Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                              Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.error.checking.CheckingError"))}))},
+                          Core.Field {
+                            Core.fieldName = (Core.Name "field"),
+                            Core.fieldTerm = (Core.TermRecord (Core.Record {
+                              Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                              Core.recordFields = [
+                                Core.Field {
+                                  Core.fieldName = (Core.Name "name"),
+                                  Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                    Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "undefinedTermVariable"))}))},
+                                Core.Field {
+                                  Core.fieldName = (Core.Name "term"),
+                                  Core.fieldTerm = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.checking.undefinedTermVariableCheckingError")),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))},
               Core.Field {
                 Core.fieldName = (Core.Name "unequalTypes"),
@@ -338,6 +402,38 @@ module_ =
                                   Core.fieldName = (Core.Name "term"),
                                   Core.fieldTerm = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.checking.untypedLetBindingError")),
+                                    Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))},
+              Core.Field {
+                Core.fieldName = (Core.Name "untypedTermVariable"),
+                Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "y"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                    Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+                    Core.injectionField = Core.Field {
+                      Core.fieldName = (Core.Name "union"),
+                      Core.fieldTerm = (Core.TermRecord (Core.Record {
+                        Core.recordTypeName = (Core.Name "hydra.core.Injection"),
+                        Core.recordFields = [
+                          Core.Field {
+                            Core.fieldName = (Core.Name "typeName"),
+                            Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                              Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.error.checking.CheckingError"))}))},
+                          Core.Field {
+                            Core.fieldName = (Core.Name "field"),
+                            Core.fieldTerm = (Core.TermRecord (Core.Record {
+                              Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                              Core.recordFields = [
+                                Core.Field {
+                                  Core.fieldName = (Core.Name "name"),
+                                  Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                    Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "untypedTermVariable"))}))},
+                                Core.Field {
+                                  Core.fieldName = (Core.Name "term"),
+                                  Core.fieldTerm = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.checking.untypedTermVariableCheckingError")),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))}]})))),
           Packaging.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
@@ -445,7 +541,7 @@ module_ =
                                       Core.fieldName = (Core.Name "list"),
                                       Core.fieldTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.map"))),
+                                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.map")),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.core.type"))})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}}))}))),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
@@ -500,6 +596,77 @@ module_ =
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.error.checking.NotAFunctionTypeError")),
+              Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.checking.otherCheckingError"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.lambdaParameter = (Core.Name "x"),
+            Core.lambdaDomain = Nothing,
+            Core.lambdaBody = (Core.TermUnion (Core.Injection {
+              Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+              Core.injectionField = Core.Field {
+                Core.fieldName = (Core.Name "record"),
+                Core.fieldTerm = (Core.TermRecord (Core.Record {
+                  Core.recordTypeName = (Core.Name "hydra.core.Record"),
+                  Core.recordFields = [
+                    Core.Field {
+                      Core.fieldName = (Core.Name "typeName"),
+                      Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                        Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                        Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.error.checking.OtherCheckingError"))}))},
+                    Core.Field {
+                      Core.fieldName = (Core.Name "fields"),
+                      Core.fieldTerm = (Core.TermList [
+                        Core.TermRecord (Core.Record {
+                          Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                          Core.recordFields = [
+                            Core.Field {
+                              Core.fieldName = (Core.Name "name"),
+                              Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "path"))}))},
+                            Core.Field {
+                              Core.fieldName = (Core.Name "term"),
+                              Core.fieldTerm = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
+                                Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+                                    Core.projectionTypeName = (Core.Name "hydra.error.checking.OtherCheckingError"),
+                                    Core.projectionField = (Core.Name "path")})))),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
+                        (Core.TermRecord (Core.Record {
+                          Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                          Core.recordFields = [
+                            Core.Field {
+                              Core.fieldName = (Core.Name "name"),
+                              Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "message"))}))},
+                            Core.Field {
+                              Core.fieldName = (Core.Name "term"),
+                              Core.fieldTerm = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                  Core.lambdaParameter = (Core.Name "x"),
+                                  Core.lambdaDomain = Nothing,
+                                  Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                                    Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+                                    Core.injectionField = Core.Field {
+                                      Core.fieldName = (Core.Name "literal"),
+                                      Core.fieldTerm = (Core.TermUnion (Core.Injection {
+                                        Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
+                                        Core.injectionField = Core.Field {
+                                          Core.fieldName = (Core.Name "string"),
+                                          Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))}))),
+                                Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+                                    Core.projectionTypeName = (Core.Name "hydra.error.checking.OtherCheckingError"),
+                                    Core.projectionField = (Core.Name "message")})))),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
+            Core.typeSchemeVariables = [],
+            Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.error.checking.OtherCheckingError")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
@@ -623,7 +790,7 @@ module_ =
                                       Core.fieldName = (Core.Name "list"),
                                       Core.fieldTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.map"))),
+                                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.map")),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.core.type"))})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}}))}))),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
@@ -737,7 +904,7 @@ module_ =
                                       Core.fieldName = (Core.Name "set"),
                                       Core.fieldTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.map"))),
+                                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.map")),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.core.name"))})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "s"))}))}}))}))),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
@@ -766,6 +933,66 @@ module_ =
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.error.checking.UnboundTypeVariablesError")),
+              Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.checking.undefinedTermVariableCheckingError"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.lambdaParameter = (Core.Name "x"),
+            Core.lambdaDomain = Nothing,
+            Core.lambdaBody = (Core.TermUnion (Core.Injection {
+              Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+              Core.injectionField = Core.Field {
+                Core.fieldName = (Core.Name "record"),
+                Core.fieldTerm = (Core.TermRecord (Core.Record {
+                  Core.recordTypeName = (Core.Name "hydra.core.Record"),
+                  Core.recordFields = [
+                    Core.Field {
+                      Core.fieldName = (Core.Name "typeName"),
+                      Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                        Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                        Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.error.checking.UndefinedTermVariableCheckingError"))}))},
+                    Core.Field {
+                      Core.fieldName = (Core.Name "fields"),
+                      Core.fieldTerm = (Core.TermList [
+                        Core.TermRecord (Core.Record {
+                          Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                          Core.recordFields = [
+                            Core.Field {
+                              Core.fieldName = (Core.Name "name"),
+                              Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "path"))}))},
+                            Core.Field {
+                              Core.fieldName = (Core.Name "term"),
+                              Core.fieldTerm = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
+                                Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+                                    Core.projectionTypeName = (Core.Name "hydra.error.checking.UndefinedTermVariableCheckingError"),
+                                    Core.projectionField = (Core.Name "path")})))),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
+                        (Core.TermRecord (Core.Record {
+                          Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                          Core.recordFields = [
+                            Core.Field {
+                              Core.fieldName = (Core.Name "name"),
+                              Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "name"))}))},
+                            Core.Field {
+                              Core.fieldName = (Core.Name "term"),
+                              Core.fieldTerm = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.core.name")),
+                                Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+                                    Core.projectionTypeName = (Core.Name "hydra.error.checking.UndefinedTermVariableCheckingError"),
+                                    Core.projectionField = (Core.Name "name")})))),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
+            Core.typeSchemeVariables = [],
+            Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.error.checking.UndefinedTermVariableCheckingError")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
@@ -808,7 +1035,7 @@ module_ =
                                       Core.fieldName = (Core.Name "list"),
                                       Core.fieldTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                          Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.map"))),
+                                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.map")),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.core.type"))})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}}))}))),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
@@ -961,9 +1188,70 @@ module_ =
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.error.checking.UntypedLetBindingError")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.checking.untypedTermVariableCheckingError"),
+          Packaging.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.lambdaParameter = (Core.Name "x"),
+            Core.lambdaDomain = Nothing,
+            Core.lambdaBody = (Core.TermUnion (Core.Injection {
+              Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+              Core.injectionField = Core.Field {
+                Core.fieldName = (Core.Name "record"),
+                Core.fieldTerm = (Core.TermRecord (Core.Record {
+                  Core.recordTypeName = (Core.Name "hydra.core.Record"),
+                  Core.recordFields = [
+                    Core.Field {
+                      Core.fieldName = (Core.Name "typeName"),
+                      Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                        Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                        Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.error.checking.UntypedTermVariableCheckingError"))}))},
+                    Core.Field {
+                      Core.fieldName = (Core.Name "fields"),
+                      Core.fieldTerm = (Core.TermList [
+                        Core.TermRecord (Core.Record {
+                          Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                          Core.recordFields = [
+                            Core.Field {
+                              Core.fieldName = (Core.Name "name"),
+                              Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "path"))}))},
+                            Core.Field {
+                              Core.fieldName = (Core.Name "term"),
+                              Core.fieldTerm = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
+                                Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+                                    Core.projectionTypeName = (Core.Name "hydra.error.checking.UntypedTermVariableCheckingError"),
+                                    Core.projectionField = (Core.Name "path")})))),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
+                        (Core.TermRecord (Core.Record {
+                          Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                          Core.recordFields = [
+                            Core.Field {
+                              Core.fieldName = (Core.Name "name"),
+                              Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "name"))}))},
+                            Core.Field {
+                              Core.fieldName = (Core.Name "term"),
+                              Core.fieldTerm = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.core.name")),
+                                Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+                                    Core.projectionTypeName = (Core.Name "hydra.error.checking.UntypedTermVariableCheckingError"),
+                                    Core.projectionField = (Core.Name "name")})))),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
+          Packaging.termDefinitionType = (Just (Core.TypeScheme {
+            Core.typeSchemeVariables = [],
+            Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.error.checking.UntypedTermVariableCheckingError")),
+              Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))}))],
       Packaging.moduleTermDependencies = [
         Packaging.Namespace "hydra.encode.core",
+        (Packaging.Namespace "hydra.encode.paths"),
         (Packaging.Namespace "hydra.encode.typing"),
         (Packaging.Namespace "hydra.encode.variants")],
       Packaging.moduleTypeDependencies = [

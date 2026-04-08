@@ -141,16 +141,11 @@
                                                                                                                                                                 "term": {
                                                                                                                                                                   "union": {
                                                                                                                                                                     "field": {
-                                                                                                                                                                      "name": "function",
+                                                                                                                                                                      "name": "variable",
                                                                                                                                                                       "term": {
-                                                                                                                                                                        "union": {
-                                                                                                                                                                          "field": {
-                                                                                                                                                                            "name": "primitive",
-                                                                                                                                                                            "term": {
-                                                                                                                                                                              "wrap": {
-                                                                                                                                                                                "body": {"literal": {"string": "hydra.lib.math.add"}},
-                                                                                                                                                                                "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                          "typeName": "hydra.core.Function"}}},
+                                                                                                                                                                        "wrap": {
+                                                                                                                                                                          "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                                                                          "typeName": "hydra.core.Name"}}},
                                                                                                                                                                     "typeName": "hydra.core.Term"}}},
                                                                                                                                                               {
                                                                                                                                                                 "name": "argument",
@@ -211,16 +206,11 @@
                                                                                                                                                     "term": {
                                                                                                                                                       "union": {
                                                                                                                                                         "field": {
-                                                                                                                                                          "name": "function",
+                                                                                                                                                          "name": "variable",
                                                                                                                                                           "term": {
-                                                                                                                                                            "union": {
-                                                                                                                                                              "field": {
-                                                                                                                                                                "name": "primitive",
-                                                                                                                                                                "term": {
-                                                                                                                                                                  "wrap": {
-                                                                                                                                                                    "body": {"literal": {"string": "hydra.lib.math.mul"}},
-                                                                                                                                                                    "typeName": "hydra.core.Name"}}},
-                                                                                                                                                              "typeName": "hydra.core.Function"}}},
+                                                                                                                                                            "wrap": {
+                                                                                                                                                              "body": {"literal": {"string": "hydra.lib.math.mul"}},
+                                                                                                                                                              "typeName": "hydra.core.Name"}}},
                                                                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                                                                   {
                                                                                                                                                     "name": "argument",
@@ -364,16 +354,11 @@
                                                                                                                                   "term": {
                                                                                                                                     "union": {
                                                                                                                                       "field": {
-                                                                                                                                        "name": "function",
+                                                                                                                                        "name": "variable",
                                                                                                                                         "term": {
-                                                                                                                                          "union": {
-                                                                                                                                            "field": {
-                                                                                                                                              "name": "primitive",
-                                                                                                                                              "term": {
-                                                                                                                                                "wrap": {
-                                                                                                                                                  "body": {"literal": {"string": "hydra.lib.math.mul"}},
-                                                                                                                                                  "typeName": "hydra.core.Name"}}},
-                                                                                                                                            "typeName": "hydra.core.Function"}}},
+                                                                                                                                          "wrap": {
+                                                                                                                                            "body": {"literal": {"string": "hydra.lib.math.mul"}},
+                                                                                                                                            "typeName": "hydra.core.Name"}}},
                                                                                                                                       "typeName": "hydra.core.Term"}}},
                                                                                                                                 {
                                                                                                                                   "name": "argument",
@@ -489,16 +474,11 @@
                                                                                                                                   "term": {
                                                                                                                                     "union": {
                                                                                                                                       "field": {
-                                                                                                                                        "name": "function",
+                                                                                                                                        "name": "variable",
                                                                                                                                         "term": {
-                                                                                                                                          "union": {
-                                                                                                                                            "field": {
-                                                                                                                                              "name": "primitive",
-                                                                                                                                              "term": {
-                                                                                                                                                "wrap": {
-                                                                                                                                                  "body": {"literal": {"string": "hydra.lib.math.add"}},
-                                                                                                                                                  "typeName": "hydra.core.Name"}}},
-                                                                                                                                            "typeName": "hydra.core.Function"}}},
+                                                                                                                                          "wrap": {
+                                                                                                                                            "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                                            "typeName": "hydra.core.Name"}}},
                                                                                                                                       "typeName": "hydra.core.Term"}}},
                                                                                                                                 {
                                                                                                                                   "name": "argument",
@@ -721,16 +701,11 @@
                                                                                                                                                                   "term": {
                                                                                                                                                                     "union": {
                                                                                                                                                                       "field": {
-                                                                                                                                                                        "name": "function",
+                                                                                                                                                                        "name": "variable",
                                                                                                                                                                         "term": {
-                                                                                                                                                                          "union": {
-                                                                                                                                                                            "field": {
-                                                                                                                                                                              "name": "primitive",
-                                                                                                                                                                              "term": {
-                                                                                                                                                                                "wrap": {
-                                                                                                                                                                                  "body": {"literal": {"string": "hydra.lib.math.add"}},
-                                                                                                                                                                                  "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                            "typeName": "hydra.core.Function"}}},
+                                                                                                                                                                          "wrap": {
+                                                                                                                                                                            "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                                                                            "typeName": "hydra.core.Name"}}},
                                                                                                                                                                       "typeName": "hydra.core.Term"}}},
                                                                                                                                                                 {
                                                                                                                                                                   "name": "argument",
@@ -894,16 +869,11 @@
                                                                                                                                                 "term": {
                                                                                                                                                   "union": {
                                                                                                                                                     "field": {
-                                                                                                                                                      "name": "function",
+                                                                                                                                                      "name": "variable",
                                                                                                                                                       "term": {
-                                                                                                                                                        "union": {
-                                                                                                                                                          "field": {
-                                                                                                                                                            "name": "primitive",
-                                                                                                                                                            "term": {
-                                                                                                                                                              "wrap": {
-                                                                                                                                                                "body": {"literal": {"string": "hydra.lib.math.add"}},
-                                                                                                                                                                "typeName": "hydra.core.Name"}}},
-                                                                                                                                                          "typeName": "hydra.core.Function"}}},
+                                                                                                                                                        "wrap": {
+                                                                                                                                                          "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                                                          "typeName": "hydra.core.Name"}}},
                                                                                                                                                     "typeName": "hydra.core.Term"}}},
                                                                                                                                               {
                                                                                                                                                 "name": "argument",
@@ -5826,16 +5796,11 @@
                                                                                                                                                                                     "term": {
                                                                                                                                                                                       "union": {
                                                                                                                                                                                         "field": {
-                                                                                                                                                                                          "name": "function",
+                                                                                                                                                                                          "name": "variable",
                                                                                                                                                                                           "term": {
-                                                                                                                                                                                            "union": {
-                                                                                                                                                                                              "field": {
-                                                                                                                                                                                                "name": "primitive",
-                                                                                                                                                                                                "term": {
-                                                                                                                                                                                                  "wrap": {
-                                                                                                                                                                                                    "body": {"literal": {"string": "hydra.lib.math.add"}},
-                                                                                                                                                                                                    "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                                              "typeName": "hydra.core.Function"}}},
+                                                                                                                                                                                            "wrap": {
+                                                                                                                                                                                              "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                                                                                              "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                                                                                                   {
                                                                                                                                                                                     "name": "argument",
@@ -5860,16 +5825,11 @@
                                                                                                                                                                                                                 "term": {
                                                                                                                                                                                                                   "union": {
                                                                                                                                                                                                                     "field": {
-                                                                                                                                                                                                                      "name": "function",
+                                                                                                                                                                                                                      "name": "variable",
                                                                                                                                                                                                                       "term": {
-                                                                                                                                                                                                                        "union": {
-                                                                                                                                                                                                                          "field": {
-                                                                                                                                                                                                                            "name": "primitive",
-                                                                                                                                                                                                                            "term": {
-                                                                                                                                                                                                                              "wrap": {
-                                                                                                                                                                                                                                "body": {"literal": {"string": "hydra.lib.math.add"}},
-                                                                                                                                                                                                                                "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                                                                          "typeName": "hydra.core.Function"}}},
+                                                                                                                                                                                                                        "wrap": {
+                                                                                                                                                                                                                          "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                                                                                                                          "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                                                     "typeName": "hydra.core.Term"}}},
                                                                                                                                                                                                               {
                                                                                                                                                                                                                 "name": "argument",
@@ -6519,16 +6479,11 @@
                                                                                                                                                                                         "term": {
                                                                                                                                                                                           "union": {
                                                                                                                                                                                             "field": {
-                                                                                                                                                                                              "name": "function",
+                                                                                                                                                                                              "name": "variable",
                                                                                                                                                                                               "term": {
-                                                                                                                                                                                                "union": {
-                                                                                                                                                                                                  "field": {
-                                                                                                                                                                                                    "name": "primitive",
-                                                                                                                                                                                                    "term": {
-                                                                                                                                                                                                      "wrap": {
-                                                                                                                                                                                                        "body": {"literal": {"string": "hydra.lib.math.add"}},
-                                                                                                                                                                                                        "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                                                  "typeName": "hydra.core.Function"}}},
+                                                                                                                                                                                                "wrap": {
+                                                                                                                                                                                                  "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                                                                                                  "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                                                                                                       {
                                                                                                                                                                                         "name": "argument",
@@ -6553,16 +6508,11 @@
                                                                                                                                                                                                                     "term": {
                                                                                                                                                                                                                       "union": {
                                                                                                                                                                                                                         "field": {
-                                                                                                                                                                                                                          "name": "function",
+                                                                                                                                                                                                                          "name": "variable",
                                                                                                                                                                                                                           "term": {
-                                                                                                                                                                                                                            "union": {
-                                                                                                                                                                                                                              "field": {
-                                                                                                                                                                                                                                "name": "primitive",
-                                                                                                                                                                                                                                "term": {
-                                                                                                                                                                                                                                  "wrap": {
-                                                                                                                                                                                                                                    "body": {"literal": {"string": "hydra.lib.math.add"}},
-                                                                                                                                                                                                                                    "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                                                                              "typeName": "hydra.core.Function"}}},
+                                                                                                                                                                                                                            "wrap": {
+                                                                                                                                                                                                                              "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                                                                                                                              "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                                                                                                                                   {
                                                                                                                                                                                                                     "name": "argument",
@@ -6904,16 +6854,11 @@
                                                                                                                                                                                     "term": {
                                                                                                                                                                                       "union": {
                                                                                                                                                                                         "field": {
-                                                                                                                                                                                          "name": "function",
+                                                                                                                                                                                          "name": "variable",
                                                                                                                                                                                           "term": {
-                                                                                                                                                                                            "union": {
-                                                                                                                                                                                              "field": {
-                                                                                                                                                                                                "name": "primitive",
-                                                                                                                                                                                                "term": {
-                                                                                                                                                                                                  "wrap": {
-                                                                                                                                                                                                    "body": {"literal": {"string": "hydra.lib.math.add"}},
-                                                                                                                                                                                                    "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                                              "typeName": "hydra.core.Function"}}},
+                                                                                                                                                                                            "wrap": {
+                                                                                                                                                                                              "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                                                                                              "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                                                                                                   {
                                                                                                                                                                                     "name": "argument",
@@ -7545,16 +7490,11 @@
                                                                                                                                                                     "term": {
                                                                                                                                                                       "union": {
                                                                                                                                                                         "field": {
-                                                                                                                                                                          "name": "function",
+                                                                                                                                                                          "name": "variable",
                                                                                                                                                                           "term": {
-                                                                                                                                                                            "union": {
-                                                                                                                                                                              "field": {
-                                                                                                                                                                                "name": "primitive",
-                                                                                                                                                                                "term": {
-                                                                                                                                                                                  "wrap": {
-                                                                                                                                                                                    "body": {"literal": {"string": "hydra.lib.math.add"}},
-                                                                                                                                                                                    "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                              "typeName": "hydra.core.Function"}}},
+                                                                                                                                                                            "wrap": {
+                                                                                                                                                                              "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                                                                              "typeName": "hydra.core.Name"}}},
                                                                                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                                                                                   {
                                                                                                                                                                     "name": "argument",
@@ -8097,16 +8037,11 @@
                                                                                                                                                                                                         "term": {
                                                                                                                                                                                                           "union": {
                                                                                                                                                                                                             "field": {
-                                                                                                                                                                                                              "name": "function",
+                                                                                                                                                                                                              "name": "variable",
                                                                                                                                                                                                               "term": {
-                                                                                                                                                                                                                "union": {
-                                                                                                                                                                                                                  "field": {
-                                                                                                                                                                                                                    "name": "primitive",
-                                                                                                                                                                                                                    "term": {
-                                                                                                                                                                                                                      "wrap": {
-                                                                                                                                                                                                                        "body": {"literal": {"string": "hydra.lib.math.add"}},
-                                                                                                                                                                                                                        "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                                                                  "typeName": "hydra.core.Function"}}},
+                                                                                                                                                                                                                "wrap": {
+                                                                                                                                                                                                                  "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                                                                                                                  "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                                                                                                                       {
                                                                                                                                                                                                         "name": "argument",
@@ -8144,16 +8079,11 @@
                                                                                                                                                                                                                       "term": {
                                                                                                                                                                                                                         "union": {
                                                                                                                                                                                                                           "field": {
-                                                                                                                                                                                                                            "name": "function",
+                                                                                                                                                                                                                            "name": "variable",
                                                                                                                                                                                                                             "term": {
-                                                                                                                                                                                                                              "union": {
-                                                                                                                                                                                                                                "field": {
-                                                                                                                                                                                                                                  "name": "primitive",
-                                                                                                                                                                                                                                  "term": {
-                                                                                                                                                                                                                                    "wrap": {
-                                                                                                                                                                                                                                      "body": {"literal": {"string": "hydra.lib.math.add"}},
-                                                                                                                                                                                                                                      "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                                                                                "typeName": "hydra.core.Function"}}},
+                                                                                                                                                                                                                              "wrap": {
+                                                                                                                                                                                                                                "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                                                                                                                                "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                                                                                                                                     {
                                                                                                                                                                                                                       "name": "argument",
@@ -8947,16 +8877,11 @@
                                                                                                                                                                                         "term": {
                                                                                                                                                                                           "union": {
                                                                                                                                                                                             "field": {
-                                                                                                                                                                                              "name": "function",
+                                                                                                                                                                                              "name": "variable",
                                                                                                                                                                                               "term": {
-                                                                                                                                                                                                "union": {
-                                                                                                                                                                                                  "field": {
-                                                                                                                                                                                                    "name": "primitive",
-                                                                                                                                                                                                    "term": {
-                                                                                                                                                                                                      "wrap": {
-                                                                                                                                                                                                        "body": {"literal": {"string": "hydra.lib.math.add"}},
-                                                                                                                                                                                                        "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                                                  "typeName": "hydra.core.Function"}}},
+                                                                                                                                                                                                "wrap": {
+                                                                                                                                                                                                  "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                                                                                                  "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                                                                                                       {
                                                                                                                                                                                         "name": "argument",
@@ -8994,16 +8919,11 @@
                                                                                                                                                                                                       "term": {
                                                                                                                                                                                                         "union": {
                                                                                                                                                                                                           "field": {
-                                                                                                                                                                                                            "name": "function",
+                                                                                                                                                                                                            "name": "variable",
                                                                                                                                                                                                             "term": {
-                                                                                                                                                                                                              "union": {
-                                                                                                                                                                                                                "field": {
-                                                                                                                                                                                                                  "name": "primitive",
-                                                                                                                                                                                                                  "term": {
-                                                                                                                                                                                                                    "wrap": {
-                                                                                                                                                                                                                      "body": {"literal": {"string": "hydra.lib.math.add"}},
-                                                                                                                                                                                                                      "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                                                                "typeName": "hydra.core.Function"}}},
+                                                                                                                                                                                                              "wrap": {
+                                                                                                                                                                                                                "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                                                                                                                "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                                                                                                                     {
                                                                                                                                                                                                       "name": "argument",
@@ -9597,16 +9517,11 @@
                                                                                                                     "term": {
                                                                                                                       "union": {
                                                                                                                         "field": {
-                                                                                                                          "name": "function",
+                                                                                                                          "name": "variable",
                                                                                                                           "term": {
-                                                                                                                            "union": {
-                                                                                                                              "field": {
-                                                                                                                                "name": "primitive",
-                                                                                                                                "term": {
-                                                                                                                                  "wrap": {
-                                                                                                                                    "body": {"literal": {"string": "hydra.lib.math.add"}},
-                                                                                                                                    "typeName": "hydra.core.Name"}}},
-                                                                                                                              "typeName": "hydra.core.Function"}}},
+                                                                                                                            "wrap": {
+                                                                                                                              "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                              "typeName": "hydra.core.Name"}}},
                                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                                   {
                                                                                                                     "name": "argument",
@@ -9750,16 +9665,11 @@
                                                                                                                 "term": {
                                                                                                                   "union": {
                                                                                                                     "field": {
-                                                                                                                      "name": "function",
+                                                                                                                      "name": "variable",
                                                                                                                       "term": {
-                                                                                                                        "union": {
-                                                                                                                          "field": {
-                                                                                                                            "name": "primitive",
-                                                                                                                            "term": {
-                                                                                                                              "wrap": {
-                                                                                                                                "body": {"literal": {"string": "hydra.lib.math.add"}},
-                                                                                                                                "typeName": "hydra.core.Name"}}},
-                                                                                                                          "typeName": "hydra.core.Function"}}},
+                                                                                                                        "wrap": {
+                                                                                                                          "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                          "typeName": "hydra.core.Name"}}},
                                                                                                                     "typeName": "hydra.core.Term"}}},
                                                                                                               {
                                                                                                                 "name": "argument",
@@ -12082,16 +11992,11 @@
                                                                                                                                                                                                         "term": {
                                                                                                                                                                                                           "union": {
                                                                                                                                                                                                             "field": {
-                                                                                                                                                                                                              "name": "function",
+                                                                                                                                                                                                              "name": "variable",
                                                                                                                                                                                                               "term": {
-                                                                                                                                                                                                                "union": {
-                                                                                                                                                                                                                  "field": {
-                                                                                                                                                                                                                    "name": "primitive",
-                                                                                                                                                                                                                    "term": {
-                                                                                                                                                                                                                      "wrap": {
-                                                                                                                                                                                                                        "body": {"literal": {"string": "hydra.lib.math.add"}},
-                                                                                                                                                                                                                        "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                                                                  "typeName": "hydra.core.Function"}}},
+                                                                                                                                                                                                                "wrap": {
+                                                                                                                                                                                                                  "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                                                                                                                  "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                                                                                                                       {
                                                                                                                                                                                                         "name": "argument",
@@ -12129,16 +12034,11 @@
                                                                                                                                                                                                                       "term": {
                                                                                                                                                                                                                         "union": {
                                                                                                                                                                                                                           "field": {
-                                                                                                                                                                                                                            "name": "function",
+                                                                                                                                                                                                                            "name": "variable",
                                                                                                                                                                                                                             "term": {
-                                                                                                                                                                                                                              "union": {
-                                                                                                                                                                                                                                "field": {
-                                                                                                                                                                                                                                  "name": "primitive",
-                                                                                                                                                                                                                                  "term": {
-                                                                                                                                                                                                                                    "wrap": {
-                                                                                                                                                                                                                                      "body": {"literal": {"string": "hydra.lib.math.add"}},
-                                                                                                                                                                                                                                      "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                                                                                "typeName": "hydra.core.Function"}}},
+                                                                                                                                                                                                                              "wrap": {
+                                                                                                                                                                                                                                "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                                                                                                                                "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                                                                                                                                     {
                                                                                                                                                                                                                       "name": "argument",
@@ -13012,16 +12912,11 @@
                                                                                                                                                                                         "term": {
                                                                                                                                                                                           "union": {
                                                                                                                                                                                             "field": {
-                                                                                                                                                                                              "name": "function",
+                                                                                                                                                                                              "name": "variable",
                                                                                                                                                                                               "term": {
-                                                                                                                                                                                                "union": {
-                                                                                                                                                                                                  "field": {
-                                                                                                                                                                                                    "name": "primitive",
-                                                                                                                                                                                                    "term": {
-                                                                                                                                                                                                      "wrap": {
-                                                                                                                                                                                                        "body": {"literal": {"string": "hydra.lib.math.add"}},
-                                                                                                                                                                                                        "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                                                  "typeName": "hydra.core.Function"}}},
+                                                                                                                                                                                                "wrap": {
+                                                                                                                                                                                                  "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                                                                                                  "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                                                                                                       {
                                                                                                                                                                                         "name": "argument",
@@ -13059,16 +12954,11 @@
                                                                                                                                                                                                       "term": {
                                                                                                                                                                                                         "union": {
                                                                                                                                                                                                           "field": {
-                                                                                                                                                                                                            "name": "function",
+                                                                                                                                                                                                            "name": "variable",
                                                                                                                                                                                                             "term": {
-                                                                                                                                                                                                              "union": {
-                                                                                                                                                                                                                "field": {
-                                                                                                                                                                                                                  "name": "primitive",
-                                                                                                                                                                                                                  "term": {
-                                                                                                                                                                                                                    "wrap": {
-                                                                                                                                                                                                                      "body": {"literal": {"string": "hydra.lib.math.add"}},
-                                                                                                                                                                                                                      "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                                                                "typeName": "hydra.core.Function"}}},
+                                                                                                                                                                                                              "wrap": {
+                                                                                                                                                                                                                "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                                                                                                                "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                                                                                                                     {
                                                                                                                                                                                                       "name": "argument",
@@ -13502,16 +13392,11 @@
                                                                                                                                                                                                   "term": {
                                                                                                                                                                                                     "union": {
                                                                                                                                                                                                       "field": {
-                                                                                                                                                                                                        "name": "function",
+                                                                                                                                                                                                        "name": "variable",
                                                                                                                                                                                                         "term": {
-                                                                                                                                                                                                          "union": {
-                                                                                                                                                                                                            "field": {
-                                                                                                                                                                                                              "name": "primitive",
-                                                                                                                                                                                                              "term": {
-                                                                                                                                                                                                                "wrap": {
-                                                                                                                                                                                                                  "body": {"literal": {"string": "hydra.lib.math.add"}},
-                                                                                                                                                                                                                  "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                                                            "typeName": "hydra.core.Function"}}},
+                                                                                                                                                                                                          "wrap": {
+                                                                                                                                                                                                            "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                                                                                                            "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                                       "typeName": "hydra.core.Term"}}},
                                                                                                                                                                                                 {
                                                                                                                                                                                                   "name": "argument",
@@ -14238,16 +14123,11 @@
                                                                                                                                                                     "term": {
                                                                                                                                                                       "union": {
                                                                                                                                                                         "field": {
-                                                                                                                                                                          "name": "function",
+                                                                                                                                                                          "name": "variable",
                                                                                                                                                                           "term": {
-                                                                                                                                                                            "union": {
-                                                                                                                                                                              "field": {
-                                                                                                                                                                                "name": "primitive",
-                                                                                                                                                                                "term": {
-                                                                                                                                                                                  "wrap": {
-                                                                                                                                                                                    "body": {"literal": {"string": "hydra.lib.math.add"}},
-                                                                                                                                                                                    "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                              "typeName": "hydra.core.Function"}}},
+                                                                                                                                                                            "wrap": {
+                                                                                                                                                                              "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                                                                              "typeName": "hydra.core.Name"}}},
                                                                                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                                                                                   {
                                                                                                                                                                     "name": "argument",

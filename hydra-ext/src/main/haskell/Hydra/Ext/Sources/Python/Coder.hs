@@ -141,6 +141,9 @@ module_ = Module ns definitions
       toDefinition encodeField,
       toDefinition encodeFieldType,
       toDefinition encodeFloatValue,
+      toDefinition encodeFloatValue_encodeFloat32,
+      toDefinition encodeFloatValue_encodeFloat64,
+      toDefinition encodeFloatValue_pySpecialFloat,
       toDefinition encodeForallType,
       toDefinition encodeFunction,
       toDefinition encodeFunctionDefinition,
@@ -248,7 +251,7 @@ module_ = Module ns definitions
 -- | Analyze a function term with Python-specific Graph management.
 --   This is a wrapper around Analysis.analyzeFunctionTermWith that provides the Python-specific
 --   Graph getteranalyzePythonFunction/setter and Python-specific binding metadata (which skips trivial bindings).
-analyzePythonFunction :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Term -> Either (InContext Error) (FunctionStructure PyHelpers.PythonEnvironment))
+analyzePythonFunction :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Term -> Either Error (FunctionStructure PyHelpers.PythonEnvironment))
 analyzePythonFunction = def "analyzePythonFunction" $
   doc "Analyze a function term with Python-specific Graph management" $
   lambda "cx" $ lambda "env" $ lambda "term" $
@@ -535,7 +538,7 @@ emptyMetadata = def "emptyMetadata" $
 --   - Variable applications
 encodeApplication :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
   -> Application
-  -> Either (InContext Error) Py.Expression)
+  -> Either Error Py.Expression)
 encodeApplication = def "encodeApplication" $
   doc "Encode a function application to a Python expression" $
   "cx" ~> "env" ~> "app" ~>
@@ -570,7 +573,7 @@ encodeApplicationInner :: TTermDefinition (Context -> PyHelpers.PythonEnvironmen
   -> TTerm Term  -- fun
   -> [Py.Expression]  -- hargs
   -> [Py.Expression]  -- rargs
-  -> Either (InContext Error) (Py.Expression, [Py.Expression]))
+  -> Either Error (Py.Expression, [Py.Expression]))
 encodeApplicationInner = def "encodeApplicationInner" $
   doc "Inner helper for encodeApplication" $
   "cx" ~> "env" ~> "fun" ~> "hargs" ~> "rargs" ~>
@@ -605,47 +608,49 @@ encodeApplicationInner = def "encodeApplicationInner" $
                   (right $ pair (var "valueExpr") (list ([] :: [TTerm Py.Expression])))
                   (right $ pair (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "valueExpr") @@ var "allArgs")
                                   (list ([] :: [TTerm Py.Expression])))],
-          -- Primitive: encode variable with args (wrap lazy arguments for primitives like ifElse)
-          _Function_primitive>>: "name" ~>
-            "wrappedArgs" <~ (wrapLazyArguments @@ var "name" @@ var "hargs") $
-            "expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "wrappedArgs") $
-            right $ pair (var "expr") (var "rargs"),
           -- Other functions: encode and apply
           _Function_lambda>>: constant $
             "pfun" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "fun") $
             right $ pair (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pfun") @@ var "hargs") (var "rargs")],
-      -- Variable: encode and apply
+      -- Variable: encode and apply. If variable resolves to a primitive, wrap lazy args.
       _Term_variable>>: "name" ~>
         "g" <~ (pythonEnvironmentGetGraph @@ var "env") $
         "allArgs" <~ (Lists.concat2 (var "hargs") (var "rargs")) $
-        Maybes.maybe
-          -- Not in graph elements: use encodeVariable
-          ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "hargs") $
-            right $ pair (var "expr") (var "rargs"))
-          -- In graph elements: check arity
-          ("el" ~>
-            Maybes.maybe
-              -- No type: use encodeVariable
-              ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "hargs") $
-                right $ pair (var "expr") (var "rargs"))
-              -- Has type: use arity
-              ("ts" ~>
-                "elArity" <~ (Arity.typeSchemeArity @@ var "ts") $
-                "consumeCount" <~ (Math.min (var "elArity") (Lists.length $ var "allArgs")) $
-                "consumedArgs" <~ (Lists.take (var "consumeCount") (var "allArgs")) $
-                "remainingArgs" <~ (Lists.drop (var "consumeCount") (var "allArgs")) $
-                Logic.ifElse (Lists.null $ var "consumedArgs")
-                  ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ (list ([] :: [TTerm Py.Expression]))) $
-                    right $ pair (var "expr") (var "rargs"))
-                  (right $ pair
-                    (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name")) @@ var "consumedArgs")
-                    (var "remainingArgs")))
-              (Core.bindingType $ var "el"))
-          (Lexical.lookupBinding @@ var "g" @@ var "name")]
+        Maybes.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
+          -- Not a primitive: use original logic
+          (Maybes.maybe
+            -- Not in graph elements: use encodeVariable
+            ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "hargs") $
+              right $ pair (var "expr") (var "rargs"))
+            -- In graph elements: check arity
+            ("el" ~>
+              Maybes.maybe
+                -- No type: use encodeVariable
+                ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "hargs") $
+                  right $ pair (var "expr") (var "rargs"))
+                -- Has type: use arity
+                ("ts" ~>
+                  "elArity" <~ (Arity.typeSchemeArity @@ var "ts") $
+                  "consumeCount" <~ (Math.min (var "elArity") (Lists.length $ var "allArgs")) $
+                  "consumedArgs" <~ (Lists.take (var "consumeCount") (var "allArgs")) $
+                  "remainingArgs" <~ (Lists.drop (var "consumeCount") (var "allArgs")) $
+                  Logic.ifElse (Lists.null $ var "consumedArgs")
+                    ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ (list ([] :: [TTerm Py.Expression]))) $
+                      right $ pair (var "expr") (var "rargs"))
+                    (right $ pair
+                      (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name")) @@ var "consumedArgs")
+                      (var "remainingArgs")))
+                (Core.bindingType $ var "el"))
+            (Lexical.lookupBinding @@ var "g" @@ var "name"))
+          -- Is a primitive: wrap lazy arguments and encode
+          (lambda "_prim" $
+            "wrappedArgs" <~ (wrapLazyArguments @@ var "name" @@ var "hargs") $
+            "expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "wrappedArgs") $
+            right $ pair (var "expr") (var "rargs"))]
 
 -- | Encode an application type to Python expression.
 --   Gathers all type arguments and encodes as primary[args].
-encodeApplicationType :: TTermDefinition (PyHelpers.PythonEnvironment -> ApplicationType -> Either (InContext Error) Py.Expression)
+encodeApplicationType :: TTermDefinition (PyHelpers.PythonEnvironment -> ApplicationType -> Either Error Py.Expression)
 encodeApplicationType = def "encodeApplicationType" $
   doc "Encode an application type to Python expression" $
   "env" ~> "at" ~>
@@ -687,7 +692,7 @@ encodeApplicationType = def "encodeApplicationType" $
 --   2. Hoisted bindings: lambdas wrapping a case statement application (from hoisting)
 --   3. Case elimination functions: case statements as values
 --   4. Other terms: falls back to encodeTermMultiline
-encodeBindingAs :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Binding -> Either (InContext Error) Py.Statement)
+encodeBindingAs :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Binding -> Either Error Py.Statement)
 encodeBindingAs = def "encodeBindingAs" $
   doc "Encode a binding as a Python statement (function definition or assignment)" $
   "cx" ~> "env" ~> "binding" ~>
@@ -855,7 +860,7 @@ encodeBindingAs = def "encodeBindingAs" $
 --   the Staging version handles that.
 encodeBindingAsAssignment :: TTermDefinition (Context -> Bool -> PyHelpers.PythonEnvironment
   -> Binding
-  -> Either (InContext Error) Py.NamedExpression)
+  -> Either Error Py.NamedExpression)
 encodeBindingAsAssignment = def "encodeBindingAsAssignment" $
   doc "Encode a binding as a walrus operator assignment" $
   "cx" ~> "allowThunking" ~> "env" ~> "binding" ~>
@@ -882,7 +887,7 @@ encodeBindingAsAssignment = def "encodeBindingAsAssignment" $
     right $ PyDsl.namedExpressionAssignment $ PyDsl.assignmentExpression (var "pyName") (var "pterm")
 
 -- | Encode bindings as function definitions
-encodeBindingsAsDefs :: TTermDefinition (PyHelpers.PythonEnvironment -> (PyHelpers.PythonEnvironment -> Binding -> Either (InContext Error) Py.Statement) -> [Binding] -> Either (InContext Error) [Py.Statement])
+encodeBindingsAsDefs :: TTermDefinition (PyHelpers.PythonEnvironment -> (PyHelpers.PythonEnvironment -> Binding -> Either Error Py.Statement) -> [Binding] -> Either Error [Py.Statement])
 encodeBindingsAsDefs = def "encodeBindingsAsDefs" $
   doc "Encode bindings as function definitions" $
   "env" ~> "encodeBinding" ~> "bindings" ~>
@@ -893,7 +898,7 @@ encodeBindingsAsDefs = def "encodeBindingsAsDefs" $
 --   The encodeBody function is passed in to allow different encoding strategies
 --   (inline vs multiline).
 --   Uses withLambda to extend Graph with the case binding variable.
-encodeCaseBlock :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> [FieldType] -> Bool -> (PyHelpers.PythonEnvironment -> Term -> Either (InContext Error) [Py.Statement]) -> Field -> Either (InContext Error) Py.CaseBlock)
+encodeCaseBlock :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> [FieldType] -> Bool -> (PyHelpers.PythonEnvironment -> Term -> Either Error [Py.Statement]) -> Field -> Either Error Py.CaseBlock)
 encodeCaseBlock = def "encodeCaseBlock" $
   doc "Encode a single case (Field) into a CaseBlock for a match statement" $
   "cx" ~> "env" ~> "tname" ~> "rowType" ~> "isEnum" ~> "encodeBody" ~> "field" ~>
@@ -952,7 +957,7 @@ encodeCaseBlock = def "encodeCaseBlock" $
 --   Takes: encoder function, isFull (whether all variants are covered), optional default term, type name
 --   Returns: list of CaseBlocks (empty or containing the wildcard case)
 --   The encoder function is passed in to allow calling from Staging code that provides encodeTermInline.
-encodeDefaultCaseBlock :: TTermDefinition ((Term -> Either (InContext Error) Py.Expression) -> Bool -> Maybe Term -> Name -> Either (InContext Error) [Py.CaseBlock])
+encodeDefaultCaseBlock :: TTermDefinition ((Term -> Either Error Py.Expression) -> Bool -> Maybe Term -> Name -> Either Error [Py.CaseBlock])
 encodeDefaultCaseBlock = def "encodeDefaultCaseBlock" $
   doc "Encode the default (wildcard) case block for a match statement" $
   "encodeTerm" ~> "isFull" ~> "mdflt" ~> "tname" ~>
@@ -972,7 +977,7 @@ encodeDefaultCaseBlock = def "encodeDefaultCaseBlock" $
 -- | Encode a definition (term or type) to Python statements
 encodeDefinition :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
   -> Definition
-  -> Either (InContext Error) [[Py.Statement]])
+  -> Either Error [[Py.Statement]])
 encodeDefinition = def "encodeDefinition" $
   doc "Encode a definition (term or type) to Python statements" $
   "cx" ~> "env" ~> "def_" ~>
@@ -996,7 +1001,7 @@ encodeDefinition = def "encodeDefinition" $
         encodeTypeAssignment @@ var "cx" @@ var "env" @@ var "name" @@ var "typ" @@ var "normComment"]
 
 -- | Encode an enum value assignment: ENUM_VALUE = Name("enum_value")
-encodeEnumValueAssignment :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> FieldType -> Either (InContext Error) [Py.Statement])
+encodeEnumValueAssignment :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> FieldType -> Either Error [Py.Statement])
 encodeEnumValueAssignment = def "encodeEnumValueAssignment" $
   doc "Encode an enum value assignment statement with optional comment" $
   "cx" ~> "env" ~> "fieldType" ~>
@@ -1014,7 +1019,7 @@ encodeEnumValueAssignment = def "encodeEnumValueAssignment" $
       ("c" ~> list [var "assignStmt", PyUtils.pyExpressionToPyStatement @@ (PyUtils.tripleQuotedString @@ var "c")])
 
 -- | Encode a field (name-value pair) to a Python (Name, Expression) pair
-encodeField :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Field -> (TTerm Term -> Either (InContext Error) Py.Expression) -> Either (InContext Error) (Py.Name, Py.Expression))
+encodeField :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Field -> (TTerm Term -> Either Error Py.Expression) -> Either Error (Py.Name, Py.Expression))
 encodeField = def "encodeField" $
   doc "Encode a field (name-value pair) to a Python (Name, Expression) pair" $
   "cx" ~> "env" ~> "field" ~> "encodeTerm" ~>
@@ -1024,7 +1029,7 @@ encodeField = def "encodeField" $
     right $ pair (PyNames.encodeFieldName @@ var "env" @@ var "fname") (var "pterm")
 
 -- | Encode a field type for record definitions (field: type annotation)
-encodeFieldType :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> FieldType -> Either (InContext Error) Py.Statement)
+encodeFieldType :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> FieldType -> Either Error Py.Statement)
 encodeFieldType = def "encodeFieldType" $
   doc "Encode a field type for record definitions (field: type annotation)" $
   "cx" ~> "env" ~> "fieldType" ~>
@@ -1038,7 +1043,7 @@ encodeFieldType = def "encodeFieldType" $
       (PyDsl.assignmentTyped $ PyDsl.typedAssignment (var "pyName") (var "annotatedPyType") nothing)
 
 -- | Encode a float value to a Python expression
-encodeFloatValue :: TTermDefinition (FloatValue -> Either (InContext Error) Py.Expression)
+encodeFloatValue :: TTermDefinition (FloatValue -> Either Error Py.Expression)
 encodeFloatValue = def "encodeFloatValue" $
   doc "Encode a float value to a Python expression" $
   "fv" ~>
@@ -1048,15 +1053,49 @@ encodeFloatValue = def "encodeFloatValue" $
           (PyUtils.pyNameToPyPrimary @@ (PyDsl.name $ string "Decimal")) @@
           list [PyUtils.singleQuotedString @@ (Literals.showBigfloat $ var "f")],
       _FloatValue_float32>>: "f" ~>
-        right $ PyUtils.pyAtomToPyExpression @@
-          (PyDsl.atomNumber $ PyDsl.numberFloat $ Literals.float32ToBigfloat $ var "f"),
+        encodeFloatValue_encodeFloat32 @@ var "f",
       _FloatValue_float64>>: "f" ~>
-        right $ PyUtils.pyAtomToPyExpression @@
-          (PyDsl.atomNumber $ PyDsl.numberFloat $ Literals.float64ToBigfloat $ var "f")]
+        encodeFloatValue_encodeFloat64 @@ var "f"]
+
+-- | Encode a float32 value, handling NaN and Infinity specially since BigDecimal cannot represent them.
+encodeFloatValue_encodeFloat32 :: TTermDefinition (Float -> Either Error Py.Expression)
+encodeFloatValue_encodeFloat32 = def "encodeFloatValue_encodeFloat32" $
+  lambda "v" $ lets [
+    "s">: Literals.showFloat32 (var "v")] $
+    Logic.ifElse (Equality.equal (var "s") (string "NaN"))
+      (right $ encodeFloatValue_pySpecialFloat @@ string "nan") $
+    Logic.ifElse (Equality.equal (var "s") (string "Infinity"))
+      (right $ encodeFloatValue_pySpecialFloat @@ string "inf") $
+    Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
+      (right $ encodeFloatValue_pySpecialFloat @@ string "-inf") $
+    right $ PyUtils.pyAtomToPyExpression @@
+      (PyDsl.atomNumber $ PyDsl.numberFloat $ Literals.float32ToBigfloat $ var "v")
+
+-- | Encode a float64 value, handling NaN and Infinity specially since BigDecimal cannot represent them.
+encodeFloatValue_encodeFloat64 :: TTermDefinition (Double -> Either Error Py.Expression)
+encodeFloatValue_encodeFloat64 = def "encodeFloatValue_encodeFloat64" $
+  lambda "v" $ lets [
+    "s">: Literals.showFloat64 (var "v")] $
+    Logic.ifElse (Equality.equal (var "s") (string "NaN"))
+      (right $ encodeFloatValue_pySpecialFloat @@ string "nan") $
+    Logic.ifElse (Equality.equal (var "s") (string "Infinity"))
+      (right $ encodeFloatValue_pySpecialFloat @@ string "inf") $
+    Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
+      (right $ encodeFloatValue_pySpecialFloat @@ string "-inf") $
+    right $ PyUtils.pyAtomToPyExpression @@
+      (PyDsl.atomNumber $ PyDsl.numberFloat $ Literals.float64ToBigfloat $ var "v")
+
+-- | Emit a Python float('nan'), float('inf'), or float('-inf') expression.
+encodeFloatValue_pySpecialFloat :: TTermDefinition (String -> Py.Expression)
+encodeFloatValue_pySpecialFloat = def "encodeFloatValue_pySpecialFloat" $
+  lambda "value" $
+    PyUtils.functionCall @@
+      (PyUtils.pyNameToPyPrimary @@ (PyDsl.name $ string "float")) @@
+      list [PyUtils.singleQuotedString @@ var "value"]
 
 -- | Encode a forall type to Python expression.
 --   Gathers all type parameters and encodes the body with parameters.
-encodeForallType :: TTermDefinition (PyHelpers.PythonEnvironment -> ForallType -> Either (InContext Error) Py.Expression)
+encodeForallType :: TTermDefinition (PyHelpers.PythonEnvironment -> ForallType -> Either Error Py.Expression)
 encodeForallType = def "encodeForallType" $
   doc "Encode a forall type to Python expression" $
   "env" ~> "lt" ~>
@@ -1097,7 +1136,7 @@ encodeForallType = def "encodeForallType" $
 --   This handles lambdas, primitives, projections, wrap eliminations, and case eliminations.
 encodeFunction :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
   -> Function
-  -> Either (InContext Error) Py.Expression)
+  -> Either Error Py.Expression)
 encodeFunction = def "encodeFunction" $
   doc "Encode a function term to a Python expression" $
   "cx" ~> "env" ~> "f" ~>
@@ -1132,9 +1171,6 @@ encodeFunction = def "encodeFunction" $
             "indexValue" <~ (PyUtils.pyAtomToPyExpression @@ (PyDsl.atomNumber $ PyDsl.numberInteger $ Literals.int32ToBigint (Lists.length (var "bindings")))) $
             "indexedExpr" <~ (PyUtils.primaryWithExpressionSlices @@ (PyUtils.pyExpressionToPyPrimary @@ var "tupleExpr") @@ list [var "indexValue"]) $
             right $ makeUncurriedLambda @@ var "pparams" @@ (PyUtils.pyPrimaryToPyExpression @@ var "indexedExpr")),
-      -- Primitives: encode as variable reference
-      _Function_primitive>>: "name" ~>
-        encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ (Phantoms.list ([] :: [TTerm Py.Expression])),
       -- Eliminations
       _Function_elimination>>: "e" ~>
         cases _Elimination (var "e") Nothing [
@@ -1155,7 +1191,7 @@ encodeFunction = def "encodeFunction" $
 --   Takes: environment, name, type params, arg names, body term, domain types, optional codomain, comment, prefix statements
 encodeFunctionDefinition :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
   -> Name -> [Name] -> [Name] -> TTerm Term -> [Type] -> Maybe Type -> Maybe String -> [Py.Statement]
-  -> Either (InContext Error) Py.Statement)
+  -> Either Error Py.Statement)
 encodeFunctionDefinition = def "encodeFunctionDefinition" $
   doc "Encode a function definition with parameters and body" $
   "cx" ~> "env" ~> "name" ~> "tparams" ~> "args" ~> "body" ~> "doms" ~> "mcod" ~> "comment" ~> "prefixes" ~>
@@ -1209,7 +1245,7 @@ encodeFunctionDefinition = def "encodeFunctionDefinition" $
 
 -- | Encode a function type to Python Callable[..., return_type].
 --   Gathers all domain types and the final codomain.
-encodeFunctionType :: TTermDefinition (PyHelpers.PythonEnvironment -> FunctionType -> Either (InContext Error) Py.Expression)
+encodeFunctionType :: TTermDefinition (PyHelpers.PythonEnvironment -> FunctionType -> Either Error Py.Expression)
 encodeFunctionType = def "encodeFunctionType" $
   doc "Encode a function type to Python Callable expression" $
   "env" ~> "ft" ~>
@@ -1251,7 +1287,7 @@ encodeFunctionType = def "encodeFunctionType" $
         @@ list [PyDsl.sliceOrStarredExpressionSlice $ PyUtils.pyExpressionToPySlice @@ var "pycod"])
 
 -- | Encode an integer value to a Python expression
-encodeIntegerValue :: TTermDefinition (IntegerValue -> Either (InContext Error) Py.Expression)
+encodeIntegerValue :: TTermDefinition (IntegerValue -> Either Error Py.Expression)
 encodeIntegerValue = def "encodeIntegerValue" $
   doc "Encode an integer value to a Python expression" $
   "iv" ~>
@@ -1271,7 +1307,7 @@ encodeIntegerValue = def "encodeIntegerValue" $
       _IntegerValue_uint64>>: "i" ~> var "toPyInt" @@ (Literals.uint64ToBigint $ var "i")]
 
 -- | Encode a literal value to a Python expression
-encodeLiteral :: TTermDefinition (Literal -> Either (InContext Error) Py.Expression)
+encodeLiteral :: TTermDefinition (Literal -> Either Error Py.Expression)
 encodeLiteral = def "encodeLiteral" $
   doc "Encode a literal value to a Python expression" $
   "lit" ~>
@@ -1297,7 +1333,7 @@ encodeLiteral = def "encodeLiteral" $
         right $ PyUtils.stringToPyExpression @@ PyDsl.quoteStyleDouble @@ var "s"]
 
 -- | Encode a literal type to a Python type expression
-encodeLiteralType :: TTermDefinition (LiteralType -> Either (InContext Error) Py.Expression)
+encodeLiteralType :: TTermDefinition (LiteralType -> Either Error Py.Expression)
 encodeLiteralType = def "encodeLiteralType" $
   doc "Encode a literal type to a Python type expression" $
   "lt" ~>
@@ -1343,7 +1379,7 @@ encodeNameConstants = def "encodeNameConstants" $
 --   4. Encodes all definitions
 --   5. Generates imports based on metadata
 --   6. Assembles the final module
-encodePythonModule :: TTermDefinition (Context -> Graph -> Module -> [Definition] -> Either (InContext Error) Py.Module)
+encodePythonModule :: TTermDefinition (Context -> Graph -> Module -> [Definition] -> Either Error Py.Module)
 encodePythonModule = def "encodePythonModule" $
   doc "Encode a Hydra module to a Python module AST" $
   "cx" ~> "g" ~> "mod" ~> "defs0" ~>
@@ -1384,7 +1420,7 @@ encodePythonModule = def "encodePythonModule" $
       right $ PyDsl.module_ (var "body"))
 
 -- | Encode a record type as a Python dataclass
-encodeRecordType :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> [FieldType] -> Maybe String -> Either (InContext Error) Py.Statement)
+encodeRecordType :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> [FieldType] -> Maybe String -> Either Error Py.Statement)
 encodeRecordType = def "encodeRecordType" $
   doc "Encode a record type as a Python dataclass" $
   "cx" ~> "env" ~> "name" ~> "rowType" ~> "comment" ~>
@@ -1414,7 +1450,7 @@ encodeRecordType = def "encodeRecordType" $
 --   This dispatches to either a simple assignment or a function definition depending on complexity.
 encodeTermAssignment :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
   -> Name -> TTerm Term -> TypeScheme -> Maybe String
-  -> Either (InContext Error) Py.Statement)
+  -> Either Error Py.Statement)
 encodeTermAssignment = def "encodeTermAssignment" $
   doc "Encode a term assignment to a Python statement" $
   "cx" ~> "env" ~> "name" ~> "term" ~> "ts" ~> "comment" ~>
@@ -1445,7 +1481,7 @@ encodeTermAssignment = def "encodeTermAssignment" $
 encodeTermInline :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
   -> Bool
   -> TTerm Term
-  -> Either (InContext Error) Py.Expression)
+  -> Either Error Py.Expression)
 encodeTermInline = def "encodeTermInline" $
   doc "Encode a term to a Python expression (inline form)" $
   "cx" ~> "env" ~> "noCast" ~> "term" ~>
@@ -1634,7 +1670,7 @@ encodeTermInline = def "encodeTermInline" $
 --   This handles case statements specially by generating match statements.
 encodeTermMultiline :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
   -> TTerm Term
-  -> Either (InContext Error) [Py.Statement])
+  -> Either Error [Py.Statement])
 encodeTermMultiline = def "encodeTermMultiline" $
   doc "Encode a term to a list of statements with return as final statement" $
   "cx" ~> "env" ~> "term" ~>
@@ -1687,7 +1723,7 @@ encodeTermMultiline = def "encodeTermMultiline" $
 --   Non-recursive returns stay as normal return statements.
 encodeTermMultilineTCO :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
   -> Name -> [Name] -> TTerm Term
-  -> Either (InContext Error) [Py.Statement])
+  -> Either Error [Py.Statement])
 encodeTermMultilineTCO = def "encodeTermMultilineTCO" $
   doc "Encode a term body for TCO: tail self-calls become param reassignment + continue" $
   "cx" ~> "env" ~> "funcName" ~> "paramNames" ~> "term" ~>
@@ -1763,7 +1799,7 @@ encodeTermMultilineTCO = def "encodeTermMultilineTCO" $
 
 -- | Encode a Hydra type to a Python type expression.
 --   This is the main recursive type encoder.
-encodeType :: TTermDefinition (PyHelpers.PythonEnvironment -> Type -> Either (InContext Error) Py.Expression)
+encodeType :: TTermDefinition (PyHelpers.PythonEnvironment -> Type -> Either Error Py.Expression)
 encodeType = def "encodeType" $
   doc "Encode a Hydra type to a Python type expression" $
   "env" ~> "typ" ~>
@@ -1813,7 +1849,7 @@ encodeType = def "encodeType" $
 
 -- | Encode a type assignment (dispatches to record, union, wrap, or simple typedef)
 --   Name constants are now generated inside the class body by each type encoder.
-encodeTypeAssignment :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Either (InContext Error) [[Py.Statement]])
+encodeTypeAssignment :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Either Error [[Py.Statement]])
 encodeTypeAssignment = def "encodeTypeAssignment" $
   doc "Encode a type definition, dispatching based on type structure" $
   "cx" ~> "env" ~> "name" ~> "typ" ~> "comment" ~>
@@ -1821,7 +1857,7 @@ encodeTypeAssignment = def "encodeTypeAssignment" $
     right $ Lists.map ("s" ~> list [var "s"]) (var "defStmts")
 
 -- | Inner type assignment encoding that handles forall unwrapping
-encodeTypeAssignmentInner :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Either (InContext Error) [Py.Statement])
+encodeTypeAssignmentInner :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Either Error [Py.Statement])
 encodeTypeAssignmentInner = def "encodeTypeAssignmentInner" $
   doc "Encode the inner type definition, unwrapping forall types" $
   "cx" ~> "env" ~> "name" ~> "typ" ~> "comment" ~>
@@ -1860,7 +1896,7 @@ encodeTypeDefSingle = def "encodeTypeDefSingle" $
 
 -- | Encode a type to a Python expression, quoting if the type has free variables.
 --   Free variables indicate forward references that need to be quoted strings in Python.
-encodeTypeQuoted :: TTermDefinition (PyHelpers.PythonEnvironment -> Type -> Either (InContext Error) Py.Expression)
+encodeTypeQuoted :: TTermDefinition (PyHelpers.PythonEnvironment -> Type -> Either Error Py.Expression)
 encodeTypeQuoted = def "encodeTypeQuoted" $
   doc "Encode a type to a Python expression, quoting if the type has free variables" $
   "env" ~> "typ" ~>
@@ -1876,7 +1912,7 @@ encodeTypeQuoted = def "encodeTypeQuoted" $
 --   statement cannot be emitted (e.g., inside a lambda or walrus assignment).
 encodeUnionEliminationInline :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
   -> CaseStatement -> Py.Expression
-  -> Either (InContext Error) Py.Expression)
+  -> Either Error Py.Expression)
 encodeUnionEliminationInline = def "encodeUnionEliminationInline" $
   doc "Encode a union elimination as an inline conditional chain (isinstance-based ternary)" $
   "cx" ~> "env" ~> "cs" ~> "pyArg" ~>
@@ -1948,7 +1984,7 @@ encodeUnionEliminationInline = def "encodeUnionEliminationInline" $
 
 -- | Encode a term to a Python expression (inline form).
 
-encodeUnionField :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> FieldType -> Either (InContext Error) Py.Statement)
+encodeUnionField :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> FieldType -> Either Error Py.Statement)
 encodeUnionField = def "encodeUnionField" $
   doc "Encode a union field as a variant class" $
   "cx" ~> "env" ~> "unionName" ~> "fieldType" ~>
@@ -1993,7 +2029,7 @@ encodeUnionFieldAlt = def "encodeUnionFieldAlt" $
        PyUtils.primaryWithExpressionSlices @@ var "namePrim" @@ var "tparamExprs")
 
 -- | Encode a union type as either an enum or a set of variant classes
-encodeUnionType :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> [FieldType] -> Maybe String -> Either (InContext Error) [Py.Statement])
+encodeUnionType :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> [FieldType] -> Maybe String -> Either Error [Py.Statement])
 encodeUnionType = def "encodeUnionType" $
   doc "Encode a union type as an enum (for unit-only fields) or variant classes" $
   "cx" ~> "env" ~> "name" ~> "rowType" ~> "comment" ~>
@@ -2030,7 +2066,7 @@ encodeUnionType = def "encodeUnionType" $
 -- | Encode a variable reference to a Python expression.
 --   This handles various cases: lambda variables, let-bound variables, primitives, and graph elements.
 --   The complexity arises from needing to determine when a variable needs call syntax () vs plain reference.
-encodeVariable :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> [Py.Expression] -> Either (InContext Error) Py.Expression)
+encodeVariable :: TTermDefinition (Context -> PyHelpers.PythonEnvironment -> Name -> [Py.Expression] -> Either Error Py.Expression)
 encodeVariable = def "encodeVariable" $
   doc "Encode a variable reference to a Python expression" $
   "cx" ~> "env" ~> "name" ~> "args" ~>
@@ -2079,7 +2115,7 @@ encodeVariable = def "encodeVariable" $
               (Maybes.maybe
                 -- Not in graph elements - check metadata
                 (Maybes.maybe
-                  (left $ Ctx.inContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Unknown variable: ") (Core.unName (var "name"))) (var "cx"))
+                  (left $ Error.errorOther $ Error.otherError $ Strings.cat2 (string "Unknown variable: ") (Core.unName (var "name")))
                   (constant $ right $ var "asFunctionCall")  -- Lifted case expression
                   (Maps.lookup (var "name") (var "tcMetadata")))
               -- In graph elements
@@ -2167,7 +2203,7 @@ encodeVariable = def "encodeVariable" $
 -- | Encode a wrapped type (newtype) to a Python class definition.
 --   Creates a class that extends Node[inner_type] with optional Generic[T] for polymorphic types.
 --   TYPE_ is assigned after the class to avoid self-reference issues (e.g., Name.TYPE_ = Name(...)).
-encodeWrappedType :: TTermDefinition (PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Either (InContext Error) [Py.Statement])
+encodeWrappedType :: TTermDefinition (PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Either Error [Py.Statement])
 encodeWrappedType = def "encodeWrappedType" $
   doc "Encode a wrapped type (newtype) to a Python class definition" $
   "env" ~> "name" ~> "typ" ~> "comment" ~>
@@ -2433,11 +2469,7 @@ functionArityWithPrimitives = def "functionArityWithPrimitives" $
     cases _Function (var "f") (Just (Phantoms.int 0)) [
       _Function_elimination>>: constant (Phantoms.int 1),
       _Function_lambda>>: "lam" ~>
-        Math.add (Phantoms.int 1) (termArityWithPrimitives @@ var "graph" @@ (Core.lambdaBody $ var "lam")),
-      _Function_primitive>>: "name" ~>
-        optCases (Maps.lookup (var "name") (Graph.graphPrimitives $ var "graph"))
-          (Phantoms.int 0)
-          ("prim" ~> Arity.primitiveArity @@ var "prim")]
+        Math.add (Phantoms.int 1) (termArityWithPrimitives @@ var "graph" @@ (Core.lambdaBody $ var "lam"))]
 
 -- | Extract lambdas and their bodies from a term.
 --   Returns the list of lambda parameters (in order from outermost to innermost) and the innermost body.
@@ -2782,7 +2814,7 @@ moduleStandardImports = def "moduleStandardImports" $
       (var "simplified")
 
 -- | Main entry point: convert a Hydra module to Python source files.
-moduleToPython :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either (InContext Error) (M.Map FilePath String))
+moduleToPython :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String))
 moduleToPython = def "moduleToPython" $
   doc "Convert a Hydra module to Python source files" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>

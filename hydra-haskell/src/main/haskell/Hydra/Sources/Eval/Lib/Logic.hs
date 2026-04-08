@@ -71,7 +71,7 @@ module_ = Module ns definitions
 
 -- | Interpreter-friendly logical AND.
 -- and a b = ifElse a b false
-and_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+and_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
 and_ = define "and" $
   doc "Interpreter-friendly logical AND." $
   "cx" ~> "g" ~>
@@ -79,14 +79,14 @@ and_ = define "and" $
   right $ Core.termApplication $ Core.application
     (Core.termApplication $ Core.application
       (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+        (Core.termVariable $ encodedName _logic_ifElse)
         (var "a"))
       (var "b"))
     (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean False)
 
 -- | Interpreter-friendly logical NOT.
 -- not a = ifElse a false true
-not_ :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Term)
+not_ :: TTermDefinition (Context -> Graph -> Term -> Either Error Term)
 not_ = define "not" $
   doc "Interpreter-friendly logical NOT." $
   "cx" ~> "g" ~>
@@ -94,14 +94,14 @@ not_ = define "not" $
   right $ Core.termApplication $ Core.application
     (Core.termApplication $ Core.application
       (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+        (Core.termVariable $ encodedName _logic_ifElse)
         (var "a"))
       (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean False))
     (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean True)
 
 -- | Interpreter-friendly logical OR.
 -- or a b = ifElse a true b
-or_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
+or_ :: TTermDefinition (Context -> Graph -> Term -> Term -> Either Error Term)
 or_ = define "or" $
   doc "Interpreter-friendly logical OR." $
   "cx" ~> "g" ~>
@@ -109,7 +109,7 @@ or_ = define "or" $
   right $ Core.termApplication $ Core.application
     (Core.termApplication $ Core.application
       (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionPrimitive $ encodedName _logic_ifElse)
+        (Core.termVariable $ encodedName _logic_ifElse)
         (var "a"))
       (Core.termLiteral $ Core.literalBoolean $ MetaLiterals.boolean True))
     (var "b")

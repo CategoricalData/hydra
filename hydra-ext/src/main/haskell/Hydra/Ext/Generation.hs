@@ -135,7 +135,7 @@ writeRust = generateSources moduleToRust rustLanguage True False False False
 moduleToLispDialect
   :: LispSyntax.Dialect -> String
   -> Module -> [Definition] -> Context -> Graph
-  -> Either (InContext Error) (M.Map FilePath String)
+  -> Either Error (M.Map FilePath String)
 moduleToLispDialect dialect ext mod defs cx g =
   case moduleToLisp dialect mod defs cx g of
     Left err -> Left err

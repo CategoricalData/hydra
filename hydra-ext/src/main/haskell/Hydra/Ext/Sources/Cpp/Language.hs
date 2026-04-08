@@ -108,8 +108,7 @@ cppLanguage = define "cppLanguage" $
     Core.floatTypeFloat64],     -- double
   "functionVariants">: Sets.fromList $ list [
     Variants.functionVariantElimination,
-    Variants.functionVariantLambda,
-    Variants.functionVariantPrimitive],
+    Variants.functionVariantLambda],
   "integerTypes">: Sets.fromList $ list [
     Core.integerTypeInt8,       -- char, int8_t
     Core.integerTypeInt16,      -- short, int16_t

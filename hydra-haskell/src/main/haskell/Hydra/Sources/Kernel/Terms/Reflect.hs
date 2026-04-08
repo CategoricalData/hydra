@@ -135,16 +135,14 @@ functionVariant = define "functionVariant" $
   doc "Find the function inject (constructor) for a given function" $
   match _Function Nothing [
     _Function_elimination>>: constant Variants.functionVariantElimination,
-    _Function_lambda>>: constant Variants.functionVariantLambda,
-    _Function_primitive>>: constant Variants.functionVariantPrimitive]
+    _Function_lambda>>: constant Variants.functionVariantLambda]
 
 functionVariants :: TTermDefinition [FunctionVariant]
 functionVariants = define "functionVariants" $
   doc "All function variants (constructors), in a canonical order" $
   list $ injectUnit _FunctionVariant <$> [
     _FunctionVariant_elimination,
-    _FunctionVariant_lambda,
-    _FunctionVariant_primitive]
+    _FunctionVariant_lambda]
 
 integerTypeIsSigned :: TTermDefinition (IntegerType -> Bool)
 integerTypeIsSigned = define "integerTypeIsSigned" $

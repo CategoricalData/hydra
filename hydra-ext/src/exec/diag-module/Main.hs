@@ -14,6 +14,7 @@ import Hydra.Ext.Sources.All
 import Hydra.Ext.Haskell.Language (haskellLanguage)
 import Hydra.Ext.Haskell.Coder (moduleToHaskell)
 import qualified Hydra.Coders as Coders
+import qualified Hydra.Show.Errors as ShowError
 
 import qualified Hydra.Ext.Sources.Cpp.Names as CppNames
 
@@ -53,7 +54,7 @@ main = do
   let bsGraph = bootstrapGraph
   putStrLn $ "  Bootstrap graph primitives: " ++ show (M.size $ graphPrimitives bsGraph)
   let schemaGraph = elementsToGraph bsGraph M.empty schemaElements
-  let schemaTypes = case Environment.schemaGraphToTypingEnvironment cx schemaGraph of
+  let schemaTypes = case Environment.schemaGraphToTypingEnvironment schemaGraph of
         Left _ -> M.empty
         Right r -> r
   putStrLn $ "  Schema types: " ++ show (M.size schemaTypes)
@@ -89,7 +90,7 @@ main = do
   putStrLn "Step 6: Calling inferGraphTypes..."
   hFlush stdout
   case inferGraphTypes cx bins0 g1 of
-    Left err -> putStrLn $ "  ERROR: " ++ show (inContextObject err)
+    Left err -> putStrLn $ "  ERROR: " ++ ShowError.error err
     Right ((g2, bs), cx2) -> do
       putStrLn $ "  OK: " ++ show (length bs) ++ " bindings"
 
@@ -97,5 +98,5 @@ main = do
   putStrLn "Step 7: Calling generateSourceFiles..."
   hFlush stdout
   case generateSourceFiles moduleToHaskell haskellLanguage True False False False bootstrapGraph uni [modToGen] cx of
-    Left ic -> putStrLn $ "  ERROR: " ++ show (inContextObject ic)
+    Left err -> putStrLn $ "  ERROR: " ++ ShowError.error err
     Right files -> putStrLn $ "  OK: " ++ show (length files) ++ " files"

@@ -28,6 +28,10 @@ escapeJavaString s = Strings.cat (Lists.map (\c -> escapeJavaChar c) (Strings.to
 hexDigit :: Int -> Int
 hexDigit n = Logic.ifElse (Equality.lt n 10) (Math.add n 48) (Math.add (Math.sub n 10) 65)
 
+javaFloatLiteralText :: String -> String
+javaFloatLiteralText s =
+    Logic.ifElse (Equality.equal s "NaN") "Double.NaN" (Logic.ifElse (Equality.equal s "Infinity") "Double.POSITIVE_INFINITY" (Logic.ifElse (Equality.equal s "-Infinity") "Double.NEGATIVE_INFINITY" s))
+
 javaUnicodeEscape :: Int -> String
 javaUnicodeEscape n =
     Logic.ifElse (Equality.gt n 65535) (
@@ -529,7 +533,8 @@ writeFieldModifier m =
       Syntax.FieldModifierVolatile -> Serialization.cst "volatile"
 
 writeFloatingPointLiteral :: Syntax.FloatingPointLiteral -> Ast.Expr
-writeFloatingPointLiteral fl = Serialization.cst (Literals.showBigfloat (Syntax.unFloatingPointLiteral fl))
+writeFloatingPointLiteral fl =
+    Serialization.cst (javaFloatLiteralText (Literals.showBigfloat (Syntax.unFloatingPointLiteral fl)))
 
 writeFloatingPointType :: Syntax.FloatingPointType -> Ast.Expr
 writeFloatingPointType ft =

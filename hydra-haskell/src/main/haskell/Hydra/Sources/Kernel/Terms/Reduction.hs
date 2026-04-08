@@ -98,8 +98,8 @@ module_ = Module ns definitions
      toDefinition termIsClosed,
      toDefinition termIsValue]
 
-formatError :: TTerm (InContext Error -> String)
-formatError = "_fic" ~> ShowError.error_ @@ Ctx.inContextObject (var "_fic")
+formatError :: TTerm (Error -> String)
+formatError = "e" ~> ShowError.error_ @@ var "e"
 
 alphaConvert :: TTermDefinition (Name -> Name -> Term -> Term)
 alphaConvert = define "alphaConvert" $
@@ -109,7 +109,7 @@ alphaConvert = define "alphaConvert" $
 
 -- Note: this is eager beta reduction, in that we always descend into subtypes,
 --       and always reduce the right-hand side of an application prior to substitution
-betaReduceType :: TTermDefinition (Context -> Graph -> Type -> Prelude.Either (InContext Error) Type)
+betaReduceType :: TTermDefinition (Context -> Graph -> Type -> Prelude.Either Error Type)
 betaReduceType = define "betaReduceType" $
   doc "Eagerly beta-reduce a type by substituting type arguments into type lambdas" $
   "cx" ~> "graph" ~> "typ" ~>
@@ -198,10 +198,7 @@ etaExpandTerm = define "etaExpandTerm" $
         Math.sub (var "termArityWithContext" @@ var "tx" @@ Core.applicationFunction (var "app")) (int32 1),
       _Term_function>>: "f" ~> cases _Function (var "f") Nothing [
         _Function_elimination>>: constant $ int32 1,
-        _Function_lambda>>: constant $ int32 0,
-        _Function_primitive>>: "name" ~>
-          optCases (Maps.lookup (var "name") (var "primTypes"))
-            (int32 0) Arity.typeSchemeArity],
+        _Function_lambda>>: constant $ int32 0],
       _Term_let>>: "l" ~>
         var "termArityWithContext"
           @@ (Scoping.extendGraphForLet @@ constant (constant nothing) @@ var "tx" @@ var "l")
@@ -214,7 +211,10 @@ etaExpandTerm = define "etaExpandTerm" $
         var "termArityWithContext" @@ var "tx" @@ Core.typeApplicationTermBody (var "tat"),
       _Term_variable>>: "name" ~>
         optCases (Maybes.map (Scoping.typeSchemeToFType) $ Maps.lookup (var "name") (Graph.graphBoundTypes $ var "tx"))
-          (int32 0) Arity.typeArity]) $
+          -- Not found in graphBoundTypes: fall through to graphPrimitives
+          (optCases (Maps.lookup (var "name") (var "primTypes"))
+            (int32 0) Arity.typeSchemeArity)
+          Arity.typeArity]) $
 
   -- domainTypes: extract domain types from a function type, returning a list of Maybe Type
   -- For a type A -> B -> C with n=2, returns [Just A, Just B]
@@ -318,10 +318,7 @@ etaExpandTerm = define "etaExpandTerm" $
         (Just nothing) [
         _Term_annotated>>: "at2" ~>
           var "termHeadType" @@ var "tx2" @@ Core.annotatedTermBody (var "at2"),
-        _Term_function>>: "f2" ~> cases _Function (var "f2") (Just nothing) [
-          _Function_primitive>>: "pn2" ~>
-            Maybes.map Scoping.typeSchemeToFType
-              (Maps.lookup (var "pn2") (var "primTypes"))],
+        _Term_function>>: constant nothing,
         _Term_let>>: "l2" ~>
           var "termHeadType"
             @@ (Scoping.extendGraphForLet @@ constant (constant nothing) @@ var "tx2" @@ var "l2")
@@ -417,13 +414,7 @@ etaExpandTerm = define "etaExpandTerm" $
             Core.lambda (Core.lambdaParameter $ var "lm") (Core.lambdaDomain $ var "lm") (var "body")) $
           "arty" <~ var "termArityWithContext" @@ var "tx" @@ var "result" $
           -- Lambda type is not in the context; pass Nothing (lambdas have arity 0 so expand is a no-op anyway)
-          var "expand" @@ false @@ var "args" @@ var "arty" @@ nothing @@ var "result",
-        _Function_primitive>>: "pn" ~>
-          -- Don't expand if bare; look up primitive type for lambda domain annotations
-          "arty" <~ var "termArityWithContext" @@ var "tx" @@ var "term" $
-          "primType" <~ Maybes.map ("ts" ~> Core.typeSchemeType $ var "ts")
-            (Maps.lookup (var "pn") (var "primTypes")) $
-          var "expand" @@ false @@ var "args" @@ var "arty" @@ var "primType" @@ var "term"],
+          var "expand" @@ false @@ var "args" @@ var "arty" @@ nothing @@ var "result"],
 
       -- Let: extend context for bindings and body
       _Term_let>>: "lt" ~>
@@ -517,9 +508,7 @@ etaExpansionArity = define "etaExpansionArity" $
     _Term_function>>: "f" ~> cases _Function (var "f")
       Nothing [
       _Function_elimination>>: constant $ int32 1,
-      _Function_lambda>>: constant $ int32 0,
-      _Function_primitive>>: "name" ~> Arity.primitiveArity
-        @@ (Maybes.fromJust (Lexical.lookupPrimitive @@ var "graph" @@ var "name"))],
+      _Function_lambda>>: constant $ int32 0],
     _Term_typeLambda>>: "ta" ~> etaExpansionArity @@ var "graph" @@ Core.typeLambdaBody (var "ta"),
     _Term_typeApplication>>: "tt" ~> etaExpansionArity @@ var "graph" @@ Core.typeApplicationTermBody (var "tt"),
     _Term_variable>>: "name" ~>
@@ -531,7 +520,7 @@ etaExpansionArity = define "etaExpansionArity" $
           ("b" ~> Core.bindingType $ var "b"))]
 
 -- TODO: add lambda domains as part of the rewriting process, so inference does not need to be performed again.
-etaExpandTypedTerm :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either (InContext Error) Term)
+etaExpandTypedTerm :: TTermDefinition (Context -> Graph -> Term -> Prelude.Either Error Term)
 etaExpandTypedTerm = define "etaExpandTypedTerm" $
   doc ("Recursively transform arbitrary terms like 'add 42' into terms like '\\x.add 42 x',"
     <> " eliminating partial application. Variable references are not expanded."
@@ -570,11 +559,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
         _Function_elimination>>: constant $ right $ int32 1,
         _Function_lambda>>: "l" ~>
           "txl" <~ Scoping.extendGraphForLambda @@ var "tx" @@ var "l" $
-          var "arityOf" @@ var "txl" @@ Core.lambdaBody (var "l"),
-        _Function_primitive>>: "name" ~>
-          Eithers.map
-          ("_ts" ~> Arity.typeSchemeArity @@ var "_ts")
-          (Lexical.requirePrimitiveType @@ var "cx" @@ var "tx" @@ var "name")]) $
+          var "arityOf" @@ var "txl" @@ Core.lambdaBody (var "l")]) $
       cases _Term (var "term")
         (Just $ var "dflt") [
         _Term_annotated>>: "at" ~> var "arityOf" @@ var "tx" @@ Core.annotatedTermBody (var "at"),
@@ -714,7 +699,7 @@ etaReduceTerm = define "etaReduceTerm" $
         (Just $ var "noChange") [
         _Function_lambda>>: "l" ~> var "reduceLambda" @@ var "l"]]
 
-reduceTerm :: TTermDefinition (Context -> Graph -> Bool -> Term -> Prelude.Either (InContext Error) Term)
+reduceTerm :: TTermDefinition (Context -> Graph -> Bool -> Term -> Prelude.Either Error Term)
 reduceTerm = define "reduceTerm" $
   doc "A term evaluation function which is alternatively lazy or eager" $
   "cx" ~> "graph" ~> "eager" ~> "term" ~>
@@ -739,45 +724,33 @@ reduceTerm = define "reduceTerm" $
       (var "applyToArguments" @@
         (Core.termApplication $ Core.application (var "fun") (Lists.head $ var "args")) @@
         (Lists.tail $ var "args"))) $
-  "mapErrorToString" <~ ("ic" ~>
-    Ctx.inContext
-      (Error.errorOther $ Error.otherError (ShowError.error_ @@ Ctx.inContextObject (var "ic")))
-      (Ctx.inContextContext $ var "ic")) $
+  "mapErrorToString" <~ ("e" ~>
+    Error.errorOther $ Error.otherError (ShowError.error_ @@ var "e")) $
   "applyElimination" <~ ("elm" ~> "reducedArg" ~>
     cases _Elimination (var "elm") Nothing [
       _Elimination_record>>: "proj" ~>
-        "fields" <<~ ExtractCore.record @@ var "cx" @@ (Core.projectionTypeName $ var "proj") @@ var "graph" @@ (Strip.deannotateTerm @@ var "reducedArg") $
+        "fields" <<~ ExtractCore.record @@ (Core.projectionTypeName $ var "proj") @@ var "graph" @@ (Strip.deannotateTerm @@ var "reducedArg") $
         "matchingFields" <~ Lists.filter
           ("f" ~> Equality.equal (Core.fieldName $ var "f") (Core.projectionField $ var "proj"))
           (var "fields") $
         Logic.ifElse
           (Lists.null $ var "matchingFields")
-          (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [
-            string "no such field: ",
-            unwrap _Name @@ (Core.projectionField $ var "proj"),
-            string " in ",
-            unwrap _Name @@ (Core.projectionTypeName $ var "proj"),
-            string " record"])) (var "cx"))
+          (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.projectionField $ var "proj")) (var "cx"))
           (right $ Core.fieldTerm $ Lists.head $ var "matchingFields"),
       _Elimination_union>>: "cs" ~>
-        "field" <<~ ExtractCore.injection @@ var "cx" @@ (Core.caseStatementTypeName $ var "cs") @@ var "graph" @@ var "reducedArg" $
+        "field" <<~ ExtractCore.injection @@ (Core.caseStatementTypeName $ var "cs") @@ var "graph" @@ var "reducedArg" $
         "matchingFields" <~ Lists.filter
           ("f" ~> Equality.equal (Core.fieldName $ var "f") (Core.fieldName $ var "field"))
           (Core.caseStatementCases $ var "cs") $
         Logic.ifElse (Lists.null $ var "matchingFields")
           (Maybes.maybe
-            (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [
-              string "no such field ",
-              unwrap _Name @@ (Core.fieldName $ var "field"),
-              string " in ",
-              unwrap _Name @@ (Core.caseStatementTypeName $ var "cs"),
-              string " case statement"])) (var "cx"))
+            (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.fieldName $ var "field")) (var "cx"))
             (unaryFunction right)
             (Core.caseStatementDefault $ var "cs"))
           (right $ Core.termApplication $ Core.application
             (Core.fieldTerm $ Lists.head $ var "matchingFields")
             (Core.fieldTerm $ var "field")),
-      _Elimination_wrap>>: "name" ~> ExtractCore.wrap @@ var "cx" @@ var "name" @@ var "graph" @@ var "reducedArg"]) $
+      _Elimination_wrap>>: "name" ~> ExtractCore.wrap @@ var "name" @@ var "graph" @@ var "reducedArg"]) $
   "applyIfNullary" <~ ("eager" ~> "original" ~> "args" ~>
     "stripped" <~ Strip.deannotateTerm @@ var "original" $
     "forElimination" <~ ("elm" ~> "args" ~>
@@ -817,19 +790,23 @@ reduceTerm = define "reduceTerm" $
           _Function_lambda>>: "l" ~>
             Logic.ifElse (Lists.null $ var "args")
               (right $ var "original")
-              (var "forLambda" @@ var "l" @@ var "args"),
-          _Function_primitive>>: "name" ~>
-            "prim" <<~ Lexical.requirePrimitive @@ var "cx" @@ var "graph" @@ var "name" $
-            "arity" <~ Arity.primitiveArity @@ var "prim" $
-            Logic.ifElse (Equality.gt (var "arity") (Lists.length $ var "args"))
-              (right $ var "applyToArguments" @@ var "original" @@ var "args")
-              (var "forPrimitive" @@ var "prim" @@ var "arity" @@ var "args")],
+              (var "forLambda" @@ var "l" @@ var "args")],
       _Term_variable>>: "v" ~>
         -- Look up the variable in the graph; if found, reduce its definition
         "mBinding" <~ Lexical.lookupBinding @@ var "graph" @@ var "v" $
         Maybes.maybe
-          -- Not found: lambda-bound variable, return with args applied
-          (right $ var "applyToArguments" @@ var "original" @@ var "args")
+          -- Not found in graphBoundTerms: fall through to graphPrimitives
+          ("mPrim" <~ Lexical.lookupPrimitive @@ var "graph" @@ var "v" $
+           Maybes.maybe
+             -- Not found in either: lambda-bound variable, return with args applied
+             (right $ var "applyToArguments" @@ var "original" @@ var "args")
+             -- Found primitive: apply with arity-based argument collection
+             ("prim" ~>
+               "arity" <~ Arity.primitiveArity @@ var "prim" $
+               Logic.ifElse (Equality.gt (var "arity") (Lists.length $ var "args"))
+                 (right $ var "applyToArguments" @@ var "original" @@ var "args")
+                 (var "forPrimitive" @@ var "prim" @@ var "arity" @@ var "args"))
+             (var "mPrim"))
           -- Found: reduce the element's term with the accumulated args
           ("binding" ~> var "applyIfNullary" @@ var "eager" @@ (Core.bindingTerm $ var "binding") @@ var "args")
           (var "mBinding"),
@@ -891,8 +868,7 @@ termIsValue = define "termIsValue" $
         _Elimination_union>>: "cs" ~>
           Logic.and (var "checkFields" @@ Core.caseStatementCases (var "cs"))
             (Maybes.maybe true termIsValue (Core.caseStatementDefault $ var "cs"))],
-    _Function_lambda>>: "l" ~> termIsValue @@ Core.lambdaBody (var "l"),
-    _Function_primitive>>: constant true]) $
+    _Function_lambda>>: "l" ~> termIsValue @@ Core.lambdaBody (var "l")]) $
   cases _Term (Strip.deannotateTerm @@ var "term")
     (Just false) [
     _Term_application>>: constant false,

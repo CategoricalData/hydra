@@ -127,7 +127,7 @@ applyVar = def "applyVar" $
               (var "lamBody")
               (Variables.substituteVariable @@ var "lamParam" @@ var "avar" @@ var "lamBody"))])]
 
-constructModule :: TTermDefinition (Context -> Graph -> Module -> [Definition] -> Either (InContext Error) Scala.Pkg)
+constructModule :: TTermDefinition (Context -> Graph -> Module -> [Definition] -> Either Error Scala.Pkg)
 constructModule = def "constructModule" $
   doc "Construct a Scala package from a Hydra module and its definitions" $
   lambda "cx" $ lambda "g" $ lambda "mod" $ lambda "defs" $ lets [
@@ -169,7 +169,7 @@ dropDomains = def "dropDomains" $
         _Type_function>>: ("ft" ~> dropDomains @@ (Math.sub (var "n") (int32 1)) @@ (Core.functionTypeCodomain $ var "ft")),
         _Type_forall>>: ("fa" ~> dropDomains @@ var "n" @@ (Core.forallTypeBody $ var "fa"))])
 
-encodeCase :: TTermDefinition (Context -> Graph -> M.Map Name Type -> Maybe Name -> Field -> Either (InContext Error) Scala.Case)
+encodeCase :: TTermDefinition (Context -> Graph -> M.Map Name Type -> Maybe Name -> Field -> Either Error Scala.Case)
 encodeCase = def "encodeCase" $
   doc "Encode a case branch" $
   lambda "cx" $ lambda "g" $ lambda "ftypes" $ lambda "sn" $ lambda "f" $ lets [
@@ -229,7 +229,7 @@ encodeCase = def "encodeCase" $
           _Case_cond>>: nothing,
           _Case_body>>: var "body"]))
 
-encodeComplexTermDef :: TTermDefinition (Context -> Graph -> String -> Term -> Type -> Either (InContext Error) Scala.Stat)
+encodeComplexTermDef :: TTermDefinition (Context -> Graph -> String -> Term -> Type -> Either Error Scala.Stat)
 encodeComplexTermDef = def "encodeComplexTermDef" $
   doc "Encode a complex term definition with proper parameter types from the type signature" $
   lambda "cx" $ lambda "g" $ lambda "lname" $ lambda "term" $ lambda "typ" $ lets [
@@ -285,11 +285,11 @@ encodeComplexTermDef = def "encodeComplexTermDef" $
                       _Defn_Def_decltpe>>: just (var "scod"),
                       _Defn_Def_body>>: var "defBody"])))))))
 
-encodeFunction :: TTermDefinition (Context -> Graph -> M.Map Name Term -> Function -> Maybe Term -> Either (InContext Error) Scala.Data)
+encodeFunction :: TTermDefinition (Context -> Graph -> M.Map Name Term -> Function -> Maybe Term -> Either Error Scala.Data)
 encodeFunction = def "encodeFunction" $
   doc "Encode a Hydra function as a Scala expression" $
   lambda "cx" $ lambda "g" $ lambda "meta" $ lambda "fun" $ lambda "arg" $
-    (cases _Function (var "fun") (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "unsupported function")) (var "cx"))) [
+    (cases _Function (var "fun") (Just $ left (Error.errorOther $ Error.otherError (string "unsupported function"))) [
       _Function_lambda>>: ("lam" ~> lets [
         "param">: project _Lambda _Lambda_parameter @@ var "lam",
         "v">: ScalaUtilsSource.scalaEscapeName @@ (Core.unName (var "param")),
@@ -323,9 +323,8 @@ encodeFunction = def "encodeFunction" $
                 (var "mdom"))
               ("sdom" ~>
                 right (ScalaUtilsSource.slambda @@ var "v" @@ var "sbody" @@ var "sdom")))),
-      _Function_primitive>>: ("name" ~> right (ScalaUtilsSource.sprim @@ var "name")),
       _Function_elimination>>: ("e" ~>
-        cases _Elimination (var "e") (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "unsupported elimination")) (var "cx"))) [
+        cases _Elimination (var "e") (Just $ left (Error.errorOther $ Error.otherError (string "unsupported elimination"))) [
           _Elimination_wrap>>: ("name" ~>
             -- Wrap elimination is identity in Scala (newtypes are erased)
             Maybes.maybe
@@ -432,7 +431,7 @@ mkLazyVal vname mdecltpe rhs =
     _Defn_Val_decltpe>>: mdecltpe,
     _Defn_Val_rhs>>: rhs]))
 
-encodeLetBinding :: TTermDefinition (Context -> Graph -> S.Set Name -> Binding -> Either (InContext Error) Scala.Stat)
+encodeLetBinding :: TTermDefinition (Context -> Graph -> S.Set Name -> Binding -> Either Error Scala.Stat)
 encodeLetBinding = def "encodeLetBinding" $
   doc "Encode a let binding as a val or def declaration. outerTypeVars are type params from the enclosing scope." $
   lambda "cx" $ lambda "g" $ lambda "outerTypeVars" $ lambda "b" $ lets [
@@ -469,18 +468,18 @@ encodeLetBinding = def "encodeLetBinding" $
               ("styp" ~> right (mkLazyVal (var "bname") (just (var "styp")) (var "srhs"))))))
       (var "mts")
 
-encodeLiteral :: TTermDefinition (Context -> Graph -> Literal -> Either (InContext Error) Scala.Lit)
+encodeLiteral :: TTermDefinition (Context -> Graph -> Literal -> Either Error Scala.Lit)
 encodeLiteral = def "encodeLiteral" $
   doc "Encode a literal value as a Scala literal" $
   lambda "cx" $ lambda "g" $ lambda "av" $
-    (cases _Literal (var "av") (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "unexpected literal")) (var "cx"))) [
+    (cases _Literal (var "av") (Just $ left (Error.errorOther $ Error.otherError (string "unexpected literal"))) [
       _Literal_binary>>: ("b" ~> right (inject _Lit (Name "bytes") (Literals.binaryToBytes (var "b")))),
       _Literal_boolean>>: ("b" ~> right (inject _Lit _Lit_boolean (var "b"))),
-      _Literal_float>>: ("fv" ~> cases _FloatValue (var "fv") (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "unexpected float value")) (var "cx"))) [
+      _Literal_float>>: ("fv" ~> cases _FloatValue (var "fv") (Just $ left (Error.errorOther $ Error.otherError (string "unexpected float value"))) [
         _FloatValue_bigfloat>>: ("bf" ~> right (inject _Lit _Lit_double (Literals.bigfloatToFloat64 (var "bf")))),
         _FloatValue_float32>>: ("f" ~> right (inject _Lit _Lit_float (var "f"))),
         _FloatValue_float64>>: ("f" ~> right (inject _Lit _Lit_double (var "f")))]),
-      _Literal_integer>>: ("iv" ~> cases _IntegerValue (var "iv") (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "unexpected integer value")) (var "cx"))) [
+      _Literal_integer>>: ("iv" ~> cases _IntegerValue (var "iv") (Just $ left (Error.errorOther $ Error.otherError (string "unexpected integer value"))) [
         _IntegerValue_bigint>>: ("i" ~> right (inject _Lit _Lit_long (Literals.bigintToInt64 (var "i")))),
         _IntegerValue_int8>>: ("i" ~> right (inject _Lit _Lit_byte (var "i"))),
         _IntegerValue_int16>>: ("i" ~> right (inject _Lit _Lit_short (var "i"))),
@@ -492,7 +491,7 @@ encodeLiteral = def "encodeLiteral" $
         _IntegerValue_uint64>>: ("i" ~> right (inject _Lit _Lit_long (Literals.bigintToInt64 (Literals.uint64ToBigint (var "i")))))]),
       _Literal_string>>: ("s" ~> right (inject _Lit _Lit_string (var "s")))])
 
-encodeLocalDef :: TTermDefinition (Context -> Graph -> S.Set Name -> String -> Term -> Type -> Either (InContext Error) Scala.Stat)
+encodeLocalDef :: TTermDefinition (Context -> Graph -> S.Set Name -> String -> Term -> Type -> Either Error Scala.Stat)
 encodeLocalDef = def "encodeLocalDef" $
   doc "Encode a local def. outerTypeVars are type params already in scope (don't redeclare them)." $
   lambda "cx" $ lambda "g" $ lambda "outerTypeVars" $ lambda "lname" $ lambda "term" $ lambda "typ" $ lets [
@@ -548,12 +547,12 @@ encodeLocalDef = def "encodeLocalDef" $
                       _Defn_Def_decltpe>>: just (var "scod"),
                       _Defn_Def_body>>: var "defBody"])))))))
 
-encodeTerm :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Scala.Data)
+encodeTerm :: TTermDefinition (Context -> Graph -> Term -> Either Error Scala.Data)
 encodeTerm = def "encodeTerm" $
   doc "Encode a Hydra term as a Scala expression" $
   lambda "cx" $ lambda "g" $ lambda "term0" $ lets [
     "term">: stripWrapEliminations @@ var "term0"] $
-    (cases _Term (Strip.deannotateTerm @@ var "term") (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "unexpected term")) (var "cx"))) [
+    (cases _Term (Strip.deannotateTerm @@ var "term") (Just $ left (Error.errorOther $ Error.otherError (string "unexpected term"))) [
       _Term_typeApplication>>: ("ta" ~> lets [
         -- Collect all nested type applications into a list of type args
         "collectTypeArgs">: ("t" ~> "acc" ~>
@@ -586,34 +585,32 @@ encodeTerm = def "encodeTerm" $
           (Just $ asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody")
           [_Term_function>>: ("f" ~> cases _Function (var "f")
             (Just $ asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody") [
-            -- For primitives and lambdas: encode with type parameters
-            _Function_primitive>>: ("pname" ~>
-              Eithers.bind
-                (Eithers.mapList ("targ" ~> asTerm encodeType @@ var "cx" @@ var "g" @@ var "targ") (var "typeArgs"))
-                ("stypeArgs" ~> lets [
-                    -- Build set of capitalized type variable names that are in scope.
-                    -- graphTypeVariables has Hydra Names like "t0"; capitalize to match Scala "T0".
-                    "inScopeTypeVarNames">: Sets.fromList (Lists.map
-                      ("n" ~> Formatting.capitalize @@ (Core.unName (var "n")))
-                      (Sets.toList (Graph.graphTypeVariables $ var "g"))),
-                    -- Check if any type arg has an unqualified type variable NOT in scope.
-                    -- These are forall-residual vars that weren't resolved by the type adapter.
-                    "hasForallResidual">: Logic.not (Lists.null (Lists.filter ("st" ~>
-                      cases Scala._Type (var "st") (Just false) [
-                        Scala._Type_var>>: ("tv" ~> lets [
-                          "tvName">: project Scala._Type_Name Scala._Type_Name_value @@ (project Scala._Type_Var Scala._Type_Var_name @@ var "tv")] $
-                          Logic.and
-                            (Logic.not (Lists.elem (int32 46) (Strings.toList (var "tvName"))))
-                            (Logic.not (Sets.member (var "tvName") (var "inScopeTypeVarNames"))))])
-                      (var "stypeArgs")))] $
-                    Logic.ifElse (var "hasForallResidual")
-                      -- Has forall residuals: omit type args and let Scala infer
-                      (right (ScalaUtilsSource.sprim @@ var "pname"))
-                      -- All type args are valid: use explicit type params
-                      (right (ScalaUtilsSource.sapplyTypes @@ (ScalaUtilsSource.sprim @@ var "pname") @@ var "stypeArgs")))),
             _Function_elimination>>: (constant $
               -- For eliminations (record/union projections): encode the substituted body
-              asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody")])]),
+              asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody")]),
+          -- TermVariable referencing a primitive: same treatment as Function_primitive
+          _Term_variable>>: ("pname" ~>
+            Maybes.cases (Maps.lookup (var "pname") (Graph.graphPrimitives (var "g")))
+              -- Not a primitive: encode the substituted body
+              (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody")
+              (lambda "_prim" $
+                Eithers.bind
+                  (Eithers.mapList ("targ" ~> asTerm encodeType @@ var "cx" @@ var "g" @@ var "targ") (var "typeArgs"))
+                  ("stypeArgs" ~> lets [
+                      "inScopeTypeVarNames">: Sets.fromList (Lists.map
+                        ("n" ~> Formatting.capitalize @@ (Core.unName (var "n")))
+                        (Sets.toList (Graph.graphTypeVariables $ var "g"))),
+                      "hasForallResidual">: Logic.not (Lists.null (Lists.filter ("st" ~>
+                        cases Scala._Type (var "st") (Just false) [
+                          Scala._Type_var>>: ("tv" ~> lets [
+                            "tvName">: project Scala._Type_Name Scala._Type_Name_value @@ (project Scala._Type_Var Scala._Type_Var_name @@ var "tv")] $
+                            Logic.and
+                              (Logic.not (Lists.elem (int32 46) (Strings.toList (var "tvName"))))
+                              (Logic.not (Sets.member (var "tvName") (var "inScopeTypeVarNames"))))])
+                        (var "stypeArgs")))] $
+                      Logic.ifElse (var "hasForallResidual")
+                        (right (ScalaUtilsSource.sprim @@ var "pname"))
+                        (right (ScalaUtilsSource.sapplyTypes @@ (ScalaUtilsSource.sprim @@ var "pname") @@ var "stypeArgs")))))]),
       _Term_typeLambda>>: ("tl" ~>
         asTerm encodeTerm @@ var "cx" @@ (Scoping.extendGraphForTypeLambda @@ var "g" @@ var "tl") @@ (Core.typeLambdaBody $ var "tl")),
       _Term_application>>: ("app" ~> lets [
@@ -836,7 +833,7 @@ encodeTerm = def "encodeTerm" $
                 right (inject _Data _Data_block (record _Data_Block [
                   _Data_Block_stats>>: Lists.concat2 (var "sbindings") (list [inject _Stat _Stat_term (var "sbody")])])))))])
 
-encodeTermDefinition :: TTermDefinition (Context -> Graph -> TermDefinition -> Either (InContext Error) Scala.Stat)
+encodeTermDefinition :: TTermDefinition (Context -> Graph -> TermDefinition -> Either Error Scala.Stat)
 encodeTermDefinition = def "encodeTermDefinition" $
   doc "Encode a term definition as a Scala statement" $
   lambda "cx" $ lambda "g" $ lambda "td" $ lets [
@@ -865,11 +862,11 @@ encodeTermDefinition = def "encodeTermDefinition" $
             ("rhs" ~>
               right (mkLazyVal (var "lname") (just (var "stype")) (var "rhs")))))
 
-encodeType :: TTermDefinition (Context -> Graph -> Type -> Either (InContext Error) Scala.Type)
+encodeType :: TTermDefinition (Context -> Graph -> Type -> Either Error Scala.Type)
 encodeType = def "encodeType" $
   doc "Encode a Hydra type as a Scala type" $
   lambda "cx" $ lambda "g" $ lambda "t" $
-    (cases _Type (Strip.deannotateType @@ var "t") (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "unsupported type")) (var "cx"))) [
+    (cases _Type (Strip.deannotateType @@ var "t") (Just $ left (Error.errorOther $ Error.otherError (string "unsupported type"))) [
       _Type_application>>: ("at" ~> lets [
         -- Collect all curried type application args into a flat list
         "collectTypeArgs">: ("t" ~> "acc" ~>
@@ -914,14 +911,14 @@ encodeType = def "encodeType" $
           (asTerm encodeType @@ var "cx" @@ var "g" @@ var "lt")
           ("slt" ~>
             right (ScalaUtilsSource.stapply1 @@ stref (string "Seq") @@ var "slt"))),
-      _Type_literal>>: ("lt" ~> cases _LiteralType (var "lt") (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "unsupported literal type")) (var "cx"))) [
+      _Type_literal>>: ("lt" ~> cases _LiteralType (var "lt") (Just $ left (Error.errorOther $ Error.otherError (string "unsupported literal type"))) [
         _LiteralType_binary>>: (constant $ right (ScalaUtilsSource.stapply @@ stref (string "Array") @@ list [stref (string "Byte")])),
         _LiteralType_boolean>>: (constant $ right (stref (string "Boolean"))),
-        _LiteralType_float>>: ("ft" ~> cases _FloatType (var "ft") (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "unsupported float type")) (var "cx"))) [
+        _LiteralType_float>>: ("ft" ~> cases _FloatType (var "ft") (Just $ left (Error.errorOther $ Error.otherError (string "unsupported float type"))) [
           _FloatType_bigfloat>>: (constant $ right (stref (string "BigDecimal"))),
           _FloatType_float32>>: (constant $ right (stref (string "Float"))),
           _FloatType_float64>>: (constant $ right (stref (string "Double")))]),
-        _LiteralType_integer>>: ("it" ~> cases _IntegerType (var "it") (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "unsupported integer type")) (var "cx"))) [
+        _LiteralType_integer>>: ("it" ~> cases _IntegerType (var "it") (Just $ left (Error.errorOther $ Error.otherError (string "unsupported integer type"))) [
           _IntegerType_bigint>>: (constant $ right (stref (string "BigInt"))),
           _IntegerType_int8>>: (constant $ right (stref (string "Byte"))),
           _IntegerType_int16>>: (constant $ right (stref (string "Short"))),
@@ -988,7 +985,7 @@ encodeType = def "encodeType" $
   where
     stref s = inject Scala._Type _Type_ref (inject _Type_Ref _Type_Ref_name (record _Type_Name [_Type_Name_value>>: s]))
 
-encodeTypeDefinition :: TTermDefinition (Context -> Graph -> TypeDefinition -> Either (InContext Error) Scala.Stat)
+encodeTypeDefinition :: TTermDefinition (Context -> Graph -> TypeDefinition -> Either Error Scala.Stat)
 encodeTypeDefinition = def "encodeTypeDefinition" $
   doc "Encode a type definition as a Scala statement" $
   lambda "cx" $ lambda "g" $ lambda "td" $ lets [
@@ -1043,7 +1040,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
                 _Defn_Type_tparams>>: var "tparams",
                 _Defn_Type_body>>: var "styp"])))))])
   where
-    defaultTypeCase :: TTerm String -> TTerm [Scala.Type_Param] -> TTerm Context -> TTerm Graph -> TTerm Type -> TTerm (Either (InContext Error) Scala.Stat)
+    defaultTypeCase :: TTerm String -> TTerm [Scala.Type_Param] -> TTerm Context -> TTerm Graph -> TTerm Type -> TTerm (Either Error Scala.Stat)
     defaultTypeCase lname tparams cx g typ =
       "mkAlias" <~ ("styp" ~>
         right (inject _Stat _Stat_defn (inject _Defn _Defn_type (
@@ -1058,7 +1055,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
         (var "mkAlias")
         (asTerm encodeType @@ cx @@ g @@ typ)
 
-    recordTypeCase :: TTerm Scala.Type_Name -> TTerm [Scala.Type_Param] -> TTerm Context -> TTerm Graph -> TTerm [FieldType] -> TTerm (Either (InContext Error) Scala.Stat)
+    recordTypeCase :: TTerm Scala.Type_Name -> TTerm [Scala.Type_Param] -> TTerm Context -> TTerm Graph -> TTerm [FieldType] -> TTerm (Either Error Scala.Stat)
     recordTypeCase tname tparams cx g rt =
       Eithers.bind
         (Eithers.mapList ("f" ~> asTerm fieldToParam @@ cx @@ g @@ var "f") rt)
@@ -1074,7 +1071,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
                 _Ctor_Primary_paramss>>: list [var "params"]],
               _Defn_Class_template>>: emptyTemplate]))))
 
-    unionTypeCase :: TTerm Scala.Type_Name -> TTerm String -> TTerm [Scala.Type_Param] -> TTerm Context -> TTerm Graph -> TTerm [FieldType] -> TTerm (Either (InContext Error) Scala.Stat)
+    unionTypeCase :: TTerm Scala.Type_Name -> TTerm String -> TTerm [Scala.Type_Param] -> TTerm Context -> TTerm Graph -> TTerm [FieldType] -> TTerm (Either Error Scala.Stat)
     unionTypeCase tname lname tparams cx g rt =
       Eithers.bind
         (Eithers.mapList ("f" ~> asTerm fieldToEnumCase @@ cx @@ g @@ lname @@ tparams @@ var "f") rt)
@@ -1110,7 +1107,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
         _Type_Param_vbounds>>: emptyList,
         _Type_Param_cbounds>>: emptyList]
 
-encodeTypedParam :: TTermDefinition (Context -> Graph -> (Name, Type) -> Either (InContext Error) Scala.Data_Param)
+encodeTypedParam :: TTermDefinition (Context -> Graph -> (Name, Type) -> Either Error Scala.Data_Param)
 encodeTypedParam = def "encodeTypedParam" $
   doc "Encode a parameter with its type annotation" $
   lambda "cx" $ lambda "g" $ lambda "pair" $ lets [
@@ -1123,7 +1120,7 @@ encodeTypedParam = def "encodeTypedParam" $
         _Data_Param_decltpe>>: just (var "sdom"),
         _Data_Param_default>>: nothing]))
 
-encodeUntypeApplicationTerm :: TTermDefinition (Context -> Graph -> Term -> Either (InContext Error) Scala.Data)
+encodeUntypeApplicationTerm :: TTermDefinition (Context -> Graph -> Term -> Either Error Scala.Data)
 encodeUntypeApplicationTerm = def "encodeUntypeApplicationTerm" $
   doc "Encode an untyped application term by first inferring types" $
   lambda "cx" $ lambda "g" $ lambda "term" $
@@ -1203,7 +1200,7 @@ extractParams = def "extractParams" $
       _Term_typeApplication>>: ("ta" ~> extractParams @@ (Core.typeApplicationTermBody $ var "ta")),
       _Term_let>>: ("lt" ~> extractParams @@ (Core.letBody $ var "lt"))]
 
-fieldToEnumCase :: TTermDefinition (Context -> Graph -> String -> [Scala.Type_Param] -> FieldType -> Either (InContext Error) Scala.Stat)
+fieldToEnumCase :: TTermDefinition (Context -> Graph -> String -> [Scala.Type_Param] -> FieldType -> Either Error Scala.Stat)
 fieldToEnumCase = def "fieldToEnumCase" $
   doc "Convert a field type to a Scala enum case" $
   lambda "cx" $ lambda "g" $ lambda "parentName" $ lambda "tparams" $ lambda "ft" $ lets [
@@ -1244,7 +1241,7 @@ fieldToEnumCase = def "fieldToEnumCase" $
   where
     stref s = inject Scala._Type _Type_ref (inject _Type_Ref _Type_Ref_name (record _Type_Name [_Type_Name_value>>: s]))
 
-fieldToParam :: TTermDefinition (Context -> Graph -> FieldType -> Either (InContext Error) Scala.Data_Param)
+fieldToParam :: TTermDefinition (Context -> Graph -> FieldType -> Either Error Scala.Data_Param)
 fieldToParam = def "fieldToParam" $
   doc "Convert a field type to a Scala parameter" $
   lambda "cx" $ lambda "g" $ lambda "ft" $ lets [
@@ -1260,28 +1257,28 @@ fieldToParam = def "fieldToParam" $
           _Data_Param_default>>: nothing]))
 
 -- | Type alias for Result
--- type Result a = Either (InContext Error) a
+-- type Result a = Either Error a
 
 -- | Get a type annotation, converting DecodingError to InContext Error.
-getTypeE :: TTerm Context -> TTerm Graph -> TTerm (M.Map Name Term) -> TTerm (Either (InContext Error) (Maybe Type))
+getTypeE :: TTerm Context -> TTerm Graph -> TTerm (M.Map Name Term) -> TTerm (Either Error (Maybe Type))
 getTypeE cx g ann = Eithers.bimap
-  ("__de" ~> Ctx.inContext (Error.errorOther $ Error.otherError ((unwrap _DecodingError) @@ var "__de")) cx)
+  ("__de" ~> Error.errorOther (Error.otherError ((unwrap _DecodingError) @@ var "__de")))
   ("__a" ~> var "__a")
   (Annotations.getType @@ g @@ ann)
 
-findDomain :: TTermDefinition (Context -> Graph -> M.Map Name Term -> Either (InContext Error) Type)
+findDomain :: TTermDefinition (Context -> Graph -> M.Map Name Term -> Either Error Type)
 findDomain = def "findDomain" $
   doc "Find the domain type from annotations" $
   lambda "cx" $ lambda "g" $ lambda "meta" $
     Eithers.bind
       (getTypeE (var "cx") (var "g") (var "meta"))
       ("r" ~> Maybes.maybe
-        (left (Ctx.inContext (Error.errorOther $ Error.otherError (string "expected a typed term")) (var "cx")))
-        ("t" ~> cases _Type (Strip.deannotateType @@ var "t") (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError (string "expected a function type")) (var "cx"))) [
+        (left (Error.errorOther $ Error.otherError (string "expected a typed term")))
+        ("t" ~> cases _Type (Strip.deannotateType @@ var "t") (Just $ left (Error.errorOther $ Error.otherError (string "expected a function type"))) [
           _Type_function>>: ("ft" ~> right (project _FunctionType _FunctionType_domain @@ var "ft"))])
         (var "r"))
 
-findImports :: TTermDefinition (Context -> Graph -> Module -> Either (InContext Error) [Scala.Stat])
+findImports :: TTermDefinition (Context -> Graph -> Module -> Either Error [Scala.Stat])
 findImports = def "findImports" $
   doc "Find import statements for the module" $
   lambda "cx" $ lambda "g" $ lambda "mod" $
@@ -1295,7 +1292,7 @@ findImports = def "findImports" $
               Lists.map (asTerm toElImport) (Sets.toList (var "elImps")),
               Lists.map (asTerm toPrimImport) (Sets.toList (var "primImps"))]))))
 
-findSdom :: TTermDefinition (Context -> Graph -> M.Map Name Term -> Either (InContext Error) (Maybe Scala.Type))
+findSdom :: TTermDefinition (Context -> Graph -> M.Map Name Term -> Either Error (Maybe Scala.Type))
 findSdom = def "findSdom" $
   doc "Find the Scala domain type for a function from annotations" $
   lambda "cx" $ lambda "g" $ lambda "meta" $
@@ -1324,7 +1321,7 @@ findSdom = def "findSdom" $
                 ("sdom2" ~> right (just (var "sdom2"))))])])
         (var "mtyp"))
 
-moduleToScala :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either (InContext Error) (M.Map FilePath String))
+moduleToScala :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String))
 moduleToScala = def "moduleToScala" $
   doc "Convert a Hydra module to Scala source code" $
   lambda "mod" $ lambda "defs" $ lambda "cx" $ lambda "g" $

@@ -38,11 +38,11 @@ testModule = Module testNs definitions [] [] Nothing
 demoMeteredEvaluation :: IO ()
 demoMeteredEvaluation = do
     case result of
-      Left ic -> putStrLn $ "error: " <> ShowError.error (inContextObject ic)
+      Left err -> putStrLn $ "error: " <> ShowError.error err
       Right reduced -> putStrLn $ "result: " <> show reduced
   where
     graph = modulesToGraph [testModule] [testModule]
     cx = emptyContext
     result = do
-      original <- bindingTerm <$> requireBinding cx graph (unqualifyName $ QualifiedName (Just testNs) "catStrings")
+      original <- bindingTerm <$> requireBinding graph (unqualifyName $ QualifiedName (Just testNs) "catStrings")
       reduceTerm cx graph False original

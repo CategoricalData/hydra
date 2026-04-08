@@ -35,7 +35,6 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging__
 import qualified Hydra.Show.Core as Core___
-import qualified Hydra.Show.Errors as Errors_
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Map as M
@@ -46,13 +45,13 @@ buildSchemaMap :: Graph.Graph -> M.Map Core.Name Core.Type
 buildSchemaMap g = Maps.map (\ts -> Strip.deannotateType (Core.typeSchemeType ts)) (Graph.graphSchemaTypes g)
 
 -- | Decode a single module from a JSON value
-decodeModuleFromJson :: Graph.Graph -> [Packaging__.Module] -> Model.Value -> Either String Packaging__.Module
+decodeModuleFromJson :: Graph.Graph -> [Packaging__.Module] -> Model.Value -> Either Errors.Error Packaging__.Module
 decodeModuleFromJson bsGraph universeModules jsonVal =
 
       let graph = modulesToGraph bsGraph universeModules universeModules
           schemaMap = buildSchemaMap graph
           modType = Core.TypeVariable (Core.Name "hydra.packaging.Module")
-      in (Eithers.either (\err -> Left err) (\term -> Eithers.either (\decErr -> Left (Errors.unDecodingError decErr)) (\mod -> Right mod) (Packaging.module_ graph term)) (Decode.fromJson schemaMap (Core.Name "hydra.packaging.Module") modType jsonVal))
+      in (Eithers.either (\err -> Left (Errors.ErrorOther (Errors.OtherError err))) (\term -> Eithers.either (\decErr -> Left (Errors.ErrorDecoding decErr)) (\mod -> Right mod) (Packaging.module_ graph term)) (Decode.fromJson schemaMap (Core.Name "hydra.packaging.Module") modType jsonVal))
 
 -- | Escape unescaped control characters inside JSON string literals
 escapeControlCharsInJson :: [Int] -> [Int]
@@ -91,9 +90,9 @@ formatTermBinding binding =
       in (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " name) " : ") typeStr)
 
 -- | Format a type binding for the lexicon
-formatTypeBinding :: Graph.Graph -> Core.Binding -> Either Errors.DecodingError String
+formatTypeBinding :: Graph.Graph -> Core.Binding -> Either Errors.Error String
 formatTypeBinding graph binding =
-    Eithers.bind (Core_.type_ graph (Core.bindingTerm binding)) (\typ -> Right (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " (Core.unName (Core.bindingName binding))) " = ") (Core___.type_ typ)))
+    Eithers.bind (Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (Core_.type_ graph (Core.bindingTerm binding))) (\typ -> Right (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " (Core.unName (Core.bindingName binding))) " = ") (Core___.type_ typ)))
 
 -- | Generate encoder or decoder modules for a list of type modules
 generateCoderModules :: (t0 -> Graph.Graph -> t1 -> Either t2 (Maybe t3)) -> Graph.Graph -> [Packaging__.Module] -> [t1] -> t0 -> Either t2 [t3]
@@ -128,14 +127,13 @@ generateCoderModules codec bsGraph universeModules typeModules cx =
                       Core.bindingType = (Packaging__.termDefinitionType v0)})
                     _ -> Nothing) (Packaging__.moduleDefinitions m))) dataModules)
           schemaGraph = Lexical.elementsToGraph bsGraph Maps.empty schemaElements
-          schemaTypes =
-                  Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Environment.schemaGraphToTypingEnvironment Lexical.emptyContext schemaGraph)
+          schemaTypes = Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Environment.schemaGraphToTypingEnvironment schemaGraph)
           allElements = Lists.concat2 schemaElements dataElements
           graph = Lexical.elementsToGraph bsGraph schemaTypes allElements
       in (Eithers.map (\results -> Maybes.cat results) (Eithers.mapList (\m -> codec cx graph m) typeModules))
 
 -- | Generate the lexicon content from a graph
-generateLexicon :: Graph.Graph -> Either Errors.DecodingError String
+generateLexicon :: Graph.Graph -> Either Errors.Error String
 generateLexicon graph =
 
       let bindings = Lexical.graphToBindings graph
@@ -152,7 +150,7 @@ generateLexicon graph =
         in (Right (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Primitives:\n" (Strings.unlines primitiveLines)) "\nTypes:\n") (Strings.unlines typeLines)) "\nTerms:\n") (Strings.unlines termLines)))))
 
 -- | Pure core of code generation: given a coder, language, flags, bootstrap graph, universe, and modules to generate, produce a list of (filePath, content) pairs.
-generateSourceFiles :: Ord t0 => ((Packaging__.Module -> [Packaging__.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (M.Map t0 t1)) -> Coders.Language -> Bool -> Bool -> Bool -> Bool -> Graph.Graph -> [Packaging__.Module] -> [Packaging__.Module] -> Context.Context -> Either (Context.InContext Errors.Error) [(t0, t1)])
+generateSourceFiles :: Ord t0 => ((Packaging__.Module -> [Packaging__.Definition] -> Context.Context -> Graph.Graph -> Either Errors.Error (M.Map t0 t1)) -> Coders.Language -> Bool -> Bool -> Bool -> Bool -> Graph.Graph -> [Packaging__.Module] -> [Packaging__.Module] -> Context.Context -> Either Errors.Error [(t0, t1)])
 generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bsGraph universeModules modsToGenerate cx =
 
       let namespaceMap =
@@ -209,17 +207,14 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                       Core.bindingType = (Packaging__.termDefinitionType v0)})
                     _ -> Nothing) (Packaging__.moduleDefinitions m))) dataMods)
           schemaGraph = Lexical.elementsToGraph bsGraph Maps.empty schemaElements
-          schemaTypes2 =
-                  Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Environment.schemaGraphToTypingEnvironment Lexical.emptyContext schemaGraph)
+          schemaTypes2 = Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Environment.schemaGraphToTypingEnvironment schemaGraph)
           dataGraph = Lexical.elementsToGraph bsGraph schemaTypes2 dataElements
       in (Eithers.bind (Logic.ifElse (Lists.null typeModulesToGenerate) (Right []) (
         let nameLists =
                 Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
                   Packaging__.DefinitionType v0 -> Just (Packaging__.typeDefinitionName v0)
                   _ -> Nothing) (Packaging__.moduleDefinitions m))) typeModulesToGenerate
-        in (Eithers.bind (Eithers.bimap (\s -> Context.InContext {
-          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError s)),
-          Context.inContextContext = cx}) (\r -> r) (Adapt.schemaGraphToDefinitions constraints schemaGraph nameLists cx)) (\schemaResult ->
+        in (Eithers.bind (Adapt.schemaGraphToDefinitions constraints schemaGraph nameLists cx) (\schemaResult ->
           let defLists = Pairs.second schemaResult
               schemaGraphWithTypes =
                       Graph.Graph {
@@ -236,9 +231,7 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                 defs = Pairs.second p
             in (Eithers.map (\m -> Maps.toList m) (printDefinitions mod (Lists.map (\d -> Packaging__.DefinitionType d) defs) cx schemaGraphWithTypes))) (Lists.zip typeModulesToGenerate defLists))))))) (\schemaFiles -> Eithers.bind (Logic.ifElse (Lists.null termModulesToGenerate) (Right []) (
         let namespaces = Lists.map (\m -> Packaging__.moduleNamespace m) termModulesToGenerate
-        in (Eithers.bind (Eithers.bimap (\s -> Context.InContext {
-          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError s)),
-          Context.inContextContext = cx}) (\r -> r) (Adapt.dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings dataElements dataGraph namespaces cx)) (\dataResult ->
+        in (Eithers.bind (Adapt.dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings dataElements dataGraph namespaces cx) (\dataResult ->
           let g1 = Pairs.first dataResult
               defLists = Pairs.second dataResult
               defName =
@@ -267,7 +260,7 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
             in (Eithers.map (\m -> Maps.toList m) (printDefinitions mod (Lists.map (\d -> Packaging__.DefinitionTerm d) defs) cx g1))) (Lists.zip refreshedMods dedupedDefLists))))))) (\termFiles -> Right (Lists.concat2 schemaFiles termFiles))))
 
 -- | Perform type inference and generate the lexicon for a set of modules
-inferAndGenerateLexicon :: Context.Context -> Graph.Graph -> [Packaging__.Module] -> Either String String
+inferAndGenerateLexicon :: Context.Context -> Graph.Graph -> [Packaging__.Module] -> Either Errors.Error String
 inferAndGenerateLexicon cx bsGraph kernelModules =
 
       let g0 = modulesToGraph bsGraph kernelModules kernelModules
@@ -278,12 +271,12 @@ inferAndGenerateLexicon cx bsGraph kernelModules =
                       Core.bindingTerm = (Packaging__.termDefinitionTerm v0),
                       Core.bindingType = (Packaging__.termDefinitionType v0)})
                     _ -> Nothing) (Packaging__.moduleDefinitions m))) kernelModules)
-      in (Eithers.bind (Eithers.bimap (\ic -> Errors_.error (Context.inContextObject ic)) (\x -> x) (Inference.inferGraphTypes cx dataElements g0)) (\inferResultWithCx ->
+      in (Eithers.bind (Inference.inferGraphTypes cx dataElements g0) (\inferResultWithCx ->
         let g1 = Pairs.first (Pairs.first inferResultWithCx)
-        in (Eithers.bimap Errors.unDecodingError (\x -> x) (generateLexicon g1))))
+        in (generateLexicon g1)))
 
 -- | Perform type inference on modules and reconstruct with inferred types
-inferModules :: Context.Context -> Graph.Graph -> [Packaging__.Module] -> [Packaging__.Module] -> Either (Context.InContext Errors.Error) [Packaging__.Module]
+inferModules :: Context.Context -> Graph.Graph -> [Packaging__.Module] -> [Packaging__.Module] -> Either Errors.Error [Packaging__.Module]
 inferModules cx bsGraph universeMods targetMods =
 
       let g0 = modulesToGraph bsGraph universeMods universeMods
@@ -332,12 +325,12 @@ moduleTermDepsTransitive nsMap modules =
       in (Maybes.cat (Lists.map (\n -> Maps.lookup n nsMap) (Sets.toList closure)))
 
 -- | Convert a Module to a JSON string
-moduleToJson :: M.Map Core.Name Core.Type -> Packaging__.Module -> Either String String
+moduleToJson :: M.Map Core.Name Core.Type -> Packaging__.Module -> Either Errors.Error String
 moduleToJson schemaMap m =
 
       let term = Packaging_.module_ m
           modType = Core.TypeVariable (Core.Name "hydra.packaging.Module")
-      in (Eithers.map (\json -> Writer.printJson json) (Encode.toJson schemaMap (Core.Name "hydra.packaging.Module") modType term))
+      in (Eithers.map (\json -> Writer.printJson json) (Eithers.bimap (\_e -> Errors.ErrorOther (Errors.OtherError _e)) (\_a -> _a) (Encode.toJson schemaMap (Core.Name "hydra.packaging.Module") modType term)))
 
 -- | Convert a generated Module into a Source module
 moduleToSourceModule :: Packaging__.Module -> Packaging__.Module
@@ -401,8 +394,7 @@ modulesToGraph bsGraph universeModules modules =
                       Core.bindingType = (Packaging__.termDefinitionType v0)})
                     _ -> Nothing) (Packaging__.moduleDefinitions m))) dataModules)
           schemaGraph = Lexical.elementsToGraph bsGraph Maps.empty schemaElements
-          schemaTypes =
-                  Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Environment.schemaGraphToTypingEnvironment Lexical.emptyContext schemaGraph)
+          schemaTypes = Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Environment.schemaGraphToTypingEnvironment schemaGraph)
       in (Lexical.elementsToGraph bsGraph schemaTypes dataElements)
 
 -- | Convert a namespace to a file path (e.g., hydra.core -> hydra/core)

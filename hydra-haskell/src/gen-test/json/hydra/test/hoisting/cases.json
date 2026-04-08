@@ -817,7 +817,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                 "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}}}},
                                                                                     "function": {
@@ -1203,7 +1203,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                 "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}}}},
                                                                                     "function": {
@@ -1596,7 +1596,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                 "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}}}},
                                                                                     "function": {
@@ -1932,7 +1932,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                 "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}}}},
                                                                                     "function": {
@@ -2289,7 +2289,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                 "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}}}},
                                                                                     "function": {
@@ -2601,7 +2601,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                 "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}}}},
                                                                                     "function": {
@@ -2926,7 +2926,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                 "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}}}},
                                                                                     "function": {
@@ -3354,7 +3354,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                 "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}}}},
                                                                                     "function": {
@@ -3806,7 +3806,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                 "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}}}},
                                                                                     "function": {
@@ -4211,7 +4211,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                 "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}}}},
                                                                                     "function": {
@@ -4532,7 +4532,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                 "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}}}},
                                                                                     "function": {
@@ -4728,7 +4728,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                 "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}}}},
                                                                                     "function": {
@@ -4949,7 +4949,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                 "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}}}},
                                                                                     "function": {
@@ -5275,7 +5275,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                 "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}}}},
                                                                                     "function": {
@@ -5625,7 +5625,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                 "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}}}},
                                                                                     "function": {
@@ -5975,7 +5975,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                 "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}}}},
                                                                                     "function": {
@@ -6385,7 +6385,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                 "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}}}},
                                                                                     "function": {
@@ -6826,7 +6826,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                 "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}}}},
                                                                                     "function": {
@@ -7267,7 +7267,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                 "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}}}},
                                                                                     "function": {
@@ -7747,7 +7747,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                "body": {"variable": "hydra.lib.pairs.second"},
                                                                                                 "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}}}},
                                                                                     "function": {

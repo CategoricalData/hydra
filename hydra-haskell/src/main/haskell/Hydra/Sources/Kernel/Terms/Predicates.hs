@@ -158,8 +158,14 @@ isComplexVariable = define "isComplexVariable" $
       -- Check if the variable is in the graph's bound types
       ("typeLookup" <~ Maps.lookup (var "name") (Graph.graphBoundTypes $ var "tc") $
        Maybes.maybe
-         -- If not in graph at all, assume mutual recursion (complex)
-         (boolean True)
+         -- Not in graphBoundTypes: fall through to graphPrimitives
+         ("primLookup" <~ Maps.lookup (var "name") (Graph.graphPrimitives $ var "tc") $
+          Maybes.maybe
+            -- If not in graph at all, assume mutual recursion (complex)
+            (boolean True)
+            -- If a primitive, non-nullary iff type arity > 0
+            ("prim" ~> Equality.gt (Arity.typeSchemeArity @@ Graph.primitiveType (var "prim")) (int32 0))
+            (var "primLookup"))
          -- If in graph, check if the binding itself is non-nullary (a function).
          -- Non-nullary bindings are always complex (they take parameters).
          -- Nullary bindings are assumed non-complex from this check;
@@ -214,7 +220,7 @@ isNominalType = define "isNominalType" $
       _Type_forall>>: lambda "fa" $
         isNominalType @@ Core.forallTypeBody (var "fa")]
 
-isSerializable :: TTermDefinition (Context -> Graph -> Binding -> Either (InContext Error) Bool)
+isSerializable :: TTermDefinition (Context -> Graph -> Binding -> Either Error Bool)
 isSerializable = define "isSerializable" $
   doc "Check if an element is serializable (no function types in dependencies) (Either version)" $
   "cx" ~> "graph" ~> "el" ~>
@@ -236,7 +242,7 @@ isSerializableType = define "isSerializableType" $
       ("m" ~> "t" ~> Lists.cons (var "t") (var "m")) @@ list ([] :: [TTerm Type]) @@ var "typ")) $
   Logic.not (Sets.member Variants.typeVariantFunction (var "allVariants"))
 
-isSerializableByName :: TTermDefinition (Context -> Graph -> Name -> Either (InContext Error) Bool)
+isSerializableByName :: TTermDefinition (Context -> Graph -> Name -> Either Error Bool)
 isSerializableByName = define "isSerializableByName" $
   doc "Check if a type (by name) is serializable, resolving all type dependencies (Either version)" $
   "cx" ~> "graph" ~> "name" ~>
@@ -268,8 +274,10 @@ isTrivialTerm = define "isTrivialTerm" $
     (Just $ boolean False) [
     -- Literals are always trivial
     _Term_literal>>: constant (boolean True),
-    -- Plain variables are trivial (the variable itself is cheap to reference)
-    _Term_variable>>: constant (boolean True),
+    -- Plain lambda-bound variables are trivial, but qualified names (element/primitive references
+    -- like "hydra.lib.maps.empty") are calls, not just references, and are not trivial.
+    _Term_variable>>: "nm" ~>
+      Equality.equal (Lists.length (Strings.splitOn (string ".") (Core.unName (var "nm")))) (int32 1),
     -- Unit is trivial
     _Term_unit>>: constant (boolean True),
     -- Field projection on a trivial subterm is trivial (e.g. app.function)
@@ -308,16 +316,15 @@ isUnitType = define "isUnitType" $
   doc "Check whether a type is the unit type" $
   match _Type (Just false) [_Type_unit>>: constant true]
 
-typeDependencies :: TTermDefinition (Context -> Graph -> Bool -> (Type -> Type) -> Name -> Either (InContext Error) (M.Map Name Type))
+typeDependencies :: TTermDefinition (Context -> Graph -> Bool -> (Type -> Type) -> Name -> Either Error (M.Map Name Type))
 typeDependencies = define "typeDependencies" $
   doc "Get all type dependencies for a given type name (Either version)" $
   "cx" ~> "graph" ~> "withSchema" ~> "transform" ~> "name" ~>
   "requireType" <~ ("name" ~>
     "cx1" <~ Ctx.pushTrace (Strings.cat2 (string "type dependencies of ") (Core.unName (var "name"))) (var "cx") $
-    Eithers.bind (Lexical.requireBinding @@ var "cx1" @@ var "graph" @@ var "name") (
-      "el" ~> Ctx.withContext (var "cx1")
-        (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
-          (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el"))))) $
+    Eithers.bind (Lexical.requireBinding @@ var "graph" @@ var "name") (
+      "el" ~> Eithers.bimap ("_e" ~> Error.errorDecoding $ var "_e") ("_a" ~> var "_a")
+          (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el")))) $
   "toPair" <~ ("name" ~>
     Eithers.map ("typ" ~> pair (var "name") (var "transform" @@ var "typ"))
       (var "requireType" @@ var "name")) $
