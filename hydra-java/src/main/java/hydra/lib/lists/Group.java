@@ -17,7 +17,6 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.schemeEq;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -36,7 +35,7 @@ public class Group extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<List<Term>, Term>) lst -> {
                 // Convert to ArrayList for index-based access
                 ArrayList<Term> items = new ArrayList<>(lst);
@@ -56,7 +55,7 @@ public class Group extends PrimitiveFunction {
                     groups.add(currentGroup);
                 }
                 return Terms.list(groups.stream().map(Terms::list).collect(java.util.stream.Collectors.toList()));
-            }, hydra.extract.Core.list(cx, graph, args.get(0)));
+            }, hydra.extract.Core.list(graph, args.get(0)));
     }
 
     /**

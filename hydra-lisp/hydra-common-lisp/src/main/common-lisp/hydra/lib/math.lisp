@@ -1,16 +1,45 @@
 (in-package :cl-user)
 
+;; Common Lisp's trig/log functions return complex numbers for out-of-domain
+;; real inputs; Hydra's semantics (per Haskell / IEEE 754) require NaN/±Inf.
+;; These helpers provide NaN/Inf constants and predicates, plus guards
+;; against out-of-domain inputs.
+(defvar +hydra-pos-inf+
+  (handler-case (/ 1.0d0 0.0d0)
+    (error () #+sbcl sb-ext:double-float-positive-infinity #-sbcl 1.0d308)))
+(defvar +hydra-neg-inf+ (- +hydra-pos-inf+))
+(defvar +hydra-nan+
+  (handler-case (- +hydra-pos-inf+ +hydra-pos-inf+)
+    (error () 0.0d0)))
+
+(declaim (inline hydra-nan-p hydra-inf-p))
+(defun hydra-nan-p (x)
+  ;; NaN is the only value not equal to itself.
+  (and (numberp x) (realp x) (not (= x x))))
+(defun hydra-inf-p (x)
+  ;; Infinity is the only nonzero value equal to twice itself.
+  (and (numberp x) (realp x) (= x x) (not (= x 0)) (= x (* 2 x))))
+
 ;; abs :: Int -> Int
 (defvar hydra_lib_math_abs
   (lambda (n) (abs n)))
 
-;; acos :: Double -> Double
+;; acos :: Double -> Double  (domain [-1, 1]; out-of-domain -> NaN)
 (defvar hydra_lib_math_acos
-  (lambda (x) (acos (float x 1.0d0))))
+  (lambda (x)
+    (let ((fx (float x 1.0d0)))
+      (cond ((hydra-nan-p fx) +hydra-nan+)
+            ((or (< fx -1.0d0) (> fx 1.0d0)) +hydra-nan+)
+            (t (acos fx))))))
 
-;; acosh :: Double -> Double
+;; acosh :: Double -> Double  (domain [1, +inf); out-of-domain -> NaN)
 (defvar hydra_lib_math_acosh
-  (lambda (x) (acosh (float x 1.0d0))))
+  (lambda (x)
+    (let ((fx (float x 1.0d0)))
+      (cond ((hydra-nan-p fx) +hydra-nan+)
+            ((< fx 1.0d0) +hydra-nan+)
+            ((and (hydra-inf-p fx) (> fx 0)) +hydra-pos-inf+)
+            (t (acosh fx))))))
 
 ;; add :: Int -> Int -> Int
 (defvar hydra_lib_math_add
@@ -18,31 +47,56 @@
     (lambda (b)
       (+ a b))))
 
-;; asin :: Double -> Double
+;; asin :: Double -> Double  (domain [-1, 1]; out-of-domain -> NaN)
 (defvar hydra_lib_math_asin
-  (lambda (x) (asin (float x 1.0d0))))
+  (lambda (x)
+    (let ((fx (float x 1.0d0)))
+      (cond ((hydra-nan-p fx) +hydra-nan+)
+            ((or (< fx -1.0d0) (> fx 1.0d0)) +hydra-nan+)
+            (t (asin fx))))))
 
-;; asinh :: Double -> Double
+;; asinh :: Double -> Double  (unrestricted domain)
 (defvar hydra_lib_math_asinh
-  (lambda (x) (asinh (float x 1.0d0))))
+  (lambda (x)
+    (let ((fx (float x 1.0d0)))
+      (cond ((hydra-nan-p fx) +hydra-nan+)
+            ((hydra-inf-p fx) fx)
+            (t (asinh fx))))))
 
 ;; atan :: Double -> Double
 (defvar hydra_lib_math_atan
   (lambda (x) (atan (float x 1.0d0))))
 
 ;; atan2 :: Double -> Double -> Double
+;; Match Haskell: atan2 returns NaN when both arguments are infinite.
 (defvar hydra_lib_math_atan2
   (lambda (y)
     (lambda (x)
-      (atan (float y 1.0d0) (float x 1.0d0)))))
+      (let ((fy (float y 1.0d0)) (fx (float x 1.0d0)))
+        (if (and (hydra-inf-p fy) (hydra-inf-p fx))
+            +hydra-nan+
+            (atan fy fx))))))
 
-;; atanh :: Double -> Double
+;; atanh :: Double -> Double  (domain (-1, 1); boundary -> ±Inf; |x|>1 -> NaN)
 (defvar hydra_lib_math_atanh
-  (lambda (x) (atanh (float x 1.0d0))))
+  (lambda (x)
+    (let ((fx (float x 1.0d0)))
+      (cond ((hydra-nan-p fx) +hydra-nan+)
+            ((< fx -1.0d0) +hydra-nan+)
+            ((> fx 1.0d0) +hydra-nan+)
+            ((= fx 1.0d0) +hydra-pos-inf+)
+            ((= fx -1.0d0) +hydra-neg-inf+)
+            (t (atanh fx))))))
 
-;; ceiling :: Double -> BigInt
+;; ceiling :: Double -> Double
+;; DIVERGENCE FROM HASKELL: Hydra returns a float, not an integer, so that
+;; NaN/Inf propagate naturally per IEEE 754.
 (defvar hydra_lib_math_ceiling
-  (lambda (x) (ceiling x)))
+  (lambda (x)
+    (let ((fx (float x 1.0d0)))
+      (cond ((hydra-nan-p fx) fx)
+            ((hydra-inf-p fx) fx)
+            (t (float (ceiling fx) 1.0d0))))))
 
 ;; cos :: Double -> Double
 (defvar hydra_lib_math_cos
@@ -69,19 +123,32 @@
 (defvar hydra_lib_math_exp
   (lambda (x) (exp (float x 1.0d0))))
 
-;; floor :: Double -> BigInt
+;; floor :: Double -> Double
+;; DIVERGENCE FROM HASKELL: returns a float, not an integer (see ceiling).
 (defvar hydra_lib_math_floor
-  (lambda (x) (floor x)))
+  (lambda (x)
+    (let ((fx (float x 1.0d0)))
+      (cond ((hydra-nan-p fx) fx)
+            ((hydra-inf-p fx) fx)
+            (t (float (floor fx) 1.0d0))))))
 
-;; log :: Double -> Double
+;; log :: Double -> Double  (domain (0, +inf); x=0 -> -Inf; x<0 -> NaN)
 (defvar hydra_lib_math_log
-  (lambda (x) (log (float x 1.0d0))))
+  (lambda (x)
+    (let ((fx (float x 1.0d0)))
+      (cond ((hydra-nan-p fx) +hydra-nan+)
+            ((< fx 0.0d0) +hydra-nan+)
+            ((= fx 0.0d0) +hydra-neg-inf+)
+            ((and (hydra-inf-p fx) (< fx 0)) +hydra-nan+)
+            ((and (hydra-inf-p fx) (> fx 0)) +hydra-pos-inf+)
+            (t (log fx))))))
 
 ;; logBase :: Double -> Double -> Double
+;; Defined via the guarded log, so NaN/Inf compose correctly.
 (defvar hydra_lib_math_logBase
   (lambda (base)
     (lambda (x)
-      (/ (log (float x 1.0d0)) (log (float base 1.0d0))))))
+      (/ (funcall hydra_lib_math_log x) (funcall hydra_lib_math_log base)))))
 
 ;; log_base alias
 (defvar hydra_lib_math_log_base hydra_lib_math_logBase)
@@ -182,9 +249,14 @@
     (lambda (b)
       (rem a b))))
 
-;; round :: Double -> BigInt
+;; round :: Double -> Double
+;; DIVERGENCE FROM HASKELL: returns a float, not an integer (see ceiling).
 (defvar hydra_lib_math_round
-  (lambda (x) (round x)))
+  (lambda (x)
+    (let ((fx (float x 1.0d0)))
+      (cond ((hydra-nan-p fx) fx)
+            ((hydra-inf-p fx) fx)
+            (t (float (round fx) 1.0d0))))))
 
 ;; signum :: Int -> Int
 (defvar hydra_lib_math_signum
@@ -198,9 +270,14 @@
 (defvar hydra_lib_math_sinh
   (lambda (x) (sinh (float x 1.0d0))))
 
-;; sqrt :: Double -> Double
+;; sqrt :: Double -> Double  (domain [0, +inf); x<0 -> NaN)
 (defvar hydra_lib_math_sqrt
-  (lambda (x) (sqrt (float x 1.0d0))))
+  (lambda (x)
+    (let ((fx (float x 1.0d0)))
+      (cond ((hydra-nan-p fx) +hydra-nan+)
+            ((< fx 0.0d0) +hydra-nan+)
+            ((and (hydra-inf-p fx) (< fx 0)) +hydra-nan+)
+            (t (sqrt fx))))))
 
 ;; sub :: Int -> Int -> Int
 (defvar hydra_lib_math_sub
@@ -220,30 +297,41 @@
 (defvar hydra_lib_math_tanh
   (lambda (x) (tanh (float x 1.0d0))))
 
-;; truncate :: Double -> BigInt
+;; truncate :: Double -> Double
+;; DIVERGENCE FROM HASKELL: returns a float, not an integer (see ceiling).
 (defvar hydra_lib_math_truncate
-  (lambda (x) (truncate x)))
+  (lambda (x)
+    (let ((fx (float x 1.0d0)))
+      (cond ((hydra-nan-p fx) fx)
+            ((hydra-inf-p fx) fx)
+            (t (float (truncate fx) 1.0d0))))))
 
 ;; roundFloat64 :: Int -> Double -> Double
+;; Returns NaN/Inf inputs unchanged (no rounding is possible).
 (defvar hydra_lib_math_round_float64
   (lambda (n)
     (lambda (x)
-      (if (= x 0.0d0) 0.0d0
-          (let* ((fx (float x 1.0d0))
-                 (factor (expt 10.0d0 (- n 1 (floor (log (abs fx) 10))))))
-            (/ (round (* fx factor)) factor))))))
+      (let ((fx (float x 1.0d0)))
+        (cond ((hydra-nan-p fx) fx)
+              ((hydra-inf-p fx) fx)
+              ((= fx 0.0d0) 0.0d0)
+              (t (let ((factor (expt 10.0d0 (- n 1 (floor (log (abs fx) 10))))))
+                   (/ (round (* fx factor)) factor))))))))
 
 ;; roundFloat32 :: Int -> Float -> Float
-;; Round to n significant digits, then snap to IEEE 754 float32 precision
+;; Round to n significant digits, then snap to IEEE 754 float32 precision.
+;; Returns NaN/Inf inputs unchanged (no rounding is possible).
 (defvar hydra_lib_math_round_float32
   (lambda (n)
     (lambda (x)
-      (if (= x 0.0) 0.0d0
-          (let* ((fx (float x 1.0d0))
-                 (factor (expt 10.0d0 (- n 1 (floor (log (abs fx) 10)))))
-                 (rounded (float (/ (round (* fx factor)) factor) 1.0d0)))
-            ;; Snap to float32 precision by round-tripping through single-float
-            (float (float rounded 1.0f0) 1.0d0))))))
+      (let ((fx (float x 1.0d0)))
+        (cond ((hydra-nan-p fx) fx)
+              ((hydra-inf-p fx) fx)
+              ((= fx 0.0d0) 0.0d0)
+              (t (let* ((factor (expt 10.0d0 (- n 1 (floor (log (abs fx) 10)))))
+                        (rounded (float (/ (round (* fx factor)) factor) 1.0d0)))
+                   ;; Snap to float32 precision by round-tripping through single-float
+                   (float (float rounded 1.0f0) 1.0d0))))))))
 
 ;; roundBigfloat :: Int -> Double -> Double  (alias for roundFloat64)
 (defvar hydra_lib_math_round_bigfloat hydra_lib_math_round_float64)

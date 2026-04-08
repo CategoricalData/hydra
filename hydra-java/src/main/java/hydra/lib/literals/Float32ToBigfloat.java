@@ -15,7 +15,6 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -46,8 +45,8 @@ public class Float32ToBigfloat extends PrimitiveFunction {
      * @return a function that converts float32 terms to bigfloat terms
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(s -> Terms.bigfloat(apply(s)), hydra.extract.Core.float32(cx, graph, args.get(0)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(s -> Terms.bigfloat(apply(s)), hydra.extract.Core.float32(graph, args.get(0)));
     }
 
     /**
@@ -56,6 +55,11 @@ public class Float32ToBigfloat extends PrimitiveFunction {
      * @return the BigDecimal representation of the value
      */
     public static BigDecimal apply(Float value) {
+        // BigDecimal cannot represent NaN or Infinity; use sentinel zero.
+        // Callers (coders) should check for NaN/Inf before reaching here.
+        if (Float.isNaN(value) || Float.isInfinite(value)) {
+            return BigDecimal.ZERO;
+        }
         return BigDecimal.valueOf(value);
     }
 }

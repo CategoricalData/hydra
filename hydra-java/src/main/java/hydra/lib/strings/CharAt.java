@@ -15,7 +15,6 @@ import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -45,8 +44,8 @@ public class CharAt extends PrimitiveFunction {
      * @return a function that transforms terms to a flow of graph and term
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.int32(cx, graph, args.get(0)), i -> hydra.lib.eithers.Map.apply(s -> Terms.int32(apply(i, s)), hydra.extract.Core.string(cx, graph, args.get(1))));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.int32(graph, args.get(0)), i -> hydra.lib.eithers.Map.apply(s -> Terms.int32(apply(i, s)), hydra.extract.Core.string(graph, args.get(1))));
     }
 
     /**

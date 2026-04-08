@@ -15,7 +15,6 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.var;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -39,7 +38,7 @@ public class Map extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> {
             Term fn = args.get(0);
             return hydra.lib.eithers.Map.apply(e -> e.accept(new hydra.util.Either.Visitor<Term, Term, Term>() {
@@ -52,7 +51,7 @@ public class Map extends PrimitiveFunction {
                     public Term visit(hydra.util.Either.Right<Term, Term> right) {
                         return Terms.right(Terms.apply(fn, right.value));
                     }
-                }), hydra.extract.Core.eitherTerm(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(1)));
+                }), hydra.extract.Core.eitherTerm(t -> Either.right(t), t -> Either.right(t), graph, args.get(1)));
         };
     }
 

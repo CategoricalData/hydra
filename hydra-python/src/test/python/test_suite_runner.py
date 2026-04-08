@@ -14,16 +14,17 @@ from pathlib import Path
 # Main path provides the full hydra package, gen-test provides hydra.test
 _root = Path(__file__).parent.parent.parent
 _main_path = _root / "main" / "python"
+_gen_main_path = _root / "gen-main" / "python"
 _gen_test_path = _root / "gen-test" / "python"
 
-# Main must come first so hydra.util etc. are found there,
-# but gen-test must also be present so hydra.test can be found
-sys.path.insert(0, str(_gen_test_path))
-sys.path.insert(0, str(_main_path))
+# All three source roots must be on sys.path for the extend_path namespace
+# package mechanism to merge hydra.* across main, gen-main, and gen-test.
+for _p in [str(_gen_test_path), str(_gen_main_path), str(_main_path)]:
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
 
 from typing import Callable, Optional
 import pytest
-import importlib.util
 
 import hydra.core
 import hydra.graph
@@ -33,21 +34,6 @@ import hydra.testing
 from hydra.dsl.python import FrozenDict, Nothing
 import hydra.context
 
-# Manually load and register hydra.test package
-# Import the main hydra package first
-import hydra
-
-# Load the hydra.test package
-_test_init_path = _gen_test_path / "hydra" / "test" / "__init__.py"
-_test_pkg_spec = importlib.util.spec_from_file_location("hydra.test", _test_init_path)
-_test_pkg = importlib.util.module_from_spec(_test_pkg_spec)
-sys.modules["hydra.test"] = _test_pkg
-_test_pkg_spec.loader.exec_module(_test_pkg)
-
-# Register hydra.test as a submodule of hydra
-hydra.test = _test_pkg
-
-# Import test_types first so it's available when test_terms and test_suite load
 import hydra.test.test_types
 
 # Now we can import the test modules

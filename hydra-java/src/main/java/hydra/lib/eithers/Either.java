@@ -15,7 +15,6 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.var;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 
 /**
@@ -39,7 +38,7 @@ public class Either extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, hydra.util.Either<InContext<Error_>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, hydra.util.Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> {
             Term forLeft = args.get(0);
             Term forRight = args.get(1);
@@ -53,7 +52,7 @@ public class Either extends PrimitiveFunction {
                     public Term visit(hydra.util.Either.Right<Term, Term> right) {
                         return Terms.apply(forRight, right.value);
                     }
-                }), hydra.extract.Core.eitherTerm(cx, t -> hydra.util.Either.right(t), t -> hydra.util.Either.right(t), graph, args.get(2)));
+                }), hydra.extract.Core.eitherTerm(t -> hydra.util.Either.right(t), t -> hydra.util.Either.right(t), graph, args.get(2)));
         };
     }
 

@@ -17,7 +17,6 @@ import java.util.function.Function;
 import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -47,7 +46,7 @@ public class Empty extends PrimitiveFunction {
      * @return the implementation function
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return ignored -> cx -> graph -> Either.right(Terms.map(apply()));
     }
 

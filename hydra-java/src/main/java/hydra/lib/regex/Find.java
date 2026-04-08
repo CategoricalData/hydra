@@ -18,7 +18,6 @@ import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -36,12 +35,12 @@ public class Find extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(
-            hydra.extract.Core.string(cx, graph, args.get(0)),
+            hydra.extract.Core.string(graph, args.get(0)),
             pat -> hydra.lib.eithers.Map.apply(
                 input -> Terms.optional(apply(pat, input).map(Terms::string)),
-                hydra.extract.Core.string(cx, graph, args.get(1))));
+                hydra.extract.Core.string(graph, args.get(1))));
     }
 
     public static Function<String, Maybe<String>> apply(String pattern) {

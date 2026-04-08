@@ -105,29 +105,29 @@ public class StatelessCoderTest extends HydraTestBase {
             hydra.util.ConsList.empty(),
             hydra.util.ConsList.empty(),
             hydra.util.PersistentMap.empty());
-        Either<hydra.context.InContext<hydra.errors.Error_>, V2> result =
+        Either<hydra.errors.Error_, V2> result =
             coder.encode.apply(cx).apply(value);
         if (result.isRight()) {
-            return Either.right(((Either.Right<hydra.context.InContext<hydra.errors.Error_>, V2>) result).value);
+            return Either.right(((Either.Right<hydra.errors.Error_, V2>) result).value);
         } else {
-            return Either.left(hydra.show.Errors.error(((Either.Left<hydra.context.InContext<hydra.errors.Error_>, V2>) result).value.object));
+            return Either.left(hydra.show.Errors.error(((Either.Left<hydra.errors.Error_, V2>) result).value));
         }
     }
 
     /**
-     * Apply a Coder's decode function, converting InContext errors to simple strings.
+     * Apply a Coder's decode function, converting errors to simple strings.
      */
     private static <V1, V2> Either<String, V1> coderDecode(Coder<V1, V2> coder, V2 value) {
         hydra.context.Context cx = new hydra.context.Context(
             hydra.util.ConsList.empty(),
             hydra.util.ConsList.empty(),
             hydra.util.PersistentMap.empty());
-        Either<hydra.context.InContext<hydra.errors.Error_>, V1> result =
+        Either<hydra.errors.Error_, V1> result =
             coder.decode.apply(cx).apply(value);
         if (result.isRight()) {
-            return Either.right(((Either.Right<hydra.context.InContext<hydra.errors.Error_>, V1>) result).value);
+            return Either.right(((Either.Right<hydra.errors.Error_, V1>) result).value);
         } else {
-            return Either.left(hydra.show.Errors.error(((Either.Left<hydra.context.InContext<hydra.errors.Error_>, V1>) result).value.object));
+            return Either.left(hydra.show.Errors.error(((Either.Left<hydra.errors.Error_, V1>) result).value));
         }
     }
 }

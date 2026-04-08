@@ -18,7 +18,6 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.schemeOrd;
 import static hydra.dsl.Types.set;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -48,8 +47,8 @@ public class Difference extends PrimitiveFunction {
      * @return a function that transforms terms to a flow of graph and term
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.set(cx, graph, args.get(0)), s1 -> hydra.lib.eithers.Map.apply(s2 -> Terms.set(apply(s1, s2)), hydra.extract.Core.set(cx, graph, args.get(1))));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.set(graph, args.get(0)), s1 -> hydra.lib.eithers.Map.apply(s2 -> Terms.set(apply(s1, s2)), hydra.extract.Core.set(graph, args.get(1))));
     }
 
     /**

@@ -15,7 +15,6 @@ import static hydra.dsl.Types.int16;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -46,8 +45,8 @@ public class ShowInt16 extends PrimitiveFunction {
      * @return a function that converts int16 terms to string terms
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<Short, Term>) s -> Terms.string(apply(s)), hydra.extract.Core.int16(cx, graph, args.get(0)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<Short, Term>) s -> Terms.string(apply(s)), hydra.extract.Core.int16(graph, args.get(0)));
     }
 
     /**

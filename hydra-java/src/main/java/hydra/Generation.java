@@ -238,16 +238,16 @@ public class Generation {
      */
     public static Module decodeModuleFromJson(Graph bsGraph, List<Module> universeModules,
             Value jsonVal) {
-        Either<String, Module> result = Codegen.decodeModuleFromJson(
+        Either<hydra.errors.Error_, Module> result = Codegen.decodeModuleFromJson(
                 bsGraph, universeModules, jsonVal);
-        return result.accept(new Either.Visitor<String, Module, Module>() {
+        return result.accept(new Either.Visitor<hydra.errors.Error_, Module, Module>() {
             @Override
-            public Module visit(Either.Left<String, Module> instance) {
-                throw new RuntimeException("Module decode error: " + instance.value);
+            public Module visit(Either.Left<hydra.errors.Error_, Module> instance) {
+                throw new RuntimeException("Module decode error: " + hydra.show.Errors.error(instance.value));
             }
 
             @Override
-            public Module visit(Either.Right<String, Module> instance) {
+            public Module visit(Either.Right<hydra.errors.Error_, Module> instance) {
                 return instance.value;
             }
         });
@@ -376,7 +376,7 @@ public class Generation {
      * Generate source files and write them to disk.
      */
     public static void generateSources(
-            Function<Module, Function<List<Definition>, Function<hydra.context.Context, Function<Graph, Either<hydra.context.InContext<hydra.errors.Error_>, Map<String, String>>>>>> coder,
+            Function<Module, Function<List<Definition>, Function<hydra.context.Context, Function<Graph, Either<hydra.errors.Error_, Map<String, String>>>>>> coder,
             hydra.coders.Language language,
             boolean doInfer,
             boolean doExpand,
@@ -388,16 +388,16 @@ public class Generation {
         Graph bsGraph = bootstrapGraph();
         hydra.context.Context cx = new hydra.context.Context(
                 new ArrayList<>(), new ArrayList<>(), new HashMap<>());
-        Either<hydra.context.InContext<hydra.errors.Error_>, List<Pair<String, String>>> result =
+        Either<hydra.errors.Error_, List<Pair<String, String>>> result =
                 Codegen.generateSourceFiles(coder, language,
                         doInfer, doExpand, doHoistCase, doHoistPoly,
                         bsGraph, universe, modulesToGenerate, cx);
         List<Pair<String, String>> files;
         if (result.isLeft()) {
-            hydra.context.InContext<hydra.errors.Error_> err = ((Either.Left<hydra.context.InContext<hydra.errors.Error_>, List<Pair<String, String>>>) result).value;
-            throw new RuntimeException("Code generation failed: " + hydra.show.Errors.error(err.object));
+            hydra.errors.Error_ err = ((Either.Left<hydra.errors.Error_, List<Pair<String, String>>>) result).value;
+            throw new RuntimeException("Code generation failed: " + hydra.show.Errors.error(err));
         }
-        files = ((Either.Right<hydra.context.InContext<hydra.errors.Error_>, List<Pair<String, String>>>) result).value;
+        files = ((Either.Right<hydra.errors.Error_, List<Pair<String, String>>>) result).value;
         for (Pair<String, String> pair : files) {
             String filePath = basePath + File.separator + pair.first;
             String content = pair.second;

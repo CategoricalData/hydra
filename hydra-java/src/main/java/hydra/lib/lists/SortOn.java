@@ -16,7 +16,6 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -36,17 +35,17 @@ public class SortOn extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph ->
-            hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(cx, graph, args.get(1)), lst -> {
+            hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(graph, args.get(1)), lst -> {
                 // Pre-compute all keys so we can short-circuit on error
                 ArrayList<Term> indexed = new ArrayList<>(lst);
                 List<Term> keys = new ArrayList<>();
                 for (Term x : indexed) {
-                    Either<InContext<Error_>, Term> r = hydra.Reduction.reduceTerm(
+                    Either<Error_, Term> r = hydra.Reduction.reduceTerm(
                         hydra.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), x));
                     if (r.isLeft()) return (Either) r;
-                    keys.add(((Either.Right<InContext<Error_>, Term>) r).value);
+                    keys.add(((Either.Right<Error_, Term>) r).value);
                 }
                 // Build index pairs and sort by pre-computed key
                 List<Integer> indices = new ArrayList<>();

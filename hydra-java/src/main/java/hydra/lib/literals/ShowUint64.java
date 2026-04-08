@@ -16,7 +16,6 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 import static hydra.dsl.Types.uint64;
 import hydra.context.Context;
-import hydra.context.InContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -47,8 +46,8 @@ public class ShowUint64 extends PrimitiveFunction {
      * @return a function that converts uint64 terms to string terms
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<BigInteger, Term>) i -> Terms.string(apply(i)), hydra.extract.Core.uint64(cx, graph, args.get(0)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<BigInteger, Term>) i -> Terms.string(apply(i)), hydra.extract.Core.uint64(graph, args.get(0)));
     }
 
     /**
