@@ -6,9 +6,8 @@ set -euo pipefail
 # This script regenerates all Scala artifacts from the Hydra sources:
 #   1. Build hydra-ext (compiles the Scala coder and test generator)
 #   2. Generate Scala source modules
-#   3. Generate Scala generation tests
-#   4. Post-process generated Scala (break long lines, fix escapes)
-#   5. Compile Scala (unless --quick)
+#   3. Generate Scala test modules
+#   4. Compile Scala (unless --quick)
 #
 # Prerequisites:
 #   - Hydra-Haskell must be built and up to date (run sync-haskell.sh first)
@@ -45,7 +44,7 @@ for arg in "$@"; do
             echo "Steps performed:"
             echo "  1. Build hydra-ext"
             echo "  2. Generate Scala source modules"
-            echo "  3. Generate Scala generation tests"
+            echo "  3. Generate Scala test modules"
             echo "  4. Compile and test Scala (unless --quick)"
             exit 0
             ;;
@@ -78,7 +77,7 @@ if [ -d "$HYDRA_SCALA_DIR/src/gen-main/scala" ]; then
     sed_inplace_find "$HYDRA_SCALA_DIR/src/gen-main/scala" -name '*.scala' -- 's/\.macro(/.`macro`(/g'
 fi
 
-step 3 $TOTAL_STEPS "Generating Scala generation tests"
+step 3 $TOTAL_STEPS "Generating Scala test modules"
 echo ""
 stack exec update-scala-tests -- $RTS_FLAGS
 
