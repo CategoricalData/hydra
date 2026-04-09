@@ -180,7 +180,8 @@ public interface Language {
       "eval-when",
       "load-time-value",
       "locally",
-      "the");
+      "the",
+      "pi");
     java.util.List<String> emacsLispKeywords = java.util.Arrays.asList(
       "defun",
       "defvar",

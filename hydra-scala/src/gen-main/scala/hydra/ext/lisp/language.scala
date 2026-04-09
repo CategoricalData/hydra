@@ -54,7 +54,8 @@ lazy val lispReservedWords: scala.collection.immutable.Set[scala.Predef.String] 
      "or", "not", "nil", "t", "quote", "function", "setq", "setf", "do", "do*", "dolist", "dotimes", "loop",
      "values", "multiple-value-bind", "multiple-value-list", "the", "declare", "declaim", "proclaim",
      "in-package", "use-package", "export", "import", "intern", "handler-case", "handler-bind", "restart-case",
-     "condition", "unwind-protect", "catch", "throw", "eval-when", "load-time-value", "locally", "the")
+     "condition", "unwind-protect", "catch", "throw", "eval-when", "load-time-value", "locally", "the",
+     "pi")
   lazy val schemeKeywords: Seq[scala.Predef.String] = Seq("define", "define-syntax", "define-record-type",
      "define-library", "define-values", "lambda", "let", "let*", "letrec", "letrec*", "let-values", "let*-values",
      "if", "cond", "case", "when", "unless", "and", "or", "not", "begin", "do", "quote", "quasiquote",
