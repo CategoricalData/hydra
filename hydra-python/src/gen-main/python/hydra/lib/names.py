@@ -330,6 +330,8 @@ math_acosh = hydra.core.Name("hydra.lib.math.acosh")
 
 math_add = hydra.core.Name("hydra.lib.math.add")
 
+math_add_float64 = hydra.core.Name("hydra.lib.math.addFloat64")
+
 math_asin = hydra.core.Name("hydra.lib.math.asin")
 
 math_asinh = hydra.core.Name("hydra.lib.math.asinh")
@@ -378,7 +380,11 @@ math_mod = hydra.core.Name("hydra.lib.math.mod")
 
 math_mul = hydra.core.Name("hydra.lib.math.mul")
 
+math_mul_float64 = hydra.core.Name("hydra.lib.math.mulFloat64")
+
 math_negate = hydra.core.Name("hydra.lib.math.negate")
+
+math_negate_float64 = hydra.core.Name("hydra.lib.math.negateFloat64")
 
 math_odd = hydra.core.Name("hydra.lib.math.odd")
 
@@ -409,6 +415,8 @@ math_sinh = hydra.core.Name("hydra.lib.math.sinh")
 math_sqrt = hydra.core.Name("hydra.lib.math.sqrt")
 
 math_sub = hydra.core.Name("hydra.lib.math.sub")
+
+math_sub_float64 = hydra.core.Name("hydra.lib.math.subFloat64")
 
 math_succ = hydra.core.Name("hydra.lib.math.succ")
 

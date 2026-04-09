@@ -22,6 +22,10 @@ acosh = Prelude.acosh
 add :: Num a => a -> a -> a
 add x y = x + y
 
+-- | Add two Float64 numbers.
+addFloat64 :: Double -> Double -> Double
+addFloat64 = add
+
 -- | Return the arc sine of x in radians.
 asin :: Double -> Double
 asin = Prelude.asin
@@ -124,9 +128,17 @@ mod = Prelude.mod
 mul :: Num a => a -> a -> a
 mul x y = x * y
 
+-- | Multiply two Float64 numbers.
+mulFloat64 :: Double -> Double -> Double
+mulFloat64 = mul
+
 -- | Negate a number.
 negate :: Num a => a -> a
 negate = Prelude.negate
+
+-- | Negate a Float64 number.
+negateFloat64 :: Double -> Double
+negateFloat64 = Prelude.negate
 
 -- | Check if an integer is odd.
 odd :: Integral a => a -> Bool
@@ -216,6 +228,10 @@ sqrt = Prelude.sqrt
 -- | Subtract two numbers.
 sub :: Num a => a -> a -> a
 sub x y = x - y
+
+-- | Subtract two Float64 numbers.
+subFloat64 :: Double -> Double -> Double
+subFloat64 = sub
 
 -- | Return the successor (x + 1), returning Nothing on int32 maxBound.
 maybeSucc :: Int -> Maybe Int

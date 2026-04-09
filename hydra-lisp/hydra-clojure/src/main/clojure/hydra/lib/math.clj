@@ -20,6 +20,11 @@
   "Add two numbers."
   (fn [a] (fn [b] (+ a b))))
 
+;; addFloat64 :: Double -> Double -> Double
+(def hydra_lib_math_add_float64
+  "Add two Float64 numbers."
+  (fn [a] (fn [b] (+ (double a) (double b)))))
+
 ;; asin :: Double -> Double
 (def hydra_lib_math_asin
   "Return the arc sine of x in radians."
@@ -176,10 +181,20 @@
   "Multiply two numbers."
   (fn [a] (fn [b] (* a b))))
 
+;; mulFloat64 :: Double -> Double -> Double
+(def hydra_lib_math_mul_float64
+  "Multiply two Float64 numbers."
+  (fn [a] (fn [b] (* (double a) (double b)))))
+
 ;; negate :: Int -> Int
 (def hydra_lib_math_negate
   "Negate a number."
   (fn [n] (- n)))
+
+;; negateFloat64 :: Double -> Double
+(def hydra_lib_math_negate_float64
+  "Negate a Float64 number."
+  (fn [n] (- (double n))))
 
 ;; odd :: Int -> Bool
 (def hydra_lib_math_odd
@@ -277,6 +292,11 @@
 (def hydra_lib_math_sub
   "Subtract two numbers."
   (fn [a] (fn [b] (- a b))))
+
+;; subFloat64 :: Double -> Double -> Double
+(def hydra_lib_math_sub_float64
+  "Subtract two Float64 numbers."
+  (fn [a] (fn [b] (- (double a) (double b)))))
 
 ;; succ :: Int -> Int
 (def hydra_lib_math_succ

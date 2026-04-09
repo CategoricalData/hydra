@@ -1338,6 +1338,14 @@
         "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
+        "name": "hydra.lib.names.mathAddFloat64",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.math.addFloat64"}},
+            "typeName": "hydra.core.Name"}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+    {
+      "term": {
         "name": "hydra.lib.names.mathAsin",
         "term": {
           "wrap": {
@@ -1530,10 +1538,26 @@
         "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
       "term": {
+        "name": "hydra.lib.names.mathMulFloat64",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.math.mulFloat64"}},
+            "typeName": "hydra.core.Name"}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+    {
+      "term": {
         "name": "hydra.lib.names.mathNegate",
         "term": {
           "wrap": {
             "body": {"literal": {"string": "hydra.lib.math.negate"}},
+            "typeName": "hydra.core.Name"}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.lib.names.mathNegateFloat64",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.math.negateFloat64"}},
             "typeName": "hydra.core.Name"}},
         "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {
@@ -1654,6 +1678,14 @@
         "term": {
           "wrap": {
             "body": {"literal": {"string": "hydra.lib.math.sub"}},
+            "typeName": "hydra.core.Name"}},
+        "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.lib.names.mathSubFloat64",
+        "term": {
+          "wrap": {
+            "body": {"literal": {"string": "hydra.lib.math.subFloat64"}},
             "typeName": "hydra.core.Name"}},
         "type": {"type": {"variable": "hydra.core.Name"}, "variables": []}}},
     {

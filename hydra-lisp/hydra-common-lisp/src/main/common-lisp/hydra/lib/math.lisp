@@ -47,6 +47,12 @@
     (lambda (b)
       (+ a b))))
 
+;; addFloat64 :: Double -> Double -> Double
+(defvar hydra_lib_math_add_float64
+  (lambda (a)
+    (lambda (b)
+      (+ (float a 1.0d0) (float b 1.0d0)))))
+
 ;; asin :: Double -> Double  (domain [-1, 1]; out-of-domain -> NaN)
 (defvar hydra_lib_math_asin
   (lambda (x)
@@ -215,10 +221,21 @@
     (lambda (b)
       (* a b))))
 
+;; mulFloat64 :: Double -> Double -> Double
+(defvar hydra_lib_math_mul_float64
+  (lambda (a)
+    (lambda (b)
+      (* (float a 1.0d0) (float b 1.0d0)))))
+
 ;; negate :: Int -> Int
 (defvar hydra_lib_math_negate
   (lambda (a)
     (- a)))
+
+;; negateFloat64 :: Double -> Double
+(defvar hydra_lib_math_negate_float64
+  (lambda (a)
+    (- (float a 1.0d0))))
 
 ;; odd :: Int -> Bool
 (defvar hydra_lib_math_odd
@@ -284,6 +301,12 @@
   (lambda (a)
     (lambda (b)
       (- a b))))
+
+;; subFloat64 :: Double -> Double -> Double
+(defvar hydra_lib_math_sub_float64
+  (lambda (a)
+    (lambda (b)
+      (- (float a 1.0d0) (float b 1.0d0)))))
 
 ;; succ :: Int -> Int
 (defvar hydra_lib_math_succ
